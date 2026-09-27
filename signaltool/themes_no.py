@@ -1,0 +1,73 @@
+"""Norwegian display texts for the themes (the UI and reports are in Norwegian)."""
+NO = {
+ "conflict_defense": dict(
+  name="Europa/Russland-konflikt og forsvarsutgifter",
+  reasoning="Eskalering i Russland–Ukraina eller økt NATO-spenning øker sannsynligheten for høyere forsvarsbudsjetter og bestillinger av ammunisjon og luftvern. Forsvarsselskaper og europeiske leverandører (bl.a. Kongsberg Gruppen, som lager NASAMS og NSM-missiler) reprises ofte på innkjøpsnyheter. Ordrebøker reagerer med måneders forsinkelse – kursene reagerer på overskrifter.",
+  sectors=["Forsvar og luftfart", "Forsvarselektronikk", "Ammunisjon"],
+  escalation="Forsvarsaksjer opp; europeisk forsvar er typisk mer følsomt enn amerikanske storselskaper. Kronen kan svekkes ved uro.",
+  deescalation="Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring).",
+  risks="Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre."),
+ "mideast_energy": dict(
+  name="Midtøsten / Iran / Gulfen – risiko for oljeforsyning",
+  reasoning="Omtrent en femdel av verdens olje og mye LNG går gjennom Hormuzstredet. Militær eskalering med Iran, Israel eller Gulf-statene gir en risikopremie i Brent, gagner produsenter utenfor regionen (Equinor, Aker BP, Vår Energi, amerikanske oljeselskaper) og tankrederier (lengre ruter, høyere rater), og rammer flyselskaper med høye drivstoffkostnader.",
+  sectors=["Olje- og gassprodusenter", "Tankskip", "Oljeservice"],
+  escalation="Brent opp, tankrederier opp, europeiske E&P-selskaper opp, flyselskaper ned. Følg Polymarket-markedene om våpenhvile/blokade.",
+  deescalation="Risikopremien forsvinner raskt: olje- og tankaksjer kan gi tilbake ukers gevinst på dager.",
+  risks="OPECs ledige kapasitet og strategiske lagre demper topper; markedet kan allerede prise en stor premie."),
+ "sanctions_energy": dict(
+  name="Sanksjoner, russisk energi og europeisk gass",
+  reasoning="Nye sanksjoner mot russisk olje/gass, håndheving av pristak mot «skyggeflåten» eller sekundærsanksjoner mot kjøpere strammer inn tilbudet og endrer handelsruter. Norge er Europas største leverandør av rørgass, så Equinor tjener på høyere europeiske gasspriser; seriøse tankrederier tjener på lengre seilaser.",
+  sectors=["Gassprodusenter", "LNG", "Tankskip"],
+  escalation="Europeisk gasspris og Equinor opp; produkttankere opp.",
+  deescalation="Lettelser i sanksjonene (f.eks. fredsavtale) vil presse gasspris og Equinor ned.",
+  risks="Sanksjoner håndheves ofte dårlig; milde vintre og fulle lagre dominerer gassprisen."),
+ "shipping_chokepoints": dict(
+  name="Flaskehalser for skipsfart (Rødehavet, Suez, Taiwanstredet, Panama)",
+  reasoning="Angrep eller blokader ved flaskehalser tvinger skip til omveier (f.eks. rundt Kapp det gode håp), binder opp flåtekapasitet og løfter fraktratene. Container-, bilskip- og tankrederier tjener mer; Oslo Børs har en uvanlig bred shippingsektor (Hafnia, Wallenius Wilhelmsen, Höegh Autoliners, MPC Container, BW LPG).",
+  sectors=["Containerfrakt", "Bilskip", "Tankskip", "LPG-frakt"],
+  escalation="Fraktrater og shippingaksjer opp (ofte i løpet av dager).",
+  deescalation="Gjenåpning av Suez/Rødehavet frigjør kapasitet → rater og shippingaksjer faller.",
+  risks="Nybyggleveranser gir overkapasitet; høyt utbytte kan skjule fallende inntjening."),
+ "tariffs_trade": dict(
+  name="Toll, handelskrig og eksportkontroll",
+  reasoning="Ny toll beskytter innenlandske produsenter (amerikansk stål/aluminium) og rammer eksportører og importører i den berørte handelsstrømmen. Norske eksportører (laks, aluminium, gjødsel) er utsatt for handelspolitikk i USA, Kina og EU; gjengjeldelse påvirker også valuta.",
+  sectors=["Stål og aluminium", "Sjømateksportører", "Varehandel/import", "Bil"],
+  escalation="Beskyttede produsenter opp, rammede eksportører og bredt marked ned; USD ofte opp.",
+  deescalation="Handelsavtaler løfter eksportører og sykliske/fremvoksende markeder.",
+  risks="Tollvarsler blir ofte utsatt, utvannet eller reversert; ekstremt mye støy i overskriftene."),
+ "rare_earths_semis": dict(
+  name="Kina/Taiwan-spenning, sjeldne jordarter og halvledere",
+  reasoning="Kina dominerer raffinering av sjeldne jordarter og har brukt eksportkontroll (gallium, germanium, sjeldne jordarter) som pressmiddel; USA begrenser eksport av brikker/utstyr til Kina. Eskalering gagner ikke-kinesiske produsenter (MP Materials) og rammer brikkeselskaper med Kina/Taiwan-eksponering. Nordic Semiconductor og Elkem (silisium) er Oslo-noterte eksponeringer.",
+  sectors=["Sjeldne jordarter", "Halvledere", "Halvlederutstyr", "Silisiummaterialer"],
+  escalation="Sjeldne jordarter opp, Taiwan/Kina-eksponerte brikkeaksjer ned; bred risikoaversjon.",
+  deescalation="Brikkeaksjer stiger ved avspenning; premien på sjeldne jordarter forsvinner.",
+  risks="Halvledere styres av AI-inntjeningssyklusen; geopolitikk er ofte sekundært."),
+ "elections_political": dict(
+  name="Valg og politisk ustabilitet",
+  reasoning="Valg, kupp og regjeringskriser endrer finans-, energi- og reguleringspolitikk. Effekten er landspesifikk: lands-ETFer, valuta og innenlandske banker er de mest direkte eksponeringene. Volatiliteten (VIX) stiger gjerne inn mot omstridte utfall.",
+  sectors=["Lands-ETFer", "Banker", "Valuta"],
+  escalation="Lands-ETF/valuta svekkes ved ustabilitet; volatilitet opp.",
+  deescalation="Klare utfall gir ofte lettelsesrally.",
+  risks="Svært støyende; prediksjonsmarkeder priser som regel utfallet før nyhetsflyten topper seg."),
+ "nordic_arctic": dict(
+  name="Nordisk/arktisk sikkerhet og undersjøisk infrastruktur",
+  reasoning="Sabotasje mot kabler og rørledninger i Østersjøen/Nordsjøen, russisk aktivitet i nordområdene og nordisk opprustning skaper etterspørsel etter overvåkning, marine systemer og undersjøisk reparasjon/beskyttelse. Norsk eksponering: Kongsberg (maritim/forsvar), Kitron (forsvarselektronikk), Subsea 7; gassforsyningsfrykt løfter Equinor.",
+  sectors=["Forsvar", "Subsea-tjenester", "Kabler", "Gassforsyning"],
+  escalation="Kongsberg/Kitron og gasspris opp.",
+  deescalation="Begrenset direkte nedside; mest et langsomt innkjøpstema.",
+  risks="Hendelser er sjeldne og ofte uklare (ulykke vs. sabotasje); bevegelser forsvinner raskt."),
+ "food_agri": dict(
+  name="Mat, korn og gjødsel – forsyningssjokk",
+  reasoning="Krig eller eksportforbud hos store korn-/gjødseleksportører (Svartehavet, Belarus/Russland-kali) løfter korn- og gjødselpriser. Yara og nordamerikanske gjødselprodusenter tjener på høyere nitrogen-/kalipriser, men Yaras gasskostnader stiger med europeisk gasspris.",
+  sectors=["Gjødsel", "Korn"],
+  escalation="Hvete/mais og gjødselaksjer opp.",
+  deescalation="Kornkorridorer/avtaler presser prisene ned.",
+  risks="Vær og avlinger styrer kornprisene langt mer enn geopolitikk."),
+ "risk_off_haven": dict(
+  name="Bred risikoaversjon / trygge havner",
+  reasoning="Når flere geopolitiske risikoer stiger samtidig, flyter penger typisk til gull, sveitserfranc, yen og amerikanske statsobligasjoner – og ut av små valutaer som NOK. Gullgruveaksjer er en giret eksponering mot gullprisen.",
+  sectors=["Gull", "Gullgruver", "Trygge valutaer"],
+  escalation="Gull, CHF, JPY opp; NOK og småselskaper ned.",
+  deescalation="Trygge havner gir tilbake gevinst; sykliske aksjer og NOK henter seg inn.",
+  risks="Gull styres også av realrenter og sentralbankkjøp, uavhengig av overskrifter."),
+}

@@ -1,0 +1,22 @@
+
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--mut:#5d6b7c;--acc:#0b5cad;--up:#0a7d3b;--down:#b3261e;--line:#e3e7ec;--warn:#8a5a00}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#0f2238;color:#fff;padding:14px 18px}header a{color:#fff;text-decoration:none}
+header .brand{font-weight:700;font-size:1.15rem}nav{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.95rem}
+nav a{opacity:.9}nav a:hover{opacity:1;text-decoration:underline}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+h1{font-size:1.5rem;margin:.2rem 0 .6rem}h2{font-size:1.2rem;margin:1.2rem 0 .6rem}h3{font-size:1.05rem;margin:.2rem 0 .4rem}
+a{color:var(--acc)}.mut{color:var(--mut);font-size:.9rem}.up{color:var(--up)}.down{color:var(--down)}
+.score{display:inline-block;min-width:3.2em;text-align:center;font-weight:700;border-radius:6px;padding:2px 8px;background:#e8f0fb;color:var(--acc)}
+.score.hot{background:#fde7e5;color:var(--down)}.score.warm{background:#fff3d6;color:var(--warn)}
+.bar{height:8px;background:#e9edf2;border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--mut);white-space:nowrap}.tw{overflow-x:auto}
+.pill{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:999px;background:#eef1f5;margin:2px 4px 2px 0}
+.warnbox{background:#fff7e0;border:1px solid #f0d58a;border-radius:10px;padding:10px 14px;font-size:.92rem}
+.ok{color:var(--up)}.fail{color:var(--down)}ul.ev{padding-left:18px;margin:.3rem 0}ul.ev li{margin:.2rem 0}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 16px;color:var(--mut);font-size:.85rem}
+svg.spark{vertical-align:middle}
+@media (max-width:600px){body{font-size:15px}main{padding:10px}th,td{padding:5px}}

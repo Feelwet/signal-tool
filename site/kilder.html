@@ -1,0 +1,61 @@
+<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kilder og metode – Geo-signal</title><link rel="stylesheet" href="style.css"><meta name="robots" content="noindex"></head><body>
+<header><a class="brand" href="index.html">🛰️ Geo-signal</a> <span class="mut" style="color:#b9c6d6">Oppdatert 2026-09-27 21:32 (norsk tid)</span>
+<nav><a href="index.html">Oversikt</a><a href="temaer.html">Temaer</a><a href="tickere.html">Tickere</a>
+<a href="makro.html">Makro</a><a href="kalender.html">Kalender</a><a href="oslo.html">Oslo Børs</a><a href="kilder.html">Kilder og metode</a></nav></header>
+<main><h1>Kilder og metode</h1><div class="warnbox"><b>Ikke finansiell rådgivning.</b> Automatisk informasjonsverktøy basert på offentlige data og enkle, transparente regler. Signaler kan være feil, forsinket eller allerede priset inn. Gjør alltid egne vurderinger.</div>
+<div class="card"><h2 style="margin-top:0">Slik fungerer det</h2><ol>
+<li><b>Innsamling</b> fra gratis, offentlige kilder (ingen betalte tjenester, ingen API-nøkler).</li>
+<li><b>Temakart:</b> 10 geopolitiske temaer koblet til sektorer, råvarer og eksempel-tickere (USA og Oslo Børs), med skriftlig begrunnelse.</li>
+<li><b>Avviksdeteksjon:</b> for hvert tema og hver ticker sammenlignes siste periode med egen historikk (robust z-score = (siste − median) / (1,4826 × MAD)).</li>
+<li><b>Temascore 0–5</b> = vektet snitt av positive, avkortede komponentscorer: GDELT-hendelser, nyhetsvolum, tone, RSS, Google-søk, SEC 8-K, prediksjonsmarkeder, kurs/volum, OFAC.</li>
+<li><b>Ticker-poeng</b> = sum av enkle, dokumenterte poeng (innsidekjøp-klynger, kongresskjøp, kontraktsmeldinger, uvanlig volum/kurs, tema-oppmerksomhet).</li></ol>
+<h3>Viktige forbehold</h3><ul>
+<li>Ingen språkmodell – nøkkelord kan gi feiltreff (f.eks. «strait» eller «war» i andre sammenhenger).</li>
+<li>Oppmerksomhet er ikke det samme som avkastning; mye kan allerede være priset inn.</li>
+<li>RSS- og Reddit-baseline bygges opp over tid; de første dagene er disse komponentene svake.</li>
+<li>Innsidedata (Form 4) kommer inntil 2 virkedager etter handel; kongresshandler inntil 45 dager.</li>
+<li>Pålitelighet: offisiell statistikk (høy, men revideres) &gt; markedsdata (høy) &gt; nyheter (middels) &gt; sosiale medier (lav).</li></ul></div>
+<div class="card"><h2 style="margin-top:0">Historisk validering (backtest)</h2><pre style="white-space:pre-wrap;font-size:.85rem"># Backtest / historisk validering
+
+_Alle tall er beregnet fra nedlastede data; ingen tall er manuelt satt inn. Resultater er ikke garanti for fremtiden._
+
+## Innsidekjøp-klynger (USA, SEC Form 4) – historisk test
+Data: SEC Insider Transactions Data Sets 2022q1–2025q4; 44,867 kjøpsmeldinger (kode P). Klynger funnet: 2016, med kursdata: 987. Enkeltkjøp (sammenligning, tilfeldig utvalg): 700, med kursdata: 186.
+Inngang: sluttkurs første handelsdag etter innleveringsdato. Meravkastning = aksje − SPY. Aksjer under $1 utelatt.
+
+| Horisont | Klynger (≥3 innsidere) meravkastning | Enkeltkjøp meravkastning |
+|---|---|---|
+| 5 handelsdager | n=984, snitt +0.09%, median -0.15%, andel positive 49%, t=0.30 | n=184, snitt +0.13%, median -0.05%, andel positive 49%, t=0.25 |
+| 20 handelsdager | n=982, snitt -0.71%, median -1.47%, andel positive 44%, t=-1.37 | n=182, snitt -0.69%, median -1.23%, andel positive 41%, t=-0.76 |
+| 60 handelsdager | n=977, snitt -0.54%, median -3.20%, andel positive 43%, t=-0.55 | n=180, snitt -3.30%, median -4.90%, andel positive 39%, t=-2.01 |
+
+Per år (klynger, 20d meravkastning): 2022: n=261, snitt -1.28%, median -1.70%, andel positive 44%, t=-1.08; 2023: n=251, snitt +0.27%, median -0.78%, andel positive 46%, t=0.25; 2024: n=206, snitt -1.66%, median -2.35%, andel positive 38%, t=-1.76; 2025: n=264, snitt -0.33%, median -1.27%, andel positive 45%, t=-0.38
+
+Winsorisert (1/99 %) snitt 20d, klynger: -0.80%
+
+**Forbehold:** Overlevelsesskjevhet (yfinance mangler mange avnoterte aksjer – trolig skjevhet oppover), ingen handelskostnader/spread (viktig for småselskaper), overlappende hendelser gir for optimistiske t-verdier, ticker-endringer kan gi feil kobling. Snitt drives ofte av få ekstreme småselskaper – se median.
+
+## GDELT-oppmerksomhetstopper vs. sektor-ETF/råvare – historisk test
+Data: GDELT 1.0 daglige hendelsesfiler 2022-01-01–2026-09-26 (1710 dager). Topp = robust z ≥ 2,5 for temaets artikkelandel (2-dagers snitt vs 60 foregående dager), 10 handelsdagers karantene. Inngang = sluttkurs første handelsdag etter toppdagen. Sammenlignet med alle dager (ubetinget) – p-verdi via bootstrap.
+
+| Tema → instrument | Topper | 5d etter topp | 20d etter topp | Ubetinget 5d / 20d | p (5d / 20d) | 5d FØR topp |
+|---|---|---|---|---|---|---|
+| mideast_energy → BZ=F | 49 | -0.88% (hit 45%) | -0.54% (hit 41%) | +0.10% / +0.35% | 0.20 / 0.54 | +0.21% (hit 45%) |
+| mideast_energy → XLE | 49 | +0.38% (hit 63%) | +1.59% (hit 49%) | +0.33% / +1.41% | 0.92 / 0.85 | -0.11% (hit 53%) |
+| conflict_defense → ITA | 35 | +0.45% (hit 60%) | +2.66% (hit 71%) | +0.35% / +1.55% | 0.83 / 0.24 | +0.80% (hit 60%) |
+| conflict_defense → RHM.DE | 35 | +1.63% (hit 51%) | +6.41% (hit 68%) | +0.91% / +3.80% | 0.49 / 0.24 | +3.18% (hit 66%) |
+| conflict_defense → KOG.OL | 35 | +0.73% (hit 69%) | +5.67% (hit 68%) | +0.83% / +3.31% | 0.90 / 0.20 | +2.31% (hit 74%) |
+| shipping_chokepoints → BDRY | 50 | -0.96% (hit 44%) | +0.83% (hit 52%) | +0.15% / +0.91% | 0.31 / 0.97 | +0.08% (hit 50%) |
+| risk_off_haven → GLD | 35 | -0.03% (hit 54%) | +1.01% (hit 66%) | +0.38% / +1.61% | 0.36 / 0.48 | +0.39% (hit 57%) |
+| sanctions_energy → TTF=F | 41 | -0.84% (hit 48%) | -1.00% (hit 48%) | +0.45% / +2.02% | 0.46 / 0.42 | +3.21% (hit 44%) |
+
+**Tolkning:** p-verdi = andel tilfeldige utvalg av like mange dager med minst like stort avvik fra det ubetingede snittet. p &gt; 0,1 betyr at vi ikke kan skille signalet fra tilfeldigheter. Kolonnen «5d FØR topp» viser om prisen allerede hadde beveget seg (dvs. om nyhetstoppen kom etter markedet).
+**Forbehold:** Få uavhengige hendelser; GDELT-dekning og kildeutvalg endres over tid; mange temaer og instrumenter testet (multippel testing – noen «signifikante» funn forventes ved flaks); ingen kostnader.
+## Konklusjon (skrevet 2026-09-27 ut fra tabellene over)
+- **Innsidekjøp-klynger:** ingen meravkastning mot SPY etter at klyngen ble offentlig (snitt og median ≈ 0 eller negativ, t-verdier nær 0). Signalet vektes derfor lavt i verktøyet og brukes som bekreftelse.
+- **GDELT-topper:** ingen av de 8 tema→instrument-parene er statistisk signifikante (alle p &gt; 0,1). Forsvar (ITA, Rheinmetall, Kongsberg) steg mer enn normalt 20 dager etter konflikttopper, men prisene hadde ofte allerede steget de 5 dagene *før* toppen – nyhetsvolumet kommer typisk samtidig med eller etter markedet. GDELT-topper er derfor et *oppmerksomhets*-signal, ikke et bevist forsprang.
+- Det betyr at rapportens rangering må leses som «hva bør jeg se nærmere på», ikke som handelssignaler.
+</pre></div>
+<div class="card tw"><h2 style="margin-top:0">Kildestatus ved siste kjøring</h2><table><tr><th>Kilde</th><th>Status</th></tr><tr><td>GDELT 1.0 daily events</td><td class="ok">ok (latest 2026-09-26, 76 days baseline)</td></tr><tr><td>GDELT DOC 2.0 API</td><td class="fail">FAILED after 0 queries: 429 for https://api.gdeltproject.org/api/v2/doc/doc -&gt; using GDELT daily event files instead</td></tr><tr><td>News RSS</td><td class="ok">ok (20/20 feeds)</td></tr><tr><td>Prices (yfinance)</td><td class="ok">ok (83/84 tickers)</td></tr><tr><td>Google Trends (pytrends)</td><td class="ok">ok (10 themes)</td></tr><tr><td>SEC EDGAR 8-K full-text</td><td class="ok">ok (9 phrases x 13 weeks)</td></tr><tr><td>SEC EDGAR Form 4</td><td class="ok">ok (1766 Form 4 filings, 0 parse errors)</td></tr><tr><td>SEC late-filing notices (NT 10-K/Q)</td><td class="ok">ok (3 late-filing notices in 7d)</td></tr><tr><td>US House PTR (congress trades)</td><td class="ok">ok (54 PTRs in 45d, 6 scanned skipped, 423 transactions parsed)</td></tr><tr><td>US Senate eFD</td><td class="mut">not automated (requires interactive terms acceptance); see research/sources.md</td></tr><tr><td>USAspending awards</td><td class="ok">ok (54 new awards &gt;= $25M in 21d)</td></tr><tr><td>SAM.gov</td><td class="mut">not used (API requires free key via sign-up)</td></tr><tr><td>OFAC recent actions</td><td class="ok">ok (120 actions since 2026-03-05)</td></tr><tr><td>Reddit (public RSS)</td><td class="fail">FAILED; 3 feed errors</td></tr><tr><td>Polymarket (Gamma API)</td><td class="ok">ok (3924 open markets, 1577 matched to themes)</td></tr><tr><td>Kalshi</td><td class="ok">ok (1742 markets)</td></tr><tr><td>Oslo Børs Newsweb</td><td class="ok">ok (4341 announcements in 60d)</td></tr><tr><td>Norges Bank</td><td class="mut">fx ok; press rss ok (5)</td></tr><tr><td>Oil spreads &amp; curves (yfinance futures)</td><td class="ok">ok (crack_321, brent_wti, bz_curve, cl_curve)</td></tr><tr><td>US DoD daily contracts (war.gov)</td><td class="ok">ok (15 daily announcements listed; 110 awards parsed)</td></tr><tr><td>Finanstilsynet short register</td><td class="ok">ok (99 issuers; 42 with reported shorts)</td></tr><tr><td>Makro: SSB</td><td class="ok">ok (5/5 serier)</td></tr><tr><td>Makro: Eurostat</td><td class="ok">ok (2/2 serier)</td></tr><tr><td>Makro: FRED/EIA</td><td class="ok">ok (2/2 serier)</td></tr><tr><td>Makro: FRED/Federal Reserve</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: FRED/BLS</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: FRED/Census</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: EIA WPSR</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: ONS</td><td class="ok">ok (2/2 serier)</td></tr><tr><td>Makro: SCB</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: DST</td><td class="ok">ok (1/1 serier)</td></tr><tr><td>Makro: OECD</td><td class="ok">ok (2/2 serier)</td></tr><tr><td>Makro: IMF WEO (DataMapper)</td><td class="ok">ok</td></tr><tr><td>Makro: World Bank API</td><td class="ok">ok</td></tr><tr><td>Makro: Eurostat update RSS</td><td class="ok">ok (0 relevante oppdateringer)</td></tr><tr><td>BLS release calendar (ICS)</td><td class="ok">ok (313 events)</td></tr><tr><td>BEA release calendar (ICS)</td><td class="ok">ok (119 events)</td></tr><tr><td>ONS release calendar API</td><td class="ok">ok (26 upcoming)</td></tr><tr><td>Makro: Destatis GENESIS</td><td class="mut">not automated: GENESIS web service returned an HTML page for guest access (new API needs registration/token)</td></tr><tr><td>Makro: China NBS</td><td class="fail">FAILED: data.stats.gov.cn returned 403 from this box</td></tr><tr><td>Makro: BLS API v1</td><td class="mut">not used: shared daily quota exhausted from this IP; BLS series taken via FRED CSV</td></tr><tr><td>Makro: EIA API v2 / FRED API / BEA API</td><td class="mut">need free API keys (sign-up) - not used; FRED graph CSV + EIA weekly CSV used instead</td></tr><tr><td>Fed FOMC calendar</td><td class="ok">ok (55 meetings)</td></tr><tr><td>ECB meeting calendar</td><td class="ok">ok (19 meetings)</td></tr><tr><td>Norges Bank meeting calendar</td><td class="mut">not automated (dates rendered client-side); press releases RSS used</td></tr><tr><td>Earnings calendar (yfinance)</td><td class="ok">ok (3 reports within 21d; 0 lookups failed)</td></tr></table>
+<p class="mut">Full dokumentasjon av kildene: research/sources.md i prosjektet.</p></div></main><footer><b>Ikke finansiell rådgivning.</b> Automatisk informasjonsverktøy basert på offentlige data og enkle, transparente regler. Signaler kan være feil, forsinket eller allerede priset inn. Gjør alltid egne vurderinger.<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer></body></html>
