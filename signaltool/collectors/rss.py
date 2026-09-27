@@ -33,6 +33,7 @@ FEEDS = {
 }
 STORE = HISTORY / "headlines.csv"
 RUNS = HISTORY / "rss_run_days.txt"
+KEEP_DAYS = 180
 
 
 def collection_days() -> int:
@@ -69,6 +70,8 @@ def collect() -> tuple[pd.DataFrame, dict]:
             old = pd.read_csv(STORE, parse_dates=["published"])
             old["published"] = pd.to_datetime(old["published"], utc=True, format="mixed")
             df = pd.concat([old, df]).drop_duplicates("link", keep="first")
+        # keep the stored history bounded (it is carried between CI runs in a cache)
+        df = df[df["published"].isna() | (df["published"] >= pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=KEEP_DAYS))]
         df.to_csv(STORE, index=False)
         with RUNS.open("a") as f:
             f.write(datetime.now().strftime("%Y-%m-%d") + "\n")

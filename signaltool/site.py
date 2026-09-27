@@ -9,26 +9,35 @@ SITE = ROOT / "site"
 E = lambda x: html.escape("" if x is None else str(x))
 
 CSS = """
-:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--mut:#5d6b7c;--acc:#0b5cad;--up:#0a7d3b;--down:#b3261e;--line:#e3e7ec;--warn:#8a5a00}
+/* Dark theme (default). Contrast vs --card #161b22: ink 14.6:1, mut 7.2:1, acc 8.1:1, up 7.6:1, down 7.1:1, warn 8.9:1 (WCAG AA+). */
+:root{color-scheme:dark;--bg:#0d1117;--card:#161b22;--card2:#1c2330;--ink:#e6edf3;--mut:#9ea9b5;--acc:#6cb6ff;--acc-bg:rgba(108,182,255,.14);
+--up:#4ac26b;--down:#ff8078;--line:#2d333b;--warn:#e3b341;--hdr:#060a10;--pill:#262d38}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:#0f2238;color:#fff;padding:14px 18px}header a{color:#fff;text-decoration:none}
-header .brand{font-weight:700;font-size:1.15rem}nav{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.95rem}
-nav a{opacity:.9}nav a:hover{opacity:1;text-decoration:underline}
+header{background:var(--hdr);color:#fff;padding:14px 18px;border-bottom:1px solid var(--line)}header a{color:#fff;text-decoration:none}
+header .brand{font-weight:700;font-size:1.15rem}header .gen{color:#a8b5c4;font-size:.9rem}nav{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.95rem}
+nav a{color:#cfd9e4!important;opacity:1}nav a:hover{color:#fff!important;text-decoration:underline}
 main{max-width:1100px;margin:0 auto;padding:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.card.hl{border-left:4px solid var(--acc)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-h1{font-size:1.5rem;margin:.2rem 0 .6rem}h2{font-size:1.2rem;margin:1.2rem 0 .6rem}h3{font-size:1.05rem;margin:.2rem 0 .4rem}
-a{color:var(--acc)}.mut{color:var(--mut);font-size:.9rem}.up{color:var(--up)}.down{color:var(--down)}
-.score{display:inline-block;min-width:3.2em;text-align:center;font-weight:700;border-radius:6px;padding:2px 8px;background:#e8f0fb;color:var(--acc)}
-.score.hot{background:#fde7e5;color:var(--down)}.score.warm{background:#fff3d6;color:var(--warn)}
-.bar{height:8px;background:#e9edf2;border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc)}
+h1{font-size:1.5rem;margin:.2rem 0 .6rem;color:#f3f6f9}h2{font-size:1.2rem;margin:1.2rem 0 .6rem;color:#f3f6f9}h3{font-size:1.05rem;margin:.2rem 0 .4rem}
+a{color:var(--acc)}a:visited{color:#b392f0}a:hover{color:#9dcbff}.mut{color:var(--mut);font-size:.9rem}.up{color:var(--up)}.down{color:var(--down)}
+.score{display:inline-block;min-width:3.2em;text-align:center;font-weight:700;border-radius:6px;padding:2px 8px;background:var(--acc-bg);color:var(--acc);border:1px solid rgba(108,182,255,.35)}
+.score.hot{background:rgba(255,128,120,.14);color:#ff9a92;border-color:rgba(255,128,120,.45)}.score.warm{background:rgba(227,179,65,.14);color:var(--warn);border-color:rgba(227,179,65,.45)}
+.bar{height:8px;background:#262d38;border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#3d8bdb,var(--acc))}
 table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-weight:600;color:var(--mut);white-space:nowrap}.tw{overflow-x:auto}
-.pill{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:999px;background:#eef1f5;margin:2px 4px 2px 0}
-.warnbox{background:#fff7e0;border:1px solid #f0d58a;border-radius:10px;padding:10px 14px;font-size:.92rem}
+th{font-weight:600;color:var(--mut);white-space:nowrap;background:var(--card2)}tr:hover td{background:rgba(255,255,255,.025)}.tw{overflow-x:auto}
+.pill{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:999px;background:var(--pill);color:#d5dde6;border:1px solid #333b47;margin:2px 4px 2px 0;text-decoration:none}
+a.pill{color:var(--acc)}
+.warnbox{background:#2a2213;border:1px solid #6b5520;color:#f2dfae;border-radius:10px;padding:10px 14px;margin:0 0 14px;font-size:.92rem}
 .ok{color:var(--up)}.fail{color:var(--down)}ul.ev{padding-left:18px;margin:.3rem 0}ul.ev li{margin:.2rem 0}
+.rel{display:inline-block;font-size:.78rem;padding:1px 8px;border-radius:8px;border:1px solid;white-space:normal}
+.rel.hi{color:var(--up);background:rgba(74,194,107,.12);border-color:rgba(74,194,107,.4)}
+.rel.mid{color:var(--warn);background:rgba(227,179,65,.12);border-color:rgba(227,179,65,.4)}
+.rel.lo{color:var(--down);background:rgba(255,128,120,.12);border-color:rgba(255,128,120,.4)}
+pre{background:#0b0f15;border:1px solid var(--line);border-radius:8px;padding:10px;color:#d5dde6}
 footer{max-width:1100px;margin:10px auto 30px;padding:0 16px;color:var(--mut);font-size:.85rem}
-svg.spark{vertical-align:middle}
+svg.spark{vertical-align:middle}svg.spark polyline{stroke:var(--acc)}
 @media (max-width:600px){body{font-size:15px}main{padding:10px}th,td{padding:5px}}
 """
 
@@ -59,6 +68,13 @@ def num(x, d=2):
     return "–" if x is None else f"{x:.{d}f}"
 
 
+def rel_label(txt):
+    """Coloured reliability label: høy -> green, middels -> amber, lav -> red."""
+    t = str(txt or "").lower()
+    lvl = "lo" if "lav" in t else "mid" if ("middels" in t or "foreløp" in t) else "hi" if "høy" in t else "mid"
+    return f'<span class="rel {lvl}">{E(txt)}</span>'
+
+
 def score_badge(s, hi=2.0, mid=1.0):
     cls = "hot" if s >= hi else "warm" if s >= mid else ""
     return f'<span class="score {cls}">{s:.2f}</span>'
@@ -71,15 +87,15 @@ def spark(vals, w=140, h=32):
     lo, hi = min(v), max(v)
     rng = (hi - lo) or 1
     pts = " ".join(f"{i*(w-2)/(len(v)-1)+1:.1f},{h-1-(x-lo)/rng*(h-2):.1f}" for i, x in enumerate(v))
-    return f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><polyline fill="none" stroke="#0b5cad" stroke-width="1.5" points="{pts}"/></svg>'
+    return f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><polyline fill="none" stroke="#6cb6ff" stroke-width="1.5" points="{pts}"/></svg>'
 
 
 def page(title: str, body: str, depth=0, snap=None) -> str:
     pre = "../" * depth
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
     return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css"><meta name="robots" content="noindex"></head><body>
-<header><a class="brand" href="{pre}index.html">🛰️ Geo-signal</a> <span class="mut" style="color:#b9c6d6">{gen}</span>
+<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
+<header><a class="brand" href="{pre}index.html">🛰️ Geo-signal</a> <span class="gen">{gen}</span>
 <nav><a href="{pre}index.html">Oversikt</a><a href="{pre}temaer.html">Temaer</a><a href="{pre}tickere.html">Tickere</a>
 <a href="{pre}makro.html">Makro</a><a href="{pre}kalender.html">Kalender</a><a href="{pre}oslo.html">Oslo Børs</a><a href="{pre}kilder.html">Kilder og metode</a></nav></header>
 <main>{body}</main><footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer></body></html>"""
@@ -175,7 +191,7 @@ def weekend_html(wk):
     cnt = ", ".join(f"{E(k)}: {v}" for k, v in list(wk["theme_headline_counts"].items())[:6])
     hs = "".join(f"<li><b>{E(k)}</b>: " + " · ".join(f'<a href="{E(h["link"])}">{E(h["title"])}</a>' for h in v[:2]) + "</li>" for k, v in wk["top_headlines"].items())
     pm = "".join(f'<li><a href="{E(m["url"])}">{E(m["question"])}</a> – {num((m["p_yes"] or 0)*100,0)}% ({num((m["chg_1d"] or 0)*100,1)} pp siste døgn)</li>' for m in wk["polymarket_1d_movers"][:5])
-    return (f'<div class="card" style="border-left:4px solid #0b5cad"><h2 style="margin-top:0">🗓️ Helgeoppsummering</h2><p class="mut">Siden fredag {E(wk["since"])} (norsk tid). Futures åpner {E(wk["futures_reopen"])}.</p>'
+    return (f'<div class="card hl"><h2 style="margin-top:0">🗓️ Helgeoppsummering</h2><p class="mut">Siden fredag {E(wk["since"])} (norsk tid). Futures åpner {E(wk["futures_reopen"])}.</p>'
             f'<p>Overskrifter per tema: {cnt or "ingen"}</p><ul class="ev">{hs}</ul>' + (f'<h3>Prediksjonsmarkeder – største døgnbevegelser</h3><ul class="ev">{pm}</ul>' if pm else "") + "</div>")
 
 
@@ -223,7 +239,7 @@ def makro_page(snap):
         z = r.get("surprise_z")
         zc = "down" if z is not None and abs(z) >= 2 else ""
         rows += (f'<tr><td><a href="{E(r["url"])}">{E(r["name"])}</a><br><span class="mut">{E(r["why"])}</span></td><td>{E(r["source"])}<br><span class="mut">{E(r["country"])}</span></td>'
-                 f'<td>{E(r["last_period"])}</td><td>{num(r["last"])} {E(r["unit"])}</td><td>{ch}</td><td class="{zc}">{num(z,1)}</td><td>{spark(r.get("spark"))}</td><td class="mut">{E(r["reliability"])}</td></tr>')
+                 f'<td>{E(r["last_period"])}</td><td>{num(r["last"])} {E(r["unit"])}</td><td>{ch}</td><td class="{zc}">{num(z,1)}</td><td>{spark(r.get("spark"))}</td><td>{rel_label(r["reliability"])}</td></tr>')
     imf = mac.get("imf_weo_gdp") or {}
     imf_rows = "".join(f'<tr><td>{E(c)}</td>' + "".join(f'<td>{num(v,1)}</td>' for v in vals.values()) + "</tr>" for c, vals in imf.items())
     imf_head = "".join(f"<th>{E(y)}</th>" for y in (next(iter(imf.values())).keys() if imf else []))

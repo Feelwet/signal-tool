@@ -1,0 +1,112 @@
+name: Nightly update + deploy to GitHub Pages
+
+on:
+  schedule:
+    - cron: "17 5 * * *"      # 05:17 UTC every day (07:17 Oslo summer time / 06:17 winter time)
+  workflow_dispatch:
+    inputs:
+      fast:
+        description: "Fast run (skip Google Trends/earnings, cap SEC Form 4 scan)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TZ: Europe/Oslo
+  PYTHONUNBUFFERED: "1"
+  # SEC EDGAR asks for a contact in the User-Agent. Set a repository variable SIGNAL_UA ("Name email") to override.
+  SIGNAL_UA: ${{ vars.SIGNAL_UA || format('signal-tool nightly (https://github.com/{0})', github.repository) }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+          pip install -r requirements.txt
+
+      - name: Tests
+        run: python -m pytest -q
+
+      # State between runs (GDELT daily aggregates, RSS/Reddit history = baselines, HTTP/Form 4 cache, snapshots)
+      # lives in data/ and is carried over with actions/cache (never committed). Cache entries are immutable, so each
+      # run saves a new key and restores the most recent one via restore-keys. If the cache is ever evicted
+      # (unused > 7 days), the next run simply backfills 75 days of GDELT and RSS/Reddit baselines start over.
+      - name: Restore state cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data
+          key: signal-state-${{ github.run_id }}
+          restore-keys: signal-state-
+
+      - name: Run pipeline (collect, score, report, build site)
+        id: run
+        continue-on-error: true   # individual sources may block GitHub IPs; collectors already degrade gracefully
+        run: |
+          if [ "${{ inputs.fast }}" = "true" ]; then python -m signaltool run --fast; else python -m signaltool run; fi
+
+      - name: Fallback site build
+        if: steps.run.outcome != 'success'
+        run: |
+          echo "::warning::Pipeline failed; rebuilding site from last available snapshot"
+          if [ -f data/snapshots/latest.json ]; then
+            python -m signaltool build-site
+          else
+            echo "::warning::No snapshot in cache; deploying the site/ committed in the repository"
+            git checkout -- site
+          fi
+          test -f site/index.html
+
+      - name: Prune state (keep cache small)
+        if: always()
+        run: |
+          mkdir -p data
+          find data/cache/gdelt_daily -type f -mtime +120 -delete 2>/dev/null || true
+          find data/cache -maxdepth 1 -name 'http_*' -mtime +7 -delete 2>/dev/null || true
+          find data/cache/form4 data/cache/house_ptr data/cache/insider_ds -type f -mtime +60 -delete 2>/dev/null || true
+          find data/snapshots -name '20*.json' -mtime +90 -delete 2>/dev/null || true
+          du -sh data || true
+
+      - name: Save state cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data
+          key: signal-state-${{ github.run_id }}
+
+      - name: Keep report with the site
+        run: |
+          mkdir -p site/rapport && cp reports/latest.md site/rapport/latest.md 2>/dev/null || true
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

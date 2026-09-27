@@ -1,5 +1,7 @@
 # signal-tool – geopolitical early-warning for stocks (v0.1)
 
+🌐 **Live site (Norwegian, dark theme, updated nightly):** https://&lt;user&gt;.github.io/&lt;repo&gt;/  <!-- replace after enabling Pages -->
+
 **What it does, in plain English:** every day it reads a large number of free public sources – world news, the GDELT
 global event database, prediction markets, US and Norwegian company filings, insider trades, short positions, sanctions,
 defence contracts, oil futures and official statistics – and asks one question: *which geopolitical themes and which
@@ -12,7 +14,7 @@ each with the evidence, links, a plain-language "why this could matter" and "wha
 
 ## Quick start
 ```bash
-cd /workspace/signal-tool
+git clone https://github.com/<user>/<repo>.git signal-tool && cd signal-tool
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt          # also needs poppler-utils (pdftotext) for US House PDFs
 export SIGNAL_UA="Your Name your@email"   # SEC asks for a contact in the User-Agent
@@ -56,7 +58,7 @@ anomalies of the theme's tickers, OFAC designations and (for oil themes) physica
 Oslo managers' transactions, US federal awards, unusual volume, unusual price move, theme attention, Reddit cashtags and
 (low weight) congressional buys. Short-position changes on Oslo are shown as warning flags, not added to the score.
 
-Weighting follows the X-accounts research in `research/x_accounts/REPORT.md`: official policy signals (sanctions, DoD
+Weighting follows a separate X-accounts research study (kept private, not part of this repository): official policy signals (sanctions, DoD
 contracts), physical oil data and shipping get relatively more weight; politician trades are low weight.
 
 ## Honest limitations
@@ -66,15 +68,41 @@ contracts), physical oil data and shipping get relatively more weight; politicia
 * Insider data lags up to 2 business days, congressional trades up to 45 days, DoD data in USAspending ~90 days.
 * Backtests have survivorship bias, no trading costs, few independent events, and multiple-testing risk – see `reports/backtest.md`.
 
-## Hosting the website (not done – nothing is published)
-`site/` is plain static HTML/CSS (plus `data.json`), so it can be hosted for free on GitHub Pages (push `site/` to a
-private repo's `gh-pages` branch or use a Pages Action; note that Pages on private repos requires a paid plan, public repos
-are free – consider whether the content should be public), Netlify / Cloudflare Pages (drag-and-drop the folder, can be
-password-protected on paid tiers or via Cloudflare Access free tier). A nightly GitHub Action can run `python -m signaltool run`
-and publish. Pages include `<meta name="robots" content="noindex">`.
+## Publishing: GitHub Pages + nightly update
+The site is plain static HTML/CSS (dark theme, all links relative, so it works under `https://<user>.github.io/<repo>/`).
+`.github/workflows/nightly.yml` runs every night at **05:17 UTC** (07:17 Oslo summer time) and on demand (*Actions → Run workflow*):
+
+1. installs Python 3.12 + `requirements.txt` + `poppler-utils`, runs the tests;
+2. restores `data/` (GDELT daily aggregates, RSS/Reddit headline history = baselines, HTTP/Form 4 caches, snapshots)
+   from **`actions/cache`**, runs `python -m signaltool run` (collect → score → report → build site), prunes old state and
+   saves the cache again. Nothing is committed back, so the repository stays small and the workflow only needs read access;
+3. deploys `site/` with the official `actions/configure-pages`, `actions/upload-pages-artifact` and `actions/deploy-pages`.
+
+Robustness: every collector catches its own errors, so sources that block GitHub's IP ranges (e.g. Reddit, GDELT DOC API,
+some statistics offices) just show up as `FAILED` on the «Kilder og metode» page. If the whole run crashes, the workflow
+rebuilds the site from the last cached snapshot, or — if there is no cache — deploys the `site/` committed in the repo.
+If the cache is evicted (GitHub drops caches unused for 7 days), the next run re-downloads 75 days of GDELT files
+(a few minutes) and the RSS/Reddit baselines start over. GitHub also disables scheduled workflows in repos with no
+activity for 60 days — re-enable under *Actions* if that happens.
+
+One-time setup after pushing: *Settings → Pages → Source: GitHub Actions*; optionally *Settings → Secrets and variables →
+Actions → Variables*: `SIGNAL_UA` = `"Your Name your@email"` (SEC EDGAR asks for a contact in the User-Agent; without it a
+generic UA with the repo URL is used). No secrets or API keys are required.
+
+Not in the repository (see `.gitignore`): `data/` (runtime state/caches, ~110 MB locally, regenerable), the private
+`research/x_accounts/` workspace, virtualenvs and logs.
+
+## Disclaimer
+**Not financial advice.** This is an automated information tool built on free public data and simple, transparent rules.
+Signals can be wrong, late, or already priced in; nothing here is a recommendation to buy or sell any security.
+Do your own research. The authors accept no liability for decisions made using this tool. Third-party data belongs to
+its respective providers (GDELT, SEC, Polymarket, Oslo Børs, Finanstilsynet, SSB, Eurostat, FRED, etc.).
+*Ikke finansiell rådgivning.*
 
 ## Files
 * `research/sources.md` – every source tested, with status, key requirements and reliability label
 * `research/backlog.md` – prioritised next steps
 * `reports/` – daily reports and `backtest.md`
-* `screenshots/` – headless-browser screenshots of the site
+* `screenshots/` – headless-browser screenshots of the site (dark theme)
+* Pages carry `<meta name="robots" content="noindex">` (remove in `signaltool/site.py` if you want search engines to index the site).
+* `site/` – last locally built copy of the website (the live site is rebuilt nightly by the workflow)

@@ -1,5 +1,23 @@
+# --- local environments / caches ---
 .venv/
-data/
+**/.venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+.DS_Store
+
+# --- runtime data (regenerable; carried between CI runs via actions/cache, never committed) ---
+# data/cache: GDELT daily aggregates (~90 MB incl. 2022+ backtest history), SEC Form 4 / insider data sets,
+#             House PTR PDFs, HTTP response cache
+# data/history: RSS/Reddit headline history (baselines), data/snapshots: daily JSON snapshots, *.log: run logs
+data/
+*.log
+
+# --- private research workspace (scraped X/Twitter timelines, raw quote dumps, own venv; ~240 MB) ---
+research/x_accounts/
+
+# --- misc large / temporary files ---
+*.zip
+*.tar.gz
+*.parquet
+tmp/

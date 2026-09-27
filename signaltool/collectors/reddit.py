@@ -39,6 +39,7 @@ def collect() -> tuple[pd.DataFrame, str]:
             old = pd.read_csv(STORE)
             old["published"] = pd.to_datetime(old["published"], utc=True, format="mixed")
             df = pd.concat([old, df]).drop_duplicates("link", keep="first")
+        df = df[df["published"].isna() | (df["published"] >= pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=180))]
         df.to_csv(STORE, index=False)
     status = f"ok ({len(rows)} posts from {len(SUBS)} subs)" if rows else "FAILED"
     if fails:
