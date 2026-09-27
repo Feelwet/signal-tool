@@ -31,3 +31,20 @@ def test_build_uses_relative_links(tmp_path, monkeypatch):
         assert not re.search(r'(href|src)="/(?!/)', txt), f"absolute link in {f}"
         assert "localhost" not in txt and "/workspace" not in txt
     assert 'href="../style.css"' in (out / "tema" / f"{snap['themes'][0]['key']}.html").read_text()
+
+
+@pytest.mark.skipif(not SNAP.exists(), reason="no snapshot available")
+def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
+    snap = json.loads(SNAP.read_text())
+    e = snap["tickers"][0]
+    e.update({"category": "kjop", "cat_reason": "test-grunn", "cat_rules": [["Regel", True, "ok"], ["Regel 2", False, "nei"]]})
+    monkeypatch.setattr(site, "SITE", tmp_path / "site")
+    site.build(snap)
+    out = tmp_path / "site"
+    idx = (out / "index.html").read_text()
+    assert 'class="cat kjop"' in idx and "Hvorfor: test-grunn" in idx and "ikke bevist å slå markedet" in idx
+    tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
+    assert "✔ oppfylt" in tp and "✘ ikke oppfylt" in tp and "ikke bevist å slå markedet" in tp
+    tk = (out / "tickere.html").read_text()
+    assert 'id="treffsikkerhet"' in tk
+    assert "Kjøp-kandidat" in (out / "kilder.html").read_text()

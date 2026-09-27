@@ -301,9 +301,16 @@ Score 0–5 = vektet snitt av positive avvik (robuste z-scorer) mot temaets egen
 
 Poeng summeres fra: innsidekjøp-klynger, kongresskjøp, Oslo Børs-kontrakter/innsidemeldinger, føderale kontrakter, uvanlig volum/kurs, Reddit-omtale og temaets oppmerksomhet. Høy score = mer å undersøke, ikke et kjøpssignal.
 
+**Kategorier i dag:** Kjøp-kandidat 0, Hold 2, Watchlist 58. _Regelbaserte kategorier – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet._
+
+- **Hold: HHH** – innsidekjøp-klynge (ledelse/styre) og positiv trend, men kursen har allerede steget (5d +14 %, 20d +5 %, +5 % over 50d-snitt) – ikke jag.
+- **Hold: GME** – innsidekjøp-klynge (ledelse/styre) og positiv trend, men kursen har allerede steget (5d +3 %, 20d +28 %, +15 % over 50d-snitt) – ikke jag.
+
 ### 2a. Koblet til geopolitiske temaer
 
-#### HAFNI.OL – Hafnia Limited — 5.24 poeng
+#### HAFNI.OL – Hafnia Limited — 5.24 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (tema med markedsbekreftelse)._
+
 _Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 1.0, ose_insider_notices 0.5. Kurs 84.10, 5d -10.4%, 20d +8.9%._
 
 - [Newsweb: 1 meldepliktige handler (primærinnsidere) siste 14 d – retning (kjøp/salg) må sjekkes i meldingen](https://newsweb.oslobors.no/message/682980)
@@ -314,7 +321,9 @@ _Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 1.0, ose_insider_not
 
 **Hva kan gå galt:** Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Meldepliktig handel kan være salg, opsjoner eller aksjelån – les meldingen. Risikopremien forsvinner raskt: olje- og tankaksjer kan gi tilbake ukers gevinst på dager. OPECs ledige kapasitet og strategiske lagre demper topper; markedet kan allerede prise en stor premie.
 
-#### SUBC.OL – Subsea 7 S.A. — 3.87 poeng
+#### SUBC.OL – Subsea 7 S.A. — 3.87 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (kontraktsmelding (Newsweb)); kurs under 50-dagers snitt._
+
 _Poeng: ose_contracts 3.0, ose_insider_notices 0.5, theme_attention 0.4. Kurs 324.80, 5d +1.2%, 20d -2.5%._
 
 - [Newsweb: 2 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Subsea 7 S.A. announces details of share related awards»](https://newsweb.oslobors.no/message/682944)
@@ -324,7 +333,9 @@ _Poeng: ose_contracts 3.0, ose_insider_notices 0.5, theme_attention 0.4. Kurs 32
 
 **Hva kan gå galt:** Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning. Meldepliktig handel kan være salg, opsjoner eller aksjelån – les meldingen. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Begrenset direkte nedside; mest et langsomt innkjøpstema. Hendelser er sjeldne og ofte uklare (ulykke vs. sabotasje); bevegelser forsvinner raskt.
 
-#### GD  — 2.55 poeng
+#### GD  — 2.55 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.1, federal_award 1.0, theme_attention 0.5. Kurs 336.72, 5d -4.6%, 20d -11.4%._
 
 - [USAspending: ny kontrakt $37M fra Department of the Interior](https://www.usaspending.gov/award/CONT_AWD_140D0426F0672_1406_140D0424D0001_1406)
@@ -334,7 +345,9 @@ _Poeng: dod_contract 1.1, federal_award 1.0, theme_attention 0.5. Kurs 336.72, 5
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Store rammekontrakter utbetales over mange år og er ofte forventet av analytikere. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### LHX  — 2.36 poeng
+#### LHX  — 2.36 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.9, theme_attention 0.5. Kurs 237.69, 5d -3.9%, 20d -8.8%._
 
 - [DoD-kontrakt(er): 1 stk, totalt $876M (Contracts for Sept. 23, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4609970/contracts-for-sept-23-2026/)
@@ -343,7 +356,9 @@ _Poeng: dod_contract 1.9, theme_attention 0.5. Kurs 237.69, 5d -3.9%, 20d -8.8%.
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### FRO  — 2.09 poeng
+#### FRO  — 2.09 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (tema med markedsbekreftelse)._
+
 _Poeng: unusual_volume 1.1, theme_attention 1.0. Kurs 47.73, 5d -7.2%, 20d +16.4%._
 
 - [Uvanlig volum: snitt siste 5 dager 1.9x normalt (z=1.6)](https://finance.yahoo.com/quote/FRO)
@@ -352,7 +367,9 @@ _Poeng: unusual_volume 1.1, theme_attention 1.0. Kurs 47.73, 5d -7.2%, 20d +16.4
 
 **Hva kan gå galt:** Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Risikopremien forsvinner raskt: olje- og tankaksjer kan gi tilbake ukers gevinst på dager. OPECs ledige kapasitet og strategiske lagre demper topper; markedet kan allerede prise en stor premie.
 
-#### NOC  — 1.94 poeng
+#### NOC  — 1.94 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.5, theme_attention 0.5. Kurs 510.52, 5d -3.2%, 20d -5.9%._
 
 - [DoD-kontrakt(er): 7 stk, totalt $462M (Contracts for Sept. 24, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4611082/contracts-for-sept-24-2026/)
@@ -361,7 +378,9 @@ _Poeng: dod_contract 1.5, theme_attention 0.5. Kurs 510.52, 5d -3.2%, 20d -5.9%.
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### KOG.OL  — 1.88 poeng
+#### KOG.OL  — 1.88 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending))._
+
 _Poeng: dod_contract 1.4, theme_attention 0.5. Kurs 312.70, 5d -3.0%, 20d +0.1%._
 
 - [DoD-kontrakt(er): 1 stk, totalt $404M (Contracts for Sept. 25, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4612013/contracts-for-sept-25-2026/)
@@ -370,7 +389,9 @@ _Poeng: dod_contract 1.4, theme_attention 0.5. Kurs 312.70, 5d -3.0%, 20d +0.1%.
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### RTX  — 1.63 poeng
+#### RTX  — 1.63 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.1, theme_attention 0.5. Kurs 189.40, 5d -2.4%, 20d -10.7%._
 
 - [DoD-kontrakt(er): 5 stk, totalt $147M (Contracts for Sept. 24, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4611082/contracts-for-sept-24-2026/)
@@ -379,7 +400,9 @@ _Poeng: dod_contract 1.1, theme_attention 0.5. Kurs 189.40, 5d -2.4%, 20d -10.7%
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### BA.L  — 1.51 poeng
+#### BA.L  — 1.51 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.0, theme_attention 0.5. Kurs 1972.00, 5d -2.6%, 20d -5.7%._
 
 - [DoD-kontrakt(er): 2 stk, totalt $28M (Contracts for Sept. 25, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4612013/contracts-for-sept-25-2026/)
@@ -388,7 +411,9 @@ _Poeng: dod_contract 1.0, theme_attention 0.5. Kurs 1972.00, 5d -2.6%, 20d -5.7%
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### LMT  — 1.50 poeng
+#### LMT  — 1.50 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
+
 _Poeng: dod_contract 1.0, theme_attention 0.5. Kurs 519.56, 5d -2.6%, 20d -7.6%._
 
 - [DoD-kontrakt(er): 1 stk, totalt $17M (Contracts for Sept. 25, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4612013/contracts-for-sept-25-2026/)
@@ -397,7 +422,9 @@ _Poeng: dod_contract 1.0, theme_attention 0.5. Kurs 519.56, 5d -2.6%, 20d -7.6%.
 
 **Hva kan gå galt:** Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet. Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Nyheter om våpenhvile har historisk gitt kraftige endagsfall i europeisk forsvar (gevinstsikring). Mye av opprustningshistorien er allerede priset inn (høye multipler); budsjetter tar år å bli til ordre.
 
-#### VAR.OL – Vår Energi ASA — 1.37 poeng
+#### VAR.OL – Vår Energi ASA — 1.37 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (tema med markedsbekreftelse)._
+
 _Poeng: theme_attention 0.9, ose_insider_notices 0.5. Kurs 51.10, 5d -5.0%, 20d +5.3%._
 
 - [Newsweb: 1 meldepliktige handler (primærinnsidere) siste 14 d – retning (kjøp/salg) må sjekkes i meldingen](https://newsweb.oslobors.no/message/682386)
@@ -406,7 +433,9 @@ _Poeng: theme_attention 0.9, ose_insider_notices 0.5. Kurs 51.10, 5d -5.0%, 20d 
 
 **Hva kan gå galt:** Oppmerksomhet ≠ lønnsomhet; temaet kan snu ved nedtrapping. Meldepliktig handel kan være salg, opsjoner eller aksjelån – les meldingen. Risikopremien forsvinner raskt: olje- og tankaksjer kan gi tilbake ukers gevinst på dager. OPECs ledige kapasitet og strategiske lagre demper topper; markedet kan allerede prise en stor premie.
 
-#### CF  — 1.29 poeng
+#### CF  — 1.29 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: ingen signaler fra kilder med høyere pålitelighet (bare price_move); kurs under 50-dagers snitt._
+
 _Poeng: price_move 1.2, theme_attention 0.1. Kurs 114.67, 5d -10.2%, 20d -8.8%._
 
 - [Kursbevegelse 5d -10.2% (z=-2.2 vs eget år)](https://finance.yahoo.com/quote/CF)
@@ -417,7 +446,9 @@ _Poeng: price_move 1.2, theme_attention 0.1. Kurs 114.67, 5d -10.2%, 20d -8.8%._
 
 ### 2b. Annen uvanlig aktivitet (ikke koblet til tema)
 
-#### ONCIN.OL – Oncoinvent ASA — 4.91 poeng
+#### ONCIN.OL – Oncoinvent ASA — 4.91 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -41 % siste 20 handelsdager, lav likviditet (~$0.23M/dag); ingen signaler fra kilder med høyere pålitelighet (bare ose_insider_notices, price_move, unusual_volume); kurs under 50-dagers snitt._
+
 _Poeng: price_move 2.0, unusual_volume 1.9, ose_insider_notices 1.0. Kurs 83.80, 5d -34.3%, 20d -3.2%._
 
 - [Newsweb: 2 meldepliktige handler (primærinnsidere) siste 14 d – retning (kjøp/salg) må sjekkes i meldingen](https://newsweb.oslobors.no/message/682902)
@@ -428,7 +459,9 @@ _Poeng: price_move 2.0, unusual_volume 1.9, ose_insider_notices 1.0. Kurs 83.80,
 
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Meldepliktig handel kan være salg, opsjoner eller aksjelån – les meldingen.
 
-#### HHH – Howard Hughes Holdings Inc. — 4.82 poeng
+#### HHH – Howard Hughes Holdings Inc. — 4.82 poeng — **Hold**
+_Kategori: Hold. Hvorfor: innsidekjøp-klynge (ledelse/styre) og positiv trend, men kursen har allerede steget (5d +14 %, 20d +5 %, +5 % over 50d-snitt) – ikke jag._
+
 _Poeng: price_move 2.0, unusual_volume 1.8, insider_cluster 1.0. Kurs 68.43, 5d +13.6%, 20d +5.4%._
 
 - [SEC Form 4: 2 innsidere kjøpte i markedet for $1,667,428 (Davis Andrew D.; GRANDISSON MARC; Chief Operating Officer, HHC; Director, Executive Chairman, Vantage)](https://www.sec.gov/Archives/edgar/data/1981792/000110465926110504/0001104659-26-110504-index.htm)
@@ -439,7 +472,9 @@ _Poeng: price_move 2.0, unusual_volume 1.8, insider_cluster 1.0. Kurs 68.43, 5d 
 
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.
 
-#### 2020.OL – 2020 Bulkers Ltd. — 4.08 poeng
+#### 2020.OL – 2020 Bulkers Ltd. — 4.08 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: økende short (1.09 %, +1.09 pp 7d), kursfall -53 % siste 20 handelsdager, lav likviditet (~$0.11M/dag), pennyaksje; bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
+
 _Poeng: unusual_volume 2.1, ose_contracts 1.5, ose_insider_notices 0.5. Kurs 6.25, 5d -15.8%, 20d +57.9%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «2020 Bulkers Ltd. (2020)   Announcement of a letter of intent to acquire up to 15x large AHTS vessels and intended financing of up to approximately USD 485 million»](https://newsweb.oslobors.no/message/682446)
@@ -451,7 +486,9 @@ _Poeng: unusual_volume 2.1, ose_contracts 1.5, ose_insider_notices 0.5. Kurs 6.2
 
 **Hva kan gå galt:** Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning. Meldepliktig handel kan være salg, opsjoner eller aksjelån – les meldingen.
 
-#### EU – enCore Energy Corp. — 4.01 poeng
+#### EU – enCore Energy Corp. — 4.01 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -31 % siste 20 handelsdager; bare én uavhengig kildetype (innsidekjøp-klynge (ledelse/styre)); svakere enn S&P 500 siste 20 d._
+
 _Poeng: price_move 2.0, unusual_volume 1.0, insider_cluster 1.0. Kurs 1.24, 5d +37.8%, 20d -10.8%._
 
 - [SEC Form 4: 2 innsidere kjøpte i markedet for $111,850 (Little Richard H; SHERIFF WILLIAM M; Director, Chief Executive Officer; Director, Executive Chairman)](https://www.sec.gov/Archives/edgar/data/1500881/000119312526396060/0001193125-26-396060-index.htm)
@@ -462,7 +499,9 @@ _Poeng: price_move 2.0, unusual_volume 1.0, insider_cluster 1.0. Kurs 1.24, 5d +
 
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.
 
-#### BFRG – BullFrog AI Holdings, Inc. — 4.00 poeng
+#### BFRG – BullFrog AI Holdings, Inc. — 4.00 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -30 % siste 20 handelsdager, lav likviditet (~$0.05M/dag), pennyaksje; bare én uavhengig kildetype (innsidekjøp-klynge (ledelse/styre))._
+
 _Poeng: unusual_volume 3.0, insider_cluster 1.0. Kurs 0.67, 5d +43.5%, 20d +17.9%._
 
 - [SEC Form 4: 2 innsidere kjøpte i markedet for $71,342 (Blacher Joshua; Singh Vininder; Chief Financial Officer; Director, Chief Executive Officer, 10% owner)](https://www.sec.gov/Archives/edgar/data/1829247/000162828026063054/0001628280-26-063054-index.htm)
@@ -472,7 +511,9 @@ _Poeng: unusual_volume 3.0, insider_cluster 1.0. Kurs 0.67, 5d +43.5%, 20d +17.9
 
 **Hva kan gå galt:** Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.
 
-#### GRAB – Grab Holdings Ltd — 3.77 poeng
+#### GRAB – Grab Holdings Ltd — 3.77 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -23 % siste 20 handelsdager; bare én uavhengig kildetype (innsidekjøp-klynge (ledelse/styre)); kurs under 50-dagers snitt._
+
 _Poeng: unusual_volume 1.5, price_move 1.3, insider_cluster 1.0. Kurs 3.13, 5d +12.0%, 20d -12.8%._
 
 - [SEC Form 4: 2 innsidere kjøpte i markedet for $30,743,149 (Hungate Alexander Charles; Tan Anthony Ping Yeow; Director, Chief Executive Officer; Director, President and COO)](https://www.sec.gov/Archives/edgar/data/1855612/000189649726000009/0001896497-26-000009-index.htm)
@@ -483,7 +524,9 @@ _Poeng: unusual_volume 1.5, price_move 1.3, insider_cluster 1.0. Kurs 3.13, 5d +
 
 **Hva kan gå galt:** Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.
 
-#### NOM.OL – Nordic Mining ASA — 3.50 poeng
+#### NOM.OL – Nordic Mining ASA — 3.50 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -64 % siste 20 handelsdager, lav likviditet (~$0.15M/dag), pennyaksje; bare én uavhengig kildetype (kontraktsmelding (Newsweb)); kurs under 50-dagers snitt._
+
 _Poeng: price_move 2.0, ose_contracts 1.5. Kurs 0.95, 5d -60.7%, 20d -50.3%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Nordic Mining ASA: Legal proceedings initiated by EPC contractor»](https://newsweb.oslobors.no/message/682904)
@@ -493,7 +536,9 @@ _Poeng: price_move 2.0, ose_contracts 1.5. Kurs 0.95, 5d -60.7%, 20d -50.3%._
 
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning.
 
-#### VTURA.OL – Ventura Offshore Holding Ltd. — 3.29 poeng
+#### VTURA.OL – Ventura Offshore Holding Ltd. — 3.29 poeng — **Watchlist**
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: lav likviditet (~$0.79M/dag); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
+
 _Poeng: price_move 1.8, ose_contracts 1.5. Kurs 31.10, 5d -12.9%, 20d +7.2%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Ventura Offshore Holding Ltd.: SSV Catarina   Contract Amendment for Additional Well»](https://newsweb.oslobors.no/message/683041)
@@ -715,6 +760,7 @@ _Poeng: price_move 1.8, ose_contracts 1.5. Kurs 31.10, 5d -12.9%, 20d +7.2%._
 | ECB meeting calendar | ok (19 meetings) |
 | Norges Bank meeting calendar | not automated (dates rendered client-side); press releases RSS used |
 | Earnings calendar (yfinance) | ok (3 reports within 21d; 0 lookups failed) |
+| Kategorier (Kjøp/Hold/Watchlist) | ok (Kjøp: 0, Hold: 2, Watchlist: 58) |
 
 ## 12. Metode og validering
 

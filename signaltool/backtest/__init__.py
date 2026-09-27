@@ -5,6 +5,12 @@ from ..config import REPORTS
 
 
 def run_all(which="all"):
+    if which in ("categories", "all"):
+        from . import categories_check  # separate file: reports/backtest_categories.md
+        categories_check.run()
+        print(REPORTS / "backtest_categories.md")
+        if which == "categories":
+            return
     parts = []
     if which in ("insider", "all"):
         from . import insider

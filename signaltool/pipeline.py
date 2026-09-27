@@ -230,6 +230,7 @@ def run(fast: bool = False) -> dict:
             e["points"]["insider_cluster"] = min(2.0, 0.5 * r["n_insiders"])
             e["evidence"].append({"text": f"SEC Form 4: {r['n_insiders']} innsidere kjøpte i markedet for ${r['total_value']:,.0f} ({r['owners']}; {r['roles']})", "url": r["url"]})
             e["name"] = r["issuer"]
+            e.setdefault("signal_dates", {})["insider_cluster"] = str(r.get("last_date") or "")[:10]
     # congress buys
     if not cong.empty:
         buys = cong[(cong["type"] == "P") & (cong["asset_type"] == "ST")]
@@ -251,6 +252,7 @@ def run(fast: bool = False) -> dict:
             if ncon:
                 e["points"]["ose_contracts"] = min(3.0, 1.5 * ncon)
                 row = g[g["contract"]].iloc[0]
+                e.setdefault("signal_dates", {})["ose_contract"] = str(g.loc[g["contract"], "published"].max())[:10]
                 e["evidence"].append({"text": f"Newsweb: {ncon} kontrakt-/ordremelding(er) siste 14 d, f.eks. «{row['title']}»", "url": row["url"]})
             if nins:
                 e["points"]["ose_insider_notices"] = min(2.0, 0.5 * nins)
@@ -261,6 +263,8 @@ def run(fast: bool = False) -> dict:
         for _, r in awards.dropna(subset=["ticker"]).iterrows():
             e = c(r["ticker"])
             e["points"]["federal_award"] = min(2.0, e["points"].get("federal_award", 0) + 1.0)
+            sd = e.setdefault("signal_dates", {})
+            sd["gov_contract"] = max(filter(None, [sd.get("gov_contract"), str(r.get("Start Date") or "")[:10]]), default=None)
             e["evidence"].append({"text": f"USAspending: ny kontrakt ${r['Award Amount']/1e6:,.0f}M fra {r['Awarding Agency']}", "url": r["url"]})
     # DoD daily contract awards (policy/official signal - weighted relatively high)
     if not dodx.empty:
@@ -268,6 +272,11 @@ def run(fast: bool = False) -> dict:
             e = c(t)
             e["points"]["dod_contract"] = min(3.0, 1.0 + g["amount"].sum() / 1e9)
             top = g.sort_values("amount", ascending=False).iloc[0]
+            from .categories import _d
+            ds = [x for x in (_d(v) for v in g["day"]) if x]
+            if ds:
+                sd = e.setdefault("signal_dates", {})
+                sd["gov_contract"] = max(filter(None, [sd.get("gov_contract"), max(ds).isoformat()]))
             e["evidence"].append({"text": f"DoD-kontrakt(er): {len(g)} stk, totalt ${g['amount'].sum()/1e6:,.0f}M ({top['day']})", "url": top["url"]})
     # reddit cashtags
     if not red.empty:
@@ -292,7 +301,7 @@ def run(fast: bool = False) -> dict:
     for t, e in cand.items():
         if t in mstats.index:
             st = mstats.loc[t]
-            e["stats"] = {k: _f(st.get(k)) for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d"]}
+            e["stats"] = {k: _f(st.get(k)) for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20"]}
             e["stats"]["last_date"] = st.get("last_date")
             vz = e["stats"].get("vol5_z")
             if vz is not None and vz > 1.5:
@@ -309,6 +318,14 @@ def run(fast: bool = False) -> dict:
         e["why"], e["risks"] = explain(e)
     ranked = sorted(cand.values(), key=lambda x: x["score"], reverse=True)
     snap["tickers"] = [e for e in ranked if e["score"] > 0][:60]
+    # rule-based categories (Kjøp-kandidat / Hold / Watchlist) + forward log + track record
+    try:
+        from . import categories
+        categories.apply(snap)
+        status["Kategorier (Kjøp/Hold/Watchlist)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
+    except Exception as ex:  # never break the run
+        log.exception("categories failed")
+        status["Kategorier (Kjøp/Hold/Watchlist)"] = f"FAILED: {ex}"
 
     # ---------- raw tables for report/site ----------
     snap["insider_clusters"] = _records(clusters, ["ticker", "issuer", "n_insiders", "n_tx", "total_value", "owners", "roles", "last_date", "url", "cluster"], 30) if not clusters.empty else []

@@ -39,6 +39,12 @@ def ticker_stats(df: pd.DataFrame) -> dict:
         out["vol_ratio_5d"] = float(np.exp(recent - base.mean()))
     else:
         out["vol5_z"] = out["vol1_z"] = out["vol_ratio_5d"] = np.nan
+    # inputs for the rule-based categories (signaltool/categories.py)
+    out["sma50"] = float(c.iloc[-50:].mean()) if len(c) >= 50 else np.nan
+    last20 = c.iloc[-20:]
+    out["maxdd20"] = float((last20 / last20.cummax() - 1).min()) if len(last20) >= 5 else np.nan  # worst peak-to-trough, 20 sessions
+    dv = (c * df["Volume"]).iloc[-20:]
+    out["adv20"] = float(dv.median()) if dv.notna().sum() >= 10 else np.nan  # median daily turnover, local currency
     return out
 
 

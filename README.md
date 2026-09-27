@@ -22,7 +22,8 @@ python -m signaltool run                  # full run (~10-20 min; first run back
 python -m signaltool run --fast           # quicker: skips Google Trends/earnings, caps SEC Form 4 scan
 python -m signaltool build-site           # rebuild site/ from the latest snapshot
 python -m signaltool serve --port 8765    # view the site at http://localhost:8765/
-python -m signaltool backtest all         # historical validation -> reports/backtest.md
+python -m signaltool categorize           # refresh prices + Kjøp/Hold/Watchlist on the latest snapshot, rebuild report/site
+python -m signaltool backtest all         # historical validation -> reports/backtest.md (+ backtest_categories.md)
 python -m pytest -q                       # tests
 ```
 Outputs: `reports/report_YYYY-MM-DD.md` (+ `reports/latest.md`), `site/` (static website), `data/snapshots/*.json`.
@@ -60,6 +61,31 @@ Oslo managers' transactions, US federal awards, unusual volume, unusual price mo
 
 Weighting follows a separate X-accounts research study (kept private, not part of this repository): official policy signals (sanctions, DoD
 contracts), physical oil data and shipping get relatively more weight; politician trades are low weight.
+
+## Categories: «Kjøp» (kandidat), «Hold», «Watchlist»
+Every candidate ticker gets a rule-based label (code and thresholds: `signaltool/categories.py`; shown as coloured
+badges with a one-line "Hvorfor: …" on the dashboard, ticker list, theme and ticker pages; each ticker page lists every rule
+as met / not met). **Our backtests found no proven edge, so these are conservative, transparent rules – not a forecast,
+not personal financial advice, and not proven to beat the market.**
+
+* **Kjøp-kandidat** – ALL of: ≥ 2 *independent* higher-reliability signal types (official US contract via DoD/USAspending
+  [one type]; SEC insider-purchase cluster with officers/directors; Oslo Newsweb contract announcement; theme score ≥ 1 confirmed
+  by the physical oil market z ≥ 1), at least one ≤ 7 days old; close above the 50-day average and 20-day return above the
+  benchmark (OSEBX for `.OL`, S&P 500 otherwise); not stretched (5d < +10 %, 20d < +25 %, < 25 % above the 50-day average);
+  no red flags (sharply rising Oslo short interest, ≥ 20 % crash within 20 sessions, turnover < ~USD 1M/day, price < ~USD 1,
+  volume/price-only signal). Volume, price moves, Reddit, congress trades and Newsweb insider notices never count as signal types.
+  Expect zero on most days.
+* **Hold** – ≥ 1 higher-reliability signal type, price confirmation, no red flags, but the entry is late: stretched, signals
+  older than 7 days, or a Kjøp-kandidat within the last 30 days without a new trigger ("if you own it, the signals still
+  support it; don't chase").
+* **Watchlist** – everything else with attention (single source, volume/theme only, falling price, red flags, no price data).
+
+**Forward log / Treffsikkerhet:** each run appends `date, ticker, category, price, price_date, benchmark, score, n_types`
+to `data/history/categories.csv` (~60 rows/day, one set per day). It is carried between nightly runs in the Actions cache
+*and* published at `site/historikk/kategorier.csv`; if the cache is lost, the workflow restores the log from the live site.
+The «Treffsikkerhet» section (Tickere page) shows excess return vs the benchmark after 5/20/60 trading days for *new*
+entries into each category, once ≥ 10 entries have matured – before that it says «ikke nok data ennå».
+Historical sanity check of the rules: `reports/backtest_categories.md` (`python -m signaltool backtest categories`).
 
 ## Honest limitations
 * No language model: keyword matching produces false hits and misses nuance (e.g. "ceasefire collapses" vs "ceasefire holds").

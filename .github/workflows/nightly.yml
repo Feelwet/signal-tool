@@ -56,6 +56,20 @@ jobs:
           key: signal-state-${{ github.run_id }}
           restore-keys: signal-state-
 
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      # The Kjøp/Hold/Watchlist forward log (data/history/categories.csv) is the long-term track record. It is also
+      # published at <site>/historikk/kategorier.csv, so if the cache was evicted it is restored from the live site.
+      - name: Restore forward log from live site if missing
+        run: |
+          mkdir -p data/history
+          if [ ! -s data/history/categories.csv ]; then
+            curl -fsSL "${{ steps.pages.outputs.base_url }}/historikk/kategorier.csv" -o data/history/categories.csv \
+              && echo "restored forward log ($(wc -l < data/history/categories.csv) lines)" \
+              || { rm -f data/history/categories.csv; echo "no published forward log yet"; }
+          fi
+
       - name: Run pipeline (collect, score, report, build site)
         id: run
         continue-on-error: true   # individual sources may block GitHub IPs; collectors already degrade gracefully
@@ -94,8 +108,6 @@ jobs:
       - name: Keep report with the site
         run: |
           mkdir -p site/rapport && cp reports/latest.md site/rapport/latest.md 2>/dev/null || true
-
-      - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
