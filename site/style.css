@@ -52,3 +52,10 @@ td.nw{white-space:nowrap}
 details summary{cursor:pointer;color:var(--acc);margin:6px 0}
 .kind{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:6px;border:1px solid}.kind.kjøp{color:var(--up);border-color:rgba(74,194,107,.5)}
 .kind.salg{color:var(--down);border-color:rgba(255,128,120,.5)}.kind.tegning{color:var(--acc);border-color:rgba(108,182,255,.5)}.kind.annet,.kind.ukjent,.kind.ikke{color:var(--mut);border-color:var(--line)}
+
+.thesis .ok-line{border-left:3px solid #3fb950;padding-left:8px}
+.thesis .no-line{border-left:3px solid #f85149;padding-left:8px}
+table.br td,table.br th{font-size:13px}
+.warnbox{background:#2d2410;border:1px solid #6e5410;color:#e3c47a;border-radius:6px;padding:6px 10px;font-size:13px;margin-bottom:8px}
+.plan-line{font-size:12px;color:#9aa4b2;margin-top:2px}
+.tline{font-size:12px;color:#c9d1d9;margin-top:2px}

@@ -296,3 +296,110 @@ def oslo_insider_html(snap: dict) -> str:
             f'<p class="mut">Test (6 418 meldinger 2021–2026, inngang dagen etter): verken innsidekjøp, store kjøp (≥ 1 mill. NOK) eller kjøpsklynger har gitt robust '
             f'meravkastning mot OSEBX etter kostnader. Derfor vises dette her, men gir <b>ikke</b> poeng i Kjøp-reglene. <a href="kilder.html#natt">Se testen</a>.</p>'
             f'<table><tr><th>Dato</th><th>Selskap</th><th>Retning</th><th>Verdi NOK</th><th>Melding</th></tr>{tr}</table></div>')
+
+
+# ---------------------------------------------------------------- thesis, base rates, entry/exit plan (signaltool/plan.py)
+from . import plan as P
+
+
+def thesis_html(e: dict, themes: dict) -> str:
+    th = P.thesis(e, themes)
+    return (f'<div class="card thesis" id="tese"><h2 style="margin-top:0">Testbar tese</h2>'
+            f'<p><b>Tese:</b> {E(th["tese"])}</p><p class="ok-line"><b>✔ Bekreftes hvis</b> {E(th["bekreftes"])}</p>'
+            f'<p class="no-line"><b>✘ Avkreftes hvis</b> {E(th["avkreftes"])}</p>'
+            '<p class="mut">Regelbasert mal fylt med dagens tall. Sjekk punktene igjen etter neste rapport eller ved stoppnivået.</p></div>')
+
+
+def _br_row(k: str, b: dict) -> str:
+    if not b or not b.get("n"):
+        return f'<tr><td>{E(P.BR_LABEL.get(k, k))}</td><td colspan="4" class="mut">Ingen historikk. {E((b or {}).get("note", ""))}</td></tr>'
+    def cell(h):
+        if b.get(f"hit{h}") is None:
+            return '<span class="mut">for få</span>'
+        return f'{b[f"hit{h}"]*100:.0f} % · {pct(b[f"med{h}"])} / {pct(b[f"mean{h}"])}'
+    base = k.startswith("baseline")
+    return (f'<tr{" class=mut" if base else ""}><td>{E(P.BR_LABEL.get(k, k))}</td><td>{b["n"]:,}'.replace(",", " ") + f'</td><td>{cell(20)}</td><td>{cell(60)}</td>'
+            f'<td class="nw">{E(b.get("period", ""))} · {E(b.get("bench", ""))}</td></tr>')
+
+
+BR_HEAD = ('<tr><th>Signal / kategori</th><th>Tilfeller</th><th>20 d: slo indeks · median / snitt</th><th>60 d: slo indeks · median / snitt</th><th>Periode · indeks</th></tr>')
+
+
+def base_rate_html(e: dict) -> str:
+    br = P.base_rates()
+    if not br:
+        return '<div class="card"><h2 style="margin-top:0">Historisk treffrate</h2><p class="mut">Ingen historikk beregnet (kjør python -m signaltool.backtest.base_rates).</p></div>'
+    rows = "".join(_br_row(k, br.get(k)) for k in P.signal_keys(e))
+    return (f'<div class="card" id="treffrate"><h2 style="margin-top:0">Historisk treffrate</h2><div class="tw"><table class="br">{BR_HEAD}{rows}</table></div>'
+            '<p class="mut">Fra våre egne tester: meravkastning mot indeks fra inngang dagen etter signalet, før kurtasje. «Slo indeks» = andel tilfeller med positiv meravkastning. '
+            'Sammenlign med den grå raden (tilfeldig aksje) – et signal er bare nyttig hvis det gjør det klart bedre. '
+            '<a href="../kilder.html#treffrate">Alle signaler og forbehold</a>.</p></div>')
+
+
+def base_rate_table_html() -> str:
+    br = P.base_rates()
+    if not br:
+        return ""
+    rows = "".join(_br_row(k, br.get(k)) for k in P.BR_ORDER)
+    notes = "".join(f'<li><b>{E(P.BR_LABEL.get(k, k))}:</b> {E((br.get(k) or {}).get("note", ""))}</li>' for k in P.BR_ORDER if (br.get(k) or {}).get("note"))
+    return (f'<div class="card" id="treffrate"><h2 style="margin-top:0">Historisk treffrate per signal og kategori</h2>'
+            f'<p>{E(br.get("_meta", {}).get("what", ""))}</p><div class="tw"><table class="br">{BR_HEAD}{rows}</table></div>'
+            f'<details><summary>Definisjoner og forbehold</summary><ul class="ev">{notes}</ul></details>'
+            '<p class="mut">Kode: signaltool/backtest/base_rates.py (bruker bare data som allerede er lastet ned av de andre testene).</p></div>')
+
+
+def plan_html(e: dict, compact: bool = False) -> str:
+    lv = P.levels(e)
+    d = e.get("decision") or {}
+    cur = d.get("currency") or ""
+    if not lv:
+        return ""
+    lvl = P._lvl
+    if not lv.get("stop"):
+        return (f'<div class="card" id="plan"><h2 style="margin-top:0">Eksempelplan</h2><p>Inngangssone: {lvl(lv["entry_lo"])}–{lvl(lv["entry_hi"])} {E(cur)} ({E(lv["entry_how"])}). '
+                'Ingen fornuftig stopp under inngangssonen (kursen ligger under både 50-dagers snitt og 2×ATR-nivået) – derfor ingen størrelsesberegning.</p></div>')
+    pk = P._primary(e)
+    br = P.base_rates().get(pk or "", {})
+    hist = ""
+    if br.get("med60") is not None:
+        hp = lv["entry"] * (1 + br["med60"])
+        hist = (f'Historisk median meravkastning over 60 d for «{E(P.BR_LABEL[pk])}» er {pct(br["med60"])} (≈ {lvl(hp)} {E(cur)}). '
+                + ("Målet på 2:1 er derfor ambisiøst i forhold til historikken." if hp < lv["target_rr"] else "Historikken støtter et mål i denne størrelsen."))
+    size = lv.get("size")
+    val = None if size is None else EXAMPLE_VALUE(size)
+    shares = None if size is None or not lv["entry"] else int(val / lv["entry"])
+    red = (" (" + "; ".join(lv["size_reasons"]) + ")") if lv.get("size_reasons") else ""
+    rows = [("Inngangssone", f'{lvl(lv["entry_lo"])}–{lvl(lv["entry_hi"])} {E(cur)} <span class="mut">({E(lv["entry_how"])})</span>'),
+            ("Stopp / ugyldiggjøring", f'{lvl(lv["stop"])} {E(cur)} <span class="mut">({E(lv["stop_name"])}, strengeste nivå under inngang; {lv["stop_dist"]*100:.1f} % risiko)</span>'),
+            ("Første mål (2:1)", f'{lvl(lv["target_rr"])} {E(cur)} <span class="mut">(+{(lv["target_rr"]/lv["entry"]-1)*100:.1f} %)</span>'),
+            ("Posisjonsstørrelse", "–" if size is None else f'{size*100:.1f} % av porteføljen{E(red)} <span class="mut">= 1 % risiko ÷ {lv["stop_dist"]*100:.1f} % stoppavstand, maks 10 %</span>')]
+    if compact:
+        return (f'<div class="plan-line">Eksempel: inngang {lvl(lv["entry_lo"])}–{lvl(lv["entry_hi"])}, stopp {lvl(lv["stop"])}, mål {lvl(lv["target_rr"])}, '
+                f'størrelse {"–" if size is None else f"{size*100:.1f} %"} av porteføljen.</div>')
+    ex = ""
+    if size is not None:
+        loss = val * lv["stop_dist"]
+        ex = (f'<p class="mut">Regneeksempel med portefølje på {_sp(P.EXAMPLE_PORTFOLIO)} {E(cur or "kr")}: kjøp for ca. {_sp(val)} {E(cur)} (≈ {shares} aksjer). '
+              f'Treffer stoppen, er tapet ca. {_sp(loss)} {E(cur)} ≈ {loss / P.EXAMPLE_PORTFOLIO * 100:.1f} % av porteføljen.</p>')
+    tab = "<table>" + "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in rows) + "</table>"
+    return (f'<div class="card" id="plan"><h2 style="margin-top:0">Eksempelplan: inngang, stopp, mål og størrelse</h2>'
+            f'<div class="warnbox">Eksempelberegning – ikke råd. Mekanisk regel fylt med dagens kurs, ATR og snitt; tar ikke hensyn til din økonomi, skatt eller kurtasje.</div>'
+            f'{tab}<p>{hist}</p>{ex}</div>')
+
+
+def _sp(x: float) -> str:
+    return f"{x:,.0f}".replace(",", " ")
+
+
+def EXAMPLE_VALUE(size: float) -> float:
+    return P.EXAMPLE_PORTFOLIO * size
+
+
+CSS_EXTRA += """
+.thesis .ok-line{border-left:3px solid #3fb950;padding-left:8px}
+.thesis .no-line{border-left:3px solid #f85149;padding-left:8px}
+table.br td,table.br th{font-size:13px}
+.warnbox{background:#2d2410;border:1px solid #6e5410;color:#e3c47a;border-radius:6px;padding:6px 10px;font-size:13px;margin-bottom:8px}
+.plan-line{font-size:12px;color:#9aa4b2;margin-top:2px}
+.tline{font-size:12px;color:#c9d1d9;margin-top:2px}
+"""

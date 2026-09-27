@@ -106,7 +106,8 @@ def cat_summary_html(snap):
     cnt = {k: sum(e["category"] == k for e in tk) for k in C.CAT_NO}
     top = [e for e in tk if e["category"] in ("kjop", "hold")]
     items = "".join(f'<li>{cat_badge(e["category"])} <a href="ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a> '
-                    f'<span class="mut">{E(e.get("name") or "")}</span><div class="why">Hvorfor: {E(e["cat_reason"])}</div></li>' for e in top)
+                    f'<span class="mut">{E(e.get("name") or "")}</span><div class="why">Hvorfor: {E(e["cat_reason"])}</div>'
+                    f'<div class="tline">{E(X.P.one_liner(e, {t["key"]: t for t in snap.get("themes", [])}))}</div>{X.plan_html(e, compact=True)}</li>' for e in top)
     none = ('<p>Ingen aksjer oppfyller alle Kjøp-kriteriene i dag. Det er normalt – reglene er bevisst strenge '
             '(minst to uavhengige, pålitelige signaltyper + kursbekreftelse + ingen røde flagg).</p>') if not cnt["kjop"] else ""
     return (f'<div class="card"><h2 style="margin-top:0">Kategorier i dag</h2><p>{cat_badge("kjop")} {cnt["kjop"]} &nbsp; '
@@ -347,8 +348,12 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""<h1>{E(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
+{X.thesis_html(e, tmap)}
 {cat_rules_html(e)}
+{X.plan_html(e, compact=False) if e.get("category") in ("kjop", "hold") else ""}
+{X.base_rate_html(e)}
 {X.decision_html(e)}
+{X.plan_html(e, compact=True) if e.get("category") == "watch" else ""}
 <div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
 <tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
@@ -425,6 +430,7 @@ def kilder_page(snap):
                    '<pre style="white-space:pre-wrap;font-size:.8rem">' + E(bn.read_text()) + "</pre></div>") + bt_html
     return f"""<h1>Kilder og metode</h1><div class="warnbox">{DISCLAIMER}</div>
 {categories_method_html()}
+{X.base_rate_table_html()}
 <div class="card"><h2 style="margin-top:0">Slik fungerer det</h2><ol>
 <li><b>Innsamling</b> fra gratis, offentlige kilder (ingen betalte tjenester, ingen API-nøkler).</li>
 <li><b>Temakart:</b> 10 geopolitiske temaer koblet til sektorer, råvarer og eksempel-tickere (USA og Oslo Børs), med skriftlig begrunnelse.</li>
@@ -436,6 +442,9 @@ verdsettelse (P/E, EV/EBITDA, P/B, utbytte, analytikersnitt der det er gratis), 
 og ugyldiggjøringsnivå (50-dagers snitt og 2×ATR under kurs).</li>
 <li><b>Scenarioer per tema</b> (bull/base/bear) med levende nøkkelindikatorer: kurs, sundpassasjer (IMF PortWatch), oljelagre mot 5-årssnitt (EIA),
 Taiwans månedsomsetning (MOPS), politikkdokumenter (Federal Register/EU) og prediksjonsmarked.</li>
+<li><b>Testbar tese</b> per ticker (hvorfor den kan stige, hva som bekrefter og hva som avkrefter – med konkrete nivåer), <b>historisk treffrate</b>
+for hvert signal fra våre egne tester, og en <b>eksempelplan</b> for Kjøp/Hold: inngangssone, stopp (strengeste av 50-dagers snitt og 2×ATR),
+første mål (2:1) og størrelse ved 1 % risiko per handel (maks 10 %, halvert ved høy volatilitet/lav likviditet). Eksempelberegning – ikke råd.</li>
 <li><b>«Hva bør jeg se på i dag?»</b> og <b>«Nytt siden i går»</b>: automatisk prioritering og sammenligning med forrige lagrede kjøring; 🔔 = varsel.</li></ol>
 <h3>Viktige forbehold</h3><ul>
 <li>Ingen språkmodell – nøkkelord kan gi feiltreff (f.eks. «strait» eller «war» i andre sammenhenger).</li>

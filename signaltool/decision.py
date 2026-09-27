@@ -62,6 +62,8 @@ def price_metrics(df: pd.DataFrame, bench: pd.Series | None, sector: pd.Series |
     out["atr_pct"] = _f(atr / c.iloc[-1])
     sma50 = c.iloc[-50:].mean() if len(c) >= 50 else None
     out["sma50"] = _f(sma50, 3)
+    out["sma20"] = _f(c.iloc[-20:].mean(), 3) if len(c) >= 20 else None
+    out["hi20"] = _f(c.iloc[-21:-1].max(), 3) if len(c) >= 21 else None  # highest close of the 20 sessions before today
     out["stop_atr"] = _f(c.iloc[-1] - 2 * atr, 3) if atr == atr else None
     out["mom12_1"] = _f(c.iloc[-22] / c.iloc[-253] - 1) if len(c) > 253 else None
     out["close"] = _f(c.iloc[-1], 3)
