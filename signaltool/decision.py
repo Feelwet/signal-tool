@@ -107,6 +107,28 @@ def pead_info(tk: yf.Ticker, close: pd.Series, bench: pd.Series | None) -> dict:
             "pead": bool(sur >= PEAD_SURPRISE and ear >= PEAD_REACTION and age <= PEAD_MAX_AGE), "pead_age_days": age}
 
 
+def revisions(tk: yf.Ticker) -> dict:
+    """Analyst EPS-estimate trend for the current fiscal year (Yahoo, free; current snapshot only - no history to backtest)."""
+    out = {}
+    try:
+        tr = tk.eps_trend
+        if tr is not None and "0y" in tr.index:
+            r = tr.loc["0y"]
+            for lab, col in (("rev30", "30daysAgo"), ("rev90", "90daysAgo")):
+                if r.get(col) and r.get("current") is not None and abs(float(r[col])) > 1e-9:
+                    out[f"eps_{lab}"] = _f(float(r["current"]) / abs(float(r[col])) - (1 if float(r[col]) > 0 else -1))
+    except Exception:
+        pass
+    try:
+        rv = tk.eps_revisions
+        if rv is not None and "0y" in rv.index:
+            out["eps_up30"] = _f(rv.loc["0y"].get("upLast30days"), 0)
+            out["eps_down30"] = _f(rv.loc["0y"].get("downLast30days"), 0)
+    except Exception:
+        pass
+    return out
+
+
 def compute(snap: dict, max_info=80) -> dict:
     tickers = [e["ticker"] for e in snap.get("tickers", [])]
     if not tickers:
@@ -126,6 +148,7 @@ def compute(snap: dict, max_info=80) -> dict:
             inf = tk.info or {}
             infos[t] = {k: inf.get(k) for k in INFO_KEYS}
             infos[t]["next_earnings"] = _next_earnings(tk)
+            infos[t].update(revisions(tk))
             if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):
                 sector_of[t] = YF_SECTOR[inf["sector"]]
         except Exception as ex:
@@ -133,12 +156,23 @@ def compute(snap: dict, max_info=80) -> dict:
     refs = sorted(set(sector_of.values()) | {"^GSPC", "OSEBX.OL"})
     d = yf.download(sorted(set(tickers) | set(refs)), period="2y", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
+    retry: dict[str, pd.Series] = {}
     def ser(t):
         try:
             s = d[t]["Close"].dropna()
-            return s if len(s) else None
+            if len(s):
+                return s
         except Exception:
-            return None
+            pass
+        if t in refs:  # Yahoo mister av og til enkeltserier i store nedlastinger – prøv igjen alene
+            if t not in retry:
+                try:
+                    r = yf.download(t, period="2y", progress=False, auto_adjust=True)["Close"]
+                    retry[t] = (r.iloc[:, 0] if isinstance(r, pd.DataFrame) else r).dropna()
+                except Exception:
+                    retry[t] = pd.Series(dtype=float)
+            return retry[t] if len(retry[t]) else None
+        return None
     for t in tickers:
         try:
             df = d[t][["Close", "High", "Low"]].dropna(subset=["Close"])

@@ -58,12 +58,26 @@ def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[d
     cand = [(t, ts, s) for t, ts, s in recent if s >= PEAD_SURPRISE]
     if not cand:
         return [], f"ok ({len(recent)} rapporter siste {max_age} d, ingen med overraskelse ≥ {PEAD_SURPRISE:.0f} %)"
-    px = yf.download([c[0] for c in cand] + ["^GSPC"], period="4mo", auto_adjust=True, progress=False)["Close"]
+    px = yf.download([c[0] for c in cand], period="4mo", auto_adjust=True, progress=False)["Close"]
+    if isinstance(px, pd.Series):
+        px = px.to_frame(cand[0][0])
+    b = None
+    for bt in ("^GSPC", "SPY", "^GSPC"):
+        try:
+            bs = yf.download(bt, period="4mo", auto_adjust=True, progress=False)["Close"]
+            bs = (bs.iloc[:, 0] if isinstance(bs, pd.DataFrame) else bs).dropna()
+            if len(bs) > 20:
+                b = bs
+                break
+        except Exception:
+            pass
+    if b is None:
+        raise RuntimeError("fant ikke referanseindeks (^GSPC/SPY) hos Yahoo")
     out = []
     for t, ts, s in cand:
         if t not in px:
             continue
-        c, b = px[t].dropna(), px["^GSPC"].dropna()
+        c = px[t].dropna()
         local = ts.tz_convert("America/New_York") if ts.tzinfo else ts
         day = pd.Timestamp(local.date())
         p = c.index.searchsorted(day)

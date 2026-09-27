@@ -123,6 +123,9 @@ def priced_in_verdict(d: dict) -> list[str]:
             out.append(f"Kursen er over analytikernes snittmål ({pct(d['target_upside'])}, {int(d['numberOfAnalystOpinions'])} analytikere).")
     if d.get("rel_sector_20d") is not None and abs(d["rel_sector_20d"]) >= 0.08:
         out.append(f"Har beveget seg {pct(d['rel_sector_20d'])} mot sektor ({E(d.get('sector_etf'))}) på 20 dager – aksjespesifikk bevegelse, ikke bare sektoren.")
+    if d.get("eps_rev30") is not None and abs(d["eps_rev30"]) >= 0.05:
+        out.append(f"Analytikerne har {'oppjustert' if d['eps_rev30'] > 0 else 'nedjustert'} årets resultatestimat {pct(d['eps_rev30'])} siste 30 dager – "
+                   + ("kursen kan allerede reflektere dette." if d["eps_rev30"] > 0 else "sjekk om kursen har tatt det inn."))
     if d.get("days_to_earnings") is not None and 0 <= d["days_to_earnings"] <= 14:
         out.append(f"Kvartalsrapport om {d['days_to_earnings']} dager ({E(d.get('next_earnings'))}) – hendelsesrisiko.")
     if d.get("weak_mom_oslo"):
@@ -149,7 +152,9 @@ def decision_html(e: dict) -> str:
               (f"Mot {bn} 20 / 60 d", f'{pct(d.get("rel_bench_20d"))} / {pct(d.get("rel_bench_60d"))}'),
               (f"Mot sektor ({E(d.get('sector_etf') or '–')}) 20 / 60 d", f'{pct(d.get("rel_sector_20d"))} / {pct(d.get("rel_sector_60d"))}'),
               ("Fra 52-ukers topp / bunn", f'{pct(d.get("pct_from_hi52"))} <span class="mut">(topp {num(d.get("hi52"))}, bunn {num(d.get("lo52"))})</span>'),
-              ("Momentum 12-1 mnd", pct(d.get("mom12_1")))]
+              ("Momentum 12-1 mnd", pct(d.get("mom12_1"))),
+              ("Analytikerestimat i år, endring 30 / 90 d", f'{pct(d.get("eps_rev30"))} / {pct(d.get("eps_rev90"))}'
+               + ("" if d.get("eps_up30") is None else f' <span class="mut">({int(d["eps_up30"])} opp, {int(d.get("eps_down30") or 0)} ned siste 30 d)</span>'))]
     mc = d.get("marketCap")
     rows_v = [("P/E siste 12 mnd / fremover", f'{num(d.get("trailingPE"), 1)} / {num(d.get("forwardPE"), 1)}'),
               ("EV/EBITDA", num(d.get("enterpriseToEbitda"), 1)), ("P/B", num(d.get("priceToBook"), 1)),

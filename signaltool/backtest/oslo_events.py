@@ -130,6 +130,26 @@ def insider_events() -> pd.DataFrame:
     return pd.concat(out, ignore_index=True)[["ticker", "date", "group"]].drop_duplicates()
 
 
+import re as _re
+CONTRACT_RX = _re.compile(r"contract|kontrakt|\border\b|ordre|framework agreement|rammeavtale|letter of intent|\bLOI\b|awarded|tildelt", _re.I)
+NOT_CONTRACT_RX = _re.compile(r"share|aksje|option|opsjon|incentive|legal|proceeding|terminat|cancel|dispute|arbitrat|lawsuit|søksmål|"
+                              r"financial calendar|presentation|webcast|invitation|mandatory|primary insider|buy-?back", _re.I)
+BIG_RX = _re.compile(r"largest|record|significant|major|substantial|betydelig|største|rekord|milestone|multi-?year|billion|milliard", _re.I)
+
+
+def contract_events() -> pd.DataFrame:
+    L = pd.read_pickle(CACHE / "newsweb_all_list.pkl")
+    t = L["title"].fillna("")
+    m = t.str.contains(CONTRACT_RX) & ~t.str.contains(NOT_CONTRACT_RX)
+    E = L[m].copy()
+    ts = E["published"].dt.tz_convert("Europe/Oslo")
+    E["date"] = ts.dt.normalize().dt.tz_localize(None) + pd.to_timedelta((ts.dt.hour >= 16).astype(int), unit="D")
+    E["ticker"] = E["issuer"].astype(str) + ".OL"
+    E = E.sort_values("date").drop_duplicates(["ticker", "date"])
+    out = [E.assign(group="Kontraktsmelding (alle)"), E[E["title"].str.contains(BIG_RX)].assign(group="Kontraktsmelding med «største/betydelig/rekord» o.l.")]
+    return pd.concat(out)[["ticker", "date", "group"]]
+
+
 def table(res: list[dict], title: str, note: str) -> str:
     L = [f"## {title}", f"_{note}_", "", "| Gruppe | Horisont | Periode | N (aksjer) | Meravk. vs OSEBX | Netto (t) | Mot snitt av likvide aksjer (t) |", "|---|---|---|---|---|---|---|"]
     for r in res:
@@ -151,6 +171,11 @@ def run(which=("short", "insider")) -> str:
             parts.append(table(evaluate(ev, C, adv, "2024-01-01", "insider"), "Innsidehandel Oslo Børs (retning lest fra Newsweb-meldingen) → senere avkastning",
                                f"{len(ev):,} hendelser fra meldinger 2021– (klassifisert automatisk; kjøp/salg, ikke opsjoner/program). In-sample 2021–2023, out-of-sample 2024–. "
                                "Inngang = sluttkurs dagen etter publisering."))
+    if "contract" in which and (CACHE / "newsweb_all_list.pkl").exists():
+        ev = contract_events()
+        parts.append(table(evaluate(ev, C, adv, "2023-01-01", "contract", horizons=(1, 5, 20)), "Kontraktsmeldinger Oslo Børs (Newsweb-titler) → senere avkastning",
+                           f"{len(ev):,} hendelser 2019– (titler med kontrakt/ordre/rammeavtale/LOI, uten aksje-/opsjons-/rettssaksmeldinger). In-sample 2019–2022, out-of-sample 2023–. "
+                           "Inngang = sluttkurs dagen ETTER publisering (dagens reaksjon er da allerede tatt) – tester om det er drift etterpå."))
     return "\n\n".join(parts)
 
 
