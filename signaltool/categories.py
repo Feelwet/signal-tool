@@ -52,7 +52,8 @@ BENCH_NAME = {BENCH_OSE: "OSEBX", BENCH_US: "S&P 500"}
 FX_USD = {".OL": 0.095, ".L": 0.0127, ".DE": 1.1, ".PA": 1.1, ".AS": 1.1, ".MI": 1.1, ".HE": 1.1, ".ST": 0.095,
           ".CO": 0.147, ".TO": 0.73, ".AX": 0.65}
 TYPE_NO = {"gov_contract": "offentlig kontrakt (DoD/USAspending)", "insider_cluster": "innsidekjøp-klynge (ledelse/styre)",
-           "ose_contract": "kontraktsmelding (Newsweb)", "theme_market": "tema med markedsbekreftelse"}
+           "ose_contract": "kontraktsmelding (Newsweb)", "theme_market": "tema med markedsbekreftelse",
+           "pead": "sterk kvartalsrapport (overraskelse + kursreaksjon)"}
 CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watchlist"}
 DISCLAIMER_NO = ("Kategoriene er regelbaserte og mekaniske – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet "
                  "(våre egne tester fant ingen dokumentert meravkastning).")
@@ -130,6 +131,10 @@ def signal_types(e: dict, ctx: dict) -> dict:
         roles = r.get("roles") or " ".join(x.get("text", "") for x in e.get("evidence", []) if "Form 4" in x.get("text", ""))
         if _officer_director(roles):
             out["insider_cluster"] = {"date": newest("insider_cluster"), "detail": roles[:80]}
+    dec = e.get("decision") or {}
+    if dec.get("pead"):
+        # validated out-of-sample 2016-2026 (reports/backtest_natt.md): top EPS surprise + top reaction -> +1.9 pp / 60 d vs other reports
+        out["pead"] = {"date": _d(dec.get("last_earnings")), "detail": f"EPS-overraskelse {dec.get('eps_surprise'):+.0f} %, reaksjon {dec.get('earn_reaction', 0)*100:+.1f} % vs S&P 500"}
     if pts.get("ose_contracts", 0) > 0:
         out["ose_contract"] = {"date": newest("ose_contract"), "detail": "Newsweb"}
     for k in e.get("themes", []):
@@ -178,6 +183,10 @@ def classify(e: dict, ctx: dict) -> dict:
             flags["illiquid"] = f"lav likviditet (~${adv*f/1e6:.2f}M/dag)"
         if close * f < R["min_price_usd"]:
             flags["penny"] = "pennyaksje"
+    dec = e.get("decision") or {}
+    if dec.get("weak_mom_oslo"):
+        # Oslo only: bottom-quintile 12-1 month momentum underperformed OSEBX out-of-sample (reports/backtest_natt.md)
+        flags["weak_mom"] = f"svak 12-1-måneders momentum ({dec.get('mom12_1', 0)*100:+.0f} %, laveste 20 % på Oslo Børs)"
     pos = {k for k, v in e.get("points", {}).items() if v > 0}
     if pos and pos <= {"unusual_volume", "price_move"}:
         flags["volume_only"] = "bare volum/kurs-signal"
@@ -199,6 +208,9 @@ def classify(e: dict, ctx: dict) -> dict:
          "; ".join(flags[k] for k in ("illiquid", "penny") if k in flags) or "ok"),
         ("Ikke bare volum-/kurssignal", "volume_only" not in flags, "ok" if "volume_only" not in flags else "bare volum/kurs"),
     ]
+    if t.endswith(".OL"):
+        rules.append(("Oslo: ikke svak 12-1-måneders momentum (laveste 20 %)", None if dec.get("mom12_1") is None else "weak_mom" not in flags,
+                      flags.get("weak_mom", "–" if dec.get("mom12_1") is None else f"{dec['mom12_1']*100:+.0f} %")))
     prev = ctx["prev_kjop"].get(t)
     prev_recent = prev is not None and (ctx["today"] - prev).days <= R["hold_memory_days"] and prev < ctx["today"]
     names = " + ".join(TYPE_NO[k] for k in types)

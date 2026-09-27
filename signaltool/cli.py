@@ -54,7 +54,11 @@ def main(argv=None):
                             for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20"]})
                 old["last_date"] = st.get("last_date")
                 e["stats"] = old
+        from . import extras, briefing
+        extras.decision(snap, snap["status"])
+        extras.collectors(snap, snap["status"])
         categories.apply(snap)
+        briefing.apply(snap)
         snap["status"]["Kategorier (Kjøp/Hold/Watchlist)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
         txt = json.dumps(snap, indent=1, default=str)
         p.write_text(txt); (DATA / "snapshots" / f"{snap['date']}.json").write_text(txt)

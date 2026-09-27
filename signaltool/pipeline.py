@@ -278,6 +278,21 @@ def run(fast: bool = False) -> dict:
                 sd = e.setdefault("signal_dates", {})
                 sd["gov_contract"] = max(filter(None, [sd.get("gov_contract"), max(ds).isoformat()]))
             e["evidence"].append({"text": f"DoD-kontrakt(er): {len(g)} stk, totalt ${g['amount'].sum()/1e6:,.0f}M ({top['day']})", "url": top["url"]})
+    # strong earnings reports (PEAD) - the one signal type validated out-of-sample (reports/backtest_natt.md)
+    if not fast:
+        try:
+            from .collectors import pead_scan
+            pe, status["Sterke kvartalsrapporter (S&P 500, Yahoo)"] = pead_scan.scan()
+            for r in pe:
+                e = c(r["ticker"])
+                e["points"]["pead"] = 2.0
+                e.setdefault("signal_dates", {})["pead"] = r["date"]
+                e["evidence"].append({"text": f"Sterk kvartalsrapport {r['date']}: EPS-overraskelse {r['surprise']:+.0f} %, kursreaksjon {r['reaction']*100:+.1f} % mot S&P 500"
+                                              f" (siden da {r['since']*100:+.1f} %)", "url": f"https://finance.yahoo.com/quote/{r['ticker']}"})
+            snap["pead_scan"] = pe
+        except Exception as ex:
+            log.exception("pead scan failed")
+            status["Sterke kvartalsrapporter (S&P 500, Yahoo)"] = f"FAILED: {ex}"
     # reddit cashtags
     if not red.empty:
         rr = red[red["published"] >= pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=2)]
@@ -318,6 +333,10 @@ def run(fast: bool = False) -> dict:
         e["why"], e["risks"] = explain(e)
     ranked = sorted(cand.values(), key=lambda x: x["score"], reverse=True)
     snap["tickers"] = [e for e in ranked if e["score"] > 0][:60]
+    # decision data (priced-in / risk / invalidation / PEAD) + new free collectors, before categories use them
+    from . import extras
+    extras.decision(snap, status)
+    extras.collectors(snap, status)
     # rule-based categories (Kjøp-kandidat / Hold / Watchlist) + forward log + track record
     try:
         from . import categories
@@ -357,6 +376,12 @@ def run(fast: bool = False) -> dict:
     cal += [dict(e, kind="sentralbank") for e in cb if e["date"] <= (date.today() + timedelta(days=45)).isoformat()]
     cal += [{"date": e["date"], "time": "", "source": "Yahoo", "title": f"Kvartalsrapport {e['ticker']}", "kind": "resultat"} for e in earn]
     snap["calendar"] = sorted(cal, key=lambda e: (e["date"], e.get("time") or ""))
+    try:
+        from . import briefing
+        briefing.apply(snap)
+    except Exception as ex:
+        log.exception("briefing failed")
+        status["Dagens fokus / endringer"] = f"FAILED: {ex}"
     snap["status"] = status
     snap["runtime_s"] = round(time.time() - t0)
     (SNAP_DIR / f"{snap['date']}.json").write_text(json.dumps(snap, indent=1, default=str))
@@ -393,6 +418,7 @@ def weekend_summary(heads, pm, ofa, themes_out) -> dict:
 
 
 RISK_TEXT = {
+    "pead": "Driften etter sterke rapporter er et gjennomsnitt – mange enkeltaksjer faller likevel; testen bruker dagens S&P 500 (overlevelsesskjevhet), og effekten har vært svakere i perioder.",
     "insider_cluster": "Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.",
     "congress_buys": "Kongresshandler rapporteres med opptil 45 dagers forsinkelse; kan være rutine/rådgiverstyrt.",
     "ose_contracts": "Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning.",
@@ -405,6 +431,7 @@ RISK_TEXT = {
     "dod_contract": "Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet.",
 }
 WHY_TEXT = {
+    "pead": "Sterk kvartalsrapport: både resultatet og kursreaksjonen var klart bedre enn ventet. Historisk (S&P 500 2006–2026) har slike aksjer i snitt gjort det ca. 1,5–2 prosentpoeng bedre enn andre rapporterende selskaper de neste 60 handelsdagene.",
     "insider_cluster": "Flere innsidere kjøper med egne penger samtidig – de kjenner selskapet best.",
     "congress_buys": "Medlem(mer) av Kongressen har kjøpt aksjen nylig.",
     "ose_contracts": "Selskapet har meldt nye kontrakter/ordre på Oslo Børs.",
