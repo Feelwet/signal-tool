@@ -124,9 +124,10 @@ def focus(snap: dict, chg: dict, al: list[dict], n=5) -> list[dict]:
             items.append((5, a))
     seen, out = set(), []
     for _, it in sorted(items, key=lambda x: x[0]):
-        if it["title"] in seen:
+        key = it.get("link") if str(it.get("link", "")).startswith("ticker/") else it["title"]
+        if key in seen or it["title"] in seen:
             continue
-        seen.add(it["title"]); out.append(it)
+        seen.add(key); seen.add(it["title"]); out.append(it)
         if len(out) >= n:
             break
     return out

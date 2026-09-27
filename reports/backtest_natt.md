@@ -21,7 +21,8 @@ Alle kurs-univers er dagens noterte selskaper → **overlevelsesskjevhet** (avno
 | Polymarket-bevegelse ≥ 10 pp → sektor-ETF | **samtidig** +0,57 % (t 3,4) for XLE, men **neste dag 0,00 %** og neste 5 d −0,17 % | Nei – bekreftelse, ikke forsprang |
 | DoD-kontrakt i % av markedsverdi | ingen signifikante (største t 1,1) | Nei endring |
 | Shortposisjoner Oslo (Finanstilsynet) | alle grupper negative (−1 til −4 %), t ≈ −1,8; historikk bare fra okt. 2024 | Beholdt som rødt flagg (økende short) |
-| Innsidehandel Oslo (retning fra meldingstekst) | se egen seksjon | se under |
+| Innsidehandel Oslo (retning fra meldingstekst, 6 418 meldinger 2021–) | Ingen gruppe robust. Kjøp ≥ 1 mill. NOK: −5,2 % netto 60 d (t −2,7) i utvalget, +0,8 % (t 0,8) utenfor. Kjøpsklynger: −1,7 % (t −2,1) utenfor utvalget | Kun visning, ikke i Kjøp-reglene |
+| Kontraktsmeldinger Oslo (4 899 titler 2019–) | Ingen robust drift etter publiseringsdagen. Alle 5 d: +0,78 pp (t 2,7) i utvalget, +0,29 pp (t 1,6) utenfor. «Største/rekord»: negativt i utvalget, positivt utenfor | Kun visning |
 
 
 ## 1. Drift etter kvartalsrapport (PEAD)
@@ -377,3 +378,54 @@ _477 månedlige observasjoner 2024-10–2026-09 (API-et har bare historikk fra d
 | Short redusert ≥ 0,5 pp på 30 d | 60 d | out-of-sample 2024-11–2026-06 | 99 (40) | -0.36 % | -0.76 % (-0.6) | -0.35 pp (-0.5) |
 | Short økt ≥ 0,5 pp på 30 d | 60 d | out-of-sample 2024-10–2026-06 | 126 (50) | -1.94 % | -2.34 % (-1.2) | -1.46 pp (-0.9) |
 | Short-nivå ≥ 3 % | 60 d | out-of-sample 2024-10–2026-06 | 77 (16) | -4.36 % | -4.76 % (-1.8) | -4.01 pp (-1.5) |
+
+## 7. Oslo Børs: innsidehandel (kjøp/salg lest fra meldingen)
+
+### Innsidehandel Oslo Børs (retning lest fra Newsweb-meldingen) → senere avkastning
+_6,418 hendelser fra meldinger 2021– (klassifisert automatisk; kjøp/salg, ikke opsjoner/program). In-sample 2021–2023, out-of-sample 2024–. Inngang = sluttkurs dagen etter publisering._
+
+| Gruppe | Horisont | Periode | N (aksjer) | Meravk. vs OSEBX | Netto (t) | Mot snitt av likvide aksjer (t) |
+|---|---|---|---|---|---|---|
+| Innsidekjøp (alle) | 20 d | in-sample 2021-01–2023-12 | 510 (79) | -0.18 % | -0.58 % (0.7) | +0.02 pp (1.5) |
+| Innsidekjøp ≥ NOK 1 mill. | 20 d | in-sample 2021-01–2023-12 | 202 (52) | -0.54 % | -0.94 % (-0.1) | -0.12 pp (0.7) |
+| Innsidekjøp-klynge (≥ 2 meldinger på 14 d) | 20 d | in-sample 2021-01–2023-12 | 154 (51) | -0.00 % | -0.40 % (0.7) | +0.41 pp (1.1) |
+| Innsidesalg (alle) | 20 d | in-sample 2021-01–2023-12 | 199 (54) | +0.79 % | +0.39 % (0.3) | +1.30 pp (1.0) |
+| Innsidekjøp (alle) | 20 d | out-of-sample 2024-01–2026-08 | 449 (78) | -0.45 % | -0.85 % (-1.6) | -0.01 pp (-0.8) |
+| Innsidekjøp ≥ NOK 1 mill. | 20 d | out-of-sample 2024-01–2026-08 | 103 (34) | +0.38 % | -0.02 % (0.6) | +0.53 pp (1.5) |
+| Innsidekjøp-klynge (≥ 2 meldinger på 14 d) | 20 d | out-of-sample 2024-01–2026-08 | 133 (50) | -0.88 % | -1.28 % (-2.2) | -0.26 pp (-1.6) |
+| Innsidesalg (alle) | 20 d | out-of-sample 2024-01–2026-08 | 180 (59) | -0.58 % | -0.98 % (-0.4) | -0.20 pp (0.4) |
+| Innsidekjøp (alle) | 60 d | in-sample 2021-01–2023-12 | 510 (79) | -1.80 % | -2.20 % (-0.7) | -0.75 pp (-0.1) |
+| Innsidekjøp ≥ NOK 1 mill. | 60 d | in-sample 2021-01–2023-12 | 202 (52) | -4.78 % | -5.18 % (-2.7) | -2.82 pp (-2.1) |
+| Innsidekjøp-klynge (≥ 2 meldinger på 14 d) | 60 d | in-sample 2021-01–2023-12 | 154 (51) | -0.37 % | -0.77 % (0.3) | +0.77 pp (0.9) |
+| Innsidesalg (alle) | 60 d | in-sample 2021-01–2023-12 | 199 (54) | +0.15 % | -0.25 % (-0.0) | +0.81 pp (0.8) |
+| Innsidekjøp (alle) | 60 d | out-of-sample 2024-01–2026-07 | 418 (77) | -0.38 % | -0.78 % (-0.7) | -0.14 pp (0.0) |
+| Innsidekjøp ≥ NOK 1 mill. | 60 d | out-of-sample 2024-01–2026-06 | 97 (32) | +1.19 % | +0.79 % (0.8) | +0.87 pp (1.1) |
+| Innsidekjøp-klynge (≥ 2 meldinger på 14 d) | 60 d | out-of-sample 2024-01–2026-07 | 121 (47) | -1.26 % | -1.66 % (-2.1) | -0.83 pp (-1.6) |
+| Innsidesalg (alle) | 60 d | out-of-sample 2024-01–2026-06 | 171 (57) | +0.08 % | -0.32 % (-0.4) | +0.42 pp (0.1) |
+
+
+**Tolkning:** Ingen gruppe har |t| ≥ 3,1 med samme fortegn i begge perioder. Store kjøp (≥ 1 mill. NOK) snur fortegn: klart negative i 2021–2023 og svakt positive fra 2024. Kjøpsklynger er negative utenfor utvalget. Dette stemmer med Eckbo & Smith (norske data, ingen langsiktig meravkastning). Masteroppgavene som finner +1–2 % måler reaksjonen på selve meldingsdagen, og den har allerede skjedd når vi kan handle (sluttkurs dagen etter). Kun ~1 300 av 6 418 hendelser er med i målingen: resten er illikvide selskaper eller mangler kurs hos Yahoo. t-verdien regnes på månedssnitt (hver måned veier likt), så fortegnet kan avvike fra snittet over alle hendelser. **Beslutning: innsidehandel i Oslo vises på siden, men gir ikke poeng i Kjøp-reglene.**
+
+## 8. Oslo Børs: kontraktsmeldinger
+
+### Kontraktsmeldinger Oslo Børs (Newsweb-titler) → senere avkastning
+_4,899 hendelser 2019– (titler med kontrakt/ordre/rammeavtale/LOI, uten aksje-/opsjons-/rettssaksmeldinger). In-sample 2019–2022, out-of-sample 2023–. Inngang = sluttkurs dagen ETTER publisering (dagens reaksjon er da allerede tatt) – tester om det er drift etterpå._
+
+| Gruppe | Horisont | Periode | N (aksjer) | Meravk. vs OSEBX | Netto (t) | Mot snitt av likvide aksjer (t) |
+|---|---|---|---|---|---|---|
+| Kontraktsmelding (alle) | 1 d | in-sample 2019-01–2022-12 | 545 (51) | +0.16 % | -0.24 % (-1.7) | +0.10 pp (0.4) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 1 d | in-sample 2019-06–2022-12 | 45 (14) | -0.03 % | -0.43 % (-1.0) | -0.16 pp (-0.6) |
+| Kontraktsmelding (alle) | 1 d | out-of-sample 2023-01–2026-09 | 629 (67) | +0.13 % | -0.27 % (-3.0) | +0.12 pp (2.0) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 1 d | out-of-sample 2023-02–2026-08 | 72 (18) | +0.35 % | -0.05 % (-0.4) | +0.35 pp (1.0) |
+| Kontraktsmelding (alle) | 5 d | in-sample 2019-01–2022-12 | 545 (51) | +0.90 % | +0.50 % (1.9) | +0.78 pp (2.7) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 5 d | in-sample 2019-06–2022-12 | 45 (14) | -0.03 % | -0.43 % (-1.3) | +0.04 pp (-0.7) |
+| Kontraktsmelding (alle) | 5 d | out-of-sample 2023-01–2026-09 | 628 (67) | +0.28 % | -0.12 % (-0.3) | +0.29 pp (1.6) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 5 d | out-of-sample 2023-02–2026-08 | 72 (18) | +1.53 % | +1.13 % (1.8) | +1.53 pp (2.6) |
+| Kontraktsmelding (alle) | 20 d | in-sample 2019-01–2022-12 | 545 (51) | +1.25 % | +0.85 % (1.6) | +1.13 pp (2.1) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 20 d | in-sample 2019-06–2022-12 | 45 (14) | -1.61 % | -2.01 % (-0.7) | -1.45 pp (-0.7) |
+| Kontraktsmelding (alle) | 20 d | out-of-sample 2023-01–2026-08 | 622 (66) | +0.49 % | +0.09 % (-0.2) | +0.59 pp (0.9) |
+| Kontraktsmelding med «største/betydelig/rekord» o.l. | 20 d | out-of-sample 2023-02–2026-08 | 70 (17) | +2.96 % | +2.56 % (2.2) | +3.06 pp (2.3) |
+
+
+**Tolkning:** Kontraktsmeldinger er som ventet en positiv hendelse, men når vi går inn på sluttkurs dagen etter, er det ingen robust drift igjen. Den eneste t-verdien over 2,5 (alle meldinger, 5 d, i utvalget) halveres utenfor utvalget. Undergruppen med «største/rekord» er liten (45–72 hendelser) og snur fortegn. **Beslutning: kontraktsmeldinger vises, men gir ikke ekstra poeng.**
+

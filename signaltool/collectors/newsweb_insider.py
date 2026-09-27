@@ -26,7 +26,7 @@ SELL = re.compile(r"\b(sold|sells|has sold|sale of|disposed|disposal|solgt|selge
 BUY = re.compile(r"\b(bought|buys|purchased|purchases|has acquired|acquired|acquisition of|kjøpt|kjøper|kjøp av|ervervet)\b", re.I)
 SUBS = re.compile(r"\b(subscribed|subscription|tegnet|tegning|private placement|rettet emisjon|offering)\b", re.I)
 NUM = r"(\d{1,3}(?:[ ,.\u00a0]\d{3})+|\d+)(?:[.,](\d+))?"
-SHARES = re.compile(NUM + r"\s*(?:ordinary\s+)?(?:shares|aksjer)", re.I)
+SHARES = re.compile(NUM + r"\s*(?:ordinary\s+)?(?:shares?|aksjer?)\b", re.I)
 PNUM = r"(\d+)(?:[.,](\d+))?"  # share prices: '13.986' / '0,498' are decimals, not thousands
 PRICE = re.compile(r"(?:price|kurs|pris)[^0-9]{0,40}?(?:(?:NOK|kr\.?)\s*)?" + PNUM + r"|(?:NOK|kr\.?)\s*" + PNUM + r"\s*(?:per|pr\.?)\s*(?:share|aksje)", re.I)
 

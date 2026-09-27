@@ -293,4 +293,6 @@ def oslo_insider_html(snap: dict) -> str:
     return (f'<div class="card tw" id="innside"><h2 style="margin-top:0">Innsidehandler med retning (Newsweb, 21 dager)</h2>'
             f'<p class="mut">Retningen er lest automatisk fra meldingsteksten: kjøp / salg / tegning (emisjon) / annet (opsjoner, aksjeprogram, lån) / ukjent (bare vedlegg). '
             f'Stikkprøve: 20 av 20 kjøp/salg riktig klassifisert. I dag: {E(", ".join(f"{v} {k}" for k, v in cnt.items()))}.</p>'
+            f'<p class="mut">Test (6 418 meldinger 2021–2026, inngang dagen etter): verken innsidekjøp, store kjøp (≥ 1 mill. NOK) eller kjøpsklynger har gitt robust '
+            f'meravkastning mot OSEBX etter kostnader. Derfor vises dette her, men gir <b>ikke</b> poeng i Kjøp-reglene. <a href="kilder.html#natt">Se testen</a>.</p>'
             f'<table><tr><th>Dato</th><th>Selskap</th><th>Retning</th><th>Verdi NOK</th><th>Melding</th></tr>{tr}</table></div>')

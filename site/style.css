@@ -48,6 +48,7 @@ svg.spark{vertical-align:middle}svg.spark polyline{stroke:var(--acc)}
 .kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}.kv>div{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px}
 .kv table td{border-bottom:1px solid #232a33;padding:4px 6px}.kv table td:first-child{color:var(--mut)}
 .verdict{border-left:4px solid var(--warn);padding:6px 10px;background:rgba(227,179,65,.07);margin:8px 0;border-radius:4px}
+td.nw{white-space:nowrap}
 details summary{cursor:pointer;color:var(--acc);margin:6px 0}
 .kind{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:6px;border:1px solid}.kind.kjøp{color:var(--up);border-color:rgba(74,194,107,.5)}
 .kind.salg{color:var(--down);border-color:rgba(255,128,120,.5)}.kind.tegning{color:var(--acc);border-color:rgba(108,182,255,.5)}.kind.annet,.kind.ukjent,.kind.ikke{color:var(--mut);border-color:var(--line)}

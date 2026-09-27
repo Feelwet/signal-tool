@@ -108,3 +108,25 @@ def test_decision_html_and_verdict():
     h = X.decision_html(e)
     assert "Allerede priset inn?" in h and "Ugyldiggjøring" in h and "92.00" in h and "priset inn" in h and "hendelsesrisiko" in h
     assert "Ingen kurs" in X.decision_html({"ticker": "Q"})
+
+
+def test_focus_dedupes_same_ticker():
+    from signaltool import briefing
+    snap = {"tickers": [{"ticker": "DELL", "category": "hold", "cat_reason": "x"}], "themes": []}
+    chg = {"items": [{"kind": "ny", "ticker": "DELL", "text": "DELL er ny på listen som Hold", "level": "info"}]}
+    out = briefing.focus(snap, chg, [])
+    assert sum(1 for i in out if i["link"] == "ticker/DELL") == 1
+
+
+def test_insider_singular_share_not_holding():
+    from signaltool.collectors.newsweb_insider import classify
+    c = classify("On 22 September 2026, Kona BidCo AS acquired 1 share in Zalaris ASA at a price of NOK 100 per share through market purchase. "
+                 "Following this Kona BidCo AS owns a total of 19,413,705 shares in the Company.")
+    assert c["kind"] == "kjøp" and c["shares"] == 1 and c["value_nok"] == 100
+
+
+def test_contract_filter_excludes_legal_and_share_awards():
+    from signaltool.collectors.newsweb import NOT_CONTRACT
+    assert NOT_CONTRACT.search("nordic mining asa: legal proceedings initiated by epc contractor")
+    assert NOT_CONTRACT.search("subsea 7 s.a. announces details of share related awards")
+    assert not NOT_CONTRACT.search("scana asa: scana company secures contract for e-house module")
