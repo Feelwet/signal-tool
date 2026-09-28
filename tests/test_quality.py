@@ -198,3 +198,9 @@ def test_build_survives_broken_section_and_passes_check(tmp_path, monkeypatch):
     assert any("datakvalitet" in p for p in sitecheck.check(out))
     (out / "index.html").unlink()
     assert sitecheck.check(out) == [f"{out / 'index.html'} mangler"]
+
+
+def test_oslo_universe_list_available_without_backtest_cache():
+    from signaltool import oslo_flags as O
+    t = O.universe_tickers()      # CI has no data/cache/universe -> the committed list must be enough
+    assert len(t) >= 200 and "OSEBX.OL" in t and all(x.endswith(".OL") for x in t)

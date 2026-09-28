@@ -19,6 +19,7 @@ Every flag carries its evidence level (FLAG_INFO). Numbers there are copied from
 from __future__ import annotations
 from . import http as _http
 import json, logging, re, time
+from pathlib import Path
 from datetime import date, datetime, timedelta
 import numpy as np
 import pandas as pd
@@ -76,11 +77,9 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
                 log.info("oslo cache %s: %s", path, ex)
     if not fetch:
         return {}
-    signs = pd.read_csv(universe.DIR / "oslo_signs.csv")["sign"].tolist() if (universe.DIR / "oslo_signs.csv").exists() else []
-    if not signs:
+    tick = universe_tickers()
+    if not tick:
         return {}
-    import yfinance as yf
-    tick = sorted({f"{s}.OL" for s in signs})
     d = _http.yf_download(tick, period="14mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
     for t in tick:
@@ -91,8 +90,26 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
                 out[t] = df
         except KeyError:
             pass
-    pd.to_pickle(out, RECENT)
+    if out:
+        pd.to_pickle(out, RECENT)
     return _clean(out)
+
+
+UNIVERSE_FILE = Path(__file__).with_name("oslo_universe.txt")
+
+
+def universe_tickers() -> list[str]:
+    """Tickers for the 14-month refresh: the committed list (signaltool/oslo_universe.txt, works in CI where the backtest
+    cache is missing) or, failing that, the Newsweb sign list from the backtest cache. OSEBX.OL is always included."""
+    tick: set[str] = set()
+    if UNIVERSE_FILE.exists():
+        tick = {l.strip() for l in UNIVERSE_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
+    if not tick:
+        from .backtest import universe
+        p = universe.DIR / "oslo_signs.csv"
+        if p.exists():
+            tick = {f"{s}.OL" for s in pd.read_csv(p)["sign"].dropna().astype(str) if s.strip("-")}
+    return sorted(tick | {"OSEBX.OL"}) if tick else []
 
 
 def _clean(d: dict) -> dict:
