@@ -31,6 +31,7 @@ PLACEMENT = re.compile(r"private placement|rettet emisjon", re.I)
 NOT_PLACEMENT = re.compile(r"notification of trade|mandatory notification|primary insider", re.I)
 BUYBACK_CAT = "ACQUISITION OR DISPOSAL OF AN ISSUER"
 PLACEMENT_DAYS, BUYBACK_DAYS = 60, 20   # trading days
+LAST_NW: pd.DataFrame | None = None
 
 # key -> (short label, kind, evidence level, evidence text). kind: red = blocks Kjøp, yellow = warning, note, info
 FLAG_INFO = {
@@ -252,6 +253,22 @@ def seed_ebit_cache(fund_pkl: str) -> int:
 
 
 # ---------------------------------------------------------------- orchestration
+def ticker_flags(t: str, m: pd.DataFrame, meta: dict, ev: dict, today: date, fetch: bool = True, e: dict | None = None) -> dict:
+    """All Oslo flags for one ticker: price ranks (fallback: per-ticker decision data), Newsweb placement/buyback, EBIT."""
+    o = price_flags(t, m, meta, today) or (decision_fallback(e, meta) if e else {}) or {"flags": {}}
+    o.update(ev.get(t, {}))
+    if o.get("placement"):
+        o["flags"]["placement"] = f"rettet emisjon {o['placement']['date']} (siste {PLACEMENT_DAYS} handelsdager)"
+    eb = ebit_latest(t, fetch=fetch)
+    if eb:
+        o["ebit"] = eb
+        if eb["ebit"] < 0:
+            o["flags"]["neg_ebit"] = f"negativt driftsresultat i siste årsregnskap ({eb['fye'][:4]}: {eb['ebit']/1e6:,.0f} mill.)".replace(",", " ")
+    if o.get("buyback"):
+        o["info"] = {"buyback": f"aktivt tilbakekjøp (egne-aksjer-melding {o['buyback']['date']})"}
+    return o
+
+
 def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True) -> str:
     """Adds e['oslo'] = {metrics..., 'flags': {key: text}, 'placement', 'buyback', 'ebit'} for every .OL ticker."""
     from .categories import _d
@@ -266,22 +283,13 @@ def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True) -> str
             nw, _ = newsweb.collect(days=95)
         except Exception as ex:
             log.warning("newsweb for flags: %s", ex)
+    global LAST_NW
+    LAST_NW = nw            # reused by theme_maps.apply (same run) to avoid a second Newsweb pass
     ev = newsweb_events(nw, today) if nw is not None else {}
     n_ebit = 0
     for e in ol:
-        t = e["ticker"]
-        o = price_flags(t, m, meta, today) or decision_fallback(e, meta) or {"flags": {}}
-        o.update(ev.get(t, {}))
-        if o.get("placement"):
-            o["flags"]["placement"] = f"rettet emisjon {o['placement']['date']} (siste {PLACEMENT_DAYS} handelsdager)"
-        eb = ebit_latest(t, fetch=fetch)
-        if eb:
-            o["ebit"] = eb
-            n_ebit += 1
-            if eb["ebit"] < 0:
-                o["flags"]["neg_ebit"] = f"negativt driftsresultat i siste årsregnskap ({eb['fye'][:4]}: {eb['ebit']/1e6:,.0f} mill.)".replace(",", " ")
-        if o.get("buyback"):
-            o["info"] = {"buyback": f"aktivt tilbakekjøp (egne-aksjer-melding {o['buyback']['date']})"}
+        o = ticker_flags(e["ticker"], m, meta, ev, today, fetch=fetch, e=e)
+        n_ebit += bool(o.get("ebit"))
         e["oslo"] = o
     snap["oslo_flags_meta"] = {**meta, "newsweb_days": None if nw is None else 95, "n_ebit": n_ebit}
     return (f"ok ({len(ol)} Oslo-tickere, univers {meta.get('n_liquid', 0)} likvide aksjer per {meta.get('asof')}, "

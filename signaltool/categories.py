@@ -61,7 +61,8 @@ FX_USD = {".OL": 0.095, ".L": 0.0127, ".DE": 1.1, ".PA": 1.1, ".AS": 1.1, ".MI":
           ".CO": 0.147, ".TO": 0.73, ".AX": 0.65}
 TYPE_NO = {"gov_contract": "offentlig kontrakt (DoD/USAspending)", "insider_cluster": "innsidekjøp-klynge (ledelse/styre)",
            "ose_contract": "kontraktsmelding (Newsweb)", "theme_market": "tema med markedsbekreftelse",
-           "pead": "sterk kvartalsrapport (eksperimentell, svak evidens)"}
+           "pead": "sterk kvartalsrapport (eksperimentell, svak evidens)",
+           "tema_kat": "Tema-katalysator (eksperimentell – teller ikke mot Kjøp)"}
 CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watchlist"}
 DISCLAIMER_NO = ("Kategoriene er regelbaserte og mekaniske – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet "
                  "(våre egne tester fant ingen dokumentert meravkastning).")
@@ -306,13 +307,16 @@ def previous_kjop(logdf: pd.DataFrame, before: date) -> dict:
 
 def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
     """One row per loggable ticker (single US / Oslo stocks) and run date; re-runs the same date replace the rows.
-    `types` = independent signal types ("pead|gov_contract"), `flags` = red/yellow flag keys ("weak_px|high_vol")."""
+    `types` = independent signal types ("pead|gov_contract") plus the experimental "tema_kat" tag (never counted as a type for
+    Kjøp; n_types excludes it), `flags` = red/yellow flag keys ("weak_px|high_vol")."""
     rows = [{"date": snap["date"], "ticker": e["ticker"], "category": e["category"],
              "price": (e.get("stats") or {}).get("close"), "price_date": (e.get("stats") or {}).get("last_date"),
              "benchmark": e.get("cat_benchmark"), "score": e.get("score"), "n_types": len(e.get("cat_types") or {}),
-             "types": "|".join(sorted(e.get("cat_types") or {})),
+             "types": "|".join(sorted(list(e.get("cat_types") or {}) + (["tema_kat"] if (e.get("temakart") or {}).get("tema_kat") else []))),
              "flags": "|".join(list(e.get("cat_flag_keys") or []) + sorted(e.get("cat_warnings") or {}))}
             for e in snap.get("tickers", []) if e.get("category") and loggable(e["ticker"], (e.get("decision") or {}).get("quoteType"))]
+    from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Watchlist stats)
+    rows += log_rows(snap)
     old = read_log(path)
     old = old[old["date"] != snap["date"]]  # one set of rows per day (re-runs replace)
     df = pd.concat([old, pd.DataFrame(rows, columns=LOG_COLS)], ignore_index=True) if rows else old

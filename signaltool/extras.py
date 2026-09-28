@@ -59,6 +59,12 @@ def flags(snap: dict, status: dict, nw=None, fetch: bool = True) -> None:
         log.exception("oslo flags failed")
         status["Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp)"] = f"FAILED: {ex}"
     try:
+        from . import theme_maps
+        status["Temakart + Tema-katalysator (eksperimentell)"] = theme_maps.apply(snap, nw=nw, fetch=fetch)
+    except Exception as ex:
+        log.exception("theme maps failed")
+        status["Temakart + Tema-katalysator (eksperimentell)"] = f"FAILED: {ex}"
+    try:
         from . import regime
         status["Markedsregime (10-mnd snitt, volatilitet)"] = regime.apply(snap, fetch=fetch)
     except Exception as ex:

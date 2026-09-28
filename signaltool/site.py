@@ -6,6 +6,7 @@ from pathlib import Path
 from .config import ROOT, REPORTS
 from . import categories as C
 from . import site_extra as X
+from . import theme_maps as TM
 
 SITE = ROOT / "site"
 E = lambda x: html.escape("" if x is None else str(x))
@@ -316,7 +317,10 @@ def build(snap: dict) -> Path:
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"])}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", f'<h1>Alle temaer</h1><div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score</th><th>Overskrifter 3d</th></tr>{rows}</table></div>', 0, snap))
+    (SITE / "temaer.html").write_text(page("Temaer", f'<h1>Alle temaer</h1><div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + TM.cards_html(), 0, snap))
+    have = {e["ticker"] for e in tickers}
+    for M in TM.MAPS.values():
+        (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", TM.map_html(M["key"], snap, have), 1, snap))
     for t in themes:
         (SITE / "tema" / f"{t['key']}.html").write_text(page(t["name"], theme_page(t, {e["ticker"]: e for e in tickers}, snap), 1, snap))
 
@@ -370,6 +374,7 @@ def theme_page(t, catmap=None, snap=None):
 <p><b>Sektorer:</b> {E(', '.join(t['sectors']))}<br><b>Vinnere ved eskalering (eksempler):</b> USA: {E(', '.join(t['tickers_us']))}; Oslo: {E(', '.join(t['tickers_ose']) or '–')}{('; andre: ' + E(', '.join(t['tickers_other']))) if t['tickers_other'] else ''}<br>
 <b>Tapere:</b> {E(', '.join(t['losers']) or '–')} &nbsp; <b>Råvarer/FX:</b> {E(', '.join(t['commodities']) or '–')}</p></div>
 {scen}
+{TM.related_html(t['key'])}
 <div class="card tw"><h2 style="margin-top:0">Hvorfor scoren er {t['score']:.2f}</h2>{trend}<table><tr><th>Komponent</th><th>Score (z)</th><th>Vekt</th><th>Detalj</th></tr>{comp_rows}</table></div>
 {'<div class="card tw"><h2 style="margin-top:0">Prediksjonsmarkeder (Polymarket)</h2><p class="mut">Pris = markedets sannsynlighet for «Ja».</p><table><tr><th>Spørsmål</th><th>Sanns.</th><th>1d</th><th>1u</th><th>Volum 24t</th></tr>' + pm + '</table></div>' if pm else ''}
 <div class="card tw"><h2 style="margin-top:0">Berørte aksjer og råvarer</h2><table><tr><th>Ticker</th><th>Kategori</th><th>Rolle</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum-z</th></tr>{tick}</table>{CAT_NOTE.format(pre="../")}</div>
@@ -387,6 +392,7 @@ def ticker_page(e, tmap):
 {X.thesis_html(e, tmap)}
 {cat_rules_html(e)}
 {X.flags_html(e)}
+{TM.ticker_html(e)}
 {X.plan_html(e, compact=False) if e.get("category") in ("kjop", "hold") else ""}
 {X.base_rate_html(e)}
 {X.decision_html(e)}

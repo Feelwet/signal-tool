@@ -313,7 +313,7 @@ Poeng summeres fra: innsidekjøp-klynger, kongresskjøp, Oslo Børs-kontrakter/i
 #### HAFNI.OL – Hafnia Limited — 5.08 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (tema med markedsbekreftelse)._
 
-_Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 0.8, ose_insider_notices 0.5. Kurs 84.10, 5d -10.4%, 20d +8.9%._
+_Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 0.8, ose_insider_notices 0.5. Kurs 85.60, 5d -9.6%, 20d +9.1%._
 
 - [Uvanlig volum: snitt siste 5 dager 4.4x normalt (z=2.9)](https://finance.yahoo.com/quote/HAFNI.OL)
 - [Kursbevegelse 5d -10.4% (z=-2.3 vs eget år)](https://finance.yahoo.com/quote/HAFNI.OL)
@@ -326,7 +326,7 @@ _Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 0.8, ose_insider_not
 #### SUBC.OL – Subsea 7 S.A. — 2.38 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (kontraktsmelding (Newsweb)); kurs under 50-dagers snitt._
 
-_Poeng: ose_contracts 1.5, ose_insider_notices 0.5, theme_attention 0.4. Kurs 324.80, 5d +1.2%, 20d -2.5%._
+_Poeng: ose_contracts 1.5, ose_insider_notices 0.5, theme_attention 0.4. Kurs 327.80, 5d +1.4%, 20d -4.9%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Subsea7 awarded contract extension offshore Türkiye»](https://newsweb.oslobors.no/message/682942)
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682944)
@@ -372,7 +372,7 @@ _Poeng: unusual_volume 1.1, theme_attention 0.8. Kurs 47.73, 5d -7.2%, 20d +16.4
 #### KOG.OL  — 1.78 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending))._
 
-_Poeng: dod_contract 1.4, theme_attention 0.4. Kurs 312.70, 5d -3.0%, 20d +0.1%._
+_Poeng: dod_contract 1.4, theme_attention 0.4. Kurs 314.30, 5d -2.4%, 20d -1.0%._
 
 - [DoD-kontrakt(er): 1 stk, totalt $404M (Contracts for Sept. 25, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4612013/contracts-for-sept-25-2026/)
 
@@ -405,7 +405,7 @@ _Poeng: dod_contract 1.1, theme_attention 0.2. Kurs 189.40, 5d -2.4%, 20d -10.7%
 #### VAR.OL – Vår Energi ASA — 1.30 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (tema med markedsbekreftelse)._
 
-_Poeng: theme_attention 0.8, ose_insider_notices 0.5. Kurs 51.10, 5d -5.0%, 20d +5.3%._
+_Poeng: theme_attention 0.8, ose_insider_notices 0.5. Kurs 51.72, 5d -0.7%, 20d +4.1%._
 
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682386)
 
@@ -427,7 +427,7 @@ _Poeng: price_move 1.2, theme_attention 0.1. Kurs 114.67, 5d -10.2%, 20d -8.8%._
 #### BA.L  — 1.27 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype (offentlig kontrakt (DoD/USAspending)); kurs under 50-dagers snitt._
 
-_Poeng: dod_contract 1.0, theme_attention 0.2. Kurs 1972.00, 5d -2.6%, 20d -5.7%._
+_Poeng: dod_contract 1.0, theme_attention 0.2. Kurs 1974.00, 5d -3.7%, 20d -3.4%._
 
 - [DoD-kontrakt(er): 2 stk, totalt $28M (Contracts for Sept. 25, 2026)](https://www.war.gov/News/Contracts/Contract/Article/4612013/contracts-for-sept-25-2026/)
 
@@ -451,7 +451,7 @@ _Poeng: dod_contract 1.0, theme_attention 0.2. Kurs 519.56, 5d -2.6%, 20d -7.6%.
 #### ONCIN.OL – Oncoinvent ASA — 4.91 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -41 % siste 20 handelsdager, lav likviditet (~$0.23M/dag), svak kurs: -42 % under 52-ukers topp (laveste 20 %, grense -28 %), rettet emisjon 2026-09-23 (siste 60 handelsdager), negativt driftsresultat i siste årsregnskap (2025: -155 mill.); ingen signaler fra kilder med høyere pålitelighet (bare ose_insider_notices, price_move, unusual_volume); kurs under 50-dagers snitt._
 
-_Poeng: price_move 2.0, unusual_volume 1.9, ose_insider_notices 1.0. Kurs 83.80, 5d -34.3%, 20d -3.2%._
+_Poeng: price_move 2.0, unusual_volume 1.9, ose_insider_notices 1.0. Kurs 83.60, 5d -27.9%, 20d -10.7%._
 
 - [Uvanlig volum: snitt siste 5 dager 7.8x normalt (z=2.4)](https://finance.yahoo.com/quote/ONCIN.OL)
 - [Kursbevegelse 5d -34.3% (z=-3.3 vs eget år)](https://finance.yahoo.com/quote/ONCIN.OL)
@@ -477,7 +477,7 @@ _Poeng: price_move 2.0, unusual_volume 1.8, insider_cluster 1.0. Kurs 68.43, 5d 
 #### 2020.OL – 2020 Bulkers Ltd. — 4.08 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: økende short (1.09 %, +1.09 pp 7d), kursfall -53 % siste 20 handelsdager, lav likviditet (~$0.11M/dag), pennyaksje, svak kurs: 12-1-momentum -97 % (laveste 20 %, grense -5 %) og -95 % under 52-ukers topp (laveste 20 %, grense -28 %), rettet emisjon 2026-09-23 (siste 60 handelsdager); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
 
-_Poeng: unusual_volume 2.1, ose_contracts 1.5, ose_insider_notices 0.5. Kurs 6.25, 5d -15.8%, 20d +57.9%._
+_Poeng: unusual_volume 2.1, ose_contracts 1.5, ose_insider_notices 0.5. Kurs 5.95, 5d +8.2%, 20d +43.7%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «2020 Bulkers Ltd. (2020)   Announcement of a letter of intent to acquire up to 15x large AHTS vessels and intended financing of up to approximately USD 485 million»](https://newsweb.oslobors.no/message/682446)
 - [Uvanlig volum: snitt siste 5 dager 9.4x normalt (z=2.6)](https://finance.yahoo.com/quote/2020.OL)
@@ -529,7 +529,7 @@ _Poeng: unusual_volume 1.5, price_move 1.3, insider_cluster 1.0. Kurs 3.13, 5d +
 #### VTURA.OL – Ventura Offshore Holding Ltd. — 3.29 poeng — **Watchlist**
 _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: lav likviditet (~$0.79M/dag); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
 
-_Poeng: price_move 1.8, ose_contracts 1.5. Kurs 31.10, 5d -12.9%, 20d +7.2%._
+_Poeng: price_move 1.8, ose_contracts 1.5. Kurs 30.90, 5d -13.5%, 20d +3.0%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Ventura Offshore Holding Ltd.: SSV Catarina   Contract Amendment for Additional Well»](https://newsweb.oslobors.no/message/683041)
 - [Kursbevegelse 5d -12.9% (z=-2.8 vs eget år)](https://finance.yahoo.com/quote/VTURA.OL)
@@ -539,9 +539,9 @@ _Poeng: price_move 1.8, ose_contracts 1.5. Kurs 31.10, 5d -12.9%, 20d +7.2%._
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning.
 
 #### TECH.OL – Techstep ASA — 3.14 poeng — **Watchlist**
-_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -48 % siste 20 handelsdager, lav likviditet (~$0.14M/dag), pennyaksje, svak kurs: 12-1-momentum -87 % (laveste 20 %, grense -5 %) og -64 % under 52-ukers topp (laveste 20 %, grense -28 %), negativt driftsresultat i siste årsregnskap (2025: -88 mill.); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -48 % siste 20 handelsdager, lav likviditet (~$0.17M/dag), pennyaksje, svak kurs: 12-1-momentum -87 % (laveste 20 %, grense -5 %) og -64 % under 52-ukers topp (laveste 20 %, grense -28 %), negativt driftsresultat i siste årsregnskap (2025: -88 mill.); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
 
-_Poeng: price_move 1.6, ose_contracts 1.5. Kurs 5.00, 5d +66.7%, 20d +213.5%._
+_Poeng: price_move 1.6, ose_contracts 1.5. Kurs 6.12, 5d +134.5%, 20d +316.3%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Techstep ASA - Award of largest individual contract ever in Sweden»](https://newsweb.oslobors.no/message/683065)
 - [Kursbevegelse 5d +66.7% (z=2.6 vs eget år)](https://finance.yahoo.com/quote/TECH.OL)
@@ -769,10 +769,11 @@ _Poeng: price_move 1.6, ose_contracts 1.5. Kurs 5.00, 5d +66.7%, 20d +213.5%._
 | Politikkvarsler (Federal Register / EU) | ok (41 dokumenter siste 10 d) |
 | EIA lagre vs 5-årssnitt | ok (3/3 serier; under 5-årssnitt: 2) |
 | Taiwan månedlig omsetning (MOPS) | ok (siste måned 2026-08, kurv +79.5 % å/å) |
-| Newsweb innsidehandel: kjøp/salg (meldingstekst) | ok (51 kjøp, 23 annet, 10 ukjent, 8 tegning, 5 salg i 21 d) |
+| Newsweb innsidehandel: kjøp/salg (meldingstekst) | ok (52 kjøp, 24 annet, 11 ukjent, 9 tegning, 5 salg i 21 d) |
 | Kategorier (Kjøp/Hold/Watchlist) | ok (Kjøp: 0, Hold: 3, Watchlist: 57) |
 | Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp) | ok (23 Oslo-tickere, univers 121 likvide aksjer per 2026-09-25, EBIT for 20, Newsweb ok) |
 | Markedsregime (10-mnd snitt, volatilitet) | ok (S&P 500: over 10-mnd snitt, vol 11 %, OSEBX: over 10-mnd snitt, vol 8 %) |
+| Temakart + Tema-katalysator (eksperimentell) | ok (11 Oslo-rader i 2 temakart, Tema-katalysator: 1, Newsweb ok) |
 
 ## 12. Metode og validering
 
