@@ -81,8 +81,10 @@ not personal financial advice, and not proven to beat the market.**
 * **Watchlist** – everything else with attention (single source, volume/theme only, falling price, red flags, no price data).
 
 **Forward log / Treffsikkerhet:** each run appends `date, ticker, category, price, price_date, benchmark, score, n_types`
-to `data/history/categories.csv` (~60 rows/day, one set per day). It is carried between nightly runs in the Actions cache
-*and* published at `site/historikk/kategorier.csv`; if the cache is lost, the workflow restores the log from the live site.
+to `logs/categories.csv` (~60 rows/day, one set per day). This file is **tracked in git**: the nightly workflow commits and
+pushes it after each run (as `GrokBot`, only if it changed, message tagged `[skip ci]`; the workflow only runs on
+schedule/workflow_dispatch, so the bot push never re-triggers a deploy). It is also published at `site/historikk/kategorier.csv`.
+Everything else in `data/` (GDELT, RSS/Reddit history, HTTP cache, snapshots) stays git-ignored and lives in the Actions cache.
 The «Treffsikkerhet» section (Tickere page) shows excess return vs the benchmark after 5/20/60 trading days for *new*
 entries into each category, once ≥ 10 entries have matured – before that it says «ikke nok data ennå».
 Historical sanity check of the rules: `reports/backtest_categories.md` (`python -m signaltool backtest categories`).

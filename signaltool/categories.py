@@ -2,7 +2,7 @@
 
 IMPORTANT: our own backtests (reports/backtest.md) found NO proven edge in insider clusters or GDELT spikes.
 These categories are therefore deliberately conservative, fully transparent rules - NOT a forecast, NOT personal
-financial advice, and NOT proven to beat the market. A forward log (data/history/categories.csv) records every
+financial advice, and NOT proven to beat the market. A forward log (logs/categories.csv, committed to git) records every
 day's categories and prices so the real hit rate can be measured over time ("Treffsikkerhet").
 
 Rules (all thresholds in RULES):
@@ -35,10 +35,14 @@ import logging, re
 from datetime import date, datetime, timedelta
 import numpy as np
 import pandas as pd
-from .config import HISTORY
+from .config import HISTORY, LOGS
 
 log = logging.getLogger(__name__)
-LOG_PATH = HISTORY / "categories.csv"
+LOG_PATH = LOGS / "categories.csv"   # tracked in git; committed back by the nightly workflow
+_OLD_LOG_PATH = HISTORY / "categories.csv"   # pre-2026-09-28 location (git-ignored, Actions cache only)
+if not LOG_PATH.exists() and _OLD_LOG_PATH.exists():  # one-time migration from the old cache-only location
+    import shutil as _sh
+    _sh.copy2(_OLD_LOG_PATH, LOG_PATH)
 LOG_COLS = ["date", "ticker", "category", "price", "price_date", "benchmark", "score", "n_types", "types", "flags"]
 
 RULES = dict(min_types=2, fresh_days=7, stretch_5d=0.10, stretch_20d=0.25, stretch_sma=0.25, crash=-0.20,

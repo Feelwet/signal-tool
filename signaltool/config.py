@@ -8,7 +8,10 @@ DATA = Path(os.environ.get("SIGNAL_DATA", ROOT / "data"))
 CACHE = DATA / "cache"
 HISTORY = DATA / "history"
 REPORTS = ROOT / "reports"
-for _p in (DATA, CACHE, HISTORY, REPORTS):
+# Tracked (committed) logs that must survive cache loss, e.g. the Kjøp/Hold/Watchlist forward log. The nightly workflow
+# commits changes here back to the repository.
+LOGS = Path(os.environ.get("SIGNAL_LOGS", ROOT / "logs"))
+for _p in (DATA, CACHE, HISTORY, REPORTS, LOGS):
     _p.mkdir(parents=True, exist_ok=True)
 
 # SEC requires a descriptive User-Agent with contact info (https://www.sec.gov/os/accessing-edgar-data).

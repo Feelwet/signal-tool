@@ -1,5 +1,7 @@
 name: Nightly update + deploy to GitHub Pages
 
+# Triggers are ONLY schedule + workflow_dispatch (no `push`), so the bot commit of logs/categories.csv at the end of the
+# build job can never re-trigger this workflow (and pushes made with GITHUB_TOKEN do not trigger workflows anyway).
 on:
   schedule:
     - cron: "17 5 * * *"      # 05:17 UTC every day (07:17 Oslo summer time / 06:17 winter time)
@@ -11,7 +13,7 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write   # commit the forward log (logs/categories.csv) back to the repository
   pages: write
   id-token: write
 
@@ -59,16 +61,17 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
 
-      # The Kjøp/Hold/Watchlist forward log (data/history/categories.csv) is the long-term track record. It is also
-      # published at <site>/historikk/kategorier.csv, so if the cache was evicted it is restored from the live site.
+      # The Kjøp/Hold/Watchlist forward log (logs/categories.csv) is the long-term track record. It is tracked in git
+      # (checked out above, committed back at the end of this job). Fallback only if it is somehow missing: live site copy.
       - name: Restore forward log from live site if missing
         run: |
-          mkdir -p data/history
-          if [ ! -s data/history/categories.csv ]; then
-            curl -fsSL "${{ steps.pages.outputs.base_url }}/historikk/kategorier.csv" -o data/history/categories.csv \
-              && echo "restored forward log ($(wc -l < data/history/categories.csv) lines)" \
-              || { rm -f data/history/categories.csv; echo "no published forward log yet"; }
+          mkdir -p logs
+          if [ ! -s logs/categories.csv ]; then
+            curl -fsSL "${{ steps.pages.outputs.base_url }}/historikk/kategorier.csv" -o logs/categories.csv \
+              && echo "restored forward log ($(wc -l < logs/categories.csv) lines)" \
+              || { rm -f logs/categories.csv; echo "no published forward log yet"; }
           fi
+          echo "forward log: $(wc -l < logs/categories.csv 2>/dev/null || echo 0) lines"
 
       - name: Run pipeline (collect, score, report, build site)
         id: run
@@ -112,6 +115,25 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
+
+      # Persist the forward log in git. Only logs/categories.csv is staged (site/, reports/, data/ are left alone);
+      # no commit if unchanged; "[skip ci]" as an extra guard against loops. Rebase + retry in case master moved.
+      - name: Commit forward log
+        if: always()
+        continue-on-error: true   # a failed push must not block the Pages deploy (shows as an error annotation)
+        run: |
+          test -s logs/categories.csv || { echo "no forward log to commit"; exit 0; }
+          git add logs/categories.csv
+          if git diff --cached --quiet -- logs/categories.csv; then
+            echo "forward log unchanged - nothing to commit"; exit 0
+          fi
+          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv
+          for i in 1 2 3; do
+            git -c user.name=GrokBot -c user.email=bot@box pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+              && git push origin "HEAD:${GITHUB_REF_NAME}" && { echo "forward log pushed ($(wc -l < logs/categories.csv) lines)"; exit 0; }
+            sleep $((i * 5))
+          done
+          echo "::error::could not push forward log"; exit 1
 
   deploy:
     needs: build
