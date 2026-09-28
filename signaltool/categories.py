@@ -16,11 +16,13 @@ Rules (all thresholds in RULES):
          (volume, price moves, Reddit, congress trades and Newsweb insider notices of unknown direction do NOT count)
       (2) at least one of those signals is fresh (<= 7 calendar days old)
       (3) price confirmation: close > 50-day average AND 20-day return > benchmark 20-day return
-          (benchmark: OSEBX for .OL, S&P 500 otherwise)
+          (benchmark: OSEBX for .OL, SPY = S&P 500 incl. dividends otherwise)
       (4) not stretched: 5d return < +10 %, 20d return < +25 %, close < 25 % above the 50-day average
       (5) no red flags: sharply rising short interest (Oslo: +0.3 pp in 7d or +0.75 pp in 30d), crash (>= 20 %
           peak-to-trough within 20 sessions), illiquid (median turnover < ~USD 1M/day) or penny stock (< ~USD 1),
-          or volume/price-only signals
+          or volume/price-only signals; Oslo only (signaltool/oslo_flags.py): weak price (bottom 20 % 12-1 momentum OR bottom
+          20 % proximity to the 52-week high among liquid Oslo stocks), negative EBIT, private placement in the last 60 trading days.
+          Yellow flags (high volatility, December small loser) and info tags (active buyback) never block.
   Hold           = >= 1 higher-reliability signal type, price confirmation holds, no red flags, but the entry is late:
                    stretched (rule 4 fails) OR no signal fresher than 7 days OR it was a Kjøp-kandidat within the last
                    30 days without a new trigger ("if you own it, the signals still support it; don't chase").
@@ -37,23 +39,29 @@ from .config import HISTORY
 
 log = logging.getLogger(__name__)
 LOG_PATH = HISTORY / "categories.csv"
-LOG_COLS = ["date", "ticker", "category", "price", "price_date", "benchmark", "score", "n_types"]
+LOG_COLS = ["date", "ticker", "category", "price", "price_date", "benchmark", "score", "n_types", "types", "flags"]
 
 RULES = dict(min_types=2, fresh_days=7, stretch_5d=0.10, stretch_20d=0.25, stretch_sma=0.25, crash=-0.20,
              min_adv_usd=1_000_000, min_price_usd=1.0, short_7d=0.3, short_30d=0.75, theme_min=1.0,
-             theme_market_z=1.0, hold_memory_days=30, min_track_n=10)
+             theme_market_z=1.0, hold_memory_days=30, min_track_n=30, track_spacing=60)
 HORIZONS = (5, 20, 60)
 # market-based theme confirmation that counts as an independent signal: physical oil spreads/futures curves only
 # (prediction-market moves were considered but are too loosely linked to single stocks, e.g. elections -> SPY)
 MARKET_COMPONENTS = ("physical_oil",)
-BENCH_OSE, BENCH_US = "OSEBX.OL", "^GSPC"
+# SPY = S&P 500 WITH dividends (auto_adjust) - the stocks are measured dividend-adjusted too (^GSPC is a price index).
+# OSEBX is a total-return index.
+BENCH_OSE, BENCH_US = "OSEBX.OL", "SPY"
 BENCH_NAME = {BENCH_OSE: "OSEBX", BENCH_US: "S&P 500"}
+# ETFs / index products never enter the forward log (they are not single stocks)
+ETFS = {"SPY", "ITA", "BDRY", "FXI", "EWW", "REMX", "SMH", "FEZ", "EWZ", "EWG", "XLE", "JETS", "XRT", "GLD", "GDX", "XLK", "XLV", "XLF",
+        "XLY", "XLC", "XLI", "XLP", "XLU", "XLRE", "XLB", "USO", "BNO", "UNG", "SLV", "EWT", "EWJ", "EWY", "INDA", "KWEB", "TLT", "IEF",
+        "HYG", "LQD", "EFA", "EEM", "QQQ", "IWM", "DIA", "URA", "LIT", "TAN", "ICLN", "OIH", "XOP", "KRE", "XME", "COPX", "SOXX"}
 # rough FX to USD for liquidity / penny checks (only thresholds; precision is not important)
 FX_USD = {".OL": 0.095, ".L": 0.0127, ".DE": 1.1, ".PA": 1.1, ".AS": 1.1, ".MI": 1.1, ".HE": 1.1, ".ST": 0.095,
           ".CO": 0.147, ".TO": 0.73, ".AX": 0.65}
 TYPE_NO = {"gov_contract": "offentlig kontrakt (DoD/USAspending)", "insider_cluster": "innsidekjøp-klynge (ledelse/styre)",
            "ose_contract": "kontraktsmelding (Newsweb)", "theme_market": "tema med markedsbekreftelse",
-           "pead": "sterk kvartalsrapport (overraskelse + kursreaksjon)"}
+           "pead": "sterk kvartalsrapport (eksperimentell, svak evidens)"}
 CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watchlist"}
 DISCLAIMER_NO = ("Kategoriene er regelbaserte og mekaniske – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet "
                  "(våre egne tester fant ingen dokumentert meravkastning).")
@@ -66,6 +74,15 @@ def benchmark_for(ticker: str) -> str:
 
 def is_equity(ticker: str) -> bool:
     return not ("=" in ticker or ticker.startswith("^"))
+
+
+def loggable(ticker, quote_type: str | None = None) -> bool:
+    """Forward log / track record: single stocks on US exchanges (no suffix) or Oslo Børs (.OL) only.
+    ETFs, indices, futures/FX and other exchanges (e.g. BA.L - no matching benchmark) are left out."""
+    t = str(ticker or "")
+    if not t or not is_equity(t) or t.upper() in ETFS or (quote_type and quote_type.upper() not in ("EQUITY", "")):
+        return False
+    return t.endswith(".OL") or "." not in t
 
 
 def fx_usd(ticker: str) -> float:
@@ -133,8 +150,10 @@ def signal_types(e: dict, ctx: dict) -> dict:
             out["insider_cluster"] = {"date": newest("insider_cluster"), "detail": roles[:80]}
     dec = e.get("decision") or {}
     if dec.get("pead"):
-        # validated out-of-sample 2016-2026 (reports/backtest_natt.md): top EPS surprise + top reaction -> +1.9 pp / 60 d vs other reports
-        out["pead"] = {"date": _d(dec.get("last_earnings")), "detail": f"EPS-overraskelse {dec.get('eps_surprise'):+.0f} %, reaksjon {dec.get('earn_reaction', 0)*100:+.1f} % vs S&P 500"}
+        # EXPERIMENTAL / weak evidence (strategy-research/RAPPORT_3): point-in-time S&P 500 incl. former members gives ~+0.4-0.8 pp
+        # gross per 60 d for the site thresholds (t 0.7-1.9), ~0 net of 0.75 % costs. PEAD-S (vol above median) ~+1 pp gross, ~+0.25 net.
+        ps = " · PEAD-S (vol. over median)" if dec.get("pead_s") else ""
+        out["pead"] = {"date": _d(dec.get("last_earnings")), "detail": f"EPS-overraskelse {dec.get('eps_surprise'):+.0f} %, reaksjon {dec.get('earn_reaction', 0)*100:+.1f} % vs SPY{ps}"}
     if pts.get("ose_contracts", 0) > 0:
         out["ose_contract"] = {"date": newest("ose_contract"), "detail": "Newsweb"}
     for k in e.get("themes", []):
@@ -184,9 +203,17 @@ def classify(e: dict, ctx: dict) -> dict:
         if close * f < R["min_price_usd"]:
             flags["penny"] = "pennyaksje"
     dec = e.get("decision") or {}
-    if dec.get("weak_mom_oslo"):
-        # Oslo only: bottom-quintile 12-1 month momentum underperformed OSEBX out-of-sample (reports/backtest_natt.md)
-        flags["weak_mom"] = f"svak 12-1-måneders momentum ({dec.get('mom12_1', 0)*100:+.0f} %, laveste 20 % på Oslo Børs)"
+    warnings, info = {}, {}
+    osl = e.get("oslo") if t.endswith(".OL") else None
+    if osl:
+        from .oslo_flags import FLAG_INFO
+        for k, txt in (osl.get("flags") or {}).items():
+            kind = FLAG_INFO.get(k, ("", "red"))[1]
+            (flags if kind == "red" else warnings)[k] = txt
+        info.update(osl.get("info") or {})
+    elif t.endswith(".OL") and dec.get("weak_mom_oslo"):
+        # fallback without the ranked universe: fixed bottom-quintile momentum cut-off (older snapshots / tests)
+        flags["weak_px"] = f"svak kurs: 12-1-måneders momentum {dec.get('mom12_1', 0)*100:+.0f} % (laveste 20 % på Oslo Børs)"
     pos = {k for k, v in e.get("points", {}).items() if v > 0}
     if pos and pos <= {"unusual_volume", "price_move"}:
         flags["volume_only"] = "bare volum/kurs-signal"
@@ -209,8 +236,18 @@ def classify(e: dict, ctx: dict) -> dict:
         ("Ikke bare volum-/kurssignal", "volume_only" not in flags, "ok" if "volume_only" not in flags else "bare volum/kurs"),
     ]
     if t.endswith(".OL"):
-        rules.append(("Oslo: ikke svak 12-1-måneders momentum (laveste 20 %)", None if dec.get("mom12_1") is None else "weak_mom" not in flags,
-                      flags.get("weak_mom", "–" if dec.get("mom12_1") is None else f"{dec['mom12_1']*100:+.0f} %")))
+        known = bool(osl and (osl.get("mom12_1") is not None or osl.get("hi52") is not None)) or dec.get("mom12_1") is not None
+        mtxt = "–"
+        if osl and osl.get("mom12_1") is not None:
+            mtxt = f"12-1 {osl['mom12_1']*100:+.0f} %" + (f", {(osl['hi52']-1)*100:.0f} % fra 52-ukers topp" if osl.get("hi52") is not None else "")
+        elif dec.get("mom12_1") is not None:
+            mtxt = f"{dec['mom12_1']*100:+.0f} %"
+        rules.append(("Oslo: ikke svak kurs (laveste 20 % på 12-1-momentum eller avstand til 52-ukers topp)", None if not known else "weak_px" not in flags,
+                      flags.get("weak_px", mtxt)))
+        eb = (osl or {}).get("ebit")
+        rules.append(("Oslo: ikke negativt driftsresultat (siste årsregnskap; testet kun 2022–26)", None if not eb else "neg_ebit" not in flags,
+                      flags.get("neg_ebit", "–" if not eb else f"EBIT {eb['fye'][:4]}: {eb['ebit']/1e6:,.0f} mill.".replace(",", " "))))
+        rules.append(("Oslo: ingen rettet emisjon siste 60 handelsdager", None if osl is None else "placement" not in flags, flags.get("placement", "ok" if osl else "–")))
     prev = ctx["prev_kjop"].get(t)
     prev_recent = prev is not None and (ctx["today"] - prev).days <= R["hold_memory_days"] and prev < ctx["today"]
     names = " + ".join(TYPE_NO[k] for k in types)
@@ -247,7 +284,7 @@ def classify(e: dict, ctx: dict) -> dict:
             why.append("signalene er ikke ferske")
         reason = "Mangler bekreftelse: " + "; ".join(why[:3]) + "."
     return {"category": cat, "reason": reason, "rules": rules, "types": {k: v["detail"] for k, v in types.items()},
-            "flags": list(flags.values()), "benchmark": bench}
+            "flags": list(flags.values()), "flag_keys": list(flags), "warnings": warnings, "info": info, "benchmark": bench}
 
 
 # ---------------------------------------------------------------- forward log + track record
@@ -268,59 +305,161 @@ def previous_kjop(logdf: pd.DataFrame, before: date) -> dict:
 
 
 def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
+    """One row per loggable ticker (single US / Oslo stocks) and run date; re-runs the same date replace the rows.
+    `types` = independent signal types ("pead|gov_contract"), `flags` = red/yellow flag keys ("weak_px|high_vol")."""
     rows = [{"date": snap["date"], "ticker": e["ticker"], "category": e["category"],
              "price": (e.get("stats") or {}).get("close"), "price_date": (e.get("stats") or {}).get("last_date"),
-             "benchmark": e.get("cat_benchmark"), "score": e.get("score"), "n_types": len(e.get("cat_types") or {})}
-            for e in snap.get("tickers", []) if e.get("category")]
+             "benchmark": e.get("cat_benchmark"), "score": e.get("score"), "n_types": len(e.get("cat_types") or {}),
+             "types": "|".join(sorted(e.get("cat_types") or {})),
+             "flags": "|".join(list(e.get("cat_flag_keys") or []) + sorted(e.get("cat_warnings") or {}))}
+            for e in snap.get("tickers", []) if e.get("category") and loggable(e["ticker"], (e.get("decision") or {}).get("quoteType"))]
     old = read_log(path)
     old = old[old["date"] != snap["date"]]  # one set of rows per day (re-runs replace)
     df = pd.concat([old, pd.DataFrame(rows, columns=LOG_COLS)], ignore_index=True) if rows else old
+    df = df.reindex(columns=LOG_COLS)
     path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(path, index=False)
     return df
 
 
-def entries(logdf: pd.DataFrame, gap_days=5) -> pd.DataFrame:
-    """First day of each (ticker, category) streak - avoids counting the same call every day."""
+def _explode(logdf: pd.DataFrame, col: str) -> pd.DataFrame:
+    """One row per (row, pipe-separated value in col) with the value in column 'key'."""
+    if logdf.empty or col not in logdf.columns:
+        return pd.DataFrame(columns=list(logdf.columns) + ["key"])
+    d = logdf.assign(key=logdf[col].fillna("").astype(str).str.split("|")).explode("key")
+    return d[d["key"] != ""]
+
+
+def entries(logdf: pd.DataFrame, key: str = "category", spacing: int | None = None) -> pd.DataFrame:
+    """Independent new entries per (ticker, key):
+    * a streak = consecutive RUN DAYS in the log with the same (ticker, key); only the first day of a streak counts (a pause
+      between runs never splits a streak, and one missing ticker-day starts a new one);
+    * non-overlapping: at most one entry per (ticker, key) per `spacing` trading days (default 60 = the longest horizon)."""
     if logdf.empty:
         return logdf
+    spacing = RULES["track_spacing"] if spacing is None else spacing
+    d = logdf.copy()
+    d["date"] = d["date"].astype(str)
+    runs = sorted(d["date"].unique())
+    prev = {x: (runs[i - 1] if i else None) for i, x in enumerate(runs)}
+    present = set(zip(d["date"], d["ticker"], d[key]))
+    out, last = [], {}
+    for _, r in d.sort_values("date").iterrows():
+        k = (r["ticker"], r[key])
+        if (prev[r["date"]], r["ticker"], r[key]) in present:
+            continue  # continuing streak
+        dd = _d(r["date"])
+        if k in last and np.busday_count(last[k], dd) < spacing:
+            continue  # overlapping window with an earlier counted entry
+        last[k] = dd
+        out.append(r)
+    return pd.DataFrame(out, columns=d.columns) if out else d.iloc[0:0]
+
+
+def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """95 % Wilson interval for a hit rate k/n."""
+    if n == 0:
+        return (float("nan"), float("nan"))
+    p = k / n
+    den = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / den
+    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
+    return (float(c - h), float(c + h))
+
+
+def mean_ci(x: pd.Series, groups: pd.Series, z: float = 1.96) -> tuple[float, float]:
+    """95 % interval for the mean with standard errors clustered by entry week (entries in the same week are not independent)."""
+    x = pd.Series(x, dtype=float).reset_index(drop=True)
+    g = pd.Series(groups).reset_index(drop=True)
+    n = len(x)
+    if n < 2 or g.nunique() < 2:
+        return (float("nan"), float("nan"))
+    e = x - x.mean()
+    se = float(np.sqrt((e.groupby(g).sum() ** 2).sum()) / n)
+    return (float(x.mean() - z * se), float(x.mean() + z * se))
+
+
+def _outcomes(ent: pd.DataFrame, closes: dict[str, pd.Series], h: int, status: dict) -> list[tuple]:
+    """(entry_date, excess) for entries that reached h trading days. Entry = FIRST close AFTER the run date (the run uses
+    closes up to the day before, so that close could not have been traded). Benchmark: SPY (US) / OSEBX (Oslo).
+    A ticker that stopped trading inside the window keeps its last close (cash thereafter) and is listed as 'stopped';
+    a ticker without any price series is listed as 'missing' (never silently dropped)."""
     out = []
-    for t, g in logdf.dropna(subset=["price"]).sort_values("date").groupby("ticker"):
-        prev_cat, prev_d = None, None
-        for _, r in g.iterrows():
-            d = _d(r["date"])
-            if r["category"] != prev_cat or prev_d is None or (d - prev_d).days > gap_days:
-                out.append(r)
-            prev_cat, prev_d = r["category"], d
-    return pd.DataFrame(out)
+    for _, r in ent.iterrows():
+        t = r["ticker"]
+        c, b = closes.get(t), closes.get(benchmark_for(t))
+        if b is None or b.empty:
+            continue
+        b = b.dropna()
+        if c is None or c.dropna().empty:
+            status["missing"].add(t)
+            continue
+        c = c.dropna()
+        run = pd.Timestamp(str(r["date"]))
+        q0 = b.index.searchsorted(run, side="right")
+        if q0 + h >= len(b):
+            continue  # not matured yet
+        p = c.index.searchsorted(run, side="right")
+        stopped = c.index[-1] < b.index[-1] - pd.Timedelta(days=7)
+        if p >= len(c):
+            status["missing" if not stopped else "stopped"].add(t)
+            continue
+        q = b.index.searchsorted(c.index[p])
+        if q + h >= len(b):
+            continue
+        end = b.index[q + h]
+        if p + h < len(c) and c.index[p + h] <= end + pd.Timedelta(days=5):
+            ce = c.iloc[p + h]
+        elif stopped:
+            ce = c.iloc[-1]
+            status["stopped"].add(t)
+        else:
+            continue
+        out.append((c.index[p], (ce / c.iloc[p] - 1) - (b.iloc[q + h] / b.iloc[q] - 1)))
+    return out
+
+
+def _perf(ent: pd.DataFrame, closes: dict, min_n: int, status: dict) -> dict:
+    res = {"entries": int(len(ent))}
+    for h in HORIZONS:
+        o = _outcomes(ent, closes, h, status) if len(ent) else []
+        x = pd.Series([v for _, v in o], dtype=float)
+        r = {"n": int(len(x))}
+        if len(x) >= min_n:
+            wk = pd.Series([pd.Timestamp(d).strftime("%G-%V") for d, _ in o])
+            k = int((x > 0).sum())
+            r.update({"mean": float(x.mean()), "median": float(x.median()), "hit": k / len(x),
+                      "hit_ci": wilson(k, len(x)), "mean_ci": mean_ci(x, wk), "weeks": int(wk.nunique())})
+        res[f"h{h}"] = r
+    return res
 
 
 def track_record(logdf: pd.DataFrame, closes: dict[str, pd.Series], min_n: int | None = None) -> dict:
-    """Excess return (stock - benchmark) after 5/20/60 trading days for each category's new entries."""
+    """Excess return (stock - benchmark) after 5/20/60 trading days for independent new entries, per category, per signal
+    type and per flag. Numbers are shown only from min_n (default 30) independent entries, with 95 % intervals."""
     min_n = min_n or RULES["min_track_n"]
+    full = logdf
+    if len(logdf):
+        keep = logdf["ticker"].map(loggable)
+        excluded = sorted(set(logdf.loc[~keep, "ticker"]))
+        logdf = logdf[keep]
+    else:
+        excluded = []
+    status = {"missing": set(), "stopped": set()}
     ent = entries(logdf)
-    res = {"n_log_rows": int(len(logdf)), "n_days": int(logdf["date"].nunique()) if len(logdf) else 0,
-           "first_date": str(logdf["date"].min()) if len(logdf) else None, "min_n": min_n, "cats": {}}
+    res = {"n_log_rows": int(len(full)), "n_days": int(full["date"].nunique()) if len(full) else 0,
+           "first_date": str(full["date"].min()) if len(full) else None, "min_n": min_n, "spacing": RULES["track_spacing"],
+           "benchmarks": {"us": "SPY (inkl. utbytte)", "oslo": "OSEBX"}, "excluded": excluded, "cats": {}, "types": {}, "flags": {}}
     for cat in CAT_NO:
-        e = ent[ent["category"] == cat] if len(ent) else ent
-        res["cats"][cat] = {"entries": int(len(e))}
-        for h in HORIZONS:
-            xs = []
-            for _, r in e.iterrows():
-                c, b = closes.get(r["ticker"]), closes.get(r.get("benchmark") or benchmark_for(r["ticker"]))
-                if c is None or b is None or c.empty or b.empty:
-                    continue
-                c, b = c.dropna(), b.dropna()
-                p = c.index.searchsorted(pd.Timestamp(str(r.get("price_date") or r["date"])))
-                if p >= len(c) or p + h >= len(c):
-                    continue
-                q = b.index.searchsorted(c.index[p])
-                if q + h >= len(b):
-                    continue
-                xs.append((c.iloc[p + h] / c.iloc[p] - 1) - (b.iloc[q + h] / b.iloc[q] - 1))
-            x = pd.Series(xs, dtype=float)
-            res["cats"][cat][f"h{h}"] = ({"n": int(len(x)), "mean": float(x.mean()), "median": float(x.median()), "hit": float((x > 0).mean())}
-                                        if len(x) >= min_n else {"n": int(len(x))})
+        res["cats"][cat] = _perf(ent[ent["category"] == cat] if len(ent) else ent, closes, min_n, status)
+    for col, dest in (("types", "types"), ("flags", "flags")):
+        ex = _explode(logdf, col)
+        if len(ex):
+            ek = entries(ex, key="key")
+            for k in sorted(ex["key"].unique()):
+                res[dest][k] = _perf(ek[ek["key"] == k], closes, min_n, status)
+    res["missing"] = sorted(status["missing"])
+    res["stopped"] = sorted(status["stopped"])
     return res
 
 
@@ -358,14 +497,15 @@ def apply(snap: dict, log_path=LOG_PATH, fetch=True) -> dict:
     for e in snap.get("tickers", []):
         c = classify(e, ctx)
         e.update({"category": c["category"], "cat_reason": c["reason"], "cat_rules": c["rules"],
-                  "cat_types": c["types"], "cat_flags": c["flags"], "cat_benchmark": c["benchmark"]})
+                  "cat_types": c["types"], "cat_flags": c["flags"], "cat_flag_keys": c["flag_keys"],
+                  "cat_warnings": c["warnings"], "cat_info": c["info"], "cat_benchmark": c["benchmark"]})
     logdf = append_log(snap, log_path)
     tr = track_record(logdf, {})
     matured = logdf[logdf["date"] <= (today - timedelta(days=7)).isoformat()] if len(logdf) else logdf
     if fetch and len(matured):
         try:
             start = (_d(matured["date"].min()) - timedelta(days=10)).isoformat()
-            tick = set(matured["ticker"]) | {BENCH_OSE, BENCH_US}
+            tick = {t for t in matured["ticker"] if loggable(t)} | {BENCH_OSE, BENCH_US}
             tr = track_record(logdf, _download_close(tick, start=start))
         except Exception as ex:
             log.warning("track record prices failed: %s", ex)

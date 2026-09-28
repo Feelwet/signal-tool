@@ -128,10 +128,10 @@ def priced_in_verdict(d: dict) -> list[str]:
                    + ("kursen kan allerede reflektere dette." if d["eps_rev30"] > 0 else "sjekk om kursen har tatt det inn."))
     if d.get("days_to_earnings") is not None and 0 <= d["days_to_earnings"] <= 14:
         out.append(f"Kvartalsrapport om {d['days_to_earnings']} dager ({E(d.get('next_earnings'))}) – hendelsesrisiko.")
-    if d.get("weak_mom_oslo"):
-        out.append("Svak 12-1-måneders momentum på Oslo Børs – historisk svakere enn indeksen (se metode).")
     if d.get("pead"):
-        out.append(f"Sterk kvartalsrapport {E(d.get('last_earnings'))}: EPS-overraskelse {d.get('eps_surprise'):+.0f} % og kursreaksjon {pct(d.get('earn_reaction'))} – historisk fulgt av positiv drift (se metode).")
+        out.append(f"Sterk kvartalsrapport {E(d.get('last_earnings'))}: EPS-overraskelse {d.get('eps_surprise'):+.0f} % og kursreaksjon {pct(d.get('earn_reaction'))} mot SPY"
+                   + (" (PEAD-S: volatilitet over median)" if d.get("pead_s") else "")
+                   + " – eksperimentelt signal: historisk ca. +0,4–1 pp brutto over 60 d, omtrent null etter kurtasje (se metode).")
     return out
 
 
@@ -312,17 +312,21 @@ def thesis_html(e: dict, themes: dict) -> str:
 
 def _br_row(k: str, b: dict) -> str:
     if not b or not b.get("n"):
-        return f'<tr><td>{E(P.BR_LABEL.get(k, k))}</td><td colspan="4" class="mut">Ingen historikk. {E((b or {}).get("note", ""))}</td></tr>'
+        return f'<tr><td>{E(P.BR_LABEL.get(k, k))}</td><td colspan="5" class="mut">Ingen historikk. {E((b or {}).get("note", ""))}</td></tr>'
     def cell(h):
         if b.get(f"hit{h}") is None:
             return '<span class="mut">for få</span>'
         return f'{b[f"hit{h}"]*100:.0f} % · {pct(b[f"med{h}"])} / {pct(b[f"mean{h}"])}'
     base = k.startswith("baseline")
+    net = "–" if b.get("net60") is None else (f'{pct(b["net60"])} <span class="mut">(−{b.get("cost", 0)*100:.2f} %)</span>'
+                                             + (f'<div class="mut">60 d brutto før/etter 2016: {pct(b.get("mean60_is"))} (t {b.get("t60_is", 0):.1f}) / '
+                                                f'{pct(b.get("mean60_oos"))} (t {b.get("t60_oos", 0):.1f})</div>' if b.get("mean60_is") is not None else ""))
     return (f'<tr{" class=mut" if base else ""}><td>{E(P.BR_LABEL.get(k, k))}</td><td>{b["n"]:,}'.replace(",", " ") + f'</td><td>{cell(20)}</td><td>{cell(60)}</td>'
-            f'<td class="nw">{E(b.get("period", ""))} · {E(b.get("bench", ""))}</td></tr>')
+            f'<td>{net}</td><td class="nw">{E(b.get("period", ""))} · {E(b.get("bench", ""))}</td></tr>')
 
 
-BR_HEAD = ('<tr><th>Signal / kategori</th><th>Tilfeller</th><th>20 d: slo indeks · median / snitt</th><th>60 d: slo indeks · median / snitt</th><th>Periode · indeks</th></tr>')
+BR_HEAD = ('<tr><th>Signal / kategori</th><th>Tilfeller</th><th>20 d: slo indeks · median / snitt</th><th>60 d: slo indeks · median / snitt</th>'
+           '<th>60 d netto etter kostnad</th><th>Periode · indeks</th></tr>')
 
 
 def base_rate_html(e: dict) -> str:
@@ -372,7 +376,7 @@ def plan_html(e: dict, compact: bool = False) -> str:
     rows = [("Inngangssone", f'{lvl(lv["entry_lo"])}–{lvl(lv["entry_hi"])} {E(cur)} <span class="mut">({E(lv["entry_how"])})</span>'),
             ("Stopp / ugyldiggjøring", f'{lvl(lv["stop"])} {E(cur)} <span class="mut">({E(lv["stop_name"])}, strengeste nivå under inngang; {lv["stop_dist"]*100:.1f} % risiko)</span>'),
             ("Første mål (2:1)", f'{lvl(lv["target_rr"])} {E(cur)} <span class="mut">(+{(lv["target_rr"]/lv["entry"]-1)*100:.1f} %)</span>'),
-            ("Posisjonsstørrelse", "–" if size is None else f'{size*100:.1f} % av porteføljen{E(red)} <span class="mut">= 1 % risiko ÷ {lv["stop_dist"]*100:.1f} % stoppavstand, maks 10 %</span>')]
+            ("Posisjonsstørrelse", "–" if size is None else f'{size*100:.1f} % av porteføljen{E(red)} <span class="mut">= 1 % risiko ÷ {lv["stop_dist"]*100:.1f} % stoppavstand, maks {P.MAX_POSITION*100:.0f} %</span>')]
     if compact:
         return (f'<div class="plan-line">Eksempel: inngang {lvl(lv["entry_lo"])}–{lvl(lv["entry_hi"])}, stopp {lvl(lv["stop"])}, mål {lvl(lv["target_rr"])}, '
                 f'størrelse {"–" if size is None else f"{size*100:.1f} %"} av porteføljen.</div>')
@@ -384,7 +388,8 @@ def plan_html(e: dict, compact: bool = False) -> str:
     tab = "<table>" + "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in rows) + "</table>"
     return (f'<div class="card" id="plan"><h2 style="margin-top:0">Eksempelplan: inngang, stopp, mål og størrelse</h2>'
             f'<div class="warnbox">Eksempelberegning – ikke råd. Mekanisk regel fylt med dagens kurs, ATR og snitt; tar ikke hensyn til din økonomi, skatt eller kurtasje.</div>'
-            f'{tab}<p>{hist}</p>{ex}</div>')
+            f'{tab}<p>{hist}</p>{ex}<p class="mut">{P.net_note(e)} Porteføljeregler: {P.MIN_POSITIONS[0]}–{P.MIN_POSITIONS[1]} posisjoner, '
+            f'maks {P.MAX_SECTOR*100:.0f} % per sektor, maks {P.MAX_POSITION*100:.0f} % per aksje.</p></div>')
 
 
 def _sp(x: float) -> str:
@@ -402,4 +407,136 @@ table.br td,table.br th{font-size:13px}
 .warnbox{background:#2d2410;border:1px solid #6e5410;color:#e3c47a;border-radius:6px;padding:6px 10px;font-size:13px;margin-bottom:8px}
 .plan-line{font-size:12px;color:#9aa4b2;margin-top:2px}
 .tline{font-size:12px;color:#c9d1d9;margin-top:2px}
+"""
+
+
+# ---------------------------------------------------------------- flags, regime, portfolio rules, honesty, dropped strategies
+LEVEL_CLASS = {"sterk": "hi", "moderat": "mid", "svak": "lo"}
+GENERIC_FLAG_INFO = {  # existing risk rules - caution rules, not separately backtested as signals
+    "short": ("Økende short", "red", "forsiktighetsregel", "Høy/økende short-andel har i litteraturen predikert lav avkastning (Asquith m.fl. 2005); vår korte Oslo-test: −1 til −4 % (t ≈ −1,8)."),
+    "crash": ("Nylig krasj", "red", "forsiktighetsregel", "≥ 20 % fall på 20 handelsdager – ikke testet som eget signal."),
+    "illiquid": ("Lav likviditet", "red", "forsiktighetsregel", "Spread og kurtasje spiser små effekter; tallene i testene gjelder likvide aksjer."),
+    "penny": ("Pennyaksje", "red", "forsiktighetsregel", "Under ca. 1 USD – støyete kurser, store spreader."),
+    "volume_only": ("Bare volum/kurs", "red", "forsiktighetsregel", "Uvanlig volum alene: 52 % slo indeks (median +0,5 %) mot 52 % (+0,4 %) for tilfeldig aksje – ingen fordel."),
+}
+
+
+def _flag_info(k):
+    from .oslo_flags import FLAG_INFO
+    return FLAG_INFO.get(k) or GENERIC_FLAG_INFO.get(k) or (k, "red", "–", "")
+
+
+def evidence_badge(level: str) -> str:
+    cls = next((c for w, c in LEVEL_CLASS.items() if str(level).startswith(w)), "mid")
+    return f'<span class="rel {cls}">evidens: {E(level)}</span>'
+
+
+def flags_html(e: dict) -> str:
+    """Ticker page: every red/yellow flag and info tag with its evidence level."""
+    rows = []
+    keymap = dict(zip(e.get("cat_flag_keys") or [], e.get("cat_flags") or []))
+    for k, txt in keymap.items():
+        rows.append(("🚩", k, txt))
+    for k, txt in (e.get("cat_warnings") or {}).items():
+        rows.append(("🟡" if _flag_info(k)[1] == "yellow" else "ⓘ", k, txt))
+    for k, txt in (e.get("cat_info") or {}).items():
+        rows.append(("🏷️", k, txt))
+    osl = e.get("oslo") or {}
+    if not rows:
+        if not e["ticker"].endswith(".OL"):
+            return ""
+        return ('<div class="card" id="flagg"><h2 style="margin-top:0">Røde flagg og merker</h2><p>Ingen røde eller gule flagg i dag.</p>'
+                '<p class="mut">Oslo-flaggene (svak kurs, negativt driftsresultat, rettet emisjon, høy volatilitet) er det mest robuste sidens tester har funnet – '
+                'de sier hva du bør unngå, ikke hva du bør kjøpe.</p></div>')
+    kind_no = {"red": "rødt flagg – blokkerer Kjøp", "yellow": "gult flagg – halver størrelsen", "note": "tillegg", "info": "info-merke – ikke kjøpssignal"}
+    lis = ""
+    for icon, k, txt in rows:
+        lab, kind, lvl, ev = _flag_info(k)
+        lis += (f'<tr><td>{icon} <b>{E(lab)}</b><div class="mut">{E(kind_no.get(kind, kind))}</div></td><td>{E(txt)}</td>'
+                f'<td>{evidence_badge(lvl)}<div class="mut">{E(ev)}</div></td></tr>')
+    src = ""
+    if osl.get("placement"):
+        src += f'<li>Emisjonsmelding: <a href="{E(osl["placement"].get("url"))}">{E(osl["placement"].get("title"))}</a> ({E(osl["placement"].get("date"))})</li>'
+    if osl.get("buyback"):
+        src += f'<li>Egne aksjer: <a href="{E(osl["buyback"].get("url"))}">{E(osl["buyback"].get("title"))}</a> ({E(osl["buyback"].get("date"))})</li>'
+    return (f'<div class="card" id="flagg"><h2 style="margin-top:0">Røde flagg og merker</h2><div class="tw"><table>'
+            f'<tr><th>Flagg</th><th>I dag</th><th>Evidensnivå (våre tester)</th></tr>{lis}</table></div>'
+            + (f'<ul class="ev">{src}</ul>' if src else "")
+            + '<p class="mut">Tallene er meravkastning mot snittaksjen over 60 handelsdager fra egne tester (strategy-research). '
+              'Oslo-kursflaggene rangeres blant likvide Oslo-aksjer (≥ ~2 MNOK/dag). <a href="../kilder.html#kategorier">Reglene</a>.</p></div>')
+
+
+def regime_html(snap: dict) -> str:
+    reg = snap.get("regime") or {}
+    if not reg:
+        return ""
+    rows = ""
+    for v in reg.values():
+        state = ('<span class="down">under</span>' if v["below"] else '<span class="up">over</span>')
+        rows += (f'<tr><td><b>{E(v["name"])}</b></td><td>{num(v["last"])} {state} 10-mnd snitt {num(v["sma10m"])} ({pct(v["dist"])})</td>'
+                 f'<td>{ppct(v["vol1m"])}{" ⚠️" if v["high_vol"] else ""}</td><td>{"🟠 halver nye posisjoner" if v["risk_off"] else "🟢 normal størrelse"}</td>'
+                 f'<td class="mut">{E(v["asof"])}</td></tr>')
+    return (f'<div class="card" id="regime"><h2 style="margin-top:0">Markedsregime</h2><div class="tw"><table>'
+            f'<tr><th>Indeks</th><th>Trend (10 måneder)</th><th>Volatilitet 1 mnd (årlig)</th><th>Regel</th><th>Data t.o.m.</th></tr>{rows}</table></div>'
+            '<p class="mut">Regel: er indeksen under sitt 10-måneders snitt <i>eller</i> 1-måneds volatilitet over 25 %, halveres størrelsen på <b>nye</b> posisjoner i eksempelplanen '
+            '(for US-aksjer S&amp;P 500, for Oslo OSEBX). <b>Ikke et salgssignal.</b> Historikk: 10-måneders-regelen kuttet verste fall for SPY 2007–2026 (−22 % mot −51 %), '
+            'men ga lavere avkastning (8,4 % mot 11,0 % per år); for OSEBX 2016–2026 reduserte den ikke engang fallet. Utenfor ASK koster hvert salg skatt.</p></div>')
+
+
+def honesty_html(pre: str = "") -> str:
+    return ('<div class="card hl" id="aerlig"><h2 style="margin-top:0">Ærlig status</h2>'
+            '<p><b>Vi har ikke funnet noe robust kjøpssignal.</b> Av over 200 testede regler og varianter (bøker, forum, egne ideer – USA og Oslo; tre testrunder) har ingen kjøpsregel '
+            'klart kravet om |t| ≥ ~3 med samme fortegn både før og etter 2016/2018, og etter kurtasje. Det beste kjøpssignalet, «sterk kvartalsrapport» (PEAD), '
+            'gir med punkt-i-tid-data bare ca. +0,6 pp brutto over 60 dager og omtrent null etter kostnader – det er merket <b>eksperimentelt / svak evidens</b>.</p>'
+            '<p><b>Sidens styrke er å hjelpe deg å unngå svake aksjer:</b> på Oslo Børs har svak kurs (laveste 20 % momentum eller langt under 52-ukers topp) gjort det '
+            '3–4 % dårligere enn snittet over 60 dager i begge testperioder, og tapsbringende selskaper, rettede emisjoner og høy volatilitet peker samme vei. '
+            f'<a href="{pre}kilder.html#droppet">Testet og droppet</a> · <a href="{pre}kilder.html#kategorier">Reglene</a></p></div>')
+
+
+def portfolio_rules_html() -> str:
+    return ('<div class="card" id="portefolje"><h2 style="margin-top:0">Porteføljeregler (eksempel)</h2><ul class="ev">'
+            f'<li><b>Maks {P.MAX_POSITION*100:.0f} % per posisjon</b> (ingen signal her har t ≥ 3; Kelly med realistisk ~1 pp forventning tilsier små, like store posisjoner).</li>'
+            '<li><b>Halv størrelse</b> for aksjer med høy volatilitet (over 50 % årlig, eller høyeste 20 % på Oslo Børs) og når markedsregimet er «halver».</li>'
+            f'<li><b>{P.MIN_POSITIONS[0]}–{P.MIN_POSITIONS[1]} posisjoner</b> før en effekt på ~1–3 pp kan slå gjennom, og <b>maks {P.MAX_SECTOR*100:.0f} % i én sektor</b> (Oslo er tung på energi og sjømat).</li>'
+            '<li>Hold i signalets horisont (~60 handelsdager) – hyppig handel skader personinvestorer.</li>'
+            f'<li><b>Netto etter kostnad og skatt:</b> US-aksjer kan ikke ligge på ASK; vanlig konto skatter realisert gevinst med {P.TAX*100:.2f} % og tur-retur koster ca. '
+            f'{P.COST_US[0]*100:.1f}–{P.COST_US[1]*100:.1f} %. Et signal på +1 pp brutto blir ≈ +0,25 pp etter 0,75 % kostnad og ≈ +0,16 pp etter skatt. '
+            'Oslo-aksjer på ASK: skatten utsettes, men kurtasje og spread gjelder fortsatt.</li></ul></div>')
+
+
+DROPPED = [
+    ("Minervini-trendmal / CAN SLIM (kurs + relativ styrke)", "USA punkt-i-tid −0,7 % (t −1,1) / −0,7 % (t −1,4) per 60 d; Oslo +0,1 % / +0,9 % (t 1,1). Ingen fordel."),
+    ("Momentum og 52-ukers topp som kjøp i USA", "Punkt-i-tid: momentum topp −0,8 % (t −1,3) / +0,2 % (t 0,3); nær 52-ukers topp −0,6 % / −0,5 %. Gevinstene i dagens S&P 500 var overlevelsesskjevhet."),
+    ("Magic Formula (Greenblatt) som kjøp", "2022–26: USA topp −0,6 % (t −0,6), Oslo topp +0,8 % (t 0,6). Bare bunnen (tapsbringende) brukes – som rødt flagg."),
+    ("Piotroski F-score / brutto lønnsomhet (GP/A)", "F-score 8–9: USA −1,5 % (t −1,5), Oslo +0,4 % (t 0,3); GP/A topp +0,2 % / −0,4 %. Kun 2022–26, ikke punkt-i-tid-regnskap."),
+    ("Dual Momentum (Antonacci GEM)", "2014–2026: 8,2 % per år mot SPY 13,7 %."),
+    ("Faber 10-måneders timing som kjøp/salg", "SPY 2007–26: mindre fall (−22 % mot −51 %), men 8,4 % mot 11,0 % per år; OSEBX 2016–26 7,7 % mot 12,1 %. Brukes bare til størrelse (regimeboksen)."),
+    ("Analytikerrevisjoner (rating- og kursmålsendringer)", "126 442 endringer 2019–26: topp 20 % −0,5 % (t −1,1) / −0,3 % (t −0,6). Kursmål følger kursen."),
+    ("Frog-in-the-pan og kortsiktig reversering", "Ingen forskjell i USA; reversering netto −6 %/år (t −1,9) i USA og negativ i Oslo."),
+    ("«Kjøp krigen» / geopolitiske sjokk", "Høyere geopolitisk risiko henger sammen med lavere avkastning (Caldara & Iacoviello); våre GDELT-, sund- og Polymarket-tester fant ingen ledende effekt."),
+    ("Short-squeeze-screens", "Høy short-andel og «days to cover» predikerer lav avkastning; Oslo-test −1 til −4 % (t ≈ −1,8). Brukes bare som rødt flagg."),
+    ("WSB/Reddit-DD og forumtips (Hegnar, Shareville)", "DD-innlegg forutsa avkastning bare før januar 2021 (Bradley m.fl. 2024); pump-and-dump er dokumentert på norske forum."),
+    ("Lead-lag mot andre markeder (Brent, USD/NOK, S&P 500, XLE, OIH, kobber, laks, tørrbulk)", "Sterk i første periode (|t| 3,1–4,8), forsvant eller snudde etterpå."),
+    ("Oslo-PEAD (kursreaksjon ≥ +5 % på rapportdagen)", "−2,7 % (t −1,5) i 2013–18 og +2,1 % (t 1,5) i 2019–26; i likvide aksjer negativ (−4,1 %, t −3,9). Ikke robust – vises ikke."),
+    ("PEAD-filtre (omsetning, egen historikk, analytikerdekning, størrelse, fredag, røde flagg)", "Ingen robust forbedring av sterk-rapport-signalet; bare høy volatilitet peker samme vei (t 1,2–1,4), derfor PEAD-S som eksperiment."),
+    ("Innsidekjøp (USA-klynger og Oslo)", "USA: 44 % slo indeks, median −2,8 % over 60 d; Oslo 6 418 meldinger uten robust meravkastning. Vises, men gir ikke Kjøp."),
+    ("Nye kurs-/volumflagg (MAX, idiosynkratisk vol, Amihud, intradag)", "48–83 % overlapp med dagens flagg – dobbelttelling."),
+    ("Åpningsgap / tidssone Oslo og utbyttefangst", "Gapet er mikrostruktur (forsvinner i likvide aksjer); utbyttefangst spises av skatt."),
+    ("Småselskapspremie Oslo, Rule of 40, PEG, Seeking Alpha", "For dyrt å handle eller uten dokumentert fordel / ikke testbart gratis."),
+]
+
+
+def dropped_html() -> str:
+    lis = "".join(f"<li><b>{E(a)}:</b> {E(b)}</li>" for a, b in DROPPED)
+    return ('<div class="card" id="droppet"><h2 style="margin-top:0">Testet og droppet</h2>'
+            '<p><b>Konklusjon: vi fant ikke noe robust kjøpssignal.</b> Sidens styrke er å unngå svake aksjer (røde flagg), ikke å finne vinnere. '
+            'Listen under er strategier fra bøker, forum og egne ideer som er testet og <i>ikke</i> bygget inn – med én linje om hvorfor. '
+            'Tall: meravkastning over 60 handelsdager, periode 1 / periode 2 (t-verdi), fra strategy-research/RAPPORT*.md.</p>'
+            f'<ul class="ev">{lis}</ul>'
+            '<p class="mut">Krav for «bygg inn»: samme fortegn i begge perioder og |t| ≥ ~3, rimelig forklaring og gevinst etter kostnader. '
+            'Med ~70 + ~700 t-verdier testet er t ≈ 2 i én periode det man venter av ren tilfeldighet.</p></div>')
+
+
+CSS_EXTRA += """
+#flagg td:first-child{min-width:12em}#flagg td:last-child{max-width:28em}
 """

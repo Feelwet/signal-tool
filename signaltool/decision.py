@@ -9,7 +9,8 @@ from datetime import date
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from .categories import benchmark_for, is_equity
+from .categories import benchmark_for, is_equity, BENCH_US
+from .config import CACHE
 from .themes import THEME_BY_KEY
 
 log = logging.getLogger(__name__)
@@ -20,11 +21,57 @@ YF_SECTOR = {"Technology": "XLK", "Healthcare": "XLV", "Financial Services": "XL
              "Communication Services": "XLC", "Industrials": "XLI", "Consumer Defensive": "XLP", "Energy": "XLE",
              "Utilities": "XLU", "Real Estate": "XLRE", "Basic Materials": "XLB"}
 INFO_KEYS = ["trailingPE", "forwardPE", "enterpriseToEbitda", "priceToBook", "marketCap", "dividendYield", "recommendationKey",
-             "numberOfAnalystOpinions", "targetMeanPrice", "currency", "sector", "shortPercentOfFloat", "beta"]
+             "numberOfAnalystOpinions", "targetMeanPrice", "currency", "sector", "shortPercentOfFloat", "beta", "quoteType"]
 PEAD_SURPRISE = 15.0   # EPS surprise % ~ 80th percentile of S&P 500 reports 2016-2026 (backtest/pead.py)
-PEAD_REACTION = 0.04   # reaction-day return minus SPY ~ 80th percentile
-PEAD_MAX_AGE = 45      # calendar days the signal stays active (drift measured over the following 60 trading days)
-OSLO_WEAK_MOM = -0.106  # median 20th percentile of 12-1 month momentum among liquid Oslo stocks 2018-2026 (backtest/price_rules)
+PEAD_REACTION = 0.04   # reaction-day return minus SPY (dividend-adjusted) ~ 80th percentile
+PEAD_MAX_AGE = 45      # calendar days the signal stays active (same limit in collectors/pead_scan.py)
+PEAD_BENCH = "SPY"     # same reference in the live signal, the scanner and the backtest
+# fallback only (when the ranked Oslo universe in oslo_flags.py is unavailable): median 20th percentile of 12-1 momentum 2018-2026
+OSLO_WEAK_MOM = -0.106
+VOL_MEDIAN_CACHE = CACHE / "universe" / "sp500_vol_median.json"
+
+
+def sp500_median_vol(fetch: bool = True, max_age_days: int = 7) -> pd.Series | None:
+    """Daily median of 1-year daily-return volatility (std of daily returns, 252 sessions) across current S&P 500 members -
+    the PEAD-S threshold (strategy-research/RAPPORT_3: it varies 1.3-3.6 %/day historically, so it is computed, not hard-coded).
+    Sources in order: cached series (<= 7 days old), the backtest price cache (if fresh), else one 14-month batch download."""
+    import json
+    from .backtest import universe
+    today = pd.Timestamp(date.today())
+    if VOL_MEDIAN_CACHE.exists():
+        try:
+            j = json.loads(VOL_MEDIAN_CACHE.read_text())
+            s = pd.Series(j["median"], index=pd.to_datetime(j["dates"]))
+            if (today - s.index[-1]).days <= max_age_days:
+                return s
+        except Exception:
+            pass
+    C = None
+    p = universe.DIR / "us.pkl"
+    if p.exists():
+        try:
+            d = pd.read_pickle(p)
+            last = max(v.index[-1] for v in d.values())
+            if (today - last).days <= max_age_days:
+                etf = set(universe.SECTOR_ETF.values()) | {"SPY"}
+                C = pd.DataFrame({t: v["Close"].iloc[-400:] for t, v in d.items() if t not in etf}).sort_index()
+        except Exception as ex:
+            log.info("us.pkl: %s", ex)
+    if C is None and fetch:
+        try:
+            tick = universe.sp500_members()["Symbol"].astype(str).tolist()
+            raw = yf.download(tick, period="14mo", progress=False, auto_adjust=True, threads=True)["Close"]
+            C = raw.sort_index()
+        except Exception as ex:
+            log.warning("S&P 500 vol median download failed: %s", ex)
+    if C is None or C.empty:
+        return None
+    vol = C.pct_change(fill_method=None).rolling(252, min_periods=200).std()
+    med = vol.median(axis=1).dropna().iloc[-120:]
+    if med.empty:
+        return None
+    VOL_MEDIAN_CACHE.write_text(json.dumps({"dates": [str(x.date()) for x in med.index], "median": [float(x) for x in med]}))
+    return med
 
 
 def _f(x, nd=4):
@@ -81,8 +128,9 @@ def _next_earnings(tk: yf.Ticker):
         return None
 
 
-def pead_info(tk: yf.Ticker, close: pd.Series, bench: pd.Series | None) -> dict:
-    """Latest reported quarter: EPS surprise (Yahoo) + reaction-day excess return; flags the PEAD condition."""
+def pead_info(tk: yf.Ticker, close: pd.Series, bench: pd.Series | None, vol_median: pd.Series | None = None) -> dict:
+    """Latest reported quarter: EPS surprise (Yahoo) + reaction-day excess return vs SPY; flags the PEAD condition (<= 45 days)
+    and the experimental PEAD-S variant (1-year daily volatility the day before the reaction day above the S&P 500 median)."""
     try:
         d = tk.get_earnings_dates(limit=8)
     except Exception:
@@ -105,8 +153,24 @@ def pead_info(tk: yf.Ticker, close: pd.Series, bench: pd.Series | None) -> dict:
     ear = (close.iloc[p] / close.iloc[p - 1] - 1) - (b.iloc[p] / b.iloc[p - 1] - 1)
     sur = float(d.loc[ts, "Surprise(%)"])
     age = (date.today() - idx[p].date()).days
-    return {"last_earnings": str(idx[p].date()), "eps_surprise": _f(sur, 1), "earn_reaction": _f(ear),
-            "pead": bool(sur >= PEAD_SURPRISE and ear >= PEAD_REACTION and age <= PEAD_MAX_AGE), "pead_age_days": age}
+    pead = bool(sur >= PEAD_SURPRISE and ear >= PEAD_REACTION and age <= PEAD_MAX_AGE)
+    out = {"last_earnings": str(idx[p].date()), "eps_surprise": _f(sur, 1), "earn_reaction": _f(ear), "pead": pead, "pead_age_days": age}
+    out.update(pead_s_check(close, p, vol_median, pead))
+    return out
+
+
+def pead_s_check(close: pd.Series, p: int, vol_median: pd.Series | None, pead: bool) -> dict:
+    """PEAD-S: PEAD AND the stock's 1-year daily volatility (known the day before the reaction day) above the S&P 500 median."""
+    if p < 1:
+        return {}
+    v = close.pct_change(fill_method=None).rolling(252, min_periods=200).std()
+    sv = v.iloc[p - 1]
+    out = {"vol1y_d": _f(sv, 5)}
+    if vol_median is not None and len(vol_median) and sv == sv:
+        m = vol_median[vol_median.index <= close.index[p - 1]]
+        med = float(m.iloc[-1]) if len(m) else float(vol_median.iloc[0])
+        out.update({"vol1y_median_d": _f(med, 5), "pead_s": bool(pead and sv > med)})
+    return out
 
 
 def revisions(tk: yf.Ticker) -> dict:
@@ -155,7 +219,12 @@ def compute(snap: dict, max_info=80) -> dict:
                 sector_of[t] = YF_SECTOR[inf["sector"]]
         except Exception as ex:
             log.info("info %s: %s", t, ex)
-    refs = sorted(set(sector_of.values()) | {"^GSPC", "OSEBX.OL"})
+    refs = sorted(set(sector_of.values()) | {BENCH_US, "OSEBX.OL"})
+    vol_med = None
+    try:
+        vol_med = sp500_median_vol()
+    except Exception as ex:
+        log.info("vol median: %s", ex)
     d = yf.download(sorted(set(tickers) | set(refs)), period="2y", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
     retry: dict[str, pd.Series] = {}
@@ -193,7 +262,7 @@ def compute(snap: dict, max_info=80) -> dict:
             m["days_to_earnings"] = (date.fromisoformat(m["next_earnings"]) - date.today()).days
         if is_equity(t) and not t.endswith(".OL") and "." not in t:
             try:
-                m.update(pead_info(yf.Ticker(t), df["Close"], ser("^GSPC")))
+                m.update(pead_info(yf.Ticker(t), df["Close"], ser(PEAD_BENCH), vol_med))
             except Exception as ex:
                 log.info("pead %s: %s", t, ex)
         m["weak_mom_oslo"] = bool(t.endswith(".OL") and m.get("mom12_1") is not None and m["mom12_1"] <= OSLO_WEAK_MOM)

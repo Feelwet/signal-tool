@@ -50,6 +50,22 @@ def collectors(snap: dict, status: dict) -> None:
         status["Newsweb innsidehandel: kjøp/salg (meldingstekst)"] = f"FAILED: {ex}"
 
 
+def flags(snap: dict, status: dict, nw=None, fetch: bool = True) -> None:
+    """Oslo red/yellow flags + info tags (oslo_flags.py) and the market-regime box (regime.py)."""
+    try:
+        from . import oslo_flags
+        status["Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp)"] = oslo_flags.apply(snap, nw=nw, fetch=fetch)
+    except Exception as ex:
+        log.exception("oslo flags failed")
+        status["Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp)"] = f"FAILED: {ex}"
+    try:
+        from . import regime
+        status["Markedsregime (10-mnd snitt, volatilitet)"] = regime.apply(snap, fetch=fetch)
+    except Exception as ex:
+        log.exception("regime failed")
+        status["Markedsregime (10-mnd snitt, volatilitet)"] = f"FAILED: {ex}"
+
+
 def annotate_insider(snap: dict) -> None:
     """Replace the generic 'direction must be checked' evidence with the classified direction (no score change)."""
     rows = snap.get("newsweb_insider_classified") or []
@@ -66,7 +82,8 @@ def annotate_insider(snap: dict) -> None:
         if buy_val:
             txt += f"; kjøp for ca. NOK {buy_val/1e6:,.1f} mill."
         e["insider_oslo"] = {"counts": k, "buy_value_nok": buy_val}
-        ev = [x for x in e.get("evidence", []) if "retning (kjøp/salg) må sjekkes" not in x.get("text", "")]
+        ev = [x for x in e.get("evidence", []) if "retning (kjøp/salg) må sjekkes" not in x.get("text", "")
+              and not x.get("text", "").startswith("Newsweb innsidehandel (21 d")]   # idempotent on re-runs
         best = next((r for r in rs if r["kind"] == "kjøp"), rs[0])
         ev.append({"text": txt, "url": best.get("url")})
         e["evidence"] = ev

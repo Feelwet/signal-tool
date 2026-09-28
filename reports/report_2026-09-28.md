@@ -306,7 +306,7 @@ Poeng summeres fra: innsidekjøp-klynger, kongresskjøp, Oslo Børs-kontrakter/i
 
 - **Hold: HHH** – innsidekjøp-klynge (ledelse/styre) og positiv trend, men kursen har allerede steget (5d +14 %, 20d +5 %, +5 % over 50d-snitt) – ikke jag.
 - **Hold: GME** – innsidekjøp-klynge (ledelse/styre) og positiv trend, men kursen har allerede steget (5d +3 %, 20d +28 %, +15 % over 50d-snitt) – ikke jag.
-- **Hold: DELL** – sterk kvartalsrapport (overraskelse + kursreaksjon) og positiv trend, men ingen ny utløser siste 7 dager (nyeste 2026-09-02).
+- **Hold: DELL** – sterk kvartalsrapport (eksperimentell, svak evidens) og positiv trend, men ingen ny utløser siste 7 dager (nyeste 2026-09-02).
 
 ### 2a. Koblet til geopolitiske temaer
 
@@ -317,7 +317,6 @@ _Poeng: unusual_volume 2.4, price_move 1.3, theme_attention 0.8, ose_insider_not
 
 - [Uvanlig volum: snitt siste 5 dager 4.4x normalt (z=2.9)](https://finance.yahoo.com/quote/HAFNI.OL)
 - [Kursbevegelse 5d -10.4% (z=-2.3 vs eget år)](https://finance.yahoo.com/quote/HAFNI.OL)
-- [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682980)
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682980)
 
 **Hvorfor det kan bety noe:** Handelsvolumet er uvanlig høyt – noen posisjonerer seg. Kursen har beveget seg uvanlig mye den siste uka. Selskapet er eksponert mot et geopolitisk tema med økende oppmerksomhet. Primærinnsidere har handlet (sjekk om det er kjøp). Tema «Midtøsten / Iran / Gulfen – risiko for oljeforsyning»: Brent opp, tankrederier opp, europeiske E&P-selskaper opp, flyselskaper ned. Følg Polymarket-markedene om våpenhvile/blokade.
@@ -330,7 +329,6 @@ _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype
 _Poeng: ose_contracts 1.5, ose_insider_notices 0.5, theme_attention 0.4. Kurs 324.80, 5d +1.2%, 20d -2.5%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «Subsea7 awarded contract extension offshore Türkiye»](https://newsweb.oslobors.no/message/682942)
-- [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682944)
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682944)
 
 **Hvorfor det kan bety noe:** Selskapet har meldt nye kontrakter/ordre på Oslo Børs. Primærinnsidere har handlet (sjekk om det er kjøp). Selskapet er eksponert mot et geopolitisk tema med økende oppmerksomhet. Tema «Nordisk/arktisk sikkerhet og undersjøisk infrastruktur»: Kongsberg/Kitron og gasspris opp.
@@ -410,7 +408,6 @@ _Kategori: Watchlist. Hvorfor: Mangler bekreftelse: bare én uavhengig kildetype
 _Poeng: theme_attention 0.8, ose_insider_notices 0.5. Kurs 51.10, 5d -5.0%, 20d +5.3%._
 
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682386)
-- [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/682386)
 
 **Hvorfor det kan bety noe:** Selskapet er eksponert mot et geopolitisk tema med økende oppmerksomhet. Primærinnsidere har handlet (sjekk om det er kjøp). Tema «Midtøsten / Iran / Gulfen – risiko for oljeforsyning»: Brent opp, tankrederier opp, europeiske E&P-selskaper opp, flyselskaper ned. Følg Polymarket-markedene om våpenhvile/blokade.
 
@@ -452,13 +449,12 @@ _Poeng: dod_contract 1.0, theme_attention 0.2. Kurs 519.56, 5d -2.6%, 20d -7.6%.
 ### 2b. Annen uvanlig aktivitet (ikke koblet til tema)
 
 #### ONCIN.OL – Oncoinvent ASA — 4.91 poeng — **Watchlist**
-_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -41 % siste 20 handelsdager, lav likviditet (~$0.23M/dag); ingen signaler fra kilder med høyere pålitelighet (bare ose_insider_notices, price_move, unusual_volume); kurs under 50-dagers snitt._
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -41 % siste 20 handelsdager, lav likviditet (~$0.23M/dag), svak kurs: -42 % under 52-ukers topp (laveste 20 %, grense -28 %), rettet emisjon 2026-09-23 (siste 60 handelsdager), negativt driftsresultat i siste årsregnskap (2025: -155 mill.); ingen signaler fra kilder med høyere pålitelighet (bare ose_insider_notices, price_move, unusual_volume); kurs under 50-dagers snitt._
 
 _Poeng: price_move 2.0, unusual_volume 1.9, ose_insider_notices 1.0. Kurs 83.80, 5d -34.3%, 20d -3.2%._
 
 - [Uvanlig volum: snitt siste 5 dager 7.8x normalt (z=2.4)](https://finance.yahoo.com/quote/ONCIN.OL)
 - [Kursbevegelse 5d -34.3% (z=-3.3 vs eget år)](https://finance.yahoo.com/quote/ONCIN.OL)
-- [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 2 annet](https://newsweb.oslobors.no/message/682902)
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 2 annet](https://newsweb.oslobors.no/message/682902)
 
 **Hvorfor det kan bety noe:** Kursen har beveget seg uvanlig mye den siste uka. Handelsvolumet er uvanlig høyt – noen posisjonerer seg. Primærinnsidere har handlet (sjekk om det er kjøp).
@@ -479,13 +475,12 @@ _Poeng: price_move 2.0, unusual_volume 1.8, insider_cluster 1.0. Kurs 68.43, 5d 
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Høyt volum kan skyldes indeksendringer, emisjoner eller nyheter som allerede er priset. Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.
 
 #### 2020.OL – 2020 Bulkers Ltd. — 4.08 poeng — **Watchlist**
-_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: økende short (1.09 %, +1.09 pp 7d), kursfall -53 % siste 20 handelsdager, lav likviditet (~$0.11M/dag), pennyaksje, svak 12-1-måneders momentum (-97 %, laveste 20 % på Oslo Børs); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: økende short (1.09 %, +1.09 pp 7d), kursfall -53 % siste 20 handelsdager, lav likviditet (~$0.11M/dag), pennyaksje, svak kurs: 12-1-momentum -97 % (laveste 20 %, grense -5 %) og -95 % under 52-ukers topp (laveste 20 %, grense -28 %), rettet emisjon 2026-09-23 (siste 60 handelsdager); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
 
 _Poeng: unusual_volume 2.1, ose_contracts 1.5, ose_insider_notices 0.5. Kurs 6.25, 5d -15.8%, 20d +57.9%._
 
 - [Newsweb: 1 kontrakt-/ordremelding(er) siste 14 d, f.eks. «2020 Bulkers Ltd. (2020)   Announcement of a letter of intent to acquire up to 15x large AHTS vessels and intended financing of up to approximately USD 485 million»](https://newsweb.oslobors.no/message/682446)
 - [Uvanlig volum: snitt siste 5 dager 9.4x normalt (z=2.6)](https://finance.yahoo.com/quote/2020.OL)
-- [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/683037)
 - [Newsweb innsidehandel (21 d, klassifisert fra meldingsteksten): 1 annet](https://newsweb.oslobors.no/message/683037)
 - ⚠️ Short 1.09% av aksjene (endring 7d +1.09 pp, 30d +1.09 pp) – GSA CAPITAL PARTNERS LLP 1.09%
 
@@ -544,7 +539,7 @@ _Poeng: price_move 1.8, ose_contracts 1.5. Kurs 31.10, 5d -12.9%, 20d +7.2%._
 **Hva kan gå galt:** Stor bevegelse kan bety at nyheten allerede er priset (du er sen). Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning.
 
 #### TECH.OL – Techstep ASA — 3.14 poeng — **Watchlist**
-_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -48 % siste 20 handelsdager, lav likviditet (~$0.14M/dag), pennyaksje, svak 12-1-måneders momentum (-87 %, laveste 20 % på Oslo Børs); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
+_Kategori: Watchlist. Hvorfor: Mangler bekreftelse: rødt flagg: kursfall -48 % siste 20 handelsdager, lav likviditet (~$0.14M/dag), pennyaksje, svak kurs: 12-1-momentum -87 % (laveste 20 %, grense -5 %) og -64 % under 52-ukers topp (laveste 20 %, grense -28 %), negativt driftsresultat i siste årsregnskap (2025: -88 mill.); bare én uavhengig kildetype (kontraktsmelding (Newsweb))._
 
 _Poeng: price_move 1.6, ose_contracts 1.5. Kurs 5.00, 5d +66.7%, 20d +213.5%._
 
@@ -776,6 +771,8 @@ _Poeng: price_move 1.6, ose_contracts 1.5. Kurs 5.00, 5d +66.7%, 20d +213.5%._
 | Taiwan månedlig omsetning (MOPS) | ok (siste måned 2026-08, kurv +79.5 % å/å) |
 | Newsweb innsidehandel: kjøp/salg (meldingstekst) | ok (51 kjøp, 23 annet, 10 ukjent, 8 tegning, 5 salg i 21 d) |
 | Kategorier (Kjøp/Hold/Watchlist) | ok (Kjøp: 0, Hold: 3, Watchlist: 57) |
+| Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp) | ok (23 Oslo-tickere, univers 121 likvide aksjer per 2026-09-25, EBIT for 20, Newsweb ok) |
+| Markedsregime (10-mnd snitt, volatilitet) | ok (S&P 500: over 10-mnd snitt, vol 11 %, OSEBX: over 10-mnd snitt, vol 8 %) |
 
 ## 12. Metode og validering
 

@@ -16,7 +16,7 @@ def test_levels_hold_waits_for_pullback_and_stop_below_entry():
     assert lv["stop"] < lv["entry_lo"]
     assert abs(lv["stop"] - 92.0) < 1e-9          # entry - 2xATR (92) is stricter than the 50d average (90)
     assert abs(lv["target_rr"] - (96 + 2 * 4)) < 1e-9
-    assert abs(lv["size"] - min(0.10, 0.01 / (4 / 96))) < 1e-9
+    assert abs(lv["size"] - min(P.MAX_POSITION, 0.01 / (4 / 96))) < 1e-9
 
 
 def test_levels_size_capped_and_halved():
@@ -24,7 +24,7 @@ def test_levels_size_capped_and_halved():
     e["decision"].update(sma50=99.5, stop_atr=96.0, vol60=0.8)
     lv = P.levels(e)
     assert lv["entry"] == 100.0 and abs(lv["stop"] - 96.0) < 1e-9   # 50d avg (99.5) is inside the entry zone -> 2xATR
-    assert abs(lv["size"] - 0.10 / 4) < 1e-9 and len(lv["size_reasons"]) == 2
+    assert abs(lv["size"] - P.MAX_POSITION / 4) < 1e-9 and len(lv["size_reasons"]) == 2
 
 
 def test_levels_missing_inputs():

@@ -1,5 +1,6 @@
-"""Scan S&P 500 members for the validated 'strong earnings report' signal (EPS surprise >= 15 % AND reaction-day
-return >= +4 % vs S&P 500, report <= 45 days old). Yahoo earnings dates via yfinance (free, unofficial).
+"""Scan S&P 500 members for the EXPERIMENTAL 'strong earnings report' signal (EPS surprise >= 15 % AND reaction-day
+return >= +4 % vs SPY, reaction day <= 45 days old - identical to decision.pead_info). Also marks PEAD-S (1-year daily
+volatility above the S&P 500 median the day before the reaction day). Point-in-time evidence is weak (strategy-research/RAPPORT_3). Yahoo earnings dates via yfinance (free, unofficial).
 Cache per ticker; a ticker is re-queried only when its next scheduled report date has passed (or cache > 20 days),
 so after the first run only companies that just reported cost a request."""
 from __future__ import annotations
@@ -8,7 +9,7 @@ from datetime import date, datetime, timedelta
 import pandas as pd
 import yfinance as yf
 from ..config import CACHE
-from ..decision import PEAD_SURPRISE, PEAD_REACTION, PEAD_MAX_AGE
+from ..decision import PEAD_SURPRISE, PEAD_REACTION, PEAD_MAX_AGE, PEAD_BENCH, pead_s_check, sp500_median_vol
 
 log = logging.getLogger(__name__)
 DIR = CACHE / "earn"
@@ -53,16 +54,16 @@ def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[d
         if d.empty:
             continue
         ts = d.index.max()
-        if (date.today() - ts.date()).days <= max_age + 3:
+        if (date.today() - ts.date()).days <= max_age:  # the reaction day can be one trading day later -> re-checked below
             recent.append((t, ts, float(d.loc[ts, "Surprise(%)"])))
     cand = [(t, ts, s) for t, ts, s in recent if s >= PEAD_SURPRISE]
     if not cand:
         return [], f"ok ({len(recent)} rapporter siste {max_age} d, ingen med overraskelse ≥ {PEAD_SURPRISE:.0f} %)"
-    px = yf.download([c[0] for c in cand], period="4mo", auto_adjust=True, progress=False)["Close"]
+    px = yf.download([c[0] for c in cand], period="14mo", auto_adjust=True, progress=False)["Close"]  # 1 y for the volatility
     if isinstance(px, pd.Series):
         px = px.to_frame(cand[0][0])
     b = None
-    for bt in ("^GSPC", "SPY", "^GSPC"):
+    for bt in (PEAD_BENCH, PEAD_BENCH):   # one retry: Yahoo sometimes drops a single series
         try:
             bs = yf.download(bt, period="4mo", auto_adjust=True, progress=False)["Close"]
             bs = (bs.iloc[:, 0] if isinstance(bs, pd.DataFrame) else bs).dropna()
@@ -72,7 +73,12 @@ def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[d
         except Exception:
             pass
     if b is None:
-        raise RuntimeError("fant ikke referanseindeks (^GSPC/SPY) hos Yahoo")
+        raise RuntimeError("fant ikke referanseindeks (SPY) hos Yahoo")
+    try:
+        vol_med = sp500_median_vol()
+    except Exception as ex:
+        log.info("vol median: %s", ex)
+        vol_med = None
     out = []
     for t, ts, s in cand:
         if t not in px:
@@ -89,7 +95,9 @@ def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[d
         ear = (c.iloc[p] / c.iloc[p - 1] - 1) - (bb.iloc[p] / bb.iloc[p - 1] - 1)
         age = (date.today() - c.index[p].date()).days
         if ear >= PEAD_REACTION and age <= max_age:
+            ps = pead_s_check(c, p, vol_med, True)
             out.append({"ticker": t, "date": str(c.index[p].date()), "surprise": round(s, 1), "reaction": round(float(ear), 4), "age": age,
-                        "since": round(float(c.iloc[-1] / c.iloc[p] - 1), 4)})
+                        "since": round(float(c.iloc[-1] / c.iloc[p] - 1), 4), "pead_s": ps.get("pead_s"), "vol1y_d": ps.get("vol1y_d"),
+                        "vol1y_median_d": ps.get("vol1y_median_d")})
     out.sort(key=lambda x: x["age"])
-    return out, f"ok ({len(recent)} rapporter siste {max_age} d; {len(out)} oppfyller overraskelse ≥ {PEAD_SURPRISE:.0f} % og reaksjon ≥ +{PEAD_REACTION*100:.0f} %)"
+    return out, f"ok ({len(recent)} rapporter siste {max_age} d; {len(out)} oppfyller overraskelse ≥ {PEAD_SURPRISE:.0f} % og reaksjon ≥ +{PEAD_REACTION*100:.0f} % mot SPY, {sum(1 for x in out if x.get('pead_s'))} av dem PEAD-S)"

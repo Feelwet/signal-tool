@@ -57,6 +57,7 @@ def main(argv=None):
         from . import extras, briefing
         extras.decision(snap, snap["status"])
         extras.collectors(snap, snap["status"])
+        extras.flags(snap, snap["status"])
         categories.apply(snap)
         briefing.apply(snap)
         snap["status"]["Kategorier (Kjøp/Hold/Watchlist)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"

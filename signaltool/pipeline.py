@@ -107,7 +107,7 @@ def run(fast: bool = False) -> dict:
     red, status["Reddit (public RSS)"] = reddit.collect()
     pm, status["Polymarket (Gamma API)"] = polymarket.collect()
     ka, status["Kalshi"] = kalshi.collect()
-    nw, status["Oslo Børs Newsweb"] = newsweb.collect(days=60)
+    nw, status["Oslo Børs Newsweb"] = newsweb.collect(days=95)   # 95 d: private placements are flagged for 60 trading days
     nb, status["Norges Bank"] = norgesbank.collect()
     oilx, status["Oil spreads & curves (yfinance futures)"] = oil.collect()
     dodx, dod_days, status["US DoD daily contracts (war.gov)"] = dod.collect()
@@ -278,7 +278,7 @@ def run(fast: bool = False) -> dict:
                 sd = e.setdefault("signal_dates", {})
                 sd["gov_contract"] = max(filter(None, [sd.get("gov_contract"), max(ds).isoformat()]))
             e["evidence"].append({"text": f"DoD-kontrakt(er): {len(g)} stk, totalt ${g['amount'].sum()/1e6:,.0f}M ({top['day']})", "url": top["url"]})
-    # strong earnings reports (PEAD) - the one signal type validated out-of-sample (reports/backtest_natt.md)
+    # strong earnings reports (PEAD) - EXPERIMENTAL, weak evidence point-in-time (strategy-research/RAPPORT_3)
     if not fast:
         try:
             from .collectors import pead_scan
@@ -287,8 +287,9 @@ def run(fast: bool = False) -> dict:
                 e = c(r["ticker"])
                 e["points"]["pead"] = 2.0
                 e.setdefault("signal_dates", {})["pead"] = r["date"]
-                e["evidence"].append({"text": f"Sterk kvartalsrapport {r['date']}: EPS-overraskelse {r['surprise']:+.0f} %, kursreaksjon {r['reaction']*100:+.1f} % mot S&P 500"
-                                              f" (siden da {r['since']*100:+.1f} %)", "url": f"https://finance.yahoo.com/quote/{r['ticker']}"})
+                e["evidence"].append({"text": f"Sterk kvartalsrapport {r['date']} (eksperimentelt signal, svak evidens): EPS-overraskelse {r['surprise']:+.0f} %, "
+                                              f"kursreaksjon {r['reaction']*100:+.1f} % mot SPY" + (" – PEAD-S (volatilitet over median)" if r.get("pead_s") else "")
+                                              + f" (siden da {r['since']*100:+.1f} %)", "url": f"https://finance.yahoo.com/quote/{r['ticker']}"})
             snap["pead_scan"] = pe
         except Exception as ex:
             log.exception("pead scan failed")
@@ -337,6 +338,7 @@ def run(fast: bool = False) -> dict:
     from . import extras
     extras.decision(snap, status)
     extras.collectors(snap, status)
+    extras.flags(snap, status, nw=nw)
     # rule-based categories (Kjøp-kandidat / Hold / Watchlist) + forward log + track record
     try:
         from . import categories
@@ -418,7 +420,7 @@ def weekend_summary(heads, pm, ofa, themes_out) -> dict:
 
 
 RISK_TEXT = {
-    "pead": "Driften etter sterke rapporter er et gjennomsnitt – mange enkeltaksjer faller likevel; testen bruker dagens S&P 500 (overlevelsesskjevhet), og effekten har vært svakere i perioder.",
+    "pead": "Eksperimentelt signal med svak evidens: med punkt-i-tid S&P 500 (inkl. tidligere medlemmer) er effekten omtrent null etter kurtasje, og om lag halvparten av tilfellene gjør det dårligere enn snittaksjen.",
     "insider_cluster": "Vår egen test (2022–2025, ~980 klynger) fant ingen meravkastning etter innsidekjøp-klynger – bruk som bekreftelse, ikke som signal alene.",
     "congress_buys": "Kongresshandler rapporteres med opptil 45 dagers forsinkelse; kan være rutine/rådgiverstyrt.",
     "ose_contracts": "Kontraktsverdi er ofte ikke oppgitt; sjekk størrelse mot selskapets omsetning.",
@@ -431,7 +433,7 @@ RISK_TEXT = {
     "dod_contract": "Mange DoD-kontrakter er modifikasjoner av eksisterende avtaler og allerede kjent for markedet.",
 }
 WHY_TEXT = {
-    "pead": "Sterk kvartalsrapport: både resultatet og kursreaksjonen var klart bedre enn ventet. Historisk (S&P 500 2006–2026) har slike aksjer i snitt gjort det ca. 1,5–2 prosentpoeng bedre enn andre rapporterende selskaper de neste 60 handelsdagene.",
+    "pead": "Sterk kvartalsrapport: både resultatet og kursreaksjonen var klart bedre enn ventet. Historisk (punkt-i-tid S&P 500 2006–2026) ga dette bare ca. +0,4–0,8 prosentpoeng brutto over 60 handelsdager (t 0,7–1,9), omtrent null etter kurtasje – eksperimentelt signal med svak evidens. Beste variant (PEAD-S, volatilitet over median) ca. +1 pp brutto, ca. +0,25 pp netto.",
     "insider_cluster": "Flere innsidere kjøper med egne penger samtidig – de kjenner selskapet best.",
     "congress_buys": "Medlem(mer) av Kongressen har kjøpt aksjen nylig.",
     "ose_contracts": "Selskapet har meldt nye kontrakter/ordre på Oslo Børs.",

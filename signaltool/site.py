@@ -80,7 +80,8 @@ def num(x, d=2):
 
 CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Watchlist"}
 CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Watchlist er regelbaserte og mekaniske – ikke personlig '
-            'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (bare én signaltype – sterk kvartalsrapport – har støtte i historiske tester). '
+            'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har robust støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
+            'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}kilder.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
 TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th></tr>"
 
@@ -129,58 +130,87 @@ def cat_rules_html(e):
             + CAT_NOTE.format(pre="../") + "</div>")
 
 
+def _ci(v):
+    return "" if not v or v[0] != v[0] else f"{v[0]*100:+.1f} til {v[1]*100:+.1f} %"
+
+
+def _track_cells(v, min_n):
+    cells = ""
+    for h in C.HORIZONS:
+        x = v.get(f"h{h}", {})
+        if "mean" in x:
+            cells += (f'<td>{pct(x["mean"])} <span class="mut">(95 %: {_ci(x.get("mean_ci")) or "–"})</span><br>'
+                      f'<span class="mut">slo indeks {x["hit"]*100:.0f} % (95 %: {x["hit_ci"][0]*100:.0f}–{x["hit_ci"][1]*100:.0f} %), median {pct(x["median"])}, n={x["n"]}</span></td>')
+        else:
+            cells += f'<td class="mut">n={x.get("n", 0)} – for få (vises fra {min_n})</td>'
+    return cells
+
+
 def track_html(snap):
     tr = snap.get("track_record")
     head = ('<div class="card tw" id="treffsikkerhet"><h2 style="margin-top:0">Treffsikkerhet (fremoverlogg)</h2>'
-            '<p class="mut">Hver kjøring lagrer dato, ticker, kategori og kurs. Her måles hvordan <b>nye</b> Kjøp-/Hold-/Watchlist-plasseringer '
-            'gjorde det 5, 20 og 60 handelsdager senere, målt mot referanseindeks (OSEBX for Oslo Børs, S&amp;P 500 ellers). '
-            'Meravkastning = aksje − indeks. Uten kurtasje/spread. <a href="historikk/kategorier.csv">Last ned loggen (CSV)</a>.</p>')
+            '<p class="mut">Hver kjøring lagrer dato, ticker, kategori, kurs, <b>signaltyper</b> og <b>flagg</b>. Her måles hvordan <b>uavhengige nye</b> plasseringer '
+            'gjorde det 5, 20 og 60 handelsdager senere mot referanseindeks (OSEBX for Oslo Børs, SPY – S&amp;P 500 inkl. utbytte – for USA). '
+            'Inngang = første sluttkurs <i>etter</i> kjøringsdatoen. Meravkastning = aksje − indeks, uten kurtasje/spread. '
+            'Bare enkeltaksjer på amerikanske børser og Oslo Børs telles (ETF-er og andre børser utelates). '
+            '<a href="historikk/kategorier.csv">Last ned loggen (CSV)</a>.</p>')
     if not tr:
         return head + "<p><b>Ikke nok data ennå.</b></p></div>"
-    rows = ""
-    for cat, v in tr["cats"].items():
-        cells = ""
-        for h in C.HORIZONS:
-            x = v.get(f"h{h}", {})
-            cells += (f'<td>{pct(x["mean"])} <span class="mut">(median {pct(x["median"])}, slo indeks {x["hit"]*100:.0f} %, n={x["n"]})</span></td>'
-                      if "mean" in x else f'<td class="mut">ikke nok data ennå (n={x.get("n", 0)})</td>')
-        rows += f'<tr><td>{cat_badge(cat)}</td><td>{v["entries"]}</td>{cells}</tr>'
+    mn = tr.get("min_n")
+    rows = "".join(f'<tr><td>{cat_badge(cat)}</td><td>{v["entries"]}</td>{_track_cells(v, mn)}</tr>' for cat, v in tr["cats"].items())
+    TN = {**C.TYPE_NO}
+    trows = "".join(f'<tr><td>{E(TN.get(k, k))}</td><td>{v["entries"]}</td>{_track_cells(v, mn)}</tr>' for k, v in (tr.get("types") or {}).items())
+    from .site_extra import _flag_info
+    frows = "".join(f'<tr><td>{E(_flag_info(k)[0])}</td><td>{v["entries"]}</td>{_track_cells(v, mn)}</tr>' for k, v in (tr.get("flags") or {}).items())
     enough = any("mean" in v.get(f"h{h}", {}) for v in tr["cats"].values() for h in C.HORIZONS)
     if not enough:
-        head += (f'<p><b>Ikke nok data ennå.</b> Loggen trenger minst {tr.get("min_n")} nye plasseringer per kategori som har nådd '
-                 f'5/20/60 handelsdager før tall vises (første tall om ca. én uke, 60-dagers tall om ca. tre måneder).</p>')
-    info = (f'<p class="mut">Loggen startet {E(tr.get("first_date"))}; {tr.get("n_days", 0)} kjøringsdager, {tr.get("n_log_rows", 0)} rader. '
-            f'Tall vises først når minst {tr.get("min_n")} plasseringer har nådd horisonten.</p>')
-    return (head + info + f'<table><tr><th>Kategori</th><th>Nye plasseringer</th><th>5 dager</th><th>20 dager</th><th>60 dager</th></tr>{rows}</table>'
-            '<p class="catnote">Få observasjoner og korte perioder gir mye tilfeldighet – selv gode tall her er ikke bevis for at reglene virker.</p></div>')
+        head += (f'<p><b>Ikke nok data ennå.</b> Tall (snitt, treffrate og 95 %-intervall) vises først når minst {mn} <i>uavhengige</i> nye plasseringer har nådd '
+                 f'horisonten. Uavhengig = første dag i en sammenhengende rekke kjøringsdager, og maks én per ticker og kategori per {tr.get("spacing", 60)} handelsdager '
+                 '(overlappende 60-dagersvinduer ville blåst opp n). Med få kjøringsdager tar dette flere måneder.</p>')
+    miss = ""
+    if tr.get("missing") or tr.get("stopped") or tr.get("excluded"):
+        miss = ('<p class="mut">' + (f'Uten kursdata (ikke målt): {E(", ".join(tr["missing"]))}. ' if tr.get("missing") else "")
+                + (f'Sluttet å handle i vinduet (siste kurs brukt): {E(", ".join(tr["stopped"]))}. ' if tr.get("stopped") else "")
+                + (f'Utelatt fra målingen (ETF/annen børs): {E(", ".join(tr["excluded"]))}.' if tr.get("excluded") else "") + '</p>')
+    info = (f'<p class="mut">Loggen startet {E(tr.get("first_date"))}; {tr.get("n_days", 0)} kjøringsdager, {tr.get("n_log_rows", 0)} rader.</p>')
+    th = '<tr><th>{}</th><th>Uavh. oppføringer</th><th>5 dager</th><th>20 dager</th><th>60 dager</th></tr>'
+    return (head + info + f'<h3>Per kategori</h3><table>{th.format("Kategori")}{rows}</table>'
+            + (f'<h3>Per signaltype</h3><table>{th.format("Signaltype")}{trows}</table>' if trows else '<p class="mut">Per signaltype: ingen signaltyper logget ennå (kolonnen ble lagt til 2026-09-28).</p>')
+            + (f'<h3>Per flagg</h3><table>{th.format("Flagg")}{frows}</table>' if frows else "")
+            + miss + '<p class="catnote">Få observasjoner og korte perioder gir mye tilfeldighet – se på intervallene, ikke bare snittet. '
+            'Selv gode tall her er ikke bevis for at reglene virker.</p></div>')
 
 
 def categories_method_html():
     R = C.RULES
+    from .oslo_flags import FLAG_INFO
+    fl = "".join(f'<li><b>{E(v[0])}</b> ({ {"red": "rødt – blokkerer Kjøp", "yellow": "gult – halver størrelsen", "note": "tillegg", "info": "info-merke"}[v[1]] }; '
+                 f'evidens: {E(v[2])}): {E(v[3])}</li>' for v in FLAG_INFO.values())
     return f"""<div class="card" id="kategorier"><h2 style="margin-top:0">Kategorier: Kjøp-kandidat, Hold, Watchlist</h2>
-<div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester (under) fant ingen bevist fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
-prediksjonsmarkeder eller kursbekreftelsen i seg selv. Unntakene er «sterk kvartalsrapport» (positiv drift) og svak momentum på Oslo Børs (negativ) – derfor er de lagt inn.
-Reglene er laget for å være strenge og etterprøvbare – ikke for å love avkastning.</div>
+<div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester fant ingen robust fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
+prediksjonsmarkeder, kursbekreftelsen i seg selv – eller for noe annet kjøpssignal. «Sterk kvartalsrapport» er med som <b>eksperimentell</b> signaltype (svak evidens).
+Det som faktisk har holdt i testene, er de <b>røde flaggene for Oslo Børs</b> – de hindrer Kjøp. Reglene er laget for å være strenge og etterprøvbare – ikke for å love avkastning.</div>
 <h3>{cat_badge("kjop")} Kjøp-kandidat – krever at ALT dette er oppfylt</h3><ol>
 <li><b>Minst {R["min_types"]} uavhengige signaltyper</b> fra kilder med høyere pålitelighet: offentlig kontrakt (DoD-kunngjøring/USAspending, teller som én type),
 innsidekjøp-klynge (≥ 2 innsidere kjøper i markedet for ≥ $50k siste 7 dager, inkl. ledelse/styre – ikke bare 10 %-eiere), kontraktsmelding på Oslo Børs (Newsweb),
 tema med score ≥ {R["theme_min"]:.1f} der fysisk oljemarked (crack spread, Brent–WTI, futureskurve) bekrefter med z ≥ {R["theme_market_z"]:.1f},
-eller <b>sterk kvartalsrapport</b> (kun USA, nytt 2026-09-28): EPS-overraskelse ≥ 15 % <i>og</i> kursreaksjon ≥ +4 % mot S&amp;P 500 på rapportdagen, siste 45 dager
-(den eneste signaltypen med støtte i historisk test både før og etter 2016 – se «Nattens tester» under).
+eller <b>sterk kvartalsrapport</b> (kun USA, <b>eksperimentell / svak evidens</b>): EPS-overraskelse ≥ 15 % <i>og</i> kursreaksjon ≥ +4 % mot SPY på reaksjonsdagen, siste 45 dager.
+Med punkt-i-tid S&amp;P 500 (inkl. tidligere medlemmer) ga sidens terskler +0,76 pp (t 1,9) før 2016 og +0,36 pp (t 0,7) etter over 60 dager – omtrent null etter
+0,75 % kurtasje/valuta (forskningsdefinisjonen: ~+0,6 pp brutto). Variant <b>PEAD-S</b> (1-års daglig volatilitet over median blant S&amp;P 500-aksjene) ≈ +1 pp brutto
+(t 1,1–1,3), ≈ +0,25 pp netto – merkes, men er også eksperimentell.
 Uvanlig volum, kursbevegelser, Reddit, kongresshandler og innsidemeldinger med ukjent retning teller <i>ikke</i>.</li>
 <li>Minst ett av signalene er <b>ferskere enn {R["fresh_days"]} dager</b>.</li>
-<li><b>Kursbekreftelse:</b> kurs over 50-dagers glidende snitt <i>og</i> 20-dagers avkastning bedre enn referanseindeksen (OSEBX for .OL, S&amp;P 500 ellers).</li>
+<li><b>Kursbekreftelse:</b> kurs over 50-dagers glidende snitt <i>og</i> 20-dagers avkastning bedre enn referanseindeksen (OSEBX for .OL, SPY – S&amp;P 500 inkl. utbytte – ellers).</li>
 <li><b>Ikke strukket:</b> 5d-avkastning under +{R["stretch_5d"]*100:.0f} %, 20d under +{R["stretch_20d"]*100:.0f} % og under {R["stretch_sma"]*100:.0f} % over 50-dagers snitt.</li>
 <li><b>Ingen røde flagg:</b> kraftig økende short (Oslo: +{R["short_7d"]} pp på 7 d eller +{R["short_30d"]} pp på 30 d), kursfall ≥ {abs(R["crash"])*100:.0f} % i løpet av 20 handelsdager,
-lav likviditet (median omsetning under ca. ${R["min_adv_usd"]/1e6:.0f}M per dag), pennyaksje (under ca. ${R["min_price_usd"]:.0f}), bare volum-/kurssignal,
-eller (kun Oslo Børs, nytt 2026-09-28) <b>svak 12-1-måneders momentum</b> (avkastning fra 12 til 1 måned siden blant de 20 % svakeste, under ca. −10,6 %) –
-denne gruppen gjorde det 3–4 % dårligere enn OSEBX over 60 dager både før og etter 2018.</li></ol>
+lav likviditet (median omsetning under ca. ${R["min_adv_usd"]/1e6:.0f}M per dag), pennyaksje (under ca. ${R["min_price_usd"]:.0f}), bare volum-/kurssignal – og for Oslo Børs flaggene under.</li></ol>
+<h3>Oslo-flagg (rangert blant likvide Oslo-aksjer ≥ ~2 MNOK/dag, oppdatert daglig)</h3><ul class="ev">{fl}</ul>
 <h3>{cat_badge("hold")} Hold</h3><p>Minst én pålitelig signaltype, kursbekreftelse og ingen røde flagg – men inngangen er sen: kursen er strukket,
 signalene er eldre enn {R["fresh_days"]} dager, eller aksjen var Kjøp-kandidat de siste {R["hold_memory_days"]} dagene uten ny utløser.
 Betydning: <i>har du aksjen, støtter signalene den fortsatt – men ikke jag kursen.</i></p>
 <h3>{cat_badge("watch")} Watchlist</h3><p>Alt annet med oppmerksomhet/avvik: bare én kildetype, bare volum eller tema, fallende kurs, røde flagg eller manglende kursdata.</p>
-<p class="mut">Forventning: få eller ingen Kjøp-kandidater de fleste dager. Hver kjøring logges (dato, ticker, kategori, kurs) slik at treffsikkerheten kan måles
-over tid – se <a href="tickere.html#treffsikkerhet">Treffsikkerhet</a>. Terskler: signaltool/categories.py.</p></div>"""
+<p class="mut">Forventning: få eller ingen Kjøp-kandidater de fleste dager. Hver kjøring logges (dato, ticker, kategori, kurs, signaltyper, flagg) slik at treffsikkerheten kan måles
+over tid – se <a href="tickere.html#treffsikkerhet">Treffsikkerhet</a>. Terskler: signaltool/categories.py og signaltool/oslo_flags.py.</p></div>"""
 
 
 def rel_label(txt):
@@ -240,6 +270,9 @@ def _prep(snap: dict) -> dict:
     for t in snap.get("themes", []):
         t["polymarket"] = sorted(t.get("polymarket", []), key=lambda m: (-abs(m.get("chg_1w") or 0), -(m.get("volume_24h") or 0)))
     snap["insider_clusters"] = [r for r in snap.get("insider_clusters", []) if str(r.get("ticker") or "").upper() not in ("", "NONE", "N/A", "NA")]
+    from . import regime
+    for e in snap.get("tickers", []):
+        e["_regime"] = regime.for_ticker(snap, e["ticker"])
     return snap
 
 
@@ -260,6 +293,9 @@ def build(snap: dict) -> Path:
          X.changes_html(snap),
          weekend_html(snap.get("weekend")),
          cat_summary_html(snap),
+         X.honesty_html(),
+         X.regime_html(snap),
+         X.portfolio_rules_html(),
          '<h2>Topp fremvoksende temaer</h2><div class="grid">' + "".join(theme_card(t) for t in themes[:6]) + "</div>",
          '<h2>Kandidat-tickere koblet til temaene</h2><div class="card tw"><table>' + TICKER_HEAD + ''
          + "".join(ticker_row(e) for e in [x for x in tickers if x["themes"]][:12]) + '</table><p class="mut">Høy poengsum betyr «verdt å undersøke», ikke «kjøp». <a href="tickere.html">Alle tickere →</a></p>' + CAT_NOTE.format(pre="") + '</div>',
@@ -350,6 +386,7 @@ def ticker_page(e, tmap):
     return f"""<h1>{E(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
 {X.thesis_html(e, tmap)}
 {cat_rules_html(e)}
+{X.flags_html(e)}
 {X.plan_html(e, compact=False) if e.get("category") in ("kjop", "hold") else ""}
 {X.base_rate_html(e)}
 {X.decision_html(e)}
@@ -429,8 +466,10 @@ def kilder_page(snap):
         bt_html = ('<div class="card" id="natt"><h2 style="margin-top:0">Nattens tester (2026-09-28): hva leder faktisk kursene?</h2>'
                    '<pre style="white-space:pre-wrap;font-size:.8rem">' + E(bn.read_text()) + "</pre></div>") + bt_html
     return f"""<h1>Kilder og metode</h1><div class="warnbox">{DISCLAIMER}</div>
+{X.honesty_html()}
 {categories_method_html()}
 {X.base_rate_table_html()}
+{X.dropped_html()}
 <div class="card"><h2 style="margin-top:0">Slik fungerer det</h2><ol>
 <li><b>Innsamling</b> fra gratis, offentlige kilder (ingen betalte tjenester, ingen API-nøkler).</li>
 <li><b>Temakart:</b> 10 geopolitiske temaer koblet til sektorer, råvarer og eksempel-tickere (USA og Oslo Børs), med skriftlig begrunnelse.</li>
@@ -444,7 +483,8 @@ og ugyldiggjøringsnivå (50-dagers snitt og 2×ATR under kurs).</li>
 Taiwans månedsomsetning (MOPS), politikkdokumenter (Federal Register/EU) og prediksjonsmarked.</li>
 <li><b>Testbar tese</b> per ticker (hvorfor den kan stige, hva som bekrefter og hva som avkrefter – med konkrete nivåer), <b>historisk treffrate</b>
 for hvert signal fra våre egne tester, og en <b>eksempelplan</b> for Kjøp/Hold: inngangssone, stopp (strengeste av 50-dagers snitt og 2×ATR),
-første mål (2:1) og størrelse ved 1 % risiko per handel (maks 10 %, halvert ved høy volatilitet/lav likviditet). Eksempelberegning – ikke råd.</li>
+første mål (2:1) og størrelse ved 1 % risiko per handel (maks 5 %, halvert ved høy volatilitet, lav likviditet eller svakt markedsregime). Eksempelberegning – ikke råd.</li>
+<li><b>Markedsregime</b>: S&amp;P 500 og OSEBX mot 10-måneders snitt og 1-måneds volatilitet – brukes bare til å halvere nye posisjoner, ikke som salgssignal.</li>
 <li><b>«Hva bør jeg se på i dag?»</b> og <b>«Nytt siden i går»</b>: automatisk prioritering og sammenligning med forrige lagrede kjøring; 🔔 = varsel.</li></ol>
 <h3>Viktige forbehold</h3><ul>
 <li>Ingen språkmodell – nøkkelord kan gi feiltreff (f.eks. «strait» eller «war» i andre sammenhenger).</li>

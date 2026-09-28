@@ -4,18 +4,27 @@ by the earlier backtests (no new downloads). Output: data/base_rates.json, used 
 For every signal: number of cases, share that beat the benchmark, median and mean excess return at 20 / 60 trading
 days, period. Entry = close the day after the event (DoD: 2 days, as in categories_check). Excess = stock - benchmark
 (SPY / S&P 500 for US, OSEBX for Oslo). Gross of costs. Survivorship bias in the US price universe (today's members).
-Run: python -m signaltool.backtest.base_rates
+EXCEPTION - PEAD: point-in-time S&P 500 membership incl. former members (event table built by strategy-research/round3,
+us_build.py), excess vs the equal-weighted point-in-time universe, shown gross AND net of 0.75 % US round-trip cost.
+Run: python -m signaltool.backtest.base_rates          (everything)
+     python -m signaltool.backtest.base_rates pead     (only the PEAD rows; the rest of data/base_rates.json is kept)
 """
 from __future__ import annotations
-import json
+import json, os, sys
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from ..config import CACHE, DATA
 from ..categories import RULES
 from . import universe, insider, oslo_events
 from .categories_check import DOD_CACHE, dedupe, evaluate as cc_evaluate
+from .price_rules import hac_t
 
 OUT = DATA / "base_rates.json"
+RESEARCH = Path(os.environ.get("SIGNAL_RESEARCH", "/workspace/strategy-research"))
+PIT_EVENTS = RESEARCH / "round3" / "data" / "events_us.pkl"
+COST_US = 0.0075   # round trip for a Norwegian retail client (0.5-1.0 %, Nordnet price list; RAPPORT.md ch. 5)
+SPLIT = "2016-01-01"
 
 
 def stats(x20: pd.Series, x60: pd.Series, dates: pd.Series, **meta) -> dict:
@@ -35,11 +44,40 @@ def _fwd_x(C: pd.DataFrame, bench: str, h: int, lag: int = 1) -> pd.DataFrame:
     return F.sub(F[bench], axis=0)
 
 
+def _pit_stats(X: pd.DataFrame, note: str) -> dict:
+    r = stats(X["x20"], X["x60"], X["date"], bench="likevektet S&P 500 (punkt-i-tid)", note=note)
+    r["cost"] = COST_US
+    for h in (20, 60):
+        if r.get(f"mean{h}") is not None:
+            r[f"net{h}"] = r[f"mean{h}"] - COST_US
+    for per, sel in (("is", X["date"] < SPLIT), ("oos", X["date"] >= SPLIT)):
+        Y = X[sel].dropna(subset=["x60"])
+        if len(Y) >= 20:
+            q = Y.groupby("qtr")["x60"].mean()
+            r[f"mean60_{per}"], r[f"t60_{per}"], r[f"n60_{per}"] = float(Y["x60"].mean()), hac_t(q, 1), int(len(Y))
+    r["pit"] = True
+    return r
+
+
 def pead() -> dict:
+    """Point-in-time PEAD base rates (site thresholds and PEAD-S). Falls back to today's members (labelled) if the
+    point-in-time event table is missing."""
+    if PIT_EVENTS.exists():
+        E = pd.read_pickle(PIT_EVENTS)
+        R = E[E["pit"]].copy()
+        site = (R["surprise"] >= 15) & (R["ear_spy"] >= 0.04)
+        hv = R["q_vol"] > 0.5
+        base = ("Punkt-i-tid S&P 500 inkl. 146 tidligere medlemmer (rapportdata mangler fortsatt for oppkjøpte/konkursrammede). "
+                "Meravkastning mot likevektet punkt-i-tid-univers, inngang sluttkurs dagen etter reaksjonsdagen. "
+                f"Netto = minus {COST_US*100:.2f} % tur-retur. t = HAC på kvartalssnitt. Kilde: strategy-research/RAPPORT_3.")
+        return {"pead": _pit_stats(R[site], "EKSPERIMENTELL / svak evidens. Sidens terskler: EPS-overraskelse ≥ 15 % og reaksjon ≥ +4 % mot SPY. " + base),
+                "pead_s": _pit_stats(R[site & hv], "EKSPERIMENTELL. PEAD-S = sidens terskler OG 1-års daglig volatilitet over median blant "
+                                                   "S&P 500-aksjene dagen før reaksjonsdagen. " + base)}
     E = pd.read_pickle(universe.DIR / "pead_events.pkl")
     live = E[(E["surprise"] >= 15) & (E["ear"] >= 0.04)]
-    return stats(live["x20"], live["x60"], live["date"], bench="S&P 500",
-                 note="Samme terskler som live-signalet (EPS-overraskelse ≥ 15 % og kursreaksjon ≥ +4 % mot indeks). Dagens S&P 500-medlemmer.")
+    r = stats(live["x20"], live["x60"], live["date"], bench="SPY",
+              note="ADVARSEL: punkt-i-tid-tabellen mangler – dagens S&P 500-medlemmer (overlevelsesskjevhet, overvurderer effekten). Brutto.")
+    return {"pead": r}
 
 
 def us_events():
@@ -125,11 +163,17 @@ def oslo() -> tuple[dict, dict, dict, dict]:
             stats(bl.x20, bl.x60, bl.date, bench="OSEBX", note="Sammenligningsgrunnlag: alle likvide Oslo-aksjer hver 21. handelsdag."))
 
 
-def build() -> dict:
+def build(only: str | None = None) -> dict:
+    if only == "pead":
+        out = json.loads(OUT.read_text()) if OUT.exists() else {}
+        out.pop("pead_s", None)
+        out.update(pead())
+        OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1))
+        return out
     out = {"_meta": {"what": "Meravkastning mot indeks (brutto, før kurtasje) fra inngang dagen etter hendelsen. "
                              "«Slo indeksen» = andel tilfeller med positiv meravkastning. Overlappende hendelser og overlevelsesskjevhet (USA) – "
                              "tallene er grunnlag for forventninger, ikke garantier."}}
-    out["pead"] = pead()
+    out.update(pead())
     ra, rb = us_events()
     out["insider_cluster"] = stats(ra.x20, ra.x60, ra.date, bench="SPY", note="≥ 3 ledere/styremedlemmer kjøper innen 30 d (SEC Form 4, 2022–2025).")
     out["gov_contract"] = stats(rb.x20, rb.x60, rb.date, bench="SPY", note="DoD/USAspending-kontrakter ≥ $100M (2022–), inngang 2 dager etter tildelingsdato.")
@@ -152,7 +196,7 @@ def build() -> dict:
 
 
 if __name__ == "__main__":
-    r = build()
+    r = build(sys.argv[1] if len(sys.argv) > 1 else None)
     for k, v in r.items():
         if k.startswith("_"):
             continue
