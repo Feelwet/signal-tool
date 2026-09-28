@@ -4,6 +4,7 @@ US: current S&P 500 members (Wikipedia list -> SURVIVORSHIP BIAS: today's member
 Oslo: every issuer seen on Newsweb (as <sign>.OL) that yfinance has data for + OSEBX.OL.
 """
 from __future__ import annotations
+from .. import http as _http
 import io, logging
 import pandas as pd
 import yfinance as yf
@@ -31,13 +32,14 @@ def sp500_members() -> pd.DataFrame:
 
 def _download(tickers, start, name) -> dict[str, pd.DataFrame]:
     p = DIR / f"{name}.pkl"
+    from ..data_quality import clean_universe   # backtests use repaired prices too (spike-and-revert bars)
     if p.exists():
-        return pd.read_pickle(p)
+        return clean_universe(pd.read_pickle(p))[0]
     out = {}
     for i in range(0, len(tickers), 100):
         chunk = tickers[i:i + 100]
         try:
-            d = yf.download(chunk, start=start, progress=False, auto_adjust=True, group_by="ticker", threads=True)
+            d = _http.yf_download(chunk, start=start, progress=False, auto_adjust=True, group_by="ticker", threads=True)
         except Exception as e:
             log.warning("chunk failed: %s", e)
             continue
@@ -50,7 +52,7 @@ def _download(tickers, start, name) -> dict[str, pd.DataFrame]:
             except KeyError:
                 pass
     pd.to_pickle(out, p)
-    return out
+    return clean_universe(out)[0]
 
 
 def us(start="2005-01-01"):

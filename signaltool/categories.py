@@ -31,6 +31,7 @@ Rules (all thresholds in RULES):
                    red flags, missing price data)
 """
 from __future__ import annotations
+from . import http as _http
 import logging, re
 from datetime import date, datetime, timedelta
 import numpy as np
@@ -322,8 +323,15 @@ def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
     from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Watchlist stats)
     rows += log_rows(snap)
     old = read_log(path)
-    old = old[old["date"] != snap["date"]]  # one set of rows per day (re-runs replace)
-    df = pd.concat([old, pd.DataFrame(rows, columns=LOG_COLS)], ignore_index=True) if rows else old
+    new = pd.DataFrame(rows, columns=LOG_COLS)
+    if snap.get("fast"):
+        # a fast/partial run (fewer sources) must never overwrite a full run's rows for the same day: keep the existing
+        # rows of today and only add tickers that are not logged yet
+        have = set(old.loc[old["date"].astype(str) == str(snap["date"]), "ticker"])
+        new = new[~new["ticker"].isin(have)]
+    else:
+        old = old[old["date"].astype(str) != str(snap["date"])]  # one set of rows per day (a full re-run replaces)
+    df = pd.concat([old, new], ignore_index=True) if len(new) else old
     df = df.reindex(columns=LOG_COLS)
     path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(path, index=False)
@@ -473,18 +481,19 @@ def track_record(logdf: pd.DataFrame, closes: dict[str, pd.Series], min_n: int |
 
 # ---------------------------------------------------------------- orchestration (network)
 def _download_close(tickers, **kw) -> dict[str, pd.Series]:
+    from .data_quality import clean_close
     import yfinance as yf
     tickers = sorted(set(tickers))
     if not tickers:
         return {}
-    d = yf.download(tickers, progress=False, auto_adjust=True, group_by="ticker", threads=True, **kw)
+    d = _http.yf_download(tickers, progress=False, auto_adjust=True, group_by="ticker", threads=True, **kw)
     out = {}
     for t in tickers:
         try:
             s = (d[t]["Close"] if len(tickers) > 1 else d["Close"]).squeeze().dropna()
             if len(s):
                 s.index = pd.to_datetime(s.index).tz_localize(None)
-                out[t] = s
+                out[t] = clean_close(s)[0]   # spike-and-revert repair (data_quality.py)
         except Exception:
             pass
     return out
@@ -514,7 +523,13 @@ def apply(snap: dict, log_path=LOG_PATH, fetch=True) -> dict:
         try:
             start = (_d(matured["date"].min()) - timedelta(days=10)).isoformat()
             tick = {t for t in matured["ticker"] if loggable(t)} | {BENCH_OSE, BENCH_US}
-            tr = track_record(logdf, _download_close(tick, start=start))
+            closes = _download_close(tick, start=start)
+            tr = track_record(logdf, closes)
+            try:   # random-ticker control per category (null_control.py); cheap, only once >= min_n entries have matured
+                from .null_control import forward
+                tr["null"] = forward(logdf, closes, tr["min_n"])
+            except Exception as ex:
+                log.warning("forward null control failed: %s", ex)
         except Exception as ex:
             log.warning("track record prices failed: %s", ex)
     counts = {k: sum(1 for e in snap.get("tickers", []) if e.get("category") == k) for k in CAT_NO}

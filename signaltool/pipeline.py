@@ -50,76 +50,149 @@ def _records(df: pd.DataFrame, cols=None, n=None) -> list[dict]:
     return out
 
 
+def _err(ex: Exception) -> str:
+    return f"{type(ex).__name__}: {str(ex)[:160]}"
+
+
+def _safe(status: dict, label: str, fn, default):
+    """Run one data source. The source returns (data..., status_text). Any exception -> warning in the log, a FAILED
+    status line (shown on the site as «ikke oppdatert (siste: dato)») and `default` - never a crashed run."""
+    try:
+        *vals, status[label] = fn()
+    except Exception as ex:
+        log.warning("source %s failed: %s", label, ex)
+        status[label] = f"FAILED: {_err(ex)}"
+        return default
+    return vals[0] if len(vals) == 1 else tuple(vals)
+
+
+LAST_OK = DATA / "source_last_ok.json"
+
+
+def mark_stale(status: dict, today: str, path=LAST_OK) -> dict:
+    """Remember the last date each source/section was ok; failed ones get «ikke oppdatert (siste: dato)» appended.
+    Returns the updated {label: last ok date} map."""
+    try:
+        last = json.loads(path.read_text())
+    except (OSError, ValueError):
+        last = {}
+    for k, v in status.items():
+        v = str(v)
+        if v.startswith("ok"):
+            last[k] = today
+        elif "FAIL" in v and "ikke oppdatert" not in v:
+            status[k] = f"{v} – ikke oppdatert (siste: {last.get(k, 'ukjent')})"
+    try:
+        path.write_text(json.dumps(last, ensure_ascii=False, indent=1, sort_keys=True))
+    except OSError as ex:
+        log.warning("could not save %s: %s", path, ex)
+    return last
+
+
 def run(fast: bool = False) -> dict:
     t0 = time.time()
     status: dict[str, str] = {}
     snap: dict = {"date": date.today().isoformat(), "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
                   "timezone": "Europe/Oslo"}
 
+    snap["fast"] = bool(fast)
+    from . import data_quality
+    data_quality.reset()
+    S = lambda label, fn, default: _safe(status, label, fn, default)
+    E = pd.DataFrame
+
     # ---------- GDELT daily events ----------
-    latest = gdelt_events.latest_available()
-    gser = pd.DataFrame()
-    if latest:
-        gdelt_events.backfill(latest - timedelta(days=75), latest)
-        gser = gdelt_events.load_theme_series(latest - timedelta(days=75), latest)
-        status["GDELT 1.0 daily events"] = f"ok (latest {latest}, {len(gser)} days baseline)"
-    else:
-        status["GDELT 1.0 daily events"] = "FAILED: no recent file"
+    gser, latest = pd.DataFrame(), None
+    try:
+        latest = gdelt_events.latest_available()
+        if latest:
+            gdelt_events.backfill(latest - timedelta(days=75), latest)
+            gser = gdelt_events.load_theme_series(latest - timedelta(days=75), latest)
+            status["GDELT 1.0 daily events"] = f"ok (latest {latest}, {len(gser)} days baseline)"
+        else:
+            status["GDELT 1.0 daily events"] = "FAILED: no recent file"
+    except Exception as ex:
+        log.warning("GDELT daily events failed: %s", ex)
+        status["GDELT 1.0 daily events"] = f"FAILED: {_err(ex)}"
     snap["gdelt_latest"] = latest.isoformat() if latest else None
 
     # ---------- GDELT DOC API (often rate limited) ----------
     first = THEMES[0]
-    _, status["GDELT DOC 2.0 API"] = gdelt_doc.collect({first.key: " OR ".join(f'"{k}"' for k in first.keywords[:3])})
+    S("GDELT DOC 2.0 API", lambda: gdelt_doc.collect({first.key: " OR ".join(f'"{k}"' for k in first.keywords[:3])}), None)
     if not status["GDELT DOC 2.0 API"].startswith("ok"):
         status["GDELT DOC 2.0 API"] += " -> using GDELT daily event files instead"
 
     # ---------- News RSS ----------
-    heads, rss_status = rss.collect()
-    ok_feeds = sum(v.startswith("ok") for v in rss_status.values())
-    status["News RSS"] = f"ok ({ok_feeds}/{len(rss_status)} feeds)" + (
-        "; failed: " + ", ".join(k for k, v in rss_status.items() if not v.startswith("ok")) if ok_feeds < len(rss_status) else "")
-    rss_daily = rss.theme_daily_counts(heads)
+    heads, rss_daily = E(), E()
+    try:
+        heads, rss_status = rss.collect()
+        ok_feeds = sum(v.startswith("ok") for v in rss_status.values())
+        status["News RSS"] = f"ok ({ok_feeds}/{len(rss_status)} feeds)" + (
+            "; failed: " + ", ".join(k for k, v in rss_status.items() if not v.startswith("ok")) if ok_feeds < len(rss_status) else "")
+        rss_daily = rss.theme_daily_counts(heads)
+    except Exception as ex:
+        log.warning("RSS failed: %s", ex)
+        status["News RSS"] = f"FAILED: {_err(ex)}"
 
     # ---------- Markets ----------
     watch = all_watch_tickers() + ["SPY"]
-    mstats, mdata, status["Prices (yfinance)"] = markets.collect(watch)
+    mstats, mdata = S("Prices (yfinance)", lambda: markets.collect(watch), (E(), {}))
 
     # ---------- Google Trends ----------
     if fast:
         tr, status["Google Trends (pytrends)"] = {}, "skipped (--fast)"
     else:
-        tr, status["Google Trends (pytrends)"] = trends.collect({t.key: t.trends_terms for t in THEMES})
+        tr = S("Google Trends (pytrends)", lambda: trends.collect({t.key: t.trends_terms for t in THEMES}), {})
 
     # ---------- SEC ----------
-    ek, ek_examples, status["SEC EDGAR 8-K full-text"] = sec.eightk_weekly_counts(weeks=13)
-    tx, status["SEC EDGAR Form 4"] = sec.fetch_form4_transactions(days=7, cap=800 if fast else 2500)
-    clusters = sec.insider_buy_clusters(tx)
+    ek, ek_examples = S("SEC EDGAR 8-K full-text", lambda: sec.eightk_weekly_counts(weeks=13), (E(), {}))
+    tx = S("SEC EDGAR Form 4", lambda: sec.fetch_form4_transactions(days=7, cap=800 if fast else 2500), E())
+    try:
+        clusters = sec.insider_buy_clusters(tx)
+    except Exception as ex:
+        log.warning("insider clusters failed: %s", ex)
+        clusters = E()
     if not clusters.empty:
         clusters = clusters[~clusters["ticker"].fillna("").str.upper().isin(["", "NONE", "N/A", "NA"])]
-    nt, status["SEC late-filing notices (NT 10-K/Q)"] = sec.forensic_late_filings()
+    nt = S("SEC late-filing notices (NT 10-K/Q)", sec.forensic_late_filings, [])
 
-    # ---------- other sources ----------
-    cong, status["US House PTR (congress trades)"] = congress.collect(days=45)
+    # ---------- other sources (each isolated: a failure = warning + FAILED status + empty data) ----------
+    cong = S("US House PTR (congress trades)", lambda: congress.collect(days=45), E())
     status["US Senate eFD"] = "not automated (requires interactive terms acceptance); see research/sources.md"
-    awards, status["USAspending awards"] = usaspending.collect()
+    awards = S("USAspending awards", usaspending.collect, E())
     status["SAM.gov"] = "not used (API requires free key via sign-up)"
-    ofa, status["OFAC recent actions"] = ofac.collect()
-    red, status["Reddit (public RSS)"] = reddit.collect()
-    pm, status["Polymarket (Gamma API)"] = polymarket.collect()
-    ka, status["Kalshi"] = kalshi.collect()
-    nw, status["Oslo Børs Newsweb"] = newsweb.collect(days=95)   # 95 d: private placements are flagged for 60 trading days
-    nb, status["Norges Bank"] = norgesbank.collect()
-    oilx, status["Oil spreads & curves (yfinance futures)"] = oil.collect()
-    dodx, dod_days, status["US DoD daily contracts (war.gov)"] = dod.collect()
-    sh, status["Finanstilsynet short register"] = shorts.collect()
-    sh = shorts.map_to_tickers(sh, nw)
-    mac, mac_status = macro.collect()
-    status.update(mac_status)
-    cb, cb_status = calendar_cb.collect()
-    status.update(cb_status)
+    ofa = S("OFAC recent actions", ofac.collect, E())
+    red = S("Reddit (public RSS)", reddit.collect, E())
+    pm = S("Polymarket (Gamma API)", polymarket.collect, E())
+    ka = S("Kalshi", kalshi.collect, E())
+    nw = S("Oslo Børs Newsweb", lambda: newsweb.collect(days=95), E())   # 95 d: private placements are flagged for 60 trading days
+    nb = S("Norges Bank", norgesbank.collect, {})
+    oilx = S("Oil spreads & curves (yfinance futures)", oil.collect, {})
+    dodx, dod_days = S("US DoD daily contracts (war.gov)", dod.collect, (E(), []))
+    sh = S("Finanstilsynet short register", shorts.collect, E())
+    try:
+        sh = shorts.map_to_tickers(sh, nw) if not sh.empty else sh
+    except Exception as ex:
+        log.warning("shorts mapping failed: %s", ex)
+        sh = E()
+    mac, cb = {}, []
+    for lab, fn in (("Makro", macro.collect), ("Sentralbankkalender", calendar_cb.collect)):
+        try:
+            res, st = fn()
+            status.update(st)
+            if lab == "Makro":
+                mac = res
+            else:
+                cb = res
+        except Exception as ex:
+            log.warning("%s failed: %s", lab, ex)
+            status[lab] = f"FAILED: {_err(ex)}"
     eq_tickers = [t for th in THEMES for t in th.tickers_us + th.tickers_ose + th.tickers_other]
     eq_tickers = [t for t in dict.fromkeys(eq_tickers) if t not in ("ITA", "BDRY", "FXI", "EWW", "REMX", "SMH", "SPY", "FEZ", "EWZ", "EWG", "XLE", "JETS", "XRT", "GLD", "GDX")]
-    earn, status["Earnings calendar (yfinance)"] = ([], "skipped (--fast)") if fast else markets.earnings_calendar(eq_tickers)
+    if fast:
+        earn, status["Earnings calendar (yfinance)"] = [], "skipped (--fast)"
+    else:
+        earn = S("Earnings calendar (yfinance)", lambda: markets.earnings_calendar(eq_tickers), [])
 
     # ---------- theme scoring ----------
     themes_out = []
@@ -384,6 +457,14 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:
         log.exception("briefing failed")
         status["Dagens fokus / endringer"] = f"FAILED: {ex}"
+    try:   # price data-quality summary (spike repairs + stale runs), shown under «Datakvalitet»
+        snap["data_quality"] = data_quality.summary(snap["date"])
+        dqs = snap["data_quality"]
+        status["Datakvalitet (kurs)"] = f"ok ({dqs['n_spikes']} reparerte kurshopp, {dqs['n_stale']} tickere med uendret kurs ≥ {data_quality.STALE_N} dager)"
+    except Exception as ex:
+        log.warning("data quality summary failed: %s", ex)
+        status["Datakvalitet (kurs)"] = f"FAILED: {_err(ex)}"
+    snap["source_last_ok"] = mark_stale(status, snap["date"])
     snap["status"] = status
     snap["runtime_s"] = round(time.time() - t0)
     (SNAP_DIR / f"{snap['date']}.json").write_text(json.dumps(snap, indent=1, default=str))

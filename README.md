@@ -120,6 +120,21 @@ generic UA with the repo URL is used). No secrets or API keys are required.
 Not in the repository (see `.gitignore`): `data/` (runtime state/caches, ~110 MB locally, regenerable), the private
 `research/x_accounts/` workspace, virtualenvs and logs.
 
+## Data quality, random-data control, robustness
+
+* **Price data-quality filter** (`signaltool/data_quality.py`): before any signal, flag, track record or backtest statistic,
+  spike-and-revert bars (|1-day return| > 25 % and the next close back within 5 %) are set to NaN and forward-filled;
+  runs of ≥ 5 identical closes with volume > 0 are flagged. Daily counts are shown under «Datakvalitet» (kilder.html).
+* **Random-data control** (`signaltool/null_control.py`): PEAD, PEAD-S (also vs. equally volatile stocks) and the Oslo
+  «svak kurs» flag are compared with 500 random draws (seed 42) from the same universe; result in `reports/kontroll.json`
+  (needs the local backtest caches: `python -m signaltool backtest kontroll`, then commit the JSON). The forward-log
+  categories are compared daily with random tickers logged the same day, once enough entries have matured.
+* **Robustness**: every source is isolated (a failure = warning + «ikke oppdatert (siste: dato)»), every site section
+  too; `python -m signaltool check-site` runs before deploy (on failure the previous Pages version stays live); a
+  `--fast` run only adds rows to `logs/categories.csv` and never replaces a full run's rows for the same day; the
+  `status` job turns a degraded run (pipeline fallback, failed log push) red, so GitHub's failed-run e-mail fires;
+  yfinance downloads are retried (`http.yf_download`).
+
 ## Disclaimer
 **Not financial advice.** This is an automated information tool built on free public data and simple, transparent rules.
 Signals can be wrong, late, or already priced in; nothing here is a recommendation to buy or sell any security.

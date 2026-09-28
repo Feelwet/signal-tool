@@ -56,3 +56,31 @@ def get(url: str, *, params=None, method="GET", json_body=None, retries=3, timeo
 
 def get_json(url, **kw):
     return get(url, **kw).json()
+
+
+def retry_call(fn, *args, tries: int = 3, wait: float = 5.0, ok=None, what: str = "", **kw):
+    """Call fn(*args, **kw) up to `tries` times with exponential backoff. A result for which ok(result) is False counts as a
+    failure (e.g. an empty frame from a throttled Yahoo request); after the last try that result is returned as is.
+    Exceptions are re-raised after the last try."""
+    last_exc, res = None, None
+    for i in range(tries):
+        try:
+            res = fn(*args, **kw)
+            if ok is None or ok(res):
+                return res
+            last_exc = None
+            log.info("retry %s: empty/invalid result (try %d/%d)", what or getattr(fn, "__name__", "call"), i + 1, tries)
+        except Exception as e:     # network errors, JSON errors, Yahoo hiccups
+            last_exc = e
+            log.info("retry %s after error %s (try %d/%d)", what or getattr(fn, "__name__", "call"), e, i + 1, tries)
+        if i < tries - 1:
+            time.sleep(wait * (2 ** i))
+    if last_exc is not None:
+        raise last_exc
+    return res
+
+
+def yf_download(*args, **kw):
+    """yfinance.download with retry (Yahoo drops requests or returns empty frames now and then)."""
+    import yfinance as yf
+    return retry_call(yf.download, *args, ok=lambda d: d is not None and len(d) > 0, what="yfinance", **kw)

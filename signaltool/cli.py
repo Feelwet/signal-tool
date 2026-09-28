@@ -11,9 +11,10 @@ def main(argv=None):
     r.add_argument("--no-site", action="store_true")
     sub.add_parser("report", help="re-render markdown report from latest snapshot")
     sub.add_parser("build-site", help="build static website in site/ from latest snapshot")
+    sub.add_parser("check-site", help="sanity check of site/ before deploy (exit 1 = do not deploy)")
     sub.add_parser("categorize", help="refresh prices + Kjøp/Hold/Watchlist categories on the latest snapshot, then report + site")
     b = sub.add_parser("backtest", help="run historical validation")
-    b.add_argument("which", choices=["insider", "gdelt", "categories", "all"], nargs="?", default="all")
+    b.add_argument("which", choices=["insider", "gdelt", "categories", "kontroll", "all"], nargs="?", default="all")
     s = sub.add_parser("serve", help="serve site/ locally")
     s.add_argument("--port", type=int, default=8765)
     ap.add_argument("-v", "--verbose", action="store_true")
@@ -23,6 +24,14 @@ def main(argv=None):
         logging.getLogger(n).setLevel(logging.WARNING)
 
     from .config import DATA
+    if a.cmd == "check-site":
+        from .config import ROOT
+        from .sitecheck import check
+        problems = check(ROOT / "site")
+        for p in problems:
+            print(f"::error::site check: {p}")
+        print("site check: OK" if not problems else f"site check: {len(problems)} problem(s) - do not deploy")
+        sys.exit(1 if problems else 0)
     if a.cmd == "run":
         from . import pipeline, report
         snap = pipeline.run(fast=a.fast)
@@ -31,6 +40,9 @@ def main(argv=None):
         if not a.no_site:
             from . import site
             print(f"site: {site.build(snap)}")
+            from .site_quality import FAILED_SECTIONS
+            if FAILED_SECTIONS:
+                print(f"::warning::sections not updated: {', '.join(FAILED_SECTIONS)}")
     elif a.cmd in ("report", "build-site"):
         snap = json.loads((DATA / "snapshots" / "latest.json").read_text())
         if a.cmd == "report":
@@ -65,8 +77,13 @@ def main(argv=None):
         p.write_text(txt); (DATA / "snapshots" / f"{snap['date']}.json").write_text(txt)
         print(report.write(snap)); print(site.build(snap))
     elif a.cmd == "backtest":
-        from .backtest import run_all
-        run_all(a.which)
+        if a.which == "kontroll":   # random-data control (null_control.py) -> reports/kontroll.json (commit it)
+            from . import null_control
+            r = null_control.build()
+            print(json.dumps({k: {"n": v.get("n"), "mean": v.get("mean")} for k, v in r.items() if not k.startswith("_")}, indent=1, ensure_ascii=False))
+        else:
+            from .backtest import run_all
+            run_all(a.which)
     elif a.cmd == "serve":
         import http.server, functools, socketserver
         from .config import ROOT

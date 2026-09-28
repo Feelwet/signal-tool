@@ -7,6 +7,7 @@ from .config import ROOT, REPORTS
 from . import categories as C
 from . import site_extra as X
 from . import theme_maps as TM
+from . import site_quality as Q
 
 SITE = ROOT / "site"
 E = lambda x: html.escape("" if x is None else str(x))
@@ -283,63 +284,69 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA)
+    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + ".card.stale{border-left:4px solid var(--down)}\n")
+    Q.FAILED_SECTIONS.clear()
+    sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     (SITE / ".nojekyll").write_text("")
     themes, tickers = snap["themes"], snap["tickers"]
 
     # ---------- dashboard ----------
     b = [f'<div class="warnbox">{DISCLAIMER}</div>',
          f'<h1>Oversikt {E(snap["date"])}</h1><p class="mut">Hvilke geopolitiske temaer får uvanlig mye oppmerksomhet nå, målt mot sin egen historikk – og hvilke aksjer som viser tidlige tegn. GDELT-data t.o.m. {E(snap.get("gdelt_latest"))}.</p>',
-         X.focus_html(snap),
-         X.changes_html(snap),
-         weekend_html(snap.get("weekend")),
-         cat_summary_html(snap),
-         X.honesty_html(),
-         X.regime_html(snap),
+         sec("Hva bør jeg se på i dag?", X.focus_html, snap),
+         sec("Nytt siden i går", X.changes_html, snap),
+         sec("Helgeoppsummering", weekend_html, snap.get("weekend")),
+         sec("Kategorier", cat_summary_html, snap),
+         sec("Ærlig status", lambda: X.honesty_html(extra=Q.section("Datakvalitet", Q.dq_line, snap, snap=snap))),
+         sec("Markedsregime", X.regime_html, snap),
          X.portfolio_rules_html(),
-         '<h2>Topp fremvoksende temaer</h2><div class="grid">' + "".join(theme_card(t) for t in themes[:6]) + "</div>",
+         sec("Topp fremvoksende temaer", lambda: '<h2>Topp fremvoksende temaer</h2><div class="grid">' + "".join(theme_card(t) for t in themes[:6]) + "</div>"),
          '<h2>Kandidat-tickere koblet til temaene</h2><div class="card tw"><table>' + TICKER_HEAD + ''
          + "".join(ticker_row(e) for e in [x for x in tickers if x["themes"]][:12]) + '</table><p class="mut">Høy poengsum betyr «verdt å undersøke», ikke «kjøp». <a href="tickere.html">Alle tickere →</a></p>' + CAT_NOTE.format(pre="") + '</div>',
          '<h2>Annen uvanlig aktivitet</h2><div class="card tw"><p class="mut">Ikke koblet til et geopolitisk tema – uvanlig volum/kurs, innsidehandler eller kontrakter.</p><table>' + TICKER_HEAD + ''
          + "".join(ticker_row(e) for e in [x for x in tickers if not x["themes"]][:8]) + '</table>' + CAT_NOTE.format(pre="") + '</div>']
-    pmm = snap.get("polymarket_movers") or []
-    if pmm:
-        b.append('<h2>Største bevegelser i prediksjonsmarkeder (1 uke)</h2><div class="card tw"><table><tr><th>Spørsmål</th><th>Sannsynlighet</th><th>1 uke</th><th>Volum 24t</th></tr>' +
-                 "".join(f'<tr><td><a href="{E(m["url"])}">{E(m["question"])}</a></td><td>{num((m["p_yes"] or 0)*100,0)}%</td><td>{num((m["chg_1w"] or 0)*100,1)} pp</td><td>${m["volume_24h"]:,.0f}</td></tr>' for m in pmm[:8]) + "</table></div>")
-    surprises = [r for r in (snap.get("macro") or {}).get("series", []) if r.get("surprise_z") is not None and abs(r["surprise_z"]) >= 1.5]
-    if surprises:
-        b.append('<h2>Makro-overraskelser</h2><div class="card"><ul class="ev">' + "".join(
-            f'<li><a href="{E(r["url"])}">{E(r["name"])}</a>: siste {num(r["last"])} ({E(r["last_period"])}), overraskelse z={r["surprise_z"]:+.1f} – {E(r["why"])}</li>' for r in surprises) + '</ul><a href="makro.html">Mer makro →</a></div>')
-    cal = [e for e in snap.get("calendar", [])][:8]
-    if cal:
-        b.append('<h2>Neste hendelser</h2><div class="card"><ul class="ev">' + "".join(f'<li>{E(e["date"])} {E(e.get("time") or "")} – <b>{E(e["source"])}</b>: {E(e["title"])}</li>' for e in cal) + '</ul><a href="kalender.html">Hele kalenderen →</a></div>')
+    try:   # optional dashboard blocks: a malformed source must not break the build
+        pmm = snap.get("polymarket_movers") or []
+        if pmm:
+            b.append('<h2>Største bevegelser i prediksjonsmarkeder (1 uke)</h2><div class="card tw"><table><tr><th>Spørsmål</th><th>Sannsynlighet</th><th>1 uke</th><th>Volum 24t</th></tr>' +
+                     "".join(f'<tr><td><a href="{E(m["url"])}">{E(m["question"])}</a></td><td>{num((m["p_yes"] or 0)*100,0)}%</td><td>{num((m["chg_1w"] or 0)*100,1)} pp</td><td>${m["volume_24h"]:,.0f}</td></tr>' for m in pmm[:8]) + "</table></div>")
+        surprises = [r for r in (snap.get("macro") or {}).get("series", []) if r.get("surprise_z") is not None and abs(r["surprise_z"]) >= 1.5]
+        if surprises:
+            b.append('<h2>Makro-overraskelser</h2><div class="card"><ul class="ev">' + "".join(
+                f'<li><a href="{E(r["url"])}">{E(r["name"])}</a>: siste {num(r["last"])} ({E(r["last_period"])}), overraskelse z={r["surprise_z"]:+.1f} – {E(r["why"])}</li>' for r in surprises) + '</ul><a href="makro.html">Mer makro →</a></div>')
+        cal = [e for e in snap.get("calendar", [])][:8]
+        if cal:
+            b.append('<h2>Neste hendelser</h2><div class="card"><ul class="ev">' + "".join(f'<li>{E(e["date"])} {E(e.get("time") or "")} – <b>{E(e["source"])}</b>: {E(e["title"])}</li>' for e in cal) + '</ul><a href="kalender.html">Hele kalenderen →</a></div>')
+    except Exception as ex:
+        import logging; logging.getLogger(__name__).warning("dashboard extras failed: %s", ex)
+        b.append(Q.stale_card("Prediksjonsmarkeder / makro / kalender", None))
     (SITE / "index.html").write_text(page("Oversikt", "".join(b), 0, snap))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"])}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", f'<h1>Alle temaer</h1><div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + TM.cards_html(), 0, snap))
+    (SITE / "temaer.html").write_text(page("Temaer", f'<h1>Alle temaer</h1><div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
     have = {e["ticker"] for e in tickers}
     for M in TM.MAPS.values():
-        (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", TM.map_html(M["key"], snap, have), 1, snap))
+        (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", sec(f"Temakart: {M['name']}", TM.map_html, M["key"], snap, have), 1, snap))
     for t in themes:
-        (SITE / "tema" / f"{t['key']}.html").write_text(page(t["name"], theme_page(t, {e["ticker"]: e for e in tickers}, snap), 1, snap))
+        (SITE / "tema" / f"{t['key']}.html").write_text(page(t["name"], sec(t["name"], theme_page, t, {e["ticker"]: e for e in tickers}, snap), 1, snap))
 
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
     (SITE / "tickere.html").write_text(page("Tickere", '<h1>Kandidat-tickere</h1><div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div>"
-                                            + track_html(snap)
+                                            + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
                                             + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 0, snap))
     tmap = {t["key"]: t for t in themes}
     for e in tickers:
-        (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], ticker_page(e, tmap), 1, snap))
+        (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
 
-    (SITE / "makro.html").write_text(page("Makro", makro_page(snap), 0, snap))
-    (SITE / "kalender.html").write_text(page("Kalender", kalender_page(snap), 0, snap))
-    (SITE / "oslo.html").write_text(page("Oslo Børs", oslo_page(snap), 0, snap))
-    (SITE / "kilder.html").write_text(page("Kilder og metode", kilder_page(snap), 0, snap))
+    (SITE / "makro.html").write_text(page("Makro", sec("Makro", makro_page, snap), 0, snap))
+    (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
+    (SITE / "oslo.html").write_text(page("Oslo Børs", sec("Oslo Børs", oslo_page, snap), 0, snap))
+    (SITE / "kilder.html").write_text(page("Kilder og metode", sec("Kilder og metode", kilder_page, snap), 0, snap))
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
     if C.LOG_PATH.exists():  # public forward log of every day's categories (also restores CI state if the cache is lost)
         (SITE / "historikk").mkdir(exist_ok=True)
@@ -450,7 +457,7 @@ def oslo_page(snap):
     con = "".join(f'<tr><td class="nw">{E(r["published"][:10])}</td><td><b>{E(r["issuer"])}</b></td><td><a href="{E(r["url"])}">{E(r["title"])}</a></td></tr>' for r in snap.get("newsweb_contracts", [])[:40])
     ins = "".join(f'<tr><td class="nw">{E(r["published"][:10])}</td><td><b>{E(r["issuer"])}</b></td><td><a href="{E(r["url"])}">{E(r["title"])}</a></td></tr>' for r in snap.get("newsweb_insider", [])[:40])
     sh = "".join(f'<tr><td>{E(r["issuer"])}</td><td>{E(r["ticker"] or "")}</td><td>{r["short_pct"]:.2f}%</td><td>{r["chg_7d"]:+.2f}</td><td>{r["chg_30d"]:+.2f}</td><td class="mut">{E(r["top_holders"])}</td></tr>' for r in snap.get("shorts", []))
-    return f"""<h1>Oslo Børs</h1>
+    return f"""<h1>Oslo Børs</h1>{Q.source_note(snap, "Oslo Børs Newsweb", "Finanstilsynet short register")}
 <div class="card tw"><h2 style="margin-top:0">Kontrakts- og ordremeldinger (Newsweb, 14 dager)</h2><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{con}</table></div>
 {X.oslo_insider_html(snap)}
 <div class="card tw"><h2 style="margin-top:0">Meldepliktige handler – primærinnsidere (14 dager)</h2><p class="mut">Tittelen sier ikke alltid om det er kjøp eller salg – åpne meldingen.</p><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{ins}</table></div>
@@ -473,6 +480,8 @@ def kilder_page(snap):
                    '<pre style="white-space:pre-wrap;font-size:.8rem">' + E(bn.read_text()) + "</pre></div>") + bt_html
     return f"""<h1>Kilder og metode</h1><div class="warnbox">{DISCLAIMER}</div>
 {X.honesty_html()}
+{Q.section("Datakvalitet", Q.dq_html, snap, snap=snap)}
+{Q.section("Kontroll mot overtilpasning", Q.kontroll_html, snap, snap=snap)}
 {categories_method_html()}
 {X.base_rate_table_html()}
 {X.dropped_html()}

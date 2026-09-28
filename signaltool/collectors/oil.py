@@ -1,6 +1,7 @@
 """Physical-oil market signals from free futures prices (yfinance): 3-2-1 crack spread, Brent–WTI spread,
 and futures-curve shape (front vs ~3rd contract; backwardation = tight prompt supply)."""
 from __future__ import annotations
+from .. import http as _http
 from datetime import date
 import pandas as pd
 import yfinance as yf
@@ -20,14 +21,14 @@ def curve(root: str, n=5) -> pd.Series:
         m = (t.month - 1 + k) % 12 + 1
         y = t.year + (t.month - 1 + k) // 12
         syms.append(_contract(root, y, m))
-    d = yf.download(syms, period="5d", progress=False, auto_adjust=True)["Close"]
+    d = _http.yf_download(syms, period="5d", progress=False, auto_adjust=True)["Close"]
     last = d.ffill().iloc[-1].dropna()
     return last.reindex([s for s in syms if s in last.index])
 
 
 def collect() -> tuple[dict, str]:
     try:
-        d = yf.download(["CL=F", "BZ=F", "RB=F", "HO=F"], period="2y", progress=False, auto_adjust=True)["Close"].ffill().dropna()
+        d = _http.yf_download(["CL=F", "BZ=F", "RB=F", "HO=F"], period="2y", progress=False, auto_adjust=True)["Close"].ffill().dropna()
     except Exception as e:
         return {}, f"FAILED: {e}"
     crack = (2 * d["RB=F"] * 42 + d["HO=F"] * 42 - 3 * d["CL=F"]) / 3

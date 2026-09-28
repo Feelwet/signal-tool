@@ -4,6 +4,7 @@ All numbers come from free Yahoo Finance endpoints via yfinance (unofficial; val
 missing - shown as '–' then). Nothing here is a recommendation; it is context for a human decision.
 """
 from __future__ import annotations
+from . import http as _http
 import logging, math
 from datetime import date
 import numpy as np
@@ -60,7 +61,7 @@ def sp500_median_vol(fetch: bool = True, max_age_days: int = 7) -> pd.Series | N
     if C is None and fetch:
         try:
             tick = universe.sp500_members()["Symbol"].astype(str).tolist()
-            raw = yf.download(tick, period="14mo", progress=False, auto_adjust=True, threads=True)["Close"]
+            raw = _http.yf_download(tick, period="14mo", progress=False, auto_adjust=True, threads=True)["Close"]
             C = raw.sort_index()
         except Exception as ex:
             log.warning("S&P 500 vol median download failed: %s", ex)
@@ -225,7 +226,7 @@ def compute(snap: dict, max_info=80) -> dict:
         vol_med = sp500_median_vol()
     except Exception as ex:
         log.info("vol median: %s", ex)
-    d = yf.download(sorted(set(tickers) | set(refs)), period="2y", progress=False, auto_adjust=True, group_by="ticker", threads=True)
+    d = _http.yf_download(sorted(set(tickers) | set(refs)), period="2y", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
     retry: dict[str, pd.Series] = {}
     def ser(t):
@@ -238,17 +239,20 @@ def compute(snap: dict, max_info=80) -> dict:
         if t in refs:  # Yahoo mister av og til enkeltserier i store nedlastinger – prøv igjen alene
             if t not in retry:
                 try:
-                    r = yf.download(t, period="2y", progress=False, auto_adjust=True)["Close"]
+                    r = _http.yf_download(t, period="2y", progress=False, auto_adjust=True)["Close"]
                     retry[t] = (r.iloc[:, 0] if isinstance(r, pd.DataFrame) else r).dropna()
                 except Exception:
                     retry[t] = pd.Series(dtype=float)
             return retry[t] if len(retry[t]) else None
         return None
+    from .data_quality import clean_frame, note as dq_note
     for t in tickers:
         try:
             df = d[t][["Close", "High", "Low"]].dropna(subset=["Close"])
         except Exception:
             continue
+        df, dqi = clean_frame(df)          # spike-and-revert repair (data_quality.py)
+        dq_note("Beslutningsdata (kurshistorikk per ticker)", {t: dqi["spikes"]} if dqi["spikes"] else {}, {}, [t])
         if len(df) < 60:
             continue
         m = price_metrics(df, ser(benchmark_for(t)), ser(sector_of[t]) if t in sector_of else None)

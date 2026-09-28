@@ -17,6 +17,7 @@ high = close / max(high, 252 sessions); volatility = std of daily returns over 2
 Every flag carries its evidence level (FLAG_INFO). Numbers there are copied from the research reports, not computed here.
 """
 from __future__ import annotations
+from . import http as _http
 import json, logging, re, time
 from datetime import date, datetime, timedelta
 import numpy as np
@@ -70,7 +71,7 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
                 d = pd.read_pickle(path)
                 last = max(v.index[-1] for v in d.values())
                 if (today - last.date()).days <= 5 or (path == RECENT and time.time() - path.stat().st_mtime < 20 * 3600):
-                    return d
+                    return _clean(d)
             except Exception as ex:
                 log.info("oslo cache %s: %s", path, ex)
     if not fetch:
@@ -80,7 +81,7 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
         return {}
     import yfinance as yf
     tick = sorted({f"{s}.OL" for s in signs})
-    d = yf.download(tick, period="14mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
+    d = _http.yf_download(tick, period="14mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
     for t in tick:
         try:
@@ -91,7 +92,13 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
         except KeyError:
             pass
     pd.to_pickle(out, RECENT)
-    return out
+    return _clean(out)
+
+
+def _clean(d: dict) -> dict:
+    """Spike-and-revert repair + stale-run flags (data_quality.py) before ranking; the raw cache files stay untouched."""
+    from .data_quality import clean_universe
+    return clean_universe(d, "Oslo Børs-univers (kursflagg, temakart)")[0]
 
 
 def price_ranks(data: dict[str, pd.DataFrame]) -> tuple[dict, pd.DataFrame]:

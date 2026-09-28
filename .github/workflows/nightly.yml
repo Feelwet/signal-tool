@@ -31,6 +31,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 75
+    outputs:
+      pipeline: ${{ steps.run.outcome }}
+      logpush: ${{ steps.logpush.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -112,6 +115,11 @@ jobs:
         run: |
           mkdir -p site/rapport && cp reports/latest.md site/rapport/latest.md 2>/dev/null || true
 
+      # Sanity check before deploy (index.html exists, reasonable size, key sections present). If it fails, this job fails:
+      # no artifact is uploaded, the deploy job does not run and the previous GitHub Pages version stays live.
+      - name: Sanity check site before deploy
+        run: python -m signaltool check-site
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
@@ -119,6 +127,7 @@ jobs:
       # Persist the forward log in git. Only logs/categories.csv is staged (site/, reports/, data/ are left alone);
       # no commit if unchanged; "[skip ci]" as an extra guard against loops. Rebase + retry in case master moved.
       - name: Commit forward log
+        id: logpush
         if: always()
         continue-on-error: true   # a failed push must not block the Pages deploy (shows as an error annotation)
         run: |
@@ -145,3 +154,21 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 # registered 2026-09-28
+
+  # Make failures REAL failures (non-zero exit -> red run -> GitHub's default e-mail for failed scheduled runs).
+  # The pipeline step and the forward-log push use continue-on-error so a partial failure still deploys the fallback
+  # site; this job turns such a degraded run red afterwards.
+  status:
+    needs: [build, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail the run if anything failed
+        run: |
+          echo "build=${{ needs.build.result }} deploy=${{ needs.deploy.result }} pipeline=${{ needs.build.outputs.pipeline }} logpush=${{ needs.build.outputs.logpush }}"
+          fail=0
+          [ "${{ needs.build.result }}" = "success" ] || { echo "::error::build job failed (site not deployed; previous Pages version is still live)"; fail=1; }
+          [ "${{ needs.deploy.result }}" = "success" ] || { echo "::error::deploy failed or skipped"; fail=1; }
+          [ "${{ needs.build.outputs.pipeline }}" = "success" ] || { echo "::error::pipeline failed - fallback site from the last snapshot was deployed"; fail=1; }
+          [ "${{ needs.build.outputs.logpush }}" != "failure" ] || { echo "::error::forward log could not be pushed"; fail=1; }
+          exit $fail

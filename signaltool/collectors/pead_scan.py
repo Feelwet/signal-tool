@@ -4,6 +4,7 @@ volatility above the S&P 500 median the day before the reaction day). Point-in-t
 Cache per ticker; a ticker is re-queried only when its next scheduled report date has passed (or cache > 20 days),
 so after the first run only companies that just reported cost a request."""
 from __future__ import annotations
+from .. import http as _http
 import logging, pickle, time
 from datetime import date, datetime, timedelta
 import pandas as pd
@@ -59,13 +60,15 @@ def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[d
     cand = [(t, ts, s) for t, ts, s in recent if s >= PEAD_SURPRISE]
     if not cand:
         return [], f"ok ({len(recent)} rapporter siste {max_age} d, ingen med overraskelse ≥ {PEAD_SURPRISE:.0f} %)"
-    px = yf.download([c[0] for c in cand], period="14mo", auto_adjust=True, progress=False)["Close"]  # 1 y for the volatility
+    px = _http.yf_download([c[0] for c in cand], period="14mo", auto_adjust=True, progress=False)["Close"]  # 1 y for the volatility
     if isinstance(px, pd.Series):
         px = px.to_frame(cand[0][0])
+    from ..data_quality import clean_close_wide
+    px = clean_close_wide(px, "Sterke kvartalsrapporter (kurs)")
     b = None
     for bt in (PEAD_BENCH, PEAD_BENCH):   # one retry: Yahoo sometimes drops a single series
         try:
-            bs = yf.download(bt, period="4mo", auto_adjust=True, progress=False)["Close"]
+            bs = _http.yf_download(bt, period="4mo", auto_adjust=True, progress=False)["Close"]
             bs = (bs.iloc[:, 0] if isinstance(bs, pd.DataFrame) else bs).dropna()
             if len(bs) > 20:
                 b = bs

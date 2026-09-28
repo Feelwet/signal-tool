@@ -1,5 +1,6 @@
 """Prices & volumes via yfinance (free, unofficial Yahoo Finance endpoints; no key)."""
 from __future__ import annotations
+from .. import http as _http
 import logging
 import numpy as np
 import pandas as pd
@@ -9,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def download(tickers: list[str], period="2y") -> dict[str, pd.DataFrame]:
-    d = yf.download(tickers, period=period, progress=False, auto_adjust=True, group_by="ticker", threads=True)
+    d = _http.yf_download(tickers, period=period, progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out = {}
     for t in tickers:
         try:
@@ -18,6 +19,8 @@ def download(tickers: list[str], period="2y") -> dict[str, pd.DataFrame]:
                 out[t] = df
         except KeyError:
             pass
+    from ..data_quality import clean_universe   # repair spike-and-revert bars before any stats (data_quality.py)
+    out, _ = clean_universe(out, "Kurser (tema- og kandidataksjer)")
     return out
 
 

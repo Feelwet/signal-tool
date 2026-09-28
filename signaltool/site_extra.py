@@ -483,14 +483,14 @@ def regime_html(snap: dict) -> str:
             'men ga lavere avkastning (8,4 % mot 11,0 % per år); for OSEBX 2016–2026 reduserte den ikke engang fallet. Utenfor ASK koster hvert salg skatt.</p></div>')
 
 
-def honesty_html(pre: str = "") -> str:
+def honesty_html(pre: str = "", extra: str = "") -> str:
     return ('<div class="card hl" id="aerlig"><h2 style="margin-top:0">Ærlig status</h2>'
             '<p><b>Vi har ikke funnet noe robust kjøpssignal.</b> Av over 200 testede regler og varianter (bøker, forum, egne ideer – USA og Oslo; tre testrunder) har ingen kjøpsregel '
             'klart kravet om |t| ≥ ~3 med samme fortegn både før og etter 2016/2018, og etter kurtasje. Det beste kjøpssignalet, «sterk kvartalsrapport» (PEAD), '
             'gir med punkt-i-tid-data bare ca. +0,6 pp brutto over 60 dager og omtrent null etter kostnader – det er merket <b>eksperimentelt / svak evidens</b>.</p>'
             '<p><b>Sidens styrke er å hjelpe deg å unngå svake aksjer:</b> på Oslo Børs har svak kurs (laveste 20 % momentum eller langt under 52-ukers topp) gjort det '
             '3–4 % dårligere enn snittet over 60 dager i begge testperioder, og tapsbringende selskaper, rettede emisjoner og høy volatilitet peker samme vei. '
-            f'<a href="{pre}kilder.html#droppet">Testet og droppet</a> · <a href="{pre}kilder.html#kategorier">Reglene</a></p></div>')
+            f'<a href="{pre}kilder.html#droppet">Testet og droppet</a> · <a href="{pre}kilder.html#kategorier">Reglene</a></p>{extra}</div>')
 
 
 def portfolio_rules_html() -> str:

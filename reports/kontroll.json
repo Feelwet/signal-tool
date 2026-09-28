@@ -1,0 +1,121 @@
+{
+ "_meta": {
+  "computed": "2026-09-28",
+  "n_draws": 500,
+  "seed": 42,
+  "what": "Faktisk resultat mot samme antall tilfeldige inngangspunkter fra samme univers (bootstrap)."
+ },
+ "pead": {
+  "label": "Sterk kvartalsrapport (PEAD, USA)",
+  "n": 1861,
+  "mean": {
+   "real": 0.005173716080587195,
+   "null_mean": -0.00012873133550406367,
+   "null_p05": -0.0049754223995517695,
+   "null_p95": 0.004380187130138975,
+   "percentile": 97.0,
+   "p": 0.031936127744510975,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "hit": {
+   "real": 0.5008060182697475,
+   "null_mean": 0.48566792047286406,
+   "null_p05": 0.46695325094035467,
+   "null_p95": 0.5040300913487372,
+   "percentile": 92.2,
+   "p": 0.08782435129740519,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "horizon": 60,
+  "period": "2006–2026",
+  "null": "tilfeldige kvartalsrapporter fra samme punkt-i-tid S&P 500-univers, samme antall per kvartal",
+  "bench": "likevektet punkt-i-tid-univers"
+ },
+ "pead_s": {
+  "label": "PEAD-S (USA)",
+  "n": 1327,
+  "mean": {
+   "real": 0.010113417741174854,
+   "null_mean": 0.0003386787516158829,
+   "null_p05": -0.004919191626548374,
+   "null_p95": 0.0053951195279011085,
+   "percentile": 99.8,
+   "p": 0.003992015968063872,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "hit": {
+   "real": 0.5071590052750565,
+   "null_mean": 0.4870278824415976,
+   "null_p05": 0.46495855312735496,
+   "null_p95": 0.5086661642803316,
+   "percentile": 94.0,
+   "p": 0.06187624750499002,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "horizon": 60,
+  "period": "2006–2026",
+  "null": "tilfeldige kvartalsrapporter fra samme punkt-i-tid S&P 500-univers, samme antall per kvartal",
+  "bench": "likevektet punkt-i-tid-univers"
+ },
+ "pead_s_vol": {
+  "label": "PEAD-S mot tilfeldige rapporter i like volatile aksjer (USA)",
+  "n": 1327,
+  "mean": {
+   "real": 0.010113417741174854,
+   "null_mean": 0.005890871015945587,
+   "null_p05": -0.0005201089256218337,
+   "null_p95": 0.012483511988774374,
+   "percentile": 85.8,
+   "p": 0.1437125748502994,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "hit": {
+   "real": 0.5071590052750565,
+   "null_mean": 0.49256367746797286,
+   "null_p05": 0.47245666917859835,
+   "null_p95": 0.5131876412961568,
+   "percentile": 88.4,
+   "p": 0.1317365269461078,
+   "n_draws": 500,
+   "better": "høyere"
+  },
+  "horizon": 60,
+  "period": "2006–2026",
+  "null": "tilfeldige kvartalsrapporter fra aksjer med volatilitet over median, samme antall per kvartal",
+  "bench": "likevektet punkt-i-tid-univers"
+ },
+ "weak_px": {
+  "label": "Svak kurs (Oslo, rødt flagg)",
+  "n": 2913,
+  "mean": {
+   "real": -0.024955153065881173,
+   "null_mean": -0.002296771893294755,
+   "null_p05": -0.008085337163303273,
+   "null_p95": 0.0035302977409315413,
+   "percentile": 0.0,
+   "p": 0.001996007984031936,
+   "n_draws": 500,
+   "better": "lavere"
+  },
+  "hit": {
+   "real": 0.4236182629591486,
+   "null_mean": 0.47988465499485067,
+   "null_p05": 0.46754205286646067,
+   "null_p95": 0.4933058702368692,
+   "percentile": 0.0,
+   "p": 0.001996007984031936,
+   "n_draws": 500,
+   "better": "lavere"
+  },
+  "horizon": 60,
+  "period": "2013–2026",
+  "n_dates": 159,
+  "null": "like mange tilfeldige likvide Oslo-aksjer på hver formasjonsdato (hver 21. handelsdag)",
+  "bench": "OSEBX"
+ }
+}
