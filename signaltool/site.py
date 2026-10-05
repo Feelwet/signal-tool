@@ -413,6 +413,7 @@ def build(snap: dict) -> Path:
     # ---------- dashboard ----------
     b = [f'<div class="warnbox">{DISCLAIMER}</div>',
          f'<h1>Oversikt {E(snap["date"])}</h1><p class="mut">Hvilke geopolitiske temaer får uvanlig mye oppmerksomhet nå, målt mot sin egen historikk – og hvilke aksjer som viser tidlige tegn. GDELT-data t.o.m. {E(snap.get("gdelt_latest"))}.</p>',
+         sec("Dashboard", X.dashboard_html, snap),
          sec("Hva bør jeg se på i dag?", X.focus_html, snap),
          sec("Nytt siden i går", X.changes_html, snap),
          sec("Helgeoppsummering", weekend_html, snap.get("weekend")),

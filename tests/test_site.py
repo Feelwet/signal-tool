@@ -55,3 +55,13 @@ def test_left_sidebar_layout():
     assert 'class="side"' in html and 'id="folds-open"' in html and 'id="folds-close"' in html
     assert 'class="on"' in html  # Oversikt marked active
     assert site.fold("Tittel", "<p>innhold</p>").startswith("<details class=\"fold\" open>")
+
+
+@pytest.mark.skipif(not SNAP.exists(), reason="no snapshot available")
+def test_dashboard_overview(tmp_path, monkeypatch):
+    snap = json.loads(SNAP.read_text())
+    monkeypatch.setattr(site, "SITE", tmp_path / "site")
+    site.build(snap)
+    idx = (tmp_path / "site" / "index.html").read_text()
+    assert 'id="dashboard"' in idx and "dash-kpis" in idx and "bar-row" in idx
+    assert "tema/" in idx and "ticker/" in idx

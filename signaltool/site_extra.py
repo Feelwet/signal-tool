@@ -62,6 +62,25 @@ CSS_EXTRA = """
 .verdict{border-left:4px solid var(--warn);padding:6px 10px;background:rgba(227,179,65,.07);margin:8px 0;border-radius:4px}
 td.nw{white-space:nowrap}
 details summary{cursor:pointer;color:var(--acc);margin:6px 0}
+.dash{margin:0 0 16px}.dash-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+a.kpi{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:inherit;transition:border-color .12s,background .12s}
+a.kpi:hover{border-color:var(--acc);background:var(--card2)}a.kpi .lbl{font-size:.78rem;color:var(--mut);text-transform:uppercase;letter-spacing:.03em}
+a.kpi .val{font-size:1.55rem;font-weight:700;line-height:1.2;margin:4px 0 2px;color:#f3f6f9}a.kpi .sub{font-size:.8rem;color:var(--mut)}
+a.kpi.warn .val{color:var(--warn)}a.kpi.hot .val{color:#ff9a92}a.kpi.ok .val{color:var(--up)}
+.dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+@media (max-width:900px){.dash-grid{grid-template-columns:1fr}}
+.dash-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.dash-panel h2{margin:0 0 10px;font-size:1.05rem}
+.bars{display:flex;flex-direction:column;gap:7px}.bar-row{display:grid;grid-template-columns:minmax(110px,1.1fr) 1fr 3.2em;gap:8px;align-items:center;text-decoration:none;color:inherit;padding:3px 4px;border-radius:6px}
+.bar-row:hover{background:rgba(108,182,255,.08)}.bar-row .nm{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-row .track{height:10px;background:#262d38;border-radius:5px;overflow:hidden}.bar-row .track>i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#3d8bdb,var(--acc))}
+.bar-row.hot .track>i{background:linear-gradient(90deg,#c45c54,#ff8078)}.bar-row .sc{font-variant-numeric:tabular-nums;font-size:.88rem;text-align:right;color:var(--mut)}
+.dash-list{list-style:none;padding:0;margin:0}.dash-list li{margin:0;border-bottom:1px solid var(--line)}.dash-list li:last-child{border-bottom:0}
+.dash-list a{display:flex;justify-content:space-between;gap:10px;padding:8px 2px;text-decoration:none;color:inherit;border-radius:4px}
+.dash-list a:hover{color:var(--acc)}.dash-list .mut{font-size:.82rem}
+.donut-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.donut-leg{font-size:.88rem}.donut-leg a{display:flex;align-items:center;gap:6px;text-decoration:none;color:inherit;margin:4px 0}
+.donut-leg a:hover{color:var(--acc)}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
 .kind{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:6px;border:1px solid}.kind.kjøp{color:var(--up);border-color:rgba(74,194,107,.5)}
 .kind.salg{color:var(--down);border-color:rgba(255,128,120,.5)}.kind.tegning{color:var(--acc);border-color:rgba(108,182,255,.5)}.kind.annet,.kind.ukjent,.kind.ikke{color:var(--mut);border-color:var(--line)}
 """
@@ -464,6 +483,135 @@ def flags_html(e: dict) -> str:
             + (f'<ul class="ev">{src}</ul>' if src else "")
             + '<p class="mut">Tallene er meravkastning mot snittaksjen over 60 handelsdager fra egne tester (strategy-research). '
               'Oslo-kursflaggene rangeres blant likvide Oslo-aksjer (≥ ~2 MNOK/dag). <a href="../kilder.html#kategorier">Reglene</a>.</p></div>')
+
+
+
+def dashboard_html(snap: dict) -> str:
+    """Clickable overview: KPI tiles + theme bars + category/source snapshot."""
+    themes = sorted(snap.get("themes") or [], key=lambda x: -(x.get("score") or 0))
+    tickers = snap.get("tickers") or []
+    cats = {"kjop": 0, "hold": 0, "watch": 0}
+    for e in tickers:
+        c = e.get("category")
+        if c in cats:
+            cats[c] += 1
+    hot = sum(1 for t in themes if (t.get("score") or 0) >= 2.0)
+    warm = sum(1 for t in themes if 1.0 <= (t.get("score") or 0) < 2.0)
+    reg = snap.get("regime") or {}
+    risk_off = any(v.get("risk_off") for v in reg.values())
+    st = snap.get("status") or {}
+    ok = sum(1 for v in st.values() if str(v).lower() in ("ok", "true", "1") or (isinstance(v, dict) and v.get("ok")))
+    # status values may be strings like "ok" / "fail" or longer messages
+    if not ok and st:
+        ok = sum(1 for v in st.values() if "ok" in str(v).lower() and "fail" not in str(v).lower() and "error" not in str(v).lower())
+    nsrc = len(st) or 1
+    nw = len(snap.get("newsweb_contracts") or [])
+    focus_n = len(((snap.get("briefing") or {}).get("focus")) or [])
+
+    kpis = [
+        ("kpi hot" if hot else "kpi", str(hot), "Hete temaer (≥2)", f"{warm} varme (≥1)", "temaer.html"),
+        ("kpi ok" if cats["kjop"] else "kpi", str(cats["kjop"]), "Kjøp-kandidater", f"Hold {cats['hold']} · Watch {cats['watch']}", "tickere.html"),
+        ("kpi warn" if risk_off else "kpi ok", "Halver" if risk_off else "Normal", "Markedsregime", "størrelse på nye posisjoner", "index.html#regime"),
+        ("kpi", str(focus_n), "Fokus i dag", "prioriterte punkter", "index.html#fokus"),
+        ("kpi", str(nw), "Newsweb-kontrakter", "siste 14 dager", "oslo.html"),
+        ("kpi", f"{ok}/{nsrc}", "Kilder OK", "siste kjøring", "kilder.html"),
+    ]
+    kpi_h = "".join(
+        f'<a class="{cls}" href="{href}"><div class="lbl">{E(lbl)}</div><div class="val">{E(val)}</div><div class="sub">{E(sub)}</div></a>'
+        for cls, val, lbl, sub, href in kpis
+    )
+
+    # Theme bar chart (click → theme page)
+    mx = max((t.get("score") or 0) for t in themes) if themes else 1
+    mx = mx or 1
+    bars = []
+    for t in themes:
+        s = float(t.get("score") or 0)
+        w = min(100, max(2, s / mx * 100))
+        cls = "bar-row hot" if s >= 2 else "bar-row"
+        bars.append(
+            f'<a class="{cls}" href="tema/{E(t["key"])}.html" title="Åpne {E(t["name"])}">'
+            f'<span class="nm">{E(t["name"])}</span>'
+            f'<span class="track"><i style="width:{w:.0f}%"></i></span>'
+            f'<span class="sc">{s:.2f}</span></a>'
+        )
+    themes_panel = (
+        f'<div class="dash-panel"><h2>Temascore <span class="mut" style="font-weight:400">(klikk for detaljer)</span></h2>'
+        f'<div class="bars">{"".join(bars) or "<p class=mut>Ingen temaer.</p>"}</div>'
+        f'<p class="mut" style="margin:10px 0 0"><a href="temaer.html">Alle temaer og temakart →</a></p></div>'
+    )
+
+    # Category donut (SVG) linking to tickere
+    total = max(1, sum(cats.values()))
+    # If no categories, show all tickers count
+    n_tk = len(tickers)
+    colors = {"kjop": "#56d364", "hold": "#6cb6ff", "watch": "#e3b341"}
+    # build conic via stroke-dasharray circle
+    r, c, stroke = 42, 50, 14
+    circ = 2 * 3.14159265 * r
+    parts = [("kjop", cats["kjop"]), ("hold", cats["hold"]), ("watch", cats["watch"])]
+    # remainder = uncategorized
+    rest = max(0, n_tk - sum(cats.values()))
+    parts.append(("andre", rest))
+    colors["andre"] = "#3d4450"
+    segs = []
+    offset = 0
+    for key, n in parts:
+        if n <= 0:
+            continue
+        frac = n / max(1, n_tk)
+        dash = frac * circ
+        segs.append(
+            f'<circle cx="{c}" cy="{c}" r="{r}" fill="none" stroke="{colors[key]}" stroke-width="{stroke}" '
+            f'stroke-dasharray="{dash:.2f} {circ - dash:.2f}" stroke-dashoffset="{-offset:.2f}" '
+            f'transform="rotate(-90 {c} {c})"/>'
+        )
+        offset += dash
+    leg = "".join(
+        f'<a href="tickere.html"><span class="dot" style="background:{colors[k]}"></span>'
+        f'<b>{n}</b>&nbsp;{lab}</a>'
+        for k, n, lab in (("kjop", cats["kjop"], "Kjøp"), ("hold", cats["hold"], "Hold"),
+                          ("watch", cats["watch"], "Watchlist"), ("andre", rest, "øvrige"))
+        if n
+    )
+    donut = (
+        f'<div class="donut-wrap"><svg width="100" height="100" viewBox="0 0 100 100" aria-hidden="true">'
+        f'<circle cx="{c}" cy="{c}" r="{r}" fill="none" stroke="#262d38" stroke-width="{stroke}"/>'
+        f'{"".join(segs)}'
+        f'<text x="{c}" y="{c-4}" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">{n_tk}</text>'
+        f'<text x="{c}" y="{c+12}" text-anchor="middle" fill="#9ea9b5" font-size="9">tickere</text></svg>'
+        f'<div class="donut-leg">{leg}</div></div>'
+    )
+
+    # Top tickers list
+    top = sorted([e for e in tickers if e.get("score") is not None], key=lambda e: -e["score"])[:8]
+    # local slug (avoid import cycle with site.py)
+    def slug(t: str) -> str:
+        import re as _re
+        return _re.sub(r"[^A-Za-z0-9_-]", "_", t)
+    # avoid circular: duplicate minimal badge
+    def _badge(cat):
+        lab = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watch"}.get(cat)
+        return f'<span class="cat {cat}">{lab}</span>' if lab else ""
+    items = "".join(
+        f'<li><a href="ticker/{slug(e["ticker"])}.html"><span><b>{E(e["ticker"])}</b> '
+        f'{_badge(e.get("category") or "")} <span class="mut">{E(e.get("name") or "")}</span></span>'
+        f'<span class="mut">{(e.get("score") or 0):.1f} p</span></a></li>'
+        for e in top
+    )
+    tick_panel = (
+        f'<div class="dash-panel"><h2>Kandidater <span class="mut" style="font-weight:400">(klikk for aksjeside)</span></h2>'
+        f'{donut}<ul class="dash-list" style="margin-top:12px">{items or "<li class=mut>Ingen.</li>"}</ul>'
+        f'<p class="mut" style="margin:10px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>'
+    )
+
+    return (
+        f'<section class="dash" id="dashboard" aria-label="Dashboard">'
+        f'<div class="dash-kpis">{kpi_h}</div>'
+        f'<div class="dash-grid">{themes_panel}{tick_panel}</div>'
+        f'<p class="mut">Klikk på et kort, en søyle eller en ticker for å gå inn i detaljene. Tallene oppdateres ved hver daglige kjøring.</p>'
+        f'</section>'
+    )
 
 
 def regime_html(snap: dict) -> str:
