@@ -17,10 +17,30 @@ CSS = """
 :root{color-scheme:dark;--bg:#0d1117;--card:#161b22;--card2:#1c2330;--ink:#e6edf3;--mut:#9ea9b5;--acc:#6cb6ff;--acc-bg:rgba(108,182,255,.14);
 --up:#4ac26b;--down:#ff8078;--line:#2d333b;--warn:#e3b341;--hdr:#060a10;--pill:#262d38}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:var(--hdr);color:#fff;padding:14px 18px;border-bottom:1px solid var(--line)}header a{color:#fff;text-decoration:none}
-header .brand{font-weight:700;font-size:1.15rem}header .gen{color:#a8b5c4;font-size:.9rem}nav{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.95rem}
-nav a{color:#cfd9e4!important;opacity:1}nav a:hover{color:#fff!important;text-decoration:underline}
-main{max-width:1100px;margin:0 auto;padding:16px}
+.app{display:flex;min-height:100vh;align-items:stretch}
+.side{position:sticky;top:0;align-self:flex-start;width:240px;flex:0 0 240px;height:100vh;overflow:auto;background:var(--hdr);color:#fff;padding:16px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.side a{color:#fff;text-decoration:none}.side .brand{font-weight:700;font-size:1.1rem;display:block}
+.side .gen{color:#a8b5c4;font-size:.78rem;line-height:1.35;display:block}
+.side nav{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:.92rem}
+.side nav a{color:#cfd9e4!important;padding:7px 10px;border-radius:8px}
+.side nav a:hover,.side nav a.on{color:#fff!important;background:rgba(108,182,255,.14)}
+.side .tools{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.side .tools button{background:var(--pill);color:#d5dde6;border:1px solid #333b47;border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer;text-align:left}
+.side .tools button:hover{background:rgba(108,182,255,.14);color:#fff}
+.content{flex:1;min-width:0;display:flex;flex-direction:column}
+main{max-width:1100px;width:100%;margin:0 auto;padding:16px;flex:1}
+details.fold{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0;margin:0 0 14px}
+details.fold>summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:8px;user-select:none}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"▸";color:var(--acc);font-size:.85rem;width:1em;flex:0 0 auto;transition:transform .12s}
+details.fold[open]>summary::before{transform:rotate(90deg)}
+details.fold>summary h2,details.fold>summary h3{margin:0;font-size:1.15rem;flex:1}
+details.fold .fold-body{padding:0 16px 14px}
+details.fold .fold-body>:first-child{margin-top:0}
+.side-toggle{display:none;background:transparent;border:1px solid var(--line);color:#cfd9e4;border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
+header.top{display:none;background:var(--hdr);color:#fff;padding:10px 14px;border-bottom:1px solid var(--line);align-items:center;gap:10px}
+header.top .brand{font-weight:700;color:#fff;text-decoration:none;flex:1}
+header.top .gen{color:#a8b5c4;font-size:.78rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
 .card.hl{border-left:4px solid var(--acc)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -48,8 +68,13 @@ a.pill{color:var(--acc)}
 .catnote{font-size:.8rem;color:#c9b27a;margin:.4rem 0 0}
 td.rule-ok{color:var(--up)}td.rule-no{color:var(--down)}td.rule-na{color:var(--mut)}
 pre{background:#0b0f15;border:1px solid var(--line);border-radius:8px;padding:10px;color:#d5dde6}
-footer{max-width:1100px;margin:10px auto 30px;padding:0 16px;color:var(--mut);font-size:.85rem}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 16px;color:var(--mut);font-size:.85rem}.content footer{width:100%}
 svg.spark{vertical-align:middle}svg.spark polyline{stroke:var(--acc)}
+@media (max-width:900px){
+.app{flex-direction:column}.side{position:fixed;inset:0 auto 0 0;transform:translateX(-105%);transition:transform .18s ease;z-index:40;height:100vh;box-shadow:8px 0 24px rgba(0,0,0,.45)}
+body.nav-open .side{transform:none}body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30}
+header.top{display:flex}.side-toggle{display:inline-block}
+}
 @media (max-width:600px){body{font-size:15px}main{padding:10px}th,td{padding:5px}}
 """
 
@@ -237,15 +262,110 @@ def spark(vals, w=140, h=32):
     return f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><polyline fill="none" stroke="#6cb6ff" stroke-width="1.5" points="{pts}"/></svg>'
 
 
+NAV = [
+    ("index.html", "Oversikt"),
+    ("temaer.html", "Temaer"),
+    ("tickere.html", "Tickere"),
+    ("makro.html", "Makro"),
+    ("kalender.html", "Kalender"),
+    ("oslo.html", "Oslo Børs"),
+    ("kilder.html", "Kilder og metode"),
+]
+
+
+def fold(title: str, body: str, *, open_: bool = True, hid: str | None = None) -> str:
+    """Collapsible section. open_=True keeps it expanded on first load."""
+    if not (body or "").strip():
+        return ""
+    o = " open" if open_ else ""
+    i = f' id="{E(hid)}"' if hid else ""
+    return (f'<details class="fold"{o}{i}><summary><h2>{title}</h2></summary>'
+            f'<div class="fold-body">{body}</div></details>')
+
+
 def page(title: str, body: str, depth=0, snap=None) -> str:
     pre = "../" * depth
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
+    active = {
+        "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
+        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html",
+        "Kilder og metode": "kilder.html",
+    }
+    cur = active.get(title)
+    if cur is None:
+        # Theme/ticker detail pages: no top-level match; highlight parent section.
+        low = title.lower()
+        if "tema" in low:
+            cur = "temaer.html"
+        elif any(x in low for x in (".ol", ".us", "ticker")) or re.match(r"^[A-Z0-9.-]{1,12}$", title):
+            cur = "tickere.html"
+    nav = "".join(
+        f'<a class="{"on" if href == cur else ""}" href="{pre}{href}">{label}</a>'
+        for href, label in NAV
+    )
+    script = """<script>
+(function(){
+  function folds(){return Array.from(document.querySelectorAll('details.fold'));}
+  function setAll(open){folds().forEach(function(d){d.open=open;});}
+  var openBtn=document.getElementById('folds-open');
+  var closeBtn=document.getElementById('folds-close');
+  if(openBtn) openBtn.addEventListener('click',function(){setAll(true);});
+  if(closeBtn) closeBtn.addEventListener('click',function(){setAll(false);});
+  var tog=document.getElementById('nav-toggle');
+  if(tog) tog.addEventListener('click',function(){document.body.classList.toggle('nav-open');});
+  document.querySelectorAll('.side nav a').forEach(function(a){
+    a.addEventListener('click',function(){document.body.classList.remove('nav-open');});
+  });
+  // Auto-wrap legacy cards that start with h2/h3 into folds (once).
+  document.querySelectorAll('main .card').forEach(function(card){
+    if(card.closest('details.fold')) return;
+    var h=null;
+    for(var i=0;i<card.children.length;i++){
+      var c=card.children[i];
+      if(c.tagName==='H2'||c.tagName==='H3'){h=c;break;}
+      if(c.tagName==='P' && c.classList.contains('mut')) continue;
+      break;
+    }
+    if(!h) return;
+    var d=document.createElement('details');
+    d.className='fold';
+    d.open=true;
+    if(card.id){d.id=card.id;card.removeAttribute('id');}
+    var sum=document.createElement('summary');
+    var hx=document.createElement('h2');
+    hx.innerHTML=h.innerHTML;
+    sum.appendChild(hx);
+    var body=document.createElement('div');
+    body.className='fold-body';
+    while(card.firstChild){
+      var ch=card.firstChild;
+      if(ch===h){card.removeChild(ch);continue;}
+      body.appendChild(ch);
+    }
+    d.appendChild(sum);d.appendChild(body);
+    card.replaceWith(d);
+  });
+})();
+</script>"""
     return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
-<header><a class="brand" href="{pre}index.html">🛰️ Geo-signal</a> <span class="gen">{gen}</span>
-<nav><a href="{pre}index.html">Oversikt</a><a href="{pre}temaer.html">Temaer</a><a href="{pre}tickere.html">Tickere</a>
-<a href="{pre}makro.html">Makro</a><a href="{pre}kalender.html">Kalender</a><a href="{pre}oslo.html">Oslo Børs</a><a href="{pre}kilder.html">Kilder og metode</a></nav></header>
-<main>{body}</main><footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer></body></html>"""
+<div class="app">
+<aside class="side" id="side">
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a>
+<span class="gen">{gen}</span>
+<nav>{nav}</nav>
+<div class="tools">
+<button type="button" id="folds-open">Åpne alle områder</button>
+<button type="button" id="folds-close">Lukk alle områder</button>
+</div>
+</aside>
+<div class="content">
+<header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰ Meny</button>
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a><span class="gen">{gen}</span></header>
+<main>{body}</main>
+<footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer>
+</div></div>
+{script}</body></html>"""
 
 
 def theme_card(t, pre=""):

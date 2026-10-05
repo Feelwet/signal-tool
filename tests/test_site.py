@@ -48,3 +48,10 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     tk = (out / "tickere.html").read_text()
     assert 'id="treffsikkerhet"' in tk
     assert "Kjøp-kandidat" in (out / "kilder.html").read_text()
+
+
+def test_left_sidebar_layout():
+    html = site.page("Oversikt", "<div class=\"card\"><h2>Test</h2><p>x</p></div>", 0, {"generated": "2026-10-05 12:00"})
+    assert 'class="side"' in html and 'id="folds-open"' in html and 'id="folds-close"' in html
+    assert 'class="on"' in html  # Oversikt marked active
+    assert site.fold("Tittel", "<p>innhold</p>").startswith("<details class=\"fold\" open>")
