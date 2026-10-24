@@ -269,12 +269,13 @@ def _parse_ics(text: str, source: str) -> list[dict]:
 
 def calendars(days_ahead=14) -> tuple[list[dict], dict]:
     today = date.today(); horizon = today + timedelta(days=days_ahead)
+    start = today.replace(day=1)   # vis også passerte hendelser i inneværende måned (dempet i kalenderen)
     events, status = [], {}
     for name, url in {"BLS": "https://www.bls.gov/schedule/news_release/bls.ics",
                       "BEA": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics"}.items():
         try:
             ev = _parse_ics(http.get(url, cache_hours=12).text, name)
-            events += [e for e in ev if today.isoformat() <= e["date"] <= horizon.isoformat()]
+            events += [e for e in ev if start.isoformat() <= e["date"] <= horizon.isoformat()]
             status[f"{name} release calendar (ICS)"] = f"ok ({len(ev)} events)"
         except Exception as e:
             status[f"{name} release calendar (ICS)"] = f"FAILED: {e}"
@@ -292,7 +293,7 @@ def calendars(days_ahead=14) -> tuple[list[dict], dict]:
     except Exception as e:
         status["ONS release calendar API"] = f"FAILED: {e}"
     # Estimated (cadence-based) releases for sources without a machine-readable calendar
-    d = today
+    d = start
     while d <= horizon:
         if d.weekday() == 2:
             events.append({"date": d.isoformat(), "time": "08:00", "source": "SSB (estimert)", "title": "Eksport av laks, ukentlig (tabell 03024)"})

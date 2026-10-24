@@ -410,7 +410,9 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + ".card.stale{border-left:4px solid var(--down)}\n")
+    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + ".card.stale{border-left:4px solid var(--down)}\n"
+                                   ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
+                                   "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
     Q.FAILED_SECTIONS.clear()
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     (SITE / ".nojekyll").write_text("")
@@ -470,7 +472,7 @@ def build(snap: dict) -> Path:
     for e in tickers:
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
 
-    (SITE / "makro.html").write_text(page("Makro", sec("Makro", makro_page, snap), 0, snap))
+    (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
     (SITE / "oslo.html").write_text(page("Oslo Børs", sec("Oslo Børs", oslo_page, snap), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
@@ -541,6 +543,23 @@ def ticker_page(e, tmap):
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
 <div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{pts}</table><ul class="ev">{ev}{flags}</ul></div>
 <div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>"""
+
+
+
+def fold_tables(h: str, keep: int = 12) -> str:
+    """Pakker hver tabell i en horisontal scroll-container; tabeller med > keep rader viser de første keep og resten i <details> «Vis alle»."""
+    def one(m):
+        t = m.group(0)
+        rows = re.findall(r"<tr\b[^>]*>.*?</tr>", t, re.S)
+        if len(rows) > keep + 1:
+            head, body = rows[0], rows[1:]
+            open_tag = re.match(r"<table[^>]*>", t).group(0)
+            first = open_tag + head + "".join(body[:keep]) + "</table>"
+            rest = open_tag + head + "".join(body[keep:]) + "</table>"
+            return (f'<div class="xscroll">{first}</div><details class="vis-alle"><summary>Vis alle ({len(body)} rader)</summary>'
+                    f'<div class="xscroll">{rest}</div></details>')
+        return f'<div class="xscroll">{t}</div>'
+    return re.sub(r"<table[^>]*>.*?</table>", one, h, flags=re.S)
 
 
 def makro_page(snap):

@@ -133,10 +133,11 @@ jobs:
         run: |
           test -s logs/categories.csv || { echo "no forward log to commit"; exit 0; }
           git add logs/categories.csv
-          if git diff --cached --quiet -- logs/categories.csv; then
+          git add logs/calendar.json 2>/dev/null || true
+          if git diff --cached --quiet -- logs/categories.csv logs/calendar.json; then
             echo "forward log unchanged - nothing to commit"; exit 0
           fi
-          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv
+          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv $(test -f logs/calendar.json && echo logs/calendar.json)
           for i in 1 2 3; do
             git -c user.name=GrokBot -c user.email=bot@box pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
               && git push origin "HEAD:${GITHUB_REF_NAME}" && { echo "forward log pushed ($(wc -l < logs/categories.csv) lines)"; exit 0; }

@@ -69,11 +69,7 @@ def us_cpi_yoy() -> list:
 
 def policy_rates() -> dict:
     out = {}
-    try:
-        r = list(csv.reader(io.StringIO(_get("https://data.norges-bank.no/api/data/IR/B.KPRA.SD.?format=csv&lastNObservations=1&locale=en").text), delimiter=";"))
-        out["NO"] = {"rate": float(r[-1][-3]), "date": r[-1][-4], "source": "Norges Bank (styringsrente)"}
-    except Exception:
-        pass
+    out["NO"] = _rate_no()
     try:
         f = fred("DFEDTARU,ECBDFR", "2025-01-01")
         if f.get("DFEDTARU"):
@@ -82,6 +78,8 @@ def policy_rates() -> dict:
             out["EA"] = {"rate": f["ECBDFR"][-1][1], "date": f["ECBDFR"][-1][0], "source": "ECB innskuddsrente (FRED ECBDFR)"}
     except Exception:
         pass
+    if out.get("NO") is None:
+        out.pop("NO", None)
     for k, fn in (("SE", _rate_se), ("DK", _rate_dk), ("UK", _rate_uk)):
         try:
             out[k] = fn()
@@ -137,6 +135,34 @@ def fed_sep() -> dict:
         pass
     return {"points": pts, "measure": "PCE", "source": "Fed SEP (median)", "published": pub,
             "url": "https://fred.stlouisfed.org/series/PCECTPIMD"}
+
+
+def _rate_no():
+    """Norges Bank styringsrente med retry + UA; faller tilbake til siste gode verdi i forrige snapshot (merket)."""
+    import time
+    url = "https://data.norges-bank.no/api/data/IR/B.KPRA.SD.?format=csv&lastNObservations=1&locale=en"
+    for i in range(3):
+        try:
+            r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (signal-tool; github.com/Feelwet/signal-tool)", "Accept": "text/csv"}, timeout=(10, 25))
+            r.raise_for_status()
+            rows = [x for x in csv.reader(io.StringIO(r.text), delimiter=";") if x]
+            head, last = rows[0], rows[-1]
+            iv = head.index("OBS_VALUE") if "OBS_VALUE" in head else len(last) - 3
+            it = head.index("TIME_PERIOD") if "TIME_PERIOD" in head else len(last) - 4
+            return {"rate": float(last[iv]), "date": last[it][:10], "source": "Norges Bank (styringsrente)"}
+        except Exception:
+            time.sleep(2 * (i + 1))
+    from .config import ROOT
+    loaders = (lambda: json.loads((ROOT / "data" / "snapshots" / "latest.json").read_text()),
+               lambda: requests.get("https://feelwet.github.io/signal-tool/data.json", timeout=30).json())
+    for load in loaders:
+        try:
+            prev = load()["macro"]["inflation"]["rates"]["NO"]
+            if prev.get("rate") is not None:
+                return {**prev, "source": prev["source"].split(" – ")[0] + " – siste gode verdi (henting feilet)", "stale": True}
+        except Exception:
+            continue
+    return None
 
 
 def _rate_se():

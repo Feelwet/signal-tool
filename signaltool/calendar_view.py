@@ -4,6 +4,31 @@ import html
 import json
 from . import sectors as SEC
 
+from pathlib import Path
+LOG_PATH = Path(__file__).resolve().parent.parent / "logs" / "calendar.json"
+
+
+def merge_log(cal: list[dict], path: Path = LOG_PATH, keep_days: int = 120) -> list[dict]:
+    """Slår sammen dagens kalender med loggen av tidligere hendelser (så passerte dager beholder sine hendelser)."""
+    from datetime import date, timedelta
+    try:
+        old = json.loads(path.read_text())
+    except Exception:
+        old = []
+    cut = (date.today() - timedelta(days=keep_days)).isoformat()
+    key = lambda e: (e.get("date"), e.get("time") or "", e.get("source"), e.get("title"))
+    seen, out = set(), []
+    for e in list(cal) + old:            # nye først: oppdaterte felt vinner
+        k = key(e)
+        if k in seen or (e.get("date") or "") < cut:
+            continue
+        seen.add(k); out.append(e)
+    out.sort(key=lambda e: (e["date"], e.get("time") or ""))
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=0))
+    return out
+
+
 TYPES = {"sentralbank": ("◆", "Sentralbank"), "resultat": ("▲", "Resultat"), "makro": ("●", "Makro")}
 FOLLOWED = {"USAR", "SUBC.OL", "AKSO.OL", "FRO.OL", "OET.OL", "NORBT.OL"}
 
@@ -34,14 +59,17 @@ CSS = """<style>
 .calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .calbar h2{margin:0;min-width:11ch;text-align:center;font-size:1.2em}
 .calbar button,.calflt button{min-width:44px;min-height:44px;padding:4px 12px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;font:inherit;cursor:pointer}
-.calflt{margin:6px 0}.calflt button{min-height:32px;margin:0 6px 6px 0}.calflt button[aria-pressed=true]{background:#6cb6ff;border-color:#6cb6ff;color:#0d1117}
+.calflt{margin:6px 0}.calflt button{min-height:36px;margin:0 6px 6px 0;color:#e6edf3;border:1px solid #8b949e;background:#161b22}
+.calflt button[aria-pressed=true]{border:2px solid #e6edf3;font-weight:600}.calflt button[aria-pressed=true]::before{content:"✓ "}
+.calflt button[aria-pressed=false]{color:#8b949e;text-decoration:line-through}
+.day.past .evl,.mlist li.past,.panel li.past{opacity:.55}.cov{font-size:.85em;color:#9ea9b5;margin:4px 0}
 .grid{display:grid;grid-template-columns:32px repeat(7,1fr);border-top:1px solid #30363d;border-left:1px solid #30363d}
 .grid>div{border-right:1px solid #30363d;border-bottom:1px solid #30363d;min-height:92px;padding:4px;font-size:.8em;overflow:hidden}
 .grid .wd{min-height:0;text-align:center;color:#9ea9b5;font-weight:600}.grid .wk{color:#9ea9b5;text-align:center;min-height:0}
 .day{cursor:pointer}.day:focus{outline:2px solid #6cb6ff;outline-offset:-2px}.day.out{opacity:.4}
 .day .dn{font-weight:600}.day.today .dn{display:inline-block;border:2px solid #6cb6ff;border-radius:50%;width:24px;height:24px;line-height:20px;text-align:center}
 .evl{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.t-sentralbank{color:#d2a8ff}.t-resultat{color:#6cb6ff}.t-makro{color:#e3b341}
+.t-sentralbank{color:#d2a8ff}.t-resultat{color:#79c0ff}.t-makro{color:#f2cc60}.tv{white-space:nowrap}
 .more{color:#9ea9b5}.fol{font-size:.75em;border:1px solid #3fb950;color:#3fb950;border-radius:3px;padding:0 4px;margin-left:4px}
 .panel{margin-top:12px;border:1px solid #6cb6ff;border-radius:6px;padding:10px 12px}.panel ul{margin:6px 0 0;padding-left:0;list-style:none}.panel li{margin:6px 0}
 .mlist h3{margin:14px 0 4px;font-size:1em}.mlist ul{list-style:none;padding:0;margin:0}.mlist li{margin:4px 0}
@@ -62,15 +90,15 @@ function wk(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(
 const y1=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-y1)/864e5+1)/7)}
 function name(e){const tk=e.ticker?(e.tv?`<a class="tv" target="_blank" rel="noopener" title="Graf på TradingView" aria-label="${esc(e.ticker)} – åpne graf på TradingView (ny fane)" href="${esc(e.tv)}"><b>${esc(e.ticker)}</b> ↗</a> `:`<b>${esc(e.ticker)}</b> `):'';
 return tk+esc(e.title)}
-function line(e){const[i,l]=TY[e.type];return `<span class="evl t-${e.type}" title="${esc(l)}: ${esc(e.title)}">${i} ${esc(e.time)} ${esc(e.ticker||e.title)}</span>`}
-function detail(e){const[i,l]=TY[e.type];return `<li><span class="t-${e.type}">${i} ${l}</span> · ${esc(e.time||'hele dagen')} · ${name(e)}${e.follow?'<span class="fol">Følges</span>':''}<div class="src">${esc(e.source)}${e.est&&!/estimert/i.test(e.source)?' (estimert)':''}</div></li>`}
+function line(e){const[i,l]=TY[e.type];return `<span class="evl t-${e.type}${e.date<today?' past':''}" title="${esc(l)}: ${esc(e.title)}">${i} ${esc(e.time)} ${esc(e.ticker||e.title)}</span>`}
+function detail(e){const[i,l]=TY[e.type];return `<li${e.date<today?' class="past"':''}><span class="t-${e.type}">${i} ${l}</span> · ${esc(e.time||'hele dagen')} · ${name(e)}${e.follow?'<span class="fol">Følges</span>':''}<div class="src">${esc(e.source)}${e.est&&!/estimert/i.test(e.source)?' (estimert)':''}</div></li>`}
 const $=id=>document.getElementById(id);
 function render(){const first=new Date(y,m,1),title=MN[m][0].toUpperCase()+MN[m].slice(1)+' '+y;$('cal-title').textContent=title;
 let h='<div class="wd">uke</div>'+WD.map(w=>`<div class="wd">${w}</div>`).join('');
 const st=new Date(y,m,1-((first.getDay()+6)%7));
 for(let r=0;r<6;r++){const ws=new Date(st.getFullYear(),st.getMonth(),st.getDate()+r*7);if(r>3&&ws.getMonth()!==m)break;h+=`<div class="wk">${wk(ws)}</div>`;
 for(let c=0;c<7;c++){const d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+c),k=iso(d),ev=byDay(k);
-const cls='day'+(d.getMonth()!==m?' out':'')+(k===today?' today':'');
+const cls='day'+(d.getMonth()!==m?' out':'')+(k===today?' today':'')+(k<today?' past':'');
 h+=`<div class="${cls}" tabindex="0" role="button" data-d="${k}" aria-label="${d.getDate()}. ${MN[d.getMonth()]}: ${ev.length} hendelser"${k===today?' aria-current="date"':''}><span class="dn">${d.getDate()}</span>`
 +ev.slice(0,3).map(line).join('')+(ev.length>3?`<span class="evl more">+${ev.length-3} til</span>`:'')+'</div>'}}
 $('cal-grid').innerHTML=h;
@@ -94,12 +122,15 @@ addEventListener('popstate',()=>{fromUrl();render()});fromUrl();render()})()</sc
 
 def calendar_html(cal: list[dict], list_html: str) -> str:
     data = json.dumps(events_json(cal), ensure_ascii=False).replace("</", "<\\/")
+    dates = sorted(e["date"] for e in events_json(cal) if e["date"])
+    cov = (f'<p class="cov" id="cal-cov">Data rekker til {html.escape(dates[-1])}' + (f' (fra {html.escape(dates[0])})' if dates else '') +
+           '. Passerte hendelser vises dempet.</p>') if dates else '<p class="cov">Ingen hendelser i datagrunnlaget.</p>'
     flt = "".join(f'<button data-t="{k}" aria-pressed="true"><span class="t-{k}">{i}</span> {l}</button>' for k, (i, l) in TYPES.items())
     js = JS.replace("%TYPES%", json.dumps({k: list(v) for k, v in TYPES.items()}, ensure_ascii=False))
     return (CSS + '<div class="cal-js card"><div class="calbar"><button id="cal-prev" aria-label="Forrige måned">‹</button>'
             '<h2 id="cal-title" aria-live="polite"></h2><button id="cal-next" aria-label="Neste måned">›</button>'
             '<button id="cal-today">I dag</button></div>'
-            f'<div class="calflt" role="group" aria-label="Filtrer type">{flt}</div>'
+            f'{cov}<div class="calflt" role="group" aria-label="Filtrer type">{flt}</div>'
             '<div class="grid" id="cal-grid"></div><div class="mlist" id="cal-mlist"></div>'
             '<div class="panel" id="cal-panel" hidden aria-live="polite"></div></div>'
             f'<script type="application/json" id="cal-data">{data}</script>'

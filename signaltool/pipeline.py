@@ -460,6 +460,11 @@ def run(fast: bool = False) -> dict:
     cal += [{"date": e["date"], "time": "", "source": "Yahoo", "title": f"Kvartalsrapport {e['ticker']}", "kind": "resultat"} for e in earn]
     snap["calendar"] = sorted(cal, key=lambda e: (e["date"], e.get("time") or ""))
     try:
+        from . import calendar_view as CV
+        snap["calendar"] = CV.merge_log(snap["calendar"])
+    except Exception as ex:
+        log.warning("calendar log failed: %s", ex)
+    try:
         from . import briefing
         briefing.apply(snap)
     except Exception as ex:

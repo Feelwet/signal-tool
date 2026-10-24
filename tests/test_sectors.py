@@ -78,3 +78,22 @@ def test_calendar_json_embedded_and_valid():
     assert [e["type"] for e in ev] == ["sentralbank", "resultat", "makro"]
     assert ev[1]["follow"] and ev[1]["est"] and "OSL%3ASUBC" in ev[1]["tv"]
     assert 'aria-label="Forrige måned"' in h and 'aria-label="Neste måned"' in h and "<table></table>" in h
+
+
+def test_calendar_log_merge_and_coverage(tmp_path):
+    from datetime import date, timedelta
+    from signaltool import calendar_view as CV
+    p = tmp_path / "cal.json"
+    past = (date.today() - timedelta(days=3)).isoformat()
+    CV.merge_log([{"date": past, "time": "", "source": "X", "title": "gammel", "kind": "makro"}], p)
+    out = CV.merge_log([{"date": date.today().isoformat(), "time": "", "source": "Y", "title": "ny", "kind": "makro"}], p)
+    assert [e["title"] for e in out] == ["gammel", "ny"]
+    h = CV.calendar_html(out, "")
+    assert "Data rekker til " + date.today().isoformat() in h and "past" in h
+
+
+def test_fold_tables():
+    from signaltool import site
+    rows = "".join(f"<tr><td>{i}</td></tr>" for i in range(20))
+    h = site.fold_tables("<table><tr><th>h</th></tr>" + rows + "</table>")
+    assert h.count('class="xscroll"') == 2 and "Vis alle (20 rader)" in h and "<details" in h

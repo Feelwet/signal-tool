@@ -1,0 +1,191 @@
+[
+{
+"date": "2026-10-02",
+"time": "14:30",
+"source": "BLS",
+"title": "Employment Situation",
+"kind": "makro"
+},
+{
+"date": "2026-10-06",
+"time": "14:30",
+"source": "BEA",
+"title": "U.S. International Trade in Goods and Services, August 2026",
+"kind": "makro"
+},
+{
+"date": "2026-10-07",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-10-07",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
+"date": "2026-10-14",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-10-14",
+"time": "14:30",
+"source": "BLS",
+"title": "Consumer Price Index",
+"kind": "makro"
+},
+{
+"date": "2026-10-14",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
+"date": "2026-10-15",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Utenrikshandel med varer, månedlig (08792)",
+"kind": "makro"
+},
+{
+"date": "2026-10-15",
+"time": "14:30",
+"source": "BLS",
+"title": "Producer Price Index",
+"kind": "makro"
+},
+{
+"date": "2026-10-16",
+"time": "14:30",
+"source": "BLS",
+"title": "U.S. Import and Export Price Indexes",
+"kind": "makro"
+},
+{
+"date": "2026-10-20",
+"time": "16:00",
+"source": "BLS",
+"title": "State Employment and Unemployment (Monthly)",
+"kind": "makro"
+},
+{
+"date": "2026-10-21",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-10-21",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
+"date": "2026-10-28",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-10-28",
+"time": "15:00",
+"source": "BLS",
+"title": "Quarterly Data Series on Business Employment Dynamics",
+"kind": "makro"
+},
+{
+"date": "2026-10-28",
+"time": "15:00",
+"source": "BLS",
+"title": "Metropolitan Area Employment and Unemployment (Monthly)",
+"kind": "makro"
+},
+{
+"date": "2026-10-28",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
+"date": "2026-10-28",
+"time": "20:00",
+"source": "Federal Reserve",
+"title": "FOMC rentebeslutning",
+"kind": "sentralbank"
+},
+{
+"date": "2026-10-29",
+"time": "13:30",
+"source": "BEA",
+"title": "GDP (Advance Estimate), 3rd Quarter 2026",
+"kind": "makro"
+},
+{
+"date": "2026-10-29",
+"time": "14:15",
+"source": "ECB",
+"title": "ECB rentebeslutning og pressekonferanse",
+"kind": "sentralbank"
+},
+{
+"date": "2026-10-30",
+"time": "09:30",
+"source": "ONS",
+"title": "GDP revisions in Blue Book: 2026",
+"kind": "makro"
+},
+{
+"date": "2026-10-30",
+"time": "13:30",
+"source": "BLS",
+"title": "Employment Cost Index",
+"kind": "makro"
+},
+{
+"date": "2026-11-04",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-11-04",
+"time": "14:30",
+"source": "BEA",
+"title": "U.S. International Trade in Goods and Services, September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-04",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
+"date": "2026-11-05",
+"time": "09:30",
+"source": "ONS",
+"title": "Local sites and numbers of employees linked to companies involved in international trade in services by subnational areas of the UK: 2024",
+"kind": "makro"
+},
+{
+"date": "2026-11-06",
+"time": "14:30",
+"source": "BLS",
+"title": "Employment Situation",
+"kind": "makro"
+}
+]
