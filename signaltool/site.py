@@ -590,7 +590,12 @@ def makro_page(snap):
     pf = lambda v, d=1: "–" if v is None else (f"{v*100:+.{d}f} %").replace(".", ",").replace("-", "−")
     # --- sammendrag i titlene (bare fra eksisterende data) ---
     al = snap.get("policy_alerts") or []
-    s_pol = f"{len(al)} varsler · siste {max(a.get('date') or '' for a in al)}" if al else MD
+    if al:
+        ld = max(a.get("date") or "" for a in al)
+        dm = f"{ld[8:10]}.{ld[5:7]}" if len(ld) >= 10 else ld
+        s_pol = f"{len(al)} varsler · siste varsel {'publiseres ' if ld[:10] > date.today().isoformat() else ''}{dm}"
+    else:
+        s_pol = MD
     nor = imf.get("NOR") or {}
     yr = str(date.today().year)
     s_imf = (f"Norge {yr}: {nf(nor.get(yr))} % · hentet {str(snap.get('generated', ''))[:10]}") if nor.get(yr) is not None else MD
