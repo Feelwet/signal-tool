@@ -9,6 +9,7 @@ from . import site_extra as X
 from . import theme_maps as TM
 from . import sectors as SEC
 from . import calendar_view as CV
+from . import inflation as INF
 from . import site_quality as Q
 
 SITE = ROOT / "site"
@@ -570,7 +571,7 @@ def makro_page(snap):
         extra += f'<div class="card tw"><h2 style="margin-top:0">Fysisk oljemarked (futures via Yahoo)</h2><table><tr><th>Mål</th><th>Siste</th><th>z (1 år)</th><th>Trend / kontrakter</th></tr>{oilh}</table><p class="mut">Pålitelighet: markedsdata – høy, men uoffisiell tilgang (yfinance).</p></div>'
     if dodh:
         extra += f'<div class="card tw"><h2 style="margin-top:0">Amerikanske forsvarskontrakter (daglige DoD-kunngjøringer)</h2><table><tr><th>Dag</th><th>Selskap</th><th>Beløp</th><th>Ticker</th><th>Kilde</th></tr>{dodh}</table><p class="mut">Pålitelighet: offisiell kunngjøring – høy. Ticker-kobling er automatisk (navnematch) og kan bomme.</p></div>'
-    return f"""<h1>Makro og fysiske indikatorer</h1>{top}
+    return f"""<h1>Makro og fysiske indikatorer</h1>{INF.html_block(mac.get("inflation"), snap.get("calendar"))}{top}
 <h2 id="stat">Offisiell statistikk</h2><p class="mut">«Overraskelse (z)» = hvor uvanlig siste endring er sammenlignet med de 24 foregående endringene (robust z-score). Ikke det samme som avvik fra analytikerforventning (konsensus er ikke fritt tilgjengelig).</p>
 <div class="card tw"><table><tr><th>Serie</th><th>Kilde</th><th>Periode</th><th>Siste</th><th>Endring</th><th>Overr. (z)</th><th>Trend</th><th>Pålitelighet</th></tr>{rows}</table></div>
 <div class="card"><h2 style="margin-top:0">Norges Bank</h2>{fxh}<ul class="ev">{press}</ul></div>

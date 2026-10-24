@@ -187,6 +187,14 @@ def run(fast: bool = False) -> dict:
         except Exception as ex:
             log.warning("%s failed: %s", lab, ex)
             status[lab] = f"FAILED: {_err(ex)}"
+    try:
+        from . import inflation as INF
+        inf, st = INF.collect()
+        status.update(st)
+        mac["inflation"] = inf
+    except Exception as ex:
+        log.warning("Inflasjon failed: %s", ex)
+        status["Inflasjon"] = f"FAILED: {_err(ex)}"
     eq_tickers = [t for th in THEMES for t in th.tickers_us + th.tickers_ose + th.tickers_other]
     eq_tickers = [t for t in dict.fromkeys(eq_tickers) if t not in ("ITA", "BDRY", "FXI", "EWW", "REMX", "SMH", "SPY", "FEZ", "EWZ", "EWG", "XLE", "JETS", "XRT", "GLD", "GDX")]
     if fast:
