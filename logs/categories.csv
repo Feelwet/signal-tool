@@ -1668,3 +1668,5 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags
 2026-10-24,NOD.OL,tema,174.1,2026-10-20,OSEBX.OL,,0,,
 2026-10-24,NORBT.OL,tema,161.5,2026-10-20,OSEBX.OL,,0,,weak_px
 2026-10-24,NTI.OL,tema,1.066,2026-10-20,OSEBX.OL,,0,,weak_px|neg_ebit|high_vol
+2026-10-24,MPCC.OL,watch,26.74,2026-10-23,OSEBX.OL,1.62,0,,
+2026-10-24,YAR.OL,watch,402.9,2026-10-23,OSEBX.OL,1.03,0,,weak_px
