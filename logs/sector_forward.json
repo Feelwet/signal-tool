@@ -23,5 +23,217 @@
   "industri": [],
   "materialer": []
  },
- "note": "Framovertest: listen er frosset og måles hvert kvartal mot sektorsnitt og OSEBX. Ikke bakovertestet."
+ "note": "Framovertest: listen er frosset og måles hvert kvartal mot sektorsnitt og OSEBX. Ikke bakovertestet.",
+ "universe": {
+  "energi": [
+   "EQNR.OL",
+   "AKRBP.OL",
+   "VAR.OL",
+   "DNO.OL",
+   "OKEA.OL",
+   "SUBC.OL",
+   "TGS.OL",
+   "AKSO.OL",
+   "BWO.OL"
+  ],
+  "sjomat": [
+   "MOWI.OL",
+   "SALM.OL",
+   "LSG.OL",
+   "GSF.OL",
+   "BAKKA.OL",
+   "AUSS.OL",
+   "NRS.OL"
+  ],
+  "shipping": [
+   "FRO.OL",
+   "HAFNI.OL",
+   "WAWI.OL",
+   "MPCC.OL",
+   "BWLPG.OL",
+   "HAUTO.OL",
+   "OET.OL",
+   "2020.OL"
+  ],
+  "forsvar": [
+   "KOG.OL",
+   "KIT.OL",
+   "NORBT.OL",
+   "NTI.OL"
+  ],
+  "bank": [
+   "DNB.OL",
+   "STB.OL",
+   "GJF.OL",
+   "SB1NO.OL",
+   "MING.OL",
+   "NONG.OL",
+   "SPOL.OL",
+   "PROT.OL"
+  ],
+  "industri": [
+   "KIT.OL",
+   "NOD.OL",
+   "TOM.OL",
+   "AKER.OL",
+   "VEI.OL",
+   "AFG.OL",
+   "SCATC.OL"
+  ],
+  "materialer": [
+   "NHY.OL",
+   "YAR.OL",
+   "ELK.OL",
+   "BRG.OL"
+  ]
+ },
+ "baseline": {
+  "date": "2026-10-23",
+  "field": "yfinance Close med auto_adjust=True (justert for utbytte og splitt)",
+  "prices": {
+   "2020.OL": {
+    "close_adj": 9.385000228881836
+   },
+   "AFG.OL": {
+    "close_adj": 187.60000610351562
+   },
+   "AKER.OL": {
+    "close_adj": 1150.0
+   },
+   "AKRBP.OL": {
+    "close_adj": 393.1000061035156
+   },
+   "AKSO.OL": {
+    "close_adj": 37.02000045776367
+   },
+   "AUSS.OL": {
+    "close_adj": 82.69999694824219
+   },
+   "BAKKA.OL": {
+    "close_adj": 459.6000061035156
+   },
+   "BRG.OL": {
+    "close_adj": 141.0
+   },
+   "BWLPG.OL": {
+    "close_adj": 235.1999969482422
+   },
+   "BWO.OL": {
+    "close_adj": 39.79999923706055
+   },
+   "DNB.OL": {
+    "close_adj": 313.29998779296875
+   },
+   "DNO.OL": {
+    "close_adj": 23.3799991607666
+   },
+   "ELK.OL": {
+    "close_adj": 29.5
+   },
+   "EQNR.OL": {
+    "close_adj": 453.79998779296875
+   },
+   "FRO.OL": {
+    "close_adj": 494.0
+   },
+   "GJF.OL": {
+    "close_adj": 260.0
+   },
+   "GSF.OL": {
+    "close_adj": 22.780000686645508
+   },
+   "HAFNI.OL": {
+    "close_adj": 98.0
+   },
+   "HAUTO.OL": {
+    "close_adj": 175.89999389648438
+   },
+   "KIT.OL": {
+    "close_adj": 83.19999694824219
+   },
+   "KOG.OL": {
+    "close_adj": 301.0
+   },
+   "LSG.OL": {
+    "close_adj": 43.599998474121094
+   },
+   "MING.OL": {
+    "close_adj": 212.6999969482422
+   },
+   "MOWI.OL": {
+    "close_adj": 216.0
+   },
+   "MPCC.OL": {
+    "close_adj": 26.739999771118164
+   },
+   "NHY.OL": {
+    "close_adj": 67.4000015258789
+   },
+   "NOD.OL": {
+    "close_adj": 167.0
+   },
+   "NONG.OL": {
+    "close_adj": 172.8000030517578
+   },
+   "NORBT.OL": {
+    "close_adj": 157.60000610351562
+   },
+   "NRS.OL": {
+    "close_adj": null,
+    "note": "feil: 'Index' object has no attribute 'strftime'"
+   },
+   "NTI.OL": {
+    "close_adj": 1.0360000133514404
+   },
+   "OET.OL": {
+    "close_adj": 877.0
+   },
+   "OKEA.OL": {
+    "close_adj": 48.650001525878906
+   },
+   "PROT.OL": {
+    "close_adj": 442.6000061035156
+   },
+   "SALM.OL": {
+    "close_adj": 584.0
+   },
+   "SB1NO.OL": {
+    "close_adj": 222.0
+   },
+   "SCATC.OL": {
+    "close_adj": 77.05000305175781
+   },
+   "SPOL.OL": {
+    "close_adj": 194.0399932861328
+   },
+   "STB.OL": {
+    "close_adj": 188.39999389648438
+   },
+   "SUBC.OL": {
+    "close_adj": 317.79998779296875
+   },
+   "TGS.OL": {
+    "close_adj": 136.89999389648438
+   },
+   "TOM.OL": {
+    "close_adj": 94.5
+   },
+   "VAR.OL": {
+    "close_adj": 58.939998626708984
+   },
+   "VEI.OL": {
+    "close_adj": 207.0
+   },
+   "WAWI.OL": {
+    "close_adj": 165.1999969482422
+   },
+   "YAR.OL": {
+    "close_adj": 402.8999938964844
+   }
+  },
+  "benchmark": {
+   "ticker": "OSEBX.OL",
+   "close_adj": 2101.1201171875
+  }
+ }
 }

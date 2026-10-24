@@ -61,7 +61,7 @@ SECTORS: dict[str, dict] = {
                  _d("Kredittvekst (K2)", "SSB", "https://www.ssb.no/bank-og-finansmarked/finansinstitusjonar-og-andre-finansielle-foretak/statistikk/kredittindikatoren", "12-måneders vekst."),
                  _d("Tap på utlån / mislighold", "Finanstilsynet, bankenes rapporter", "https://www.finanstilsynet.no/", "Tap i % av utlån per kvartal.")],
         prose=("Bankene tjener på forskjellen mellom utlåns- og innskuddsrente, som øker når styringsrenten er høy. Det motsatte gjelder når renten kuttes. "
-               "Kredittap øker ved arbeidsledighet. NB: ROIC, fri kontantstrøm og gjeld/EBITDA gir lite mening for banker – derfor blir de fleste FLAG her (mangler data), ikke fordi de er dårlige."),
+               "Kredittap øker ved arbeidsledighet."),
         tickers=["DNB.OL", "STB.OL", "GJF.OL", "SB1NO.OL", "MING.OL", "NONG.OL", "SPOL.OL", "PROT.OL"]),
     "industri": dict(
         name="Industri og teknologi", file="sektor_industri",
@@ -217,14 +217,16 @@ DISCLAIMER = ("Eksperimentell skjerm-output: illustrerer eksponering mot sektore
 FORWARD_PATH = Path(__file__).resolve().parent.parent / "logs" / "sector_forward.json"
 FORWARD_TXT = "Framovertest: Frosset 24.10, første måling jan 2027"
 CSS = """<style>
-.sb{display:inline-block;border-radius:3px;padding:1px 7px;font-size:.85em;font-weight:600;border:1px solid;white-space:nowrap}
-.sb.clear{color:#1d5fd1;border-color:#1d5fd1;background:#eaf1fd}.sb.fail{color:#a33;border-color:#a33;background:#fbeeee}
-.sb.miss{color:#666;border:1px dashed #888;background:#f4f4f4}
-.ok{color:#1d5fd1}.no{color:#a33}.na{color:#777}.rough{border-bottom:1px dotted;cursor:help}
+.sb{display:inline-block;border-radius:3px;padding:1px 7px;font-size:.85em;font-weight:600;border:1px solid;white-space:nowrap;background:transparent}
+.sb.clear{color:#5b9cff;border-color:#5b9cff}.sb.fail{color:#ff7b7b;border-color:#ff7b7b}.sb.miss{color:#aab;border:1px dashed #aab}
+.ok{color:#5b9cff}.no{color:#ff7b7b}.na{color:#999}.rough{border-bottom:1px dotted;cursor:help}
 .scards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.scard{display:block;text-decoration:none;color:inherit;border:1px solid #ccd;border-radius:6px;padding:12px}.scard:hover,.scard:focus{border-color:#1d5fd1}
-.flt button{margin-right:6px;padding:3px 10px;border:1px solid #889;border-radius:3px;background:#fff;cursor:pointer}.flt button[aria-pressed=true]{background:#1d5fd1;color:#fff}
-.src{font-size:.8em;color:#777}
+.scard{display:block;text-decoration:none;color:inherit;border:1px solid #445;border-radius:6px;padding:12px}.scard:hover,.scard:focus{border-color:#5b9cff}
+.flt{margin:8px 0}.flt button{margin:0 6px 6px 0;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;cursor:pointer;font:inherit}
+.flt button[aria-pressed=true]{background:#5b9cff;border-color:#5b9cff;color:#0b0f17}
+.src{font-size:.8em;color:#999}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
+.tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""
 FILTER_JS = """<script>document.querySelectorAll('.flt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));
 document.querySelectorAll('tr[data-st]').forEach(r=>r.style.display=(b.dataset.f==='all'||r.dataset.st===b.dataset.f)?'':'none')})</script>"""
@@ -320,7 +322,7 @@ def sector_html(key: str, fund: dict | None = None) -> str:
     S, R, asof = SECTORS[key], rules_for(key), fund.get("asof")
     dasof = S.get("drivers_asof", "2026-10-24")
     drv = "".join(f'<tr><td>{_E(x["name"])}</td><td>{_dsrc(x, dasof)}</td><td class="mut">{_E(x["how"])}</td></tr>' for x in S["drivers"])
-    trs = []
+    trs, rows_src = [], []
     for r in sector_rows(key, fund):
         f = r["f"]
         fy = f.get("fy")
@@ -328,7 +330,12 @@ def sector_html(key: str, fund: dict | None = None) -> str:
         old = bool(fy) and is_stale((date.fromisoformat(fy[:10]).replace(year=date.fromisoformat(fy[:10]).year + 1)).isoformat())
         src = f'Yahoo/yfinance, årsregnskap {_E(fy or "–")}' + (" · ⏱ Utdatert" if old or not fy else "")
         cells = "".join(_cell(k, r["checks"][k], f) for k, _, _ in R)
-        trs.append(f'<tr data-st="{r["status"]}"><td><b>{_E(r["ticker"])}</b><div class="src">{_E(r["name"])}</div></td><td>{_status_badge(r)}</td>{cells}<td class="src">{src}</td></tr>')
+        rows_src.append(src)
+        trs.append((r, cells, src))
+    from collections import Counter
+    common = Counter(rows_src).most_common(1)[0][0] if rows_src else ""
+    trs = [f'<tr data-st="{r["status"]}"><td><b>{_E(r["ticker"])}</b><div class="src">{_E(r["name"])}</div>'
+           + (f'<div class="src">{src}</div>' if src != common else "") + f'</td><td>{_status_badge(r)}</td>{cells}</tr>' for r, cells, src in trs]
     head = "".join(f'<th>{_E(h)}</th>' for _, h, _ in R)
     rules = "".join(f"<li>{_E(l)}</li>" for _, _, l in R)
     stale = " · <b>⏱ Utdatert</b>" if is_stale(asof) else ""
@@ -339,12 +346,12 @@ def sector_html(key: str, fund: dict | None = None) -> str:
         [("all", "Alle"), ("CLEAR", "◆ CLEAR"), ("FAIL", "✕ Består ikke"), ("MISSING", "? Mangler data")]) + "</div>"
     return (f'{CSS}<div class="warnbox">{_E(DISCLAIMER)}</div><h1>Sektor: {_E(S["name"])}</h1>'
             f'<div class="card"><h2 style="margin-top:0">Hva driver sektoren</h2><p>{_E(S["prose"])}</p></div>'
-            f'<div class="card tw"><h2 style="margin-top:0">Målbare drivere</h2><table><tr><th>Driver</th><th>Kilde og dato</th><th>Slik måles den</th></tr>{drv}</table></div>'
+            f'<div class="card tw"><h2 style="margin-top:0">Målbare drivere</h2><div class="tscroll"><table><tr><th>Driver</th><th>Kilde og dato</th><th>Slik måles den</th></tr>{drv}</table></div></div>'
             f'<div class="card tw"><h2 style="margin-top:0">Kandidater</h2><p class="mut">◆ CLEAR = alle reglene har tall og består:</p><ul>{rules}</ul>'
             f'<p class="mut">Ett brudd gir «✕ Består ikke». Mangler et tall (og ingen brudd), blir status «? Mangler data» – vi finner ikke opp tall. '
             f'Data: {_E(fund.get("source") or "–")}, hentet {_E(fund.get("fetched") or asof or "–")}{stale}. Ikke bakovertestet. Tema alene er ikke grunn til å kjøpe.</p>{bank_note}'
             f'<p><b>{_E(FORWARD_TXT)}</b> (mot sektorsnitt og OSEBX).</p>{flt}'
-            f'<table><tr><th>Selskap</th><th>Status</th>{head}<th>Kilde</th></tr>{"".join(trs)}</table></div>{FILTER_JS}')
+            f'<div class="tscroll"><table><tr><th>Selskap</th><th>Status</th>{head}</tr>{"".join(trs)}</table></div><p class="src">Kilde: {common}</p></div>{FILTER_JS}')
 
 
 def index_html(fund: dict | None = None) -> str:
