@@ -44,3 +44,13 @@ def test_pages_render():
     assert "ROE &gt;10 %" in b and "ROIC" not in b.split("<table")[2] and "kvartalsrapport" in b
     i = S.index_html(fund)
     assert "sektor_shipping.html" in i and "FLAG: n&lt;5" in i
+
+
+def test_tv_url_builder():
+    assert S.tv_url("FRO.OL") == "https://www.tradingview.com/chart/?symbol=OSL%3AFRO"
+    assert S.tv_symbol("NORBT.OL") == "OSL:NORBT"
+    assert S.tv_url("BRK-B") is None and S.tv_url("AAPL") is None and S.tv_url("") is None
+    assert S.tv_url("SUBC.OL").endswith("OSL%3ASUBC")
+    link = S.tv_ticker("FRO.OL")
+    assert 'target="_blank"' in link and 'rel="noopener"' in link and "↗" in link and "FRO.OL" in link
+    assert S.tv_ticker("AAPL") == "<b>AAPL</b>" and S.tv_ext("AAPL") == ""

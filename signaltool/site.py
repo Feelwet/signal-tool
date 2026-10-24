@@ -387,7 +387,7 @@ def theme_card(t, pre=""):
 def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0)
-    return (f'<tr><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a><br><span class="mut">{E(e.get("name") or "")}</span></td>'
+    return (f'<tr><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a>{SEC.tv_ext(e["ticker"])}<br><span class="mut">{E(e.get("name") or "")}</span></td>'
             f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td><td>{pct(st.get("ret_5d"))}</td><td>{pct(st.get("ret_20d"))}</td></tr>')
 
 
@@ -500,7 +500,7 @@ def theme_page(t, catmap=None, snap=None):
     comp_rows = "".join(f'<tr><td>{E(v["label"])}</td><td>{num(v["score"])}</td><td>{v["weight"]}</td><td class="mut">{E(v["detail"])}</td></tr>' for v in t["components"].values())
     ser = t.get("gdelt_series") or {}
     trend = f'<p class="mut">GDELT-andel siste {len(ser.get("share", []))} dager: {spark(ser.get("share"), 300, 50)} &nbsp; nyhets-URL-andel: {spark(ser.get("url"), 300, 50)}</p>' if ser else ""
-    tick = "".join(f'<tr><td><a href="../ticker/{slug(r["ticker"])}.html">{E(r["ticker"])}</a></td><td>{theme_cat(catmap, r)}</td><td>{E(r["role"])}</td><td>{pct(r["ret_1d"])}</td><td>{pct(r["ret_5d"])}</td><td>{pct(r["ret_20d"])}</td><td>{num(r["ret5_z"],1)}</td><td>{num(r["vol5_z"],1)}</td></tr>' for r in t["tickers"])
+    tick = "".join(f'<tr><td><a href="../ticker/{slug(r["ticker"])}.html">{E(r["ticker"])}</a>{SEC.tv_ext(r["ticker"])}</td><td>{theme_cat(catmap, r)}</td><td>{E(r["role"])}</td><td>{pct(r["ret_1d"])}</td><td>{pct(r["ret_5d"])}</td><td>{pct(r["ret_20d"])}</td><td>{num(r["ret5_z"],1)}</td><td>{num(r["vol5_z"],1)}</td></tr>' for r in t["tickers"])
     pm = "".join(f'<tr><td><a href="{E(m["url"])}">{E(m["question"])}</a></td><td>{num((m["p_yes"] or 0)*100,0)}%</td><td>{num((m["chg_1d"] or 0)*100,1)} pp</td><td>{num((m["chg_1w"] or 0)*100,1)} pp</td><td>${m["volume_24h"]:,.0f}</td></tr>' for m in t["polymarket"])
     heads = "".join(f'<li><a href="{E(h["link"])}">{E(h["title"])}</a> <span class="mut">– {E(h["source"])}, {E(str(h.get("published") or "")[:16].replace("T", " "))} UTC</span></li>' for h in t["headlines"])
     red = "".join(f'<li><a href="{E(r["link"])}">{E(r["title"])}</a> <span class="mut">r/{E(r["sub"])}</span></li>' for r in t["reddit"])
@@ -525,7 +525,7 @@ def ticker_page(e, tmap):
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""<h1>{E(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
+    return f"""<h1>{E(e['ticker'])}{SEC.tv_ext(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
 {X.thesis_html(e, tmap)}
 {cat_rules_html(e)}
 {X.flags_html(e)}

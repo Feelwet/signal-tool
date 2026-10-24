@@ -224,7 +224,7 @@ CSS = """<style>
 .scard{display:block;text-decoration:none;color:inherit;border:1px solid #445;border-radius:6px;padding:12px}.scard:hover,.scard:focus{border-color:#5b9cff}
 .flt{margin:8px 0}.flt button{margin:0 6px 6px 0;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;cursor:pointer;font:inherit}
 .flt button[aria-pressed=true]{background:#5b9cff;border-color:#5b9cff;color:#0b0f17}
-.src{font-size:.8em;color:#999}
+.src{font-size:.8em;color:#999}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
 .tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""
@@ -232,6 +232,42 @@ FILTER_JS = """<script>document.querySelectorAll('.flt button').forEach(b=>b.onc
 document.querySelectorAll('tr[data-st]').forEach(r=>r.style.display=(b.dataset.f==='all'||r.dataset.st===b.dataset.f)?'':'none')})</script>"""
 LABEL = {"CLEAR": "◆ CLEAR", "FAIL": "✕ Består ikke", "MISSING": "? Mangler data"}
 CLS = {"CLEAR": "clear", "FAIL": "fail", "MISSING": "miss"}
+
+from urllib.parse import quote
+
+
+def tv_symbol(ticker: str) -> str | None:
+    """TradingView-symbol for en ticker, eller None hvis vi ikke kjenner børsen (da ingen lenke)."""
+    t = (ticker or "").strip().upper()
+    if t.endswith(".OL"):
+        base = t[:-3]
+        return f"OSL:{base}" if base else None
+    return None   # andre suffikser/ukjente: ingen lenke, vi gjetter ikke
+
+
+def tv_url(ticker: str) -> str | None:
+    sym = tv_symbol(ticker)
+    return f"https://www.tradingview.com/chart/?symbol={quote(sym)}" if sym else None
+
+
+def tv_ext(ticker: str) -> str:
+    """Liten ↗-lenke til TradingView ved siden av en intern tickerlenke (tom hvis ukjent børs)."""
+    url = tv_url(ticker)
+    if not url:
+        return ""
+    return (f' <a class="tv" target="_blank" rel="noopener" title="Graf på TradingView" '
+            f'aria-label="{_E(ticker)} – åpne graf på TradingView (ny fane)" href="{_E(url)}">↗</a>')
+
+
+def tv_ticker(ticker: str) -> str:
+    """Ticker som TradingView-lenke (eller ren tekst hvis ukjent børs)."""
+    t = _E(ticker)
+    url = tv_url(ticker)
+    if not url:
+        return f"<b>{t}</b>"
+    return (f'<a class="tv" target="_blank" rel="noopener" title="Graf på TradingView" '
+            f'aria-label="{t} – åpne graf på TradingView (ny fane)" href="{_E(url)}"><b>{t}</b> ↗</a>')
+
 
 
 def _pct(v):
@@ -334,7 +370,7 @@ def sector_html(key: str, fund: dict | None = None) -> str:
         trs.append((r, cells, src))
     from collections import Counter
     common = Counter(rows_src).most_common(1)[0][0] if rows_src else ""
-    trs = [f'<tr data-st="{r["status"]}"><td><b>{_E(r["ticker"])}</b><div class="src">{_E(r["name"])}</div>'
+    trs = [f'<tr data-st="{r["status"]}"><td class="tvcell">{tv_ticker(r["ticker"])}<div class="src">{_E(r["name"])}</div>'
            + (f'<div class="src">{src}</div>' if src != common else "") + f'</td><td>{_status_badge(r)}</td>{cells}</tr>' for r, cells, src in trs]
     head = "".join(f'<th>{_E(h)}</th>' for _, h, _ in R)
     rules = "".join(f"<li>{_E(l)}</li>" for _, _, l in R)
