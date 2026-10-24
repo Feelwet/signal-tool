@@ -411,6 +411,7 @@ def build(snap: dict) -> Path:
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
     (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + ".card.stale{border-left:4px solid var(--down)}\n"
+                                   ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
     Q.FAILED_SECTIONS.clear()
@@ -581,22 +582,53 @@ def makro_page(snap):
     oil = snap.get("oil") or {}
     oilh = "".join(f'<tr><td>{E(v["label"])}</td><td>{num(v["last"])}</td><td>{num(v.get("z"),1)}</td><td>{spark(v.get("spark"))}{(" " + E(", ".join(f"{c}: {p}" for c, p in v["contracts"].items()))) if v.get("contracts") else ""}</td></tr>' for v in oil.values())
     dodh = "".join(f'<tr><td>{E(r["day"])}</td><td>{E(r["company"])}</td><td>${r["amount"]/1e6:,.1f}M</td><td>{E(r.get("ticker") or "")}</td><td><a href="{E(r["url"])}">kunngjøring</a></td></tr>' for r in snap.get("dod_awards", [])[:20])
-    top = X.chokepoints_html(snap) + X.policy_html(snap) + X.taiwan_html(snap) + X.oil_nowcast_html(snap)
-    if top:
-        top = ('<p class="mut">Hopp til: <a href="#sund">Sundpassasjer</a> · <a href="#politikk">Politikkvarsler</a> · <a href="#taiwan">Taiwan-radar</a> · '
-               '<a href="#olje">Oljelagre</a> · <a href="#stat">Offisiell statistikk</a></p>') + top
-    extra = ""
+    def strip_h2(h):
+        return re.sub(r'<h2 style="margin-top:0">.*?</h2>', "", h, count=1, flags=re.S)
+    from datetime import date
+    MD = "Mangler data"
+    nf = lambda v, d=1: "–" if v is None else f"{v:.{d}f}".replace(".", ",")
+    pf = lambda v, d=1: "–" if v is None else (f"{v*100:+.{d}f} %").replace(".", ",").replace("-", "−")
+    # --- sammendrag i titlene (bare fra eksisterende data) ---
+    al = snap.get("policy_alerts") or []
+    s_pol = f"{len(al)} varsler · siste {max(a.get('date') or '' for a in al)}" if al else MD
+    nor = imf.get("NOR") or {}
+    yr = str(date.today().year)
+    s_imf = (f"Norge {yr}: {nf(nor.get(yr))} % · hentet {str(snap.get('generated', ''))[:10]}") if nor.get(yr) is not None else MD
+    cp = [v.get("alle") or {} for v in (snap.get("chokepoints") or {}).values()]
+    cp = [a for a in cp if a.get("last7") is not None]
+    if cp:
+        tot = sum(a["last7"] for a in cp)
+        base = sum(a["last7"] / (1 + a["vs90"]) for a in cp if a.get("vs90") not in (None, -1))
+        s_cp = f"{nf(tot, 0)} skip/dag i {len(cp)} sund · {pf(tot / base - 1, 0) if base else MD} mot 90-dagers normal"
+    else:
+        s_cp = MD
+    tw = snap.get("taiwan_revenue") or {}
+    tb = (tw.get("latest") or {}).get("basket")
+    s_tw = f"{tw.get('month')}: {pf(tb)} å/å (AI/halvleder-kurv)" if tb is not None and tw.get("month") else MD
+    ws = (snap.get("oil_nowcast") or {}).get("WCESTUS1") or {}
+    s_oil = (f"råoljelagre {nf(ws.get('last'))} mill. fat, {pf(ws.get('dev_pct'))} mot 5-årssnitt (uke t.o.m. {ws.get('date')})"
+             if ws.get("dev_pct") is not None else MD)
+    T = lambda name, summ: f'{name} <span class="fold-sum">– {E(summ)}</span>'
+    oil_body = strip_h2(X.oil_nowcast_html(snap))
     if oilh:
-        extra += f'<div class="card tw"><h2 style="margin-top:0">Fysisk oljemarked (futures via Yahoo)</h2><table><tr><th>Mål</th><th>Siste</th><th>z (1 år)</th><th>Trend / kontrakter</th></tr>{oilh}</table><p class="mut">Pålitelighet: markedsdata – høy, men uoffisiell tilgang (yfinance).</p></div>'
-    if dodh:
-        extra += f'<div class="card tw"><h2 style="margin-top:0">Amerikanske forsvarskontrakter (daglige DoD-kunngjøringer)</h2><table><tr><th>Dag</th><th>Selskap</th><th>Beløp</th><th>Ticker</th><th>Kilde</th></tr>{dodh}</table><p class="mut">Pålitelighet: offisiell kunngjøring – høy. Ticker-kobling er automatisk (navnematch) og kan bomme.</p></div>'
-    return f"""<h1>Makro og fysiske indikatorer</h1>{INF.html_block(mac.get("inflation"), snap.get("calendar"))}{top}
-<h2 id="stat">Offisiell statistikk</h2><p class="mut">«Overraskelse (z)» = hvor uvanlig siste endring er sammenlignet med de 24 foregående endringene (robust z-score). Ikke det samme som avvik fra analytikerforventning (konsensus er ikke fritt tilgjengelig).</p>
-<div class="card tw"><table><tr><th>Serie</th><th>Kilde</th><th>Periode</th><th>Siste</th><th>Endring</th><th>Overr. (z)</th><th>Trend</th><th>Pålitelighet</th></tr>{rows}</table></div>
-<div class="card"><h2 style="margin-top:0">Norges Bank</h2>{fxh}<ul class="ev">{press}</ul></div>
-{('<div class="card tw"><h2 style="margin-top:0">IMF WEO – BNP-vekst (prognose, %)</h2><table><tr><th>Land</th>' + imf_head + '</tr>' + imf_rows + '</table><p class="mut">Pålitelighet: offisiell prognose – anslag, ikke fasit.</p></div>') if imf else ''}
-{('<div class="card"><h2 style="margin-top:0">Nylig oppdatert hos Eurostat</h2><ul class="ev">' + eu + '</ul></div>') if eu else ''}""" + extra
-
+        oil_body += (f'<h3>Fysisk oljemarked (futures via Yahoo)</h3><table><tr><th>Mål</th><th>Siste</th><th>z (1 år)</th><th>Trend / kontrakter</th></tr>{oilh}</table>'
+                     '<p class="mut">Pålitelighet: markedsdata – høy, men uoffisiell tilgang (yfinance).</p>')
+    stat = ('<p class="mut">«Overraskelse (z)» = hvor uvanlig siste endring er sammenlignet med de 24 foregående endringene (robust z-score). Ikke det samme som avvik fra analytikerforventning (konsensus er ikke fritt tilgjengelig).</p>'
+            f'<table><tr><th>Serie</th><th>Kilde</th><th>Periode</th><th>Siste</th><th>Endring</th><th>Overr. (z)</th><th>Trend</th><th>Pålitelighet</th></tr>{rows}</table>')
+    nser = len(mac.get("series", []))
+    imf_body = ('<table><tr><th>Land</th>' + imf_head + '</tr>' + imf_rows + '</table><p class="mut">Pålitelighet: offisiell prognose – anslag, ikke fasit.</p>') if imf else ""
+    dod_body = (f'<table><tr><th>Dag</th><th>Selskap</th><th>Beløp</th><th>Ticker</th><th>Kilde</th></tr>{dodh}</table><p class="mut">Pålitelighet: offisiell kunngjøring – høy. Ticker-kobling er automatisk (navnematch) og kan bomme.</p>') if dodh else ""
+    nd = len(snap.get("dod_awards", []))
+    return (f'<h1>Makro og fysiske indikatorer</h1>{INF.html_block(mac.get("inflation"), snap.get("calendar"))}'
+            f'<div class="card"><h2 style="margin-top:0">Norges Bank</h2>{fxh}<ul class="ev">{press}</ul></div>'
+            + fold(T("⚖️ Politikkvarsler", s_pol), strip_h2(X.policy_html(snap)) or f'<p class="mut">{MD}</p>', open_=False, hid="politikk")
+            + fold(T("IMF WEO – BNP-vekst", s_imf), imf_body or f'<p class="mut">{MD}</p>', open_=False, hid="imf")
+            + fold(T("🚢 Sundpassasjer", s_cp), strip_h2(X.chokepoints_html(snap)) or f'<p class="mut">{MD}</p>', open_=False, hid="sund")
+            + fold(T("🔌 Forsyningskjede-radar (Taiwan)", s_tw), strip_h2(X.taiwan_html(snap)) or f'<p class="mut">{MD}</p>', open_=False, hid="taiwan")
+            + fold(T("🛢️ Fysisk oljemarked og oljelagre", s_oil), oil_body or f'<p class="mut">{MD}</p>', open_=False, hid="olje")
+            + fold(T("Offisiell statistikk", f"{nser} serier" if nser else MD), stat, open_=False, hid="stat")
+            + fold(T("Amerikanske forsvarskontrakter (DoD)", f"{nd} kunngjøringer" if nd else MD), dod_body or f'<p class="mut">{MD}</p>', open_=False, hid="dod")
+            + (fold(T("Nylig oppdatert hos Eurostat", f"{len(mac.get('eurostat_updates', []))} oppdateringer"), f'<ul class="ev">{eu}</ul>', open_=False, hid="eurostat") if eu else ""))
 
 def kalender_page(snap):
     rows = "".join(f'<tr><td>{E(e["date"])}</td><td>{E(e.get("time") or "")}</td><td>{E(e.get("kind",""))}</td><td>{E(e["source"])}</td><td>{E(e["title"])}</td></tr>' for e in snap.get("calendar", []))
