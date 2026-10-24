@@ -231,14 +231,19 @@ CSS = """<style>
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
 .tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""
-INFO_JS = """<script>(()=>{let cur=null;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
+INFO_JS = """<script>(()=>{let cur=null,pinned=false;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
 function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b),r=b.getBoundingClientRect();t.hidden=false;
 t.style.top=(r.bottom+6)+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-t.offsetWidth-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
-function hide(b){tip(b).hidden=true;b.setAttribute('aria-expanded','false');if(cur===b)cur=null}
-document.querySelectorAll('button.info').forEach(b=>{b.addEventListener('mouseenter',()=>show(b));b.addEventListener('mouseleave',()=>{if(document.activeElement!==b)hide(b)});
-b.addEventListener('focus',()=>show(b));b.addEventListener('blur',()=>hide(b));b.addEventListener('click',e=>{e.stopPropagation();cur===b?hide(b):show(b)})});
-document.addEventListener('click',()=>cur&&hide(cur));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
-addEventListener('scroll',()=>cur&&hide(cur),true);addEventListener('resize',()=>cur&&hide(cur))})()</script>"""
+function hide(b){tip(b).hidden=true;b.setAttribute('aria-expanded','false');if(cur===b){cur=null;pinned=false}}
+document.querySelectorAll('button.info').forEach(b=>{
+b.addEventListener('mouseenter',()=>show(b));
+b.addEventListener('mouseleave',()=>{if(!(pinned&&cur===b)&&document.activeElement!==b)hide(b)});
+b.addEventListener('focus',()=>show(b));
+b.addEventListener('blur',()=>{if(!(pinned&&cur===b))hide(b)});
+b.addEventListener('click',e=>{e.stopPropagation();if(cur===b&&pinned){hide(b)}else{show(b);pinned=true}})});
+document.addEventListener('click',e=>{if(cur&&!e.target.closest('.tip'))hide(cur)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
+const re=()=>{if(cur){const c=cur,k=pinned;show(c);pinned=k}};addEventListener('scroll',re,true);addEventListener('resize',re)})()</script>"""
 FILTER_JS = """<script>document.querySelectorAll('.flt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));
 document.querySelectorAll('tr[data-st]').forEach(r=>r.style.display=(b.dataset.f==='all'||r.dataset.st===b.dataset.f)?'':'none')})</script>"""
 LABEL = {"CLEAR": "◆ CLEAR", "FAIL": "✕ Består ikke", "MISSING": "? Mangler data"}
