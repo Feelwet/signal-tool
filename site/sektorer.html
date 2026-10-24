@@ -22,6 +22,9 @@
 .flt{margin:8px 0}.flt button{margin:0 6px 6px 0;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;cursor:pointer;font:inherit}
 .flt button[aria-pressed=true]{background:#5b9cff;border-color:#5b9cff;color:#0b0f17}
 .src{font-size:.8em;color:#999}
+.info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
+.info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:#6cb6ff;border-color:#6cb6ff}
+.tip{position:fixed;z-index:50;max-width:260px;padding:8px 10px;background:#1c2330;color:#e6edf3;border:1px solid #6cb6ff;border-radius:4px;font-size:.85em;font-weight:400;line-height:1.4;white-space:normal;text-align:left}
 .tv{color:var(--acc,#6cb6ff);text-decoration:none}.tv:hover,.tv:focus{text-decoration:underline}
 .tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}

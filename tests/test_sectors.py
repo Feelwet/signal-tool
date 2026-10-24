@@ -54,3 +54,13 @@ def test_tv_url_builder():
     link = S.tv_ticker("FRO.OL")
     assert 'target="_blank"' in link and 'rel="noopener"' in link and "↗" in link and "FRO.OL" in link
     assert S.tv_ticker("AAPL") == "<b>AAPL</b>" and S.tv_ext("AAPL") == ""
+
+
+def test_every_column_has_info_text():
+    fund = {"asof": "2026-10-24", "source": "t", "data": {}}
+    for k in S.SECTORS:
+        for key, _, _ in S.rules_for(k):
+            assert S.INFO.get(key) and S.INFO[key][1]
+        h = S.sector_html(k, fund)
+        assert h.count('class="info"') == len(S.rules_for(k)) + 2
+        assert 'role="tooltip"' in h and "aria-describedby" in h

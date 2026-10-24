@@ -224,10 +224,21 @@ CSS = """<style>
 .scard{display:block;text-decoration:none;color:inherit;border:1px solid #445;border-radius:6px;padding:12px}.scard:hover,.scard:focus{border-color:#5b9cff}
 .flt{margin:8px 0}.flt button{margin:0 6px 6px 0;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;cursor:pointer;font:inherit}
 .flt button[aria-pressed=true]{background:#5b9cff;border-color:#5b9cff;color:#0b0f17}
-.src{font-size:.8em;color:#999}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
+.src{font-size:.8em;color:#999}
+.info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
+.info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:#6cb6ff;border-color:#6cb6ff}
+.tip{position:fixed;z-index:50;max-width:260px;padding:8px 10px;background:#1c2330;color:#e6edf3;border:1px solid #6cb6ff;border-radius:4px;font-size:.85em;font-weight:400;line-height:1.4;white-space:normal;text-align:left}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
 .tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""
+INFO_JS = """<script>(()=>{let cur=null;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
+function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b),r=b.getBoundingClientRect();t.hidden=false;
+t.style.top=(r.bottom+6)+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-t.offsetWidth-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
+function hide(b){tip(b).hidden=true;b.setAttribute('aria-expanded','false');if(cur===b)cur=null}
+document.querySelectorAll('button.info').forEach(b=>{b.addEventListener('mouseenter',()=>show(b));b.addEventListener('mouseleave',()=>{if(document.activeElement!==b)hide(b)});
+b.addEventListener('focus',()=>show(b));b.addEventListener('blur',()=>hide(b));b.addEventListener('click',e=>{e.stopPropagation();cur===b?hide(b):show(b)})});
+document.addEventListener('click',()=>cur&&hide(cur));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
+addEventListener('scroll',()=>cur&&hide(cur),true);addEventListener('resize',()=>cur&&hide(cur))})()</script>"""
 FILTER_JS = """<script>document.querySelectorAll('.flt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));
 document.querySelectorAll('tr[data-st]').forEach(r=>r.style.display=(b.dataset.f==='all'||r.dataset.st===b.dataset.f)?'':'none')})</script>"""
 LABEL = {"CLEAR": "◆ CLEAR", "FAIL": "✕ Består ikke", "MISSING": "? Mangler data"}
@@ -268,6 +279,29 @@ def tv_ticker(ticker: str) -> str:
     return (f'<a class="tv" target="_blank" rel="noopener" title="Graf på TradingView" '
             f'aria-label="{t} – åpne graf på TradingView (ny fane)" href="{_E(url)}"><b>{t}</b> ↗</a>')
 
+
+
+# Forklaringer til kolonneoverskriftene (rett tekst her). Nøkkel = regel-key eller "ticker"/"status".
+INFO = {
+    "ticker": ("Selskap", "Klikk tickeren for graf på TradingView (ny fane)."),
+    "status": ("Status", "CLEAR betyr at alle reglene har tall og er bestått, og det er ikke det samme som kjøp. «Består ikke» betyr at minst én regel er brutt, og «Mangler data» betyr at et tall mangler."),
+    "growth": ("Vekst 3 år", "Hvor mye omsetningen har økt per år de siste tre årene. Grensen er over 10 % i året."),
+    "fcf": ("FCF", "Fri kontantstrøm er pengene selskapet sitter igjen med etter drift og investeringer. Den må være positiv."),
+    "roic": ("ROIC", "Avkastning på kapitalen viser hvor mye selskapet tjener på pengene som er investert i det. ≈ betyr grovt anslag. Grensen er over 10 %."),
+    "dilution": ("Utvanning", "Hvor mye antall aksjer øker per år. Mange nye aksjer gjør eierandelen din mindre. Grensen er under 3 %."),
+    "debt": ("Gjeld/EBITDA", "Hvor mange år det ville tatt å betale ned gjelden med driftsresultatet før avskrivninger. Grensen er under 3."),
+    "roe": ("ROE", "Egenkapitalavkastning er overskuddet delt på eiernes egne penger i banken. Grensen er over 10 %."),
+    "cost_income": ("Kostnad/inntekt", "Andelen av inntektene som går til drift. Lavere er bedre, og grensen er under 50 %."),
+    "loan_loss": ("Utlånstap", "Tap på lån i prosent av alle utlån. Grensen er under 0,3 %."),
+    "cet1": ("CET1", "Ren kjernekapital er bankens buffer mot tap. Den må ligge minst 1 prosentpoeng over myndighetskravet."),
+}
+
+
+def _th(label: str, key: str, uid: str) -> str:
+    name, text = INFO[key]
+    tid = f"tip-{uid}-{key}"
+    return (f'<th>{_E(label)} <button type="button" class="info" aria-label="Hva betyr {_E(name)}?" aria-expanded="false" '
+            f'aria-describedby="{tid}">i</button><span role="tooltip" id="{tid}" class="tip" hidden>{_E(text)}</span></th>')
 
 
 def _pct(v):
@@ -372,7 +406,7 @@ def sector_html(key: str, fund: dict | None = None) -> str:
     common = Counter(rows_src).most_common(1)[0][0] if rows_src else ""
     trs = [f'<tr data-st="{r["status"]}"><td class="tvcell">{tv_ticker(r["ticker"])}<div class="src">{_E(r["name"])}</div>'
            + (f'<div class="src">{src}</div>' if src != common else "") + f'</td><td>{_status_badge(r)}</td>{cells}</tr>' for r, cells, src in trs]
-    head = "".join(f'<th>{_E(h)}</th>' for _, h, _ in R)
+    head = "".join(_th(h, k, key) for k, h, _ in R)
     rules = "".join(f"<li>{_E(l)}</li>" for _, _, l in R)
     stale = " · <b>⏱ Utdatert</b>" if is_stale(asof) else ""
     bank_note = ('<p class="mut">Bank: ROIC, fri kontantstrøm og gjeld/EBITDA gir lite mening og er erstattet med bankregler. Vekstkrav gjelder ikke. '
@@ -387,7 +421,7 @@ def sector_html(key: str, fund: dict | None = None) -> str:
             f'<p class="mut">Ett brudd gir «✕ Består ikke». Mangler et tall (og ingen brudd), blir status «? Mangler data» – vi finner ikke opp tall. '
             f'Data: {_E(fund.get("source") or "–")}, hentet {_E(fund.get("fetched") or asof or "–")}{stale}. Ikke bakovertestet. Tema alene er ikke grunn til å kjøpe.</p>{bank_note}'
             f'<p><b>{_E(FORWARD_TXT)}</b> (mot sektorsnitt og OSEBX).</p>{flt}'
-            f'<div class="tscroll"><table><tr><th>Selskap</th><th>Status</th>{head}</tr>{"".join(trs)}</table></div><p class="src">Kilde: {common}</p></div>{FILTER_JS}')
+            f'<div class="tscroll"><table><tr>{_th("Selskap", "ticker", key)}{_th("Status", "status", key)}{head}</tr>{"".join(trs)}</table></div><p class="src">Kilde: {common}</p></div>{FILTER_JS}{INFO_JS}')
 
 
 def index_html(fund: dict | None = None) -> str:
