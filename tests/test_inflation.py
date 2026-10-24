@@ -22,3 +22,11 @@ def test_forecast_stale_after_6_months():
 
 def test_block_without_data():
     assert "Mangler data" in INF.html_block(None, [])
+
+
+def test_forecast_file_has_provenance():
+    fc = INF.load_forecasts()
+    assert set(fc) >= {"NO", "SE", "EA", "DK", "UK"}
+    for k, f in fc.items():
+        assert f["url"].startswith("https://") and f["source"] and f["published"][:2] == "20" and f["measure"] and f["points"]
+        assert all(isinstance(v, float) for _, v in f["points"])

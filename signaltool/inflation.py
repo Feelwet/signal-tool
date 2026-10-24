@@ -82,6 +82,11 @@ def policy_rates() -> dict:
             out["EA"] = {"rate": f["ECBDFR"][-1][1], "date": f["ECBDFR"][-1][0], "source": "ECB innskuddsrente (FRED ECBDFR)"}
     except Exception:
         pass
+    for k, fn in (("SE", _rate_se), ("DK", _rate_dk), ("UK", _rate_uk)):
+        try:
+            out[k] = fn()
+        except Exception:
+            pass
     return out
 
 
@@ -107,10 +112,10 @@ def ssb_kpi_yoy() -> list:
 
 
 def scb_kpif() -> list:
-    q = {"query": [{"code": "ContentsCode", "selection": {"filter": "item", "values": ["PR0101F1"]}},
-                   {"code": "Tid", "selection": {"filter": "top", "values": ["72"]}}], "response": {"format": "json"}}
-    d = requests.post("https://api.scb.se/OV0104/v1/doris/sv/ssd/PR/PR0101/PR0101G/KPIF", json=q, headers=UA, timeout=30).json()
-    return sorted([[r["key"][0].replace("M", "-"), float(r["values"][0])] for r in d["data"] if r["values"][0] not in ("..", "")])
+    j = _get("https://statistikdatabasen.scb.se/api/v2/tables/TAB6590/data",
+             params={"lang": "sv", "valueCodes[ContentsCode]": "000007ZM", "valueCodes[Tid]": "top(72)", "outputFormat": "json-stat2"}).json()
+    ti = j["dimension"]["Tid"]["category"]["index"]
+    return sorted([[t.replace("M", "-"), float(j["value"][i])] for t, i in ti.items() if j["value"][i] is not None])
 
 
 def us_pce_yoy() -> list:
@@ -134,6 +139,37 @@ def fed_sep() -> dict:
             "url": "https://fred.stlouisfed.org/series/PCECTPIMD"}
 
 
+def _rate_se():
+    j = _get("https://api.riksbank.se/swea/v1/Observations/Latest/SECBREPOEFF").json()
+    return {"rate": float(j["value"]), "date": j["date"], "source": "Riksbanken styrränta (SWEA)"}
+
+
+def _rate_dk():
+    r = requests.post("https://api.statbank.dk/v1/data", headers=UA, timeout=30, json={"table": "DNRENTD", "format": "CSV", "variables": [
+        {"code": "INSTRUMENT", "values": ["OFONAA"]}, {"code": "LAND", "values": ["DK"]}, {"code": "OPGOER", "values": ["E"]}, {"code": "Tid", "values": ["(-n+1)"]}]})
+    r.raise_for_status()
+    row = r.text.strip().splitlines()[-1].split(";")
+    t = row[-2]
+    return {"rate": float(row[-1].replace(",", ".")), "date": f"{t[:4]}-{t[5:7]}-{t[8:10]}", "source": "Nationalbanken, foliorente (Statbank DNRENTD)"}
+
+
+def _rate_uk():
+    from datetime import datetime
+    t = requests.get("https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2026&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+                     headers={"User-Agent": "Mozilla/5.0"}, timeout=30).text.strip().splitlines()[-1].split(",")
+    return {"rate": float(t[1]), "date": datetime.strptime(t[0], "%d %b %Y").date().isoformat(), "source": "Bank of England, Bank Rate (IADB IUDBEDR)"}
+
+
+FC_PATH = __import__("pathlib").Path(__file__).with_name("inflation_forecasts.json")
+
+
+def load_forecasts() -> dict:
+    try:
+        return {k: v for k, v in json.loads(FC_PATH.read_text()).items() if not k.startswith("_")}
+    except Exception:
+        return {}
+
+
 def collect() -> tuple[dict, dict]:
     series, cards, fc, st = {}, {}, {}, {}
     def run(lab, fn):
@@ -153,6 +189,7 @@ def collect() -> tuple[dict, dict]:
     for k, lab, fn in (("NO", "Inflasjon Norge KPI (SSB)", ssb_kpi_yoy), ("SE", "Inflasjon Sverige KPIF (SCB)", scb_kpif), ("US", "Inflasjon USA PCE (FRED)", us_pce_yoy)):
         r = run(lab, fn)
         if r: cards[k] = r
+    fc.update(load_forecasts())
     sep = run("Prognose Fed SEP (FRED PCECTPIMD)", fed_sep)
     if sep: fc["US"] = sep
     return {"series": {k: v[-MONTHS:] for k, v in series.items()}, "cards": {k: v[-MONTHS:] for k, v in cards.items()},
@@ -195,7 +232,8 @@ def card_chart(hist, fc, col, today, W=300, H=170):
     steps = []
     if fc:
         lm = _mi(last[0])
-        steps = [(int(y), v) for y, v in fc["points"] if int(y) * 12 + 11 > lm]
+        q3 = fc.get("kind") == "q3"
+        steps = [(int(y), v) for y, v in fc["points"] if (int(y) * 12 + 8 if q3 else int(y) * 12 + 11) > lm]
     x0 = _mi(hist[0][0])
     x1 = max(_mi(last[0]), *(y * 12 + 11 for y, _ in steps)) if steps else _mi(last[0])
     tm = today.year * 12 + today.month - 1
@@ -219,10 +257,13 @@ def card_chart(hist, fc, col, today, W=300, H=170):
         lx, ly = X(_mi(last[0])), Y(last[1])
         d = f"M{lx:.1f},{ly:.1f}"
         for y, v in steps:
-            xa, xb = X(max(y * 12, _mi(last[0]))), X(y * 12 + 11)
-            d += f" L{xa:.1f},{Y(v):.1f} L{xb:.1f},{Y(v):.1f}"
+            if q3:   # publiserte kvartalspunkter (Q3), ikke årssnitt: punkt-til-punkt
+                d += f" L{X(y * 12 + 7):.1f},{Y(v):.1f}"
+            else:
+                xa, xb = X(max(y * 12, _mi(last[0]))), X(y * 12 + 11)
+                d += f" L{xa:.1f},{Y(v):.1f} L{xb:.1f},{Y(v):.1f}"
         g.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="1.8" stroke-dasharray="5 4"/>')
-        g += [f'<circle cx="{X(y * 12 + 6):.1f}" cy="{Y(v):.1f}" r="3" fill="{col}"><title>{y}: {_nf(v)} %</title></circle>' for y, v in steps]
+        g += [f'<circle cx="{X(y * 12 + (7 if q3 else 6)):.1f}" cy="{Y(v):.1f}" r="3" fill="{col}"><title>{y}: {_nf(v)} %</title></circle>' for y, v in steps]
     return (f'<svg class="cchart" viewBox="0 0 {W} {H}" width="100%" height="{H}" role="img" aria-label="Inflasjon og prognose">{"".join(g)}</svg>')
 
 
@@ -278,7 +319,8 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
         f = F.get(k)
         if f:
             lab, pub, old = _fc_label(f, today)
-            fcl = (f'<div class="fcl" style="color:{col}" title="Publisert {_E(pub or "ukjent")}">- - Prognose: {_E(lab)}'
+            src = f' · <a href="{_E(f["url"])}" target="_blank" rel="noopener">kilde</a>' if f.get("url") else ""
+            fcl = (f'<div class="fcl" style="color:{col}" title="Publisert {_E(pub or "ukjent")}">- - Prognose: {_E(lab)}{src}'
                    f'{" · <b>⏱ Utdatert</b>" if old else ""}</div>')
         else:
             fcl = '<div class="fcl mut">Ingen prognose</div>'
