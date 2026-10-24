@@ -8,6 +8,7 @@ from . import categories as C
 from . import site_extra as X
 from . import theme_maps as TM
 from . import sectors as SEC
+from . import calendar_view as CV
 from . import site_quality as Q
 
 SITE = ROOT / "site"
@@ -580,7 +581,7 @@ def makro_page(snap):
 def kalender_page(snap):
     rows = "".join(f'<tr><td>{E(e["date"])}</td><td>{E(e.get("time") or "")}</td><td>{E(e.get("kind",""))}</td><td>{E(e["source"])}</td><td>{E(e["title"])}</td></tr>' for e in snap.get("calendar", []))
     return f"""<h1>Kalender</h1><p class="mut">Tider i norsk tid der kilden oppgir tid. «(estimert)» = beregnet fra fast publiseringsrytme, ikke offisiell kalender. Sentralbankmøter vises 45 dager frem, øvrige 14–21 dager.</p>
-<div class="card tw"><table><tr><th>Dato</th><th>Tid</th><th>Type</th><th>Kilde</th><th>Hendelse</th></tr>{rows}</table></div>"""
+""" + CV.calendar_html(snap.get("calendar", []), f'<div class="card tw"><table><tr><th>Dato</th><th>Tid</th><th>Type</th><th>Kilde</th><th>Hendelse</th></tr>{rows}</table></div>')
 
 
 def oslo_page(snap):

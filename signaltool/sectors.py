@@ -227,7 +227,7 @@ CSS = """<style>
 .src{font-size:.8em;color:#999}
 .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
 .info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:#6cb6ff;border-color:#6cb6ff}
-.tip{position:fixed;z-index:50;max-width:260px;padding:8px 10px;background:#1c2330;color:#e6edf3;border:1px solid #6cb6ff;border-radius:4px;font-size:.85em;font-weight:400;line-height:1.4;white-space:normal;text-align:left}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
+.tip{position:fixed;z-index:50;max-width:min(260px,calc(100vw - 16px));padding:8px 10px;background:#1c2330;color:#e6edf3;border:1px solid #6cb6ff;border-radius:4px;font-size:.85em;font-weight:400;line-height:1.4;white-space:normal;text-align:left}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none;white-space:nowrap}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
 .tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""

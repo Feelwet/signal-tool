@@ -64,3 +64,17 @@ def test_every_column_has_info_text():
         h = S.sector_html(k, fund)
         assert h.count('class="info"') == len(S.rules_for(k)) + 2
         assert 'role="tooltip"' in h and "aria-describedby" in h
+
+
+def test_calendar_json_embedded_and_valid():
+    import json, re
+    from signaltool import calendar_view as CV
+    cal = [{"date": "2026-10-28", "time": "20:00", "source": "Federal Reserve", "title": "FOMC", "kind": "sentralbank"},
+           {"date": "2026-11-05", "time": "", "source": "Selskap (estimert)", "title": "Q3", "kind": "resultat", "ticker": "SUBC.OL"},
+           {"date": "2026-10-29", "time": "08:00", "source": "SSB", "title": "KPI </script>", "kind": "makro"}]
+    h = CV.calendar_html(cal, "<table></table>")
+    m = re.search(r'<script type="application/json" id="cal-data">(.*?)</script>', h, re.S)
+    ev = json.loads(m.group(1))
+    assert [e["type"] for e in ev] == ["sentralbank", "resultat", "makro"]
+    assert ev[1]["follow"] and ev[1]["est"] and "OSL%3ASUBC" in ev[1]["tv"]
+    assert 'aria-label="Forrige måned"' in h and 'aria-label="Neste måned"' in h and "<table></table>" in h
