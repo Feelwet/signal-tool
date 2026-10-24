@@ -7,6 +7,7 @@ from .config import ROOT, REPORTS
 from . import categories as C
 from . import site_extra as X
 from . import theme_maps as TM
+from . import sectors as SEC
 from . import site_quality as Q
 
 SITE = ROOT / "site"
@@ -269,6 +270,7 @@ NAV = [
     ("makro.html", "Makro"),
     ("kalender.html", "Kalender"),
     ("oslo.html", "Oslo Børs"),
+    ("sektorer.html", "Sektorer"),
     ("kilder.html", "Kilder og metode"),
 ]
 
@@ -288,14 +290,16 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
-        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html",
+        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html",
     }
     cur = active.get(title)
     if cur is None:
         # Theme/ticker detail pages: no top-level match; highlight parent section.
         low = title.lower()
-        if "tema" in low:
+        if low.startswith("sektor"):
+            cur = "sektorer.html"
+        elif "tema" in low:
             cur = "temaer.html"
         elif any(x in low for x in (".ol", ".us", "ticker")) or re.match(r"^[A-Z0-9.-]{1,12}$", title):
             cur = "tickere.html"
@@ -467,6 +471,11 @@ def build(snap: dict) -> Path:
     (SITE / "makro.html").write_text(page("Makro", sec("Makro", makro_page, snap), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
     (SITE / "oslo.html").write_text(page("Oslo Børs", sec("Oslo Børs", oslo_page, snap), 0, snap))
+    _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
+    ssnap = {**snap, "generated": _f.get("fetched") or _f.get("asof") or snap.get("generated")}
+    (SITE / "sektorer.html").write_text(page("Sektorer", sec("Sektorer", SEC.index_html), 0, ssnap))
+    for k, S in SEC.SECTORS.items():
+        (SITE / "tema" / f"{S['file']}.html").write_text(page(f"Sektor: {S['name']}", sec(f"Sektor: {S['name']}", SEC.sector_html, k), 1, ssnap))
     (SITE / "kilder.html").write_text(page("Kilder og metode", sec("Kilder og metode", kilder_page, snap), 0, snap))
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
     if C.LOG_PATH.exists():  # public forward log of every day's categories (also restores CI state if the cache is lost)

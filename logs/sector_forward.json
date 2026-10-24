@@ -1,0 +1,27 @@
+{
+ "frozen": "2026-10-24",
+ "first_measurement": "2027-01",
+ "benchmark": [
+  "sektorsnitt",
+  "OSEBX"
+ ],
+ "data_asof": "2026-10-24",
+ "clear": {
+  "energi": [
+   "SUBC.OL",
+   "AKSO.OL"
+  ],
+  "sjomat": [],
+  "shipping": [
+   "FRO.OL",
+   "OET.OL"
+  ],
+  "forsvar": [
+   "NORBT.OL"
+  ],
+  "bank": [],
+  "industri": [],
+  "materialer": []
+ },
+ "note": "Framovertest: listen er frosset og måles hvert kvartal mot sektorsnitt og OSEBX. Ikke bakovertestet."
+}
