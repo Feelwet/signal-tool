@@ -30,6 +30,7 @@ def load_index(year: int) -> pd.DataFrame:
 TYPE_RE = re.compile(r"\s(P|S \(partial\)|S|E)\s+(\d{2}/\d{2}/\d{4})\s+(\d{2}/\d{2}/\d{4})\s+(Over \$[\d,]+|\$[\d,]+(?:\s*-\s*\$[\d,]+)?)?")
 TICK_RE = re.compile(r"\(([A-Z][A-Z.\-]{0,6})\)")
 ATYPE_RE = re.compile(r"\[([A-Z]{2})\]")
+SPLIT_HI_RE = re.compile(r"\s*-\s")
 
 
 def parse_ptr_text(text: str) -> list[dict]:
@@ -42,8 +43,15 @@ def parse_ptr_text(text: str) -> list[dict]:
             continue
         tk = TICK_RE.findall(flat)
         at = ATYPE_RE.search(flat)
+        amt = (m.group(4) or "").strip()
+        if amt.startswith("$") and "-" not in amt:   # spennet delt over to linjer: «$15,001 -» + neste linje «$50,000»
+            j = SPLIT_HI_RE.match(flat, m.end())
+            if j:
+                hi = re.compile(r"\$[\d,]+").search(flat, j.end())
+                if hi:
+                    amt = f"{amt} - {hi.group(0)}"
         out.append({"ticker": tk[0] if tk else None, "asset_type": at.group(1) if at else None, "type": m.group(1)[0],
-                    "trans_date": m.group(2), "amount": (m.group(4) or "").strip(),
+                    "trans_date": m.group(2), "amount": amt,
                     "asset": re.sub(r"\s+", " ", flat[:m.start()]).strip()[-80:]})
     return out
 

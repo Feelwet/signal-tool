@@ -426,7 +426,7 @@ def ticker_row(e, pre=""):
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
             f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -691,7 +691,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
-{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{RK.status()}
+{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}

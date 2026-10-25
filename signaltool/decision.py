@@ -327,12 +327,74 @@ def compute(snap: dict, max_info=80) -> dict:
     return out
 
 
+FUND_KEYS = tuple(INFO_KEYS) + ("next_earnings", "info_date")
+FALLBACK_MAX_TD = 5        # AnalBot 25.10: gjenbruk høyst 5 handelsdager gammel dekning/fundamentaldata
+_RUN = {"fail": False}     # kildefeil gjelder hele kjøringen (alle apply-kall i samme prosess)
+
+
+def _has_fund(m) -> bool:
+    return bool(m) and any(m.get(k) is not None for k in ("sector", "marketCap", "trailingPE", "numberOfAnalystOpinions"))
+
+
+def fallback(snap: dict, dec: dict, today: str | None = None, path=None) -> dict:
+    """Yahoo-vakt (AnalBot 25.10): feiler fundamentaldata for > 50 % av aksjetickerne i kjøringen, er det kildefeil for hele
+    kjøringen. Da gjenbrukes siste vellykkede fundamentaldata per ticker (høyst 5 handelsdager gamle) og e["fund_fallback"]
+    = dato; eldre -> vanlig 4/7-regel. Uten kildefeil lagres dagens vellykkede som siste gode (data/cache, følger actions/cache)."""
+    import json
+    today = today or date.today().isoformat()
+    path = path or (CACHE / "fund_lastgood.json")
+    try:
+        good = json.loads(path.read_text()) if path.exists() else {}
+    except Exception:
+        good = {}
+    eq = [e for e in snap.get("tickers", []) if is_equity(e["ticker"])]
+    failed = [e for e in eq if not _has_fund(dec.get(e["ticker"]))]
+    if eq and len(failed) / len(eq) > 0.5:
+        _RUN["fail"] = True
+    used = []
+    if _RUN["fail"]:
+        for e in failed:
+            g = good.get(e["ticker"])
+            if not g or int(np.busday_count(g["date"], today)) > FALLBACK_MAX_TD:
+                continue
+            m = dec.setdefault(e["ticker"], dict(e.get("decision") or {}))
+            for k, v in g["fund"].items():
+                if m.get(k) is None:
+                    m[k] = v
+            m["fund_fallback"] = g["date"]
+            used.append(e["ticker"])
+    else:
+        for e in eq:
+            m = dec.get(e["ticker"])
+            if _has_fund(m):
+                good[e["ticker"]] = {"date": today, "fund": {k: m.get(k) for k in FUND_KEYS if m.get(k) is not None}}
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(good, ensure_ascii=False, default=str))
+        except OSError as ex:
+            log.warning("lastgood: %s", ex)
+    return {"attempted": len(eq), "failed": len(failed), "source_fail": _RUN["fail"], "used": used}
+
+
+def fb_date(e: dict):
+    return (e.get("decision") or {}).get("fund_fallback")
+
+
+def fb_text(e: dict) -> str:
+    d = fb_date(e)
+    return f"Fundamentaldata fra {d[8:10]}.{d[5:7]} (Yahoo feilet i dag)" if d else ""
+
+
 def apply(snap: dict) -> dict:
     try:
         dec = compute(snap)
     except Exception as ex:
         log.warning("decision data failed: %s", ex)
         dec = {}
+    try:
+        snap.setdefault("_fund_fb", []).append(fallback(snap, dec))
+    except Exception as ex:
+        log.warning("yahoo fallback: %s", ex)
     for e in snap.get("tickers", []):
         if e["ticker"] in dec:
             e["decision"] = dec[e["ticker"]]

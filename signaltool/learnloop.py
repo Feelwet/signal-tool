@@ -50,7 +50,7 @@ def prev_list(today: str = "") -> set:
 
 
 EXIT_COLS = ["date", "ticker", "prev_run", "reason", "rank", "score", "tie_step", "n_types", "tied_with", "run_id", "is_canonical"]
-RAW_COLS = ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60", "run_id", "is_canonical"]
+RAW_COLS = ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60", "run_id", "is_canonical", "source_fallback"]
 
 
 def run_meta() -> tuple[str, str]:
@@ -174,7 +174,8 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
         t, b = e["ticker"], benches.get(e["ticker"])
         s, bs = px.get(t) or {}, (px.get(b[0]) if b else None) or {}
         rr = {"date": today, "ticker": t, "rank": crank.get(t, ""), "score": e.get("score"), "types": "|".join(sorted(k for k, v in (e.get("points") or {}).items() if v > 0)),
-              "close": round(s[max(s)], 4) if s else "", "close_date": max(s) if s else "", "index": b[0] if b else ""}
+              "close": round(s[max(s)], 4) if s else "", "close_date": max(s) if s else "", "index": b[0] if b else "",
+              "source_fallback": 1 if (e.get("decision") or {}).get("fund_fallback") else 0}
         for n in (5, 20, 60):
             a, x = _ret(s, n), _ret(bs, n)
             rr[f"r{n}"] = "" if a is None else round(a, 6)

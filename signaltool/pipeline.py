@@ -100,7 +100,7 @@ def _coverage_cut(snap: dict, pos: list, status: dict) -> None:
         for e in cur:
             if DCv.rankable(e):
                 kept.append(e)
-            elif it == 0:          # bare tickere som ellers hadde vært blant de 60, vises som «Ikke rangert»
+            else:                  # også erstattere utenfra topp 60 (25.10: LHX falt ut helt -> 404)
                 low.append(e)
         need = 60 - len(kept)
         if need <= 0 or nxt_i >= len(pos):
@@ -116,6 +116,13 @@ def _coverage_cut(snap: dict, pos: list, status: dict) -> None:
     for e in low:
         e["unranked"] = True
     snap["tickers"] = kept + low
+    fbs = snap.pop("_fund_fb", [])
+    if any(f["source_fail"] for f in fbs):
+        used = sorted({t for f in fbs for t in f["used"]})
+        status["Yahoo-fundamentaldata (vakt > 50 %)"] = (f"FAILED: kildefeil ({fbs[0]['failed']}/{fbs[0]['attempted']} feilet) – "
+                                                         f"siste gode brukt for {len(used)}: {', '.join(used) or '–'}")
+    elif fbs:
+        status["Yahoo-fundamentaldata (vakt > 50 %)"] = f"ok ({fbs[0]['attempted'] - fbs[0]['failed']}/{fbs[0]['attempted']})"
     status["Datakvalitet (≥ 4/7 for rangering)"] = f"ok ({len(kept)} rangert, {len(low)} ikke rangert: {', '.join(e['ticker'] for e in low) or '–'})"
 
 

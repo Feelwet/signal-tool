@@ -47,4 +47,19 @@ def line(e: dict, status: dict) -> str:
     return f'<p class="src-line{" src-bad" if bad else ""}">{E(txt)}</p>'
 
 
-CSS = ".src-line{margin:0 0 4px;font-size:11px;line-height:14px;color:#8b949e}.src-line.src-bad{color:#92400E}\n"
+def fb_line(e: dict) -> str:
+    """AnalBot/UxBot 25.10: gul linje rett under kildelinjen når fundamentaldata er gjenbrukt (Yahoo-kildefeil)."""
+    from .decision import fb_text
+    t = fb_text(e)
+    return f'<p class="fb-line">{E(t)}</p>' if t else ""
+
+
+def fb_dot(e: dict) -> str:
+    from .decision import fb_text
+    t = fb_text(e)
+    return f'<span class="fb-dot" title="{E(t)}" aria-label="{E(t)}" tabindex="0"></span>' if t else ""
+
+
+CSS = ".fb-line{margin:2px 0 4px;font-size:11px;line-height:14px;color:#92400E;white-space:normal;overflow:visible;text-overflow:clip}"\
+      ".fb-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#92400E;margin-left:4px;vertical-align:middle;cursor:help}\n"
+CSS += ".src-line:has(+.fb-line){margin-bottom:0}.src-line{margin:0 0 4px;font-size:11px;line-height:14px;color:#8b949e}.src-line.src-bad{color:#92400E}\n"
