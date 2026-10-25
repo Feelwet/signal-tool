@@ -302,7 +302,7 @@ def _fc_label(f, today):
     pub = f.get("published")
     when = f"{MN[int(pub[5:7]) - 1]} {pub[:4]}" if pub else "dato ukjent"
     old = (not pub) or (today - date.fromisoformat(pub)).days > 183
-    return f'{f["source"]} {when}, {f["measure"]}', pub, old
+    return f'{f.get("short_source") or f["source"]} {when}, {f["measure"]}', pub, old
 
 
 def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel=None):
@@ -334,7 +334,7 @@ def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel
     if target is not None:
         g.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(target):.1f}" y2="{Y(target):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/>')
         if tlabel:
-            g.append(f'<text x="{L + 2}" y="{Y(target) - 3:.1f}">{_E(tlabel)}</text>')
+            g.append(f'<text class="tlabel" x="{W - R - 2}" y="{Y(target) - 3:.1f}" text-anchor="end">{_E(tlabel)}</text>')
     pts = " ".join(f"{X(_mi(m)):.1f},{Y(v):.1f}" for m, v in hist)
     g.append(f'<polyline fill="none" stroke="{col}" stroke-width="1.8" points="{pts}"/>')
     if steps:
@@ -361,7 +361,7 @@ CSS = """<style>
 .infl-leg button[aria-pressed=false]{opacity:.45;text-decoration:line-through}.infl-leg i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:6px}
 .infl-svg{width:100%;height:auto}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
 .infl-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px}
-.infl-card{border:1px solid #30363d;border-radius:6px;padding:10px 12px}.infl-card .big{font-size:1.5em;font-weight:600}
+.infl-card{border:1px solid #30363d;border-radius:6px;padding:10px 12px}.infl-card .big{font-size:1.5em;font-weight:600;color:#e6edf3}
 .cchart{display:block;min-height:160px;margin:6px 0}.fcl{font-size:.8em}
 </style>"""
 JS = """<script>document.querySelectorAll('.infl-leg button').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
@@ -412,12 +412,12 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
         tgt = (f'<div class="src">Mål: <a href="{_E(CN_TARGET["url"])}" target="_blank" rel="noopener">{_E(CN_TARGET["label"])}</a> – {_E(CN_TARGET["source"])}</div>' if k == "CN" else "")
         nm = _next_meeting(cal, cb)
         cards.append(f'<div class="infl-card"><b>{_E(name)}</b>'
-                     f'<div class="big" style="color:{col}">{_E(meas)} {"–" if not last else _nf(last[1]) + " %"}</div>'
+                     f'<div class="big">{_E(meas)} {"–" if not last else _nf(last[1]) + " %"}</div>'
                      f'<div class="src">{_E(msrc)}{f" · {_E(last[0])}" if last else " · Mangler data"}{" · <b>⏱ Utdatert</b>" if stale else ""}</div>{sub}'
                      f'{(card_chart(hist, f, col, today, floor=-2.0, target=2.0, tlabel=CN_TARGET["label"]) if k == "CN" else card_chart(hist, f, col, today)) if len(hist) > 1 else ""}{fcl}'
                      f'{tgt}'
-                     f'<p style="margin:6px 0 0">Styringsrente: {f"<b>{_nf(rt["rate"], 2)} %</b> <span class=src>{_E(rt["source"])}, {_E(rt["date"])}</span>" if rt else "<span class=mut>ikke hentet</span>"}<br>'
-                     f'Neste møte: {"<span class=mut>ingen faste rentemøter</span>" if k == "CN" else ""}{"" if k == "CN" else f"{_E(nm["date"])} {_E(nm.get("time") or "")}" + (" (estimert)" if "estimert" in nm.get("source", "").lower() else "") if nm else "<span class=mut>ikke i kalenderen (45 dager frem)</span>"}</p></div>'.replace("Neste møte: <span class=mut>ingen faste rentemøter</span><span class=mut>ikke i kalenderen (45 dager frem)</span>", "Neste møte: <span class=mut>ingen faste rentemøter</span>"))
+                     f'<p style="margin:6px 0 0">Styringsrente: {f"<b>{_nf(rt["rate"], 2)} %</b> <span class=src>{_E(rt["source"])}, {_E(rt["date"])}</span>" if rt else ("<span class=mut>Rente: ingen fri kilde</span>" if k == "CN" else "<span class=mut>ikke hentet</span>")}<br>'
+                     f'Neste møte: {"<span class=mut>LPR settes den 20. hver måned</span>" if k == "CN" else ""}{"" if k == "CN" else f"{_E(nm["date"])} {_E(nm.get("time") or "")}" + (" (estimert)" if "estimert" in nm.get("source", "").lower() else "") if nm else "<span class=mut>ikke i kalenderen (45 dager frem)</span>"}</p></div>'.replace("Neste møte: <span class=mut>LPR settes den 20. hver måned</span><span class=mut>ikke i kalenderen (45 dager frem)</span>", "Neste møte: <span class=mut>LPR settes den 20. hver måned</span>"))
     two = f'<line x1="{L}" x2="{W-8}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/><text x="{W-10}" y="{Y(2)-4:.1f}" text-anchor="end">2 % mål</text>'
     svg = (f'<svg class="infl-svg" viewBox="0 0 {W} {H}" role="img" aria-label="Inflasjon siste 5 år, årlig prosent, per land">{grid}{years}{two}{"".join(lines)}</svg>')
     return (f'{CSS}<div class="card" id="inflasjon"><h2 style="margin-top:0">Inflasjon siste 5 år (årlig %, faktiske tall)</h2>'

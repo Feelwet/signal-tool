@@ -40,4 +40,4 @@ def test_china_card_grey_imf_target_and_no_meetings():
           "url": "https://www.imf.org/x", "grey": True, "points": [["2026", 1.0], ["2027", 1.4]]}
     h = I.html_block({"series": {"CN": hist}, "cards": {"CN": hist}, "forecasts": {"CN": fc}, "rates": {}, "stale": ["CN"]}, [], date(2026, 10, 25))
     assert "KPI (NBS), ikke HICP" in h and "ikke sentralbank" in h and 'stroke="#8b949e" stroke-width="1.8" stroke-dasharray="5 4"' in h
-    assert "regjeringens mål ~2 %" in h and "english.www.gov.cn" in h and "ingen faste rentemøter" in h and "⏱ Utdatert" in h
+    assert "regjeringens mål ~2 %" in h and "english.www.gov.cn" in h and "LPR settes den 20. hver måned" in h and "Rente: ingen fri kilde" in h and "⏱ Utdatert" in h

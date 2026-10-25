@@ -120,6 +120,7 @@
  },
  "DE": {
   "source": "Bundesbank Deutschland-Prognose",
+  "short_source": "Bundesbank",
   "measure": "HICP",
   "kind": "annual",
   "published": "2026-06-12",
