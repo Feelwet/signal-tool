@@ -94,9 +94,10 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
         parts.append(f"Siden {_dm(s['since'])}")
         if s.get("price") is not None:
             parts.append(f"inn {_price(s['price'])}" + (f" ({_dm(s['price_date'])})" if s.get("price_date") else ""))
-        if ret and ret.get("r") is not None:
-            parts.append(pct(ret["r"]))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
+    if ret and ret.get("r") is not None:
+        t += (f'<span class="sl-r">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span><button type="button" class="rt-i" aria-expanded="false" '
+              f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
     return f'<p class="since mut rk-line">{lead}{t}</p>'
 
 
@@ -105,6 +106,10 @@ NOTE_T = ("Avkastningen er regnet fra sluttkursen dagen aksjen kom på lista (in
           "på samme børs. Var aksjen ute av lista en stund, starter tellingen på nytt. Tallet viser hva som har skjedd, ikke hva som vil skje, "
           "og er ikke et kjøpsråd.")
 NOTE = NOTE_T.replace(" (inn {dm})", "")   # felles (i) i kolonneoverskriften: ingen enkeltdato
+
+
+def tip_html(s: dict | None) -> str:
+    return f'<p id="rt-tip" class="rk-tip" hidden>{E(note_for(s))}</p>'
 
 
 def note_for(s: dict | None) -> str:
@@ -167,8 +172,7 @@ def ret_inner(r: dict | None) -> str:
 
 def ret_cell(r: dict | None) -> str:
     v = f"{r['r']:.6f}" if r else ""
-    t = f' title="{E(r["note"])}"' if r and r.get("note") else ""
-    return f'<td class="ret-c" data-v="{v}"{t}>{ret_inner(r)}</td>'
+    return f'<td class="ret-c" data-v="{v}">{ret_inner(r)}</td>'
 
 
 def cell(s: dict | None) -> str:
@@ -185,7 +189,7 @@ def mobile(s: dict | None, r: dict | None = None) -> str:
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
 td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
-.ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri:hover .tip,.ri:focus .tip,.ri[aria-expanded=true] .tip{display:block}
+.ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
@@ -197,7 +201,7 @@ function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),
 rows.sort((a,b)=>{const x=a.children[i].dataset.v,y=b.children[i].dataset.v;if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;const c=num?(+x)-(+y):x.localeCompare(y);return asc?c:-c});
 const p=rows[0]&&rows[0].parentNode;rows.forEach(r=>p.appendChild(r));tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending')}
 h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
-document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));
+document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));const riX=()=>document.querySelectorAll('.ri[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.ri'))riX()});document.addEventListener('keydown',e=>{if(e.key==='Escape')riX()});
 document.querySelectorAll('tr.rowlink').forEach(r=>{const skip=e=>e.target.closest('a,button,input,label,.ri,.mstar');
 const go=(e,nt)=>{if(skip(e))return;const u=r.dataset.href;if(nt||e.ctrlKey||e.metaKey||e.shiftKey)window.open(u,'_blank','noopener');else location.href=u};
 r.addEventListener('click',e=>go(e,false));r.addEventListener('auxclick',e=>{if(e.button===1){e.preventDefault();go(e,true)}});

@@ -21,4 +21,12 @@ def test_exit_reason_tie(tmp_path, monkeypatch):
     for x in ranked[:60]:
         x["stats"] = {"close": 1}
     LL.record({"date": "2026-10-25", "tickers": ranked[:60]}, ranked)
-    assert "lik score, kutt 60" in (tmp_path / "e.csv").read_text()
+    txt = (tmp_path / "e.csv").read_text()
+    assert "lik score, kutt 60" in txt and ",1,1," in txt and "T59:ny:1" in txt and txt.startswith(",".join(LL.EXIT_COLS))
+
+
+def test_tie_step():
+    a, b = e("AAA", 1.0, 1), e("BBB", 1.0, 1)
+    assert LL.tie_step(b, a, {"AAA", "BBB"}) == "3"
+    assert LL.tie_step(b, a, {"AAA"}) == "1"
+    assert LL.tie_step(e("BBB", 1.0, 1), e("CCC", 1.0, 2), set()) == "2"

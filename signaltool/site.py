@@ -684,7 +684,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2))}
-{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{RK.src(e.get("_risk"))}{RK.status()}
+{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}

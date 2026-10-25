@@ -51,7 +51,7 @@ CSS = """
 p.since.rk-line{display:flex;align-items:center;gap:0;overflow:visible;white-space:nowrap;margin:0 0 8px;min-height:28px}
 p.since.rk-line .sl-t{overflow:hidden;text-overflow:ellipsis;min-width:0}
 .rk-i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px 0 -8px -6px;padding:0;border:0;background:none;color:var(--mut);font:inherit;font-size:16px;cursor:pointer}
-.rk-i[aria-expanded=true]{color:var(--fg,#e6edf3)}
+.rt-i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px -10px -8px -10px;padding:0;border:0;background:none;color:var(--mut);font:inherit;font-size:14px;cursor:pointer}.sl-r{flex:none;white-space:nowrap}.rt-i[aria-expanded=true],.rk-i[aria-expanded=true]{color:var(--fg,#e6edf3)}
 .rk-tip{margin:0 0 6px;padding:8px 10px;font-size:13px;line-height:1.4;border:1px solid #30363d;border-radius:6px;background:#161b22}
 .rk-src{margin:-6px 0 0;font-size:11px;line-height:14px;color:#8b949e}
 p.catdisc.rk-status{margin:2px 0 4px;font-size:11px;line-height:1.3;color:#8b949e;white-space:nowrap}
@@ -59,5 +59,6 @@ p.catdisc.rk-status{margin:2px 0 4px;font-size:11px;line-height:1.3;color:#8b949
 td.rk-c{white-space:nowrap}
 """
 
-JS = """<script>(()=>{document.querySelectorAll('.rk-i').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();
-const t=document.getElementById(b.getAttribute('aria-controls'));const o=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',o?'true':'false');if(t)t.hidden=!o}))})()</script>"""
+JS = """<script>(()=>{const B=[...document.querySelectorAll('.rk-i,.rt-i')];const close=x=>B.forEach(b=>{if(b!==x){b.setAttribute('aria-expanded','false');const t=document.getElementById(b.getAttribute('aria-controls'));if(t)t.hidden=true}});
+B.forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const t=document.getElementById(b.getAttribute('aria-controls'));const o=b.getAttribute('aria-expanded')!=='true';close(b);b.setAttribute('aria-expanded',o?'true':'false');if(t)t.hidden=!o}));
+document.addEventListener('click',e=>{if(!e.target.closest('.rk-tip'))close(null)});document.addEventListener('keydown',e=>{if(e.key==='Escape')close(null)})})()</script>"""

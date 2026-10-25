@@ -49,6 +49,18 @@ def prev_list(today: str = "") -> set:
     return {r["ticker"] for r in rows if runs and r["date"] == runs[-1] and r.get("category") != "tema"}
 
 
+EXIT_COLS = ["date", "ticker", "prev_run", "reason", "rank", "score", "tie_step", "n_types", "tied_with"]
+
+
+def tie_step(out: dict, last_kept: dict, prev: set) -> str:
+    """Hvilket trinn skilte utfallet fra siste beholdte med lik score: 1 på lista fra før, 2 antall signaltyper, 3 alfabetisk."""
+    if (out["ticker"] in prev) != (last_kept["ticker"] in prev):
+        return "1"
+    if n_types(out) != n_types(last_kept):
+        return "2"
+    return "3"
+
+
 def rank_candidates(cands: list[dict], prev: set) -> list[dict]:
     """Score synkende; ved likt score: på lista fra før, flere signaltyper, alfabetisk."""
     return sorted(cands, key=lambda e: (-(e.get("score") or 0), e["ticker"] not in prev, -n_types(e), e["ticker"]))
@@ -158,14 +170,28 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
             why = "lik score, kutt 60" if len(ranked) >= 60 and pos[t][1] == (ranked[59].get("score") or 0) else "cut60"
         else:
             why = "score0"
+        step, nt, tw = "", "", ""
+        if why == "lik score, kutt 60":
+            e_t = ranked[pos[t][0] - 1]
+            kept = [x for x in ranked[:60] if (x.get("score") or 0) == pos[t][1]]
+            onp = set(prev_t)
+            nt = n_types(e_t)
+            tw = "|".join(f'{x["ticker"]}:{"på" if x["ticker"] in onp else "ny"}:{n_types(x)}' for x in kept)
+            step = tie_step(e_t, ranked[59], onp)
         exits.append({"date": today, "ticker": t, "prev_run": prev, "reason": why,
-                      "rank": pos[t][0] if t in pos else "", "score": pos[t][1] if t in pos else ""})
+                      "rank": pos[t][0] if t in pos else "", "score": pos[t][1] if t in pos else "",
+                      "tie_step": step, "n_types": nt, "tied_with": tw})
+    if EXITS.exists() and EXITS.read_text().split("\n", 1)[0] != ",".join(EXIT_COLS):   # gammelt format: nye kolonner tomme
+        import csv as _c
+        old_rows = list(_c.DictReader(EXITS.open()))
+        EXITS.unlink()
+        _append_csv(EXITS, EXIT_COLS, [{k: r.get(k, "") for k in EXIT_COLS} for r in old_rows])
     if EXITS.exists():   # ny kjøring samme dato erstatter dagens utfall (siste kutt gjelder)
         keep = [l for l in EXITS.read_text().splitlines() if not l.startswith(today + ",")]
         EXITS.write_text("\n".join(keep) + "\n" if keep else "")
         if len(keep) <= 1:
             EXITS.unlink()
-    _append_csv(EXITS, ["date", "ticker", "prev_run", "reason", "rank", "score"], exits)
+    _append_csv(EXITS, EXIT_COLS, exits)
     # 3) datakvalitet
     flags = []
     last_idx = {b: max(px[b]) for b in idx_t if px.get(b)}
