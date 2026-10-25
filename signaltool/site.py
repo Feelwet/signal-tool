@@ -14,6 +14,7 @@ from . import inflation as INF
 from . import site_layout as L
 from . import site_quality as Q
 from . import evidens as EV
+from . import overview as OV
 
 SITE = ROOT / "site"
 E = lambda x: html.escape("" if x is None else str(x))
@@ -372,7 +373,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰ Meny</button>
 <a class="brand" href="{pre}index.html">🛰️ Geo-signal</a><span class="gen">{gen}</span></header>
 <main>{body}</main>
-<footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer>
+<footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
 {script}{L.TIP_JS}</body></html>"""
 
@@ -423,7 +424,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + L.CSS + EV.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + ".ov-low2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ov-low2>*{margin:0;min-width:0}@media(max-width:699px){.ov-low2{grid-template-columns:1fr}}\n" + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -439,16 +440,12 @@ def build(snap: dict) -> Path:
     bad = [k for k in used if X.source_state(st[k]) == "fail"]
     today = str(snap.get("date") or date.today())
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
-    b = [L.head(f'Oversikt {snap["date"]}', f'Hvilke geopolitiske temaer får uvanlig mye oppmerksomhet nå, og hvilke aksjer som bør undersøkes. GDELT-data t.o.m. {snap.get("gdelt_latest")}.'),
+    b = [f'<h1>Oversikt {E(str(snap["date"]))} <span class="mut" style="font-size:.55em;font-weight:400">GDELT t.o.m. {E(str(snap.get("gdelt_latest")))}</span></h1>',
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
-         sec("Oppsummering", EV.summary_html, snap),
-         sec("Røde flagg Oslo", EV.red_top5, snap),
-         sec("Hva bør jeg se på i dag?", EV.focus_html, snap, X.link),
-         sec("Dashboard", X.dashboard_html, snap).replace("<h2>Temascore ", "<h2>Temascore " + L.EXP() + L.stale_mark(rowsL, ["GDELT 1.0 daily events"]) + " ", 1)
-            ,
-         sec("Nytt siden i går", X.changes_html, snap),
-         '<div class="card" style="padding:8px 12px">' + L.watch_text(snap.get("track_record")) + '</div>',
-         ('<h2>Neste 5 hendelser</h2><div class="card" style="padding-top:8px;padding-bottom:8px"><ul class="ev" style="margin:0">' + "".join(f'<li style="margin:2px 0;padding:2px 0">{E(e["date"])} {E(e.get("time") or "")} – <b>{E(e["source"])}</b>: {E(e["title"])}</li>' for e in nxt) + '</ul><a href="kalender.html">Hele kalenderen →</a></div>') if nxt else ""]
+         sec("Status", OV.strip_html, snap),
+         sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
+         sec("Kandidater og røde flagg", OV.two_col_html, snap),
+         '<div class="ov-low2">' + sec("Endringer og varsler", OV.changes_alerts_html, snap, X.link) + sec("Kalender", OV.calendar_html, snap) + '</div>']
     # flyttet til Metode › Eksperimentelt (ingenting slettet)
     ex = []
     pmm = snap.get("polymarket_movers") or []
@@ -730,6 +727,7 @@ def metode_page(snap):
                    [(f"{ok}/{n}", "Kilder OK", "siste kjøring", "#kilder"), (str(len(tested)), "Testet, ingen effekt", "fjernet fra Makro", "#testet"), (str(len(exp)), "Eksperimentelt", "ikke testet", "#eksperimentelt")])
             + fold(T("Ærlig status", "hva verktøyet kan og ikke kan"), hon, open_=False, hid="status")
             + fold(T("Porteføljeregler og markedsregime", "regler for posisjoner"), X.portfolio_rules_html() + Q.section("Markedsregime", X.regime_html, snap, snap=snap), open_=False, hid="regler")
+            + fold(T("Treffrate", "fremoverlogg, Watchlist og Kjøp"), L.watch_text(snap.get("track_record")), open_=False, hid="treffrate")
             + fold(T("Kildestatus", f"Kilder OK {ok}/{n} · {len(fails)} feilet · {len(part)} delvis"), src, open_=False, hid="kilder")
             + fold(T("Rapporter, backtester og kildeliste", "metode, overtilpasning, basisrater, rapporter"), kb, open_=False, hid="rapporter")
             + fold(T("Testet, ingen effekt", ", ".join(t[0].split(" ", 1)[-1] for t in tested) or "–"), tested_h, open_=False, hid="testet")

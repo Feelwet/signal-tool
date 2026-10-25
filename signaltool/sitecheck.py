@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-MIN_INDEX, MAX_INDEX = 15_000, 15_000_000     # bytes
+MIN_INDEX, MAX_INDEX = 8_000, 15_000_000      # bytes (ny kompakt forside ~15 kB)
 REQUIRED = {
     "index.html": ["<nav", "Oversikt", "Temascore"],
     "metode.html": ['id="datakvalitet"', 'id="kontroll"', "Kildestatus ved siste kjøring", 'id="aerlig"', "Ærlig status"],

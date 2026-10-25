@@ -187,7 +187,8 @@ def test_build_survives_broken_section_and_passes_check(tmp_path, monkeypatch):
     monkeypatch.setattr(site, "SITE", tmp_path / "site")
     monkeypatch.setattr(Q, "SECTION_OK", tmp_path / "ok.json")
     from signaltool import evidens as EV
-    monkeypatch.setattr(EV, "focus_html", lambda s, link=None: 1 / 0)          # a broken section must not break the build
+    from signaltool import overview as OV
+    monkeypatch.setattr(OV, "calendar_html", lambda s: 1 / 0)          # a broken section must not break the build
     site.build(snap)
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
