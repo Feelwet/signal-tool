@@ -425,9 +425,14 @@ IKKE_RANGERT_INFO = ("Har en hendelse, men data fra færre enn 4 av 7 kilder, s�
                      "Det sier ikke at aksjen er dårlig, bare at vi vet for lite. Telles ikke i resultatene.")   # UxBot/AnalBot 25.10, ordrett
 UR_I = ('<button type="button" class="rk-i ur-i" aria-expanded="false" aria-controls="ur-tip" aria-label="Om Ikke rangert">ⓘ</button>'
         f'<p id="ur-tip" class="rk-tip ur-tip" hidden>{E(IKKE_RANGERT_INFO)}</p>')
+# UxBot 26.10: «Ikke rangert» bruker samme kolonnebredder som den rangerte tabellen
+UR_SYNC = ("<script>(function(){function f(){var r=document.querySelector('#tf-table table:not(.ur-tab) tr.rowlink'),u=document.querySelector('#tf-table table.ur-tab tr');"
+           "if(!r||!u)return;var c=u.cells[0];c.style.width=c.style.minWidth='';var w=Math.max(110,r.cells[0].getBoundingClientRect().width)+'px';c.style.width=c.style.minWidth=w}"
+           "f();addEventListener('resize',f);addEventListener('load',f)})()</script>")
 FRZ_CSS = (".ur-head{display:block;width:100%;box-sizing:border-box;padding:12px;white-space:normal;overflow-wrap:anywhere;border-top:1px solid #30363d}"
            ".ur-tip{display:block;width:100%;box-sizing:border-box;margin:8px 0 0;font-weight:400;white-space:normal}.ur-tip[hidden]{display:none}"
            "table.ur-tab .lowchip{white-space:normal;height:auto;min-height:20px;line-height:14px;padding:2px 7px;max-width:100%;overflow:visible;text-overflow:clip}"
+           "table.ur-tab .nm,#tf-table table:not(.ur-tab) .nm{word-break:normal;overflow-wrap:normal;hyphens:none;-webkit-hyphens:none}table.ur-tab td:first-child{min-width:110px}"
            "@media(max-width:599px){#tf-table table.ur-tab td{white-space:normal}table.ur-tab td:has(>.lowchip){min-width:140px}}") + "\n" + (".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n")
 
 
@@ -611,7 +616,7 @@ def build(snap: dict) -> Path:
                                             + "".join(ticker_row(e) for e in tickers if not e.get("unranked")) + "</table></div>"
                                             # UxBot 25.10: overskrift + (i)-tekst utenfor scrollboksen, full bredde, bryter linjer
                                             + ('<div class="ur-head"><b>Ikke rangert</b> <span class="mut">· for lite data (under 4/7 grunnfelt)</span>' + UR_I + "</div>"
-                                               + '<div class="tw"><table class="ur-tab">' + "".join(ticker_row(e) for e in tickers if e.get("unranked")) + "</table></div>" if any(e.get("unranked") for e in tickers) else "")
+                                               + '<div class="tw"><table class="ur-tab">' + "".join(ticker_row(e) for e in tickers if e.get("unranked")) + "</table></div>" + UR_SYNC if any(e.get("unranked") for e in tickers) else "")
                                             + RET_NOTE + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>'
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
