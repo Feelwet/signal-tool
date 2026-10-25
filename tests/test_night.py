@@ -26,6 +26,8 @@ def test_price_metrics_basic():
 def test_pead_counts_as_signal_type(monkeypatch):
     from signaltool import config
     monkeypatch.setattr(config, "PEAD_TT_ENABLED", True)
+    from signaltool import pead_roll
+    monkeypatch.setattr(pead_roll, "thresholds", lambda on=None, E=None: {"surprise": 15.0, "reaction": 0.04, "n": 1000})   # testterskler, ikke ekte data
     e = cand(points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
     e["decision"] = {"pead": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
     r = C.classify(e, ctx())

@@ -146,6 +146,8 @@ def _tt_flag(request, monkeypatch):
     from signaltool import config
     if request.node.name.startswith("test_tt_"):
         monkeypatch.setattr(config, "PEAD_TT_ENABLED", True)
+        from signaltool import pead_roll
+        monkeypatch.setattr(pead_roll, "thresholds", lambda on=None, E=None: {"surprise": 15.0, "reaction": 0.04, "n": 1000})   # testterskler, ikke ekte data
 
 
 def test_flag_off_by_default_old_rules():
@@ -224,3 +226,13 @@ def test_tt_rules_only_for_us():
     e3 = _tt(points={"ose_contracts": 1.5}, dates={"ose_contract": FRESH}); e3["ticker"] = "ABC.OL"
     assert C.classify(e3, ctx())["category"] == "kjop"         # Oslo: topp/topp teller som én vanlig type, som før
     assert C.classify(_tt(stats=hot), ctx())["category"] == "kjop"   # US: unntatt + alene nok
+
+
+def test_rolling_threshold_window_strictly_before_and_min_n():
+    import pandas as pd
+    from signaltool import pead_roll as R
+    d = pd.date_range("2025-01-01", periods=300, freq="D")
+    E = pd.DataFrame({"date": d, "surprise": range(300), "ear": [x / 1000 for x in range(300)]})
+    th = R.thresholds("2025-10-28", E)          # 300 rapporter før, samme dag (2025-10-28 = indeks 300) ikke med
+    assert th["n"] == 300 and abs(th["surprise"] - 239.2) < 1e-9
+    assert R.thresholds("2025-07-01", E) is None  # < 200 i vinduet
