@@ -121,4 +121,4 @@ def test_frozen_line_uses_lastgood_date(tmp_path, monkeypatch):
 def test_ikke_rangert_mobile_css():
     from signaltool import site
     assert "table.ur-tab .lowchip{white-space:normal" in site.FRZ_CSS and ".ur-head{display:block;width:100%" in site.FRZ_CSS
-    assert "padding:12px" in site.FRZ_CSS and "ellipsis" not in site.FRZ_CSS
+    assert "td:has(>.lowchip){min-width:140px}" in site.FRZ_CSS and "padding:12px" in site.FRZ_CSS and "ellipsis" not in site.FRZ_CSS

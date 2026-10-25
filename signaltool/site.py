@@ -428,7 +428,7 @@ UR_I = ('<button type="button" class="rk-i ur-i" aria-expanded="false" aria-cont
 FRZ_CSS = (".ur-head{display:block;width:100%;box-sizing:border-box;padding:12px;white-space:normal;overflow-wrap:anywhere;border-top:1px solid #30363d}"
            ".ur-tip{display:block;width:100%;box-sizing:border-box;margin:8px 0 0;font-weight:400;white-space:normal}.ur-tip[hidden]{display:none}"
            "table.ur-tab .lowchip{white-space:normal;height:auto;min-height:20px;line-height:14px;padding:2px 7px;max-width:100%;overflow:visible;text-overflow:clip}"
-           "@media(max-width:599px){#tf-table table.ur-tab td{white-space:normal}}") + "\n" + (".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n")
+           "@media(max-width:599px){#tf-table table.ur-tab td{white-space:normal}table.ur-tab td:has(>.lowchip){min-width:140px}}") + "\n" + (".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n")
 
 
 def frz_text(d: str) -> str:
