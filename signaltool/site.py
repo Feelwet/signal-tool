@@ -17,6 +17,7 @@ from . import evidens as EV
 from . import overview as OV
 from . import tickerlist as TL
 from . import names as NM
+from . import mine as MINE
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -120,7 +121,7 @@ CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -390,7 +391,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <main>{body}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
-{script}{L.TIP_JS}</body></html>"""
+{script}{SEARCH.get("mine", "")}{L.TIP_JS}</body></html>"""
 
 
 def theme_card(t, pre=""):
@@ -409,8 +410,8 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
-    return (f'<tr data-cat="{E(e.get("category") or "")}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")))}</td>'
-            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}</tr>')
+    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")))}</td>'
+            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -441,7 +442,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + MINE.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -452,6 +453,7 @@ def build(snap: dict) -> Path:
     (SITE / ".nojekyll").write_text("")
     themes, tickers = snap["themes"], snap["tickers"]
 
+    SEARCH["mine"] = MINE.script(tickers, slug)
     SEARCH["html"] = L.search_html([e["ticker"] for e in tickers], "{PRE}", slug)
     st = snap.get("status") or {}
     rowsL = L.load_log()
@@ -462,6 +464,7 @@ def build(snap: dict) -> Path:
     b = [f'<h1 style="margin:0 0 6px">Oversikt {E(str(snap["date"]))} <span class="mut" style="font-size:.55em;font-weight:400">GDELT t.o.m. {E(str(snap.get("gdelt_latest")))}</span></h1>',
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
          f'<style>{OV.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
+         MINE.tile(),
          sec("Status", OV.strip_html, snap),
          sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
          sec("Kandidater og røde flagg", OV.two_col_html, snap),
@@ -564,7 +567,7 @@ def ticker_page(e, tmap):
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""{NM.header(e['ticker'], e.get('name'), score_badge(e['score'], 4, 2) + ' ' + cat_badge(e.get('category')))}
+    return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2) + ' ' + cat_badge(e.get('category')))}
 {cat_rules_html(e)}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}

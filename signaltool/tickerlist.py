@@ -5,8 +5,9 @@ from html import escape as E
 
 from . import evidens as EV
 from . import names as NM
+from .mine import EMPTY
 
-FILTERS = (("alle", "Alle"), ("kjop", "Kjøp"), ("hold", "Hold"), ("folg", "Følg"), ("flagg", "Røde flagg"))
+FILTERS = (("mine", "★ Mine"), ("alle", "Alle"), ("kjop", "Kjøp"), ("hold", "Hold"), ("folg", "Følg"), ("flagg", "Røde flagg"))
 CAT_OF = {"kjop": "kjop", "hold": "hold", "folg": "watch"}
 NAME = dict(FILTERS)
 
@@ -21,13 +22,16 @@ CSS = """
 #tf-table th:nth-child(4),#tf-table td:nth-child(4){display:none}#tf-table .why,#tf-table .mer,#tf-table td:first-child .mut{display:none}#tf-table td{padding:6px 4px;white-space:nowrap;font-size:.9em}#tf-table th{padding:6px 4px}}
 """
 
-JS = """<script>(()=>{const F=['alle','kjop','hold','folg','flagg'],B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag');
-function set(f,push){if(!F.includes(f))f='alle';B.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f?'true':'false'));
-const fl=f==='flagg';if(G)G.hidden=!fl;if(T)T.hidden=fl;let n=0;
-document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||r.dataset.cat===({kjop:'kjop',hold:'hold',folg:'watch'})[f];r.hidden=!on;if(on)n++});
-document.querySelectorAll('.tf-empty').forEach(p=>p.hidden=!(p.dataset.f===f&&n===0));
+JS = """<script>(()=>{const F=['mine','alle','kjop','hold','folg','flagg'],NM={mine:'★ Mine',alle:'Alle',kjop:'Kjøp',hold:'Hold',folg:'Følg',flagg:'Røde flagg'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
+let cur='alle';function mine(){return window.STMine?window.STMine.load():[]}
+function set(f,push){if(!F.includes(f))f='alle';cur=f;B.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f?'true':'false'));
+const fl=f==='flagg';if(G)G.hidden=!fl;if(T)T.hidden=fl;let n=0;const M=mine();
+document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||(f==='mine'?M.includes(r.dataset.t):r.dataset.cat===({kjop:'kjop',hold:'hold',folg:'watch'})[f]);r.hidden=!on;if(on)n++});
+if(fl&&G)n=G.querySelectorAll('.rfr').length;
+if(P){P.hidden=n>0;P.textContent=f==='mine'?'""" + EMPTY + """':'Ingen tickere i '+NM[f]+' nå.';if(fl&&G)G.after(P);else if(T)T.prepend(P)}
 if(push){const u=new URL(location.href);if(f==='alle')u.searchParams.delete('filter');else u.searchParams.set('filter',f);history.replaceState(null,'',u)}}
-B.forEach(b=>b.addEventListener('click',()=>{const cur=new URL(location.href).searchParams.get('filter')||'alle';set(b.dataset.f===cur?'alle':b.dataset.f,true)}));
+B.forEach(b=>b.addEventListener('click',()=>{set(b.dataset.f===cur&&b.dataset.f!=='alle'?'alle':b.dataset.f,true)}));
+document.addEventListener('mine:change',e=>set(e.detail&&e.detail.imp?'mine':cur,false));
 set(new URL(location.href).searchParams.get('filter')||'alle',false)})()</script>"""
 
 
@@ -45,7 +49,7 @@ def chip(r: dict | None) -> str:
 def filter_row(snap: dict) -> str:
     n = len(EV.red_rows(snap))
     return '<div class="tf-row" role="group" aria-label="Filter">' + "".join(
-        f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ""}</button>'
+        f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ' (<span class="mine-n">0</span>)' if k == "mine" else ""}</button>'
         for k, lab in FILTERS) + "</div>"
 
 
@@ -73,4 +77,5 @@ def flag_block(snap: dict) -> str:
 
 
 def empties() -> str:
-    return "".join(f'<p class="tf-empty mut" data-f="{k}" hidden>Ingen tickere i {E(NAME[k])} nå.</p>' for k in CAT_OF)
+    """Én felles melding: «Ingen tickere i X nå.» for alle filtre med 0 treff (★ Mine: hint om ☆)."""
+    return '<p id="tf-empty" class="tf-empty mut" hidden></p>'

@@ -85,14 +85,14 @@ def test_tickerlist_filter_row_and_flag_groups():
     from signaltool import tickerlist as TL
     s = _fsnap()
     fr = TL.filter_row(s)
-    assert [x in fr for x in ("Alle", "Kjøp", "Hold", "Følg", "Røde flagg (3)")] == [True] * 5 and fr.count("<button") == 5
+    assert [x in fr for x in ("Alle", "Kjøp", "Hold", "Følg", "Røde flagg (3)")] == [True] * 5 and fr.count("<button") == 6
     fb = TL.flag_block(s)
     assert "Bare Oslo-aksjer er sjekket for røde flagg" in fb and "Z.OL" in fb and "E.OL" in fb  # alle flaggede, også utenfor tickerlisten
     assert fb.index("2+ flagg") < fb.index("1 flagg") < fb.index("Bare negativ EBIT")
     assert "Eksperimentelt" in fb or "⚗" in fb
     assert "OSL:A" in fb.replace("%3A", ":")
     assert TL.chip(None) == "" and "⚑ 2 flagg" in TL.chip(TL.flag_map(s)["A.OL"])
-    assert 'data-f="kjop" hidden>Ingen tickere i Kjøp nå.' in TL.empties()
+    assert 'id="tf-empty"' in TL.empties() and "'Ingen tickere i '+NM[f]+' nå.'" in TL.JS
 
 
 def test_tickere_page_redirect_and_menu(tmp_path, monkeypatch):

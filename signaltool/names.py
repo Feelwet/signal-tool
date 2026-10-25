@@ -56,7 +56,7 @@ def cell(ticker: str, href: str | None = None, fallback: str | None = None, extr
     return f'<span class="tn"><span class="nm">{nm}</span><span class="tk">{E(ticker)}{SEC.tv_ext(ticker)}{extra}</span></span>'
 
 
-def header(ticker: str, fallback: str | None = None, after: str = "") -> str:
+def header(ticker: str, fallback: str | None = None, after: str = "", star: str = "") -> str:
     from . import sectors as SEC
     n = name(ticker, fallback)
     ex = exchange(ticker)
@@ -66,7 +66,7 @@ def header(ticker: str, fallback: str | None = None, after: str = "") -> str:
     w = website(ticker)
     ch += f'<a class="chart" target="_blank" rel="noopener" href="{E(w)}">Nettside ↗</a>' if w else ""
     return (f'<div class="thead"><h1 class="nm1">{E(n or ticker)}</h1>'
-            f'<div class="tk1">{"<span>" + tk + "</span>" if n else ""}{ch}{after}</div></div>')
+            f'<div class="tk1">{star}{"<span>" + tk + "</span>" if n else ""}{ch}{after}</div></div>')
 
 
 def refresh(tickers) -> list:
