@@ -67,3 +67,18 @@ def test_nokkeltall_missing_and_etf():
     assert "Tallet mangler hos kilden." in h and "Ikke tilgjengelig" not in h and "oppdatert 25.10" in h
     etf = N.compute({"ticker": "SPY", "decision": {"quoteType": "ETF"}})
     assert {f["key"] for f in etf["fields"]} == {"mcap", "rev", "dps", "yld", "next"}
+
+
+def test_sparkline_needs_4_consecutive_quarters_and_ebit_never_derived():
+    import pandas as pd
+    from signaltool import nokkeltall as N, decision as D
+    cols = pd.to_datetime(["2026-06-30", "2026-03-31", "2025-12-31", "2025-09-30", "2025-06-30"])
+    q = pd.DataFrame([[10, 9, 8, 7, 6], [1.0, 0.9, float("nan"), 0.7, 0.6], [2, 2, 2, float("nan"), 2]],
+                     index=["Total Revenue", "Diluted EPS", "EBIT"], columns=cols)
+    assert len(D._q_run(q, ("Total Revenue",))) == 5 and len(D._q_run(q, ("Diluted EPS",))) == 2
+    assert D.ebit_ttm(None, q) is None          # ett kvartal mangler -> ingen EBIT
+    e = {"ticker": "X", "decision": {"close": 10.0, "currency": "USD", "totalRevenue": 34.0, "operatingMargins": 0.2,
+                                     "rev_q": D._q_run(q, ("Total Revenue",)), "eps_q": D._q_run(q, ("Diluted EPS",))}}
+    n = N.compute(e); f = {x["key"]: x for x in n["fields"]}
+    assert f["ebit"]["value"] is None and "quarters" in f["rev"] and "quarters" not in f["eps"]
+    assert "siste 5 kv." in N.html(n)

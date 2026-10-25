@@ -10,6 +10,18 @@ FIELDS = [("mcap", "Børsverdi"), ("pe", "P/E"), ("rev", "Omsetning"), ("ebit", 
 MISSING = "–"
 MISSING_INFO = "Tallet mangler hos kilden."
 MOBILE_SHOW = 6
+SPARK_MIN = 4
+
+
+def spark_svg(qs) -> str:
+    """40×16 px linje over kvartalene (eldst til venstre). Bare ekte kvartalstall, ingen hull (krav: ≥ 4 sammenhengende)."""
+    ys = [y for _, y in qs]
+    lo, hi = min(ys), max(ys)
+    rng = (hi - lo) or 1
+    pts = " ".join(f"{1 + i * 38 / (len(ys) - 1):.1f},{1 + (hi - y) * 14 / rng:.1f}" for i, y in enumerate(ys))
+    n = len(qs)
+    return (f'<span class="spk"><svg width="40" height="16" viewBox="0 0 40 16" aria-hidden="true"><polyline points="{pts}" fill="none" stroke="#8b949e" stroke-width="1.2"/></svg>'
+            f'<span class="ri" tabindex="0" aria-expanded="false" aria-label="siste {n} kv.">ⓘ<span class="tip">siste {n} kv.</span></span></span>')
 ETF_HIDE = {"eps", "pe", "ebit", "pb", "ps"}
 
 
@@ -51,20 +63,21 @@ def compute(e: dict) -> dict:
     dps = _f(d.get("trailingAnnualDividendRate"))
     v["dps"] = (f"{_n(dps)} {cur}".strip() if dps else "0") if dps is not None else None
     v["yld"] = (_n(dps / close * 100, 1) + " %" if dps and close else "0 %") if dps is not None and close else None
+    spark = {k: d.get(src) for k, src in (("rev", "rev_q"), ("eps", "eps_q")) if len(d.get(src) or []) >= SPARK_MIN}
     etf = is_etf(e)
     return {"ticker": e["ticker"], "etf": etf, "date": d.get("info_date"),
-            "fields": [{"key": k, "label": lab, "value": v.get(k)} for k, lab in FIELDS if not (etf and k in ETF_HIDE)]}
+            "fields": [{"key": k, "label": lab, "value": v.get(k), **({"quarters": spark[k]} if k in spark and v.get(k) else {})} for k, lab in FIELDS if not (etf and k in ETF_HIDE)]}
 
 
 CSS = """.nk{display:grid;grid-template-columns:repeat(4,1fr);column-gap:24px}
 .nk .r{display:flex;flex-direction:column;justify-content:center;height:52px;border-bottom:1px solid #30363d;min-width:0}
 .nk .l{color:var(--mut);font-size:12px}.nk .v{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap}
-.nksrc{font-size:12px;margin:6px 0 0}.nkmore{display:none}#nokkeltall h2{font-size:1em;margin:0 0 2px}
+.nkh{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.nksrc{font-size:11px;text-align:right}
+.spk{display:inline-flex;align-items:center;gap:2px;margin-left:6px;vertical-align:middle}.spk svg{display:block}.spk .ri{font-size:11px}.nkmore{display:none}#nokkeltall h2{font-size:1em;margin:0 0 2px}
 @media(max-width:599px){#nokkeltall{padding:6px 10px;margin:0 0 12px}#nokkeltall h2{margin:0;font-size:14px;line-height:20px}
-.nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r{height:40px}.nk .l{font-size:11px;line-height:13px}.nk .v{font-size:15px;line-height:19px}
+.nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r{height:36px;gap:2px}.nk .l{font-size:11px;line-height:12px}.nk .v{font-size:15px;line-height:18px}
 .nk .r.mx{display:none}.nkall .nk .r.mx{display:flex}
-.nkmore{display:inline-block;height:28px;line-height:28px;padding:0;margin:2px 0 0;background:none;border:0;color:#58a6ff;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}
-.nksrc{font-size:11px;margin:2px 0 0}}"""
+.nkmore{display:block;height:32px;line-height:32px;padding:0;margin:0;background:none;border:0;color:#58a6ff;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}}"""
 
 
 MISS_HTML = (f'– <span class="ri" tabindex="0" aria-expanded="false" aria-label="{MISSING_INFO}">ⓘ<span class="tip">{MISSING_INFO}</span></span>')
@@ -73,14 +86,13 @@ MISS_HTML = (f'– <span class="ri" tabindex="0" aria-expanded="false" aria-labe
 def html(n: dict) -> str:
     from .since import _dm
     fs = n["fields"]
-    rows = "".join(f'<div class="r{" mx" if i >= MOBILE_SHOW else ""}"><span class="l">{E(f["label"])}</span><span class="v">{E(f["value"]) if f["value"] else MISS_HTML}</span></div>'
+    rows = "".join(f'<div class="r{" mx" if i >= MOBILE_SHOW else ""}"><span class="l">{E(f["label"])}</span><span class="v">{E(f["value"]) if f["value"] else MISS_HTML}{spark_svg(f["quarters"]) if f.get("quarters") else ""}</span></div>'
                    for i, f in enumerate(fs))
     per = (len(fs) + 1) // 2
     more = (f'<button type="button" class="nkmore" onclick="this.closest(\'.card\').classList.add(\'nkall\');this.remove()">Vis alle ({len(fs)})</button>'
             if len(fs) > MOBILE_SHOW else "")
     upd = f" · oppdatert {_dm(n['date'])}" if n.get("date") else ""
-    return (f'<div class="card nofold" id="nokkeltall"><h2>Nøkkeltall</h2><div class="nk">{rows}</div>{more}'
-            f'<p class="mut nksrc">Kilde: Yahoo Finance · siste 12 mnd.{upd}</p>'
+    return (f'<div class="card nofold" id="nokkeltall"><div class="nkh"><h2>Nøkkeltall</h2><span class="mut nksrc">Kilde: Yahoo Finance · siste 12 mnd.{upd}</span></div><div class="nk">{rows}</div>{more}'
             '<script>document.querySelectorAll("#nokkeltall .ri").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();b.setAttribute("aria-expanded",b.getAttribute("aria-expanded")==="true"?"false":"true")}))</script></div>')
 
 

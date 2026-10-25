@@ -122,10 +122,39 @@ def price_metrics(df: pd.DataFrame, bench: pd.Series | None, sector: pd.Series |
     return out
 
 
-def ebit_ttm(tk: yf.Ticker):
-    """EBIT siste 12 mnd = sum av Yahoos fire siste kvartaler (rad EBIT, ellers Operating Income). Mangler ett kvartal: None."""
+def _q_run(q, rows):
+    """Nyeste sammenhengende kvartalsrekke (eldst først) uten hull: ingen NaN og 60–120 dager mellom kvartalene."""
+    row = next((r for r in rows if r in q.index), None)
+    if row is None:
+        return []
+    v = q.loc[row].sort_index(ascending=False)
+    out, prev = [], None
+    for d, x in v.items():
+        if x != x:
+            break
+        if prev is not None and not 60 <= (prev - d).days <= 120:
+            break
+        out.append([str(d.date()), float(x)])
+        prev = d
+    return out[::-1]
+
+
+def quarterly(tk: yf.Ticker) -> dict:
+    """EBIT siste 12 mnd (sum av fire siste kvartaler, aldri avledet) + kvartalsrekker for omsetning og EPS (sparklines)."""
     try:
         q = tk.quarterly_income_stmt
+    except Exception:
+        q = None
+    if q is None or q.empty:
+        return {"ebit_ttm": None, "rev_q": [], "eps_q": []}
+    return {"ebit_ttm": ebit_ttm(tk, q), "rev_q": _q_run(q, ("Total Revenue", "Operating Revenue")),
+            "eps_q": _q_run(q, ("Diluted EPS", "Basic EPS"))}
+
+
+def ebit_ttm(tk: yf.Ticker, q=None):
+    """EBIT siste 12 mnd = sum av Yahoos fire siste kvartaler (rad EBIT, ellers Operating Income). Mangler ett kvartal: None."""
+    try:
+        q = tk.quarterly_income_stmt if q is None else q
         if q is None or q.empty:
             return None
         row = next((r for r in ("EBIT", "Operating Income") if r in q.index), None)
@@ -236,7 +265,7 @@ def compute(snap: dict, max_info=80) -> dict:
             inf = tk.info or {}
             infos[t] = {k: inf.get(k) for k in INFO_KEYS}
             infos[t]["info_date"] = date.today().isoformat()
-            infos[t]["ebit_ttm"] = ebit_ttm(tk)
+            infos[t].update(quarterly(tk))
             infos[t]["next_earnings"] = _next_earnings(tk)
             infos[t].update(revisions(tk))
             if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):
