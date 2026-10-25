@@ -65,7 +65,7 @@ def load_red(path: Path = EVFILE) -> dict[str, tuple[str, str]]:
         t += f", n ≈ {_n(r['n'])} aksjer per dato." if r.get("n") else "."
         if lv != "testet" and r.get("t_is") is not None:
             t += f" Ikke bestått testkravet: t {_n(r['t_is'])} i 2014–18, testet etter at enkeltflaggene var sett."
-        t += " Testet på svak kurs, høy volatilitet og rettet emisjon; negativ EBIT inngår ikke i testen."
+        t += " Telles bare på svak kurs, høy volatilitet og rettet emisjon (de testede flaggene); negativ EBIT vises, men teller ikke."
         out["two_plus"] = (lv, t)
     else:
         out["two_plus"] = ("eksp", "2+ flagg: evidensnivå ikke satt ennå.")
@@ -108,9 +108,10 @@ def level(key: str) -> str:
     return evidens.get(key, (DEFAULT, ""))[0]
 
 
-def badge(key: str) -> str:
+def badge(key: str, extra: str = "") -> str:
     """Badge for a signal key: always placed first on its row, with an «i» showing n/treffrate where known."""
     lv, tip = evidens.get(key, (DEFAULT, ""))
+    tip += extra
     ic, txt, cls = LEVELS[lv]
     i = (f'<span class="ilink" tabindex="0" role="img" aria-label="{E(tip)}" title="{E(tip)}">i</span>' if tip else "")
     return f'<span class="evb {cls}">{ic} {E(txt)}</span>{i} '
@@ -139,8 +140,19 @@ TITLE = "Røde flagg Oslo · verdt å undersøke"
 def red_rows(snap: dict) -> list[dict]:
     """Liquid Oslo stocks with ≥ 1 red flag, most flags first (weak price breaks ties)."""
     rows = [r for r in snap.get("oslo_universe_flags") or [] if r.get("flags")]
-    order = ["weak_px", "high_vol", "placement", "neg_ebit"]       # strongest first (tie-break)
-    return sorted(rows, key=lambda r: (-len(r["flags"]), min(order.index(k) for k in r["flags"] if k in order), r["ticker"]))
+    return sorted(rows, key=lambda r: (-ntest(r), min([TESTED.index(k) for k in r["flags"] if k in TESTED] or [9]), r["ticker"]))
+
+
+TESTED = ["weak_px", "high_vol", "placement"]        # counted/sorted (strongest first); neg_ebit shown but not counted
+
+
+def ntest(r: dict) -> int:
+    return sum(1 for k in r.get("flags", {}) if k in TESTED)
+
+
+def nlabel(r: dict) -> str:
+    n, eb = ntest(r), "neg_ebit" in r.get("flags", {})
+    return (f"{n} flagg" + (" + EBIT" if eb else "")) if n else "bare EBIT"
 
 
 def coverage(snap: dict) -> dict:
@@ -154,9 +166,11 @@ def _flag_items(r: dict, pre: str = "") -> str:
     return "".join(f'<div class="evrow">{badge(k)}<span>{E(r["flags"][k])}</span></div>' for k in RED_FLAGS if k in r["flags"])
 
 
-def short_badge(k: str) -> str:
+def short_badge(k: str, extra: str = "") -> str:
     ic, _, cls = LEVELS[level(k)]
-    return f'<span class="evb {cls}" title="{E(evidens.get(k, ("", ""))[1])}">{ic} {E(FLAG_SHORT[k])}</span>'
+    tip = evidens.get(k, ("", ""))[1] + extra
+    return (f'<span class="evb {cls}">{ic} {E(FLAG_SHORT[k])}</span>'
+            f'<span class="ilink" tabindex="0" role="img" aria-label="{E(tip)}" title="{E(tip)}">i</span>')
 
 
 def red_page(snap: dict) -> str:
@@ -164,27 +178,21 @@ def red_page(snap: dict) -> str:
     if not c["n"]:
         return (f'<h1>{E(TITLE)}</h1><p class="warnline">Flaggene er ikke beregnet i denne kjøringen (mangler Oslo-univers). '
                 'Ingen tall vises heller enn oppdiktede.</p>')
-    miss = []
-    if c["ebit"] < c["n"]:
-        miss.append(f"Negativ EBIT er bare kjent for {c['ebit']} av {c['n']} aksjer (resten mangler regnskapstall fra Yahoo) – manglende ≠ positiv EBIT.")
-    if not c["newsweb"]:
-        miss.append("Newsweb var utilgjengelig: rettet emisjon er ikke beregnet i denne kjøringen.")
+    ebx = (f" Dekning: negativ EBIT er bare kjent for {c['ebit']} av {c['n']} aksjer (resten mangler regnskapstall fra Yahoo) – manglende ≠ positiv EBIT."
+           if c["ebit"] < c["n"] else "")
+    warn = "" if c["newsweb"] else '<p class="warnline">Newsweb var utilgjengelig: rettet emisjon er ikke beregnet i denne kjøringen.</p>'
     card = lambda r: (f'<div class="rfc"><div class="top"><b><a href="https://finance.yahoo.com/quote/{E(r["ticker"])}">{E(r["ticker"])}</a></b>'
-                      f'<span class="mut">{len(r["flags"])} flagg</span></div><div class="fb">'
-                      + "".join(short_badge(k) for k in RED_FLAGS if k in r["flags"])
+                      f'<span class="mut">{E(nlabel(r))}</span></div><div class="fb">'
+                      + "".join(short_badge(k, ebx if k == "neg_ebit" else "") for k in RED_FLAGS if k in r["flags"])
                       + f'</div><details><summary>Vis mer</summary>{_flag_items(r)}</details></div>')
-    multi, single = [r for r in rows if len(r["flags"]) >= 2], [r for r in rows if len(r["flags"]) < 2]
-    tbl = (f'<details class="fold" open><summary><h2>{badge("two_plus")}2+ flagg ({len(multi)})</h2></summary><div class="fold-body">'
-           + "".join(card(r) for r in multi) + '</div></details>'
-           f'<details class="fold"><summary><h2>1 flagg ({len(single)}), ingen målt underavkastning</h2></summary><div class="fold-body">'
-           + "".join(card(r) for r in single) + '</div></details>')
-    cnt = ", ".join(f"{FLAG_SHORT[k]} {c['by_flag'][k]}" for k in RED_FLAGS)
-    return (f'<h1>{E(TITLE)}</h1><p class="pintro">En liste verdt å undersøke nærmere: likvide Oslo-aksjer (≥ ~2 MNOK/dag) med minst ett rødt flagg. '
-            f'Ingen av flaggene har bestått vårt eget testkrav – se «i» per flagg og <a href="metode.html">Metode</a> '
-            f'(<a href="{EVREPORT}">testrapport</a>). Ikke et salgsråd.</p>'
-            f'<p class="mut">{len(rows)} av {c["n"]} likvide aksjer har flagg · {E(cnt)} · data per {E(c["asof"])}.</p>'
-            + "".join(f'<p class="warnline">{E(m)}</p>' for m in miss)
-            + '<p class="mut">Sortert etter antall flagg. Mange aksjer får flagg fordi hvert flagg alene er svakt.</p>' + tbl)
+    multi, single, ebo = ([r for r in rows if ntest(r) >= 2], [r for r in rows if ntest(r) == 1], [r for r in rows if ntest(r) == 0])
+    grp = lambda title, rs, open_: (f'<details class="fold"{" open" if open_ else ""}><summary><h2>{title}</h2></summary>'
+                                    f'<div class="fold-body">{"".join(card(r) for r in rs)}</div></details>')
+    return (f'<h1>{E(TITLE)}</h1><p class="pintro">Likvide Oslo-aksjer med røde flagg, verdt å undersøke nærmere – ingen flagg har bestått '
+            f'testkravet (se «i», <a href="metode.html">Metode</a>, <a href="{EVREPORT}">testrapport</a>); data per {E(c["asof"])}.</p>' + warn
+            + grp(f'{badge("two_plus")}2+ flagg ({len(multi)})', multi, True)
+            + grp(f'1 flagg ({len(single)}), ingen målt underavkastning', single, False)
+            + grp(f'{badge("neg_ebit", ebx)}Bare negativ EBIT ({len(ebo)}), ikke testet', ebo, False))
 
 
 def red_top5(snap: dict) -> str:
@@ -192,10 +200,10 @@ def red_top5(snap: dict) -> str:
     if not c["n"]:
         return '<div class="card" id="rodeflagg"><h2 style="margin-top:0">Røde flagg Oslo</h2><p class="mut">Ikke beregnet i denne kjøringen.</p></div>'
     top = rows[:5]
-    li = lambda r: (f'<li><b>{E(r["ticker"])}</b> · {len(r["flags"])} flagg – {E(", ".join(FLAG_SHORT[k] for k in RED_FLAGS if k in r["flags"]))}</li>')
-    m1, s1 = [r for r in top if len(r["flags"]) >= 2], [r for r in top if len(r["flags"]) < 2]
+    li = lambda r: (f'<li><b>{E(r["ticker"])}</b> · {E(nlabel(r))} – {E(", ".join(FLAG_SHORT[k] for k in RED_FLAGS if k in r["flags"]))}</li>')
+    m1, s1 = [r for r in top if ntest(r) >= 2], [r for r in top if ntest(r) < 2]
     lis = ((f'<li class="evrow">{badge("two_plus")}<b>2+ flagg</b></li>' + "".join(li(r) for r in m1)) if m1 else "") + \
-          (('<li class="mut"><b>1 flagg</b></li>' + "".join(li(r) for r in s1)) if s1 else "")
+          (('<li class="mut"><b>Under 2 testede flagg</b></li>' + "".join(li(r) for r in s1)) if s1 else "")
     return (f'<div class="card" id="rodeflagg"><h2 style="margin-top:0">{E(TITLE)}</h2><ul class="rfl">{lis}</ul>'
             f'<p style="margin:6px 0 0"><a href="rode-flagg.html">Se alle ({len(rows)}) →</a> <span class="mut">data per {E(c["asof"])}</span></p></div>')
 
