@@ -30,7 +30,7 @@ CSS = """
 .kpis.k3 .lbl{font-size:12px;line-height:16px;color:var(--mut)}.kpis.k3 .val{font-size:16px;line-height:22px;font-weight:700}.kpis.k3 .sub{font-size:12px;line-height:16px;color:var(--mut)}
 @media(max-width:699px){.kpis.k3{gap:8px}.kpis.k3 .kpi{padding:12px}
 .kpis.k3 .lbl{font-size:11px;line-height:14px}.kpis.k3 .val{font-size:14px;line-height:18px}.kpis.k3 .sub{font-size:11px;line-height:14px}
-.kpis.k3 .kpi:not(.open) .lbl,.kpis.k3 .kpi:not(.open) .val,.kpis.k3 .kpi:not(.open) .sub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}}
+.kpis.k3 .val,.kpis.k3 .lbl{overflow-wrap:anywhere}.kpis.k3 .kpi:not(.open) .sub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}}
 .kpis.k4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpis.k4 .kpi{min-width:0}
 @media(max-width:699px){.kpis.k4{grid-template-columns:repeat(2,1fr)}}
 .warnline{border-left:3px solid #d29922;padding:6px 10px;margin:0 0 12px;color:#e6edf3;background:rgba(210,153,34,.08);font-size:.9rem}
