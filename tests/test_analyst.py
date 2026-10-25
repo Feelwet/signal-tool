@@ -27,7 +27,7 @@ def test_line_format_and_old():
     assert "DNB Carnegie: Kjøp · kursmål 195 · +12 % fra dagens kurs · 21.10 <a" in h
     assert "Ekstern analytiker" in h and '>↗</a>' in h and h.count("<a ") == 1
     assert "◌ Bare oppmerksomhet" in h and "Treffrate under måling" in h and "eldre" not in h
-    assert "%" not in h.split("title=")[1].split('"')[1]
+    assert "%" not in h.split('class="tip" hidden>')[1].split("</span>")[0] and "title=" not in h
     assert "eldre anbefaling" in A.line_html(r, 174.1, date(2027, 2, 1))
     mp.undo(); assert "40–44 %" in A.line_html(r, 174.1, date(2026, 10, 25))
     assert "DNB" in A.tag_html(r, 174.1, date(2026, 10, 25))

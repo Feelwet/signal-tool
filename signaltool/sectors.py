@@ -226,25 +226,11 @@ CSS = """<style>
 .flt{margin:8px 0}.flt button{margin:0 6px 6px 0;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;cursor:pointer;font:inherit}
 .flt button[aria-pressed=true]{background:#5b9cff;border-color:#5b9cff;color:#0b0f17}
 .src{font-size:.8em;color:#999}
-.info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
-.info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:#6cb6ff;border-color:#6cb6ff}
-.tip{position:fixed;z-index:50;max-width:min(260px,calc(100vw - 16px));padding:8px 10px;background:#1c2330;color:#e6edf3;border:1px solid #6cb6ff;border-radius:4px;font-size:.85em;font-weight:400;line-height:1.4;white-space:normal;text-align:left}\n.tv{color:var(--acc,#6cb6ff);text-decoration:none;white-space:nowrap}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
+\n.tv{color:var(--acc,#6cb6ff);text-decoration:none;white-space:nowrap}.tv:hover,.tv:focus{text-decoration:underline}\n.tvcell{min-height:44px;height:44px}@media(max-width:480px){.tvcell a{display:block;padding:12px 0;min-height:44px}}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.tscroll table{min-width:640px}
 .tscroll td:first-child,.tscroll th:first-child{position:sticky;left:0;background:var(--card,#151a24);z-index:1}
 </style>"""
-INFO_JS = """<script>(()=>{let cur=null,pinned=false;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
-function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b),r=b.getBoundingClientRect();t.hidden=false;
-t.style.top=(r.bottom+6)+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-t.offsetWidth-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
-function hide(b){tip(b).hidden=true;b.setAttribute('aria-expanded','false');if(cur===b){cur=null;pinned=false}}
-document.querySelectorAll('button.info').forEach(b=>{
-b.addEventListener('mouseenter',()=>show(b));
-b.addEventListener('mouseleave',()=>{if(!(pinned&&cur===b)&&document.activeElement!==b)hide(b)});
-b.addEventListener('focus',()=>show(b));
-b.addEventListener('blur',()=>{if(!(pinned&&cur===b))hide(b)});
-b.addEventListener('click',e=>{e.stopPropagation();if(cur===b&&pinned){hide(b)}else{show(b);pinned=true}})});
-document.addEventListener('click',e=>{if(cur&&!e.target.closest('.tip'))hide(cur)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
-const re=()=>{if(cur){const c=cur,k=pinned;show(c);pinned=k}};addEventListener('scroll',re,true);addEventListener('resize',re)})()</script>"""
+INFO_JS = ""  # felles TIP_JS i site.page
 FILTER_JS = """<script>document.querySelectorAll('.flt button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));
 document.querySelectorAll('tr[data-st]').forEach(r=>r.style.display=(b.dataset.f==='all'||r.dataset.st===b.dataset.f)?'':'none')})</script>"""
 LABEL = {"CLEAR": "◆ CLEAR", "FAIL": "✕ Består ikke", "MISSING": "? Mangler data"}
@@ -313,9 +299,8 @@ INFO = {
 
 def _th(label: str, key: str, uid: str) -> str:
     name, text = INFO[key]
-    tid = f"tip-{uid}-{key}"
-    return (f'<th>{_E(label)} <button type="button" class="info" aria-label="Hva betyr {_E(name)}?" aria-expanded="false" '
-            f'aria-describedby="{tid}">i</button><span role="tooltip" id="{tid}" class="tip" hidden>{_E(text)}</span></th>')
+    from .site_layout import info_tip
+    return f'<th>{_E(label)} {info_tip(text, name)}</th>'
 
 
 def _pct(v):

@@ -1,5 +1,6 @@
 """Analyst recommendations (facts only) as an attention line. Never affects score or category."""
 import csv, html, logging
+from .site_layout import info_tip
 from datetime import date
 from pathlib import Path
 
@@ -71,7 +72,7 @@ def line_html(r, close, today=None):
     oldtag = ' <span class="pill">eldre anbefaling</span>' if old else ""
     return (f'<div class="card analyst-row"{style}><h3 style="margin:0 0 4px;font-size:.9em" class="mut">Ekstern analytiker</h3>'
             f'<p class="analyst mut" style="margin:0">{a} <span class="pill">◌ Bare oppmerksomhet</span>{oldtag} '
-            f'<span class="info" title="{html.escape(tip)}" tabindex="0">ⓘ</span></p></div>')
+            f'{info_tip(tip, "Ekstern analytiker")}</p></div>')
 
 
 def tag_html(r, close, today=None):

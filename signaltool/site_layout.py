@@ -32,12 +32,47 @@ CSS = """
 .ilink{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border:1px solid #9ea9b5;border-radius:50%;font:600 11px/1 system-ui;color:#9ea9b5;cursor:help;margin-left:4px;position:relative}
 @media(max-width:699px){.card.tw{overflow-x:auto;max-width:100%}main :not(.xscroll)>table{display:block;overflow-x:auto;max-width:100%}.content,main{min-width:0;max-width:100vw}}
 .ilink::after{content:"";position:absolute;inset:-14px}
+.info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
+.info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:var(--acc,#6cb6ff);border-color:var(--acc,#6cb6ff)}
+.tip{position:fixed;z-index:1000;box-sizing:border-box;width:max-content;max-width:min(280px,calc(100vw - 16px));padding:12px;background:#1c2330;color:#e6edf3;border:1px solid var(--acc,#6cb6ff);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.5);font-size:14px;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere;text-align:left;text-transform:none;letter-spacing:normal}
+.tip[hidden]{display:none}.tip b{display:block;margin-bottom:4px;font-weight:700}
 """
+
+
+_TIPN = [0]
+
+
+def info_tip(text: str, title: str = "") -> str:
+    """Felles «i»-komponent: knapp + role=tooltip-boks (ingen title-attributt). Åpnes av TIP_JS."""
+    if not text:
+        return ""
+    _TIPN[0] += 1
+    tid = f"tip{_TIPN[0]}"
+    lab = f"Hva betyr {title}?" if title else "Forklaring"
+    head = f"<b>{E(title)}</b>" if title else ""
+    return (f'<button type="button" class="info" aria-label="{E(lab)}" aria-expanded="false" aria-describedby="{tid}">i</button>'
+            f'<span role="tooltip" id="{tid}" class="tip" hidden>{head}{E(text)}</span>')
+
+
+TIP_JS = """<script>(()=>{let cur=null,pinned=false;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
+function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b);if(!t)return;const r=b.getBoundingClientRect();t.hidden=false;
+const w=t.offsetWidth,h=t.offsetHeight;let top=r.bottom+6;if(top+h>innerHeight-8&&r.top-h-6>8)top=r.top-h-6;
+t.style.top=top+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-w-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
+function hide(b){const t=tip(b);if(t)t.hidden=true;b.setAttribute('aria-expanded','false');if(cur===b){cur=null;pinned=false}}
+document.querySelectorAll('button.info[aria-describedby]').forEach(b=>{
+b.addEventListener('mouseenter',()=>show(b));
+b.addEventListener('mouseleave',()=>{if(!(pinned&&cur===b)&&document.activeElement!==b)hide(b)});
+b.addEventListener('focus',()=>show(b));
+b.addEventListener('blur',()=>{if(!(pinned&&cur===b))hide(b)});
+b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(cur===b&&pinned){hide(b)}else{show(b);pinned=true}})});
+document.addEventListener('click',e=>{if(cur&&!e.target.closest('.tip'))hide(cur)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur){const c=cur;hide(c);c.focus&&c.blur()}});
+const re=()=>{if(cur){const c=cur,k=pinned;show(c);pinned=k}};addEventListener('scroll',re,true);addEventListener('resize',re)})()</script>"""
 
 
 def xbadge(text: str, tip: str = "") -> str:
     """Grått, firkantet merke (aldri blått/grønt, ikke CLEAR-form)."""
-    i = f' <span class="ilink" tabindex="0" role="img" aria-label="{E(tip)}" title="{E(tip)}">i</span>' if tip else ""
+    i = " " + info_tip(tip, text) if tip else ""
     return f'<span class="xbadge">{E(text)}</span>{i}'
 
 

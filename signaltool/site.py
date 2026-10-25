@@ -374,7 +374,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <main>{body}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode».</footer>
 </div></div>
-{script}</body></html>"""
+{script}{L.TIP_JS}</body></html>"""
 
 
 def theme_card(t, pre=""):

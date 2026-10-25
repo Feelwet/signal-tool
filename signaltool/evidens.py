@@ -13,6 +13,7 @@ E = lambda x: html.escape("" if x is None else str(x))
 
 import json
 from pathlib import Path
+from . import site_layout as L
 
 EVFILE = Path(__file__).resolve().parent.parent / "logs" / "red_flag_evidence.json"
 EVREPORT = "https://github.com/feelwet/signal-tool/blob/master/reports/natt/red_flags_oslo.md"
@@ -113,7 +114,7 @@ def badge(key: str, extra: str = "") -> str:
     lv, tip = evidens.get(key, (DEFAULT, ""))
     tip += extra
     ic, txt, cls = LEVELS[lv]
-    i = (f'<span class="ilink" tabindex="0" role="img" aria-label="{E(tip)}" title="{E(tip)}">i</span>' if tip else "")
+    i = L.info_tip(tip, txt)
     return f'<span class="evb {cls}">{ic} {E(txt)}</span>{i} '
 
 
