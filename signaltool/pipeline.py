@@ -584,19 +584,21 @@ def append_theme_scores(themes: list, day: str, path=None) -> int:
     import csv
     from pathlib import Path
     path = Path(path or Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv")
-    hdr = ["date", "theme", "score", "proxy_ticker", "proxy_close", "mean_close_winners", "n_winners"]
+    # Primærmål: snitt sluttkurs for kandidat-tickerne (ikke tapere). Enkeltticker kun til informasjon.
+    hdr = ["date", "theme", "score", "mean_close_candidates", "n_candidates", "info_ticker", "info_ticker_close"]
+    ren = {"mean_close_winners": "mean_close_candidates", "n_winners": "n_candidates", "proxy_ticker": "info_ticker", "proxy_close": "info_ticker_close"}
     old = []
     if path.exists():
         with path.open() as f:
-            old = [r for r in csv.DictReader(f) if r.get("date") != day]
+            old = [{ren.get(k, k): v for k, v in r.items()} for r in csv.DictReader(f) if r.get("date") != day]
     new = []
     for t in themes:
         tk = [x for x in (t.get("tickers") or []) if x.get("close") is not None]
         win = [x["close"] for x in tk if "taper" not in str(x.get("role", "")).lower()]
         px = tk[0] if tk else {}
         new.append({"date": day, "theme": t.get("key"), "score": "" if t.get("score") is None else round(float(t["score"]), 4),
-                    "proxy_ticker": px.get("ticker", ""), "proxy_close": px.get("close", ""),
-                    "mean_close_winners": round(sum(win) / len(win), 4) if win else "", "n_winners": len(win)})
+                    "mean_close_candidates": round(sum(win) / len(win), 4) if win else "", "n_candidates": len(win),
+                    "info_ticker": px.get("ticker", ""), "info_ticker_close": px.get("close", "")})
     path.parent.mkdir(exist_ok=True)
     with path.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=hdr); w.writeheader(); w.writerows(old + new)

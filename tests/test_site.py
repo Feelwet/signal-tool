@@ -43,7 +43,7 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
     tk = (out / "tickere.html").read_text()  # full kategoritekst på Tickere etter opprydding
-    assert 'class="cat kjop"' in idx and "Hvorfor: test-grunn" in idx and "ikke bevist å slå markedet" in tk
+    assert 'class="cat kjop"' in tk and "Hvorfor: test-grunn" in tk and "ikke bevist å slå markedet" in tk and "Treffrate fra fremoverloggen" in idx
     tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
     assert "✔ oppfylt" in tp and "✘ ikke oppfylt" in tp and "ikke bevist å slå markedet" in tp
     tk = (out / "tickere.html").read_text()
@@ -87,4 +87,4 @@ def test_theme_score_log(tmp_path):
     p = tmp_path / "t.csv"
     append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-25", p)
     lines = p.read_text().splitlines()
-    assert len(lines) == 3 and lines[1].startswith("2026-10-24,a,1.5,SPY,10,10.0,1")
+    assert len(lines) == 3 and lines[0].split(",")[3] == "mean_close_candidates" and lines[1].startswith("2026-10-24,a,1.5,10.0,1,SPY,10")

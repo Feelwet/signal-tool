@@ -428,10 +428,10 @@ def build(snap: dict) -> Path:
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [L.head(f'Oversikt {snap["date"]}', f'Hvilke geopolitiske temaer får uvanlig mye oppmerksomhet nå, og hvilke aksjer som bør undersøkes. GDELT-data t.o.m. {snap.get("gdelt_latest")}.'),
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
-         sec("Dashboard", X.dashboard_html, snap).replace("<h2>Temascore ", "<h2>Temascore " + L.EXP() + " ", 1),
-         sec("Hva bør jeg se på i dag?", X.focus_html, snap),
+         sec("Dashboard", X.dashboard_html, snap).replace("<h2>Temascore ", "<h2>Temascore " + L.EXP() + L.stale_mark(rowsL, ["GDELT 1.0 daily events"]) + " ", 1)
+             .replace('<div class="dash-grid">', sec("Hva bør jeg se på i dag?", X.focus_html, snap) + '<div class="dash-grid">', 1),
          sec("Nytt siden i går", X.changes_html, snap),
-         re.sub(r'<p class="catnote">.*?</p>', '<p class="catnote">ⓘ Regelbaserte kategorier, ikke rådgivning. <a href="metode.html#rapporter">Reglene</a> · <a href="tickere.html#treffsikkerhet">Treffsikkerhet</a></p>', sec("Kategorier", cat_summary_html, snap), flags=re.S).replace("</div>", L.watch_text(snap.get("track_record")) + "</div>", 1),
+         '<div class="card" style="padding:8px 12px">' + L.watch_text(snap.get("track_record")) + '</div>',
          ('<h2>Neste 5 hendelser</h2><div class="card" style="padding-top:8px;padding-bottom:8px"><ul class="ev" style="margin:0">' + "".join(f'<li style="margin:2px 0;padding:2px 0">{E(e["date"])} {E(e.get("time") or "")} – <b>{E(e["source"])}</b>: {E(e["title"])}</li>' for e in nxt) + '</ul><a href="kalender.html">Hele kalenderen →</a></div>') if nxt else ""]
     # flyttet til Metode › Eksperimentelt (ingenting slettet)
     ex = []
@@ -462,18 +462,18 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", L.head("Tickere", "Alle kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».", [(str(len(tickers)), "Tickere", "totalt", "#"), (str(sum(1 for e in tickers if e.get("category") == "kjop")), "Kjøp", "i dag", "#"), (str(sum(1 for e in tickers if e.get("category") == "watch")), "Watchlist", "i dag", "#treffsikkerhet")]) + '<div class="card tw"><table>' + TICKER_HEAD + ''
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(L.head("Tickere", "Alle kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».", [(str(len(tickers)), "Tickere", "totalt", "#"), (str(sum(1 for e in tickers if e.get("category") == "kjop")), "Kjøp", "i dag", "#"), (str(sum(1 for e in tickers if e.get("category") == "watch")), "Watchlist", "i dag", "#treffsikkerhet")]) + '<div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div>"
                                             + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
-                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 0, snap))
+                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 20, "Vis flere"), 0, snap))
     tmap = {t["key"]: t for t in themes}
     for e in tickers:
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
 
     (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
-    (SITE / "oslo.html").write_text(page("Oslo Børs", sec("Oslo Børs", oslo_page, snap), 0, snap))
+    (SITE / "oslo.html").write_text(page("Oslo Børs", fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
     ssnap = {**snap, "generated": _f.get("fetched") or _f.get("asof") or snap.get("generated")}
     (SITE / "sektorer.html").write_text(page("Sektorer", sec("Sektorer", SEC.index_html), 0, ssnap))
@@ -546,7 +546,7 @@ def ticker_page(e, tmap):
 
 
 
-def fold_tables(h: str, keep: int = 12) -> str:
+def fold_tables(h: str, keep: int = 12, label: str = "Vis alle") -> str:
     """Pakker hver tabell i en horisontal scroll-container; tabeller med > keep rader viser de første keep og resten i <details> «Vis alle»."""
     def one(m):
         t = m.group(0)
@@ -556,7 +556,7 @@ def fold_tables(h: str, keep: int = 12) -> str:
             open_tag = re.match(r"<table[^>]*>", t).group(0)
             first = open_tag + head + "".join(body[:keep]) + "</table>"
             rest = open_tag + head + "".join(body[keep:]) + "</table>"
-            return (f'<div class="xscroll">{first}</div><details class="vis-alle"><summary>Vis alle ({len(body)} rader)</summary>'
+            return (f'<div class="xscroll">{first}</div><details class="vis-alle"><summary>{label} ({len(body)} rader)</summary>'
                     f'<div class="xscroll">{rest}</div></details>')
         return f'<div class="xscroll">{t}</div>'
     return re.sub(r"<table[^>]*>.*?</table>", one, h, flags=re.S)
@@ -635,9 +635,9 @@ def makro_page(snap):
         ("Amerikanske forsvarskontrakter (DoD)", f"{nd} kunngjøringer" if nd else MD, dod_body, "dod", ["US DoD daily contracts (war.gov)"]),
     ]
     MOVED["tested"] = [
-        ("🚢 Sundpassasjer", s_cp, strip_h2(X.chokepoints_html(snap)), "sund", "Testet, ingen påvist effekt – testdetaljer i kortet."),
-        ("🔌 Forsyningskjede-radar (Taiwan)", s_tw, strip_h2(X.taiwan_html(snap)), "taiwan", "Testet, ingen påvist effekt – testdetaljer i kortet."),
-        ("🛢️ Oljelagre mot sesongnormal", s_oil, strip_h2(X.oil_nowcast_html(snap)), "olje", "Testet, ingen påvist effekt – testdetaljer i kortet."),
+        ("🚢 Sundpassasjer", s_cp, strip_h2(X.chokepoints_html(snap)), "sund", ("mot tankrederier/Brent: ingen signifikante funn (alle p>0,1; 21–31 hendelser, 16 tester)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/chokepoint.md")),
+        ("🔌 Forsyningskjede-radar (Taiwan)", s_tw, strip_h2(X.taiwan_html(snap)), "taiwan", ("mot SMH/TSM/EWT: ingen robust sammenheng (|t|≤1,1 fra 2020, n≈79)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/taiwan.md")),
+        ("🛢️ Oljelagre mot sesongnormal", s_oil, strip_h2(X.oil_nowcast_html(snap)), "olje", ("mot WTI/XLE: fortegnet skifter mellom periodene (t 3,1 før 2015, −1,5 fra 2015, n=608)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/oil_stocks.md")),
     ]
     infl = mac.get("inflation") or {}
     nb = (infl.get("rates") or {}).get("NO") or {}
@@ -645,7 +645,7 @@ def makro_page(snap):
                 [(f'{len((infl.get("cards") or {}))}', "Land med inflasjon", "siste måned", "#inflasjon"),
                  (("–" if nb.get("rate") is None else f'{nb["rate"]:.2f} %'.replace(".", ",")), "Norges Bank", "styringsrente", "#inflasjon"),
                  (str(len((infl.get("forecasts") or {}))), "Offisielle prognoser", "sentralbanker", "#inflasjon")])
-    return (hd + f'<div id="inflasjon">{INF.html_block(mac.get("inflation"), snap.get("calendar"))}</div>'
+    return (hd + MK(["Inflasjon HICP (Eurostat)", "Inflasjon Norge KPI (SSB)", "Inflasjon UK (ONS D7G7)", "Inflasjon USA KPI-U (FRED CPIAUCSL)", "Inflasjon Sverige KPIF (SCB)"]) + f'<div id="inflasjon">{INF.html_block(mac.get("inflation"), snap.get("calendar"))}</div>'
             f'<div class="card"><h2 style="margin-top:0">Norges Bank{MK(["Norges Bank"])}</h2>{fxh}<ul class="ev">{press}</ul></div>'
             + fold(T("Fysisk oljemarked (futures)", f"{len(oil)} mål") + MK(["Oil spreads & curves (yfinance futures)"]), futures, open_=False, hid="futures")
             + (fold(T("Nylig oppdatert hos Eurostat", f"{len(mac.get('eurostat_updates', []))} oppdateringer"), f'<ul class="ev">{eu}</ul>', open_=False, hid="eurostat") if eu else "")
@@ -661,7 +661,7 @@ def kalender_page(snap):
     cal = snap.get("calendar", [])
     td = str(snap.get("date") or date.today())
     fut = [e for e in cal if str(e.get("date")) >= td]
-    return L.head("Kalender", "Kommende sentralbankmøter, resultater og makrotall i én månedsvisning.",
+    return L.stale_mark(L.load_log(), ["Fed FOMC calendar", "ECB meeting calendar", "Norges Bank meeting calendar", "Earnings calendar (yfinance)"]) + L.head("Kalender", "Kommende sentralbankmøter, resultater og makrotall i én månedsvisning.",
                   [(str(len(fut)), "Kommende", "hendelser", "#"), (str(sum(1 for e in fut if "sentral" in str(e.get("kind","")).lower() or "FOMC" in str(e.get("source","")) or "ECB" in str(e.get("source","")) or "Norges Bank" in str(e.get("source","")))), "Sentralbank", "kommende", "#"), ((fut[0]["date"] if fut else "–"), "Neste", "dato", "#")]) + f"""<p class="mut">Tider i norsk tid der kilden oppgir tid. «(estimert)» = beregnet fra fast publiseringsrytme, ikke offisiell kalender. Sentralbankmøter vises 45 dager frem, øvrige 14–21 dager.</p>
 """ + CV.calendar_html(snap.get("calendar", []), f'<div class="card tw"><table><tr><th>Dato</th><th>Tid</th><th>Type</th><th>Kilde</th><th>Hendelse</th></tr>{rows}</table></div>')
 
@@ -672,12 +672,18 @@ def oslo_page(snap):
     sh = "".join(f'<tr><td>{E(r["issuer"])}</td><td>{E(r["ticker"] or "")}</td><td>{r["short_pct"]:.2f}%</td><td>{r["chg_7d"]:+.2f}</td><td>{r["chg_30d"]:+.2f}</td><td class="mut">{E(r["top_holders"])}</td></tr>' for r in snap.get("shorts", []))
     nc, ni, ns = len(snap.get("newsweb_contracts", [])), len(snap.get("newsweb_insider", [])), len(snap.get("short_positions", []) or [])
     rowsL = L.load_log()
-    return L.head("Oslo", "Rådata fra Oslo Børs: kontraktsmeldinger, innsidehandel og short – ikke filtrert eller testet som signal.",
-                  [(str(nc), "Kontraktsmeldinger", "14 dager", "#kontrakter"), (str(ni), "Innsidemeldinger", "14 dager", "#innside"), ("Rådata", "Status", "ikke signal", "#")]) + f"""{Q.source_note(snap, "Oslo Børs Newsweb", "Finanstilsynet short register")}
-<div class="card tw" id="kontrakter"><h2 style="margin-top:0">Kontrakts- og ordremeldinger (Newsweb, 14 dager) {L.RAW()}{L.stale_mark(rowsL, ["Oslo Børs Newsweb"])}</h2><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{con}</table></div>
-{X.oslo_insider_html(snap)}
-<div class="card tw" id="innside"><h2 style="margin-top:0">Meldepliktige handler – primærinnsidere (14 dager) {L.RAW()}</h2><p class="mut">Tittelen sier ikke alltid om det er kjøp eller salg – åpne meldingen.</p><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{ins}</table></div>
-<div class="card tw"><h2 style="margin-top:0">Shortposisjoner (Finanstilsynet) – største endringer {L.RAW()}{L.stale_mark(rowsL, ["Finanstilsynet short register"])}</h2><p class="mut">Netto shortposisjoner ≥ 0,5 % offentliggjøres. Økende short = noen profesjonelle vedder på fall.</p><table><tr><th>Selskap</th><th>Ticker</th><th>Short</th><th>Endr. 7d (pp)</th><th>Endr. 30d</th><th>Største aktører</th></tr>{sh}</table></div>"""
+    ins_x = X.oslo_insider_html(snap)
+    mx = re.match(r'\s*<div class="card tw" id="innside"><h2 style="margin-top:0">(.*?)</h2>(.*)</div>\s*$', ins_x or "", re.S)
+    nx = max(0, (ins_x or "").count("<tr") - 1)
+    T = lambda name, summ: f'{name} <span class="fold-sum">– {E(summ)}</span>'
+    raw = lambda t, n, extra="": T(t, f"{n} rader") + " " + L.RAW() + extra
+    return (L.head("Oslo", "Rådata fra Oslo Børs: kontraktsmeldinger, innsidehandel og short – ikke filtrert eller testet som signal.",
+                  [(str(nc), "Kontraktsmeldinger", "14 dager", "#kontrakter"), (str(ni), "Innsidemeldinger", "14 dager", "#innside-meld"), ("Rådata", "Status", "ikke signal", "#")])
+            + Q.source_note(snap, "Oslo Børs Newsweb", "Finanstilsynet short register")
+            + fold(raw("Kontrakts- og ordremeldinger (Newsweb, 14 dager)", min(nc, 40), L.stale_mark(rowsL, ["Oslo Børs Newsweb"])), f'<table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{con}</table>', open_=False, hid="kontrakter")
+            + (fold(raw(mx.group(1), nx), mx.group(2), open_=False, hid="innside") if mx else ins_x)
+            + fold(raw("Meldepliktige handler – primærinnsidere (14 dager)", min(ni, 40)), f'<p class="mut">Tittelen sier ikke alltid om det er kjøp eller salg – åpne meldingen.</p><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{ins}</table>', open_=False, hid="innside-meld")
+            + fold(raw("Shortposisjoner (Finanstilsynet) – største endringer", len(snap.get("shorts", [])), L.stale_mark(rowsL, ["Finanstilsynet short register"])), f'<p class="mut">Netto shortposisjoner ≥ 0,5 % offentliggjøres. Økende short = noen profesjonelle vedder på fall.</p><table><tr><th>Selskap</th><th>Ticker</th><th>Short</th><th>Endr. 7d (pp)</th><th>Endr. 30d</th><th>Største aktører</th></tr>{sh}</table>', open_=False, hid="short"))
 
 
 def metode_page(snap):
@@ -694,18 +700,23 @@ def metode_page(snap):
            + (f'<h3>Delvis OK (reservekilde brukt)</h3><ul class="ev">{li(part)}</ul>' if part else "")
            + '<p class="mut">Regel: 3 netter på rad med feil gir «⏱ Utdatert» på seksjonen; 14 dager uten ferske data flytter den til Eksperimentelt (logs/source_status.jsonl).</p>')
     tested = MOVED.get("tested", [])
-    tested_h = "".join(f'<details class="vis-alle"><summary><b>{E(nm)}</b> – {E(res)} <span class="mut">({E(sm)})</span></summary>{body or "<p class=mut>Mangler data</p>"}</details>' for nm, sm, body, _, res in tested)
+    tested_h = "".join(f'<details class="vis-alle"><summary><b>{E(nm)}</b> – {E(res[0])} · <a href="{E(res[1])}">rapport</a> <span class="mut">(siste: {E(sm)})</span></summary>{body or "<p class=mut>Mangler data</p>"}</details>' for nm, sm, body, _, res in tested)
     exp = list(EXTRA_EXP) + list(MOVED.get("exp", []))
     exp_h = "".join(fold(T(nm, sm) + L.stale_mark(rowsL, srcs), body or '<p class="mut">Mangler data</p>', open_=False, hid=hid) for nm, sm, body, hid, srcs in exp)
+    kb = kilder_page(snap)
+    m = re.search(r'<div class="card tw"><h2 style="margin-top:0">Kildestatus ved siste kjøring</h2>.*?</div>', kb, re.S)
+    if m:  # én plass for kildetabellen: under Kildestatus
+        kb = kb.replace(m.group(0), ""); src += m.group(0)
     hon = X.honesty_html(extra=Q.section("Datakvalitet", Q.dq_line, snap, snap=snap))
     return (L.head("Metode", "Hvordan signalene lages, hva som er testet, kildestatus og hva som fortsatt er eksperimentelt.",
                    [(f"{ok}/{n}", "Kilder OK", "siste kjøring", "#kilder"), (str(len(tested)), "Testet, ingen effekt", "fjernet fra Makro", "#testet"), (str(len(exp)), "Eksperimentelt", "ikke testet", "#eksperimentelt")])
             + fold(T("Ærlig status", "hva verktøyet kan og ikke kan"), hon, open_=False, hid="status")
             + fold(T("Porteføljeregler og markedsregime", "regler for posisjoner"), X.portfolio_rules_html() + Q.section("Markedsregime", X.regime_html, snap, snap=snap), open_=False, hid="regler")
             + fold(T("Kildestatus", f"Kilder OK {ok}/{n} · {len(fails)} feilet · {len(part)} delvis"), src, open_=False, hid="kilder")
-            + fold(T("Rapporter, backtester og kildeliste", "metode, overtilpasning, basisrater, rapporter"), kilder_page(snap), open_=False, hid="rapporter")
+            + fold(T("Rapporter, backtester og kildeliste", "metode, overtilpasning, basisrater, rapporter"), kb, open_=False, hid="rapporter")
             + fold(T("Testet, ingen effekt", ", ".join(t[0].split(" ", 1)[-1] for t in tested) or "–"), tested_h, open_=False, hid="testet")
-            + '<h2 id="eksperimentelt">Eksperimentelt ' + L.xbadge("Eksperimentelt · ikke testet") + '</h2>' + exp_h)
+            + '<h2 id="eksperimentelt">Eksperimentelt ' + L.xbadge("Eksperimentelt · ikke testet") + '</h2>'
+            + '<p class="mut">Temascore logges hver natt i logs/theme_score.csv. Primærmål: snitt sluttkurs for temaets kandidat-tickere (mean_close_candidates); enkeltticker (info_ticker) er kun informasjon. Treffrate måles ved n ≥ 100.</p>' + exp_h)
 
 
 def kilder_page(snap):
