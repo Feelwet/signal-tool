@@ -44,7 +44,15 @@ def _dates(t: str) -> pd.DataFrame | None:
 def scan(tickers: list[str] | None = None, max_age=PEAD_MAX_AGE) -> tuple[list[dict], str]:
     if tickers is None:
         if not SP500.exists():
-            return [], "skipped (S&P 500-liste mangler – kjør backtest-universet)"
+            # Selvreparasjon: lista hentes på nytt (Wikipedia, ett kall) i stedet for å hoppe over – ellers faller tickere som
+            # bare er på lista via sterk rapport (HAS 25.10) ut når state-cachen er tom.
+            try:
+                from ..backtest import universe
+                universe.sp500_members()
+            except Exception as ex:
+                log.warning("S&P 500-liste: %s", ex)
+            if not SP500.exists():
+                return [], "FAILED (S&P 500-liste mangler og kunne ikke hentes)"
         tickers = pd.read_csv(SP500)["Symbol"].astype(str).str.replace(".", "-", regex=False).tolist()
     recent = []
     for t in tickers:

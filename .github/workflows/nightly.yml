@@ -55,6 +55,7 @@ jobs:
       # run saves a new key and restores the most recent one via restore-keys. If the cache is ever evicted
       # (unused > 7 days), the next run simply backfills 75 days of GDELT and RSS/Reddit baselines start over.
       - name: Restore state cache
+        id: restore_state
         uses: actions/cache/restore@v4
         with:
           path: data
@@ -104,8 +105,10 @@ jobs:
           find data/snapshots -name '20*.json' -mtime +90 -delete 2>/dev/null || true
           du -sh data || true
 
+      # Lagre bare når state ble hentet og pipelinen faktisk kjørte. 25.10: en kansellert kjøring (før restore) lagret
+      # en tom data/ (180 byte), neste kjøring hentet den via restore-keys -> S&P 500-lista og Yahoo-cachen var borte.
       - name: Save state cache
-        if: always()
+        if: always() && steps.restore_state.outcome == 'success' && (steps.run.outcome == 'success' || steps.run.outcome == 'failure')
         uses: actions/cache/save@v4
         with:
           path: data

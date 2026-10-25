@@ -77,14 +77,18 @@ def svg(series, n, mark_date=None, W=600, H=240):
     xs = range(L)
     p1 = _path(xs, [v for _, v in s], fx, fy)
     p2 = _path(xs, m, fx, fy)
-    mk = ""
+    mk, ov = "", ""
     if mark_date:
         for i, (dd, v) in enumerate(s):
             if dd == mark_date and v is not None:
-                mk = f'<circle cx="{fx(i):.1f}" cy="{fy(v):.1f}" r="4" fill="{COL}" stroke="#0d1117" stroke-width="1.5"><title>Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}</title></circle>'
+                x = fx(i)
+                mk = f'<line x1="{x:.1f}" x2="{x:.1f}" y1="0" y2="{H}" stroke="{COL}" stroke-width="1" stroke-dasharray="3 3" opacity=".8" vector-effect="non-scaling-stroke"/>'
+                xp, yp = x / W * 100, fy(v) / H * 100
+                ov = (f'<span class="pcdot" style="left:{xp:.2f}%;top:{yp:.2f}%" title="Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}"></span>'
+                      f'<span class="pcin{" r" if xp > 80 else ""}" style="left:{xp:.2f}%">inn {dd[8:10]}.{dd[5:7]}</span>')
     fmt = lambda v: f"{v:,.2f}".replace(",", " ").replace(".", ",")
     okv = [v for _, v in s if v is not None]
-    lab = f'<span class="hi">{fmt(max(okv))}</span><span class="lo">{fmt(min(okv))}</span>'
+    lab = f'<span class="hi">{fmt(max(okv))}</span><span class="lo">{fmt(min(okv))}</span>{ov}'
     return (f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-label="Sluttkurs siste {n} handelsdager">'
             f'<path d="{p2}" fill="none" stroke="{COL}" stroke-width="1.2" stroke-dasharray="4 3" opacity=".7" vector-effect="non-scaling-stroke"/>'
             f'<path d="{p1}" fill="none" stroke="{COL}" stroke-width="1.8" vector-effect="non-scaling-stroke"/>{mk}</svg>'
@@ -107,7 +111,7 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None) -> str:
     if not any(b for b in btns if 'aria-pressed="true"' in b):
         btns[-1] = btns[-1].replace('aria-pressed="false"', 'aria-pressed="true"'); panes[-1] = panes[-1].replace(" hidden", "")
     u = f" · oppdatert {upd[8:10]}.{upd[5:7]}" if upd else ""
-    return (f'<div class="card pc nofold" id="kursgraf"><div class="pcbs" role="group" aria-label="Periode">{"".join(btns)}</div>{"".join(panes)}'
+    return (f'<div class="card pc nofold" id="kursgraf"><div class="pch"><h2 class="pct">Kurs</h2><div class="pcbs" role="group" aria-label="Periode">{"".join(btns)}</div></div>{"".join(panes)}'
             f'<p class="mut pcs">Kilde: Yahoo Finance{u}</p>'
             '<script>(()=>{const c=document.getElementById("kursgraf");c.querySelectorAll(".pcb").forEach(b=>b.addEventListener("click",()=>{'
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
@@ -115,8 +119,13 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None) -> str:
 
 
 CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margin-bottom:6px}.pcb{height:32px;min-width:44px;padding:0 10px;border:1px solid #30363d;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
-.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
-.pcs{font-size:12px;margin:4px 0 0}@media(max-width:599px){.pcp svg{height:180px}.card.pc{padding:6px 10px;margin-bottom:8px}.pcbs{margin-bottom:4px}.pcs{margin-top:2px}}"""
+.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#58a6ff;box-shadow:0 0 0 1.5px #0d1117}
+.pcin{position:absolute;top:0;margin-left:4px;font-size:11px;color:#58a6ff;white-space:nowrap}.pcin.r{transform:translateX(-100%);margin-left:-4px}
+.pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
+.pcs{font-size:12px;margin:4px 0 0}.pct{display:none}
+@media(max-width:599px){.card.pc{padding:3px 10px;margin:0 0 12px}
+.pch{display:flex;align-items:center;justify-content:space-between;height:28px;margin-bottom:2px}.pct{display:block;font-size:14px;margin:0}
+.pcbs{margin:0;gap:4px}.pcb{height:28px;min-width:40px;padding:0 8px;font-size:13px}.pcp svg{height:150px}.pcs{font-size:11px;margin:4px 0 0;line-height:1.2}}"""
 
 
 def write_json(ticker, series, path, upd=None):

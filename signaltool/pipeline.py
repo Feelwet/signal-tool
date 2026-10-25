@@ -435,7 +435,7 @@ def run(fast: bool = False) -> dict:
     try:
         from . import pead_roll
         th = pead_roll.log_today()
-        status["pead_tt_thresholds"] = (f"ok (overraskelse ≥ {th['surprise']:.1f} %, reaksjon ≥ {th['reaction']*100:.1f} %, n {th['n']})"
+        status["pead_tt_thresholds"] = (f"ok (grenser per {th['last_report'][8:10]}.{th['last_report'][5:7]}: overraskelse ≥ {th['surprise']:.1f} %, reaksjon ≥ {th['reaction']*100:.1f} %, n {th['n']})"
                                         if th else "skipped (< 200 rapporter i vinduet)")
     except Exception as ex:
         status["pead_tt_thresholds"] = f"error: {ex}"

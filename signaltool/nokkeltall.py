@@ -44,8 +44,7 @@ def compute(e: dict) -> dict:
          "pe": ("Negativ" if eps < 0 else _n(close / eps, 1) if eps > 0 else None) if eps is not None and close and fcur == cur else None,
          "pb": _n(close / bv, 1) if bv and bv > 0 and close and fcur == cur else None,
          "ps": _n(mcap / rev, 1) if mcap and rev and rev > 0 and fcur == cur else None}
-    om = _f(d.get("operatingMargins"))   # Yahoo: driftsresultat siste 12 mnd / omsetning siste 12 mnd
-    ebit = om * rev if om is not None and rev else None
+    ebit = _f(d.get("ebit_ttm"))   # sum av fire siste kvartaler fra Yahoo (decision.ebit_ttm); aldri avledet
     v["ebit"] = ("Negativ" if ebit < 0 else _big(ebit, fcur)) if ebit is not None else None
     nx = d.get("next_earnings")
     v["next"] = (f"{nx[8:10]}.{nx[5:7]}.{nx[:4]}" + ("" if d.get("isEarningsDateEstimate") is False else " (anslått)")) if nx else None
@@ -61,8 +60,11 @@ CSS = """.nk{display:grid;grid-template-columns:repeat(4,1fr);column-gap:24px}
 .nk .r{display:flex;flex-direction:column;justify-content:center;height:52px;border-bottom:1px solid #30363d;min-width:0}
 .nk .l{color:var(--mut);font-size:12px}.nk .v{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap}
 .nksrc{font-size:12px;margin:6px 0 0}.nkmore{display:none}#nokkeltall h2{font-size:1em;margin:0 0 2px}
-@media(max-width:599px){#nokkeltall{padding:6px 10px}#nokkeltall h2{margin:0}.nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r.mx{display:none}.nkall .nk .r.mx{display:flex}
-.nkmore{display:block;margin-top:6px;min-height:44px;background:none;border:1px solid #30363d;border-radius:6px;color:inherit;font:inherit;width:100%;cursor:pointer}}"""
+@media(max-width:599px){#nokkeltall{padding:6px 10px;margin:0 0 12px}#nokkeltall h2{margin:0;font-size:14px;line-height:20px}
+.nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r{height:40px}.nk .l{font-size:11px;line-height:13px}.nk .v{font-size:15px;line-height:19px}
+.nk .r.mx{display:none}.nkall .nk .r.mx{display:flex}
+.nkmore{display:inline-block;height:28px;line-height:28px;padding:0;margin:2px 0 0;background:none;border:0;color:#58a6ff;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}
+.nksrc{font-size:11px;margin:2px 0 0}}"""
 
 
 MISS_HTML = (f'– <span class="ri" tabindex="0" aria-expanded="false" aria-label="{MISSING_INFO}">ⓘ<span class="tip">{MISSING_INFO}</span></span>')

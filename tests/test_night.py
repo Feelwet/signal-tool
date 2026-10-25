@@ -134,3 +134,47 @@ def test_contract_filter_excludes_legal_and_share_awards():
     assert NOT_CONTRACT.search("nordic mining asa: legal proceedings initiated by epc contractor")
     assert NOT_CONTRACT.search("subsea 7 s.a. announces details of share related awards")
     assert not NOT_CONTRACT.search("scana asa: scana company secures contract for e-house module")
+
+
+def test_pead_scan_refetches_missing_sp500_list(monkeypatch, tmp_path):
+    """25.10: tom state-cache -> sp500.csv manglet -> skannet ble hoppet over og HAS (Hold) falt ut av lista."""
+    import pandas as pd
+    from signaltool.collectors import pead_scan as PS
+    from signaltool.backtest import universe
+    p = tmp_path / "sp500.csv"
+    monkeypatch.setattr(PS, "SP500", p)
+    called = []
+    def fake():
+        called.append(1); pd.DataFrame({"Symbol": ["HAS"], "Security": ["Hasbro"], "GICS Sector": ["X"]}).to_csv(p, index=False)
+    monkeypatch.setattr(universe, "sp500_members", fake)
+    monkeypatch.setattr(PS, "_dates", lambda t: None)
+    out, msg = PS.scan()
+    assert called and "skipped" not in msg and "mangler" not in msg
+
+
+def test_state_cache_not_saved_from_cancelled_run():
+    from pathlib import Path
+    y = (Path(__file__).resolve().parent.parent / ".github/workflows/nightly.yml").read_text()
+    save = y[y.index("- name: Save state cache"):].split("\n")[1]
+    assert "steps.restore_state.outcome == 'success'" in save and "steps.run.outcome" in save
+
+
+def test_every_logged_ticker_has_page_and_no_stray_pages(tmp_path):
+    """25.10: HAS (Hold) var i loggen, men ticker/HAS.html manglet. Alle kategorier (også Følg og tema) skal ha side."""
+    import json
+    from signaltool.sitecheck import log_page_problems
+    log = tmp_path / "categories.csv"
+    log.write_text("date,ticker,category,price,price_date,benchmark,score,n_types,types,flags\n"
+                   "2026-10-24,OLD,watch,1,2026-10-23,SPY,1,1,,\n"
+                   "2026-10-25,HAS,hold,1,2026-10-23,SPY,1,1,pead,\n2026-10-25,EIOF.OL,watch,1,2026-10-23,OSEBX.OL,1,1,,\n"
+                   "2026-10-25,KOG.OL,tema,1,2026-10-23,OSEBX.OL,,0,,\n")
+    site = tmp_path / "site"; (site / "ticker").mkdir(parents=True)
+    (site / "data.json").write_text(json.dumps({"date": "2026-10-25", "tickers": [{"ticker": "SPY", "decision": {"quoteType": "ETF"}}]}))
+    for p in ("EIOF_OL", "KOG_OL", "SPY"):
+        (site / "ticker" / f"{p}.html").write_text("x")
+    pr = log_page_problems(site, log)
+    assert pr == ["ticker/HAS.html mangler (i loggen 2026-10-25)"]
+    (site / "ticker" / "HAS.html").write_text("x"); (site / "ticker" / "OLD.html").write_text("x")
+    assert log_page_problems(site, log) == ["ticker/OLD.html finnes, men tickeren er ikke i loggen 2026-10-25"]
+    (site / "ticker" / "OLD.html").unlink()
+    assert log_page_problems(site, log) == []   # SPY: ETF, bevisst ikke logget

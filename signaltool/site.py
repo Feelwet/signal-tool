@@ -462,6 +462,7 @@ def _prep(snap: dict) -> dict:
     from . import regime
     fm = TL.flag_map(snap)
     sin = SN.compute(SN.load(), str(snap.get("date") or "") or None)
+    snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
     for e in snap.get("tickers", []):
@@ -543,7 +544,9 @@ def build(snap: dict) -> Path:
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
                                             + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS, 0, snap))
     tmap = {t["key"]: t for t in themes}
-    pxs = PC.download([e["ticker"] for e in tickers])
+    from .theme_maps import log_rows as _tema_rows
+    tema = [r for r in _tema_rows(snap) if r["ticker"] not in {e["ticker"] for e in tickers}]
+    pxs = PC.download([e["ticker"] for e in tickers] + [r["ticker"] for r in tema])
     for e in tickers:
         e["_px"], e["_px_date"] = pxs.get(e["ticker"]), PC._CACHE.get("date")
         if e["_px"]:
@@ -551,6 +554,16 @@ def build(snap: dict) -> Path:
         e["_nk"] = NK.compute(e)
         NK.write_json(e["_nk"], SITE / "data" / "nokkeltall" / f"{slug(e['ticker'])}.json")
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
+    # Temakart-tickere (kategori «tema» i fremoverloggen, utenfor kandidatlista) får også en side: alle tickere i dagens logg skal ha side.
+    for r in tema:
+        t = r["ticker"]
+        e = {"ticker": t, "_since": (snap.get("_sin") or {}).get(t), "_px": pxs.get(t), "_px_date": PC._CACHE.get("date"),
+             "stats": {"close": r.get("price")}}
+        if e["_px"]:
+            PC.write_json(t, e["_px"], SITE / "data" / "kurs" / f"{slug(t)}.json", e["_px_date"])
+        e["_nk"] = NK.compute(e)
+        NK.write_json(e["_nk"], SITE / "data" / "nokkeltall" / f"{slug(t)}.json")
+        (SITE / "ticker" / f"{slug(t)}.html").write_text(page(t, sec(t, tema_ticker_page, e), 1, snap))
 
     (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
@@ -610,6 +623,17 @@ def theme_page(t, catmap=None, snap=None):
 <div class="card tw"><h2 style="margin-top:0">Berørte aksjer og råvarer</h2><table><tr><th>Ticker</th><th>Kategori</th><th>Rolle</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum-z</th></tr>{tick}</table>{CAT_NOTE.format(pre="../")}</div>
 <div class="card"><h2 style="margin-top:0">Siste nyheter</h2><ul class="ev">{heads or '<li class="mut">Ingen treff siste 3 døgn.</li>'}</ul>
 {('<h3>Reddit</h3><ul class="ev">' + red + '</ul>') if red else ''}{('<h3>Siste 8-K som nevner temaet</h3><ul class="ev">' + ek + '</ul>') if ek else ''}</div>"""
+
+
+def tema_ticker_page(e):
+    """Side for temakart-ticker (fremoverlogg-kategori «tema»): ikke kandidat, ingen Kjøp/Hold/Følg-vurdering."""
+    s = e.get("_since")
+    line = SN.line(s, '<span class="cat">Tema</span>') if s else ""
+    return (f"""{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
+{line}
+{PC.html(e["ticker"], e.get("_px"), (s or {}).get("price_date"), e.get("_px_date"))}
+{NK.html(e["_nk"])}
+<div class="card"><p class="mut" style="margin:0">Med i et temakart, ikke på kandidatlista. Ingen kategori (Kjøp/Hold/Følg) i dag. Se <a href="../temaer.html">temaene</a>.</p></div>""")
 
 
 def ticker_page(e, tmap):

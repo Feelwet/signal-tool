@@ -78,6 +78,6 @@ def log_today(path=None) -> dict | None:
     with open(path, "a", newline="") as f:
         w = csv.writer(f)
         if new:
-            w.writerow(["date", "surprise_p80_pct", "reaction_p80", "n_window", "last_report_in_window", "logged_at"])
+            w.writerow(["date", "surprise_p80_pct", "reaction_p80", "n_window", "grenser_per", "logged_at"])
         w.writerow([th["date"], round(th["surprise"], 3), round(th["reaction"], 5), th["n"], th["last_report"], datetime.now().isoformat(timespec="seconds")])
     return th

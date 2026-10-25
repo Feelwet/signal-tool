@@ -122,6 +122,23 @@ def price_metrics(df: pd.DataFrame, bench: pd.Series | None, sector: pd.Series |
     return out
 
 
+def ebit_ttm(tk: yf.Ticker):
+    """EBIT siste 12 mnd = sum av Yahoos fire siste kvartaler (rad EBIT, ellers Operating Income). Mangler ett kvartal: None."""
+    try:
+        q = tk.quarterly_income_stmt
+        if q is None or q.empty:
+            return None
+        row = next((r for r in ("EBIT", "Operating Income") if r in q.index), None)
+        if row is None:
+            return None
+        v = q.loc[row].sort_index(ascending=False).iloc[:4]
+        if len(v) < 4 or v.isna().any():
+            return None
+        return float(v.sum())
+    except Exception:
+        return None
+
+
 def _next_earnings(tk: yf.Ticker):
     try:
         cal = tk.calendar or {}
@@ -219,6 +236,7 @@ def compute(snap: dict, max_info=80) -> dict:
             inf = tk.info or {}
             infos[t] = {k: inf.get(k) for k in INFO_KEYS}
             infos[t]["info_date"] = date.today().isoformat()
+            infos[t]["ebit_ttm"] = ebit_ttm(tk)
             infos[t]["next_earnings"] = _next_earnings(tk)
             infos[t].update(revisions(tk))
             if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):

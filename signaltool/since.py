@@ -145,7 +145,7 @@ td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
-th.ret-h,td.ret-c{display:none}#tf-table .ret-m{display:block;font-size:12px}#tf-table .ret-m .rex{display:inline;margin-left:4px;font-size:12px}}
+th.ret-h,td.ret-c{display:none}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}#tf-table .ret-m{display:block;font-size:12px}#tf-table .ret-m .rex{display:inline;margin-left:4px;font-size:12px}}
 """
 
 JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
