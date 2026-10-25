@@ -32,7 +32,7 @@ def test_css_box_spec():
     tip = re.search(r"\.tip\{[^}]*\}", c).group(0)
     for k in ("padding:12px", "280px", "font-size:14px", "border:1px solid var(--acc", "border-radius", "100vw - 16px", "background:#1c2330"):
         assert k in tip
-    assert "Escape" in L.TIP_JS and "mouseenter" in L.TIP_JS and "focus" in L.TIP_JS and "innerWidth" in L.TIP_JS
+    assert "Escape" in L.TIP_JS and "pointerover" in L.TIP_JS and "focusin" in L.TIP_JS and "querySelectorAll" not in L.TIP_JS and "focus" in L.TIP_JS and "innerWidth" in L.TIP_JS
 
 
 def test_built_pages_every_tip_nonempty():

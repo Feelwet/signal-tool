@@ -54,19 +54,16 @@ def info_tip(text: str, title: str = "") -> str:
             f'<span role="tooltip" id="{tid}" class="tip" hidden>{head}{E(text)}</span>')
 
 
-TIP_JS = """<script>(()=>{let cur=null,pinned=false;const tip=b=>document.getElementById(b.getAttribute('aria-describedby'));
-function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b);if(!t)return;const r=b.getBoundingClientRect();t.hidden=false;
-const w=t.offsetWidth,h=t.offsetHeight;let top=r.bottom+6;if(top+h>innerHeight-8&&r.top-h-6>8)top=r.top-h-6;
+TIP_JS = """<script>(()=>{let cur=null,pinned=false;const d=document,tip=b=>d.getElementById(b.getAttribute('aria-describedby')),btn=e=>e.target&&e.target.closest?e.target.closest('button.info[aria-describedby]'):null;
+function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b);if(!t)return;t.hidden=false;const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;let top=r.bottom+6;if(top+h>innerHeight-8&&r.top-h-6>8)top=r.top-h-6;
 t.style.top=top+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-w-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
 function hide(b){const t=tip(b);if(t)t.hidden=true;b.setAttribute('aria-expanded','false');if(cur===b){cur=null;pinned=false}}
-document.querySelectorAll('button.info[aria-describedby]').forEach(b=>{
-b.addEventListener('mouseenter',()=>show(b));
-b.addEventListener('mouseleave',()=>{if(!(pinned&&cur===b)&&document.activeElement!==b)hide(b)});
-b.addEventListener('focus',()=>show(b));
-b.addEventListener('blur',()=>{if(!(pinned&&cur===b))hide(b)});
-b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(cur===b&&pinned){hide(b)}else{show(b);pinned=true}})});
-document.addEventListener('click',e=>{if(cur&&!e.target.closest('.tip'))hide(cur)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur){const c=cur;hide(c);c.focus&&c.blur()}});
+d.addEventListener('pointerover',e=>{const b=btn(e);if(b&&e.pointerType!=='touch'&&cur!==b)show(b)});
+d.addEventListener('pointerout',e=>{const b=btn(e);if(b&&!b.contains(e.relatedTarget)&&!(pinned&&cur===b)&&d.activeElement!==b)hide(b)});
+d.addEventListener('focusin',e=>{const b=btn(e);if(b)show(b)});
+d.addEventListener('focusout',e=>{const b=btn(e);if(b&&!(pinned&&cur===b))hide(b)});
+d.addEventListener('click',e=>{const b=btn(e);if(b){e.preventDefault();e.stopPropagation();if(cur===b&&pinned)hide(b);else{show(b);pinned=true}return}if(cur&&!e.target.closest('.tip'))hide(cur)},true);
+d.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
 const re=()=>{if(cur){const c=cur,k=pinned;show(c);pinned=k}};addEventListener('scroll',re,true);addEventListener('resize',re)})()</script>"""
 
 
