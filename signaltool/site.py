@@ -547,9 +547,9 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""<h1>{E(e['ticker'])}{SEC.tv_ext(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
+{cat_rules_html(e)}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}
-{cat_rules_html(e)}
 {X.flags_html(e)}
 {TM.ticker_html(e)}
 {X.plan_html(e, compact=False) if e.get("category") in ("kjop", "hold") else ""}

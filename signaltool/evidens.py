@@ -168,9 +168,13 @@ def _flag_items(r: dict, pre: str = "") -> str:
 
 def short_badge(k: str, extra: str = "") -> str:
     ic, _, cls = LEVELS[level(k)]
-    tip = evidens.get(k, ("", ""))[1] + extra
-    return (f'<span class="evb {cls}">{ic} {E(FLAG_SHORT[k])}</span>'
-            f'<span class="ilink" tabindex="0" role="img" aria-label="{E(tip)}" title="{E(tip)}">i</span>')
+    return f'<span class="evb {cls}">{ic} {E(FLAG_SHORT[k])}</span>'
+
+
+def _legend(keys, ebx: str = "") -> str:
+    """Én kort forklaring per flaggtype øverst i gruppen (erstatter «i» på hvert merke)."""
+    li = "".join(f'<li>{short_badge(k)} <span class="mut">{E(evidens.get(k, ("", ""))[1] + (ebx if k == "neg_ebit" else ""))}</span></li>' for k in keys)
+    return f'<ul class="rfl rflegend" style="font-size:.85em;margin:0 0 8px">{li}</ul>' if li else ""
 
 
 def red_page(snap: dict) -> str:
@@ -187,9 +191,9 @@ def red_page(snap: dict) -> str:
                       + f'</div><details><summary>Vis mer</summary>{_flag_items(r)}</details></div>')
     multi, single, ebo = ([r for r in rows if ntest(r) >= 2], [r for r in rows if ntest(r) == 1], [r for r in rows if ntest(r) == 0])
     grp = lambda title, rs, open_: (f'<details class="fold"{" open" if open_ else ""}><summary><h2>{title}</h2></summary>'
-                                    f'<div class="fold-body">{"".join(card(r) for r in rs)}</div></details>')
+                                    f'<div class="fold-body">{_legend([k for k in RED_FLAGS if any(k in r["flags"] for r in rs)], ebx)}{"".join(card(r) for r in rs)}</div></details>')
     return (f'<h1>{E(TITLE)}</h1><p class="pintro">Likvide Oslo-aksjer med røde flagg, verdt å undersøke nærmere – ingen flagg har bestått '
-            f'testkravet (se «i», <a href="metode.html">Metode</a>, <a href="{EVREPORT}">testrapport</a>); data per {E(c["asof"])}.</p>' + warn
+            f'testkravet (se forklaringen øverst i hver gruppe, <a href="metode.html">Metode</a>, <a href="{EVREPORT}">testrapport</a>); data per {E(c["asof"])}.</p>' + warn
             + grp(f'{badge("two_plus")}2+ flagg ({len(multi)})', multi, True)
             + grp(f'1 flagg ({len(single)}), ingen målt underavkastning', single, False)
             + grp(f'{badge("neg_ebit", ebx)}Bare negativ EBIT ({len(ebo)}), ikke testet', ebo, False))

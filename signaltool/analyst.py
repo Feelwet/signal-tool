@@ -66,11 +66,12 @@ def line_html(r, close, today=None):
     tip = f"{info}. Teller ikke i poengsum eller kategori."
     link = html.escape(r.get("lenke") or "")
     txt = html.escape(f"{FIRM}: " + " · ".join(bits))
-    a = f'<a href="{link}" rel="noopener">{txt} ↗</a>' if link else txt
+    a = f'{txt} <a href="{link}" rel="noopener" aria-label="Kilde: {html.escape(FIRM)}">↗</a>' if link else txt
     style = ' style="opacity:.55"' if old else ""
     oldtag = ' <span class="pill">eldre anbefaling</span>' if old else ""
-    return (f'<p class="analyst mut"{style}>{a} <span class="pill">◌ Bare oppmerksomhet</span>{oldtag} '
-            f'<span class="info" title="{html.escape(tip)}" tabindex="0">ⓘ</span></p>')
+    return (f'<div class="card analyst-row"{style}><h3 style="margin:0 0 4px;font-size:.9em" class="mut">Ekstern analytiker</h3>'
+            f'<p class="analyst mut" style="margin:0">{a} <span class="pill">◌ Bare oppmerksomhet</span>{oldtag} '
+            f'<span class="info" title="{html.escape(tip)}" tabindex="0">ⓘ</span></p></div>')
 
 
 def tag_html(r, close, today=None):

@@ -359,7 +359,7 @@ CSS = """<style>
 .infl-chart{display:block}
 .infl-leg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.infl-leg button{min-height:32px;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .infl-leg .chip{display:inline-flex;border:1px solid #30363d;border-radius:14px;margin:0 4px 4px 0;overflow:hidden}.infl-leg .chip button{background:none;border:0;color:inherit;padding:3px 8px;cursor:pointer}.infl-leg .chip .only{border-left:1px solid #30363d;font-size:.8em;color:#9ea9b5}.infl-leg .chip.on{background:#1f3a5f;border-color:#58a6ff}.infl-leg .chip.off .cb{color:#6e7681;text-decoration:line-through}.infl-all{margin:0 0 6px;background:#21262d;border:1px solid #30363d;color:inherit;border-radius:6px;padding:3px 10px;cursor:pointer}.infl-leg i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:6px}
-.infl-svg{width:100%;height:auto}.infl-svg .hit{pointer-events:stroke;cursor:pointer}.infl-svg .htip{fill:#e6edf3!important;font-size:12px!important;pointer-events:none;paint-order:stroke;stroke:#0d1117;stroke-width:3px}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
+.infl-svg{width:100%;height:auto}.infl-svg .ln,.infl-svg .hit,.infl-svg line{vector-effect:non-scaling-stroke}@media(max-width:700px){.infl-leg .chip button{min-height:44px;min-width:44px}.infl-all{min-height:44px}}.infl-svg .hit{pointer-events:stroke;cursor:pointer}.infl-svg .htip{fill:#e6edf3!important;font-size:12px!important;pointer-events:none;paint-order:stroke;stroke:#0d1117;stroke-width:3px}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
 .infl-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px}
 .infl-card{border:1px solid #30363d;border-radius:6px;padding:10px 12px}.infl-card .big{font-size:1.5em;font-weight:600;color:#e6edf3}
 .cchart{display:block;min-height:160px;margin:6px 0}.fcl{font-size:.8em}
@@ -368,7 +368,9 @@ JS = """<script>(()=>{const svg=document.querySelector('.infl-svg');if(!svg)retu
 const ALL=[...document.querySelectorAll('.infl-leg .chip')].map(c=>c.dataset.c);let hi=new Set(),only=null,lt=0;
 const t=document.createElementNS(NS,'text');t.setAttribute('class','htip');svg.appendChild(t);
 const VW=svg.viewBox.baseVal.width;
-function tip(s,x,y){t.textContent=s||'';if(s){t.setAttribute('x',Math.min(x+8,VW-170));t.setAttribute('y',Math.max(y-8,12))}}
+let FX=null;function fixT(el){if(!FX){el.removeAttribute('transform');el.style.fontSize='';return}const x=+el.getAttribute('x')||0,y=+el.getAttribute('y')||0;el.style.fontSize=(FX.f)+'px';el.setAttribute('transform','translate('+x+' '+y+') scale('+FX.k+' 1) translate('+(-x)+' '+(-y)+')')}
+function fit(){const m=matchMedia('(max-width:700px)').matches,w=svg.getBoundingClientRect().width;if(m&&w){svg.setAttribute('preserveAspectRatio','none');svg.style.height='260px';const sx=w/VW,sy=260/svg.viewBox.baseVal.height;FX={k:sy/sx,f:12/sy}}else{svg.removeAttribute('preserveAspectRatio');svg.style.height='';FX=null}svg.querySelectorAll('text').forEach(fixT)}
+function tip(s,x,y){t.textContent=s||'';if(s){t.setAttribute('x',Math.min(x+8,VW-170));t.setAttribute('y',Math.max(y-8,12));fixT(t)}}
 function render(){const vis=c=>!only||c===only;
 ALL.forEach(c=>{const ch=document.querySelector('.infl-leg .chip[data-c="'+c+'"]'),b=ch.querySelector('.cb');
 b.setAttribute('aria-pressed',hi.has(c));ch.classList.toggle('on',hi.has(c));ch.classList.toggle('off',!vis(c));
@@ -397,7 +399,7 @@ h.addEventListener('mouseenter',()=>ln.setAttribute('stroke-width','3'));
 h.addEventListener('mousemove',e=>{const p=P(e);tip(h.dataset.l,p.x,p.y)});
 h.addEventListener('mouseleave',()=>{ln.setAttribute('stroke-width',hi.has(h.dataset.c)?'3':'2');tip('')})});
 const q=new URLSearchParams(location.search),ok=c=>ALL.includes(c);
-(q.get('land')||'').toUpperCase().split(',').filter(ok).forEach(c=>hi.add(c));const o=(q.get('bare')||'').toUpperCase();if(ok(o)){only=o;hi.add(o)}render()})()</script>"""
+(q.get('land')||'').toUpperCase().split(',').filter(ok).forEach(c=>hi.add(c));const o=(q.get('bare')||'').toUpperCase();if(ok(o)){only=o;hi.add(o)}fit();addEventListener('resize',fit);render()})()</script>"""
 
 
 def html_block(inf: dict | None, cal: list | None, today=None) -> str:
