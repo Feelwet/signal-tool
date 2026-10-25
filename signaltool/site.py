@@ -6,6 +6,7 @@ from pathlib import Path
 from .config import ROOT, REPORTS
 from . import categories as C
 from . import site_extra as X
+from . import analyst as AN
 from . import theme_maps as TM
 from . import sectors as SEC
 from . import calendar_view as CV
@@ -390,7 +391,8 @@ def theme_card(t, pre=""):
 
 def ticker_row(e, pre=""):
     st = e.get("stats") or {}
-    pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0)
+    an = AN.tag_html(e.get("_analyst"), st.get("close"))
+    pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
     return (f'<tr><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a>{SEC.tv_ext(e["ticker"])}<br><span class="mut">{E(e.get("name") or "")}</span></td>'
             f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}</tr>')
 
@@ -408,7 +410,9 @@ def _prep(snap: dict) -> dict:
         t["polymarket"] = sorted(t.get("polymarket", []), key=lambda m: (-abs(m.get("chg_1w") or 0), -(m.get("volume_24h") or 0)))
     snap["insider_clusters"] = [r for r in snap.get("insider_clusters", []) if str(r.get("ticker") or "").upper() not in ("", "NONE", "N/A", "NA")]
     from . import regime
+    recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
     for e in snap.get("tickers", []):
+        e["_analyst"] = recs.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
     return snap
 
@@ -543,6 +547,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""<h1>{E(e['ticker'])}{SEC.tv_ext(e['ticker'])} <span class="mut">{E(e.get('name') or '')}</span> {score_badge(e['score'], 4, 2)} {cat_badge(e.get('category'))}</h1>
+{AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}
 {cat_rules_html(e)}
 {X.flags_html(e)}
