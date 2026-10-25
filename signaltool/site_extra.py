@@ -347,11 +347,11 @@ def pead_exp_html(e: dict) -> str:
 
 
 def thesis_html(e: dict, themes: dict) -> str:
-    th = P.thesis(e, themes)
+    th = P.thesis(e, themes, stop=False)   # AnalBot-veto 25.10: ingen stopp-/inngangsnivå på siden (regnes fortsatt)
     return (f'<div class="card thesis" id="tese"><h2 style="margin-top:0">Testbar tese</h2>'
             f'<p><b>Tese:</b> {E(th["tese"])}</p><p class="ok-line"><b>✔ Bekreftes hvis</b> {E(th["bekreftes"])}</p>'
             f'<p class="no-line"><b>✘ Avkreftes hvis</b> {E(th["avkreftes"])}</p>'
-            '<p class="mut">Regelbasert mal fylt med dagens tall. Sjekk punktene igjen etter neste rapport eller ved stoppnivået.</p></div>')
+            '<p class="mut">Regelbasert mal fylt med dagens tall. Sjekk punktene igjen etter neste rapport.</p></div>')
 
 
 def _br_row(k: str, b: dict) -> str:
@@ -376,7 +376,7 @@ BR_HEAD = ('<tr><th>Signal / kategori</th><th>Tilfeller</th><th>20 d: slo indeks
 def base_rate_html(e: dict) -> str:
     br = P.base_rates()
     if not br:
-        return '<div class="card"><h2 style="margin-top:0">Historisk treffrate</h2><p class="mut">Ingen historikk beregnet (kjør python -m signaltool.backtest.base_rates).</p></div>'
+        return '<div class="card"><h2 style="margin-top:0">Historisk treffrate</h2><p class="mut" style="font-size:12px">Historisk treffrate: ikke beregnet ennå.</p></div>'
     rows = "".join(_br_row(k, br.get(k)) for k in P.signal_keys(e))
     return (f'<div class="card" id="treffrate"><h2 style="margin-top:0">Historisk treffrate</h2><div class="tw"><table class="br">{BR_HEAD}{rows}</table></div>'
             '<p class="mut">Fra våre egne tester: meravkastning mot indeks fra inngang dagen etter signalet, før kurtasje. «Slo indeks» = andel tilfeller med positiv meravkastning. '

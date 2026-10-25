@@ -21,6 +21,8 @@ from . import mine as MINE
 from . import datacov as DC
 from . import since as SN
 from . import site_risk as RK
+from . import site_congress as CG
+from . import site_sources as SS
 from . import nokkeltall as NK
 from . import pricechart as PC
 
@@ -423,8 +425,8 @@ def ticker_row(e, pre=""):
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
-            f'{RK.cell(e.get("_risk"))}<td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
+            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -481,6 +483,8 @@ def _prep(snap: dict) -> dict:
         print(f"risk: {ex}"); rk = {}
     for e in snap.get("tickers", []):
         e["_risk"] = rk.get(e["ticker"])
+        e["_congress"] = CG.rows_for(snap, e["ticker"])
+        e["_srcline"] = SS.line(e, snap.get("status") or {})
     _factor_fix(snap)
     for e in snap.get("tickers", []):
         if e.get("_ret"):
@@ -522,7 +526,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -580,7 +584,9 @@ def build(snap: dict) -> Path:
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
     (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
                                             + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
-                                            + "".join(ticker_row(e) for e in tickers) + "</table>" + RET_NOTE + "</div></div>"
+                                            + "".join(ticker_row(e) for e in tickers if not e.get("unranked"))
+                                            + ("<tr class=\"grp\"><th colspan=\"9\">Ikke rangert <span class=\"mut\" style=\"font-weight:400\">· for lite data (under 4/7 grunnfelt)</span></th></tr>" + "".join(ticker_row(e) for e in tickers if e.get("unranked")) if any(e.get("unranked") for e in tickers) else "")
+                                            + "</table>" + RET_NOTE + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>'
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
                                             + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS + RK.JS, 0, snap))
@@ -683,8 +689,8 @@ def ticker_page(e, tmap):
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2))}
-{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{RK.status()}
+    return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
+{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{e.get("_srcline") or ""}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
@@ -693,13 +699,12 @@ def ticker_page(e, tmap):
 {X.flags_html(e)}
 {TM.ticker_html(e)}
 {X.base_rate_html(e)}
-{X.decision_html(e)}
 <div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
 <tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
 {DC.card(e)}
 <div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
-<div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>{RK.JS}"""
+<div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p>{CG.html(e.get("_congress") or [])}<h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>{RK.JS}"""
 
 
 

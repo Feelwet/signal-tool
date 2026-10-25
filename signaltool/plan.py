@@ -116,7 +116,7 @@ def _primary(e: dict) -> str | None:
     return ks[0] if ks else None
 
 
-def thesis(e: dict, themes: dict | None = None) -> dict:
+def thesis(e: dict, themes: dict | None = None, stop: bool = True) -> dict:
     """{'tese','bekreftes','avkreftes'} built from the ticker's actual signals and levels."""
     d, t = e.get("decision") or {}, e["ticker"]
     themes = themes or {}
@@ -152,7 +152,7 @@ def thesis(e: dict, themes: dict | None = None) -> dict:
         conf = f"kursen holder seg over 20-dagers snitt ({_lvl(d['sma20'])}) og slår fortsatt {bn} over 20 d (i dag {_p(rel20)})."
     else:
         conf = f"aksjen fortsetter å slå {bn} de neste 20 dagene (siste 20 d: {_p(rel20)})."
-    lv = levels(e)
+    lv = levels(e) if stop else {}
     inv = []
     if lv.get("stop"):
         inv.append(f"sluttkurs under {_lvl(lv['stop'])} ({lv['stop_name']})")

@@ -49,7 +49,29 @@ def prev_list(today: str = "") -> set:
     return {r["ticker"] for r in rows if runs and r["date"] == runs[-1] and r.get("category") != "tema"}
 
 
-EXIT_COLS = ["date", "ticker", "prev_run", "reason", "rank", "score", "tie_step", "n_types", "tied_with"]
+EXIT_COLS = ["date", "ticker", "prev_run", "reason", "rank", "score", "tie_step", "n_types", "tied_with", "run_id", "is_canonical"]
+RAW_COLS = ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60", "run_id", "is_canonical"]
+
+
+def run_meta() -> tuple[str, str]:
+    """(run_id, is_canonical): GitHub run id; kanonisk bare for den planlagte nattkjøringen (schedule)."""
+    import os
+    return os.environ.get("GITHUB_RUN_ID", ""), "true" if os.environ.get("GITHUB_EVENT_NAME") == "schedule" else "false"
+
+
+def migrate(path, cols) -> None:
+    """Legg til nye kolonner i en eksisterende logg uten å endre verdier. Gamle rader: run_id tom (ikke kjent),
+    is_canonical=true (én rad per dato og ticker fantes før 25.10-endringen)."""
+    if not path.exists():
+        return
+    import csv as _c
+    with path.open(newline="") as f:
+        r = _c.DictReader(f)
+        if r.fieldnames == cols:
+            return
+        rows = list(r)
+    path.unlink()
+    _append_csv(path, cols, [{k: x.get(k, "true" if k == "is_canonical" else "") for k in cols} for x in rows])
 
 
 def tie_step(out: dict, last_kept: dict, prev: set) -> str:
@@ -132,6 +154,9 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
     from .since import bench_for
     today = today or str(snap.get("date") or date.today())
     tick = [e["ticker"] for e in snap.get("tickers", [])]
+    kept = [e for e in snap.get("tickers", []) if not e.get("unranked")]
+    unr = {e["ticker"] for e in snap.get("tickers", []) if e.get("unranked")}
+    crank = {e["ticker"]: i for i, e in enumerate(ranked, 1)}   # rang i kandidatlista: samme i raw og exits
     benches = {t: bench_for(t) for t in tick}
     idx_t = sorted({b[0] for b in benches.values() if b})
     rows = _log_rows()
@@ -148,49 +173,47 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
     for i, e in enumerate(snap.get("tickers", []), 1):
         t, b = e["ticker"], benches.get(e["ticker"])
         s, bs = px.get(t) or {}, (px.get(b[0]) if b else None) or {}
-        rr = {"date": today, "ticker": t, "rank": i, "score": e.get("score"), "types": "|".join(sorted(k for k, v in (e.get("points") or {}).items() if v > 0)),
+        rr = {"date": today, "ticker": t, "rank": crank.get(t, ""), "score": e.get("score"), "types": "|".join(sorted(k for k, v in (e.get("points") or {}).items() if v > 0)),
               "close": round(s[max(s)], 4) if s else "", "close_date": max(s) if s else "", "index": b[0] if b else ""}
         for n in (5, 20, 60):
             a, x = _ret(s, n), _ret(bs, n)
             rr[f"r{n}"] = "" if a is None else round(a, 6)
             rr[f"i{n}"] = "" if x is None else round(x, 6)
         raw.append(rr)
-    if RAW.exists() and any(l.startswith(today + ",") for l in RAW.read_text().splitlines()):
-        raw = []   # én gang per dato
-    _append_csv(RAW, ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60"], raw)
+    rid, canon = run_meta()
+    for x in raw:
+        x["run_id"], x["is_canonical"] = rid, canon
+    migrate(RAW, RAW_COLS)
+    _append_csv(RAW, RAW_COLS, raw)   # aldri overskrevet: hver kjøring legger til egne rader
     # 2) utfall
     pos = {e["ticker"]: (i, e.get("score") or 0, bool((e.get("stats") or {}).get("close"))) for i, e in enumerate(ranked, 1)}
     exits = []
+    last = kept[-1] if kept else None
+    keep_t = {e["ticker"] for e in kept}
     for t in prev_t:
-        if t in tick:
+        if t in keep_t:
             continue
-        if t in pos and not pos[t][2]:
+        if t in unr:
+            why = "for lite data"
+        elif t in pos and not pos[t][2]:
             why = "data"
         elif t in pos and pos[t][1] > 0:
-            why = "lik score, kutt 60" if len(ranked) >= 60 and pos[t][1] == (ranked[59].get("score") or 0) else "cut60"
+            why = "lik score, kutt 60" if len(kept) >= 60 and pos[t][1] == (last.get("score") or 0) else "cut60"
         else:
             why = "score0"
         step, nt, tw = "", "", ""
         if why == "lik score, kutt 60":
             e_t = ranked[pos[t][0] - 1]
-            kept = [x for x in ranked[:60] if (x.get("score") or 0) == pos[t][1]]
             onp = set(prev_t)
             nt = n_types(e_t)
-            tw = "|".join(f'{x["ticker"]}:{"på" if x["ticker"] in onp else "ny"}:{n_types(x)}' for x in kept)
-            step = tie_step(e_t, ranked[59], onp)
+            tw = "|".join(f'{x["ticker"]}:{"på" if x["ticker"] in onp else "ny"}:{n_types(x)}' for x in kept if (x.get("score") or 0) == pos[t][1])
+            step = tie_step(e_t, last, onp)
         exits.append({"date": today, "ticker": t, "prev_run": prev, "reason": why,
                       "rank": pos[t][0] if t in pos else "", "score": pos[t][1] if t in pos else "",
                       "tie_step": step, "n_types": nt, "tied_with": tw})
-    if EXITS.exists() and EXITS.read_text().split("\n", 1)[0] != ",".join(EXIT_COLS):   # gammelt format: nye kolonner tomme
-        import csv as _c
-        old_rows = list(_c.DictReader(EXITS.open()))
-        EXITS.unlink()
-        _append_csv(EXITS, EXIT_COLS, [{k: r.get(k, "") for k in EXIT_COLS} for r in old_rows])
-    if EXITS.exists():   # ny kjøring samme dato erstatter dagens utfall (siste kutt gjelder)
-        keep = [l for l in EXITS.read_text().splitlines() if not l.startswith(today + ",")]
-        EXITS.write_text("\n".join(keep) + "\n" if keep else "")
-        if len(keep) <= 1:
-            EXITS.unlink()
+    for x in exits:
+        x["run_id"], x["is_canonical"] = rid, canon
+    migrate(EXITS, EXIT_COLS)
     _append_csv(EXITS, EXIT_COLS, exits)
     # 3) datakvalitet
     flags = []

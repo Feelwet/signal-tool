@@ -89,6 +89,36 @@ def mark_stale(status: dict, today: str, path=LAST_OK) -> dict:
     return last
 
 
+def _coverage_cut(snap: dict, pos: list, status: dict) -> None:
+    """Datakvalitetsregel: tickere med < 4/7 grunnfelt (ETF < 2/2) rangeres ikke og teller ikke i kuttet på 60; plassen
+    går til neste kandidat. De beholdes i snap["tickers"] med unranked=True (egen gruppe «Ikke rangert»)."""
+    from . import datacov as DCv
+    from . import decision as dec
+    kept, low = [], []
+    cur, nxt_i = list(snap["tickers"]), len(snap["tickers"])
+    for it in range(4):
+        for e in cur:
+            if DCv.rankable(e):
+                kept.append(e)
+            elif it == 0:          # bare tickere som ellers hadde vært blant de 60, vises som «Ikke rangert»
+                low.append(e)
+        need = 60 - len(kept)
+        if need <= 0 or nxt_i >= len(pos):
+            break
+        cur = pos[nxt_i:nxt_i + need]
+        nxt_i += len(cur)
+        try:
+            dec.apply({**snap, "tickers": cur})
+        except Exception as ex:
+            log.warning("decision for replacements: %s", ex)
+    order = {id(e): i for i, e in enumerate(pos)}
+    kept = sorted(kept, key=lambda e: order.get(id(e), 1e9))[:60]
+    for e in low:
+        e["unranked"] = True
+    snap["tickers"] = kept + low
+    status["Datakvalitet (≥ 4/7 for rangering)"] = f"ok ({len(kept)} rangert, {len(low)} ikke rangert: {', '.join(e['ticker'] for e in low) or '–'})"
+
+
 def run(fast: bool = False) -> dict:
     t0 = time.time()
     status: dict[str, str] = {}
@@ -419,6 +449,7 @@ def run(fast: bool = False) -> dict:
     # decision data (priced-in / risk / invalidation / PEAD) + new free collectors, before categories use them
     from . import extras
     extras.decision(snap, status)
+    _coverage_cut(snap, [e for e in ranked if e["score"] > 0], status)
     extras.collectors(snap, status)
     extras.flags(snap, status, nw=nw)
     # rule-based categories (Kjøp-kandidat / Hold / Følg) + forward log + track record

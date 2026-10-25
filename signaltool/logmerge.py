@@ -6,8 +6,14 @@ import sys
 
 def merge(ours: str, theirs: str, path_hint: str) -> str:
     a, b = ours.splitlines(), theirs.splitlines()
+    if path_hint.endswith(".csv") and a and b and a[0] != b[0] and "run_id" in a[0].split(","):
+        return ours if ours.endswith("\n") else ours + "\n"   # første gang med nye kolonner: vår migrerte fil er et overmengde
     if path_hint.endswith(".csv") and a and b and a[0] == b[0]:
-        head, key = a[0], lambda l: tuple(l.split(",")[:2])
+        head = a[0]
+        if "run_id" in head.split(","):   # append-logger per kjøring: alle rader beholdes (union)
+            have = set(b)
+            return "\n".join(b + [l for l in a if l and l not in have and not have.add(l)]) + "\n"
+        key = lambda l: tuple(l.split(",")[:2])
         mine = {key(l): l for l in a[1:] if l}
         out, seen = [head], set()
         for l in b[1:]:

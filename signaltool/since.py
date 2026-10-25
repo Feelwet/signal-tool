@@ -197,9 +197,9 @@ th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-
 """
 
 JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
-function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h')||h.classList.contains('rk-h');
+function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]:not([data-unr])')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h')||h.classList.contains('rk-h');
 rows.sort((a,b)=>{const x=a.children[i].dataset.v,y=b.children[i].dataset.v;if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;const c=num?(+x)-(+y):x.localeCompare(y);return asc?c:-c});
-const p=rows[0]&&rows[0].parentNode;rows.forEach(r=>p.appendChild(r));tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending')}
+const p=rows[0]&&rows[0].parentNode,g=tb.querySelector('tr.grp');rows.forEach(r=>g&&g.parentNode===p?p.insertBefore(r,g):p.appendChild(r));tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending')}
 h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));const riX=()=>document.querySelectorAll('.ri[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.ri'))riX()});document.addEventListener('keydown',e=>{if(e.key==='Escape')riX()});
 document.querySelectorAll('tr.rowlink').forEach(r=>{const skip=e=>e.target.closest('a,button,input,label,.ri,.mstar');

@@ -72,3 +72,19 @@ def card(e: dict) -> str:
 
 
 CSS = ".dchip{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;background:#21262d;color:var(--mut);border:1px solid #30363d;font-size:.8em;white-space:nowrap;cursor:help}\n"
+
+
+MIN_HAVE = 4   # AnalBot/rom 25.10: score vises og rangeres bare med minst 4/7 grunnfelt (ETF: 2/2 teller som fullt)
+
+
+def rankable(e: dict) -> bool:
+    c = coverage(e)
+    return c["have"] >= c["of"] if c["etf"] else c["have"] >= MIN_HAVE
+
+
+def low_chip(e: dict) -> str:
+    c = coverage(e)
+    return f'<span class="lowchip">Registrert hendelse · for lite data ({c["have"]}/{c["of"]})</span>'
+
+
+CSS += ".lowchip{display:inline-flex;align-items:center;box-sizing:border-box;height:20px;padding:0 7px;border-radius:5px;background:#21262d;color:#8b949e;border:1px solid #30363d;font-size:11px;white-space:nowrap}\n"

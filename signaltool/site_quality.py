@@ -130,7 +130,7 @@ def kontroll_html(snap: dict) -> str:
                  f'<td>{m.get("percentile", 0):.0f}</td><td>{_p(m.get("p"))}</td><td>{(h.get("real") or 0)*100:.0f} % mot {(h.get("null_mean") or 0)*100:.0f} %</td>'
                  f'<td>{E(_verdict(k, m))}</td></tr>')
     if not rows:
-        body = '<p class="mut">Ikke beregnet ennå (kjør python -m signaltool backtest kontroll).</p>'
+        body = '<p class="mut" style="font-size:12px">Historisk treffrate: ikke beregnet ennå.</p>'
     else:
         meta = K.get("_meta", {})
         body = (f'<p>Et signal er bare interessant hvis det gjør det bedre (eller for røde flagg: dårligere) enn <b>like mange tilfeldige kjøp fra samme univers</b>. '
