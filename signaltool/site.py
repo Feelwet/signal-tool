@@ -20,6 +20,8 @@ from . import names as NM
 from . import mine as MINE
 from . import datacov as DC
 from . import since as SN
+from . import nokkeltall as NK
+from . import pricechart as PC
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -345,7 +347,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
   });
   // Auto-wrap legacy cards that start with h2/h3 into folds (once).
   document.querySelectorAll('main .card').forEach(function(card){
-    if(card.closest('details.fold')) return;
+    if(card.closest('details.fold')||card.classList.contains('nofold')) return;
     var h=null;
     for(var i=0;i<card.children.length;i++){
       var c=card.children[i];
@@ -419,7 +421,8 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
-    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
+    href = f"{pre}ticker/{slug(e['ticker'])}.html"
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
             f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -477,7 +480,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + MINE.CSS + DC.CSS + SN.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -540,7 +543,13 @@ def build(snap: dict) -> Path:
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
                                             + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS, 0, snap))
     tmap = {t["key"]: t for t in themes}
+    pxs = PC.download([e["ticker"] for e in tickers])
     for e in tickers:
+        e["_px"], e["_px_date"] = pxs.get(e["ticker"]), PC._CACHE.get("date")
+        if e["_px"]:
+            PC.write_json(e["ticker"], e["_px"], SITE / "data" / "kurs" / f"{slug(e['ticker'])}.json", e["_px_date"])
+        e["_nk"] = NK.compute(e)
+        NK.write_json(e["_nk"], SITE / "data" / "nokkeltall" / f"{slug(e['ticker'])}.json")
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
 
     (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
@@ -612,6 +621,8 @@ def ticker_page(e, tmap):
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2))}
 {SN.line(e.get("_since"), cat_badge(e.get('category')), e.get("_ret"))}
 {X.pead_exp_html(e)}
+{PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
+{NK.html(e["_nk"])}
 {cat_rules_html(e)}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}

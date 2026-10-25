@@ -54,3 +54,15 @@ def test_return():
     assert S.ret(dict(s, list_days=4), 17.8, "2026-10-23", idx, "EIOF.OL") is None
     assert S.ret(s, None, None, idx, "EIOF.OL") is None and S.ret_cell(None).count("–") == 1
     assert "mot" not in S.ret_inner(S.ret(s, 17.8, "2026-10-23", {}, "EIOF.OL"))
+
+
+def test_nokkeltall_missing_and_etf():
+    from signaltool import nokkeltall as N
+    e = {"ticker": "IBM", "decision": {"close": 250.0, "currency": "USD", "sharesOutstanding": 9.6e8, "trailingEps": -1.0, "info_date": "2026-10-25"}}
+    n = N.compute(e)
+    v = {f["key"]: f["value"] for f in n["fields"]}
+    assert len(n["fields"]) == 10 and v["mcap"] == "240 mrd. USD" and v["pe"] == "Negativ" and v["rev"] is None
+    h = N.html(n)
+    assert "Tallet mangler hos kilden." in h and "Ikke tilgjengelig" not in h and "oppdatert 25.10" in h
+    etf = N.compute({"ticker": "SPY", "decision": {"quoteType": "ETF"}})
+    assert {f["key"] for f in etf["fields"]} == {"mcap", "rev", "dps", "yld", "next"}

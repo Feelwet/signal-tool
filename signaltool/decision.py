@@ -22,7 +22,11 @@ YF_SECTOR = {"Technology": "XLK", "Healthcare": "XLV", "Financial Services": "XL
              "Communication Services": "XLC", "Industrials": "XLI", "Consumer Defensive": "XLP", "Energy": "XLE",
              "Utilities": "XLU", "Real Estate": "XLRE", "Basic Materials": "XLB"}
 INFO_KEYS = ["trailingPE", "forwardPE", "enterpriseToEbitda", "priceToBook", "marketCap", "dividendYield", "recommendationKey",
-             "numberOfAnalystOpinions", "targetMeanPrice", "currency", "sector", "shortPercentOfFloat", "beta", "quoteType"]
+             "numberOfAnalystOpinions", "targetMeanPrice", "currency", "sector", "shortPercentOfFloat", "beta", "quoteType",
+             # Nøkkeltall-seksjonen (nokkeltall.py): faktiske tall siste 12 mnd fra samme Yahoo-kall
+             "trailingEps", "totalRevenue", "financialCurrency", "bookValue", "sharesOutstanding",
+             "trailingAnnualDividendRate", "trailingAnnualDividendYield", "priceToSalesTrailing12Months",
+             "operatingMargins", "isEarningsDateEstimate"]
 PEAD_SURPRISE = 15.0   # EPS surprise % ~ 80th percentile of S&P 500 reports 2016-2026 (backtest/pead.py)
 PEAD_REACTION = 0.04   # reaction-day return minus SPY (dividend-adjusted) ~ 80th percentile
 PEAD_MAX_AGE = 45      # calendar days the signal stays active (same limit in collectors/pead_scan.py)
@@ -214,6 +218,7 @@ def compute(snap: dict, max_info=80) -> dict:
             tk = yf.Ticker(t)
             inf = tk.info or {}
             infos[t] = {k: inf.get(k) for k in INFO_KEYS}
+            infos[t]["info_date"] = date.today().isoformat()
             infos[t]["next_earnings"] = _next_earnings(tk)
             infos[t].update(revisions(tk))
             if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):
