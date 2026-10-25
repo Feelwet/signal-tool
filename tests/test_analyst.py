@@ -36,3 +36,5 @@ def test_line_format_and_old():
 def test_red_badges_have_no_i():
     from signaltool import evidens as EV
     assert "ilink" not in EV.short_badge("weak_px")
+    from signaltool import evidens as EV2
+    assert "ilink" not in EV2._flag_items({"flags": {"weak_px": "x"}}, noi=True)

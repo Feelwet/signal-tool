@@ -117,6 +117,11 @@ def badge(key: str, extra: str = "") -> str:
     return f'<span class="evb {cls}">{ic} {E(txt)}</span>{i} '
 
 
+def _plain(k: str) -> str:
+    ic, txt, cls = LEVELS[level(k)]
+    return f'<span class="evb {cls}">{ic} {E(txt)}</span> '
+
+
 def focus_key(it: dict) -> str:
     """Map a «Hva bør jeg se på i dag?» item to a signal key."""
     s = f'{it.get("title", "")} {it.get("why", "")}'.lower()
@@ -162,8 +167,8 @@ def coverage(snap: dict) -> dict:
             "asof": meta.get("asof"), "by_flag": {k: sum(1 for r in uni if k in r.get("flags", {})) for k in RED_FLAGS}}
 
 
-def _flag_items(r: dict, pre: str = "") -> str:
-    return "".join(f'<div class="evrow">{badge(k)}<span>{E(r["flags"][k])}</span></div>' for k in RED_FLAGS if k in r["flags"])
+def _flag_items(r: dict, pre: str = "", noi: bool = False) -> str:
+    return "".join(f'<div class="evrow">{badge(k, "") if not noi else _plain(k)}<span>{E(r["flags"][k])}</span></div>' for k in RED_FLAGS if k in r["flags"])
 
 
 def short_badge(k: str, extra: str = "") -> str:
@@ -188,7 +193,7 @@ def red_page(snap: dict) -> str:
     card = lambda r: (f'<div class="rfc"><div class="top"><b><a href="https://finance.yahoo.com/quote/{E(r["ticker"])}">{E(r["ticker"])}</a></b>'
                       f'<span class="mut">{E(nlabel(r))}</span></div><div class="fb">'
                       + "".join(short_badge(k, ebx if k == "neg_ebit" else "") for k in RED_FLAGS if k in r["flags"])
-                      + f'</div><details><summary>Vis mer</summary>{_flag_items(r)}</details></div>')
+                      + f'</div><details><summary>Vis mer</summary>{_flag_items(r, noi=True)}</details></div>')
     multi, single, ebo = ([r for r in rows if ntest(r) >= 2], [r for r in rows if ntest(r) == 1], [r for r in rows if ntest(r) == 0])
     grp = lambda title, rs, open_: (f'<details class="fold"{" open" if open_ else ""}><summary><h2>{title}</h2></summary>'
                                     f'<div class="fold-body">{_legend([k for k in RED_FLAGS if any(k in r["flags"] for r in rs)], ebx)}{"".join(card(r) for r in rs)}</div></details>')
