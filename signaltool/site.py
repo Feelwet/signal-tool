@@ -316,7 +316,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
-        "Kilder og metode": "kilder.html", "Metode": "metode.html",
+        "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html",
     }
     cur = active.get(title)
     if cur is None:
@@ -526,7 +526,9 @@ def build(snap: dict) -> Path:
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
     try:
         from . import portfolio
-        portfolio.write_json(SITE / "portfolio.json")   # for siden UxBot skisserer; ingen avkastning før 30 lukkede handler
+        portfolio.write_json(SITE / "portfolio.json")
+        from . import portfolio_page
+        (SITE / "portefolje.html").write_text(page("Signal-boka", sec("Signal-boka", portfolio_page.html, snap), 0, snap))   # for siden UxBot skisserer; ingen avkastning før 30 lukkede handler
     except Exception as ex:
         print(f"portfolio.json: {ex}")
     if C.LOG_PATH.exists():  # public forward log of every day's categories (also restores CI state if the cache is lost)
