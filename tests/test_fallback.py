@@ -85,3 +85,34 @@ def test_unranked_row_has_no_numbers():
     h = site.ticker_row(e)
     assert "0.3" not in h and "%" not in h and "20.10" in h
     assert "Telles ikke i resultatene." in site.IKKE_RANGERT_INFO
+
+
+def test_frozen_line_text():
+    from signaltool import site
+    assert site.frz_text("2026-10-25") == "Lista er fryst fra 25.10 fordi Yahoo-data feilet i dag. Tallene oppdateres når kilden svarer igjen."
+
+
+def test_dates_from_lastgood_fetch_date_and_5_td_limit(tmp_path):
+    p = tmp_path / "lg.json"
+    p.write_text(json.dumps({"OK5": {"date": "2026-10-19", "fund": {"sector": "Energy"}},     # man 19.10 -> man 26.10 = 5 handelsdager
+                             "OLD6": {"date": "2026-10-16", "fund": {"sector": "Energy"}}}))  # fre 16.10 -> 6 handelsdager
+    D._RUN["fail"] = False
+    dec = {}
+    fb = D.fallback(_snap(["OK5", "OLD6"]), dec, today="2026-10-26", path=p)
+    assert fb["used"] == ["OK5"] and "OLD6" not in dec                       # eldre enn 5 handelsdager -> vanlig 4/7-regel
+    assert D.fb_text({"decision": dec["OK5"]}) == "Fundamentaldata fra 19.10 (Yahoo feilet i dag)"   # hentedato, ikke kjøringsdato
+    assert D.lastgood_date(p) == "2026-10-19"
+    D._RUN["fail"] = False
+
+
+def test_frozen_line_uses_lastgood_date(tmp_path, monkeypatch):
+    from signaltool import pipeline, learnloop, site, decision as dec
+    raw = tmp_path / "learn_raw.csv"
+    raw.write_text("date,ticker,rank,score,types,is_canonical,run_id\n2026-10-26,AAA,1,1.5,x,true,\n")
+    monkeypatch.setattr(learnloop, "RAW", raw)
+    monkeypatch.setattr(dec, "apply", lambda s: s)
+    monkeypatch.setattr(dec, "lastgood_date", lambda path=None: "2026-10-23")
+    snap = {"date": "2026-10-27", "tickers": [], "_fund_fb": [{"source_fail": True, "used": [], "failed": 1, "attempted": 1}]}
+    pipeline._coverage_cut(snap, [], {})
+    assert snap["frozen_from"] == "2026-10-23"
+    assert site.frz_text(snap["frozen_from"]) == "Lista er fryst fra 23.10 fordi Yahoo-data feilet i dag. Tallene oppdateres når kilden svarer igjen."

@@ -148,7 +148,7 @@ def _freeze(snap: dict, pos: list, fr: dict, status: dict) -> None:
         except Exception as ex:
             log.warning("decision for frozen: %s", ex)
     snap["tickers"] = out
-    snap["frozen_from"] = fr["date"]
+    snap["frozen_from"] = dec.lastgood_date() or fr["date"]   # AnalBot 25.10: hentedato fra fund_lastgood.json
     status["Datakvalitet (≥ 4/7 for rangering)"] = f"ok (lista fryst fra {fr['date']}: {len(out)} tickere, 0 ikke rangert – Yahoo-kildefeil)"
 
 

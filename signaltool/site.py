@@ -428,6 +428,11 @@ UR_I = ('<button type="button" class="rk-i ur-i" aria-expanded="false" aria-cont
 FRZ_CSS = ".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n"
 
 
+def frz_text(d: str) -> str:
+    """AnalBot 25.10, ordrett."""
+    return f"Lista er fryst fra {d[8:10]}.{d[5:7]} fordi Yahoo-data feilet i dag. Tallene oppdateres når kilden svarer igjen."
+
+
 def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
@@ -598,7 +603,7 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">Lista er fryst fra {snap["frozen_from"][8:10]}.{snap["frozen_from"][5:7]}. Yahoo feilet i dag.</p>' if snap.get("frozen_from") else "")
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">{E(frz_text(snap["frozen_from"]))}</p>' if snap.get("frozen_from") else "")
                                             + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers if not e.get("unranked"))
                                             + ("<tr class=\"grp\"><th colspan=\"9\">Ikke rangert <span class=\"mut\" style=\"font-weight:400\">· for lite data (under 4/7 grunnfelt)</span>" + UR_I + "</th></tr>" + "".join(ticker_row(e) for e in tickers if e.get("unranked")) if any(e.get("unranked") for e in tickers) else "")

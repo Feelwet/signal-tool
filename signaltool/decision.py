@@ -406,6 +406,17 @@ def fallback(snap: dict, dec: dict, today: str | None = None, path=None) -> dict
     return {"attempted": len(eq), "failed": len(failed), "source_fail": _RUN["fail"], "used": used}
 
 
+def lastgood_date(path=None):
+    """Seneste hentedato i fund_lastgood.json (datoen Yahoo faktisk svarte), ikke kjørings- eller deploydato."""
+    import json
+    path = path or (CACHE / "fund_lastgood.json")
+    try:
+        ds = [v.get("date") for v in json.loads(path.read_text()).values() if v.get("date")]
+    except Exception:
+        return None
+    return max(ds) if ds else None
+
+
 def fb_date(e: dict):
     return (e.get("decision") or {}).get("fund_fallback")
 
