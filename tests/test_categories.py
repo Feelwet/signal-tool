@@ -188,3 +188,16 @@ def test_tt_display(tmp_path):
     h = site.cat_rules_html(e)
     assert "via Sterk rapport + reaksjon" in h and PEAD_TT_CAVEAT.replace("&", "&amp;") in h and "…eller ⚑ sterk rapport" in h
     assert PEAD_TT_BADGE.replace("&", "&amp;") in site.tt_row(e)
+
+
+def test_tt_rules_only_for_us():
+    hot = {"ret_5d": 0.12, "ret_20d": 0.30, "close": 130.0}
+    e = _tt(); e["ticker"] = "ABC.OL"
+    r = C.classify(e, ctx())
+    assert r["category"] != "kjop" and not r["via_tt"]        # Oslo: ikke alene nok
+    e2 = _tt(stats=hot, points={"ose_contracts": 1.5}, dates={"ose_contract": FRESH}); e2["ticker"] = "ABC.OL"
+    r2 = C.classify(e2, ctx())
+    assert r2["category"] != "kjop"                            # Oslo: strukket-regelen gjelder fortsatt
+    e3 = _tt(points={"ose_contracts": 1.5}, dates={"ose_contract": FRESH}); e3["ticker"] = "ABC.OL"
+    assert C.classify(e3, ctx())["category"] == "kjop"         # Oslo: topp/topp teller som én vanlig type, som før
+    assert C.classify(_tt(stats=hot), ctx())["category"] == "kjop"   # US: unntatt + alene nok

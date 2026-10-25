@@ -3,432 +3,539 @@
  "names": {
   "2020.OL": {
    "exchange": "Oslo",
-   "name": "2020 Bulkers Ltd."
+   "name": "2020 Bulkers Ltd.",
+   "website": "https://2020bulkers.com"
   },
   "AKAST.OL": {
    "exchange": "Oslo",
-   "name": "Akastor ASA"
+   "name": "Akastor ASA",
+   "website": "https://akastor.com"
   },
   "AKRBP.OL": {
    "exchange": "Oslo",
-   "name": "Aker BP ASA"
+   "name": "Aker BP ASA",
+   "website": "https://akerbp.com"
   },
   "ARCH.OL": {
    "exchange": "Oslo",
-   "name": "Archer Limited"
+   "name": "Archer Limited",
+   "website": "https://www.archerwell.com"
   },
   "ATEA.OL": {
    "exchange": "Oslo",
-   "name": "Atea ASA"
+   "name": "Atea ASA",
+   "website": "https://www.atea.com"
   },
   "AUTO.OL": {
    "exchange": "Oslo",
-   "name": "AutoStore Holdings Ltd."
+   "name": "AutoStore Holdings Ltd.",
+   "website": "https://www.autostoresystem.com"
   },
   "BCPC": {
    "exchange": "NasdaqGS",
-   "name": "Balchem Corporation"
+   "name": "Balchem Corporation",
+   "website": "https://www.balchem.com"
   },
   "BORR.OL": {
    "exchange": "Oslo",
-   "name": "Borr Drilling Limited"
+   "name": "Borr Drilling Limited",
+   "website": "https://borrdrilling.com"
   },
   "BOUV.OL": {
    "exchange": "Oslo",
-   "name": "Bouvet ASA"
+   "name": "Bouvet ASA",
+   "website": "https://www.bouvet.no"
   },
   "BRG.OL": {
    "exchange": "Oslo",
-   "name": "Borregaard ASA"
+   "name": "Borregaard ASA",
+   "website": "https://www.borregaard.com"
   },
   "BRUT.OL": {
    "exchange": "Oslo",
-   "name": "Bruton Limited"
+   "name": "Bruton Limited",
+   "website": "https://bruton-ltd.com"
   },
   "CF": {
    "exchange": "NYSE",
-   "name": "CF Industries Holdings, Inc."
+   "name": "CF Industries Holdings, Inc.",
+   "website": "https://www.cfindustries.com"
   },
   "CLF": {
    "exchange": "NYSE",
-   "name": "Cleveland-Cliffs Inc."
+   "name": "Cleveland-Cliffs Inc.",
+   "website": "https://www.clevelandcliffs.com"
   },
   "COSH.OL": {
    "exchange": "Oslo",
-   "name": "Constellation Oil Services Holding S.A."
+   "name": "Constellation Oil Services Holding S.A.",
+   "website": "https://www.theconstellation.com"
   },
   "CRNA.OL": {
    "exchange": "Oslo",
-   "name": "Circio Holding ASA"
+   "name": "Circio Holding ASA",
+   "website": "https://www.circio.com"
   },
   "CVX": {
    "exchange": "NYSE",
-   "name": "Chevron Corporation"
+   "name": "Chevron Corporation",
+   "website": "https://www.chevron.com"
   },
   "CYVIZ.OL": {
    "exchange": "Oslo",
-   "name": "Cyviz AS"
+   "name": "Cyviz AS",
+   "website": "https://www.cyviz.com"
   },
   "DDRIL.OL": {
    "exchange": "Oslo",
-   "name": "Dolphin Drilling AS"
+   "name": "Dolphin Drilling AS",
+   "website": "https://www.dolphindrilling.com"
   },
   "DFENS.OL": {
    "exchange": "Oslo",
-   "name": "Fjord Defence Group ASA"
+   "name": "Fjord Defence Group ASA",
+   "website": "https://www.fjorddefencegroup.no"
   },
   "DHT": {
    "exchange": "NYSE",
-   "name": "DHT Holdings, Inc."
+   "name": "DHT Holdings, Inc.",
+   "website": "https://www.dhtankers.com"
   },
   "DNB.OL": {
    "exchange": "Oslo",
-   "name": "DNB Bank ASA"
+   "name": "DNB Bank ASA",
+   "website": "https://www.dnb.no"
   },
   "DOFG.OL": {
    "exchange": "Oslo",
-   "name": "DOF Group ASA"
+   "name": "DOF Group ASA",
+   "website": "https://www.dof.com"
   },
   "DVD.OL": {
    "exchange": "Oslo",
-   "name": "Deep Value Driller AS"
+   "name": "Deep Value Driller AS",
+   "website": "https://www.deepvaluedriller.no"
   },
   "EIOF.OL": {
    "exchange": "Oslo",
-   "name": "Eidesvik Offshore ASA"
+   "name": "Eidesvik Offshore ASA",
+   "website": "https://www.eidesvik.no"
   },
   "ELK.OL": {
    "exchange": "Oslo",
-   "name": "Elkem ASA"
+   "name": "Elkem ASA",
+   "website": "https://www.elkem.com"
   },
   "ELO.OL": {
    "exchange": "Oslo",
-   "name": "Elopak ASA"
+   "name": "Elopak ASA",
+   "website": "https://www.elopak.com"
   },
   "ENDUR.OL": {
    "exchange": "Oslo",
-   "name": "Endúr ASA"
+   "name": "Endúr ASA",
+   "website": "https://endur.no"
   },
   "ENH.OL": {
    "exchange": "Oslo",
-   "name": "SED Energy Holdings Plc"
+   "name": "SED Energy Holdings Plc",
+   "website": "https://www.energyholdings.cy"
   },
   "ENTRA.OL": {
    "exchange": "Oslo",
-   "name": "Entra ASA"
+   "name": "Entra ASA",
+   "website": "https://www.entra.no"
   },
   "ENVIP.OL": {
    "exchange": "Oslo",
-   "name": "Envipco Holding N.V."
+   "name": "Envipco Holding N.V.",
+   "website": "https://www.envipco.com"
   },
   "EPR.OL": {
    "exchange": "Oslo",
-   "name": "Europris ASA"
+   "name": "Europris ASA",
+   "website": "https://www.europris.no"
   },
   "EQNR.OL": {
    "exchange": "Oslo",
-   "name": "Equinor ASA"
+   "name": "Equinor ASA",
+   "website": "https://www.equinor.com"
   },
   "EWG": {
    "exchange": "NYSEArca",
-   "name": "iShares MSCI Germany ETF"
+   "name": "iShares MSCI Germany ETF",
+   "website": null
   },
   "EWW": {
    "exchange": "NYSEArca",
-   "name": "iShares MSCI Mexico ETF"
+   "name": "iShares MSCI Mexico ETF",
+   "website": null
   },
   "EWZ": {
    "exchange": "NYSEArca",
-   "name": "iShares MSCI Brazil ETF"
+   "name": "iShares MSCI Brazil ETF",
+   "website": null
   },
   "FEZ": {
    "exchange": "NYSEArca",
-   "name": "State Street SPDR EURO STOXX 50 ETF"
+   "name": "State Street SPDR EURO STOXX 50 ETF",
+   "website": null
   },
   "FRO": {
    "exchange": "NYSE",
-   "name": "Frontline plc"
+   "name": "Frontline plc",
+   "website": "https://www.frontlineplc.cy"
   },
   "GDX": {
    "exchange": "NYSEArca",
-   "name": "VanEck Gold Miners ETF"
+   "name": "VanEck Gold Miners ETF",
+   "website": null
   },
   "GLD": {
    "exchange": "NYSEArca",
-   "name": "SPDR Gold Shares"
+   "name": "SPDR Gold Shares",
+   "website": null
   },
   "GS": {
    "exchange": "NYSE",
-   "name": "The Goldman Sachs Group, Inc."
+   "name": "The Goldman Sachs Group, Inc.",
+   "website": "https://www.goldmansachs.com"
   },
   "GSF.OL": {
    "exchange": "Oslo",
-   "name": "Grieg Seafood ASA"
+   "name": "Grieg Seafood ASA",
+   "website": "https://griegseafood.com"
   },
   "HAFNI.OL": {
    "exchange": "Oslo",
-   "name": "Hafnia Limited"
+   "name": "Hafnia Limited",
+   "website": "https://hafnia.com"
   },
   "HAS": {
    "exchange": "NasdaqGS",
-   "name": "Hasbro, Inc."
+   "name": "Hasbro, Inc.",
+   "website": "https://corporate.hasbro.com"
   },
   "HAUTO.OL": {
    "exchange": "Oslo",
-   "name": "Höegh Autoliners ASA"
+   "name": "Höegh Autoliners ASA",
+   "website": "https://www.hoeghautoliners.com"
   },
   "HAV.OL": {
    "exchange": "Oslo",
-   "name": "HAV Group ASA"
+   "name": "HAV Group ASA",
+   "website": "https://www.havgroup.no"
   },
   "HAVI.OL": {
    "exchange": "Oslo",
-   "name": "Havila Shipping ASA"
+   "name": "Havila Shipping ASA",
+   "website": "https://www.havilashipping.no"
   },
   "HD": {
    "exchange": "NYSE",
-   "name": "The Home Depot, Inc."
+   "name": "The Home Depot, Inc.",
+   "website": "https://www.homedepot.com"
   },
   "HEX.OL": {
    "exchange": "Oslo",
-   "name": "Hexagon Composites ASA"
+   "name": "Hexagon Composites ASA",
+   "website": "https://www.hexagongroup.com"
   },
   "HUNT.OL": {
    "exchange": "Oslo",
-   "name": "Hunter Group ASA"
+   "name": "Hunter Group ASA",
+   "website": "https://huntergroup.no"
   },
   "IBM": {
    "exchange": "NYSE",
-   "name": "International Business Machines Corporation"
+   "name": "International Business Machines Corporation",
+   "website": "https://www.ibm.com"
   },
   "KIT.OL": {
    "exchange": "Oslo",
-   "name": "Kitron ASA"
+   "name": "Kitron ASA",
+   "website": "https://kitron.com"
   },
   "KOG.OL": {
    "exchange": "Oslo",
-   "name": "Kongsberg Gruppen ASA"
+   "name": "Kongsberg Gruppen ASA",
+   "website": "https://www.kongsberg.com"
   },
   "KOMPL.OL": {
    "exchange": "Oslo",
-   "name": "Komplett ASA"
+   "name": "Komplett ASA",
+   "website": "https://www.komplettgroup.com"
   },
   "LINK.OL": {
    "exchange": "Oslo",
-   "name": "LINK Mobility Group Holding ASA"
+   "name": "LINK Mobility Group Holding ASA",
+   "website": "https://www.linkmobility.com"
   },
   "LMT": {
    "exchange": "NYSE",
-   "name": "Lockheed Martin Corporation"
+   "name": "Lockheed Martin Corporation",
+   "website": "https://www.lockheedmartin.com"
   },
   "LSG.OL": {
    "exchange": "Oslo",
-   "name": "Lerøy Seafood Group ASA"
+   "name": "Lerøy Seafood Group ASA",
+   "website": "https://www.leroyseafood.com"
   },
   "MGN.OL": {
    "exchange": "Oslo",
-   "name": "Magnora ASA"
+   "name": "Magnora ASA",
+   "website": "https://www.magnoraasa.com"
   },
   "MORLD.OL": {
    "exchange": "Oslo",
-   "name": "Moreld ASA"
+   "name": "Moreld ASA",
+   "website": "https://www.moreld.com"
   },
   "MOS": {
    "exchange": "NYSE",
-   "name": "The Mosaic Company"
+   "name": "The Mosaic Company",
+   "website": "https://www.mosaicco.com"
   },
   "MOWI.OL": {
    "exchange": "Oslo",
-   "name": "Mowi ASA"
+   "name": "Mowi ASA",
+   "website": "https://www.mowi.com"
   },
   "MPCC.OL": {
    "exchange": "Oslo",
-   "name": "MPC Container Ships ASA"
+   "name": "MPC Container Ships ASA",
+   "website": "https://www.mpc-container.com"
   },
   "MSFT": {
    "exchange": "NasdaqGS",
-   "name": "Microsoft Corporation"
+   "name": "Microsoft Corporation",
+   "website": "https://www.microsoft.com"
   },
   "MULTI.OL": {
    "exchange": "Oslo",
-   "name": "Multiconsult ASA"
+   "name": "Multiconsult ASA",
+   "website": "https://www.multiconsultgroup.com"
   },
   "NAPA.OL": {
    "exchange": "Oslo",
-   "name": "Napatech A/S"
+   "name": "Napatech A/S",
+   "website": "https://www.napatech.com"
   },
   "NAS.OL": {
    "exchange": "Oslo",
-   "name": "Norwegian Air Shuttle ASA"
+   "name": "Norwegian Air Shuttle ASA",
+   "website": "https://www.norwegian.com"
   },
   "NEL.OL": {
    "exchange": "Oslo",
-   "name": "Nel ASA"
+   "name": "Nel ASA",
+   "website": "https://nelhydrogen.com"
   },
   "NEM": {
    "exchange": "NYSE",
-   "name": "Newmont Corporation"
+   "name": "Newmont Corporation",
+   "website": "https://www.newmont.com"
   },
   "NFLX": {
    "exchange": "NasdaqGS",
-   "name": "Netflix, Inc."
+   "name": "Netflix, Inc.",
+   "website": "https://www.netflix.com"
   },
   "NHY.OL": {
    "exchange": "Oslo",
-   "name": "Norsk Hydro ASA"
+   "name": "Norsk Hydro ASA",
+   "website": "https://www.hydro.com"
   },
   "NOFIN.OL": {
    "exchange": "Oslo",
-   "name": "Nordic Financials ASA"
+   "name": "Nordic Financials ASA",
+   "website": "https://nordicfinancials.no"
   },
   "NORBT.OL": {
    "exchange": "Oslo",
-   "name": "Norbit ASA"
+   "name": "Norbit ASA",
+   "website": "https://norbit.com"
   },
   "NORCO.OL": {
    "exchange": "Oslo",
-   "name": "Norconsult ASA"
+   "name": "Norconsult ASA",
+   "website": "https://norconsult.com"
   },
   "NRC.OL": {
    "exchange": "Oslo",
-   "name": "NRC Group ASA"
+   "name": "NRC Group ASA",
+   "website": "https://www.nrcgroup.com"
   },
   "NSKOG.OL": {
    "exchange": "Oslo",
-   "name": "Norske Skog ASA"
+   "name": "Norske Skog ASA",
+   "website": "https://www.norskeskog.com"
   },
   "NTR": {
    "exchange": "NYSE",
-   "name": "Nutrien Ltd."
+   "name": "Nutrien Ltd.",
+   "website": "https://www.nutrien.com"
   },
   "NYKD.OL": {
    "exchange": "Oslo",
-   "name": "Nykode Therapeutics AS"
+   "name": "Nykode Therapeutics AS",
+   "website": "https://nykode.com"
   },
   "ONCIN.OL": {
    "exchange": "Oslo",
-   "name": "Oncoinvent ASA"
+   "name": "Oncoinvent ASA",
+   "website": "https://www.oncoinvent.com"
   },
   "PARB.OL": {
    "exchange": "Oslo",
-   "name": "Pareto Bank ASA"
+   "name": "Pareto Bank ASA",
+   "website": "https://www.paretobank.no"
   },
   "PLT.OL": {
    "exchange": "Oslo",
-   "name": "poLight ASA"
+   "name": "poLight ASA",
+   "website": "https://www.polight.com"
   },
   "PRS.OL": {
    "exchange": "Oslo",
-   "name": "Prosafe SE"
+   "name": "Prosafe SE",
+   "website": "https://www.prosafe.com"
   },
   "PUBLI.OL": {
    "exchange": "Oslo",
-   "name": "PPI Public Property Invest AB (publ)"
+   "name": "PPI Public Property Invest AB (publ)",
+   "website": "https://www.publicproperty.se/sv"
   },
   "PWR": {
    "exchange": "NYSE",
-   "name": "Quanta Services, Inc."
+   "name": "Quanta Services, Inc.",
+   "website": "https://www.quantaservices.com"
   },
   "RTX": {
    "exchange": "NYSE",
-   "name": "RTX Corporation"
+   "name": "RTX Corporation",
+   "website": "https://www.rtx.com"
   },
   "SALME.OL": {
    "exchange": "Oslo",
-   "name": "Salmon Evolution ASA"
+   "name": "Salmon Evolution ASA",
+   "website": "https://www.salmonevolution.no"
   },
   "SMOP.OL": {
    "exchange": "Oslo",
-   "name": "Smartoptics Group ASA"
+   "name": "Smartoptics Group ASA",
+   "website": "https://www.smartoptics.com"
   },
   "SNOW": {
    "exchange": "NYSE",
-   "name": "Snowflake Inc."
+   "name": "Snowflake Inc.",
+   "website": "https://www.snowflake.com"
   },
   "SPY": {
    "exchange": "NYSEArca",
-   "name": "State Street SPDR S&P 500 ETF Trust"
+   "name": "State Street SPDR S&P 500 ETF Trust",
+   "website": null
   },
   "STB.OL": {
    "exchange": "Oslo",
-   "name": "Storebrand ASA"
+   "name": "Storebrand ASA",
+   "website": "https://www.storebrand.no"
   },
   "STNG": {
    "exchange": "NYSE",
-   "name": "Scorpio Tankers Inc."
+   "name": "Scorpio Tankers Inc.",
+   "website": "https://www.scorpiotankers.com"
   },
   "T": {
    "exchange": "NYSE",
-   "name": "AT&T Inc."
+   "name": "AT&T Inc.",
+   "website": "https://www.att.com"
   },
   "TECH.OL": {
    "exchange": "Oslo",
-   "name": "Techstep ASA"
+   "name": "Techstep ASA",
+   "website": "https://www.techstep.io"
   },
   "TEKNA.OL": {
    "exchange": "Oslo",
-   "name": "Tekna Holding ASA"
+   "name": "Tekna Holding ASA",
+   "website": "https://www.tekna.com"
   },
   "TEL.OL": {
    "exchange": "Oslo",
-   "name": "Telenor ASA"
+   "name": "Telenor ASA",
+   "website": "https://www.telenor.com"
   },
   "TOM.OL": {
    "exchange": "Oslo",
-   "name": "Tomra Systems ASA"
+   "name": "Tomra Systems ASA",
+   "website": "https://www.tomra.com"
   },
   "TRMED.OL": {
    "exchange": "Oslo",
-   "name": "Thor Medical ASA"
+   "name": "Thor Medical ASA",
+   "website": "https://www.thormedical.no"
   },
   "TSM": {
    "exchange": "NYSE",
-   "name": "Taiwan Semiconductor Manufacturing Company Limited"
+   "name": "Taiwan Semiconductor Manufacturing Company Limited",
+   "website": "https://www.tsmc.com"
   },
   "VAR.OL": {
    "exchange": "Oslo",
-   "name": "Vår Energi ASA"
+   "name": "Vår Energi ASA",
+   "website": "https://varenergi.no"
   },
   "VEI.OL": {
    "exchange": "Oslo",
-   "name": "Veidekke ASA"
+   "name": "Veidekke ASA",
+   "website": "https://www.veidekke.com"
   },
   "VEND.OL": {
    "exchange": "Oslo",
-   "name": "Vend Marketplaces ASA"
+   "name": "Vend Marketplaces ASA",
+   "website": "https://vend.com"
   },
   "VOW.OL": {
    "exchange": "Oslo",
-   "name": "Vow ASA"
+   "name": "Vow ASA",
+   "website": "https://www.vowasa.com"
   },
   "WAWI.OL": {
    "exchange": "Oslo",
-   "name": "Wallenius Wilhelmsen ASA"
+   "name": "Wallenius Wilhelmsen ASA",
+   "website": "https://www.walleniuswilhelmsen.com"
   },
   "WWI.OL": {
    "exchange": "Oslo",
-   "name": "Wilh. Wilhelmsen Holding ASA"
+   "name": "Wilh. Wilhelmsen Holding ASA",
+   "website": "https://www.wilhelmsen.com"
   },
   "XLE": {
    "exchange": "NYSEArca",
-   "name": "State Street Energy Select Sector SPDR ETF"
+   "name": "State Street Energy Select Sector SPDR ETF",
+   "website": null
   },
   "XOM": {
    "exchange": "NYSE",
-   "name": "ExxonMobil Holdings Corporation"
+   "name": "ExxonMobil Holdings Corporation",
+   "website": "https://corporate.exxonmobil.com"
   },
   "XPLRA.OL": {
    "exchange": "Oslo",
-   "name": "Xplora Technologies AS"
+   "name": "Xplora Technologies AS",
+   "website": "https://www.myxplora.com"
   },
   "YAR.OL": {
    "exchange": "Oslo",
-   "name": "Yara International ASA"
+   "name": "Yara International ASA",
+   "website": "https://www.yara.com"
   },
   "ZAP.OL": {
    "exchange": "Oslo",
-   "name": "Zaptec ASA"
+   "name": "Zaptec ASA",
+   "website": "https://zaptec.com"
   }
  },
- "source": "Yahoo Finance via yfinance (longName, ellers shortName; fullExchangeName)"
+ "source": "Yahoo Finance via yfinance (longName, ellers shortName; fullExchangeName; website)"
 }

@@ -26,6 +26,11 @@ def name(ticker: str, fallback: str | None = None) -> str | None:
     return r.get("name") or fallback or None
 
 
+def website(ticker: str) -> str | None:
+    w = (_load().get(ticker) or {}).get("website") or None
+    return w if w and w.startswith(("http://", "https://")) else None
+
+
 def exchange(ticker: str) -> str | None:
     return (_load().get(ticker) or {}).get("exchange") or None
 
@@ -35,7 +40,7 @@ CSS = """
 .tn .tk{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}.tn .tk a.tv{font-family:inherit}
 .thead{margin:0 0 8px}.thead .nm1{font-size:24px;font-weight:700;line-height:1.2;margin:0;overflow-wrap:anywhere}
 .thead .tk1{font:14px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.thead .chart{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;font-family:system-ui,sans-serif}
+.thead .chart{display:inline-flex;color:var(--mut);text-decoration:none;align-items:center;min-height:44px;padding:0 6px;font-family:system-ui,sans-serif}
 @media(max-width:599px){.thead .nm1{font-size:20px}}
 """
 
@@ -58,6 +63,8 @@ def header(ticker: str, fallback: str | None = None, after: str = "") -> str:
     url = SEC.tv_url(ticker)
     tk = E(ticker) + (f" · {E(ex)}" if ex else "")
     ch = f'<a class="chart" target="_blank" rel="noopener" href="{E(url)}">Chart ↗</a>' if url else ""
+    w = website(ticker)
+    ch += f'<a class="chart" target="_blank" rel="noopener" href="{E(w)}">Nettside ↗</a>' if w else ""
     return (f'<div class="thead"><h1 class="nm1">{E(n or ticker)}</h1>'
             f'<div class="tk1">{"<span>" + tk + "</span>" if n else ""}{ch}{after}</div></div>')
 
@@ -73,11 +80,11 @@ def refresh(tickers) -> list:
             i = {}
         n = i.get("longName") or i.get("shortName")
         if n:
-            d["names"][t] = {"name": n, "exchange": i.get("fullExchangeName") or None}
+            d["names"][t] = {"name": n, "exchange": i.get("fullExchangeName") or None, "website": i.get("website") or None}
         else:
             miss.append(t)
         time.sleep(0.3)
-    d["source"] = "Yahoo Finance via yfinance (longName, ellers shortName; fullExchangeName)"
+    d["source"] = "Yahoo Finance via yfinance (longName, ellers shortName; fullExchangeName; website)"
     d["fetched"] = time.strftime("%Y-%m-%d")
     PATH.write_text(json.dumps(d, ensure_ascii=False, indent=1, sort_keys=True))
     _C.clear()

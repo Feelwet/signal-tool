@@ -112,6 +112,10 @@ def test_names_from_cache_and_fallback(monkeypatch):
     h = NM.header("LMT")
     assert 'class="nm1">Lockheed Martin Corporation</h1>' in h and "LMT · NYSE" in h and "Chart ↗" in h
     assert "· " not in NM.header("ZZZ")  # ingen gjettet børs
+    assert "Nettside" not in h
+    monkeypatch.setattr(NM, "_C", {"LMT": {"name": "L", "website": "https://www.lockheedmartin.com"}})
+    h2 = NM.header("LMT")
+    assert h2.index("Chart ↗") < h2.index("Nettside ↗") and "lockheedmartin.com" in h2
 
 
 def test_names_file_covers_real_source():

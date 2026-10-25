@@ -148,7 +148,11 @@ def pead_kind(dec: dict) -> str:
     return "pead_tt" if sur is not None and ear is not None and sur >= PEAD_SURPRISE and ear >= PEAD_REACTION else "pead"
 
 
-NOT_FOR_KJOP = {"pead"}   # eksperimentelle typer som vises, men ikke teller mot Kjøp
+NOT_FOR_KJOP = {"pead"}
+
+
+def is_us(ticker: str) -> bool:
+    return "." not in ticker and not ticker.startswith("^") and "=" not in ticker   # eksperimentelle typer som vises, men ikke teller mot Kjøp
 
 
 def signal_types(e: dict, ctx: dict) -> dict:
@@ -191,7 +195,7 @@ def classify(e: dict, ctx: dict) -> dict:
     types = signal_types(e, ctx)
     n = len(types)
     nk = len([k for k in types if k not in NOT_FOR_KJOP])
-    tt = "pead_tt" in types
+    tt = "pead_tt" in types and is_us(t)   # unntak + «alene nok» gjelder bare US (testet på S&P 500); Oslo uendret
     enough = nk >= R["min_types"] or tt
     close, sma, r5, r20 = st.get("close"), st.get("sma50"), st.get("ret_5d"), st.get("ret_20d")
     bench = benchmark_for(t)
@@ -244,7 +248,7 @@ def classify(e: dict, ctx: dict) -> dict:
         ("≥ 2 uavhengige signaltyper fra kilder med høyere pålitelighet", nk >= R["min_types"],
          ", ".join(TYPE_NO[k] for k in types) or "ingen"),
         ("…eller ⚑ sterk rapport + reaksjon alene (topp 20 % på EPS-overraskelse og reaksjon)", tt,
-         (types["pead_tt"]["detail"] if tt else "nei")),
+         (types["pead_tt"]["detail"] if tt else "gjelder bare US-aksjer (testet på S&P 500)" if "pead_tt" in types else "nei")),
         (f"Minst ett av dem ferskere enn {R['fresh_days']} dager", fresh if types else False, f"nyeste {newest}" if newest else "–"),
         ("Kurs over 50-dagers glidende snitt", above,
          "mangler kursdata" if above is None else f"{close:.2f} vs {sma:.2f}"),
