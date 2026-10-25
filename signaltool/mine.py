@@ -45,6 +45,7 @@ EMPTY = "Trykk ☆ på en ticker for å lagre den"
 
 CSS = """
 .mstar{min-width:44px;min-height:44px;width:44px;height:44px;padding:0;border:0;background:none;color:var(--mut);font-size:22px;line-height:1;cursor:pointer;border-radius:8px;flex:none}
+.thead.has-star{position:relative}.thead.has-star .nm1{padding-right:48px}.thead.has-star>.mstar{position:absolute;right:0;top:-10px}
 .mstar[aria-pressed=true]{color:#e3b341}.mstar:focus-visible{outline:2px solid var(--acc)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 td.mcol{width:44px;padding:0!important;text-align:right}

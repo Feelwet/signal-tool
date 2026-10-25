@@ -65,8 +65,8 @@ def header(ticker: str, fallback: str | None = None, after: str = "", star: str 
     ch = f'<a class="chart" target="_blank" rel="noopener" href="{E(url)}">Chart ↗</a>' if url else ""
     w = website(ticker)
     ch += f'<a class="chart" target="_blank" rel="noopener" href="{E(w)}">Nettside ↗</a>' if w else ""
-    return (f'<div class="thead"><h1 class="nm1">{E(n or ticker)}</h1>'
-            f'<div class="tk1">{star}{"<span>" + tk + "</span>" if n else ""}{ch}{after}</div></div>')
+    return (f'<div class="thead{" has-star" if star else ""}">{star}<h1 class="nm1">{E(n or ticker)}</h1>'
+            f'<div class="tk1">{"<span>" + tk + "</span>" if n else ""}{ch}{after}</div></div>')
 
 
 def refresh(tickers) -> list:
