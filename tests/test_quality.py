@@ -190,11 +190,11 @@ def test_build_survives_broken_section_and_passes_check(tmp_path, monkeypatch):
     site.build(snap)
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
-    assert "ikke oppdatert" in idx and "Datakvalitet i dag" in idx
-    k = (out / "kilder.html").read_text()
+    assert "ikke oppdatert" in idx and "Datakvalitet i dag" in (out / "metode.html").read_text()  # flyttet til Metode
+    k = (out / "metode.html").read_text()
     assert 'id="datakvalitet"' in k and "A.OL 2026-01-02" in k and "B.OL (5 dager" in k and 'id="kontroll"' in k
     assert sitecheck.check(out) == []
-    (out / "kilder.html").write_text("<html></html>")
+    (out / "metode.html").write_text("<html></html>")
     assert any("datakvalitet" in p for p in sitecheck.check(out))
     (out / "index.html").unlink()
     assert sitecheck.check(out) == [f"{out / 'index.html'} mangler"]

@@ -325,7 +325,7 @@ def oslo_insider_html(snap: dict) -> str:
             f'<p class="mut">Retningen er lest automatisk fra meldingsteksten: kjøp / salg / tegning (emisjon) / annet (opsjoner, aksjeprogram, lån) / ukjent (bare vedlegg). '
             f'Stikkprøve: 20 av 20 kjøp/salg riktig klassifisert. I dag: {E(", ".join(f"{v} {k}" for k, v in cnt.items()))}.</p>'
             f'<p class="mut">Test (6 418 meldinger 2021–2026, inngang dagen etter): verken innsidekjøp, store kjøp (≥ 1 mill. NOK) eller kjøpsklynger har gitt robust '
-            f'meravkastning mot OSEBX etter kostnader. Derfor vises dette her, men gir <b>ikke</b> poeng i Kjøp-reglene. <a href="kilder.html#natt">Se testen</a>.</p>'
+            f'meravkastning mot OSEBX etter kostnader. Derfor vises dette her, men gir <b>ikke</b> poeng i Kjøp-reglene. <a href="metode.html#natt">Se testen</a>.</p>'
             f'<table><tr><th>Dato</th><th>Selskap</th><th>Retning</th><th>Verdi NOK</th><th>Melding</th></tr>{tr}</table></div>')
 
 
@@ -368,7 +368,7 @@ def base_rate_html(e: dict) -> str:
     return (f'<div class="card" id="treffrate"><h2 style="margin-top:0">Historisk treffrate</h2><div class="tw"><table class="br">{BR_HEAD}{rows}</table></div>'
             '<p class="mut">Fra våre egne tester: meravkastning mot indeks fra inngang dagen etter signalet, før kurtasje. «Slo indeks» = andel tilfeller med positiv meravkastning. '
             'Sammenlign med den grå raden (tilfeldig aksje) – et signal er bare nyttig hvis det gjør det klart bedre. '
-            '<a href="../kilder.html#treffrate">Alle signaler og forbehold</a>.</p></div>')
+            '<a href="../metode.html#treffrate">Alle signaler og forbehold</a>.</p></div>')
 
 
 def base_rate_table_html() -> str:
@@ -494,7 +494,7 @@ def flags_html(e: dict) -> str:
             f'<tr><th>Flagg</th><th>I dag</th><th>Evidensnivå (våre tester)</th></tr>{lis}</table></div>'
             + (f'<ul class="ev">{src}</ul>' if src else "")
             + '<p class="mut">Tallene er meravkastning mot snittaksjen over 60 handelsdager fra egne tester (strategy-research). '
-              'Oslo-kursflaggene rangeres blant likvide Oslo-aksjer (≥ ~2 MNOK/dag). <a href="../kilder.html#kategorier">Reglene</a>.</p></div>')
+              'Oslo-kursflaggene rangeres blant likvide Oslo-aksjer (≥ ~2 MNOK/dag). <a href="../metode.html#kategorier">Reglene</a>.</p></div>')
 
 
 
@@ -524,7 +524,6 @@ def dashboard_html(snap: dict) -> str:
         ("kpi warn" if risk_off else "kpi ok", "Halver" if risk_off else "Normal", "Markedsregime", "størrelse på nye posisjoner", "index.html#regime"),
         ("kpi", str(focus_n), "Fokus i dag", "prioriterte punkter", "index.html#fokus"),
         ("kpi", str(nw), "Newsweb-kontrakter", "siste 14 dager", "oslo.html"),
-        ("kpi", f"{ok}/{nsrc}", "Kilder OK", "siste kjøring", "kilder.html"),
     ]
     kpi_h = "".join(
         f'<a class="{cls}" href="{href}"><div class="lbl">{E(lbl)}</div><div class="val">{E(val)}</div><div class="sub">{E(sub)}</div></a>'
@@ -648,7 +647,7 @@ def honesty_html(pre: str = "", extra: str = "") -> str:
             'gir med punkt-i-tid-data bare ca. +0,6 pp brutto over 60 dager og omtrent null etter kostnader – det er merket <b>eksperimentelt / svak evidens</b>.</p>'
             '<p><b>Sidens styrke er å hjelpe deg å unngå svake aksjer:</b> på Oslo Børs har svak kurs (laveste 20 % momentum eller langt under 52-ukers topp) gjort det '
             '3–4 % dårligere enn snittet over 60 dager i begge testperioder, og tapsbringende selskaper, rettede emisjoner og høy volatilitet peker samme vei. '
-            f'<a href="{pre}kilder.html#droppet">Testet og droppet</a> · <a href="{pre}kilder.html#kategorier">Reglene</a></p>{extra}</div>')
+            f'<a href="{pre}metode.html#droppet">Testet og droppet</a> · <a href="{pre}metode.html#kategorier">Reglene</a></p>{extra}</div>')
 
 
 def portfolio_rules_html() -> str:

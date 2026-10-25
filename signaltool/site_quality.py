@@ -74,7 +74,7 @@ def dq_line(snap: dict, pre: str = "") -> str:
         return ""
     return (f'<p class="mut"><b>Datakvalitet i dag:</b> {dq.get("n_spikes", 0)} kurshopp reparert '
             f'({dq.get("n_spikes_12m", 0)} siste 12 mnd), {dq.get("n_stale", 0)} tickere med uendret kurs ≥ {dq["rules"]["stale_n"]} dager. '
-            f'<a href="{pre}kilder.html#datakvalitet">Detaljer</a> · <a href="{pre}kilder.html#kontroll">Kontroll mot overtilpasning</a></p>')
+            f'<a href="{pre}metode.html#datakvalitet">Detaljer</a> · <a href="{pre}metode.html#kontroll">Kontroll mot overtilpasning</a></p>')
 
 
 def dq_html(snap: dict) -> str:

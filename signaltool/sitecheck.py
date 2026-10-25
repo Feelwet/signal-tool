@@ -6,10 +6,11 @@ from pathlib import Path
 
 MIN_INDEX, MAX_INDEX = 15_000, 15_000_000     # bytes
 REQUIRED = {
-    "index.html": ['id="aerlig"', "Ærlig status", "<nav", "Oversikt"],
-    "kilder.html": ['id="datakvalitet"', 'id="kontroll"', "Kildestatus ved siste kjøring"],
-    "tickere.html": ["Kandidat-tickere"],
-    "temaer.html": ["Alle temaer"],
+    "index.html": ["<nav", "Oversikt", "Temascore"],
+    "metode.html": ['id="datakvalitet"', 'id="kontroll"', "Kildestatus ved siste kjøring", 'id="aerlig"', "Ærlig status"],
+    "kilder.html": ["metode.html"],
+    "tickere.html": ["Tickere"],
+    "temaer.html": ["Temaer"],
     "oslo.html": ["Oslo Børs"],
     "makro.html": [], "kalender.html": [], "style.css": [],
 }

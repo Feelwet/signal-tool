@@ -481,6 +481,10 @@ def run(fast: bool = False) -> dict:
     snap["status"] = status
     try:
         append_source_status(status)
+        try:
+            append_theme_scores(snap.get("themes") or [], str(snap.get("date")))
+        except Exception as ex:
+            log.warning("theme_score log failed: %s", ex)
     except Exception as ex:
         log.warning("source status log failed: %s", ex)
     snap["runtime_s"] = round(time.time() - t0)
@@ -572,3 +576,28 @@ def append_source_status(status: dict, path=None) -> int:
             f.write(_json.dumps({"ts": ts, "source": k, "state": st, "code": m.group(1) if m else None,
                                  "msg": str(v)[:160] if st != "ok" else None}, ensure_ascii=False) + "\n")
     return len(status)
+
+
+def append_theme_scores(themes: list, day: str, path=None) -> int:
+    """logs/theme_score.csv: dato, tema, score, proxy (første ticker med kurs, normalt temaets ETF) og snitt sluttkurs
+    for vinner-tickerne. Én rad per tema per dato (samme dato overskrives). Manglende kurs = tomt felt, aldri anslag."""
+    import csv
+    from pathlib import Path
+    path = Path(path or Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv")
+    hdr = ["date", "theme", "score", "proxy_ticker", "proxy_close", "mean_close_winners", "n_winners"]
+    old = []
+    if path.exists():
+        with path.open() as f:
+            old = [r for r in csv.DictReader(f) if r.get("date") != day]
+    new = []
+    for t in themes:
+        tk = [x for x in (t.get("tickers") or []) if x.get("close") is not None]
+        win = [x["close"] for x in tk if "taper" not in str(x.get("role", "")).lower()]
+        px = tk[0] if tk else {}
+        new.append({"date": day, "theme": t.get("key"), "score": "" if t.get("score") is None else round(float(t["score"]), 4),
+                    "proxy_ticker": px.get("ticker", ""), "proxy_close": px.get("close", ""),
+                    "mean_close_winners": round(sum(win) / len(win), 4) if win else "", "n_winners": len(win)})
+    path.parent.mkdir(exist_ok=True)
+    with path.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=hdr); w.writeheader(); w.writerows(old + new)
+    return len(new)

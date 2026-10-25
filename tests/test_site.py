@@ -42,12 +42,13 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     site.build(snap)
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
-    assert 'class="cat kjop"' in idx and "Hvorfor: test-grunn" in idx and "ikke bevist å slå markedet" in idx
+    tk = (out / "tickere.html").read_text()  # full kategoritekst på Tickere etter opprydding
+    assert 'class="cat kjop"' in idx and "Hvorfor: test-grunn" in idx and "ikke bevist å slå markedet" in tk
     tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
     assert "✔ oppfylt" in tp and "✘ ikke oppfylt" in tp and "ikke bevist å slå markedet" in tp
     tk = (out / "tickere.html").read_text()
     assert 'id="treffsikkerhet"' in tk
-    assert "Kjøp-kandidat" in (out / "kilder.html").read_text()
+    assert "Kjøp-kandidat" in (out / "metode.html").read_text() and "metode.html" in (out / "kilder.html").read_text()
 
 
 def test_left_sidebar_layout():
@@ -65,3 +66,25 @@ def test_dashboard_overview(tmp_path, monkeypatch):
     idx = (tmp_path / "site" / "index.html").read_text()
     assert 'id="dashboard"' in idx and "dash-kpis" in idx and "bar-row" in idx
     assert "tema/" in idx and "ticker/" in idx
+
+
+def test_layout_staleness_and_watch_text():
+    from datetime import date
+    from signaltool import site_layout as L
+    rows = [{"ts": f"2026-10-{d:02d}T03:00", "source": "S", "state": s} for d, s in ((1, "ok"), (2, "fail"), (3, "fail"), (4, "fail"))]
+    st = L.staleness(rows, "S", date(2026, 10, 5))
+    assert st["stale"] and not st["dead"] and st["last_ok"] == "2026-10-01"
+    rows[2]["state"] = "partial"   # partial counts as ok
+    assert not L.staleness(rows, "S", date(2026, 10, 5))["stale"]
+    assert L.staleness(rows, "S", date(2026, 10, 30))["dead"]
+    t = L.watch_text({"cats": {"watch": {"h5": {"n": 136, "hit": 0.537, "hit_ci": [0.453, 0.618]}}, "kjop": {"h5": {"n": 0}}}})
+    assert "53,7 %" in t and "45–62 %" in t and "n=136" in t and "FLAG: ikke skilt fra tilfeldig" in t and "Kjøp: n=0, ikke målt ennå" in t and "0 %" not in t.replace("53,7 %", "")
+
+
+def test_theme_score_log(tmp_path):
+    from signaltool.pipeline import append_theme_scores
+    th = [{"key": "a", "score": 1.5, "tickers": [{"ticker": "SPY", "role": "vinner", "close": 10}, {"ticker": "X", "role": "taper", "close": 99}]}]
+    p = tmp_path / "t.csv"
+    append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-25", p)
+    lines = p.read_text().splitlines()
+    assert len(lines) == 3 and lines[1].startswith("2026-10-24,a,1.5,SPY,10,10.0,1")
