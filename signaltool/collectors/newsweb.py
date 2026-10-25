@@ -14,14 +14,14 @@ NOT_CONTRACT = re.compile(r"share related|share award|aksje|option|opsjon|incent
 CONTRACT_WORDS = ["contract", "kontrakt", "order", "award", "framework agreement", "rammeavtale", "letter of intent"]
 
 
-def collect(days=60) -> tuple[pd.DataFrame, str]:
+def _collect(days=60) -> tuple[pd.DataFrame, str]:
     rows, end = [], date.today()
     try:
         s = end - timedelta(days=days)
         while s <= end:
             e = min(s + timedelta(days=4), end)
             j = http.get_json(API, params={"category": "", "issuer": "", "fromDate": s.isoformat(), "toDate": e.isoformat(),
-                                           "market": "", "messageTitle": ""}, cache_hours=(0.5 if e >= end - timedelta(days=2) else 48))
+                                           "market": "", "messageTitle": ""}, cache_hours=(0.5 if e >= end - timedelta(days=2) else 24 * 30))   # ingen ny historikkhenting: eldre vinduer fra cache
             for m in j["data"]["messages"]:
                 rows.append({"id": m["messageId"], "published": m["publishedTime"], "issuer": m.get("issuerSign"),
                              "issuer_name": m.get("issuerName"), "title": m.get("title"),
@@ -37,3 +37,24 @@ def collect(days=60) -> tuple[pd.DataFrame, str]:
     t = df["title"].str.lower()
     df["contract"] = t.apply(lambda x: any(w in x for w in CONTRACT_WORDS) and not NOT_CONTRACT.search(x))
     return df, f"ok ({len(df)} announcements in {days}d)"
+
+
+def collect(days=60) -> tuple[pd.DataFrame, str]:
+    """AnalBot 25.10: høyst én nettverkskjøring per natt (dato i Europe/Oslo); senere kjøringer samme dag gjenbruker resultatet."""
+    from ..config import CACHE as _C
+    p = _C / f"nw_run_{date.today().isoformat()}.pkl"
+    if p.exists():
+        try:
+            df, st = pd.read_pickle(p)
+            return df, f"{st} – gjenbrukt fra dagens første kjøring"
+        except Exception:
+            pass
+    df, st = _collect(days)
+    if str(st).startswith("ok"):
+        try:
+            for old in _C.glob("nw_run_*.pkl"):
+                old.unlink()
+            pd.to_pickle((df, st), p)
+        except OSError:
+            pass
+    return df, st

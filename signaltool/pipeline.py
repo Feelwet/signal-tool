@@ -89,11 +89,80 @@ def mark_stale(status: dict, today: str, path=LAST_OK) -> dict:
     return last
 
 
+def _fb_status(snap: dict, status: dict) -> None:
+    fbs = snap.pop("_fund_fb", [])
+    if any(f["source_fail"] for f in fbs):
+        used = sorted({t for f in fbs for t in f["used"]})
+        status["Yahoo-fundamentaldata (vakt > 50 %)"] = (f"FAILED: kildefeil ({fbs[0]['failed']}/{fbs[0]['attempted']} feilet) – "
+                                                         f"siste gode brukt for {len(used)}: {', '.join(used) or '–'}")
+    elif fbs:
+        status["Yahoo-fundamentaldata (vakt > 50 %)"] = f"ok ({fbs[0]['attempted'] - fbs[0]['failed']}/{fbs[0]['attempted']})"
+
+
+def frozen_list(today: str):
+    """Siste kanoniske kjøring før i dag fra logs/learn_raw.csv (is_canonical=true): [(ticker, rang, score)] i rangrekkefølge.
+    Bare ekte loggede rader; ingen kanonisk kjøring -> None (ingen frysing)."""
+    import csv
+    from .learnloop import RAW
+    if not RAW.exists():
+        return None
+    with RAW.open(newline="") as f:
+        rows = [r for r in csv.DictReader(f) if r.get("is_canonical") == "true" and r.get("date") and r["date"] <= today]
+    if not rows:
+        return None
+    d = max(r["date"] for r in rows)
+    rr = [r for r in rows if r["date"] == d]
+    if len({r.get("run_id") for r in rr}) > 1:
+        return None
+    def _num(x):
+        try:
+            return float(x)
+        except (TypeError, ValueError):
+            return None
+    rr.sort(key=lambda r: (_num(r.get("rank")) or 1e9))
+    return {"date": d, "tickers": [(r["ticker"], _num(r.get("score")), [t for t in (r.get("types") or "").split("|") if t]) for r in rr]}
+
+
+def _freeze(snap: dict, pos: list, fr: dict, status: dict) -> None:
+    """AnalBot 25.10: ved Yahoo-kildefeil fryses lista nøyaktig som i siste kanoniske kjøring – ingen erstattere, ingen
+    «Ikke rangert». Score fra loggen; dagens kurs/fundamentaldata (evt. siste gode via vakten) der de finnes."""
+    from . import decision as dec
+    byt = {e["ticker"]: e for e in pos}
+    out, need = [], []
+    for t, sc, types in fr["tickers"]:
+        e = byt.get(t)
+        if e is None:
+            e = {"ticker": t, "points": {}, "themes": [], "evidence": [], "flags": [], "why": "", "risks": ""}
+            need.append(e)
+        elif not e.get("decision"):
+            need.append(e)
+        if sc is not None:
+            e["score"] = sc
+        e.setdefault("score", 0)
+        e["frozen"] = True
+        e.pop("unranked", None)
+        out.append(e)
+    if need:
+        try:
+            dec.apply({**snap, "tickers": need})
+        except Exception as ex:
+            log.warning("decision for frozen: %s", ex)
+    snap["tickers"] = out
+    snap["frozen_from"] = fr["date"]
+    status["Datakvalitet (≥ 4/7 for rangering)"] = f"ok (lista fryst fra {fr['date']}: {len(out)} tickere, 0 ikke rangert – Yahoo-kildefeil)"
+
+
 def _coverage_cut(snap: dict, pos: list, status: dict) -> None:
     """Datakvalitetsregel: tickere med < 4/7 grunnfelt (ETF < 2/2) rangeres ikke og teller ikke i kuttet på 60; plassen
     går til neste kandidat. De beholdes i snap["tickers"] med unranked=True (egen gruppe «Ikke rangert»)."""
     from . import datacov as DCv
     from . import decision as dec
+    if any(f.get("source_fail") for f in snap.get("_fund_fb", [])):
+        fr = frozen_list(str(snap.get("date") or ""))
+        if fr:
+            _freeze(snap, pos, fr, status)
+            _fb_status(snap, status)
+            return
     kept, low = [], []
     cur, nxt_i = list(snap["tickers"]), len(snap["tickers"])
     for it in range(4):
@@ -116,13 +185,7 @@ def _coverage_cut(snap: dict, pos: list, status: dict) -> None:
     for e in low:
         e["unranked"] = True
     snap["tickers"] = kept + low
-    fbs = snap.pop("_fund_fb", [])
-    if any(f["source_fail"] for f in fbs):
-        used = sorted({t for f in fbs for t in f["used"]})
-        status["Yahoo-fundamentaldata (vakt > 50 %)"] = (f"FAILED: kildefeil ({fbs[0]['failed']}/{fbs[0]['attempted']} feilet) – "
-                                                         f"siste gode brukt for {len(used)}: {', '.join(used) or '–'}")
-    elif fbs:
-        status["Yahoo-fundamentaldata (vakt > 50 %)"] = f"ok ({fbs[0]['attempted'] - fbs[0]['failed']}/{fbs[0]['attempted']})"
+    _fb_status(snap, status)
     status["Datakvalitet (≥ 4/7 for rangering)"] = f"ok ({len(kept)} rangert, {len(low)} ikke rangert: {', '.join(e['ticker'] for e in low) or '–'})"
 
 

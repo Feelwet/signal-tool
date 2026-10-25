@@ -30,7 +30,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 120   # inkl. opptil 45 min Yahoo-backoff (AnalBot 25.10)
     outputs:
       pipeline: ${{ steps.run.outcome }}
       logpush: ${{ steps.logpush.outcome }}

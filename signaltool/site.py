@@ -421,13 +421,21 @@ RTAB_CSS = ("@media(max-width:599px){table.rtab,table.rtab tbody{display:block;w
 RET_NOTE = f'<p class="mut retnote">Avkastning: {E(SN.NOTE)}</p>'
 
 
+IKKE_RANGERT_INFO = ("Har en hendelse, men data fra færre enn 4 av 7 kilder, så den får ingen score og ingen plass på lista. "
+                     "Det sier ikke at aksjen er dårlig, bare at vi vet for lite. Telles ikke i resultatene.")   # UxBot/AnalBot 25.10, ordrett
+UR_I = ('<button type="button" class="rk-i ur-i" aria-expanded="false" aria-controls="ur-tip" aria-label="Om Ikke rangert">ⓘ</button>'
+        f'<p id="ur-tip" class="rk-tip" hidden style="font-weight:400;white-space:normal">{E(IKKE_RANGERT_INFO)}</p>')
+FRZ_CSS = ".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n"
+
+
 def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
-    pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
+    unr = bool(e.get("unranked"))
+    pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
-            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -466,7 +474,12 @@ def _prep(snap: dict) -> dict:
     snap["insider_clusters"] = [r for r in snap.get("insider_clusters", []) if str(r.get("ticker") or "").upper() not in ("", "NONE", "N/A", "NA")]
     from . import regime
     fm = TL.flag_map(snap)
-    sin = SN.compute(SN.load(), str(snap.get("date") or "") or None)
+    _rows = SN.load()
+    sin = SN.compute(_rows, str(snap.get("date") or "") or None)
+    _hist = SN.compute(_rows)          # hele historikken (MAX_MISS uendret): tickere som mangler i dagens kategorier
+    for e in snap.get("tickers", []):
+        if e["ticker"] not in sin and e["ticker"] in _hist:
+            sin[e["ticker"]] = _hist[e["ticker"]]
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
@@ -476,7 +489,9 @@ def _prep(snap: dict) -> dict:
         e["_since"] = sin.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
-        e["_ret"] = SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"])
+        e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"])
+        if e.get("unranked") and e["_since"]:
+            e["_since"] = {"since": e["_since"]["since"]}   # «Ikke rangert»: bare datoen, ingen tall
     try:
         from . import risk
         rk = risk.refresh([e["ticker"] for e in snap.get("tickers", [])])
@@ -527,7 +542,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -583,10 +598,10 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">Lista er fryst fra {snap["frozen_from"][8:10]}.{snap["frozen_from"][5:7]}. Yahoo feilet i dag.</p>' if snap.get("frozen_from") else "")
                                             + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers if not e.get("unranked"))
-                                            + ("<tr class=\"grp\"><th colspan=\"9\">Ikke rangert <span class=\"mut\" style=\"font-weight:400\">· for lite data (under 4/7 grunnfelt)</span></th></tr>" + "".join(ticker_row(e) for e in tickers if e.get("unranked")) if any(e.get("unranked") for e in tickers) else "")
+                                            + ("<tr class=\"grp\"><th colspan=\"9\">Ikke rangert <span class=\"mut\" style=\"font-weight:400\">· for lite data (under 4/7 grunnfelt)</span>" + UR_I + "</th></tr>" + "".join(ticker_row(e) for e in tickers if e.get("unranked")) if any(e.get("unranked") for e in tickers) else "")
                                             + "</table>" + RET_NOTE + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>'
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")

@@ -98,7 +98,7 @@ def body(mid: int) -> str | None:
     return b
 
 
-def enrich(df: pd.DataFrame, max_fetch=400) -> pd.DataFrame:
+def enrich(df: pd.DataFrame, max_fetch=60) -> pd.DataFrame:
     """Classify each message (title + body). Fetches at most `max_fetch` uncached bodies per call."""
     out, fetched = [], 0
     for r in df.sort_values("published", ascending=False).itertuples():
@@ -113,7 +113,7 @@ def enrich(df: pd.DataFrame, max_fetch=400) -> pd.DataFrame:
     return pd.DataFrame(out).drop(columns=["Index"], errors="ignore")
 
 
-def collect(days=30) -> tuple[pd.DataFrame, str]:
+def _collect(days=30) -> tuple[pd.DataFrame, str]:
     try:
         df = list_messages(date.today() - timedelta(days=days), date.today())
         if df.empty:
@@ -123,3 +123,24 @@ def collect(days=30) -> tuple[pd.DataFrame, str]:
         return pd.DataFrame(), f"FAILED: {ex}"
     k = e["kind"].value_counts().to_dict()
     return e, "ok (" + ", ".join(f"{n} {v}" for v, n in k.items()) + f" i {days} d)"
+
+
+def collect(days=30) -> tuple[pd.DataFrame, str]:
+    """AnalBot 25.10: høyst én nettverkskjøring per natt (dato i Europe/Oslo); senere kjøringer samme dag gjenbruker resultatet."""
+    from ..config import CACHE as _C
+    p = _C / f"nwi_run_{date.today().isoformat()}.pkl"
+    if p.exists():
+        try:
+            df, st = pd.read_pickle(p)
+            return df, f"{st} – gjenbrukt fra dagens første kjøring"
+        except Exception:
+            pass
+    df, st = _collect(days)
+    if str(st).startswith("ok"):
+        try:
+            for old in _C.glob("nwi_run_*.pkl"):
+                old.unlink()
+            pd.to_pickle((df, st), p)
+        except OSError:
+            pass
+    return df, st

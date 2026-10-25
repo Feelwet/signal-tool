@@ -5,7 +5,7 @@ missing - shown as '–' then). Nothing here is a recommendation; it is context 
 """
 from __future__ import annotations
 from . import http as _http
-import logging, math
+import logging, math, os, random, time
 from datetime import date
 import numpy as np
 import pandas as pd
@@ -246,6 +246,20 @@ def revisions(tk: yf.Ticker) -> dict:
     return out
 
 
+_RUN = {"fail": False}     # kildefeil gjelder hele kjøringen (alle apply-kall i samme prosess)
+RATE_S = float(os.environ.get("YF_RATE_S", "1.0"))                 # ≤ 1 forespørsel/s mot Yahoo (+ jitter)
+RETRY_BASE_S = float(os.environ.get("YF_RETRY_BASE_S", "60"))      # 60, 120, 240, 480, 960 s ...
+RETRY_WINDOW_S = float(os.environ.get("YF_RETRY_WINDOW_MIN", "45")) * 60
+_LAST = [0.0]
+
+
+def _pace() -> None:
+    gap = RATE_S * random.uniform(1.0, 1.5) - (time.monotonic() - _LAST[0])
+    if gap > 0:
+        time.sleep(gap)
+    _LAST[0] = time.monotonic()
+
+
 def compute(snap: dict, max_info=80) -> dict:
     tickers = [e["ticker"] for e in snap.get("tickers", [])]
     if not tickers:
@@ -257,21 +271,38 @@ def compute(snap: dict, max_info=80) -> dict:
             if th and th.sector_etf and th.sector_etf != "SPY":
                 sector_of.setdefault(e["ticker"], th.sector_etf)
     infos = {}
-    for t in tickers[:max_info]:
-        if not is_equity(t):
-            continue
-        try:
-            tk = yf.Ticker(t)
-            inf = tk.info or {}
-            infos[t] = {k: inf.get(k) for k in INFO_KEYS}
-            infos[t]["info_date"] = date.today().isoformat()
-            infos[t].update(quarterly(tk))
-            infos[t]["next_earnings"] = _next_earnings(tk)
-            infos[t].update(revisions(tk))
-            if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):
-                sector_of[t] = YF_SECTOR[inf["sector"]]
-        except Exception as ex:
-            log.info("info %s: %s", t, ex)
+    def _one(t):
+        tk = yf.Ticker(t)
+        inf = tk.info or {}
+        if not any(inf.get(k) is not None for k in ("sector", "marketCap", "trailingPE", "quoteType")):
+            raise RuntimeError("tom info")
+        _pace(); infos[t] = {k: inf.get(k) for k in INFO_KEYS}
+        infos[t]["info_date"] = date.today().isoformat()
+        infos[t].update(quarterly(tk)); _pace()
+        infos[t]["next_earnings"] = _next_earnings(tk); _pace()
+        infos[t].update(revisions(tk))
+        if t not in sector_of and YF_SECTOR.get(inf.get("sector")) and not t.endswith(".OL"):
+            sector_of[t] = YF_SECTOR[inf["sector"]]
+    todo = [t for t in tickers[:max_info] if is_equity(t)]
+    wait = RETRY_BASE_S
+    while True:
+        failed = []
+        for t in todo:
+            _pace()
+            try:
+                _one(t)
+            except Exception as ex:
+                infos.pop(t, None)
+                failed.append(t)
+                log.info("info %s: %s", t, ex)
+        # AnalBot 25.10: eksponentiell backoff innen et vindu (standard 45 min per kjøring) før > 50 %-vakten slår til
+        left = _RUN.setdefault("deadline", time.monotonic() + RETRY_WINDOW_S) - time.monotonic()
+        if not failed or _RUN["fail"] or left <= 0:
+            break
+        nap = min(wait, left) * random.uniform(0.85, 1.15)
+        log.warning("Yahoo-fundamentaldata: %d/%d feilet, nytt forsøk om %.0f s (%.0f s igjen av vinduet)", len(failed), len(todo), nap, left)
+        time.sleep(max(0.0, nap))
+        todo, wait = failed, wait * 2
     refs = sorted(set(sector_of.values()) | {BENCH_US, "OSEBX.OL"})
     vol_med = None
     try:
@@ -329,7 +360,6 @@ def compute(snap: dict, max_info=80) -> dict:
 
 FUND_KEYS = tuple(INFO_KEYS) + ("next_earnings", "info_date")
 FALLBACK_MAX_TD = 5        # AnalBot 25.10: gjenbruk høyst 5 handelsdager gammel dekning/fundamentaldata
-_RUN = {"fail": False}     # kildefeil gjelder hele kjøringen (alle apply-kall i samme prosess)
 
 
 def _has_fund(m) -> bool:
