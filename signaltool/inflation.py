@@ -359,13 +359,28 @@ CSS = """<style>
 .infl-chart{display:block}@media(max-width:699px){.infl-chart{display:none}}
 .infl-leg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.infl-leg button{min-height:32px;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .infl-leg button[aria-pressed=false]{opacity:.45;text-decoration:line-through}.infl-leg i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:6px}
-.infl-svg{width:100%;height:auto}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
+.infl-svg{width:100%;height:auto}.infl-svg .hit{pointer-events:stroke;cursor:pointer}.infl-svg .htip{fill:#e6edf3!important;font-size:12px!important;pointer-events:none;paint-order:stroke;stroke:#0d1117;stroke-width:3px}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
 .infl-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px}
 .infl-card{border:1px solid #30363d;border-radius:6px;padding:10px 12px}.infl-card .big{font-size:1.5em;font-weight:600;color:#e6edf3}
 .cchart{display:block;min-height:160px;margin:6px 0}.fcl{font-size:.8em}
 </style>"""
-JS = """<script>document.querySelectorAll('.infl-leg button').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
-document.querySelectorAll('.infl-svg [data-c="'+b.dataset.c+'"]').forEach(e=>e.style.display=on?'':'none')})</script>"""
+JS = """<script>(()=>{const B=c=>document.querySelector('.infl-leg button[data-c="'+c+'"]');
+function tog(c){const b=B(c);if(!b)return;const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
+document.querySelectorAll('.infl-svg [data-c="'+c+'"]').forEach(e=>e.style.display=on?'':'none');if(!on)tip('')}
+document.querySelectorAll('.infl-leg button').forEach(b=>b.onclick=()=>tog(b.dataset.c));
+const svg=document.querySelector('.infl-svg');if(!svg)return;const NS='http://www.w3.org/2000/svg';
+const t=document.createElementNS(NS,'text');t.setAttribute('class','htip');svg.appendChild(t);
+function tip(s,x,y){t.textContent=s;if(s){t.setAttribute('x',Math.min(x+8,svg.viewBox.baseVal.width-150));t.setAttribute('y',Math.max(y-8,12))}}
+const P=e=>{const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())};
+function near(e){const p=P(e),k=svg.getScreenCTM().a||1;let best=null,bd=1e9;
+svg.querySelectorAll('.hit').forEach(h=>{if(h.style.display==='none')return;const q=h.points;for(let i=1;i<q.length;i++){const a=q[i-1],b=q[i],dx=b.x-a.x,dy=b.y-a.y,L=dx*dx+dy*dy||1;
+let u=((p.x-a.x)*dx+(p.y-a.y)*dy)/L;u=Math.max(0,Math.min(1,u));const d=Math.hypot(p.x-a.x-u*dx,p.y-a.y-u*dy);if(d<bd){bd=d;best=h}}});
+return bd*k<=24?best:null}
+svg.addEventListener('click',e=>{const h=near(e);if(h)tog(h.dataset.c)});
+svg.querySelectorAll('.hit').forEach(h=>{const ln=svg.querySelector('.ln[data-c="'+h.dataset.c+'"]');
+h.addEventListener('mouseenter',()=>ln.setAttribute('stroke-width','3.5'));
+h.addEventListener('mousemove',e=>{const p=P(e);tip(h.dataset.l,p.x,p.y)});
+h.addEventListener('mouseleave',()=>{ln.setAttribute('stroke-width','2');tip('')})})})()</script>"""
 
 
 def html_block(inf: dict | None, cal: list | None, today=None) -> str:
@@ -391,7 +406,8 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
         v = [(m, x) for m, x in S.get(k, []) if m in idx]
         if v:
             pts = " ".join(f"{X(idx[m]):.1f},{Y(x):.1f}" for m, x in v)
-            lines.append(f'<polyline data-c="{k}" fill="none" stroke="{col}" stroke-width="2" points="{pts}"><title>{_E(name)}: {_E(note)}</title></polyline>')
+            lines.append(f'<polyline class="ln" data-c="{k}" fill="none" stroke="{col}" stroke-width="2" points="{pts}"><title>{_E(name)}: {_E(note)}</title></polyline>')
+            lines.append(f'<polyline class="hit" data-c="{k}" data-l="{_E(name)} {_nf(v[-1][1])} % ({_E(v[-1][0])})" fill="none" stroke="transparent" stroke-width="14" points="{pts}"/>')
             leg.append(f'<button data-c="{k}" aria-pressed="true"><i style="background:{col}"></i>{_E(name + (" – KPI (NBS), ikke HICP" if k == "CN" else ""))}</button>')
         meas, msrc = CARD_MEASURE[k]
         hist = C.get(k) or []

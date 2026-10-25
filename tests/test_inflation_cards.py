@@ -19,3 +19,12 @@ def test_cn_label_right_and_big_neutral():
     src = pathlib.Path(I.__file__).read_text()
     assert 'text-anchor="end">{_E(tlabel)}' in src
     assert '<div class="big" style="color' not in src
+
+
+def test_combined_chart_lines_clickable():
+    import pathlib
+    from signaltool import inflation as I
+    src = pathlib.Path(I.__file__).read_text()
+    assert 'class="hit"' in src and 'stroke="transparent" stroke-width="14"' in src
+    assert "pointer-events:stroke;cursor:pointer" in src
+    assert "b.onclick=()=>tog(b.dataset.c)" in src and "if(h)tog(h.dataset.c)" in src
