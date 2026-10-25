@@ -18,6 +18,7 @@ from . import overview as OV
 from . import tickerlist as TL
 from . import names as NM
 from . import mine as MINE
+from . import datacov as DC
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -410,7 +411,7 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
-    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")))}</td>'
+    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}</td>'
             f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -442,7 +443,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + MINE.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + MINE.CSS + DC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -580,6 +581,7 @@ def ticker_page(e, tmap):
 <div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
 <tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
+{DC.card(e)}
 <div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
 <div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>"""
 
