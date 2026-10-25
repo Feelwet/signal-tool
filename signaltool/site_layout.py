@@ -25,6 +25,12 @@ CSS = """
 .xbadge{display:inline-block;border:1px solid #8b949e;color:#c9d1d9;background:transparent;border-radius:2px;padding:0 6px;font-size:.72rem;font-weight:600;vertical-align:middle;margin-left:6px;white-space:nowrap}
 .pintro{color:var(--mut);margin:-4px 0 12px}
 .kpis.small{margin-bottom:14px}
+.kpis.k3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+.kpis.k3 .kpi{min-width:0;margin:0;height:auto;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start}
+.kpis.k3 .lbl{font-size:12px;line-height:16px;color:var(--mut)}.kpis.k3 .val{font-size:16px;line-height:22px;font-weight:700}.kpis.k3 .sub{font-size:12px;line-height:16px;color:var(--mut)}
+@media(max-width:699px){.kpis.k3{gap:8px}.kpis.k3 .kpi{padding:12px}
+.kpis.k3 .lbl{font-size:11px;line-height:14px}.kpis.k3 .val{font-size:14px;line-height:18px}.kpis.k3 .sub{font-size:11px;line-height:14px}
+.kpis.k3 .kpi:not(.open) .lbl,.kpis.k3 .kpi:not(.open) .val,.kpis.k3 .kpi:not(.open) .sub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}}
 .kpis.k4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpis.k4 .kpi{min-width:0}
 @media(max-width:699px){.kpis.k4{grid-template-columns:repeat(2,1fr)}}
 .warnline{border-left:3px solid #d29922;padding:6px 10px;margin:0 0 12px;color:#e6edf3;background:rgba(210,153,34,.08);font-size:.9rem}
@@ -106,14 +112,21 @@ def search_html(tickers: list[str], pre: str, slug) -> str:
             f'const k=Object.keys(M).find(x=>x.toUpperCase()===v);if(k)location.href="{pre}ticker/"+M[k]+".html"}})}})()</script>' + HASH_JS)
 
 
+K3_JS = ("<script>(()=>{document.querySelectorAll('.kpis.k3 .kpi').forEach(b=>b.addEventListener('click',e=>{"
+         "if(matchMedia('(max-width:699px)').matches&&!b.classList.contains('open')){e.preventDefault();"
+         "document.querySelectorAll('.kpis.k3 .kpi.open').forEach(o=>o.classList.remove('open'));b.classList.add('open')}}))})()</script>")
+
+
 def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = False) -> str:
     """Felles sidetopp: tittel, én setning, nøkkeltall."""
     k = ""
     if kpis:
-        k = f'<div class="kpis small{" k4" if k4 else ""}">' + "".join(
+        k3 = title in ("Makro", "Kalender") and len(kpis) == 3
+        k = f'<div class="kpis small{" k4" if k4 else ""}{" k3" if k3 else ""}">' + "".join(
             f'<a class="kpi" href="{E(h or "#")}"><div class="lbl">{E(l)}</div><div class="val">{E(v)}</div><div class="sub">{E(s)}</div></a>'
             for v, l, s, h in kpis) + "</div>"
-    return f'<h1>{E(title)}</h1><p class="pintro">{E(sentence)}</p>{k}'
+    js = K3_JS if kpis and title in ("Makro", "Kalender") and len(kpis) == 3 else ""
+    return f'<h1>{E(title)}</h1><p class="pintro">{E(sentence)}</p>{k}{js}'
 
 
 # ---------------- treffrate ----------------
