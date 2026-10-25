@@ -437,14 +437,15 @@ _IDX: dict = {}
 
 
 def _index_closes() -> dict:
-    """Ekte sluttkurser for OSEBX.OL og SPY (Yahoo), {ticker: {YYYY-MM-DD: close}}. Feiler nedlastingen: tomt (grå linje utelates)."""
+    """Ekte sluttkurser for børsenes hovedindekser (OSEBX.OL, ^IXIC, ^NYA; Yahoo), {ticker: {YYYY-MM-DD: close}}. Feiler nedlastingen: tomt (grå linje utelates)."""
     if "v" in _IDX:
         return _IDX["v"]
     out = {}
     try:
         import yfinance as yf
-        d = yf.download(["OSEBX.OL", "SPY"], period="1y", auto_adjust=True, progress=False)["Close"]
-        for c in ("OSEBX.OL", "SPY"):
+        idxs = sorted({v[0] for v in SN.BENCH.values()})
+        d = yf.download(idxs, period="1y", auto_adjust=True, progress=False)["Close"]
+        for c in idxs:
             if c in d:
                 ser = d[c].dropna()
                 out[c] = {str(k.date()): float(v) for k, v in ser.items()}

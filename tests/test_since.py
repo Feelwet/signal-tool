@@ -49,11 +49,12 @@ def test_return():
     s = {"since": "2026-10-08", "price": 17.0, "price_date": "2026-10-06", "category": "watch", "days": 17, "list_days": 17, "illiquid": True}
     idx = {"OSEBX.OL": {"2026-10-06": 100.0, "2026-10-23": 101.0}}
     r = S.ret(s, 17.8, "2026-10-23", idx, "EIOF.OL")
-    assert S.pct(r["r"]) == "+4,7 %" and S.pct(r["ex"]) == "+3,7 %" and r["illiquid"]
+    assert S.pct(r["r"]) == "+4,7 %" and S.pp(r["ex"]) == "+3,7 pp" and "vs OSEBX +3,7 pp" in S.ret_inner(r) and r["illiquid"]
     assert "+4,7 %" in S.line(s, "", r) and "⚠" in S.ret_cell(r) and "rup" in S.ret_cell(r)
     assert S.ret(dict(s, list_days=0), 17.8, "2026-10-23", idx, "EIOF.OL")["r"] > 0
     assert S.ret(s, None, None, idx, "EIOF.OL") is None and S.ret_cell(None).count("–") == 1
-    assert "mot" not in S.ret_inner(S.ret(s, 17.8, "2026-10-23", {}, "EIOF.OL"))
+    assert '<span class="rex">–</span>' in S.ret_inner(S.ret(s, 17.8, "2026-10-23", {}, "EIOF.OL"))
+    assert S.bench_for("EIOF.OL")[1] == "OSEBX"
 
 
 def test_nokkeltall_missing_and_etf():

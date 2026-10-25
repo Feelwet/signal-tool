@@ -89,25 +89,49 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
 
 MIN_DAYS = 0   # AnalBot 25.10: avkastning fra price_date fra første dag
 NOTE = ("Kursendring fra sluttkursen dagen før aksjen kom på lista, til siste sluttkurs. I lokal valuta, uten kostnader og utbytte. "
-        "Grått tall: mot OSEBX (Oslo) eller S&P 500 (USA). Ikke en treffrate og ikke et kjøpsråd.")
+        "Grått tall: mot hovedindeksen på børsen aksjen er notert på. Ikke en treffrate og ikke et kjøpsråd.")
 
 
 def pct(x: float) -> str:
     return f"{x*100:+.1f} %".replace(".", ",").replace("-", "−")
 
 
+BENCH = {"oslo": ("OSEBX.OL", "OSEBX"), "nasdaq": ("^IXIC", "Nasdaq"), "nyse": ("^NYA", "NYSE"), "arca": ("^NYA", "NYSE")}
+
+
+def bench_for(ticker: str):
+    """Hovedindeksen på børsen tickeren er notert på (exchange fra names.json / Yahoo). None = ukjent børs."""
+    from .names import exchange
+    ex = (exchange(ticker) or "").lower().replace(" ", "")
+    if ticker.endswith(".OL") or ex.startswith("oslo"):
+        return BENCH["oslo"]
+    if ex.startswith("nasdaq") or ex in ("nms", "ngm", "ncm"):
+        return BENCH["nasdaq"]
+    if "arca" in ex or ex in ("amex", "nysemkt", "nyseamerican", "pcx", "ase"):
+        return BENCH["arca"]
+    if ex.startswith("nyse") or ex == "nyq":
+        return BENCH["nyse"]
+    return None
+
+
+def pp(x: float) -> str:
+    return f"{x*100:+.1f} pp".replace(".", ",").replace("-", "−")
+
+
 def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, ticker: str = "") -> dict | None:
     """Avkastning fra innkurs (sluttkurs på price_date) til siste sluttkurs. None ved manglende data eller < 5 dager på lista.
-    Meravkastning mot OSEBX.OL (.OL) eller SPY (US) over samme datoer, bare hvis indeksdata finnes for begge datoene."""
+    Meravkastning (prosentpoeng) mot hovedindeksen på tickerens børs over samme datoer, bare med ekte indeksdata for begge datoene."""
     if not s or s.get("price") in (None, 0) or close in (None, 0) or s.get("list_days", 0) < MIN_DAYS:
         return None
     r = float(close) / float(s["price"]) - 1
-    ex = None
-    bench = "OSEBX.OL" if ticker.endswith(".OL") else "SPY"
-    ser = (idx or {}).get(bench)
-    if ser and s.get("price_date") and last_date and s["price_date"] in ser and last_date in ser:
-        ex = r - (ser[last_date] / ser[s["price_date"]] - 1)
-    return {"r": r, "ex": ex, "bench": "OSEBX" if bench == "OSEBX.OL" else "S&P 500", "illiquid": bool(s.get("illiquid"))}
+    ex, bn = None, None
+    b = bench_for(ticker)
+    if b:
+        bn = b[1]
+        ser = (idx or {}).get(b[0])
+        if ser and s.get("price_date") and last_date and s["price_date"] in ser and last_date in ser:
+            ex = r - (ser[last_date] / ser[s["price_date"]] - 1)
+    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid"))}
 
 
 def _cls(x):
@@ -118,7 +142,7 @@ def ret_inner(r: dict | None) -> str:
     if not r:
         return "–"
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
-    ex = f'<span class="rex">{pct(r["ex"])} mot {r["bench"]}</span>' if r.get("ex") is not None else ""
+    ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
     return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{w}{ex}'
 
 
