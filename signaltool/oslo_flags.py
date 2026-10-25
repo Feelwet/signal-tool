@@ -315,6 +315,16 @@ def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True) -> str
         o = ticker_flags(e["ticker"], m, meta, ev, today, fetch=fetch, e=e)
         n_ebit += bool(o.get("ebit"))
         e["oslo"] = o
-    snap["oslo_flags_meta"] = {**meta, "newsweb_days": None if nw is None else 95, "n_ebit": n_ebit}
+    # Røde flagg Oslo: same flags for the whole liquid universe (candidates reuse their result above)
+    done = {e["ticker"]: e["oslo"] for e in ol}
+    uni, n_ebit_u = [], 0
+    for t in (m.index[m["liquid"]] if len(m) else []):
+        o = done.get(t) or ticker_flags(t, m, meta, ev, today, fetch=fetch)
+        n_ebit_u += bool(o.get("ebit"))
+        red = {k: v for k, v in o.get("flags", {}).items() if k in ("weak_px", "neg_ebit", "placement", "high_vol")}
+        uni.append({"ticker": t, "flags": red, "asof": meta.get("asof"), "ebit_known": bool(o.get("ebit"))})
+    snap["oslo_universe_flags"] = uni
+    snap["oslo_flags_meta"] = {**meta, "newsweb_days": None if nw is None else 95, "n_ebit": n_ebit,
+                               "n_ebit_universe": n_ebit_u, "newsweb_ok": nw is not None and len(nw) > 0}
     return (f"ok ({len(ol)} Oslo-tickere, univers {meta.get('n_liquid', 0)} likvide aksjer per {meta.get('asof')}, "
             f"EBIT for {n_ebit}, Newsweb {'ok' if nw is not None and len(nw) else 'mangler'})")

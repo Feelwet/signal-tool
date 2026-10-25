@@ -325,7 +325,7 @@ def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel
     g = []
     if x1 > tm:
         g.append(f'<rect x="{X(tm):.1f}" y="{T}" width="{W - R - X(tm):.1f}" height="{H - T - B}" fill="#6cb6ff" opacity=".07"/>'
-                 f'<text x="{W - R - 2}" y="{T + 10}" text-anchor="end">Prognose</text>')
+                 f'<text x="{W - R - 2}" y="{(H - B - 4) if tlabel else (T + 10)}" text-anchor="end">Prognose</text>')
     for v in range(int(lo // 2 * 2), int(hi) + 2, 2):
         if lo <= v <= hi:
             g.append(f'<text x="{L - 3}" y="{Y(v) + 3:.1f}" text-anchor="end">{v}</text>')
@@ -334,7 +334,7 @@ def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel
     if target is not None:
         g.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(target):.1f}" y2="{Y(target):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/>')
         if tlabel:
-            g.append(f'<text class="tlabel" x="{W - R - 2}" y="{Y(target) - 9:.1f}" text-anchor="end">{_E(tlabel)}</text>')
+            g.append(f'<text class="tlabel" x="{W - R - 2}" y="{Y(target) - 6:.1f}" text-anchor="end">{_E(tlabel)}</text>')
     pts = " ".join(f"{X(_mi(m)):.1f},{Y(v):.1f}" for m, v in hist)
     g.append(f'<polyline fill="none" stroke="{col}" stroke-width="1.8" points="{pts}"/>')
     if steps:
