@@ -492,7 +492,7 @@ def flags_html(e: dict) -> str:
         return ('<div class="card" id="flagg"><h2 style="margin-top:0">Røde flagg og merker</h2><p>Ingen røde eller gule flagg i dag.</p>'
                 '<p class="mut">Oslo-flaggene (svak kurs, negativt driftsresultat, rettet emisjon, høy volatilitet) er det sterkeste sidens tester har funnet, men ingen har bestått vårt eget testkrav – '
                 'de sier hva du bør unngå, ikke hva du bør kjøpe.</p></div>')
-    kind_no = {"red": "rødt flagg – blokkerer Kjøp", "yellow": "gult flagg – halver størrelsen", "note": "tillegg", "info": "info-merke – ikke kjøpssignal"}
+    kind_no = {"red": "rødt flagg", "yellow": "gult flagg – halver størrelsen", "note": "tillegg", "info": "info-merke – ikke kjøpssignal"}
     lis = ""
     for icon, k, txt in rows:
         lab, kind, lvl, ev = _flag_info(k)

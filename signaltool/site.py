@@ -239,7 +239,7 @@ def track_html(snap):
 def categories_method_html():
     R = C.RULES
     from .oslo_flags import FLAG_INFO
-    fl = "".join(f'<li><b>{E(v[0])}</b> ({ {"red": "rødt – blokkerer Kjøp", "yellow": "gult – halver størrelsen", "note": "tillegg", "info": "info-merke"}[v[1]] }; '
+    fl = "".join(f'<li><b>{E(v[0])}</b> ({ {"red": "rødt", "yellow": "gult – halver størrelsen", "note": "tillegg", "info": "info-merke"}[v[1]] }; '
                  f'evidens: {E(v[2])}): {E(v[3])}</li>' for v in FLAG_INFO.values())
     return f"""<div class="card" id="kategorier"><h2 style="margin-top:0">Kategorier: Kjøp-kandidat, Hold, Følg</h2>
 <div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester fant ingen pålitelig fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
