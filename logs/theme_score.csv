@@ -1,8 +1,8 @@
 date,theme,score,mean_close_candidates,n_candidates,info_ticker,info_ticker_close
-2026-10-25,elections_political,2.357,163.3804,8,SPY,759.97
-2026-10-25,food_agri,2.128,282.0267,6,CF,120.68
+2026-10-25,elections_political,2.37,163.3803,8,SPY,759.97
+2026-10-25,food_agri,1.729,282.0267,6,CF,120.68
 2026-10-25,mideast_energy,1.5,155.6683,12,XLE,69.33
-2026-10-25,risk_off_haven,1.173,593.7464,8,GLD,366.61
+2026-10-25,risk_off_haven,1.0,593.7462,8,GLD,366.61
 2026-10-25,conflict_defense,0.981,557.6264,11,LMT,604.18
 2026-10-25,sanctions_energy,0.894,167.9263,10,LNG,298.67
 2026-10-25,shipping_chokepoints,0.367,2379.434,10,ZIM,29.35
