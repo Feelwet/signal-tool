@@ -19,6 +19,7 @@ from . import tickerlist as TL
 from . import names as NM
 from . import mine as MINE
 from . import datacov as DC
+from . import since as SN
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -122,7 +123,7 @@ CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th><span class=\"sr\">★ Mine</span></th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Siden</th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -411,8 +412,8 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
-    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}</td>'
-            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+    return (f'<tr data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"))}</td>'
+            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -429,10 +430,12 @@ def _prep(snap: dict) -> dict:
     snap["insider_clusters"] = [r for r in snap.get("insider_clusters", []) if str(r.get("ticker") or "").upper() not in ("", "NONE", "N/A", "NA")]
     from . import regime
     fm = TL.flag_map(snap)
+    sin = SN.compute(SN.load(), str(snap.get("date") or "") or None)
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
     for e in snap.get("tickers", []):
         e["_analyst"] = recs.get(e["ticker"])
         e["_flag"] = fm.get(e["ticker"])
+        e["_since"] = sin.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
     return snap
 
@@ -443,7 +446,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + MINE.CSS + DC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + MINE.CSS + DC.CSS + SN.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -504,7 +507,7 @@ def build(snap: dict) -> Path:
                                             + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
-                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS, 0, snap))
+                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS, 0, snap))
     tmap = {t["key"]: t for t in themes}
     for e in tickers:
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
@@ -569,6 +572,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2) + ' ' + cat_badge(e.get('category')))}
+{SN.line(e.get("_since"))}
 {cat_rules_html(e)}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}
