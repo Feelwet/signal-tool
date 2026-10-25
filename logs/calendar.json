@@ -91,6 +91,34 @@
 "kind": "makro"
 },
 {
+"date": "2026-10-26",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport NUE",
+"kind": "resultat"
+},
+{
+"date": "2026-10-28",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport DHT",
+"kind": "resultat"
+},
+{
+"date": "2026-10-28",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport STNG",
+"kind": "resultat"
+},
+{
+"date": "2026-10-28",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport EQNR.OL",
+"kind": "resultat"
+},
+{
 "date": "2026-10-28",
 "time": "08:00",
 "source": "SSB (estimert)",
@@ -127,6 +155,48 @@
 },
 {
 "date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport LHX",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport KOG.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport AKRBP.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport LNG",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport ELK.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport FTI",
+"kind": "resultat"
+},
+{
+"date": "2026-10-29",
 "time": "13:30",
 "source": "BEA",
 "title": "GDP (Advance Estimate), 3rd Quarter 2026",
@@ -141,6 +211,27 @@
 },
 {
 "date": "2026-10-30",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport GD",
+"kind": "resultat"
+},
+{
+"date": "2026-10-30",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport XOM",
+"kind": "resultat"
+},
+{
+"date": "2026-10-30",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport CVX",
+"kind": "resultat"
+},
+{
+"date": "2026-10-30",
 "time": "09:30",
 "source": "ONS",
 "title": "GDP revisions in Blue Book: 2026",
@@ -152,6 +243,55 @@
 "source": "BLS",
 "title": "Employment Cost Index",
 "kind": "makro"
+},
+{
+"date": "2026-11-03",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport OKEA.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-03",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport SALM.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-03",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport MOS",
+"kind": "resultat"
+},
+{
+"date": "2026-11-04",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport WAWI.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-04",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport MOWI.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-04",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport CF",
+"kind": "resultat"
+},
+{
+"date": "2026-11-04",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport NTR",
+"kind": "resultat"
 },
 {
 "date": "2026-11-04",
@@ -176,6 +316,27 @@
 },
 {
 "date": "2026-11-05",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport RHM.DE",
+"kind": "resultat"
+},
+{
+"date": "2026-11-05",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport MAERSK-B.CO",
+"kind": "resultat"
+},
+{
+"date": "2026-11-05",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport MP",
+"kind": "resultat"
+},
+{
+"date": "2026-11-05",
 "time": "09:30",
 "source": "ONS",
 "title": "Local sites and numbers of employees linked to companies involved in international trade in services by subnational areas of the UK: 2024",
@@ -187,5 +348,19 @@
 "source": "BLS",
 "title": "Employment Situation",
 "kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport HLAG.DE",
+"kind": "resultat"
+},
+{
+"date": "2026-12-09",
+"time": "20:00",
+"source": "Federal Reserve",
+"title": "FOMC rentebeslutning + prognoser (SEP)",
+"kind": "sentralbank"
 }
 ]
