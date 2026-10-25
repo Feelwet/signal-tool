@@ -66,3 +66,10 @@ def test_change_text_arrows():
 
 def test_mobile_bar_name_own_line():
     assert "@media(max-width:599px){.ov-bar{grid-template-columns:1fr auto auto" in OV.CSS and "grid-column:1/-1" in OV.CSS
+
+
+def test_red_flag_rows_have_tradingview_link():
+    from signaltool import evidens as EV
+    snap = _snap(oslo_universe_flags=[{"ticker": "NYKD.OL", "flags": {"weak_px": "x", "high_vol": "y"}}], oslo_flags_meta={"asof": "2026-10-20"})
+    for h in (OV.two_col_html(snap), EV.red_page(snap), EV.red_top5(snap)):
+        assert "tradingview.com/chart/?symbol=OSL:NYKD" in h.replace("%3A", ":")

@@ -152,7 +152,7 @@ def two_col_html(snap: dict) -> str:
     left = (f'<div class="card"><h2>Kandidater</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
-    rl = "".join(f'<li><span><b>{E(r["ticker"])}</b> <span class="mut">{E(", ".join(EV.FLAG_SHORT[k] for k in EV.RED_FLAGS if k in r["flags"]))}</span></span>'
+    rl = "".join(f'<li><span><b>{E(r["ticker"])}</b>{EV._tv(r["ticker"])} <span class="mut">{E(", ".join(EV.FLAG_SHORT[k] for k in EV.RED_FLAGS if k in r["flags"]))}</span></span>'
                  f'<span class="mut">{E(EV.nlabel(r))}</span></li>' for r in rows[:5])
     right = (f'<div class="card"><h2>Røde flagg Oslo</h2><ul class="ov-list">{rl or "<li class=mut>Ingen.</li>"}</ul>'
              f'<p style="margin:6px 0 0"><a href="rode-flagg.html">Se alle ({len(rows)}) →</a> <span class="mut">data per {E(c["asof"] or "–")}</span></p></div>') if c["n"] else \

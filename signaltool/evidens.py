@@ -183,6 +183,11 @@ def _legend(keys, ebx: str = "") -> str:
     return f'<ul class="rfl rflegend" style="font-size:.85em;margin:0 0 8px">{li}</ul>' if li else ""
 
 
+def _tv(t: str) -> str:
+    from . import sectors as SEC
+    return SEC.tv_ext(t)
+
+
 def red_page(snap: dict) -> str:
     rows, c = red_rows(snap), coverage(snap)
     if not c["n"]:
@@ -191,7 +196,7 @@ def red_page(snap: dict) -> str:
     ebx = (f" Dekning: negativ EBIT er bare kjent for {c['ebit']} av {c['n']} aksjer (resten mangler regnskapstall fra Yahoo) – manglende ≠ positiv EBIT."
            if c["ebit"] < c["n"] else "")
     warn = "" if c["newsweb"] else '<p class="warnline">Newsweb var utilgjengelig: rettet emisjon er ikke beregnet i denne kjøringen.</p>'
-    card = lambda r: (f'<div class="rfc"><div class="top"><b><a href="https://finance.yahoo.com/quote/{E(r["ticker"])}">{E(r["ticker"])}</a></b>'
+    card = lambda r: (f'<div class="rfc"><div class="top"><b><a href="https://finance.yahoo.com/quote/{E(r["ticker"])}">{E(r["ticker"])}</a></b>{_tv(r["ticker"])}'
                       f'<span class="mut">{E(nlabel(r))}</span></div><div class="fb">'
                       + "".join(short_badge(k, ebx if k == "neg_ebit" else "") for k in RED_FLAGS if k in r["flags"])
                       + f'</div><details><summary>Vis mer</summary>{_flag_items(r, noi=True)}</details></div>')
@@ -210,7 +215,7 @@ def red_top5(snap: dict) -> str:
     if not c["n"]:
         return '<div class="card" id="rodeflagg"><h2 style="margin-top:0">Røde flagg Oslo</h2><p class="mut">Ikke beregnet i denne kjøringen.</p></div>'
     top = rows[:5]
-    li = lambda r: (f'<li><b>{E(r["ticker"])}</b> · {E(nlabel(r))} – {E(", ".join(FLAG_SHORT[k] for k in RED_FLAGS if k in r["flags"]))}</li>')
+    li = lambda r: (f'<li><b>{E(r["ticker"])}</b>{_tv(r["ticker"])} · {E(nlabel(r))} – {E(", ".join(FLAG_SHORT[k] for k in RED_FLAGS if k in r["flags"]))}</li>')
     m1, s1 = [r for r in top if ntest(r) >= 2], [r for r in top if ntest(r) < 2]
     lis = ((f'<li class="evrow">{badge("two_plus")}<b>2+ flagg</b></li>' + "".join(li(r) for r in m1)) if m1 else "") + \
           (('<li class="mut"><b>Under 2 testede flagg</b></li>' + "".join(li(r) for r in s1)) if s1 else "")
