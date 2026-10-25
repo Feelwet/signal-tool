@@ -29,3 +29,12 @@ def test_combined_chart_lines_clickable():
     assert "pointer-events:stroke;cursor:pointer" in src
     assert "if(h)pick(h.dataset.c,e.shiftKey)" in src and "pick(c,e.shiftKey)" in src
     assert "Vis alle" in src and "searchParams.set('land'" in src and ">Bare</button>" in src and "'.15'" in src
+
+
+def test_reselect_resets_all_and_mobile_chart_visible():
+    import pathlib
+    from signaltool import inflation as I
+    src = pathlib.Path(I.__file__).read_text()
+    assert "if(hi.has(c)||only===c){hi=new Set();only=null;render();return}" in src
+    assert "u.searchParams.delete('land')" in src
+    assert "{.infl-chart{display:none}}" not in src

@@ -356,7 +356,7 @@ def _spark(vals, w=120, h=32):
 
 
 CSS = """<style>
-.infl-chart{display:block}@media(max-width:699px){.infl-chart{display:none}}
+.infl-chart{display:block}
 .infl-leg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.infl-leg button{min-height:32px;padding:3px 10px;border:1px solid #778;border-radius:3px;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .infl-leg .chip{display:inline-flex;border:1px solid #30363d;border-radius:14px;margin:0 4px 4px 0;overflow:hidden}.infl-leg .chip button{background:none;border:0;color:inherit;padding:3px 8px;cursor:pointer}.infl-leg .chip .only{border-left:1px solid #30363d;font-size:.8em;color:#9ea9b5}.infl-leg .chip.on{background:#1f3a5f;border-color:#58a6ff}.infl-leg .chip.off .cb{color:#6e7681;text-decoration:line-through}.infl-all{margin:0 0 6px;background:#21262d;border:1px solid #30363d;color:inherit;border-radius:6px;padding:3px 10px;cursor:pointer}.infl-leg i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:6px}
 .infl-svg{width:100%;height:auto}.infl-svg .hit{pointer-events:stroke;cursor:pointer}.infl-svg .htip{fill:#e6edf3!important;font-size:12px!important;pointer-events:none;paint-order:stroke;stroke:#0d1117;stroke-width:3px}.infl-svg text,.cchart text{fill:#9ea9b5;font-size:11px}
@@ -365,7 +365,7 @@ CSS = """<style>
 .cchart{display:block;min-height:160px;margin:6px 0}.fcl{font-size:.8em}
 </style>"""
 JS = """<script>(()=>{const svg=document.querySelector('.infl-svg');if(!svg)return;const NS='http://www.w3.org/2000/svg';
-const ALL=[...document.querySelectorAll('.infl-leg .chip')].map(c=>c.dataset.c);let hi=new Set(),only=null;
+const ALL=[...document.querySelectorAll('.infl-leg .chip')].map(c=>c.dataset.c);let hi=new Set(),only=null,lt=0;
 const t=document.createElementNS(NS,'text');t.setAttribute('class','htip');svg.appendChild(t);
 const VW=svg.viewBox.baseVal.width;
 function tip(s,x,y){t.textContent=s||'';if(s){t.setAttribute('x',Math.min(x+8,VW-170));t.setAttribute('y',Math.max(y-8,12))}}
@@ -374,16 +374,16 @@ ALL.forEach(c=>{const ch=document.querySelector('.infl-leg .chip[data-c="'+c+'"]
 b.setAttribute('aria-pressed',hi.has(c));ch.classList.toggle('on',hi.has(c));ch.classList.toggle('off',!vis(c));
 svg.querySelectorAll('[data-c="'+c+'"]').forEach(e=>e.style.display=vis(c)?'':'none');
 const ln=svg.querySelector('.ln[data-c="'+c+'"]');if(ln){ln.setAttribute('stroke-width',hi.has(c)?'3':'2');ln.style.opacity=(hi.size&&!hi.has(c))?'.15':''}});
-svg.querySelectorAll('.lbl').forEach(e=>e.remove());
+svg.querySelectorAll('.hlbl').forEach(e=>e.remove());
 hi.forEach(c=>{const h=svg.querySelector('.hit[data-c="'+c+'"]');if(!h||!vis(c))return;const q=h.points,p=q[q.length-1];const x=document.createElementNS(NS,'text');
-x.setAttribute('class','htip lbl');x.setAttribute('x',Math.min(p.x+4,VW-170));x.setAttribute('y',Math.max(p.y-6,12));x.textContent=h.dataset.l;svg.appendChild(x)});
+x.setAttribute('class','htip hlbl');x.setAttribute('x',Math.min(p.x+4,VW-170));x.setAttribute('y',Math.max(p.y-6,12));x.textContent=h.dataset.l;svg.appendChild(x)});
 const u=new URL(location);hi.size?u.searchParams.set('land',[...hi].join(',')):u.searchParams.delete('land');only?u.searchParams.set('bare',only):u.searchParams.delete('bare');history.replaceState(null,'',u)}
-function pick(c,add){if(only&&only!==c)only=null;if(add){hi.has(c)?hi.delete(c):hi.add(c)}else{hi=(hi.size===1&&hi.has(c))?new Set():new Set([c])}render()}
+function pick(c,add){if(hi.has(c)||only===c){hi=new Set();only=null;render();return}if(only)only=null;if(add){hi.add(c)}else{hi=new Set([c])}render()}
 function bare(c){only=c;hi=new Set([c]);render()}
 document.querySelectorAll('.infl-leg .chip').forEach(ch=>{const c=ch.dataset.c,b=ch.querySelector('.cb');let lp=null,long=false;
-b.addEventListener('click',e=>{if(long){long=false;return}pick(c,e.shiftKey)});b.addEventListener('dblclick',()=>bare(c));
+b.addEventListener('click',e=>{if(long){long=false;return}pick(c,e.shiftKey)});b.addEventListener('dblclick',()=>{if(Date.now()-lt>1000)bare(c)});
 ch.querySelector('.only').addEventListener('click',()=>bare(c));
-b.addEventListener('touchstart',()=>{long=false;lp=setTimeout(()=>{long=true;bare(c)},550)},{passive:true});
+b.addEventListener('touchstart',()=>{lt=Date.now();long=false;lp=setTimeout(()=>{long=true;bare(c)},550)},{passive:true});
 ['touchend','touchmove','touchcancel'].forEach(ev=>b.addEventListener(ev,()=>clearTimeout(lp),{passive:true}))});
 document.querySelector('.infl-all').addEventListener('click',()=>{hi=new Set();only=null;render()});
 const P=e=>{const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())};
@@ -455,7 +455,7 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
     two = f'<line x1="{L}" x2="{W-8}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/><text x="{W-10}" y="{Y(2)-4:.1f}" text-anchor="end">2 % mål</text>'
     svg = (f'<svg class="infl-svg" viewBox="0 0 {W} {H}" role="img" aria-label="Inflasjon siste 5 år, årlig prosent, per land">{grid}{years}{two}{"".join(lines)}</svg>')
     return (f'{CSS}<div class="card" id="inflasjon"><h2 style="margin-top:0">Inflasjon siste 5 år (årlig %, faktiske tall)</h2>'
-            f'<div class="infl-chart"><button class="infl-all" type="button">Vis alle</button><div class="infl-leg" role="group" aria-label="Fremhev land">{"".join(leg)}</div><p class="src infl-hint">Klikk eller trykk på en linje eller et land for å fremheve det (Shift-klikk: flere). «Bare», dobbeltklikk eller langt trykk viser bare det landet. «Vis alle» nullstiller.</p>{svg}'
+            f'<div class="infl-chart"><button class="infl-all" type="button">Vis alle</button><div class="infl-leg" role="group" aria-label="Fremhev land">{"".join(leg)}</div><p class="src infl-hint">Klikk eller trykk på en linje eller et land for å fremheve det (Shift-klikk: flere). Trykk på det valgte landet igjen for å vise alle. «Bare», dobbeltklikk eller langt trykk viser bare det landet. «Vis alle» nullstiller.</p>{svg}'
             f'<p class="src">Felles graf: Eurostat HICP (prc_hicp_minr) for Norge, Sverige, Danmark, eurosonen og Tyskland – sammenlignbare. Kina: KPI (NBS), ikke HICP, hentet via OECD SDMX. '
             f'UK: ONS KPI (D7G7); Eurostat HICP for UK stopper nov. 2020 (seriebrudd). USA: KPI-U, ikke HICP (FRED CPIAUCSL, årlig endring). Ingen prognoser i denne grafen.</p></div>'
             f'<h3>Per land – målet sentralbanken bruker, med offisiell prognose der den finnes</h3>'
