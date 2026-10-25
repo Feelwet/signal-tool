@@ -89,7 +89,7 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
 
 MIN_DAYS = 0   # AnalBot 25.10: avkastning fra price_date fra første dag
 NOTE = ("Kursendring fra sluttkursen dagen før aksjen kom på lista, til siste sluttkurs. I lokal valuta, uten kostnader og utbytte. "
-        "Grått tall: mot hovedindeksen på børsen aksjen er notert på. Ikke en treffrate og ikke et kjøpsråd.")
+        "Grått tall: mot hovedindeksen på børsen aksjen er notert på. Ikke en treffrate og ikke et kjøpsråd – det er kategorien som avgjør.")
 
 
 def pct(x: float) -> str:
