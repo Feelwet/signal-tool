@@ -8,7 +8,7 @@ compute the features with data up to t; entry at close t+1, exit t+1+h. Excess =
 Per formation date we take the equal-weighted mean of each group minus the universe mean ("spread"); the time series of
 spreads gives mean and a HAC (Newey-West) t-value. Split: in-sample (older half) vs out-of-sample (newer half).
 Costs: a signal that selects stocks has to trade them: round trip 0.20 % (US) / 0.40 % (Oslo) is subtracted from the
-group-vs-benchmark return ("netto"). Multiple testing: ~30 tests -> Bonferroni |t| >= 3.1 required for "robust".
+group-vs-benchmark return ("netto"). Multiple testing: ~30 tests -> Bonferroni |t| >= 3.1 required for "bestått".
 Bias: US universe = TODAY's S&P 500 members (survivorship bias, flatters everything that 'survived'; affects all groups).
 """
 from __future__ import annotations
@@ -127,7 +127,7 @@ def run() -> str:
          f"_Kode: signaltool/backtest/price_rules.py. USA: dagens S&P 500 ({len(usd)} tickere m/ data, 2006–) – overlevelsesskjevhet. "
          f"Oslo: {len(osl)} tickere fra Newsweb med yfinance-data (2011–). Formasjon hver 21. handelsdag, kun likvide aksjer (≥ ~$1M/dag, kurs ≥ ~$1)._",
          "", "«Spread» = gruppens snitt minus snittet av alle aksjer samme dato (brutto). «Netto vs indeks» = gruppens meravkastning mot SPY/OSEBX "
-         "etter handelskostnad (0,2 % USA / 0,4 % Oslo tur-retur). t = HAC t-verdi. Robust krever |t| ≥ 3,1 (Bonferroni for ~30 tester) OG samme fortegn i begge perioder.", ""]
+         "etter handelskostnad (0,2 % USA / 0,4 % Oslo tur-retur). t = HAC t-verdi. Bestått krever |t| ≥ 3,1 (Bonferroni for ~30 tester) OG samme fortegn i begge perioder.", ""]
     for mk in ("US", "OSLO"):
         L += [f"### {'USA' if mk == 'US' else 'Oslo Børs'}", "| Gruppe | Horisont | Periode | Snitt antall aksjer | Spread vs alle (t) | Netto vs indeks (t) | Andel datoer spread > 0 |", "|---|---|---|---|---|---|---|"]
         for _, r in R[R["market"] == mk].iterrows():

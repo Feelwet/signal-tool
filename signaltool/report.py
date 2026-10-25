@@ -46,7 +46,7 @@ def render(snap: dict) -> str:
             a("\n**OFAC i helgen:** " + "; ".join(md_link(o["title"], o["url"]) for o in wk["ofac"]))
         a("")
     a("## 1. Topp fremvoksende temaer\n")
-    a("Score 0–5 = vektet snitt av positive avvik (robuste z-scorer) mot temaets egen historikk. Se metode nederst.\n")
+    a("Score 0–5 = vektet snitt av positive avvik (z-scorer (median/MAD)) mot temaets egen historikk. Se metode nederst.\n")
     a("| # | Tema | Score | Sterkeste drivere |")
     a("|---|---|---|---|")
     for i, t in enumerate(snap["themes"], 1):
@@ -181,7 +181,7 @@ def render(snap: dict) -> str:
     a("")
     bt = ROOT / "reports" / "backtest.md"
     a("## 12. Metode og validering\n")
-    a("- Robust z-score: (siste verdi − median i basisperioden) / (1,4826 × MAD). Basis: 60 dager for GDELT, 12 uker for 8-K, 3 mnd for Google Trends.")
+    a("- Z-score (median/MAD): (siste verdi − median i basisperioden) / (1,4826 × MAD). Basis: 60 dager for GDELT, 12 uker for 8-K, 3 mnd for Google Trends.")
     a("- Temascore = vektet snitt av positive, avkortede (maks 5) komponentscorer. Vekter: " +
       ", ".join(f"{k} {v}" for k, v in __import__('signaltool.pipeline', fromlist=['WEIGHTS']).WEIGHTS.items()) + ".")
     a("- Prediksjonsmarked-score = største 1-ukes sannsynlighetsendring i prosentpoeng / 5 blant markeder med ≥ $10k volum siste 24t.")

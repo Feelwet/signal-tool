@@ -1,6 +1,6 @@
 """Backtest: do GDELT attention spikes on a theme lead the related ETF/commodity?
 
-Spike = robust z of the theme's daily article share (2-day mean vs previous 60 days) >= 2.5,
+Spike = z (median/MAD) of the theme's daily article share (2-day mean vs previous 60 days) >= 2.5,
 10-trading-day cooldown. Entry = close of the first trading day AFTER the spike day (no look-ahead:
 the GDELT daily file for day D is published early on D+1). Compared with the unconditional
 distribution of same-horizon returns over the whole period (bootstrap p-value, 5000 draws)."""
@@ -42,7 +42,7 @@ def run(start=date(2022, 1, 1)) -> str:
     g = gdelt_events.load_theme_series(start, date.today())
     L = ["## GDELT-oppmerksomhetstopper vs. sektor-ETF/råvare – historisk test",
          f"Data: GDELT 1.0 daglige hendelsesfiler {g.index.min().date() if len(g) else '?'}–{g.index.max().date() if len(g) else '?'} ({len(g)} dager). "
-         "Topp = robust z ≥ 2,5 for temaets artikkelandel (2-dagers snitt vs 60 foregående dager), 10 handelsdagers karantene. "
+         "Topp = z (median/MAD) ≥ 2,5 for temaets artikkelandel (2-dagers snitt vs 60 foregående dager), 10 handelsdagers karantene. "
          "Inngang = sluttkurs første handelsdag etter toppdagen. Sammenlignet med alle dager (ubetinget) – p-verdi via bootstrap.", "",
          "| Tema → instrument | Topper | 5d etter topp | 20d etter topp | Ubetinget 5d / 20d | p (5d / 20d) | 5d FØR topp |",
          "|---|---|---|---|---|---|---|"]

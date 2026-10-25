@@ -12,7 +12,7 @@ LOG = Path(__file__).resolve().parent.parent / "logs" / "source_status.jsonl"
 # (label, href | None, [(href, label)])
 NAV = [
     ("Oversikt", "index.html", []),
-    ("Aksjer", None, [("tickere.html", "Tickere"), ("sektorer.html", "Sektorer"), ("oslo.html", "Oslo")]),
+    ("Aksjer", None, [("rode-flagg.html", "Røde flagg"), ("tickere.html", "Tickere"), ("sektorer.html", "Sektorer"), ("oslo.html", "Oslo")]),
     ("Marked", None, [("makro.html", "Makro"), ("kalender.html", "Kalender")]),
     ("Temaer", "temaer.html", []),
     ("Metode", "metode.html", []),
@@ -24,6 +24,8 @@ CSS = """
 .xbadge{display:inline-block;border:1px solid #8b949e;color:#c9d1d9;background:transparent;border-radius:2px;padding:0 6px;font-size:.72rem;font-weight:600;vertical-align:middle;margin-left:6px;white-space:nowrap}
 .pintro{color:var(--mut);margin:-4px 0 12px}
 .kpis.small{margin-bottom:14px}
+.kpis.k4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpis.k4 .kpi{min-width:0}
+@media(max-width:699px){.kpis.k4{grid-template-columns:repeat(2,1fr)}}
 .warnline{border-left:3px solid #d29922;padding:6px 10px;margin:0 0 12px;color:#e6edf3;background:rgba(210,153,34,.08);font-size:.9rem}
 .stale{color:#d29922;font-weight:600;font-size:.8em;margin-left:6px}
 .tsearch{margin:6px 0}.tsearch input{width:100%;min-height:36px;padding:6px 8px;border-radius:4px;border:1px solid #30363d;background:#0d1117;color:#e6edf3;font:inherit}
@@ -71,11 +73,11 @@ def search_html(tickers: list[str], pre: str, slug) -> str:
             f'const k=Object.keys(M).find(x=>x.toUpperCase()===v);if(k)location.href="{pre}ticker/"+M[k]+".html"}})}})()</script>' + HASH_JS)
 
 
-def head(title: str, sentence: str, kpis: list[tuple] | None = None) -> str:
+def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = False) -> str:
     """Felles sidetopp: tittel, én setning, nøkkeltall."""
     k = ""
     if kpis:
-        k = '<div class="kpis small">' + "".join(
+        k = f'<div class="kpis small{" k4" if k4 else ""}">' + "".join(
             f'<a class="kpi" href="{E(h or "#")}"><div class="lbl">{E(l)}</div><div class="val">{E(v)}</div><div class="sub">{E(s)}</div></a>'
             for v, l, s, h in kpis) + "</div>"
     return f'<h1>{E(title)}</h1><p class="pintro">{E(sentence)}</p>{k}'
@@ -140,3 +142,15 @@ def redirect(target: str, title: str) -> str:
     return (f'<!doctype html><html lang="no"><head><meta charset="utf-8"><title>{E(title)}</title>'
             f'<meta http-equiv="refresh" content="0; url={E(target)}"><link rel="canonical" href="{E(target)}"></head>'
             f'<body><p>Flyttet: <a href="{E(target)}">{E(title)}</a></p></body></html>')
+
+
+_NR = [(r"\brobuste? z(-score[r]?)?", r"z\1 (median/MAD)"), (r"\bRobust krever\b", "Bestått krever"), (r"\bikke robust\b", "ikke bestått testkravet"),
+       (r"\bIkke robust\b", "Ikke bestått testkravet"), (r"\brobuste\b", "pålitelige"), (r"\brobust\b", "pålitelig"), (r"\bRobust\b", "Pålitelig")]
+
+
+def no_robust(h: str) -> str:
+    """Rendered text never uses the word «robust» (embedded backtest reports included)."""
+    import re
+    for a, b in _NR:
+        h = re.sub(a, b, h)
+    return h

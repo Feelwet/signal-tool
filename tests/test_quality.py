@@ -186,13 +186,15 @@ def test_build_survives_broken_section_and_passes_check(tmp_path, monkeypatch):
                             "n_spikes": 1, "n_spikes_12m": 1, "n_stale": 1}
     monkeypatch.setattr(site, "SITE", tmp_path / "site")
     monkeypatch.setattr(Q, "SECTION_OK", tmp_path / "ok.json")
-    monkeypatch.setattr(X, "focus_html", lambda s: 1 / 0)          # a broken section must not break the build
+    from signaltool import evidens as EV
+    monkeypatch.setattr(EV, "focus_html", lambda s, link=None: 1 / 0)          # a broken section must not break the build
     site.build(snap)
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
     assert "ikke oppdatert" in idx and "Datakvalitet i dag" in (out / "metode.html").read_text()  # flyttet til Metode
     k = (out / "metode.html").read_text()
     assert 'id="datakvalitet"' in k and "A.OL 2026-01-02" in k and "B.OL (5 dager" in k and 'id="kontroll"' in k
+    assert not [p for p in out.rglob("*.html") if "robust" in p.read_text().lower()]
     assert sitecheck.check(out) == []
     (out / "metode.html").write_text("<html></html>")
     assert any("datakvalitet" in p for p in sitecheck.check(out))

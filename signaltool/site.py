@@ -12,6 +12,7 @@ from . import calendar_view as CV
 from . import inflation as INF
 from . import site_layout as L
 from . import site_quality as Q
+from . import evidens as EV
 
 SITE = ROOT / "site"
 E = lambda x: html.escape("" if x is None else str(x))
@@ -111,7 +112,7 @@ def num(x, d=2):
 
 CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Watchlist"}
 CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Watchlist er regelbaserte og mekaniske – ikke personlig '
-            'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har robust støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
+            'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
 TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th></tr>"
@@ -218,7 +219,7 @@ def categories_method_html():
     fl = "".join(f'<li><b>{E(v[0])}</b> ({ {"red": "rødt – blokkerer Kjøp", "yellow": "gult – halver størrelsen", "note": "tillegg", "info": "info-merke"}[v[1]] }; '
                  f'evidens: {E(v[2])}): {E(v[3])}</li>' for v in FLAG_INFO.values())
     return f"""<div class="card" id="kategorier"><h2 style="margin-top:0">Kategorier: Kjøp-kandidat, Hold, Watchlist</h2>
-<div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester fant ingen robust fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
+<div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester fant ingen pålitelig fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
 prediksjonsmarkeder, kursbekreftelsen i seg selv – eller for noe annet kjøpssignal. «Sterk kvartalsrapport» er med som <b>eksperimentell</b> signaltype (svak evidens).
 Det som faktisk har holdt i testene, er de <b>røde flaggene for Oslo Børs</b> – de hindrer Kjøp. Reglene er laget for å være strenge og etterprøvbare – ikke for å love avkastning.</div>
 <h3>{cat_badge("kjop")} Kjøp-kandidat – krever at ALT dette er oppfylt</h3><ol>
@@ -289,11 +290,12 @@ def fold(title: str, body: str, *, open_: bool = True, hid: str | None = None) -
 
 
 def page(title: str, body: str, depth=0, snap=None) -> str:
+    body = L.no_robust(body)
     pre = "../" * depth
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
-        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Sektorer": "sektorer.html",
+        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "rode-flagg.html", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html", "Metode": "metode.html",
     }
     cur = active.get(title)
@@ -410,7 +412,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + L.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + L.CSS + EV.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -428,8 +430,11 @@ def build(snap: dict) -> Path:
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [L.head(f'Oversikt {snap["date"]}', f'Hvilke geopolitiske temaer får uvanlig mye oppmerksomhet nå, og hvilke aksjer som bør undersøkes. GDELT-data t.o.m. {snap.get("gdelt_latest")}.'),
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
+         sec("Oppsummering", EV.summary_html, snap),
+         sec("Røde flagg Oslo", EV.red_top5, snap),
+         sec("Hva bør jeg se på i dag?", EV.focus_html, snap, X.link),
          sec("Dashboard", X.dashboard_html, snap).replace("<h2>Temascore ", "<h2>Temascore " + L.EXP() + L.stale_mark(rowsL, ["GDELT 1.0 daily events"]) + " ", 1)
-             .replace('<div class="dash-grid">', sec("Hva bør jeg se på i dag?", X.focus_html, snap) + '<div class="dash-grid">', 1),
+            ,
          sec("Nytt siden i går", X.changes_html, snap),
          '<div class="card" style="padding:8px 12px">' + L.watch_text(snap.get("track_record")) + '</div>',
          ('<h2>Neste 5 hendelser</h2><div class="card" style="padding-top:8px;padding-bottom:8px"><ul class="ev" style="margin:0">' + "".join(f'<li style="margin:2px 0;padding:2px 0">{E(e["date"])} {E(e.get("time") or "")} – <b>{E(e["source"])}</b>: {E(e["title"])}</li>' for e in nxt) + '</ul><a href="kalender.html">Hele kalenderen →</a></div>') if nxt else ""]
@@ -462,7 +467,7 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(L.head("Tickere", "Alle kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».", [(str(len(tickers)), "Tickere", "totalt", "#"), (str(sum(1 for e in tickers if e.get("category") == "kjop")), "Kjøp", "i dag", "#"), (str(sum(1 for e in tickers if e.get("category") == "watch")), "Watchlist", "i dag", "#treffsikkerhet")]) + '<div class="card tw"><table>' + TICKER_HEAD + ''
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(L.head("Tickere", "Alle kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».", [(str(len(tickers)), "Tickere", (f"{nun} uten kategori" if (nun := sum(1 for e in tickers if e.get("category") not in ("kjop", "hold", "watch"))) else "totalt"), "#"), (str(nkj := sum(1 for e in tickers if e.get("category") == "kjop")), "Kjøp", "i dag" if nkj else "ingen i dag, det er normalt", "#"), (str(sum(1 for e in tickers if e.get("category") == "hold")), "Hold", "i dag", "#"), (str(sum(1 for e in tickers if e.get("category") == "watch")), "Watchlist", "i dag", "#treffsikkerhet")], k4=True) + '<div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div>"
                                             + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
@@ -473,6 +478,7 @@ def build(snap: dict) -> Path:
 
     (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
+    (SITE / "rode-flagg.html").write_text(page("Røde flagg Oslo", sec("Røde flagg Oslo", EV.red_page, snap), 0, snap))
     (SITE / "oslo.html").write_text(page("Oslo Børs", fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
     ssnap = {**snap, "generated": _f.get("fetched") or _f.get("asof") or snap.get("generated")}
@@ -525,7 +531,7 @@ def theme_page(t, catmap=None, snap=None):
 
 def ticker_page(e, tmap):
     st = e.get("stats") or {}
-    pts = "".join(f'<tr><td>{E(POINT_NO.get(k, k))}</td><td>{v:.2f}</td></tr>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
+    pts = "".join(f'<tr><td>{EV.badge(k)}{E(POINT_NO.get(k, k))}</td><td>{v:.2f}</td></tr>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
@@ -617,7 +623,7 @@ def makro_page(snap):
     if oilh:
         oil_body += (f'<h3>Fysisk oljemarked (futures via Yahoo)</h3><table><tr><th>Mål</th><th>Siste</th><th>z (1 år)</th><th>Trend / kontrakter</th></tr>{oilh}</table>'
                      '<p class="mut">Pålitelighet: markedsdata – høy, men uoffisiell tilgang (yfinance).</p>')
-    stat = ('<p class="mut">«Overraskelse (z)» = hvor uvanlig siste endring er sammenlignet med de 24 foregående endringene (robust z-score). Ikke det samme som avvik fra analytikerforventning (konsensus er ikke fritt tilgjengelig).</p>'
+    stat = ('<p class="mut">«Overraskelse (z)» = hvor uvanlig siste endring er sammenlignet med de 24 foregående endringene (z-score (median/MAD)). Ikke det samme som avvik fra analytikerforventning (konsensus er ikke fritt tilgjengelig).</p>'
             f'<table><tr><th>Serie</th><th>Kilde</th><th>Periode</th><th>Siste</th><th>Endring</th><th>Overr. (z)</th><th>Trend</th><th>Pålitelighet</th></tr>{rows}</table>')
     nser = len(mac.get("series", []))
     imf_body = ('<table><tr><th>Land</th>' + imf_head + '</tr>' + imf_rows + '</table><p class="mut">Pålitelighet: offisiell prognose – anslag, ikke fasit.</p>') if imf else ""
@@ -636,7 +642,7 @@ def makro_page(snap):
     ]
     MOVED["tested"] = [
         ("🚢 Sundpassasjer", s_cp, strip_h2(X.chokepoints_html(snap)), "sund", ("mot tankrederier/Brent: ingen signifikante funn (alle p>0,1; 21–31 hendelser, 16 tester)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/chokepoint.md")),
-        ("🔌 Forsyningskjede-radar (Taiwan)", s_tw, strip_h2(X.taiwan_html(snap)), "taiwan", ("mot SMH/TSM/EWT: ingen robust sammenheng (|t|≤1,1 fra 2020, n≈79)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/taiwan.md")),
+        ("🔌 Forsyningskjede-radar (Taiwan)", s_tw, strip_h2(X.taiwan_html(snap)), "taiwan", ("mot SMH/TSM/EWT: ingen pålitelig sammenheng (|t|≤1,1 fra 2020, n≈79)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/taiwan.md")),
         ("🛢️ Oljelagre mot sesongnormal", s_oil, strip_h2(X.oil_nowcast_html(snap)), "olje", ("mot WTI/XLE: fortegnet skifter mellom periodene (t 3,1 før 2015, −1,5 fra 2015, n=608)", "https://github.com/Feelwet/signal-tool/blob/master/reports/natt/oil_stocks.md")),
     ]
     infl = mac.get("inflation") or {}
@@ -743,7 +749,7 @@ def kilder_page(snap):
 <div class="card"><h2 style="margin-top:0">Slik fungerer det</h2><ol>
 <li><b>Innsamling</b> fra gratis, offentlige kilder (ingen betalte tjenester, ingen API-nøkler).</li>
 <li><b>Temakart:</b> 10 geopolitiske temaer koblet til sektorer, råvarer og eksempel-tickere (USA og Oslo Børs), med skriftlig begrunnelse.</li>
-<li><b>Avviksdeteksjon:</b> for hvert tema og hver ticker sammenlignes siste periode med egen historikk (robust z-score = (siste − median) / (1,4826 × MAD)).</li>
+<li><b>Avviksdeteksjon:</b> for hvert tema og hver ticker sammenlignes siste periode med egen historikk (z-score (median/MAD) = (siste − median) / (1,4826 × MAD)).</li>
 <li><b>Temascore 0–5</b> = vektet snitt av positive, avkortede komponentscorer: GDELT-hendelser, nyhetsvolum, tone, RSS, Google-søk, SEC 8-K, prediksjonsmarkeder, kurs/volum, OFAC.</li>
 <li><b>Ticker-poeng</b> = sum av enkle, dokumenterte poeng (innsidekjøp-klynger, kongresskjøp, kontraktsmeldinger, uvanlig volum/kurs, tema-oppmerksomhet).</li>
 <li><b>Beslutningsgrunnlag per ticker</b> (Yahoo via yfinance): hva som allerede er priset inn (avkastning mot indeks og sektor-ETF, avstand til 52-ukers topp),

@@ -2,7 +2,7 @@
 ONS, SCB, DST, OECD, IMF, World Bank + release calendars (BLS/BEA ICS, ONS release API).
 
 Every series gets a reliability label and a 'surprise vs trend' score:
-    surprise_z = robust z of the latest period-on-period change vs the previous 24 changes.
+    surprise_z = z (median/MAD) of the latest period-on-period change vs the previous 24 changes.
 Only real downloaded values are used; failed sources are reported as failed.
 """
 from __future__ import annotations

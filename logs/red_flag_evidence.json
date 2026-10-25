@@ -1,0 +1,34 @@
+{
+ "svak_momentum_12_1": {
+  "evidens": "eksperimentell",
+  "n": 7.9,
+  "effekt_60d": -0.0326,
+  "t_is": -1.47,
+  "t_oos": -3.23,
+  "merknad": "Bunn 20 % 12-1 mnd. Netto vs OSEBX OOS -3,82 % (t -2,85). Samme fortegn, men IS |t|<3,1 -> ikke robust. Reprodusert fra price_rules."
+ },
+ "hoy_volatilitet": {
+  "evidens": "eksperimentell",
+  "n": 9.1,
+  "effekt_60d": -0.0236,
+  "t_is": -1.86,
+  "t_oos": -1.87,
+  "merknad": "Topp 20 % 60d realisert vol. Negativ i begge perioder (IS -2,65 %, OOS -2,36 % spread 60d), men |t|<1,9 begge -> ikke robust."
+ },
+ "rettet_emisjon_60d": {
+  "evidens": "eksperimentell",
+  "n": 2.6,
+  "effekt_60d": -0.0341,
+  "t_is": null,
+  "t_oos": -0.91,
+  "merknad": "Newsweb-titler (private placement/rettet emisjon) finnes bare fra 2019 -> ingen IS-periode, kun OOS 2019-04–2026-06. Ikke proxy brukt (ingen shares outstanding-historikk i repoet). Svak og ikke signifikant (t -0,91), ~2,6 aksjer per dato."
+ },
+ "negativ_ebit_ttm": {
+  "evidens": "ikke_testet",
+  "n": null,
+  "effekt_60d": null,
+  "t_is": null,
+  "t_oos": null,
+  "merknad": "Repoet har bare siste årlige EBIT per selskap (data/cache/fund_ol, ett øyeblikksbilde fra yfinance), ingen kvartalshistorikk eller rapportdatoer. Point-in-time test umulig uten look-ahead; ingen tall diktet."
+ }
+}

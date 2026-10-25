@@ -1,6 +1,6 @@
 """IMF PortWatch – daily vessel transit counts through maritime chokepoints (AIS-based, free ArcGIS open data, no key).
 https://portwatch.imf.org  (data lag ~ 4-8 days). We compute 7-day average transits (total and tankers) vs the
-previous 90 days (robust z) and vs the same period last year."""
+previous 90 days (z (median/MAD)) and vs the same period last year."""
 from __future__ import annotations
 import pandas as pd
 from .. import http

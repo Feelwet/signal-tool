@@ -152,7 +152,7 @@ def test_flags_html_shows_evidence_level():
     e = {"ticker": "ABC.OL", "cat_flag_keys": ["weak_px"], "cat_flags": ["svak kurs: x"], "cat_warnings": {"high_vol": "høy"}, "cat_info": {"buyback": "tilbakekjøp"},
          "oslo": {"buyback": {"date": "2026-09-20", "title": "Share buyback", "url": "u"}}}
     h = X.flags_html(e)
-    assert "evidens: sterk" in h and "Aktivt tilbakekjøp" in h and "−3,7 %" in h and "gult flagg" in h
+    assert "Eksperimentelt" in h and "Aktivt tilbakekjøp" in h and "−3,3 %" in h and "gult flagg" in h
 
 
 # ---------------------------------------------------------------- B: PEAD-S
@@ -224,7 +224,7 @@ def test_far_confirmation_level_is_hidden_hhh():
 # ---------------------------------------------------------------- site
 def test_site_sections():
     h = X.dropped_html()
-    assert "Testet og droppet" in h and "Minervini" in h and "Dual Momentum" in h and "ikke noe robust kjøpssignal" in h
+    assert "Testet og droppet" in h and "Minervini" in h and "Dual Momentum" in h and "ikke noe pålitelig kjøpssignal" in h
     assert "Ærlig status" in X.honesty_html() and "maks 5 %" in X.portfolio_rules_html().replace("Maks", "maks")
     tr = C.track_record(_log([{"date": "2026-09-28", "ticker": "AAA", "category": "watch", "price": 1.0, "types": "pead"}]), {})
     t = site.track_html({"track_record": tr})

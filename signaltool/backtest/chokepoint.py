@@ -1,6 +1,6 @@
 """Chokepoint transit drops (IMF PortWatch, 2019-) vs tanker equities / Brent.
 
-Event: 7-day average transits (tankers) at a chokepoint fall >= 2 robust-z below the previous 60 days, 20-day cooldown.
+Event: 7-day average transits (tankers) at a chokepoint fall >= 2 z (median/MAD) below the previous 60 days, 20-day cooldown.
 PortWatch is published with a lag of roughly a week, so ENTRY = close 7 calendar days after the event date (realistic).
 Forward 20/60 trading-day returns of FRO, DHT, STNG (tankers), BZ=F (Brent) vs SPY, compared with all days (bootstrap p).
 """
@@ -20,7 +20,7 @@ def run() -> str:
     d.index = pd.to_datetime(d.index).tz_localize(None)
     rng = np.random.default_rng(7)
     L = ["## Trafikkfall i sjøveis flaskehalser (IMF PortWatch) vs tankrederier og Brent",
-         "_Kode: signaltool/backtest/chokepoint.py. Hendelse = 7-dagers snitt av tankskip-passeringer ≥ 2 robuste z under foregående 60 dager "
+         "_Kode: signaltool/backtest/chokepoint.py. Hendelse = 7-dagers snitt av tankskip-passeringer ≥ 2 z (median/MAD) under foregående 60 dager "
          "(20 d karantene). Inngang 7 kalenderdager etter hendelsen (PortWatch publiseres med ca. en ukes forsinkelse). Meravkastning mot SPY. "
          "p = andel av 2000 tilfeldige like store utvalg av dager med minst like stort snitt._", "",
          "| Flaskehals | Hendelser | Instrument | 20 d etter (snitt) | Alle dager 20 d | p | 60 d etter | Alle dager 60 d |", "|---|---|---|---|---|---|---|---|"]

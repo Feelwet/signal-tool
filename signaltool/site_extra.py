@@ -3,6 +3,7 @@ theme scenarios, chokepoints, oil nowcast, Taiwan radar, policy alerts, classifi
 from __future__ import annotations
 import html, re
 from . import scenarios
+from . import evidens as EV
 
 E = lambda x: html.escape("" if x is None else str(x))
 
@@ -239,7 +240,7 @@ def chokepoints_html(snap: dict) -> str:
         rows += (f'<tr><td>{mark}<b>{E(v["name"])}</b></td><td>{num(a.get("last7"), 1)}</td><td>{pct(a.get("yoy"), 0)}</td><td>{pct(a.get("vs90"), 0)} <span class="mut">(z {num(a.get("z90"), 1)})</span></td>'
                  f'<td>{num(tk.get("last7"), 1)} ({pct(tk.get("yoy"), 0)})</td><td>{_spark(v.get("spark"))}</td><td class="mut">{E(v.get("last_date"))}</td></tr>')
     return (f'<div class="card tw" id="sund"><h2 style="margin-top:0">🚢 Sundpassasjer – skip per dag (IMF PortWatch)</h2>'
-            f'<p class="mut">7-dagers snitt av skipspasseringer (AIS-satellittdata), mot samme periode i fjor og mot siste ~90 dager (robust z). '
+            f'<p class="mut">7-dagers snitt av skipspasseringer (AIS-satellittdata), mot samme periode i fjor og mot siste ~90 dager (z (median/MAD)). '
             f'Fysisk bekreftelse på om en krise faktisk påvirker handelen. Forsinkelse ca. 1 uke. 🔔 = nytt fall (z ≤ −2 og minst 15 % under 90-dagers median); ⚠️ = vedvarende forstyrrelse (≥ 50 % under i fjor).</p>'
             f'<table><tr><th>Sund</th><th>Skip/dag</th><th>Mot i fjor</th><th>Mot 90 d</th><th>Tankskip/dag (å/å)</th><th>Trend (4 mnd)</th><th>Data t.o.m.</th></tr>{rows}</table>'
             '<p class="mut">Pålitelighet: høy (IMF/Oxford, satellitt-AIS), men modellbasert. Vår test fant <b>ingen</b> statistisk sikker sammenheng mellom fall i passeringer og '
@@ -265,7 +266,7 @@ def oil_nowcast_html(snap: dict) -> str:
     return (f'<div class="card tw" id="olje"><h2 style="margin-top:0">🛢️ Oljelagre mot sesongnormal (EIA, ukentlig)</h2>'
             '<p class="mut">Lagre i millioner fat mot snittet for samme uke de siste 5 årene. Under normalen = stramt fysisk marked.</p>'
             f'<table><tr><th>Serie</th><th>Siste</th><th>5-årssnitt</th><th>Avvik</th><th>5-års spenn</th><th>Endring uke</th><th>1 år</th><th>Uke t.o.m.</th></tr>{rows}</table>'
-            '<p class="mut">Pålitelighet: offisiell (EIA), revideres lite. Historisk test 2001–2026: avviket forutsa <b>ikke</b> Brent/WTI eller energiaksjer robust '
+            '<p class="mut">Pålitelighet: offisiell (EIA), revideres lite. Historisk test 2001–2026: avviket forutsa <b>ikke</b> Brent/WTI eller energiaksjer pålitelig '
             '(fortegn skiftet mellom perioder) – kontekst, ikke signal.</p></div>')
 
 
@@ -282,7 +283,7 @@ def taiwan_html(snap: dict) -> str:
             f'<table><tr><th>Indikator</th><th>Siste å/å</th><th>24 mnd</th></tr>{summ}</table>'
             f'<p class="mut">Akselerasjon siste 3 mnd vs 3 mnd før: {pct(tw.get("accel_3m"))}.</p>'
             f'<details><summary>Selskapene i kurven</summary><table><tr><th>Kode</th><th>Selskap</th><th>Omsetning (mrd. TWD)</th><th>å/å</th></tr>{firms}</table></details>'
-            '<p class="mut">Test 2013–2026: kurvens vekst/akselerasjon forutsa <b>ikke</b> SMH/TSM/EWT robust. Unntak å følge med på: akselerasjon i minneomsetning '
+            '<p class="mut">Test 2013–2026: kurvens vekst/akselerasjon forutsa <b>ikke</b> SMH/TSM/EWT pålitelig. Unntak å følge med på: akselerasjon i minneomsetning '
             '→ Micron neste måned (+11,7 pp topp- mot bunntredjedel, t=3,2 etter 2020, men svak før 2020 – ikke bekreftet).</p></div>')
 
 
@@ -324,7 +325,7 @@ def oslo_insider_html(snap: dict) -> str:
     return (f'<div class="card tw" id="innside"><h2 style="margin-top:0">Innsidehandler med retning (Newsweb, 21 dager)</h2>'
             f'<p class="mut">Retningen er lest automatisk fra meldingsteksten: kjøp / salg / tegning (emisjon) / annet (opsjoner, aksjeprogram, lån) / ukjent (bare vedlegg). '
             f'Stikkprøve: 20 av 20 kjøp/salg riktig klassifisert. I dag: {E(", ".join(f"{v} {k}" for k, v in cnt.items()))}.</p>'
-            f'<p class="mut">Test (6 418 meldinger 2021–2026, inngang dagen etter): verken innsidekjøp, store kjøp (≥ 1 mill. NOK) eller kjøpsklynger har gitt robust '
+            f'<p class="mut">Test (6 418 meldinger 2021–2026, inngang dagen etter): verken innsidekjøp, store kjøp (≥ 1 mill. NOK) eller kjøpsklynger har gitt pålitelig '
             f'meravkastning mot OSEBX etter kostnader. Derfor vises dette her, men gir <b>ikke</b> poeng i Kjøp-reglene. <a href="metode.html#natt">Se testen</a>.</p>'
             f'<table><tr><th>Dato</th><th>Selskap</th><th>Retning</th><th>Verdi NOK</th><th>Melding</th></tr>{tr}</table></div>')
 
@@ -477,14 +478,14 @@ def flags_html(e: dict) -> str:
         if not e["ticker"].endswith(".OL"):
             return ""
         return ('<div class="card" id="flagg"><h2 style="margin-top:0">Røde flagg og merker</h2><p>Ingen røde eller gule flagg i dag.</p>'
-                '<p class="mut">Oslo-flaggene (svak kurs, negativt driftsresultat, rettet emisjon, høy volatilitet) er det mest robuste sidens tester har funnet – '
+                '<p class="mut">Oslo-flaggene (svak kurs, negativt driftsresultat, rettet emisjon, høy volatilitet) er det sterkeste sidens tester har funnet, men ingen har bestått vårt eget testkrav – '
                 'de sier hva du bør unngå, ikke hva du bør kjøpe.</p></div>')
     kind_no = {"red": "rødt flagg – blokkerer Kjøp", "yellow": "gult flagg – halver størrelsen", "note": "tillegg", "info": "info-merke – ikke kjøpssignal"}
     lis = ""
     for icon, k, txt in rows:
         lab, kind, lvl, ev = _flag_info(k)
         lis += (f'<tr><td>{icon} <b>{E(lab)}</b><div class="mut">{E(kind_no.get(kind, kind))}</div></td><td>{E(txt)}</td>'
-                f'<td>{evidence_badge(lvl)}<div class="mut">{E(ev)}</div></td></tr>')
+                f'<td>{(EV.badge(k) if k in EV.RED_FLAGS else evidence_badge(lvl))}<div class="mut">{E(EV.evidens[k][1] if k in EV.RED_FLAGS else ev)}</div></td></tr>')
     src = ""
     if osl.get("placement"):
         src += f'<li>Emisjonsmelding: <a href="{E(osl["placement"].get("url"))}">{E(osl["placement"].get("title"))}</a> ({E(osl["placement"].get("date"))})</li>'
@@ -642,7 +643,7 @@ def regime_html(snap: dict) -> str:
 
 def honesty_html(pre: str = "", extra: str = "") -> str:
     return ('<div class="card hl" id="aerlig"><h2 style="margin-top:0">Ærlig status</h2>'
-            '<p><b>Vi har ikke funnet noe robust kjøpssignal.</b> Av over 200 testede regler og varianter (bøker, forum, egne ideer – USA og Oslo; tre testrunder) har ingen kjøpsregel '
+            '<p><b>Vi har ikke funnet noe pålitelig kjøpssignal.</b> Av over 200 testede regler og varianter (bøker, forum, egne ideer – USA og Oslo; tre testrunder) har ingen kjøpsregel '
             'klart kravet om |t| ≥ ~3 med samme fortegn både før og etter 2016/2018, og etter kurtasje. Det beste kjøpssignalet, «sterk kvartalsrapport» (PEAD), '
             'gir med punkt-i-tid-data bare ca. +0,6 pp brutto over 60 dager og omtrent null etter kostnader – det er merket <b>eksperimentelt / svak evidens</b>.</p>'
             '<p><b>Sidens styrke er å hjelpe deg å unngå svake aksjer:</b> på Oslo Børs har svak kurs (laveste 20 % momentum eller langt under 52-ukers topp) gjort det '
@@ -674,9 +675,9 @@ DROPPED = [
     ("Short-squeeze-screens", "Høy short-andel og «days to cover» predikerer lav avkastning; Oslo-test −1 til −4 % (t ≈ −1,8). Brukes bare som rødt flagg."),
     ("WSB/Reddit-DD og forumtips (Hegnar, Shareville)", "DD-innlegg forutsa avkastning bare før januar 2021 (Bradley m.fl. 2024); pump-and-dump er dokumentert på norske forum."),
     ("Lead-lag mot andre markeder (Brent, USD/NOK, S&P 500, XLE, OIH, kobber, laks, tørrbulk)", "Sterk i første periode (|t| 3,1–4,8), forsvant eller snudde etterpå."),
-    ("Oslo-PEAD (kursreaksjon ≥ +5 % på rapportdagen)", "−2,7 % (t −1,5) i 2013–18 og +2,1 % (t 1,5) i 2019–26; i likvide aksjer negativ (−4,1 %, t −3,9). Ikke robust – vises ikke."),
-    ("PEAD-filtre (omsetning, egen historikk, analytikerdekning, størrelse, fredag, røde flagg)", "Ingen robust forbedring av sterk-rapport-signalet; bare høy volatilitet peker samme vei (t 1,2–1,4), derfor PEAD-S som eksperiment."),
-    ("Innsidekjøp (USA-klynger og Oslo)", "USA: 44 % slo indeks, median −2,8 % over 60 d; Oslo 6 418 meldinger uten robust meravkastning. Vises, men gir ikke Kjøp."),
+    ("Oslo-PEAD (kursreaksjon ≥ +5 % på rapportdagen)", "−2,7 % (t −1,5) i 2013–18 og +2,1 % (t 1,5) i 2019–26; i likvide aksjer negativ (−4,1 %, t −3,9). Ikke bestått testkravet – vises ikke."),
+    ("PEAD-filtre (omsetning, egen historikk, analytikerdekning, størrelse, fredag, røde flagg)", "Ingen pålitelig forbedring av sterk-rapport-signalet; bare høy volatilitet peker samme vei (t 1,2–1,4), derfor PEAD-S som eksperiment."),
+    ("Innsidekjøp (USA-klynger og Oslo)", "USA: 44 % slo indeks, median −2,8 % over 60 d; Oslo 6 418 meldinger uten pålitelig meravkastning. Vises, men gir ikke Kjøp."),
     ("Nye kurs-/volumflagg (MAX, idiosynkratisk vol, Amihud, intradag)", "48–83 % overlapp med dagens flagg – dobbelttelling."),
     ("Åpningsgap / tidssone Oslo og utbyttefangst", "Gapet er mikrostruktur (forsvinner i likvide aksjer); utbyttefangst spises av skatt."),
     ("Småselskapspremie Oslo, Rule of 40, PEG, Seeking Alpha", "For dyrt å handle eller uten dokumentert fordel / ikke testbart gratis."),
@@ -686,7 +687,7 @@ DROPPED = [
 def dropped_html() -> str:
     lis = "".join(f"<li><b>{E(a)}:</b> {E(b)}</li>" for a, b in DROPPED)
     return ('<div class="card" id="droppet"><h2 style="margin-top:0">Testet og droppet</h2>'
-            '<p><b>Konklusjon: vi fant ikke noe robust kjøpssignal.</b> Sidens styrke er å unngå svake aksjer (røde flagg), ikke å finne vinnere. '
+            '<p><b>Konklusjon: vi fant ikke noe pålitelig kjøpssignal.</b> Sidens styrke er å unngå svake aksjer (røde flagg), ikke å finne vinnere. '
             'Listen under er strategier fra bøker, forum og egne ideer som er testet og <i>ikke</i> bygget inn – med én linje om hvorfor. '
             'Tall: meravkastning over 60 handelsdager, periode 1 / periode 2 (t-verdi), fra strategy-research/RAPPORT*.md.</p>'
             f'<ul class="ev">{lis}</ul>'
