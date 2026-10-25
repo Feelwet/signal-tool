@@ -220,7 +220,7 @@ def red_top5(snap: dict) -> str:
     lis = ((f'<li class="evrow">{badge("two_plus")}<b>2+ flagg</b></li>' + "".join(li(r) for r in m1)) if m1 else "") + \
           (('<li class="mut"><b>Under 2 testede flagg</b></li>' + "".join(li(r) for r in s1)) if s1 else "")
     return (f'<div class="card" id="rodeflagg"><h2 style="margin-top:0">{E(TITLE)}</h2><ul class="rfl">{lis}</ul>'
-            f'<p style="margin:6px 0 0"><a href="rode-flagg.html">Se alle ({len(rows)}) →</a> <span class="mut">data per {E(c["asof"])}</span></p></div>')
+            f'<p style="margin:6px 0 0"><a href="tickere.html?filter=flagg">Se alle ({len(rows)}) →</a> <span class="mut">data per {E(c["asof"])}</span></p></div>')
 
 
 def summary(snap: dict) -> list[str]:

@@ -26,7 +26,7 @@ def test_hit_line_uses_real_n_and_flags():
 
 def test_strip_has_four_tiles_and_stacked_bar():
     h = OV.strip_html(_snap())
-    assert h.count('class="ov-tile"') == 4 and "ov-stack" in h and "I morgen" in h and "NUE" in h
+    assert h.count('class="ov-tile') == 4 and 'href="tickere.html?filter=kjop"' in h and 'href="tickere.html?filter=folg"' in h and "ov-stack" in h and "I morgen" in h and "NUE" in h
     assert 'class="ov-dot up"></span>OSEBX' in h and 'class="ov-dot dn"></span>S&amp;P' in h
     assert "for lav (FLAG)" in h
 
@@ -73,3 +73,29 @@ def test_red_flag_rows_have_tradingview_link():
     snap = _snap(oslo_universe_flags=[{"ticker": "NYKD.OL", "flags": {"weak_px": "x", "high_vol": "y"}}], oslo_flags_meta={"asof": "2026-10-20"})
     for h in (OV.two_col_html(snap), EV.red_page(snap), EV.red_top5(snap)):
         assert "tradingview.com/chart/?symbol=OSL:NYKD" in h.replace("%3A", ":")
+
+
+def _fsnap():
+    uni = [{"ticker": "A.OL", "flags": {"weak_px": "x", "high_vol": "y"}}, {"ticker": "Z.OL", "flags": {"placement": "z"}},
+           {"ticker": "E.OL", "flags": {"neg_ebit": "e"}}, {"ticker": "N.OL", "flags": {}}]
+    return _snap(oslo_universe_flags=uni, oslo_flags_meta={"asof": "2026-10-20"})
+
+
+def test_tickerlist_filter_row_and_flag_groups():
+    from signaltool import tickerlist as TL
+    s = _fsnap()
+    fr = TL.filter_row(s)
+    assert [x in fr for x in ("Alle", "Kjøp", "Hold", "Følg", "Røde flagg (3)")] == [True] * 5 and fr.count("<button") == 5
+    fb = TL.flag_block(s)
+    assert "Bare Oslo-aksjer er sjekket for røde flagg" in fb and "Z.OL" in fb and "E.OL" in fb  # alle flaggede, også utenfor tickerlisten
+    assert fb.index("2+ flagg") < fb.index("1 flagg") < fb.index("Bare negativ EBIT")
+    assert "Eksperimentelt" in fb or "⚗" in fb
+    assert "OSL:A" in fb.replace("%3A", ":")
+    assert TL.chip(None) == "" and "⚑ 2 flagg" in TL.chip(TL.flag_map(s)["A.OL"])
+    assert 'data-f="kjop" hidden>Ingen tickere i Kjøp nå.' in TL.empties()
+
+
+def test_tickere_page_redirect_and_menu(tmp_path, monkeypatch):
+    from signaltool import site, site_layout as L
+    assert "rode-flagg.html" not in str(L.NAV) if hasattr(L, "NAV") else True
+    assert "rode-flagg.html" not in L.nav_html("Tickere", "")

@@ -15,6 +15,7 @@ from . import site_layout as L
 from . import site_quality as Q
 from . import evidens as EV
 from . import overview as OV
+from . import tickerlist as TL
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -298,7 +299,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
-        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "rode-flagg.html", "Sektorer": "sektorer.html",
+        "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html", "Metode": "metode.html",
     }
     cur = active.get(title)
@@ -395,7 +396,7 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
-    return (f'<tr><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a>{SEC.tv_ext(e["ticker"])}<br><span class="mut">{E(e.get("name") or "")}</span></td>'
+    return (f'<tr data-cat="{E(e.get("category") or "")}"><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a>{SEC.tv_ext(e["ticker"])}{TL.chip(e.get("_flag"))}<br><span class="mut">{E(e.get("name") or "")}</span></td>'
             f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}</tr>')
 
 
@@ -412,9 +413,11 @@ def _prep(snap: dict) -> dict:
         t["polymarket"] = sorted(t.get("polymarket", []), key=lambda m: (-abs(m.get("chg_1w") or 0), -(m.get("volume_24h") or 0)))
     snap["insider_clusters"] = [r for r in snap.get("insider_clusters", []) if str(r.get("ticker") or "").upper() not in ("", "NONE", "N/A", "NA")]
     from . import regime
+    fm = TL.flag_map(snap)
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
     for e in snap.get("tickers", []):
         e["_analyst"] = recs.get(e["ticker"])
+        e["_flag"] = fm.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
     return snap
 
@@ -425,7 +428,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -479,18 +482,19 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(L.head("Tickere", "Alle kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».", [(str(len(tickers)), "Tickere", (f"{nun} uten kategori" if (nun := sum(1 for e in tickers if e.get("category") not in ("kjop", "hold", "watch"))) else "totalt"), "#"), (str(nkj := sum(1 for e in tickers if e.get("category") == "kjop")), "Kjøp", "i dag" if nkj else "ingen i dag, det er normalt", "#"), (str(sum(1 for e in tickers if e.get("category") == "hold")), "Hold", "i dag", "#"), (str(sum(1 for e in tickers if e.get("category") == "watch")), "Watchlist", "i dag", "#treffsikkerhet")], k4=True) + '<div class="card tw"><table>' + TICKER_HEAD + ''
-                                            + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div>"
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
+                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
+                                            + "".join(ticker_row(e) for e in tickers) + "</table>" + CAT_NOTE.format(pre="") + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
-                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 20, "Vis flere"), 0, snap))
+                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS, 0, snap))
     tmap = {t["key"]: t for t in themes}
     for e in tickers:
         (SITE / "ticker" / f"{slug(e['ticker'])}.html").write_text(page(e["ticker"], sec(e["ticker"], ticker_page, e, tmap), 1, snap))
 
     (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
-    (SITE / "rode-flagg.html").write_text(page("Røde flagg Oslo", sec("Røde flagg Oslo", EV.red_page, snap), 0, snap))
+    (SITE / "rode-flagg.html").write_text(L.redirect("tickere.html?filter=flagg", "Røde flagg Oslo"))
     (SITE / "oslo.html").write_text(page("Oslo Børs", fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
     ssnap = {**snap, "generated": _f.get("fetched") or _f.get("asof") or snap.get("generated")}
