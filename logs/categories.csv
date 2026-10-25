@@ -1692,7 +1692,7 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags
 2026-10-25,NHY.OL,watch,67.4,2026-10-23,OSEBX.OL,1.86,0,,weak_px
 2026-10-25,YAR.OL,watch,402.9,2026-10-23,OSEBX.OL,1.8,0,,
 2026-10-25,RTX,watch,191.01,2026-10-23,SPY,1.75,0,,
-2026-10-25,DNB.OL,watch,313.3,2026-10-23,OSEBX.OL,1.68,0,,
+2026-10-25,DNB.OL,watch,313.3,2026-10-23,OSEBX.OL,1.74,0,,
 2026-10-25,CVX,watch,233.21,2026-10-23,SPY,1.61,1,theme_market,
 2026-10-25,VAR.OL,watch,58.94,2026-10-23,OSEBX.OL,1.61,1,theme_market,
 2026-10-25,HAFNI.OL,watch,98.0,2026-10-23,OSEBX.OL,1.61,1,theme_market,
