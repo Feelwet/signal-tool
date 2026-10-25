@@ -139,13 +139,13 @@ def mobile(s: dict | None, r: dict | None = None) -> str:
     return f'<span class="since-m">siden {_dm(s["since"])}{"<span class=ret-m>" + ret_inner(r) + "</span>" if r else ""}</span>' 
 
 
-CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}.since-m{display:none}
+CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
 td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri:hover .tip,.ri:focus .tip,.ri[aria-expanded=true] .tip{display:block}
 .retnote{font-size:12px}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
-#tf-table th.ret-h,#tf-table td.ret-c{display:none}#tf-table .ret-m{display:block;font-size:12px}#tf-table .ret-m .rex{display:inline;margin-left:4px;font-size:12px}}
+th.ret-h,td.ret-c{display:none}#tf-table .ret-m{display:block;font-size:12px}#tf-table .ret-m .rex{display:inline;margin-left:4px;font-size:12px}}
 """
 
 JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
