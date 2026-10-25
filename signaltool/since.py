@@ -101,8 +101,14 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
 
 
 MIN_DAYS = 0   # AnalBot 25.10: avkastning fra price_date fra første dag
-NOTE = ("Kursendring fra sluttkursen dagen før aksjen kom på lista, til siste sluttkurs. I lokal valuta, uten kostnader og utbytte. "
-        "Grått tall: mot hovedindeksen på børsen aksjen er notert på. Ikke en treffrate og ikke et kjøpsråd – det er kategorien som avgjør.")
+NOTE_T = ("Avkastningen er regnet fra sluttkursen dagen aksjen kom på lista (inn {dm}) til siste sluttkurs, og sammenlignet med indeksen "
+          "på samme børs. Var aksjen ute av lista en stund, starter tellingen på nytt. Tallet viser hva som har skjedd, ikke hva som vil skje, "
+          "og er ikke et kjøpsråd.")
+NOTE = NOTE_T.replace(" (inn {dm})", "")   # felles (i) i kolonneoverskriften: ingen enkeltdato
+
+
+def note_for(s: dict | None) -> str:
+    return NOTE_T.format(dm=_dm(s["price_date"])) if s and s.get("price_date") else NOTE
 
 
 def pct(x: float) -> str:
@@ -161,7 +167,8 @@ def ret_inner(r: dict | None) -> str:
 
 def ret_cell(r: dict | None) -> str:
     v = f"{r['r']:.6f}" if r else ""
-    return f'<td class="ret-c" data-v="{v}">{ret_inner(r)}</td>'
+    t = f' title="{E(r["note"])}"' if r and r.get("note") else ""
+    return f'<td class="ret-c" data-v="{v}"{t}>{ret_inner(r)}</td>'
 
 
 def cell(s: dict | None) -> str:

@@ -8,7 +8,8 @@ Hver natt:
   logs/dq_flags.jsonl  datakvalitetsflagg: jump40 (> 40 % endring på én dag, siste 5 dager), factor (Yahoo har justert
                        historikken bakover med en konstant faktor mot loggførte kurser), stale (kurs mangler ≥ 2 handelsdager
                        mot indeksen), log_gap (tickeren manglet i 1 kjøring midt i en periode).
-Ingen regel for likt score ved kuttet på 60 her (AnalBot spesifiserer den)."""
+Likt score ved kuttet på 60 (AnalBot 25.10): 1) ticker som allerede er på lista blir, 2) flere uavhengige signaltyper først,
+3) tickernavn alfabetisk. Utfall med samme score som plass 60 logges som «lik score, kutt 60»."""
 from __future__ import annotations
 
 import csv, json, logging
@@ -35,6 +36,22 @@ def _closes(tickers, period="1y"):
         s = d[t].dropna()
         out[str(t)] = {str(k.date()): float(v) for k, v in s.items()}
     return out
+
+
+def n_types(e: dict) -> int:
+    """Antall uavhengige signaltyper = signaltyper med poeng > 0."""
+    return sum(1 for v in (e.get("points") or {}).values() if (v or 0) > 0)
+
+
+def prev_list(today: str = "") -> set:
+    rows = _log_rows()
+    runs = sorted({r["date"] for r in rows if not today or r["date"] < today})
+    return {r["ticker"] for r in rows if runs and r["date"] == runs[-1] and r.get("category") != "tema"}
+
+
+def rank_candidates(cands: list[dict], prev: set) -> list[dict]:
+    """Score synkende; ved likt score: på lista fra før, flere signaltyper, alfabetisk."""
+    return sorted(cands, key=lambda e: (-(e.get("score") or 0), e["ticker"] not in prev, -n_types(e), e["ticker"]))
 
 
 def _ret(ser: dict, n: int):
@@ -138,13 +155,16 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
         if t in pos and not pos[t][2]:
             why = "data"
         elif t in pos and pos[t][1] > 0:
-            why = "cut60"
+            why = "lik score, kutt 60" if len(ranked) >= 60 and pos[t][1] == (ranked[59].get("score") or 0) else "cut60"
         else:
             why = "score0"
         exits.append({"date": today, "ticker": t, "prev_run": prev, "reason": why,
                       "rank": pos[t][0] if t in pos else "", "score": pos[t][1] if t in pos else ""})
-    if EXITS.exists() and any(l.startswith(today + ",") for l in EXITS.read_text().splitlines()):
-        exits = []
+    if EXITS.exists():   # ny kjøring samme dato erstatter dagens utfall (siste kutt gjelder)
+        keep = [l for l in EXITS.read_text().splitlines() if not l.startswith(today + ",")]
+        EXITS.write_text("\n".join(keep) + "\n" if keep else "")
+        if len(keep) <= 1:
+            EXITS.unlink()
     _append_csv(EXITS, ["date", "ticker", "prev_run", "reason", "rank", "score"], exits)
     # 3) datakvalitet
     flags = []

@@ -413,7 +413,8 @@ def run(fast: bool = False) -> dict:
             e["points"]["theme_attention"] = round(0.75 * theme_score.get(best, 0), 2)
         e["score"] = round(sum(e["points"].values()), 2)
         e["why"], e["risks"] = explain(e)
-    ranked = sorted(cand.values(), key=lambda x: x["score"], reverse=True)
+    from .learnloop import rank_candidates, prev_list
+    ranked = rank_candidates(list(cand.values()), prev_list(str(snap.get("date") or "")))
     snap["tickers"] = [e for e in ranked if e["score"] > 0][:60]
     # decision data (priced-in / risk / invalidation / PEAD) + new free collectors, before categories use them
     from . import extras

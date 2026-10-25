@@ -482,6 +482,9 @@ def _prep(snap: dict) -> dict:
     for e in snap.get("tickers", []):
         e["_risk"] = rk.get(e["ticker"])
     _factor_fix(snap)
+    for e in snap.get("tickers", []):
+        if e.get("_ret"):
+            e["_ret"]["note"] = SN.note_for(e.get("_since"))
     return snap
 
 
