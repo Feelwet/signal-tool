@@ -72,7 +72,7 @@ def compute(e: dict) -> dict:
 CSS = """.nk{display:grid;grid-template-columns:repeat(4,1fr);column-gap:24px}
 .nk .r{display:flex;flex-direction:column;justify-content:center;height:52px;border-bottom:1px solid #30363d;min-width:0}
 .nk .l{color:var(--mut);font-size:12px}.nk .v{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap}
-.nkh{display:flex;align-items:baseline;justify-content:space-between;gap:6px}.nksrc{font-size:11px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.nkh{display:flex;align-items:baseline;justify-content:space-between;gap:6px}.nksrc{font-size:11px;text-align:right;white-space:nowrap;flex-shrink:0}
 .spk{display:inline-flex;align-items:center;gap:2px;margin-left:6px;vertical-align:middle}.spk svg{display:block}.spk .ri{font-size:11px}.nkmore{display:none}#nokkeltall h2{font-size:1em;margin:0 0 2px}
 @media(max-width:599px){#nokkeltall{padding:6px 10px;margin:0 0 12px}#nokkeltall h2{margin:0;font-size:14px;line-height:20px}
 .nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r{height:36px;gap:2px}.nk .l{font-size:11px;line-height:12px}.nk .v{font-size:15px;line-height:18px}
@@ -91,8 +91,9 @@ def html(n: dict) -> str:
     per = (len(fs) + 1) // 2
     more = (f'<button type="button" class="nkmore" onclick="this.closest(\'.card\').classList.add(\'nkall\');this.remove()">Vis alle ({len(fs)})</button>'
             if len(fs) > MOBILE_SHOW else "")
-    upd = f" · oppdatert {_dm(n['date'])}" if n.get("date") else ""
-    return (f'<div class="card nofold" id="nokkeltall"><div class="nkh"><h2>Nøkkeltall</h2><span class="mut nksrc">Kilde: Yahoo Finance · siste 12 mnd.{upd}</span></div><div class="nk">{rows}</div>{more}'
+    upd = f" · {_dm(n['date'])}" if n.get("date") else ""
+    full = f"Kilde: Yahoo Finance · siste 12 mnd. (trailing){' · oppdatert ' + _dm(n['date']) if n.get('date') else ''}"
+    return (f'<div class="card nofold" id="nokkeltall"><div class="nkh"><h2>Nøkkeltall</h2><span class="mut nksrc">Yahoo{upd} <span class="ri" tabindex="0" aria-expanded="false" aria-label="{E(full)}">ⓘ<span class="tip">{E(full)}</span></span></span></div><div class="nk">{rows}</div>{more}'
             '<script>document.querySelectorAll("#nokkeltall .ri").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();b.setAttribute("aria-expanded",b.getAttribute("aria-expanded")==="true"?"false":"true")}))</script></div>')
 
 

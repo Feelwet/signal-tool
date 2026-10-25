@@ -110,9 +110,10 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None) -> str:
         return ""
     if not any(b for b in btns if 'aria-pressed="true"' in b):
         btns[-1] = btns[-1].replace('aria-pressed="false"', 'aria-pressed="true"'); panes[-1] = panes[-1].replace(" hidden", "")
-    u = f" · oppdatert {upd[8:10]}.{upd[5:7]}" if upd else ""
+    u = f" · {upd[8:10]}.{upd[5:7]}" if upd else ""
+    full = f"Kilde: Yahoo Finance, daglige sluttkurser{' · oppdatert ' + upd[8:10] + '.' + upd[5:7] if upd else ''}"
     return (f'<div class="card pc nofold" id="kursgraf"><div class="pch"><h2 class="pct">Kurs</h2><div class="pcbs" role="group" aria-label="Periode">{"".join(btns)}</div></div>{"".join(panes)}'
-            f'<p class="mut pcs">Kilde: Yahoo Finance{u}</p>'
+            f'<p class="mut pcs">Yahoo{u} <span class="ri" tabindex="0" aria-expanded="false" aria-label="{full}">ⓘ<span class="tip">{full}</span></span></p>'
             '<script>(()=>{const c=document.getElementById("kursgraf");c.querySelectorAll(".pcb").forEach(b=>b.addEventListener("click",()=>{'
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
             'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p)}))})()</script></div>')
@@ -122,7 +123,7 @@ CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margi
 .pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#58a6ff;box-shadow:0 0 0 1.5px #0d1117}
 .pcin{position:absolute;top:14px;margin-left:4px;font-size:11px;color:#58a6ff;white-space:nowrap}.pcin.r{transform:translateX(-100%);margin-left:-4px}
 .pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
-.pcs{font-size:12px;margin:4px 0 0}.pct{display:none}
+.pcs{font-size:11px;margin:4px 0 0;text-align:right}.pct{display:none}
 @media(max-width:599px){.card.pc{padding:3px 10px;margin:0 0 12px}
 .pch{display:flex;align-items:center;justify-content:space-between;height:28px;margin-bottom:2px}.pct{display:block;font-size:14px;margin:0}
 .pcbs{margin:0;gap:4px}.pcb{height:28px;min-width:40px;padding:0 8px;font-size:13px}.pcp svg{height:150px}.pcs{font-size:11px;margin:4px 0 0;line-height:1.2}}"""
