@@ -7,6 +7,18 @@ from . import scenarios
 E = lambda x: html.escape("" if x is None else str(x))
 
 
+
+def source_state(v) -> str:
+    """'ok' | 'fail' | 'skip' for én statusverdi (strenger som «ok (…)», «FAILED: …», «not automated …»)."""
+    if isinstance(v, dict):
+        return "ok" if v.get("ok") else "fail"
+    t = str(v).strip().lower()
+    if t.startswith(("not automated", "not used", "need ", "skipped", "disabled")):
+        return "skip"
+    if t.startswith(("fail", "partial", "error")) or "failed" in t.split(";")[0][:40]:
+        return "fail"
+    return "ok" if t.startswith(("ok", "true", "1")) or " ok" in t[:20] else "fail"
+
 def slug(t: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "_", t)
 
@@ -500,11 +512,9 @@ def dashboard_html(snap: dict) -> str:
     reg = snap.get("regime") or {}
     risk_off = any(v.get("risk_off") for v in reg.values())
     st = snap.get("status") or {}
-    ok = sum(1 for v in st.values() if str(v).lower() in ("ok", "true", "1") or (isinstance(v, dict) and v.get("ok")))
-    # status values may be strings like "ok" / "fail" or longer messages
-    if not ok and st:
-        ok = sum(1 for v in st.values() if "ok" in str(v).lower() and "fail" not in str(v).lower() and "error" not in str(v).lower())
-    nsrc = len(st) or 1
+    cls = [source_state(v) for v in st.values()]
+    ok = cls.count("ok")
+    nsrc = (ok + cls.count("fail")) or 1   # ikke-automatiserte/ubrukte kilder telles ikke
     nw = len(snap.get("newsweb_contracts") or [])
     focus_n = len(((snap.get("briefing") or {}).get("focus")) or [])
 

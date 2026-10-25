@@ -97,3 +97,14 @@ def test_fold_tables():
     rows = "".join(f"<tr><td>{i}</td></tr>" for i in range(20))
     h = site.fold_tables("<table><tr><th>h</th></tr>" + rows + "</table>")
     assert h.count('class="xscroll"') == 2 and "Vis alle (20 rader)" in h and "<details" in h
+
+
+def test_source_state_and_log(tmp_path):
+    import json
+    from signaltool import site_extra as X, pipeline as P
+    st = {"a": "ok (5)", "b": "FAILED: 403 Client Error", "c": "not automated (x)", "d": "fx ok; press rss ok (5)", "e": "partial: 403"}
+    assert [X.source_state(v) for v in st.values()] == ["ok", "fail", "skip", "ok", "fail"]
+    p = tmp_path / "s.jsonl"
+    P.append_source_status(st, p)
+    rows = [json.loads(l) for l in p.read_text().splitlines()]
+    assert len(rows) == 5 and rows[1]["code"] == "403" and rows[0]["state"] == "ok"

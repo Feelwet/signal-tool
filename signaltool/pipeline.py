@@ -479,6 +479,10 @@ def run(fast: bool = False) -> dict:
         status["Datakvalitet (kurs)"] = f"FAILED: {_err(ex)}"
     snap["source_last_ok"] = mark_stale(status, snap["date"])
     snap["status"] = status
+    try:
+        append_source_status(status)
+    except Exception as ex:
+        log.warning("source status log failed: %s", ex)
     snap["runtime_s"] = round(time.time() - t0)
     (SNAP_DIR / f"{snap['date']}.json").write_text(json.dumps(snap, indent=1, default=str))
     (SNAP_DIR / "latest.json").write_text(json.dumps(snap, indent=1, default=str))
@@ -551,3 +555,20 @@ def explain(e: dict) -> tuple[str, str]:
     for k in e["themes"][:1]:
         risks += f" {THEME_BY_KEY[k].deescalation} {THEME_BY_KEY[k].risks}"
     return why.strip(), risks.strip()
+
+
+def append_source_status(status: dict, path=None) -> int:
+    """Legger til én linje per kilde i logs/source_status.jsonl (tid, kilde, ok/fail/skip, feilkode)."""
+    import json as _json, re as _re
+    from pathlib import Path as _P
+    from .site_extra import source_state
+    path = _P(path) if path else _P(__file__).resolve().parent.parent / "logs" / "source_status.jsonl"
+    path.parent.mkdir(exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%dT%H:%M")
+    with path.open("a", encoding="utf-8") as f:
+        for k, v in status.items():
+            st = source_state(v)
+            m = _re.search(r"\b([45]\d\d)\b", str(v)) if st == "fail" else None
+            f.write(_json.dumps({"ts": ts, "source": k, "state": st, "code": m.group(1) if m else None,
+                                 "msg": str(v)[:160] if st != "ok" else None}, ensure_ascii=False) + "\n")
+    return len(status)
