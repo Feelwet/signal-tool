@@ -91,3 +91,17 @@ def test_theme_score_log(tmp_path):
     append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-24", p); append_theme_scores(th, "2026-10-25", p)
     lines = p.read_text().splitlines()
     assert len(lines) == 3 and lines[0].split(",")[3] == "mean_close_candidates" and lines[1].startswith("2026-10-24,a,1.5,10.0,1,SPY,10")
+
+
+@pytest.mark.skipif(not SNAP.exists(), reason="no snapshot available")
+def test_every_page_has_css_version(tmp_path, monkeypatch):
+    snap = json.loads(SNAP.read_text())
+    monkeypatch.setattr(site, "SITE", tmp_path / "site")
+    site.build(snap)
+    v = site.CSS_V[0]
+    assert re.fullmatch(r"[0-9a-f]{10}", v)
+    pages = [p for p in (tmp_path / "site").rglob("*.html") if "http-equiv=\"refresh\"" not in p.read_text()]
+    assert len(pages) > 20
+    for p in pages:
+        h = p.read_text()
+        assert f'style.css?v={v}"' in h and 'style.css"' not in h, p.name
