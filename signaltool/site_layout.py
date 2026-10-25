@@ -33,7 +33,7 @@ CSS = """
 @media(max-width:699px){.card.tw{overflow-x:auto;max-width:100%}main :not(.xscroll)>table{display:block;overflow-x:auto;max-width:100%}.content,main{min-width:0;max-width:100vw}}
 .ilink::after{content:"";position:absolute;inset:-14px}
 .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;margin-left:4px;border:1px solid #9ea9b5;border-radius:50%;background:transparent;color:#9ea9b5;font:600 11px/1 system-ui;cursor:pointer;position:relative;vertical-align:middle}
-.info::after{content:"";position:absolute;inset:-14px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:var(--acc,#6cb6ff);border-color:var(--acc,#6cb6ff)}
+.info::after{content:"";position:absolute;inset:-15px}.info:focus-visible,.info[aria-expanded=true]{color:#0d1117;background:var(--acc,#6cb6ff);border-color:var(--acc,#6cb6ff)}
 .tip{position:fixed;z-index:1000;box-sizing:border-box;width:max-content;max-width:min(280px,calc(100vw - 16px));padding:12px;background:#1c2330;color:#e6edf3;border:1px solid var(--acc,#6cb6ff);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.5);font-size:14px;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere;text-align:left;text-transform:none;letter-spacing:normal}
 .tip[hidden]{display:none}.tip b{display:block;margin-bottom:4px;font-weight:700}
 """

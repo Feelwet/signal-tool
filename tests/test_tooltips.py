@@ -49,3 +49,11 @@ def test_built_pages_every_tip_nonempty():
             n += 1
     if pages:
         assert n > 0
+
+
+def test_info_tap_area_44():
+    c = L.CSS
+    box = re.search(r"\.info\{[^}]*\}", c).group(0)
+    size = int(re.search(r"width:(\d+)px", box).group(1)); border = int(re.search(r"border:(\d+)px", box).group(1))
+    inset = int(re.search(r"\.info::after\{[^}]*inset:-(\d+)px", c).group(1))
+    assert size - 2 * border + 2 * inset >= 44 and "position:relative" in box
