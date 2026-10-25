@@ -1,0 +1,11 @@
+date,theme,score,proxy_ticker,proxy_close,mean_close_winners,n_winners
+2026-10-25,elections_political,2.477,SPY,759.97,163.3821,8
+2026-10-25,mideast_energy,1.777,XLE,69.33,155.6683,12
+2026-10-25,food_agri,1.729,CF,120.68,282.0267,6
+2026-10-25,conflict_defense,0.981,LMT,604.18,557.6264,11
+2026-10-25,sanctions_energy,0.795,LNG,298.67,167.9263,10
+2026-10-25,risk_off_haven,0.577,GLD,366.61,593.748,8
+2026-10-25,tariffs_trade,0.404,NUE,258.11,424.5161,11
+2026-10-25,rare_earths_semis,0.179,MP,38.3,376.8413,8
+2026-10-25,nordic_arctic,0.168,FTI,69.89,303.649,7
+2026-10-25,shipping_chokepoints,0.159,ZIM,29.35,2379.434,10
