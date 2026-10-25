@@ -1,187 +1,305 @@
 dato_publisert,kilde,ticker,selskap,anbefaling,kursmal,valuta,kurs_ved_anbefaling,lenke,type,verifisert
-2026-01-05,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,550.0,NOK,517.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-volvo-cars,enkeltanbefaling,usikker
-2026-01-05,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,kjop,37.0,SEK,32.75,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-volvo-cars,enkeltanbefaling,usikker
-2026-01-06,DNB Carnegie (DNB Nyheter),KID.OL,Kid,hold,140.0,NOK,132.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs-og-kid,enkeltanbefaling,usikker
-2026-01-06,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,selg,70.0,NOK,87.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs-og-kid,enkeltanbefaling,usikker
-2026-01-07,DNB Carnegie (DNB Nyheter),IVSO.ST,Invisio,kjop,370.0,SEK,274.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-inviso,enkeltanbefaling,usikker
-2026-01-07,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,20.0,NOK,17.44,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-inviso,enkeltanbefaling,usikker
-2026-01-08,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,kjop,300.0,NOK,233.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-,enkeltanbefaling,usikker
-2026-01-12,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,hold,245.0,NOK,262.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,usikker
-2026-01-12,DNB Carnegie (DNB Nyheter),DNO.OL,DNO,kjop,17.5,NOK,15.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,usikker
-2026-01-12,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,255.0,NOK,231.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,usikker
-2026-01-12,DNB Carnegie (DNB Nyheter),VAR.OL,Vår Energi,hold,31.0,NOK,32.69,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,usikker
-2026-01-14,DNB Carnegie (DNB Nyheter),BO.CO,Bang & Olufsen,hold,13.0,DKK,12.38,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bang---olufsen,enkeltanbefaling,usikker
-2026-01-15,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,280.0,NOK,275.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,usikker
-2026-01-15,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF,kjop,130.0,NOK,106.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,usikker
-2026-01-15,DNB Carnegie (DNB Nyheter),PLSV.OL,Paratus,kjop,60.0,NOK,45.48,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,usikker
-2026-01-15,DNB Carnegie (DNB Nyheter),SUBC.OL,Subsea 7,kjop,230.0,NOK,221.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,usikker
-2026-01-16,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,hold,99.0,NOK,98.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-autoliners-og-tf-bank,enkeltanbefaling,usikker
-2026-01-19,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,105.0,SEK,87.52,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson,enkeltanbefaling,usikker
-2026-01-20,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,16.0,NOK,12.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tf-bank-og-autostore,enkeltanbefaling,usikker
-2026-01-21,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,255.0,NOK,220.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,usikker
-2026-01-22,DNB Carnegie (DNB Nyheter),AKSO.OL,Aker Solutions,hold,35.0,NOK,33.16,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-aker-solutions-og-volvo-cars,enkeltanbefaling,usikker
-2026-01-22,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,kjop,37.0,SEK,31.02,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-aker-solutions-og-volvo-cars,enkeltanbefaling,usikker
-2026-01-23,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,90.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-europris,enkeltanbefaling,usikker
-2026-01-23,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,105.0,SEK,85.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-europris,enkeltanbefaling,usikker
-2026-01-26,DNB Carnegie (DNB Nyheter),NOKIA.HE,Nokia,kjop,6.7,EUR,5.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nokia--ericsson-og-scatec,enkeltanbefaling,usikker
-2026-01-27,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,272.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--gjensidige-og-protetor,enkeltanbefaling,usikker
-2026-01-30,DNB Carnegie (DNB Nyheter),ACAD.ST,AcadeMedia,kjop,115.0,SEK,93.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sparebanken-norge-og-academedia,enkeltanbefaling,usikker
-2026-01-30,DNB Carnegie (DNB Nyheter),SBNOR.OL,Sparebanken Norge,hold,195.0,NOK,185.82,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sparebanken-norge-og-academedia,enkeltanbefaling,usikker
-2026-02-02,DNB Carnegie (DNB Nyheter),ARCH.OL,Archer,kjop,35.0,NOK,25.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-archer-og-boliden,enkeltanbefaling,usikker
-2026-02-02,DNB Carnegie (DNB Nyheter),BOL.ST,Boliden,hold,567.0,SEK,626.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-archer-og-boliden,enkeltanbefaling,usikker
-2026-02-05,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,200.0,NOK,131.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-semiconductor,enkeltanbefaling,usikker
-2026-02-05,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,selg,100.0,NOK,117.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-orkla-og-verisure,enkeltanbefaling,usikker
-2026-02-06,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg Gruppen,hold,300.0,NOK,321.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-kongsberg-gruppen,enkeltanbefaling,usikker
-2026-02-06,DNB Carnegie (DNB Nyheter),TEL.OL,Telenor,kjop,190.0,NOK,161.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-kongsberg-gruppen,enkeltanbefaling,usikker
-2026-02-09,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,480.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-sats,enkeltanbefaling,usikker
-2026-02-09,DNB Carnegie (DNB Nyheter),SATS.OL,Sats,kjop,46.0,NOK,39.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-sats,enkeltanbefaling,usikker
-2026-02-10,DNB Carnegie (DNB Nyheter),ELO.OL,Elopak,hold,50.0,NOK,50.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-elopak,enkeltanbefaling,usikker
-2026-02-10,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,593.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-elopak,enkeltanbefaling,usikker
-2026-02-13,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,19.0,NOK,17.06,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-hydro--norwegian-og-tomra,enkeltanbefaling,usikker
-2026-02-13,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,55.0,NOK,134.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-hydro--norwegian-og-tomra,enkeltanbefaling,usikker
-2026-02-17,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,26.86,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem-og-hacksaw,enkeltanbefaling,usikker
-2026-02-18,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,hold,440.0,NOK,292.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scandiv--okeanis-og-frontline,enkeltanbefaling,usikker
-2026-02-18,DNB Carnegie (DNB Nyheter),SHOT.ST,Scandic,kjop,115.0,SEK,92.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scandiv--okeanis-og-frontline,enkeltanbefaling,usikker
-2026-02-19,DNB Carnegie (DNB Nyheter),ALK-B.CO,ALK-Abelló,kjop,243.0,DKK,218.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group-og-alk-abello,enkeltanbefaling,usikker
-2026-02-19,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF Group,kjop,130.0,NOK,119.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group-og-alk-abello,enkeltanbefaling,usikker
-2026-02-20,DNB Carnegie (DNB Nyheter),AUSS.OL,Austevoll,kjop,60.0,NOK,94.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-sjomat,enkeltanbefaling,usikker
-2026-02-24,DNB Carnegie (DNB Nyheter),BONHR.OL,Bonheur,kjop,280.0,NOK,274.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bonheur-og-odfjell-drilling,enkeltanbefaling,usikker
-2026-02-24,DNB Carnegie (DNB Nyheter),ODL.OL,Odfjell Drilling,kjop,110.0,NOK,105.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bonheur-og-odfjell-drilling,enkeltanbefaling,usikker
-2026-02-26,DNB Carnegie (DNB Nyheter),NEL.OL,Nel,selg,1.2,NOK,2.02,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nel-og-subsea-7,enkeltanbefaling,usikker
-2026-02-26,DNB Carnegie (DNB Nyheter),SUBC.OL,Subsea 7,kjop,280.0,NOK,263.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nel-og-subsea-7,enkeltanbefaling,usikker
-2026-03-02,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy Seafood,kjop,60.0,NOK,49.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-leroy-seafood,enkeltanbefaling,usikker
-2026-03-03,DNB Carnegie (DNB Nyheter),BWLPG.OL,BW LPG,hold,147.0,NOK,174.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-teknologi-og-bw-lpg,enkeltanbefaling,usikker
-2026-03-04,DNB Carnegie (DNB Nyheter),8TRA.ST,Traton,kjop,380.0,SEK,354.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-traton,enkeltanbefaling,usikker
-2026-03-04,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,20.0,NOK,15.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-traton,enkeltanbefaling,usikker
-2026-03-05,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,57.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-elekta,enkeltanbefaling,usikker
-2026-03-05,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,hold,355.0,NOK,351.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-elekta,enkeltanbefaling,usikker
-2026-03-06,DNB Carnegie (DNB Nyheter),ATEA.OL,Atea,kjop,170.0,NOK,143.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,usikker
-2026-03-06,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,90.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,usikker
-2026-03-06,DNB Carnegie (DNB Nyheter),TOKMAN.HE,Tokmanni,hold,8.3,EUR,8.23,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,usikker
-2026-03-10,DNB Carnegie (DNB Nyheter),PEXIP.OL,Pexip,kjop,70.0,NOK,61.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-pexip,enkeltanbefaling,usikker
-2026-03-11,DNB Carnegie (DNB Nyheter),ASMDEE-B.ST,Asmodee,kjop,155.0,SEK,102.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,usikker
-2026-03-11,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,400.0,SEK,358.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,usikker
-2026-03-11,DNB Carnegie (DNB Nyheter),RUSTA.ST,Rusta,hold,80.0,SEK,77.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,usikker
-2026-03-12,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,hold,21.0,NOK,22.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-truecaller,enkeltanbefaling,usikker
-2026-03-13,DNB Carnegie (DNB Nyheter),ENVIP.OL,Envipco,kjop,80.0,NOK,51.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-autostore-og-envipco,enkeltanbefaling,usikker
-2026-03-16,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,950.0,SEK,596.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vend-og-evoution,enkeltanbefaling,usikker
-2026-03-16,DNB Carnegie (DNB Nyheter),VEND.OL,Vend,kjop,310.0,NOK,258.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vend-og-evoution,enkeltanbefaling,usikker
-2026-03-18,DNB Carnegie (DNB Nyheter),BOL.ST,Boliden,hold,622.0,SEK,622.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar-og-boliden,enkeltanbefaling,usikker
-2026-03-18,DNB Carnegie (DNB Nyheter),SKIS-B.ST,Skistar,kjop,215.0,SEK,170.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar-og-boliden,enkeltanbefaling,usikker
-2026-03-19,DNB Carnegie (DNB Nyheter),COOR.ST,Coor,kjop,68.0,SEK,60.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-coor,enkeltanbefaling,usikker
-2026-03-20,DNB Carnegie (DNB Nyheter),VAIAS.HE,Vaisala,kjop,57.0,EUR,45.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala,enkeltanbefaling,usikker
-2026-03-23,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,56.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz-og-cadeler,enkeltanbefaling,usikker
-2026-03-23,DNB Carnegie (DNB Nyheter),HM-B.ST,Hennes & Mauritz,selg,167.0,SEK,168.85,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz-og-cadeler,enkeltanbefaling,usikker
-2026-03-24,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,102.0,NOK,197.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-norbit,enkeltanbefaling,usikker
-2026-03-25,DNB Carnegie (DNB Nyheter),ATEA.OL,Atea,kjop,170.0,NOK,136.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala--smartoptics-og-atea,enkeltanbefaling,usikker
-2026-03-26,DNB Carnegie (DNB Nyheter),MULTI.OL,Multiconsult,hold,170.0,NOK,158.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-multiconsult,enkeltanbefaling,usikker
-2026-03-26,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,17.0,NOK,14.13,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-multiconsult,enkeltanbefaling,usikker
-2026-03-27,DNB Carnegie (DNB Nyheter),SBO.OL,Selvaag Bolig,kjop,41.0,NOK,33.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-selvaag-bolig-og-volvo-cars,enkeltanbefaling,usikker
-2026-03-27,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,hold,25.0,SEK,21.17,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-selvaag-bolig-og-volvo-cars,enkeltanbefaling,usikker
-2026-04-07,DNB Carnegie (DNB Nyheter),SAVE.ST,Nordnet,kjop,370.0,SEK,306.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordnet-og-avanza,enkeltanbefaling,usikker
-2026-04-09,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,17.0,NOK,15.31,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-stolt-nielsen-,enkeltanbefaling,usikker
-2026-04-09,DNB Carnegie (DNB Nyheter),SNI.OL,Stolt-Nielsen,hold,360.0,NOK,336.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-stolt-nielsen-,enkeltanbefaling,usikker
-2026-04-10,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,15.0,NOK,9.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-autostore,enkeltanbefaling,usikker
-2026-04-11,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,hold,125.0,NOK,123.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kid-og-tgs,enkeltanbefaling,usikker
-2026-04-14,DNB Carnegie (DNB Nyheter),AVARDA.ST,Avarda,kjop,212.0,SEK,183.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-avarda,enkeltanbefaling,usikker
-2026-04-15,DNB Carnegie (DNB Nyheter),TRYG.CO,Tryg,kjop,190.0,DKK,155.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tryg--dustin-group-og-atea,enkeltanbefaling,usikker
-2026-04-16,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,121.0,SEK,108.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-nokia,enkeltanbefaling,usikker
-2026-04-16,DNB Carnegie (DNB Nyheter),NOKIA.HE,Nokia,hold,7.5,EUR,8.53,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-nokia,enkeltanbefaling,usikker
-2026-04-21,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,950.0,SEK,636.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-evolution-og-paratus-energy,enkeltanbefaling,usikker
-2026-04-21,DNB Carnegie (DNB Nyheter),PLSV.OL,Paratus Energy,kjop,65.0,NOK,49.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-evolution-og-paratus-energy,enkeltanbefaling,usikker
-2026-04-22,DNB Carnegie (DNB Nyheter),SHOT.ST,Scandic Hotels,kjop,110.0,SEK,95.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-var-energi-og-scandic-hotels,enkeltanbefaling,usikker
-2026-04-22,DNB Carnegie (DNB Nyheter),VAR.OL,Vår Energi,selg,32.0,NOK,43.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-var-energi-og-scandic-hotels,enkeltanbefaling,usikker
-2026-04-23,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,94.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-protector-og-europris,enkeltanbefaling,usikker
-2026-04-23,DNB Carnegie (DNB Nyheter),PROT.OL,Protector,kjop,600.0,NOK,487.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-protector-og-europris,enkeltanbefaling,usikker
-2026-04-24,DNB Carnegie (DNB Nyheter),KIT.OL,Kitron,hold,103.0,NOK,96.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-tomra,enkeltanbefaling,usikker
-2026-04-24,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,110.0,NOK,120.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-tomra,enkeltanbefaling,usikker
-2026-04-29,DNB Carnegie (DNB Nyheter),BRG.OL,Borregaard,kjop,220.0,NOK,166.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gjensidige-og-borregaard,enkeltanbefaling,usikker
-2026-04-29,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,254.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gjensidige-og-borregaard,enkeltanbefaling,usikker
-2026-04-30,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,27.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem--aker-biomarine--komplett,enkeltanbefaling,usikker
-2026-05-04,DNB Carnegie (DNB Nyheter),PEXIP.OL,Pexip,kjop,45.0,NOK,67.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-pexip,enkeltanbefaling,usikker
-2026-05-05,DNB Carnegie (DNB Nyheter),ACAST.ST,Acast,kjop,35.0,SEK,32.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-acast-og-vestas,enkeltanbefaling,usikker
-2026-05-05,DNB Carnegie (DNB Nyheter),VWS.CO,Vestas,kjop,220.0,DKK,194.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-acast-og-vestas,enkeltanbefaling,usikker
-2026-05-06,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg-aksjer,hold,400.0,NOK,312.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg-aksjer-og-novo-nordisk,enkeltanbefaling,usikker
-2026-05-06,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,420.0,DKK,285.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg-aksjer-og-novo-nordisk,enkeltanbefaling,usikker
-2026-05-07,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,370.0,NOK,339.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp-og-smartoptics,enkeltanbefaling,usikker
-2026-05-07,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,60.0,NOK,56.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp-og-smartoptics,enkeltanbefaling,usikker
-2026-05-08,DNB Carnegie (DNB Nyheter),WAWI.OL,Wallenius,selg,108.0,NOK,111.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-og-wallenius-,enkeltanbefaling,usikker
-2026-05-11,DNB Carnegie (DNB Nyheter),ACAD.ST,AcadeMedia,kjop,120.0,SEK,94.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-academedia,enkeltanbefaling,usikker
-2026-05-12,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,hold,22.0,NOK,25.72,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-leroy-og-link-mobility,enkeltanbefaling,usikker
-2026-05-12,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy,kjop,60.0,NOK,43.38,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-leroy-og-link-mobility,enkeltanbefaling,usikker
-2026-05-13,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,194.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-mowi,enkeltanbefaling,usikker
-2026-05-13,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,259.0,NOK,222.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-mowi,enkeltanbefaling,usikker
-2026-05-15,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,237.0,NOK,203.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hemnet-og-norbit,enkeltanbefaling,usikker
-2026-05-18,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,197.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-general-oceans-og-mowi,enkeltanbefaling,usikker
-2026-05-19,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,449.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-nibe,enkeltanbefaling,usikker
-2026-05-19,DNB Carnegie (DNB Nyheter),NIBE-B.ST,Nibe,hold,43.0,SEK,43.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-nibe,enkeltanbefaling,usikker
-2026-05-20,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,62.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-salmar-og-cadeler,enkeltanbefaling,usikker
-2026-05-20,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,585.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-salmar-og-cadeler,enkeltanbefaling,usikker
-2026-05-26,DNB Carnegie (DNB Nyheter),HAFNI.OL,Hafnia,hold,79.0,NOK,79.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-odfjell-og-hafnia,enkeltanbefaling,usikker
-2026-05-26,DNB Carnegie (DNB Nyheter),ODF.OL,Odfjell,hold,120.0,NOK,109.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-odfjell-og-hafnia,enkeltanbefaling,usikker
-2026-05-28,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,61.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elekta,enkeltanbefaling,usikker
-2026-06-01,DNB Carnegie (DNB Nyheter),BWLPG.OL,BW LPG,hold,199.0,NOK,182.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bw-lpg,enkeltanbefaling,usikker
-2026-06-02,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,460.0,SEK,425.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson,enkeltanbefaling,usikker
-2026-06-03,DNB Carnegie (DNB Nyheter),HIAB.HE,Hiab,kjop,70.0,EUR,61.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hiab,enkeltanbefaling,usikker
-2026-06-03,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,19.0,NOK,16.53,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hiab,enkeltanbefaling,usikker
-2026-06-04,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,selg,115.0,NOK,147.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs,enkeltanbefaling,usikker
-2026-06-05,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,34.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem,enkeltanbefaling,usikker
-2026-06-08,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,235.0,NOK,193.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordic-semiconductor,enkeltanbefaling,usikker
-2026-06-09,DNB Carnegie (DNB Nyheter),OMDA.OL,Omda,kjop,50.0,NOK,35.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omda,enkeltanbefaling,usikker
-2026-06-10,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg  Gruppen,hold,340.0,NOK,313.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg--gruppen,enkeltanbefaling,usikker
-2026-06-11,DNB Carnegie (DNB Nyheter),PUUILO.HE,Puuilo,kjop,14.5,EUR,13.94,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-puuilo,enkeltanbefaling,usikker
-2026-06-16,DNB Carnegie (DNB Nyheter),EQNR.OL,Equinor,hold,350.0,NOK,325.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-securitas,enkeltanbefaling,usikker
-2026-06-16,DNB Carnegie (DNB Nyheter),SECU-B.ST,Securitas,kjop,185.0,SEK,154.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-securitas,enkeltanbefaling,usikker
-2026-06-17,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,51.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elekta0,enkeltanbefaling,usikker
-2026-06-18,DNB Carnegie (DNB Nyheter),SKIS-B.ST,Skistar,kjop,196.0,SEK,145.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar,enkeltanbefaling,usikker
-2026-06-19,DNB Carnegie (DNB Nyheter),ENDUR.OL,Endúr,kjop,135.0,NOK,111.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-endur,enkeltanbefaling,usikker
-2026-06-19,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,194.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-endur,enkeltanbefaling,usikker
-2026-06-22,DNB Carnegie (DNB Nyheter),HM-B.ST,Hennes & Mauritz,selg,145.0,SEK,170.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-hennes-mauritz,enkeltanbefaling,usikker
-2026-06-29,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,370.0,NOK,303.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp,enkeltanbefaling,usikker
-2026-06-30,DNB Carnegie (DNB Nyheter),KEMIRA.HE,Kemira,kjop,22.0,EUR,16.48,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ap-moller-maersk--kemira--selvaag,enkeltanbefaling,usikker
-2026-06-30,DNB Carnegie (DNB Nyheter),SBO.OL,Selvaag,kjop,41.0,NOK,32.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ap-moller-maersk--kemira--selvaag,enkeltanbefaling,usikker
-2026-07-01,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,402.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-bonheur,enkeltanbefaling,usikker
-2026-07-01,DNB Carnegie (DNB Nyheter),BONHR.OL,Bonheur,kjop,290.0,NOK,230.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-bonheur,enkeltanbefaling,usikker
-2026-07-02,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,selg,106.0,NOK,140.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-autoliners,enkeltanbefaling,usikker
-2026-08-04,DNB Carnegie (DNB Nyheter),ASMDEE-B.ST,Asmodee,kjop,162.0,SEK,147.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-noho-partners-og-asmodee,enkeltanbefaling,usikker
-2026-08-04,DNB Carnegie (DNB Nyheter),NOHO.HE,NoHo Partners,kjop,8.6,EUR,7.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-noho-partners-og-asmodee,enkeltanbefaling,usikker
-2026-08-05,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,430.0,DKK,307.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-novo-nordisk,enkeltanbefaling,usikker
-2026-08-06,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,235.0,NOK,163.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordic-semiconductor-og-hexagon-,enkeltanbefaling,usikker
-2026-08-12,DNB Carnegie (DNB Nyheter),ENVIP.OL,Envipco,kjop,70.0,NOK,44.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-envipco-og-borr-drilling,enkeltanbefaling,usikker
-2026-08-13,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,15.0,NOK,13.89,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-autostore,enkeltanbefaling,usikker
-2026-08-13,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,198.0,NOK,183.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-autostore,enkeltanbefaling,usikker
-2026-08-14,DNB Carnegie (DNB Nyheter),SATS.OL,Sats,hold,43.0,NOK,40.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sats-og-veidekke,enkeltanbefaling,usikker
-2026-08-14,DNB Carnegie (DNB Nyheter),VEI.OL,Veidekke,selg,165.0,NOK,188.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sats-og-veidekke,enkeltanbefaling,usikker
-2026-08-17,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,202.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-odfjell-drilling,enkeltanbefaling,usikker
-2026-08-17,DNB Carnegie (DNB Nyheter),ODL.OL,Odfjell Drilling,kjop,115.0,NOK,92.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-odfjell-drilling,enkeltanbefaling,usikker
-2026-08-18,DNB Carnegie (DNB Nyheter),ELO.OL,Elopak,kjop,45.0,NOK,36.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-multiconsult,enkeltanbefaling,usikker
-2026-08-18,DNB Carnegie (DNB Nyheter),MULTI.OL,Multiconsult,hold,165.0,NOK,151.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-multiconsult,enkeltanbefaling,usikker
-2026-08-19,DNB Carnegie (DNB Nyheter),CAMBI.OL,Cambi,kjop,31.0,NOK,22.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-cambi,enkeltanbefaling,usikker
-2026-08-20,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,kjop,135.0,NOK,192.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-endur--hoeegh-autoliners-og-orkla,enkeltanbefaling,usikker
-2026-08-20,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,selg,95.0,NOK,103.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-endur--hoeegh-autoliners-og-orkla,enkeltanbefaling,usikker
-2026-08-21,DNB Carnegie (DNB Nyheter),NIBE-B.ST,Nibe,hold,40.0,SEK,38.59,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scatec-og-nibe,enkeltanbefaling,usikker
-2026-08-21,DNB Carnegie (DNB Nyheter),SCATC.OL,Scatec,kjop,120.0,NOK,96.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scatec-og-nibe,enkeltanbefaling,usikker
-2026-08-24,DNB Carnegie (DNB Nyheter),KCC.OL,Klaveness,kjop,125.0,NOK,104.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-klaveness-,enkeltanbefaling,usikker
-2026-08-24,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,526.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-klaveness-,enkeltanbefaling,usikker
-2026-08-25,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,56.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-napatech-og-cadeler,enkeltanbefaling,usikker
-2026-08-25,DNB Carnegie (DNB Nyheter),NAPA.OL,Napatech,kjop,65.0,NOK,41.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-napatech-og-cadeler,enkeltanbefaling,usikker
-2026-08-26,DNB Carnegie (DNB Nyheter),MPCC.OL,MPC,selg,15.8,NOK,28.05,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mpc-og-nykode-,enkeltanbefaling,usikker
-2026-08-26,DNB Carnegie (DNB Nyheter),NYKD.OL,Nykode,kjop,5.5,NOK,4.64,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mpc-og-nykode-,enkeltanbefaling,usikker
-2026-08-31,DNB Carnegie (DNB Nyheter),ACAD.ST,Academedia,kjop,120.0,SEK,98.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-academedia,enkeltanbefaling,usikker
-2026-08-31,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,498.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-academedia,enkeltanbefaling,usikker
-2026-09-04,DNB Carnegie (DNB Nyheter),SECT-B.ST,Sectra,kjop,340.0,SEK,290.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sectra-,enkeltanbefaling,usikker
-2026-09-07,DNB Carnegie (DNB Nyheter),REG1V.HE,Revenio,kjop,21.6,EUR,15.68,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-revenio,enkeltanbefaling,usikker
-2026-09-08,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,85.0,NOK,97.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tomra--envipco-og-coffee-stain,enkeltanbefaling,usikker
-2026-09-10,DNB Carnegie (DNB Nyheter),CAMBI.OL,Cambi,kjop,30.0,NOK,23.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omc-tankers-og-cambi,enkeltanbefaling,usikker
-2026-09-10,DNB Carnegie (DNB Nyheter),OMC.OL,OMC Tankers,kjop,42.0,NOK,27.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omc-tankers-og-cambi,enkeltanbefaling,usikker
-2026-09-11,DNB Carnegie (DNB Nyheter),ISS.CO,ISS,kjop,340.0,DKK,280.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-iss,enkeltanbefaling,usikker
-2026-09-14,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF Group,kjop,150.0,NOK,133.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group,enkeltanbefaling,usikker
-2026-09-17,DNB Carnegie (DNB Nyheter),BRG.OL,Borregaard,kjop,190.0,NOK,147.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-borregaard,enkeltanbefaling,usikker
-2026-09-18,DNB Carnegie (DNB Nyheter),REMEDY.HE,Remedy Entertainment,kjop,20.0,EUR,19.88,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nrc-gr--og-remedy-entertainment,enkeltanbefaling,usikker
-2026-09-21,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,420.0,DKK,281.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-novo-nordisk0,enkeltanbefaling,usikker
-2026-09-22,DNB Carnegie (DNB Nyheter),WAWI.OL,Wallenius Wilhelmsen,hold,150.0,NOK,180.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-wallenius-wilhelmsen-og-skanska,enkeltanbefaling,usikker
-2026-09-23,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,hold,95.0,NOK,94.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-orkla,enkeltanbefaling,usikker
-2026-09-24,DNB Carnegie (DNB Nyheter),HM-B.ST,Hennes & Mauritz,selg,145.0,SEK,166.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz,enkeltanbefaling,usikker
+2026-01-02,DNB Carnegie (DNB Nyheter),SBO.OL,Selvaag Bolig,hold,37.0,NOK,36.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-selvaag-bolig-yara,enkeltanbefaling,ja
+2026-01-02,DNB Carnegie (DNB Nyheter),YAR.OL,Yara,kjop,450.0,NOK,414.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-selvaag-bolig-yara,enkeltanbefaling,ja
+2026-01-05,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,550.0,NOK,517.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-volvo-cars,enkeltanbefaling,ja
+2026-01-05,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,kjop,37.0,SEK,32.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-volvo-cars,enkeltanbefaling,ja
+2026-01-06,DNB Carnegie (DNB Nyheter),KID.OL,Kid,hold,140.0,NOK,132.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs-og-kid,enkeltanbefaling,ja
+2026-01-06,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,selg,70.0,NOK,87.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs-og-kid,enkeltanbefaling,ja
+2026-01-07,DNB Carnegie (DNB Nyheter),IVSO.ST,Invisio,kjop,370.0,SEK,274.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-inviso,enkeltanbefaling,ja
+2026-01-07,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,20.0,NOK,17.44,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-inviso,enkeltanbefaling,ja
+2026-01-08,DNB Carnegie (DNB Nyheter),8TRA.ST,Traton,kjop,360.0,SEK,344.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-,enkeltanbefaling,ja
+2026-01-08,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,kjop,300.0,NOK,233.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-,enkeltanbefaling,ja
+2026-01-08,DNB Carnegie (DNB Nyheter),HEX.OL,Hexagon Composites,hold,9.0,NOK,7.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-,enkeltanbefaling,ja
+2026-01-08,DNB Carnegie (DNB Nyheter),VOLV-B.ST,Volvo,hold,295.0,SEK,305.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-,enkeltanbefaling,ja
+2026-01-09,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,292.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-den-norske-finanssektoren,enkeltanbefaling,ja
+2026-01-09,DNB Carnegie (DNB Nyheter),YAR.OL,Yara,kjop,450.0,NOK,392.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-den-norske-finanssektoren,enkeltanbefaling,ja
+2026-01-12,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,hold,245.0,NOK,262.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,ja
+2026-01-12,DNB Carnegie (DNB Nyheter),DNO.OL,DNO,kjop,17.5,NOK,15.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,ja
+2026-01-12,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,255.0,NOK,231.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,ja
+2026-01-12,DNB Carnegie (DNB Nyheter),VAR.OL,Vår Energi,hold,31.0,NOK,32.69,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi--aker-bp--var-energi-og-dno,enkeltanbefaling,ja
+2026-01-13,DNB Carnegie (DNB Nyheter),AKSO.OL,Aker Solutions,hold,30.0,NOK,32.06,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-og-dansk-offshore-energi,enkeltanbefaling,ja
+2026-01-13,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,49.92,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-og-dansk-offshore-energi,enkeltanbefaling,ja
+2026-01-13,DNB Carnegie (DNB Nyheter),EQNR.OL,Equinor,selg,180.0,NOK,240.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-og-dansk-offshore-energi,enkeltanbefaling,ja
+2026-01-13,DNB Carnegie (DNB Nyheter),ORSTED.CO,Ørsted,hold,115.0,DKK,127.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-og-dansk-offshore-energi,enkeltanbefaling,ja
+2026-01-13,DNB Carnegie (DNB Nyheter),SUBC.OL,Subsea 7,kjop,230.0,NOK,212.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-og-dansk-offshore-energi,enkeltanbefaling,ja
+2026-01-14,DNB Carnegie (DNB Nyheter),BO.CO,Bang & Olufsen,hold,13.0,DKK,12.38,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bang---olufsen,enkeltanbefaling,ja
+2026-01-15,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,280.0,NOK,275.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,ja
+2026-01-15,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF,kjop,130.0,NOK,106.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,ja
+2026-01-15,DNB Carnegie (DNB Nyheter),PLSV.OL,Paratus,kjop,60.0,NOK,45.48,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,ja
+2026-01-15,DNB Carnegie (DNB Nyheter),SUBC.OL,Subsea 7,kjop,230.0,NOK,221.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--dof--paratus--subsea-7,enkeltanbefaling,ja
+2026-01-16,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,hold,99.0,NOK,98.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-autoliners-og-tf-bank,enkeltanbefaling,ja
+2026-01-16,DNB Carnegie (DNB Nyheter),TFBANK.ST,TF Bank,kjop,201.0,SEK,170.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-autoliners-og-tf-bank,enkeltanbefaling,ja
+2026-01-19,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,105.0,SEK,87.52,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson,enkeltanbefaling,ja
+2026-01-20,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,16.0,NOK,12.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tf-bank-og-autostore,enkeltanbefaling,ja
+2026-01-20,DNB Carnegie (DNB Nyheter),TFBANK.ST,TF Bank,kjop,201.0,SEK,,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tf-bank-og-autostore,enkeltanbefaling,nei
+2026-01-21,DNB Carnegie (DNB Nyheter),ALMB.CO,Alm. Brand,kjop,20.0,DKK,18.24,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,ja
+2026-01-21,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,275.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,ja
+2026-01-21,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,255.0,NOK,220.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,ja
+2026-01-21,DNB Carnegie (DNB Nyheter),SAMPO.HE,Sampo,kjop,11.1,EUR,9.83,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,ja
+2026-01-21,DNB Carnegie (DNB Nyheter),TRYG.CO,Tryg,kjop,190.0,DKK,161.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-skadeforsikring-og-mowi,enkeltanbefaling,ja
+2026-01-22,DNB Carnegie (DNB Nyheter),AKSO.OL,Aker Solutions,hold,35.0,NOK,33.16,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-aker-solutions-og-volvo-cars,enkeltanbefaling,ja
+2026-01-22,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,kjop,37.0,SEK,31.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-aker-solutions-og-volvo-cars,enkeltanbefaling,ja
+2026-01-23,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,90.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-europris,enkeltanbefaling,ja
+2026-01-23,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,105.0,SEK,85.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-europris,enkeltanbefaling,ja
+2026-01-26,DNB Carnegie (DNB Nyheter),NOKIA.HE,Nokia,kjop,6.7,EUR,5.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nokia--ericsson-og-scatec,enkeltanbefaling,ja
+2026-01-26,DNB Carnegie (DNB Nyheter),SCATC.OL,Scatec,hold,116.0,NOK,120.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nokia--ericsson-og-scatec,enkeltanbefaling,ja
+2026-01-27,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,272.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--gjensidige-og-protetor,enkeltanbefaling,ja
+2026-01-27,DNB Carnegie (DNB Nyheter),PROT.OL,Protector,kjop,565.0,NOK,540.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp--gjensidige-og-protetor,enkeltanbefaling,ja
+2026-01-28,DNB Carnegie (DNB Nyheter),SNI.OL,Stolt-Nielsen,kjop,495.0,NOK,340.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-stolt-nielsen-og-og-volvo,enkeltanbefaling,ja
+2026-01-28,DNB Carnegie (DNB Nyheter),VOLV-B.ST,Volvo,hold,295.0,SEK,315.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-stolt-nielsen-og-og-volvo,enkeltanbefaling,ja
+2026-01-29,DNB Carnegie (DNB Nyheter),NDA-SE.ST,Nordea,kjop,208.0,SEK,177.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-finans-og-forsikring,enkeltanbefaling,ja
+2026-01-29,DNB Carnegie (DNB Nyheter),PARB.OL,Pareto Bank,kjop,95.0,NOK,86.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-finans-og-forsikring,enkeltanbefaling,ja
+2026-01-29,DNB Carnegie (DNB Nyheter),SEB-A.ST,SEB,hold,199.0,SEK,202.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-finans-og-forsikring,enkeltanbefaling,ja
+2026-01-29,DNB Carnegie (DNB Nyheter),SWED-A.ST,Swedbank,hold,328.0,SEK,346.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-finans-og-forsikring,enkeltanbefaling,ja
+2026-01-30,DNB Carnegie (DNB Nyheter),ACAD.ST,AcadeMedia,kjop,115.0,SEK,93.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sparebanken-norge-og-academedia,enkeltanbefaling,ja
+2026-01-30,DNB Carnegie (DNB Nyheter),SBNOR.OL,Sparebanken Norge,hold,195.0,NOK,185.82,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sparebanken-norge-og-academedia,enkeltanbefaling,ja
+2026-02-02,DNB Carnegie (DNB Nyheter),ARCH.OL,Archer,kjop,35.0,NOK,25.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-archer-og-boliden,enkeltanbefaling,ja
+2026-02-02,DNB Carnegie (DNB Nyheter),BOL.ST,Boliden,hold,567.0,SEK,626.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-archer-og-boliden,enkeltanbefaling,ja
+2026-02-03,DNB Carnegie (DNB Nyheter),BRG.OL,Borregaard,kjop,240.0,NOK,190.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-okea-og-borregaard,enkeltanbefaling,ja
+2026-02-03,DNB Carnegie (DNB Nyheter),OKEA.OL,Okea,hold,21.0,NOK,23.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-okea-og-borregaard,enkeltanbefaling,ja
+2026-02-04,DNB Carnegie (DNB Nyheter),EQNR.OL,Equinor,selg,200.0,NOK,251.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-novo-nordisk,enkeltanbefaling,ja
+2026-02-04,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,440.0,DKK,367.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-novo-nordisk,enkeltanbefaling,ja
+2026-02-05,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,980.0,SEK,585.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-semiconductor,enkeltanbefaling,ja
+2026-02-05,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,200.0,NOK,131.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-semiconductor,enkeltanbefaling,ja
+2026-02-05,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,selg,100.0,NOK,121.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-orkla-og-verisure,enkeltanbefaling,ja
+2026-02-05,DNB Carnegie (DNB Nyheter),VSURE.ST,Verisure,kjop,20.5,EUR,11.99,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-orkla-og-verisure,enkeltanbefaling,nei
+2026-02-06,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg,hold,300.0,NOK,321.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-kongsberg-gruppen,enkeltanbefaling,ja
+2026-02-06,DNB Carnegie (DNB Nyheter),TEL.OL,Telenor,kjop,190.0,NOK,161.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-kongsberg-gruppen,enkeltanbefaling,ja
+2026-02-09,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,480.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-sats,enkeltanbefaling,ja
+2026-02-09,DNB Carnegie (DNB Nyheter),SATS.OL,Sats,kjop,46.0,NOK,39.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-sats,enkeltanbefaling,ja
+2026-02-10,DNB Carnegie (DNB Nyheter),ELO.OL,Elopak,hold,50.0,NOK,50.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-elopak,enkeltanbefaling,ja
+2026-02-10,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,593.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-elopak,enkeltanbefaling,ja
+2026-02-11,DNB Carnegie (DNB Nyheter),ELMRA.OL,Elmera,selg,28.0,NOK,41.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-yara-og-elmera,enkeltanbefaling,ja
+2026-02-11,DNB Carnegie (DNB Nyheter),YAR.OL,Yara,kjop,470.0,NOK,466.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-yara-og-elmera,enkeltanbefaling,ja
+2026-02-13,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,19.0,NOK,17.05,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-hydro--norwegian-og-tomra,enkeltanbefaling,ja
+2026-02-13,DNB Carnegie (DNB Nyheter),NHY.OL,Hydro,selg,55.0,NOK,91.24,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-hydro--norwegian-og-tomra,enkeltanbefaling,ja
+2026-02-13,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,110.0,NOK,134.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-hydro--norwegian-og-tomra,enkeltanbefaling,ja
+2026-02-16,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,hold,21.0,NOK,21.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nrc-group-og-sinch,enkeltanbefaling,ja
+2026-02-16,DNB Carnegie (DNB Nyheter),SINCH.ST,Sinch,kjop,42.0,SEK,23.88,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nrc-group-og-sinch,enkeltanbefaling,ja
+2026-02-17,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,26.86,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem-og-hacksaw,enkeltanbefaling,ja
+2026-02-17,DNB Carnegie (DNB Nyheter),HACK.ST,Hacksaw,kjop,105.0,SEK,56.22,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem-og-hacksaw,enkeltanbefaling,ja
+2026-02-18,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,kjop,320.0,NOK,292.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scandiv--okeanis-og-frontline,enkeltanbefaling,ja
+2026-02-18,DNB Carnegie (DNB Nyheter),OET.OL,Okeanis Eco Tankers,hold,440.0,NOK,404.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scandiv--okeanis-og-frontline,enkeltanbefaling,ja
+2026-02-18,DNB Carnegie (DNB Nyheter),SHOT.ST,Scandic Hotels,kjop,115.0,SEK,92.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scandiv--okeanis-og-frontline,enkeltanbefaling,ja
+2026-02-19,DNB Carnegie (DNB Nyheter),ALK-B.CO,ALK-Abelló,kjop,243.0,DKK,218.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group-og-alk-abello,enkeltanbefaling,ja
+2026-02-19,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF Group,kjop,130.0,NOK,119.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group-og-alk-abello,enkeltanbefaling,ja
+2026-02-20,DNB Carnegie (DNB Nyheter),AUSS.OL,Austevoll Seafood,kjop,115.0,NOK,94.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-sjomat,enkeltanbefaling,ja
+2026-02-20,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy,kjop,60.0,NOK,48.56,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-sjomat,enkeltanbefaling,ja
+2026-02-23,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,7.1,NOK,532.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-shipping-og-norsk-oppdrett,enkeltanbefaling,nei
+2026-02-23,DNB Carnegie (DNB Nyheter),MPCC.OL,MPC Container,selg,14.6,NOK,20.43,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-shipping-og-norsk-oppdrett,enkeltanbefaling,ja
+2026-02-24,DNB Carnegie (DNB Nyheter),BONHR.OL,Bonheur,kjop,280.0,NOK,274.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bonheur-og-odfjell-drilling,enkeltanbefaling,ja
+2026-02-24,DNB Carnegie (DNB Nyheter),ODL.OL,Odfjell Drilling,kjop,110.0,NOK,105.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bonheur-og-odfjell-drilling,enkeltanbefaling,ja
+2026-02-25,DNB Carnegie (DNB Nyheter),GSF.OL,Grieg Seafood,kjop,80.0,NOK,74.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-oppdrett-og-shipping,enkeltanbefaling,ja
+2026-02-25,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,hold,99.0,NOK,121.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-oppdrett-og-shipping,enkeltanbefaling,ja
+2026-02-26,DNB Carnegie (DNB Nyheter),NEL.OL,Nel,selg,1.2,NOK,2.02,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nel-og-subsea-7,enkeltanbefaling,ja
+2026-02-26,DNB Carnegie (DNB Nyheter),SUBC.OL,Subsea 7,kjop,280.0,NOK,263.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nel-og-subsea-7,enkeltanbefaling,ja
+2026-02-27,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,kjop,320.0,NOK,349.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-paratus-energy,enkeltanbefaling,ja
+2026-02-27,DNB Carnegie (DNB Nyheter),PLSV.OL,Paratus Energy,kjop,60.0,NOK,48.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-paratus-energy,enkeltanbefaling,ja
+2026-03-02,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy,kjop,60.0,NOK,49.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-leroy-seafood,enkeltanbefaling,ja
+2026-03-03,DNB Carnegie (DNB Nyheter),BWLPG.OL,BW LPG,hold,147.0,NOK,174.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-teknologi-og-bw-lpg,enkeltanbefaling,ja
+2026-03-03,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,200.0,NOK,141.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-teknologi-og-bw-lpg,enkeltanbefaling,ja
+2026-03-03,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,50.0,NOK,36.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norsk-teknologi-og-bw-lpg,enkeltanbefaling,nei
+2026-03-04,DNB Carnegie (DNB Nyheter),8TRA.ST,Traton,kjop,380.0,SEK,354.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-traton,enkeltanbefaling,ja
+2026-03-04,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,20.0,NOK,15.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-traton,enkeltanbefaling,ja
+2026-03-05,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,57.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-elekta,enkeltanbefaling,ja
+2026-03-05,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,hold,355.0,NOK,351.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-frontline-og-elekta,enkeltanbefaling,ja
+2026-03-06,DNB Carnegie (DNB Nyheter),ATEA.OL,Atea,kjop,170.0,NOK,143.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,ja
+2026-03-06,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,90.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,ja
+2026-03-06,DNB Carnegie (DNB Nyheter),TOKMAN.HE,Tokmanni,hold,8.3,EUR,8.23,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-atea--tokmanni-og-europris,enkeltanbefaling,ja
+2026-03-10,DNB Carnegie (DNB Nyheter),PEXIP.OL,Pexip,kjop,70.0,NOK,61.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-pexip,enkeltanbefaling,ja
+2026-03-11,DNB Carnegie (DNB Nyheter),ASMDEE-B.ST,Asmodee,kjop,155.0,SEK,102.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,ja
+2026-03-11,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,400.0,SEK,358.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,ja
+2026-03-11,DNB Carnegie (DNB Nyheter),RUSTA.ST,Rusta,hold,80.0,SEK,77.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson--rusta-og-asmodee,enkeltanbefaling,ja
+2026-03-12,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,hold,21.0,NOK,22.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-truecaller,enkeltanbefaling,ja
+2026-03-12,DNB Carnegie (DNB Nyheter),TRUE-B.ST,Truecaller,kjop,30.0,SEK,11.53,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-truecaller,enkeltanbefaling,nei
+2026-03-13,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,17.0,NOK,10.16,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-autostore-og-envipco,enkeltanbefaling,ja
+2026-03-13,DNB Carnegie (DNB Nyheter),ENVIP.OL,Envipco,kjop,80.0,NOK,51.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-autostore-og-envipco,enkeltanbefaling,ja
+2026-03-16,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,950.0,SEK,596.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vend-og-evoution,enkeltanbefaling,ja
+2026-03-16,DNB Carnegie (DNB Nyheter),VEND.OL,Vend,kjop,310.0,NOK,258.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vend-og-evoution,enkeltanbefaling,ja
+2026-03-18,DNB Carnegie (DNB Nyheter),BOL.ST,Boliden,hold,622.0,SEK,622.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar-og-boliden,enkeltanbefaling,ja
+2026-03-18,DNB Carnegie (DNB Nyheter),SKIS-B.ST,Skistar,kjop,215.0,SEK,170.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar-og-boliden,enkeltanbefaling,ja
+2026-03-19,DNB Carnegie (DNB Nyheter),COOR.ST,Coor,kjop,68.0,SEK,60.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-coor,enkeltanbefaling,ja
+2026-03-20,DNB Carnegie (DNB Nyheter),VAIAS.HE,Vaisala,kjop,57.0,EUR,45.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala,enkeltanbefaling,ja
+2026-03-23,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,56.35,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz-og-cadeler,enkeltanbefaling,ja
+2026-03-23,DNB Carnegie (DNB Nyheter),HM-B.ST,Hennes & Mauritz,selg,167.0,SEK,168.85,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz-og-cadeler,enkeltanbefaling,ja
+2026-03-24,DNB Carnegie (DNB Nyheter),KIT.OL,Kitron,kjop,102.0,NOK,97.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-norbit,enkeltanbefaling,ja
+2026-03-24,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,hold,182.0,NOK,197.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-norbit,enkeltanbefaling,ja
+2026-03-25,DNB Carnegie (DNB Nyheter),ATEA.OL,Atea,kjop,170.0,NOK,136.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala--smartoptics-og-atea,enkeltanbefaling,ja
+2026-03-25,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,6.8,NOK,584.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala--smartoptics-og-atea,enkeltanbefaling,nei
+2026-03-25,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,50.0,NOK,41.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala--smartoptics-og-atea,enkeltanbefaling,ja
+2026-03-25,DNB Carnegie (DNB Nyheter),VAIAS.HE,Vaisala,kjop,57.0,EUR,45.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-vaisala--smartoptics-og-atea,enkeltanbefaling,ja
+2026-03-26,DNB Carnegie (DNB Nyheter),MULTI.OL,Multiconsult,hold,170.0,NOK,158.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-multiconsult,enkeltanbefaling,ja
+2026-03-26,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,17.0,NOK,14.13,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-multiconsult,enkeltanbefaling,ja
+2026-03-27,DNB Carnegie (DNB Nyheter),SBO.OL,Selvaag Bolig,kjop,41.0,NOK,33.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-selvaag-bolig-og-volvo-cars,enkeltanbefaling,ja
+2026-03-27,DNB Carnegie (DNB Nyheter),VOLCAR-B.ST,Volvo Cars,hold,25.0,SEK,21.17,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-selvaag-bolig-og-volvo-cars,enkeltanbefaling,ja
+2026-04-07,DNB Carnegie (DNB Nyheter),SAVE.ST,Nordnet,kjop,370.0,SEK,306.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordnet-og-avanza,enkeltanbefaling,ja
+2026-04-08,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,458.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-faeroysk-og-norsk-oppdrett,enkeltanbefaling,ja
+2026-04-08,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy Seafood,kjop,60.0,NOK,49.64,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-faeroysk-og-norsk-oppdrett,enkeltanbefaling,ja
+2026-04-08,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,567.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-faeroysk-og-norsk-oppdrett,enkeltanbefaling,ja
+2026-04-09,DNB Carnegie (DNB Nyheter),GSF.OL,Grieg Seafood,kjop,78.0,NOK,76.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-stolt-nielsen-,enkeltanbefaling,ja
+2026-04-09,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,17.0,NOK,15.31,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-stolt-nielsen-,enkeltanbefaling,ja
+2026-04-09,DNB Carnegie (DNB Nyheter),SNI.OL,Stolt-Nielsen,hold,360.0,NOK,336.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norwegian-og-stolt-nielsen-,enkeltanbefaling,ja
+2026-04-10,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,15.0,NOK,9.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-autostore,enkeltanbefaling,ja
+2026-04-11,DNB Carnegie (DNB Nyheter),KID.OL,Kid,hold,125.0,NOK,128.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kid-og-tgs,enkeltanbefaling,ja
+2026-04-11,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,selg,80.0,NOK,123.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kid-og-tgs,enkeltanbefaling,ja
+2026-04-14,DNB Carnegie (DNB Nyheter),AVARDA.ST,Avarda,kjop,212.0,SEK,183.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-avarda,enkeltanbefaling,ja
+2026-04-15,DNB Carnegie (DNB Nyheter),ATEA.OL,Atea,kjop,170.0,NOK,142.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tryg--dustin-group-og-atea,enkeltanbefaling,ja
+2026-04-15,DNB Carnegie (DNB Nyheter),TRYG.CO,Tryg,kjop,190.0,DKK,153.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tryg--dustin-group-og-atea,enkeltanbefaling,ja
+2026-04-16,DNB Carnegie (DNB Nyheter),ERIC-B.ST,Ericsson,kjop,121.0,SEK,108.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-nokia,enkeltanbefaling,ja
+2026-04-16,DNB Carnegie (DNB Nyheter),NOKIA.HE,Nokia,hold,7.5,EUR,8.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ericsson-og-nokia,enkeltanbefaling,ja
+2026-04-17,DNB Carnegie (DNB Nyheter),GIGA.OL,Gigante Salmon,kjop,16.0,NOK,9.54,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gigante-salmon-og-yara,enkeltanbefaling,ja
+2026-04-17,DNB Carnegie (DNB Nyheter),YAR.OL,Yara,hold,550.0,NOK,557.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gigante-salmon-og-yara,enkeltanbefaling,ja
+2026-04-20,DNB Carnegie (DNB Nyheter),ENTRA.OL,Entra,hold,115.0,NOK,108.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-entra-og-lime-technologies,enkeltanbefaling,ja
+2026-04-20,DNB Carnegie (DNB Nyheter),LIME.ST,Lime Technologies,kjop,333.0,SEK,232.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-entra-og-lime-technologies,enkeltanbefaling,ja
+2026-04-21,DNB Carnegie (DNB Nyheter),EVO.ST,Evolution,kjop,950.0,SEK,636.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-evolution-og-paratus-energy,enkeltanbefaling,ja
+2026-04-21,DNB Carnegie (DNB Nyheter),PLSV.OL,Paratus,kjop,65.0,NOK,49.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-evolution-og-paratus-energy,enkeltanbefaling,ja
+2026-04-22,DNB Carnegie (DNB Nyheter),SHOT.ST,Scandic Hotels,kjop,110.0,SEK,95.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-var-energi-og-scandic-hotels,enkeltanbefaling,ja
+2026-04-22,DNB Carnegie (DNB Nyheter),VAR.OL,Vår Energi,selg,32.0,NOK,43.78,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-var-energi-og-scandic-hotels,enkeltanbefaling,ja
+2026-04-23,DNB Carnegie (DNB Nyheter),EPR.OL,Europris,hold,95.0,NOK,94.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-protector-og-europris,enkeltanbefaling,ja
+2026-04-23,DNB Carnegie (DNB Nyheter),PROT.OL,Protector,kjop,600.0,NOK,487.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-protector-og-europris,enkeltanbefaling,ja
+2026-04-24,DNB Carnegie (DNB Nyheter),KIT.OL,Kitron,hold,103.0,NOK,96.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-tomra,enkeltanbefaling,ja
+2026-04-24,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,110.0,NOK,120.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kitron-og-tomra,enkeltanbefaling,ja
+2026-04-28,DNB Carnegie (DNB Nyheter),SATS.OL,Sats,kjop,47.0,NOK,43.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-sats,enkeltanbefaling,ja
+2026-04-28,DNB Carnegie (DNB Nyheter),TEL.OL,Telenor,kjop,190.0,NOK,162.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-telenor-og-sats,enkeltanbefaling,ja
+2026-04-29,DNB Carnegie (DNB Nyheter),BRG.OL,Borregaard,kjop,220.0,NOK,166.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gjensidige-og-borregaard,enkeltanbefaling,ja
+2026-04-29,DNB Carnegie (DNB Nyheter),GJF.OL,Gjensidige,hold,280.0,NOK,254.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-gjensidige-og-borregaard,enkeltanbefaling,ja
+2026-04-30,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,27.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem--aker-biomarine--komplett,enkeltanbefaling,ja
+2026-04-30,DNB Carnegie (DNB Nyheter),KOMPL.OL,Komplett,selg,7.0,NOK,7.98,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem--aker-biomarine--komplett,enkeltanbefaling,ja
+2026-05-04,DNB Carnegie (DNB Nyheter),ELO.OL,Elopak,kjop,45.0,NOK,35.75,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-pexip,enkeltanbefaling,ja
+2026-05-04,DNB Carnegie (DNB Nyheter),PEXIP.OL,Pexip,kjop,80.0,NOK,67.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-pexip,enkeltanbefaling,ja
+2026-05-05,DNB Carnegie (DNB Nyheter),ACAST.ST,Acast,kjop,35.0,SEK,32.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-acast-og-vestas,enkeltanbefaling,ja
+2026-05-05,DNB Carnegie (DNB Nyheter),VWS.CO,Vestas,kjop,220.0,DKK,194.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-acast-og-vestas,enkeltanbefaling,ja
+2026-05-06,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg Maritime,hold,400.0,NOK,312.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg-aksjer-og-novo-nordisk,enkeltanbefaling,ja
+2026-05-06,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,420.0,DKK,285.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg-aksjer-og-novo-nordisk,enkeltanbefaling,ja
+2026-05-07,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,370.0,NOK,339.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp-og-smartoptics,enkeltanbefaling,ja
+2026-05-07,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,60.0,NOK,56.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp-og-smartoptics,enkeltanbefaling,ja
+2026-05-08,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,selg,108.0,NOK,126.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-og-wallenius-,enkeltanbefaling,ja
+2026-05-11,DNB Carnegie (DNB Nyheter),ACAD.ST,AcadeMedia,kjop,120.0,SEK,94.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-academedia,enkeltanbefaling,ja
+2026-05-12,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,hold,22.0,NOK,25.72,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-leroy-og-link-mobility,enkeltanbefaling,ja
+2026-05-12,DNB Carnegie (DNB Nyheter),LSG.OL,Lerøy,kjop,60.0,NOK,43.38,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-leroy-og-link-mobility,enkeltanbefaling,ja
+2026-05-13,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,194.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-mowi,enkeltanbefaling,ja
+2026-05-13,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,259.0,NOK,222.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-mowi,enkeltanbefaling,ja
+2026-05-15,DNB Carnegie (DNB Nyheter),HEM.ST,Hemnet,kjop,221.0,SEK,107.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hemnet-og-norbit,enkeltanbefaling,ja
+2026-05-15,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,237.0,NOK,203.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hemnet-og-norbit,enkeltanbefaling,ja
+2026-05-18,DNB Carnegie (DNB Nyheter),GEOS.OL,General Oceans,hold,32.0,NOK,9.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-general-oceans-og-mowi,enkeltanbefaling,nei
+2026-05-18,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,197.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-general-oceans-og-mowi,enkeltanbefaling,ja
+2026-05-19,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,449.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-nibe,enkeltanbefaling,ja
+2026-05-19,DNB Carnegie (DNB Nyheter),NIBE-B.ST,Nibe,hold,43.0,SEK,43.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-nibe,enkeltanbefaling,ja
+2026-05-20,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,62.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-salmar-og-cadeler,enkeltanbefaling,ja
+2026-05-20,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,585.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-salmar-og-cadeler,enkeltanbefaling,ja
+2026-05-21,DNB Carnegie (DNB Nyheter),ASMDEE-B.ST,Asmodee,kjop,155.0,SEK,126.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-asmodee-og-panoro-energy,enkeltanbefaling,ja
+2026-05-21,DNB Carnegie (DNB Nyheter),PEN.OL,Panoro,kjop,40.0,NOK,35.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-asmodee-og-panoro-energy,enkeltanbefaling,ja
+2026-05-26,DNB Carnegie (DNB Nyheter),HAFNI.OL,Hafnia,hold,79.0,NOK,79.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-odfjell-og-hafnia,enkeltanbefaling,ja
+2026-05-26,DNB Carnegie (DNB Nyheter),ODF.OL,Odfjell,hold,120.0,NOK,109.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-odfjell-og-hafnia,enkeltanbefaling,ja
+2026-05-28,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,61.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elekta,enkeltanbefaling,ja
+2026-06-01,DNB Carnegie (DNB Nyheter),BWLPG.OL,BW LPG,hold,199.0,NOK,182.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bw-lpg,enkeltanbefaling,ja
+2026-06-02,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,460.0,SEK,425.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson,enkeltanbefaling,ja
+2026-06-03,DNB Carnegie (DNB Nyheter),HIAB.HE,Hiab,kjop,70.0,EUR,61.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hiab,enkeltanbefaling,ja
+2026-06-03,DNB Carnegie (DNB Nyheter),NAS.OL,Norwegian,kjop,19.0,NOK,16.53,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hiab,enkeltanbefaling,ja
+2026-06-04,DNB Carnegie (DNB Nyheter),TGS.OL,TGS,selg,115.0,NOK,147.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tgs,enkeltanbefaling,ja
+2026-06-05,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,34.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elkem,enkeltanbefaling,ja
+2026-06-08,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg Maritime,selg,50.0,NOK,312.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg-maritime,enkeltanbefaling,nei
+2026-06-08,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,235.0,NOK,193.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordic-semiconductor,enkeltanbefaling,ja
+2026-06-09,DNB Carnegie (DNB Nyheter),OMDA.OL,Omda,kjop,50.0,NOK,35.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omda,enkeltanbefaling,ja
+2026-06-10,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg Gruppen,hold,340.0,NOK,313.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-kongsberg--gruppen,enkeltanbefaling,ja
+2026-06-11,DNB Carnegie (DNB Nyheter),PUUILO.HE,Puuilo,kjop,14.5,EUR,13.96,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-puuilo,enkeltanbefaling,ja
+2026-06-12,DNB Carnegie (DNB Nyheter),HEM.ST,Hemnet,kjop,221.0,SEK,86.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-hemnet,enkeltanbefaling,nei
+2026-06-15,DNB Carnegie (DNB Nyheter),IVSO.ST,Invisio,kjop,375.0,SEK,242.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-forsvarsaksjer,enkeltanbefaling,ja
+2026-06-15,DNB Carnegie (DNB Nyheter),KIT.OL,Kitron,hold,101.0,NOK,108.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-forsvarsaksjer,enkeltanbefaling,ja
+2026-06-15,DNB Carnegie (DNB Nyheter),KOG.OL,Kongsberg Gruppen,hold,340.0,NOK,294.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-forsvarsaksjer,enkeltanbefaling,ja
+2026-06-15,DNB Carnegie (DNB Nyheter),PEXIP.OL,Pexip,kjop,95.0,NOK,75.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-forsvarsaksjer,enkeltanbefaling,ja
+2026-06-16,DNB Carnegie (DNB Nyheter),EQNR.OL,Equinor,hold,350.0,NOK,325.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-securitas,enkeltanbefaling,ja
+2026-06-16,DNB Carnegie (DNB Nyheter),SDRL.OL,Seadrill,kjop,45.0,USD,,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-securitas,enkeltanbefaling,nei
+2026-06-16,DNB Carnegie (DNB Nyheter),SECU-B.ST,Securitas,kjop,185.0,SEK,154.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-equinor-og-securitas,enkeltanbefaling,ja
+2026-06-17,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,51.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elekta0,enkeltanbefaling,ja
+2026-06-18,DNB Carnegie (DNB Nyheter),SKIS-B.ST,Skistar,kjop,196.0,SEK,145.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-skistar,enkeltanbefaling,ja
+2026-06-19,DNB Carnegie (DNB Nyheter),ENDUR.OL,Endúr,kjop,135.0,NOK,111.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-endur,enkeltanbefaling,ja
+2026-06-19,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,194.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-endur,enkeltanbefaling,ja
+2026-06-22,DNB Carnegie (DNB Nyheter),HM-B.ST,H&M,selg,145.0,SEK,170.15,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-hennes-mauritz,enkeltanbefaling,ja
+2026-06-23,DNB Carnegie (DNB Nyheter),NONG.OL,Sparebank1 Nord-Norge,kjop,165.0,NOK,153.42,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-bank-sektoren,enkeltanbefaling,ja
+2026-06-24,DNB Carnegie (DNB Nyheter),BRUT.OL,Bruton,kjop,86.0,NOK,53.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegie-anbefaler-bruton,enkeltanbefaling,ja
+2026-06-24,DNB Carnegie (DNB Nyheter),FRO.OL,Frontline,hold,390.0,NOK,412.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegie-anbefaler-bruton,enkeltanbefaling,ja
+2026-06-24,DNB Carnegie (DNB Nyheter),OET.OL,Okeanis Eco Tankers,hold,570.0,NOK,538.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegie-anbefaler-bruton,enkeltanbefaling,ja
+2026-06-25,DNB Carnegie (DNB Nyheter),HM-B.ST,H&M,selg,145.0,SEK,168.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dagens-anbefalinger-fra-dnb-carnegie,enkeltanbefaling,ja
+2026-06-25,DNB Carnegie (DNB Nyheter),NAPA.OL,Napatech,kjop,65.0,NOK,47.45,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dagens-anbefalinger-fra-dnb-carnegie,enkeltanbefaling,ja
+2026-06-25,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,235.0,NOK,180.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dagens-anbefalinger-fra-dnb-carnegie,enkeltanbefaling,ja
+2026-06-25,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,60.0,NOK,50.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dagens-anbefalinger-fra-dnb-carnegie,enkeltanbefaling,ja
+2026-06-26,DNB Carnegie (DNB Nyheter),ELK.OL,Elkem,kjop,40.0,NOK,32.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dagens-kjopsanbefaling-fra-dnb-carnegie,enkeltanbefaling,ja
+2026-06-29,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,370.0,NOK,303.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-bp,enkeltanbefaling,ja
+2026-06-30,DNB Carnegie (DNB Nyheter),KEMIRA.HE,Kemira,kjop,22.0,EUR,16.48,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ap-moller-maersk--kemira--selvaag,enkeltanbefaling,ja
+2026-06-30,DNB Carnegie (DNB Nyheter),MAERSK-B.CO,AP Møller Mærsk,selg,12400.0,DKK,15895.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ap-moller-maersk--kemira--selvaag,enkeltanbefaling,ja
+2026-06-30,DNB Carnegie (DNB Nyheter),SBO.OL,Selvaag Bolig,kjop,41.0,NOK,32.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ap-moller-maersk--kemira--selvaag,enkeltanbefaling,ja
+2026-07-01,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,402.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-bonheur,enkeltanbefaling,ja
+2026-07-01,DNB Carnegie (DNB Nyheter),BONHR.OL,Bonheur,kjop,290.0,NOK,230.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-bonheur,enkeltanbefaling,ja
+2026-07-02,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,selg,106.0,NOK,140.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hoeegh-autoliners,enkeltanbefaling,ja
+2026-07-03,DNB Carnegie (DNB Nyheter),AKER.OL,Aker,kjop,125.0,NOK,1186.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-biomarine-og-protector,enkeltanbefaling,nei
+2026-07-03,DNB Carnegie (DNB Nyheter),PROT.OL,Protector,kjop,600.0,NOK,493.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aker-biomarine-og-protector,enkeltanbefaling,ja
+2026-08-04,DNB Carnegie (DNB Nyheter),ASMDEE-B.ST,Asmodee,kjop,162.0,SEK,147.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-noho-partners-og-asmodee,enkeltanbefaling,ja
+2026-08-04,DNB Carnegie (DNB Nyheter),NOHO.HE,NoHo Partners,kjop,8.6,EUR,7.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-noho-partners-og-asmodee,enkeltanbefaling,ja
+2026-08-05,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,430.0,DKK,307.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-novo-nordisk,enkeltanbefaling,ja
+2026-08-06,DNB Carnegie (DNB Nyheter),HEX.OL,Hexagon Composites,kjop,17.0,NOK,12.31,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordic-semiconductor-og-hexagon-,enkeltanbefaling,ja
+2026-08-06,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,235.0,NOK,163.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordic-semiconductor-og-hexagon-,enkeltanbefaling,ja
+2026-08-07,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,460.0,SEK,419.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-varehandel,enkeltanbefaling,ja
+2026-08-07,DNB Carnegie (DNB Nyheter),PUUILO.HE,Puuilo,kjop,17.0,EUR,17.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-varehandel,enkeltanbefaling,ja
+2026-08-07,DNB Carnegie (DNB Nyheter),TOKMAN.HE,Tokmanni,hold,17.0,EUR,7.22,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nordisk-varehandel,enkeltanbefaling,ja
+2026-08-11,DNB Carnegie (DNB Nyheter),DEMANT.CO,Demant,kjop,305.0,DKK,277.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-himalaya-shipping-og-demant,enkeltanbefaling,ja
+2026-08-12,DNB Carnegie (DNB Nyheter),BORR.OL,Borr Drilling,hold,3.5,USD,39.47,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-envipco-og-borr-drilling,enkeltanbefaling,nei
+2026-08-12,DNB Carnegie (DNB Nyheter),ENVIP.OL,Envipco,kjop,70.0,NOK,44.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-envipco-og-borr-drilling,enkeltanbefaling,ja
+2026-08-13,DNB Carnegie (DNB Nyheter),AUTO.OL,Autostore,kjop,15.0,NOK,13.89,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-autostore,enkeltanbefaling,ja
+2026-08-13,DNB Carnegie (DNB Nyheter),NORBT.OL,Norbit,kjop,198.0,NOK,183.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norbit-og-autostore,enkeltanbefaling,ja
+2026-08-14,DNB Carnegie (DNB Nyheter),SATS.OL,Sats,hold,43.0,NOK,40.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sats-og-veidekke,enkeltanbefaling,ja
+2026-08-14,DNB Carnegie (DNB Nyheter),VEI.OL,Veidekke,selg,165.0,NOK,188.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sats-og-veidekke,enkeltanbefaling,ja
+2026-08-17,DNB Carnegie (DNB Nyheter),MOWI.OL,Mowi,kjop,250.0,NOK,202.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-odfjell-drilling,enkeltanbefaling,ja
+2026-08-17,DNB Carnegie (DNB Nyheter),ODL.OL,Odfjell Drilling,kjop,115.0,NOK,92.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mowi-og-odfjell-drilling,enkeltanbefaling,ja
+2026-08-18,DNB Carnegie (DNB Nyheter),ELO.OL,Elopak,kjop,45.0,NOK,36.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-multiconsult,enkeltanbefaling,ja
+2026-08-18,DNB Carnegie (DNB Nyheter),MULTI.OL,Multiconsult,hold,165.0,NOK,151.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-multiconsult,enkeltanbefaling,ja
+2026-08-18,DNB Carnegie (DNB Nyheter),NORCO.OL,Norconsult,kjop,43.0,NOK,38.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-elopak-og-multiconsult,enkeltanbefaling,ja
+2026-08-19,DNB Carnegie (DNB Nyheter),CAMBI.OL,Cambi,kjop,30.0,NOK,22.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-cambi,enkeltanbefaling,ja
+2026-08-19,DNB Carnegie (DNB Nyheter),LINK.OL,Link Mobility,kjop,31.0,NOK,26.72,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-link-mobility-og-cambi,enkeltanbefaling,ja
+2026-08-20,DNB Carnegie (DNB Nyheter),ENDUR.OL,Endúr,kjop,135.0,NOK,111.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-endur--hoeegh-autoliners-og-orkla,enkeltanbefaling,ja
+2026-08-20,DNB Carnegie (DNB Nyheter),HAUTO.OL,Höegh Autoliners,selg,132.0,NOK,192.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-endur--hoeegh-autoliners-og-orkla,enkeltanbefaling,ja
+2026-08-20,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,selg,95.0,NOK,103.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-endur--hoeegh-autoliners-og-orkla,enkeltanbefaling,ja
+2026-08-21,DNB Carnegie (DNB Nyheter),NIBE-B.ST,Nibe,hold,40.0,SEK,38.49,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scatec-og-nibe,enkeltanbefaling,ja
+2026-08-21,DNB Carnegie (DNB Nyheter),SCATC.OL,Scatec,kjop,120.0,NOK,96.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-scatec-og-nibe,enkeltanbefaling,ja
+2026-08-24,DNB Carnegie (DNB Nyheter),KCC.OL,Klaveness,kjop,125.0,NOK,104.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-klaveness-,enkeltanbefaling,ja
+2026-08-24,DNB Carnegie (DNB Nyheter),SALM.OL,Salmar,kjop,630.0,NOK,526.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-salmar-og-klaveness-,enkeltanbefaling,ja
+2026-08-25,DNB Carnegie (DNB Nyheter),CADLR.OL,Cadeler,kjop,80.0,NOK,56.7,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-napatech-og-cadeler,enkeltanbefaling,ja
+2026-08-25,DNB Carnegie (DNB Nyheter),NAPA.OL,Napatech,kjop,65.0,NOK,41.6,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-napatech-og-cadeler,enkeltanbefaling,ja
+2026-08-26,DNB Carnegie (DNB Nyheter),MPCC.OL,MPC Container,selg,15.8,NOK,28.05,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mpc-og-nykode-,enkeltanbefaling,ja
+2026-08-26,DNB Carnegie (DNB Nyheter),NYKD.OL,Nykode,kjop,5.5,NOK,4.64,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-mpc-og-nykode-,enkeltanbefaling,ja
+2026-08-27,DNB Carnegie (DNB Nyheter),EKTA-B.ST,Elekta,kjop,70.0,SEK,54.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-cmb-tech-og-elekta-,enkeltanbefaling,ja
+2026-08-31,DNB Carnegie (DNB Nyheter),ACAD.ST,Academedia,kjop,120.0,SEK,98.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-academedia,enkeltanbefaling,ja
+2026-08-31,DNB Carnegie (DNB Nyheter),BAKKA.OL,Bakkafrost,kjop,530.0,NOK,498.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-bakkafrost-og-academedia,enkeltanbefaling,ja
+2026-09-01,DNB Carnegie (DNB Nyheter),BORR.OL,Borr Drilling,hold,3.5,USD,42.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ventura-og-borr-drilling,enkeltanbefaling,nei
+2026-09-01,DNB Carnegie (DNB Nyheter),VENTU.OL,Ventura Offshore,kjop,40.0,NOK,,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-ventura-og-borr-drilling,enkeltanbefaling,nei
+2026-09-02,DNB Carnegie (DNB Nyheter),VSURE.ST,Verisure,kjop,16.4,EUR,8.96,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-verisure,enkeltanbefaling,nei
+2026-09-03,DNB Carnegie (DNB Nyheter),CLAS-B.ST,Clas Ohlson,kjop,500.0,SEK,444.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson-og-novo-nordisk,enkeltanbefaling,ja
+2026-09-03,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,420.0,DKK,301.65,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-clas-ohlson-og-novo-nordisk,enkeltanbefaling,ja
+2026-09-04,DNB Carnegie (DNB Nyheter),SECT-B.ST,Sectra,kjop,340.0,SEK,290.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-sectra-,enkeltanbefaling,ja
+2026-09-07,DNB Carnegie (DNB Nyheter),REG1V.HE,Revenio,kjop,21.6,EUR,15.68,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-revenio,enkeltanbefaling,ja
+2026-09-08,DNB Carnegie (DNB Nyheter),COFFEE-B.ST,Coffee Stain,kjop,32.0,SEK,19.39,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tomra--envipco-og-coffee-stain,enkeltanbefaling,ja
+2026-09-08,DNB Carnegie (DNB Nyheter),ENVIP.OL,Envipco,kjop,70.0,NOK,35.75,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tomra--envipco-og-coffee-stain,enkeltanbefaling,ja
+2026-09-08,DNB Carnegie (DNB Nyheter),TOM.OL,Tomra,selg,85.0,NOK,97.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-tomra--envipco-og-coffee-stain,enkeltanbefaling,ja
+2026-09-10,DNB Carnegie (DNB Nyheter),CAMBI.OL,Cambi,kjop,30.0,NOK,23.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omc-tankers-og-cambi,enkeltanbefaling,ja
+2026-09-10,DNB Carnegie (DNB Nyheter),OMC.OL,OMC Tankers,kjop,42.0,NOK,27.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-omc-tankers-og-cambi,enkeltanbefaling,ja
+2026-09-11,DNB Carnegie (DNB Nyheter),ISS.CO,ISS,kjop,340.0,DKK,280.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-iss,enkeltanbefaling,ja
+2026-09-13,DNB Carnegie (DNB Nyheter),AKRBP.OL,Aker BP,kjop,360.0,NOK,360.4,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-olje--og-gasselskaper,enkeltanbefaling,ja
+2026-09-13,DNB Carnegie (DNB Nyheter),DNO.OL,DNO,kjop,23.0,NOK,19.11,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-olje--og-gasselskaper,enkeltanbefaling,ja
+2026-09-13,DNB Carnegie (DNB Nyheter),EQNR.OL,Equinor,hold,370.0,NOK,423.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-olje--og-gasselskaper,enkeltanbefaling,ja
+2026-09-13,DNB Carnegie (DNB Nyheter),VAR.OL,Vår Energi,hold,44.0,NOK,53.12,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-norske-olje--og-gasselskaper,enkeltanbefaling,ja
+2026-09-14,DNB Carnegie (DNB Nyheter),DOFG.OL,DOF Group,kjop,150.0,NOK,133.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-dof-group,enkeltanbefaling,ja
+2026-09-15,DNB Carnegie (DNB Nyheter),ATCO-A.ST,Atlas Copco,kjop,220.0,SEK,193.25,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aksjer-eksponert-mot-ki,enkeltanbefaling,ja
+2026-09-15,DNB Carnegie (DNB Nyheter),NOD.OL,Nordic Semiconductor,kjop,250.0,NOK,169.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aksjer-eksponert-mot-ki,enkeltanbefaling,ja
+2026-09-15,DNB Carnegie (DNB Nyheter),NOKIA.HE,Nokia,selg,7.8,EUR,8.59,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aksjer-eksponert-mot-ki,enkeltanbefaling,ja
+2026-09-15,DNB Carnegie (DNB Nyheter),SMOP.OL,Smartoptics,kjop,60.0,NOK,45.1,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aksjer-eksponert-mot-ki,enkeltanbefaling,ja
+2026-09-15,DNB Carnegie (DNB Nyheter),WRT1V.HE,Wärtsilä,kjop,43.0,EUR,26.9,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-aksjer-eksponert-mot-ki,enkeltanbefaling,ja
+2026-09-17,DNB Carnegie (DNB Nyheter),BRG.OL,Borregaard,kjop,190.0,NOK,147.0,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-borregaard,enkeltanbefaling,ja
+2026-09-18,DNB Carnegie (DNB Nyheter),REMEDY.HE,Remedy Entertainment,kjop,20.0,EUR,19.88,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nrc-gr--og-remedy-entertainment,enkeltanbefaling,ja
+2026-09-21,DNB Carnegie (DNB Nyheter),NOVO-B.CO,Novo Nordisk,kjop,420.0,DKK,281.55,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-novo-nordisk0,enkeltanbefaling,ja
+2026-09-22,DNB Carnegie (DNB Nyheter),SKA-B.ST,Skanska,kjop,330.0,SEK,273.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-wallenius-wilhelmsen-og-skanska,enkeltanbefaling,ja
+2026-09-22,DNB Carnegie (DNB Nyheter),WAWI.OL,Wallenius Wilhelmsen,hold,150.0,NOK,180.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-wallenius-wilhelmsen-og-skanska,enkeltanbefaling,ja
+2026-09-23,DNB Carnegie (DNB Nyheter),ORK.OL,Orkla,hold,95.0,NOK,94.3,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-orkla,enkeltanbefaling,ja
+2026-09-24,DNB Carnegie (DNB Nyheter),HM-B.ST,Hennes & Mauritz,selg,145.0,SEK,166.2,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-hennes---mauritz,enkeltanbefaling,ja
 2026-09-25,DNB Carnegie (DNB Nyheter),OMDA.OL,Omda,kjop,66.0,NOK,44.8,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-paa-omda,enkeltanbefaling,ja
 2026-09-29,DNB Carnegie (DNB Nyheter),CAMX.ST,Camurus,kjop,860.0,SEK,630.5,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nykode-og-camurus,enkeltanbefaling,ja
 2026-09-29,DNB Carnegie (DNB Nyheter),NYKD.OL,Nykode,kjop,5.5,NOK,3.61,https://www.dnb.no/dnbnyheter/no/bors-og-marked/dnb-carnegies-anbefaling-pa-nykode-og-camurus,enkeltanbefaling,ja

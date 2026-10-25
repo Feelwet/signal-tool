@@ -22,9 +22,11 @@ def test_no_column_shows_nothing(tmp_path):
 
 def test_line_format_and_old():
     r = {"dato_publisert": "2026-10-21", "anbefaling": "kjop", "kursmal": "195", "lenke": "https://x"}
+    import pytest; mp = pytest.MonkeyPatch(); mp.setattr(A, "HIT_RATE_TEXT", None)
     h = A.line_html(r, 174.1, date(2026, 10, 25))
     assert "DNB Carnegie: Kjøp · kursmål 195 · +12 % fra dagens kurs · 21.10 ↗" in h
     assert "◌ Bare oppmerksomhet" in h and "Treffrate under måling" in h and "eldre" not in h
     assert "%" not in h.split("title=")[1].split('"')[1]
     assert "eldre anbefaling" in A.line_html(r, 174.1, date(2027, 2, 1))
+    mp.undo(); assert "40–44 %" in A.line_html(r, 174.1, date(2026, 10, 25))
     assert "DNB" in A.tag_html(r, 174.1, date(2026, 10, 25))
