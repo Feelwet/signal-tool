@@ -1670,7 +1670,7 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags
 2026-10-24,NTI.OL,tema,1.066,2026-10-20,OSEBX.OL,,0,,weak_px|neg_ebit|high_vol
 2026-10-24,MPCC.OL,watch,26.74,2026-10-23,OSEBX.OL,1.62,0,,
 2026-10-24,YAR.OL,watch,402.9,2026-10-23,OSEBX.OL,1.03,0,,weak_px
-2026-10-25,HAS,kjop,117.44,2026-10-23,SPY,6.43,1,pead_tt,
+2026-10-25,HAS,hold,117.44,2026-10-23,SPY,6.43,1,pead,
 2026-10-25,HAVI.OL,watch,0.87,2026-10-23,OSEBX.OL,5.93,1,ose_contract,crash|illiquid|penny|weak_px|high_vol
 2026-10-25,ARCH.OL,watch,18.08,2026-10-23,OSEBX.OL,5.19,1,ose_contract,crash|illiquid
 2026-10-25,KOMPL.OL,watch,6.04,2026-10-23,OSEBX.OL,3.53,0,,illiquid|penny|weak_px|neg_ebit
@@ -1695,7 +1695,7 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags
 2026-10-25,VAR.OL,watch,58.94,2026-10-23,OSEBX.OL,1.8,1,theme_market,
 2026-10-25,HAFNI.OL,watch,98.0,2026-10-23,OSEBX.OL,1.8,1,theme_market,
 2026-10-25,RTX,watch,191.01,2026-10-23,SPY,1.66,0,,
-2026-10-25,CLF,kjop,13.9,2026-10-23,SPY,1.59,1,pead_tt,
+2026-10-25,CLF,hold,13.9,2026-10-23,SPY,1.59,1,pead,
 2026-10-25,YAR.OL,watch,402.9,2026-10-23,OSEBX.OL,1.59,0,,weak_px
 2026-10-25,CYVIZ.OL,watch,24.0,2026-10-23,OSEBX.OL,1.5,1,ose_contract,illiquid|weak_px|neg_ebit
 2026-10-25,EIOF.OL,watch,17.8,2026-10-23,OSEBX.OL,1.5,1,ose_contract,illiquid
