@@ -90,7 +90,7 @@ def render(snap: dict) -> str:
     cats = [e for e in snap["tickers"] if e.get("category") in ("kjop", "hold")]
     if any(e.get("category") for e in snap["tickers"]):
         cnt = {k: sum(e.get("category") == k for e in snap["tickers"]) for k in ("kjop", "hold", "watch")}
-        a(f"**Kategorier i dag:** Kjøp-kandidat {cnt['kjop']}, Hold {cnt['hold']}, Watchlist {cnt['watch']}. "
+        a(f"**Kategorier i dag:** Kjøp-kandidat {cnt['kjop']}, Hold {cnt['hold']}, Følg {cnt['watch']}. "
           "_Regelbaserte kategorier – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet._\n")
         for e in cats:
             a(f"- **{'Kjøp-kandidat' if e['category'] == 'kjop' else 'Hold'}: {e['ticker']}** – {e.get('cat_reason')}")
@@ -102,7 +102,7 @@ def render(snap: dict) -> str:
         for e in group:
             pts = ", ".join(f"{k} {v:.1f}" for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
             st = e.get("stats") or {}
-            catl = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Watchlist"}.get(e.get("category"), "")
+            catl = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Følg"}.get(e.get("category"), "")
             a(f"#### {e['ticker']} {('– ' + e['name']) if e.get('name') else ''} — {e['score']:.2f} poeng" + (f" — **{catl}**" if catl else ""))
             if e.get("cat_reason"):
                 a(f"_Kategori: {catl}. Hvorfor: {e['cat_reason']}_\n")

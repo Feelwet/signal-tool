@@ -146,7 +146,7 @@ def kontroll_html(snap: dict) -> str:
                 f'Historikken beregnes lokalt (sist {E(meta.get("computed"))}) fordi kursarkivet ikke finnes i den nattlige kjøringen; kode: signaltool/null_control.py.</p>')
     fw = ((snap.get("track_record") or {}).get("null") or {})
     cats = fw.get("cats") or {}
-    lab = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Watchlist"}
+    lab = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Følg"}
     if cats:
         items = []
         for c, r in cats.items():

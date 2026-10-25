@@ -420,14 +420,14 @@ def run(fast: bool = False) -> dict:
     extras.decision(snap, status)
     extras.collectors(snap, status)
     extras.flags(snap, status, nw=nw)
-    # rule-based categories (Kjøp-kandidat / Hold / Watchlist) + forward log + track record
+    # rule-based categories (Kjøp-kandidat / Hold / Følg) + forward log + track record
     try:
         from . import categories
         categories.apply(snap)
-        status["Kategorier (Kjøp/Hold/Watchlist)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
+        status["Kategorier (Kjøp/Hold/Følg)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
     except Exception as ex:  # never break the run
         log.exception("categories failed")
-        status["Kategorier (Kjøp/Hold/Watchlist)"] = f"FAILED: {ex}"
+        status["Kategorier (Kjøp/Hold/Følg)"] = f"FAILED: {ex}"
 
     # ---------- raw tables for report/site ----------
     snap["insider_clusters"] = _records(clusters, ["ticker", "issuer", "n_insiders", "n_tx", "total_value", "owners", "roles", "last_date", "url", "cluster"], 30) if not clusters.empty else []

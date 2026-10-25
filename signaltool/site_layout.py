@@ -127,10 +127,10 @@ def watch_text(tr: dict | None) -> str:
     if w.get("n") and w.get("hit") is not None:
         ci = w.get("hit_ci") or [None, None]
         sig = ci[0] is not None and ci[0] > 0.5
-        wt = (f'Watchlist (5 dager): <b>{_pc(w["hit"])} %</b> (95 %-KI {_pc(ci[0], 0)}–{_pc(ci[1], 0)} %), n={w["n"]}'
+        wt = (f'Følg (5 dager): <b>{_pc(w["hit"])} %</b> (95 %-KI {_pc(ci[0], 0)}–{_pc(ci[1], 0)} %), n={w["n"]}'
               + ("" if sig else ', <span class="xbadge">FLAG: ikke skilt fra tilfeldig</span>'))
     else:
-        wt = "Watchlist: n=0, ikke målt ennå"
+        wt = "Følg: n=0, ikke målt ennå"
     kt = f'Kjøp: n={k.get("n") or 0}, ikke målt ennå' if not k.get("n") else f'Kjøp (5 dager): {_pc(k["hit"])} %, n={k["n"]}'
     return f'<p class="mut" style="margin:6px 0 0">Treffrate fra fremoverloggen – {wt}. {kt}. <a href="tickere.html#treffsikkerhet">Detaljer</a></p>'
 

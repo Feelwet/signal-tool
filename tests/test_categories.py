@@ -1,4 +1,5 @@
-"""Rule-based Kjøp-kandidat / Hold / Watchlist categories."""
+import pytest
+"""Rule-based Kjøp-kandidat / Hold / Følg categories."""
 from datetime import date, timedelta
 import pandas as pd
 from signaltool import categories as C
@@ -139,6 +140,28 @@ def test_parse_dates():
 
 
 # ---------------- PEAD topp/topp
+@pytest.fixture(autouse=True)
+def _tt_flag(request, monkeypatch):
+    """test_tt_* tester topp/topp-logikken med flagget PÅ; alt annet kjører med standard (AV)."""
+    from signaltool import config
+    if request.node.name.startswith("test_tt_"):
+        monkeypatch.setattr(config, "PEAD_TT_ENABLED", True)
+
+
+def test_flag_off_by_default_old_rules():
+    from signaltool import config, site
+    assert config.PEAD_TT_ENABLED is False
+    e = _tt(); r = C.classify(e, ctx())
+    assert "pead_tt" not in r["types"] and not r["via_tt"]
+    assert r["category"] != "kjop"                       # PEAD alene teller ikke mot Kjøp
+    assert not any(x[0].startswith("…eller") for x in r["rules"])
+    hot = _tt(stats={"ret_5d": 0.12, "ret_20d": 0.30, "close": 130.0}, dec={"eps_surprise": 9.0}, points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
+    st = next(x for x in C.classify(hot, ctx())["rules"] if x[0].startswith("Ikke strukket"))
+    assert st[1] is False and "unntatt" not in st[2]     # ingen unntak fra strukket-regelen
+    e.update(category=r["category"], cat_reason=r["reason"], cat_rules=r["rules"], cat_types=r["types"], cat_via_tt=r["via_tt"])
+    assert site.tt_row(e) == "" and "1 type: sterk rapport" not in site.cat_cell(e)
+    assert config.PEAD_TT_CAVEAT.replace("&", "&amp;") not in site.cat_rules_html(e)
+
 TT = {"pead": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
 
 
@@ -186,7 +209,7 @@ def test_tt_display(tmp_path):
     e.update(category=r["category"], cat_reason=r["reason"], cat_rules=r["rules"], cat_types=r["types"], cat_via_tt=r["via_tt"])
     assert "· 1 type: sterk rapport" in site.cat_cell(e)
     h = site.cat_rules_html(e)
-    assert "via Sterk rapport + reaksjon" in h and PEAD_TT_CAVEAT.replace("&", "&amp;") in h and "…eller ⚑ sterk rapport" in h
+    assert 'Kjøp</span> <span style="font-weight:400">· <span class="mut">1 type</span>: sterk rapport' in h and "kandidat via" not in h and PEAD_TT_CAVEAT.replace("&", "&amp;") in h and "…eller ⚑ sterk rapport" in h
     assert PEAD_TT_BADGE.replace("&", "&amp;") in site.tt_row(e)
 
 

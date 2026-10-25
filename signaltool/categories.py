@@ -1,4 +1,4 @@
-"""Rule-based stock categories: «Kjøp» (kandidat), «Hold», «Watchlist».
+"""Rule-based stock categories: «Kjøp» (kandidat), «Hold», «Følg».
 
 IMPORTANT: our own backtests (reports/backtest.md) found NO proven edge in insider clusters or GDELT spikes.
 These categories are therefore deliberately conservative, fully transparent rules - NOT a forecast, NOT personal
@@ -26,12 +26,13 @@ Rules (all thresholds in RULES):
   Hold           = >= 1 higher-reliability signal type, price confirmation holds, no red flags, but the entry is late:
                    stretched (rule 4 fails) OR no signal fresher than 7 days OR it was a Kjøp-kandidat within the last
                    30 days without a new trigger ("if you own it, the signals still support it; don't chase").
-                   A single fresh, un-stretched signal is NOT Hold but Watchlist (single source = unconfirmed).
-  Watchlist      = everything else with attention/anomalies (single source, volume-only, theme-only, falling price,
+                   A single fresh, un-stretched signal is NOT Hold but Følg (single source = unconfirmed).
+  Følg      = everything else with attention/anomalies (single source, volume-only, theme-only, falling price,
                    red flags, missing price data)
 """
 from __future__ import annotations
 from . import http as _http
+from . import config as CFG
 import logging, re
 from datetime import date, datetime, timedelta
 import numpy as np
@@ -69,7 +70,7 @@ TYPE_NO = {"gov_contract": "offentlig kontrakt (DoD/USAspending)", "insider_clus
            "pead": "sterk kvartalsrapport (eksperimentell, teller ikke mot Kjøp)",
            "pead_tt": "sterk rapport + reaksjon (testet, topp 20 % på begge)",
            "tema_kat": "Tema-katalysator (eksperimentell – teller ikke mot Kjøp)"}
-CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watchlist"}
+CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Følg"}
 DISCLAIMER_NO = ("Kategoriene er regelbaserte og mekaniske – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet "
                  "(våre egne tester fant ingen dokumentert meravkastning).")
 _MONTHS = {m: i for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
@@ -144,6 +145,8 @@ def _officer_director(roles: str) -> bool:
 def pead_kind(dec: dict) -> str:
     """Samme rapport gir aldri to typer: topp/topp (EPS-overraskelse og reaksjon begge over ~80-persentilen) erstatter vanlig PEAD."""
     from .decision import PEAD_SURPRISE, PEAD_REACTION
+    if not CFG.PEAD_TT_ENABLED:   # av: gammel regel (vanlig PEAD, teller ikke mot Kjøp)
+        return "pead"
     sur, ear = dec.get("eps_surprise"), dec.get("earn_reaction")
     return "pead_tt" if sur is not None and ear is not None and sur >= PEAD_SURPRISE and ear >= PEAD_REACTION else "pead"
 
@@ -247,8 +250,10 @@ def classify(e: dict, ctx: dict) -> dict:
     rules = [
         ("≥ 2 uavhengige signaltyper fra kilder med høyere pålitelighet", nk >= R["min_types"],
          ", ".join(TYPE_NO[k] for k in types) or "ingen"),
+    ] + ([
         ("…eller ⚑ sterk rapport + reaksjon alene (topp 20 % på EPS-overraskelse og reaksjon)", tt,
          (types["pead_tt"]["detail"] if tt else "gjelder bare US-aksjer (testet på S&P 500)" if "pead_tt" in types else "nei")),
+    ] if CFG.PEAD_TT_ENABLED else []) + [
         (f"Minst ett av dem ferskere enn {R['fresh_days']} dager", fresh if types else False, f"nyeste {newest}" if newest else "–"),
         ("Kurs over 50-dagers glidende snitt", above,
          "mangler kursdata" if above is None else f"{close:.2f} vs {sma:.2f}"),
@@ -343,7 +348,7 @@ def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
              "types": "|".join(sorted(list(e.get("cat_types") or {}) + (["tema_kat"] if (e.get("temakart") or {}).get("tema_kat") else []))),
              "flags": "|".join(list(e.get("cat_flag_keys") or []) + sorted(e.get("cat_warnings") or {}))}
             for e in snap.get("tickers", []) if e.get("category") and loggable(e["ticker"], (e.get("decision") or {}).get("quoteType"))]
-    from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Watchlist stats)
+    from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Følg stats)
     rows += log_rows(snap)
     old = read_log(path)
     new = pd.DataFrame(rows, columns=LOG_COLS)

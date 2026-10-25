@@ -579,7 +579,7 @@ def dashboard_html(snap: dict) -> str:
         f'<a href="tickere.html"><span class="dot" style="background:{colors[k]}"></span>'
         f'<b>{n}</b>&nbsp;{lab}</a>'
         for k, n, lab in (("kjop", cats["kjop"], "Kjøp"), ("hold", cats["hold"], "Hold"),
-                          ("watch", cats["watch"], "Watchlist"), ("andre", rest, "øvrige"))
+                          ("watch", cats["watch"], "Følg"), ("andre", rest, "øvrige"))
         if n
     )
     donut = (
@@ -599,7 +599,7 @@ def dashboard_html(snap: dict) -> str:
         return _re.sub(r"[^A-Za-z0-9_-]", "_", t)
     # avoid circular: duplicate minimal badge
     def _badge(cat):
-        lab = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watch"}.get(cat)
+        lab = {"kjop": "Kjøp", "hold": "Hold", "watch": "Følg"}.get(cat)
         return f'<span class="cat {cat}">{lab}</span>' if lab else ""
     items = "".join(
         f'<li><a href="ticker/{slug(e["ticker"])}.html"><span><b>{E(e["ticker"])}</b> '

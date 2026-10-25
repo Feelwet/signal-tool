@@ -13,7 +13,7 @@ from . import site_layout as L
 from . import names as NM
 
 THEME_LOG = Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv"
-CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Watch", "#e3b341"))
+CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Følg", "#e3b341"))
 MIN_N = 30  # under dette: «n for lav (FLAG)»
 
 CSS = """
@@ -94,7 +94,7 @@ def strip_html(snap: dict) -> str:
     seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in CATS if cnt[k])
     fk = {"kjop": "kjop", "hold": "hold", "watch": "folg"}
     t2 = (f'<div class="ov-tile tap"><div class="lbl">Kategorier<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["kjop"]} Kjøp</div>'
-          f'<div class="ov-stack" role="img" aria-label="Kjøp {cnt["kjop"]}, Hold {cnt["hold"]}, Watch {cnt["watch"]}">{seg}</div>'
+          f'<div class="ov-stack" role="img" aria-label="Kjøp {cnt["kjop"]}, Hold {cnt["hold"]}, Følg {cnt["watch"]}">{seg}</div>'
           f'<div class="sub">' + " · ".join(f'<a class="in" href="tickere.html?filter={fk[k]}">{lab} {cnt[k]}</a>' for k, lab, _ in CATS) + '</div>'
           f'<div class="sub2" id="kjop-treff">{E(kjop_hit_line(snap.get("track_record")))}</div>'
           '</div>')
@@ -162,9 +162,15 @@ def two_col_html(snap: dict) -> str:
     return f'<section class="ov-2">{left}{right}</section>'
 
 
+NOTICE = "HAS, CLF: Kjøp trukket tilbake. Regelen på siden var ikke den som ble testet. Ny test før den slås på igjen."
+NOTICE_UNTIL = "2026-11-01"
+
+
 def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
     b = snap.get("briefing") or {}
     items, seen = [], set()
+    if str(snap.get("date") or "") <= NOTICE_UNTIL:   # fast melding i 7 dager (t.o.m. 01.11.2026)
+        items.append(f'<li>ⓘ {E(NOTICE)}</li>')
     for a in b.get("alerts") or []:
         k = a["title"].split(":")[0].strip().lower()
         if k not in seen:

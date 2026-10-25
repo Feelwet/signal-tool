@@ -224,7 +224,7 @@ def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True, prices
 
 
 def log_rows(snap: dict) -> list[dict]:
-    """Forward-log rows for map tickers NOT already in the snapshot (category 'tema' – outside the Kjøp/Hold/Watchlist stats).
+    """Forward-log rows for map tickers NOT already in the snapshot (category 'tema' – outside the Kjøp/Hold/Følg stats).
     types = 'tema_kat' when the tag is set; rows without it are the control group."""
     have = {e["ticker"] for e in snap.get("tickers", [])}
     from .oslo_flags import FLAG_INFO

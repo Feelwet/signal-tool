@@ -115,8 +115,8 @@ def num(x, d=2):
     return "–" if x is None else f"{x:.{d}f}"
 
 
-CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Watchlist"}
-CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Watchlist er regelbaserte og mekaniske – ikke personlig '
+CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Følg"}
+CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er regelbaserte og mekaniske – ikke personlig '
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
@@ -172,9 +172,9 @@ def cat_rules_html(e):
                "hold": "Har du aksjen, støtter signalene den fortsatt – men inngangen er sen/strukket. Ikke jag kursen.",
                "watch": "Noe uvanlig skjer, men bekreftelse mangler. Følg med."}[e["category"]]
     from .config import PEAD_TT_CAVEAT
-    via = (' <span style="font-weight:400">via Sterk rapport + reaksjon</span>' if e.get("cat_via_tt") else "")
+    via = (' <span style="font-weight:400">· <span class="mut">1 type</span>: sterk rapport</span>' if e.get("cat_via_tt") else "")
     cav = f'<p class="mut" style="margin:0 0 6px">{E(PEAD_TT_CAVEAT)}</p>' if e.get("cat_via_tt") else ""
-    return (f'<div class="card"><h2 style="margin-top:0">Kategori: {cat_badge(e["category"])}{via}</h2>{cav}<p><b>Hvorfor:</b> {E(e.get("cat_reason"))}</p>'
+    return (f'<div class="card"><h2 style="margin-top:0">Kategori: {'<span class="cat kjop">Kjøp</span>' if e.get("cat_via_tt") else cat_badge(e["category"])}{via}</h2>{cav}<p><b>Hvorfor:</b> {E(e.get("cat_reason"))}</p>'
             f'<p class="mut">{meaning}</p><div class="tw"><table><tr><th>Regel (Kjøp-kandidat krever alle)</th><th>Status</th><th>Detalj</th></tr>{rows}</table></div>'
             + CAT_NOTE.format(pre="../") + "</div>")
 
@@ -235,7 +235,7 @@ def categories_method_html():
     from .oslo_flags import FLAG_INFO
     fl = "".join(f'<li><b>{E(v[0])}</b> ({ {"red": "rødt – blokkerer Kjøp", "yellow": "gult – halver størrelsen", "note": "tillegg", "info": "info-merke"}[v[1]] }; '
                  f'evidens: {E(v[2])}): {E(v[3])}</li>' for v in FLAG_INFO.values())
-    return f"""<div class="card" id="kategorier"><h2 style="margin-top:0">Kategorier: Kjøp-kandidat, Hold, Watchlist</h2>
+    return f"""<div class="card" id="kategorier"><h2 style="margin-top:0">Kategorier: Kjøp-kandidat, Hold, Følg</h2>
 <div class="warnbox">{E(C.DISCLAIMER_NO)} Våre historiske tester fant ingen pålitelig fordel for innsidekjøp-klynger, DoD-kontrakter, GDELT-topper,
 prediksjonsmarkeder, kursbekreftelsen i seg selv – eller for noe annet kjøpssignal. «Sterk kvartalsrapport» er med som <b>eksperimentell</b> signaltype (svak evidens).
 Det som faktisk har holdt i testene, er de <b>røde flaggene for Oslo Børs</b> – de hindrer Kjøp. Reglene er laget for å være strenge og etterprøvbare – ikke for å love avkastning.</div>
@@ -257,7 +257,7 @@ lav likviditet (median omsetning under ca. ${R["min_adv_usd"]/1e6:.0f}M per dag)
 <h3>{cat_badge("hold")} Hold</h3><p>Minst én pålitelig signaltype, kursbekreftelse og ingen røde flagg – men inngangen er sen: kursen er strukket,
 signalene er eldre enn {R["fresh_days"]} dager, eller aksjen var Kjøp-kandidat de siste {R["hold_memory_days"]} dagene uten ny utløser.
 Betydning: <i>har du aksjen, støtter signalene den fortsatt – men ikke jag kursen.</i></p>
-<h3>{cat_badge("watch")} Watchlist</h3><p>Alt annet med oppmerksomhet/avvik: bare én kildetype, bare volum eller tema, fallende kurs, røde flagg eller manglende kursdata.</p>
+<h3>{cat_badge("watch")} Følg</h3><p>Alt annet med oppmerksomhet/avvik: bare én kildetype, bare volum eller tema, fallende kurs, røde flagg eller manglende kursdata.</p>
 <p class="mut">Forventning: få eller ingen Kjøp-kandidater de fleste dager. Hver kjøring logges (dato, ticker, kategori, kurs, signaltyper, flagg) slik at treffsikkerheten kan måles
 over tid – se <a href="tickere.html#treffsikkerhet">Treffsikkerhet</a>. Terskler: signaltool/categories.py og signaltool/oslo_flags.py.</p></div>"""
 
@@ -748,7 +748,7 @@ def metode_page(snap):
                    [(f"{ok}/{n}", "Kilder OK", "siste kjøring", "#kilder"), (str(len(tested)), "Testet, ingen effekt", "fjernet fra Makro", "#testet"), (str(len(exp)), "Eksperimentelt", "ikke testet", "#eksperimentelt")])
             + fold(T("Ærlig status", "hva verktøyet kan og ikke kan"), hon, open_=False, hid="status")
             + fold(T("Porteføljeregler og markedsregime", "regler for posisjoner"), X.portfolio_rules_html() + Q.section("Markedsregime", X.regime_html, snap, snap=snap), open_=False, hid="regler")
-            + fold(T("Treffrate", "fremoverlogg, Watchlist og Kjøp"), L.watch_text(snap.get("track_record")), open_=False, hid="treffrate")
+            + fold(T("Treffrate", "fremoverlogg, Følg og Kjøp"), L.watch_text(snap.get("track_record")), open_=False, hid="treffrate")
             + fold(T("Kildestatus", f"Kilder OK {ok}/{n} · {len(fails)} feilet · {len(part)} delvis"), src, open_=False, hid="kilder")
             + fold(T("Rapporter, backtester og kildeliste", "metode, overtilpasning, basisrater, rapporter"), kb, open_=False, hid="rapporter")
             + fold(T("Testet, ingen effekt", ", ".join(t[0].split(" ", 1)[-1] for t in tested) or "–"), tested_h, open_=False, hid="testet")

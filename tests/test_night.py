@@ -23,7 +23,9 @@ def test_price_metrics_basic():
     assert m["mom12_1"] is not None
 
 
-def test_pead_counts_as_signal_type():
+def test_pead_counts_as_signal_type(monkeypatch):
+    from signaltool import config
+    monkeypatch.setattr(config, "PEAD_TT_ENABLED", True)
     e = cand(points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
     e["decision"] = {"pead": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
     r = C.classify(e, ctx())

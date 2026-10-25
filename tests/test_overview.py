@@ -123,3 +123,11 @@ def test_names_file_covers_real_source():
     from signaltool import names as NM
     d = json.loads(NM.PATH.read_text())
     assert "yfinance" in d["source"] and len(d["names"]) >= 60
+
+
+def test_tt_withdrawn_notice_7_days():
+    from signaltool import overview as OV
+    on = OV.changes_alerts_html({"date": "2026-10-25"})
+    assert "HAS, CLF: Kjøp trukket tilbake. Regelen på siden var ikke den som ble testet. Ny test før den slås på igjen." in on
+    assert "trukket tilbake" in OV.changes_alerts_html({"date": "2026-11-01"})
+    assert "trukket tilbake" not in OV.changes_alerts_html({"date": "2026-11-02"})

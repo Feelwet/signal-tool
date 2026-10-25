@@ -7,7 +7,7 @@ from pathlib import Path
 from .config import DATA
 
 SNAP_DIR = DATA / "snapshots"
-CAT_NO = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Watchlist"}
+CAT_NO = {"kjop": "Kjøp-kandidat", "hold": "Hold", "watch": "Følg"}
 CAT_RANK = {"kjop": 2, "hold": 1, "watch": 0}
 
 

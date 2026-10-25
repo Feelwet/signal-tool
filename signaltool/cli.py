@@ -12,7 +12,7 @@ def main(argv=None):
     sub.add_parser("report", help="re-render markdown report from latest snapshot")
     sub.add_parser("build-site", help="build static website in site/ from latest snapshot")
     sub.add_parser("check-site", help="sanity check of site/ before deploy (exit 1 = do not deploy)")
-    sub.add_parser("categorize", help="refresh prices + Kjøp/Hold/Watchlist categories on the latest snapshot, then report + site")
+    sub.add_parser("categorize", help="refresh prices + Kjøp/Hold/Følg categories on the latest snapshot, then report + site")
     b = sub.add_parser("backtest", help="run historical validation")
     b.add_argument("which", choices=["insider", "gdelt", "categories", "kontroll", "all"], nargs="?", default="all")
     s = sub.add_parser("serve", help="serve site/ locally")
@@ -72,7 +72,7 @@ def main(argv=None):
         extras.flags(snap, snap["status"])
         categories.apply(snap)
         briefing.apply(snap)
-        snap["status"]["Kategorier (Kjøp/Hold/Watchlist)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
+        snap["status"]["Kategorier (Kjøp/Hold/Følg)"] = "ok (" + ", ".join(f"{categories.CAT_NO[k]}: {v}" for k, v in snap["categories_meta"]["counts"].items()) + ")"
         txt = json.dumps(snap, indent=1, default=str)
         p.write_text(txt); (DATA / "snapshots" / f"{snap['date']}.json").write_text(txt)
         print(report.write(snap)); print(site.build(snap))
