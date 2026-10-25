@@ -111,3 +111,6 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-25,VEI.OL,2026-10-24,for lite data,8,3.0,,,,40235369673,false
 2026-10-25,XOM,2026-10-24,for lite data,50,1.14,,,,40235369673,false
 2026-10-25,YAR.OL,2026-10-24,for lite data,27,1.8,,,,40235369673,false
+2026-10-25,NOC,2026-10-24,"lik score, kutt 60",62,0.74,3,1,GD:på:1|KOG.OL:på:1|LHX:på:1,40237541660,false
+2026-10-25,NOSN.OL,2026-10-24,cut60,75,0.5,,,,40237541660,false
+2026-10-25,NPRO.OL,2026-10-24,for lite data,6,3.0,,,,40237541660,false
