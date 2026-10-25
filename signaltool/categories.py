@@ -66,7 +66,8 @@ FX_USD = {".OL": 0.095, ".L": 0.0127, ".DE": 1.1, ".PA": 1.1, ".AS": 1.1, ".MI":
           ".CO": 0.147, ".TO": 0.73, ".AX": 0.65}
 TYPE_NO = {"gov_contract": "offentlig kontrakt (DoD/USAspending)", "insider_cluster": "innsidekjøp-klynge (ledelse/styre)",
            "ose_contract": "kontraktsmelding (Newsweb)", "theme_market": "tema med markedsbekreftelse",
-           "pead": "sterk kvartalsrapport (eksperimentell, svak evidens)",
+           "pead": "sterk kvartalsrapport (eksperimentell, teller ikke mot Kjøp)",
+           "pead_tt": "sterk rapport + reaksjon (testet, topp 20 % på begge)",
            "tema_kat": "Tema-katalysator (eksperimentell – teller ikke mot Kjøp)"}
 CAT_NO = {"kjop": "Kjøp", "hold": "Hold", "watch": "Watchlist"}
 DISCLAIMER_NO = ("Kategoriene er regelbaserte og mekaniske – ikke personlig finansiell rådgivning, og ikke bevist å slå markedet "
@@ -140,6 +141,16 @@ def _officer_director(roles: str) -> bool:
     return bool(re.search(r"director|officer|chief|ceo|cfo|coo|president|vp\b|vice", roles or "", re.I))
 
 
+def pead_kind(dec: dict) -> str:
+    """Samme rapport gir aldri to typer: topp/topp (EPS-overraskelse og reaksjon begge over ~80-persentilen) erstatter vanlig PEAD."""
+    from .decision import PEAD_SURPRISE, PEAD_REACTION
+    sur, ear = dec.get("eps_surprise"), dec.get("earn_reaction")
+    return "pead_tt" if sur is not None and ear is not None and sur >= PEAD_SURPRISE and ear >= PEAD_REACTION else "pead"
+
+
+NOT_FOR_KJOP = {"pead"}   # eksperimentelle typer som vises, men ikke teller mot Kjøp
+
+
 def signal_types(e: dict, ctx: dict) -> dict:
     """Higher-reliability, independent signal types present for this ticker -> {type: {"date", "detail"}}."""
     t, pts, out = e["ticker"], e.get("points", {}), {}
@@ -159,7 +170,7 @@ def signal_types(e: dict, ctx: dict) -> dict:
         # EXPERIMENTAL / weak evidence (strategy-research/RAPPORT_3): point-in-time S&P 500 incl. former members gives ~+0.4-0.8 pp
         # gross per 60 d for the site thresholds (t 0.7-1.9), ~0 net of 0.75 % costs. PEAD-S (vol above median) ~+1 pp gross, ~+0.25 net.
         ps = " · PEAD-S (vol. over median)" if dec.get("pead_s") else ""
-        out["pead"] = {"date": _d(dec.get("last_earnings")), "detail": f"EPS-overraskelse {dec.get('eps_surprise'):+.0f} %, reaksjon {dec.get('earn_reaction', 0)*100:+.1f} % vs SPY{ps}"}
+        out[pead_kind(dec)] = {"date": _d(dec.get("last_earnings")), "detail": f"EPS-overraskelse {dec.get('eps_surprise'):+.0f} %, reaksjon {dec.get('earn_reaction', 0)*100:+.1f} % vs SPY{ps}"}
     if pts.get("ose_contracts", 0) > 0:
         out["ose_contract"] = {"date": newest("ose_contract"), "detail": "Newsweb"}
     for k in e.get("themes", []):
@@ -179,6 +190,9 @@ def classify(e: dict, ctx: dict) -> dict:
     t, st, R = e["ticker"], e.get("stats") or {}, RULES
     types = signal_types(e, ctx)
     n = len(types)
+    nk = len([k for k in types if k not in NOT_FOR_KJOP])
+    tt = "pead_tt" in types
+    enough = nk >= R["min_types"] or tt
     close, sma, r5, r20 = st.get("close"), st.get("sma50"), st.get("ret_5d"), st.get("ret_20d")
     bench = benchmark_for(t)
     b20 = ctx["bench_ret20"].get(bench)
@@ -193,6 +207,7 @@ def classify(e: dict, ctx: dict) -> dict:
     dist = None if close is None or not sma else close / sma - 1
     stretched = any([r5 is not None and r5 >= R["stretch_5d"], r20 is not None and r20 >= R["stretch_20d"],
                      dist is not None and dist >= R["stretch_sma"]])
+    stretch_block = stretched and not tt   # topp/topp er unntatt strukket-regelen (pead_stretch.md)
     # red flags
     flags = {}
     sh = ctx["shorts"].get(t)
@@ -226,15 +241,17 @@ def classify(e: dict, ctx: dict) -> dict:
     no_flags = not flags
 
     rules = [
-        ("≥ 2 uavhengige signaltyper fra kilder med høyere pålitelighet", n >= R["min_types"],
+        ("≥ 2 uavhengige signaltyper fra kilder med høyere pålitelighet", nk >= R["min_types"],
          ", ".join(TYPE_NO[k] for k in types) or "ingen"),
+        ("…eller ⚑ sterk rapport + reaksjon alene (topp 20 % på EPS-overraskelse og reaksjon)", tt,
+         (types["pead_tt"]["detail"] if tt else "nei")),
         (f"Minst ett av dem ferskere enn {R['fresh_days']} dager", fresh if types else False, f"nyeste {newest}" if newest else "–"),
         ("Kurs over 50-dagers glidende snitt", above,
          "mangler kursdata" if above is None else f"{close:.2f} vs {sma:.2f}"),
         (f"20-dagers avkastning bedre enn {BENCH_NAME[bench]}", beats,
          "mangler data" if rel20 is None else f"{r20*100:+.1f} % vs {b20*100:+.1f} %"),
-        ("Ikke strukket (5d < +10 %, 20d < +25 %, < 25 % over 50d-snitt)", None if r5 is None else not stretched,
-         "–" if r5 is None else f"5d {r5*100:+.1f} %, 20d {(r20 or 0)*100:+.1f} %" + (f", {dist*100:+.0f} % vs 50d" if dist is not None else "")),
+        ("Ikke strukket (5d < +10 %, 20d < +25 %, < 25 % over 50d-snitt)", None if r5 is None else not stretch_block,
+         "–" if r5 is None else ("unntatt: sterk rapport + reaksjon; " if tt and stretched else "") + f"5d {r5*100:+.1f} %, 20d {(r20 or 0)*100:+.1f} %" + (f", {dist*100:+.0f} % vs 50d" if dist is not None else "")),
         ("Ingen kraftig økende shortposisjoner", "short" not in flags, flags.get("short", "ok")),
         ("Ikke nylig krasj (≥ 20 % fall på 20 dager)", None if dd is None else "crash" not in flags, flags.get("crash", "ok" if dd is not None else "–")),
         ("Tilstrekkelig likviditet, ikke pennyaksje", "illiquid" not in flags and "penny" not in flags,
@@ -258,9 +275,9 @@ def classify(e: dict, ctx: dict) -> dict:
     prev_recent = prev is not None and (ctx["today"] - prev).days <= R["hold_memory_days"] and prev < ctx["today"]
     names = " + ".join(TYPE_NO[k] for k in types)
     bn = BENCH_NAME[bench]
-    if n >= R["min_types"] and fresh and price_ok and no_flags and not stretched:
+    if enough and fresh and price_ok and no_flags and not stretch_block:
         cat = "kjop"
-        reason = f"{names}; kurs over 50-dagers snitt og sterkere enn {bn} siste 20 d; ingen røde flagg."
+        reason = (f"via Sterk rapport + reaksjon ({types['pead_tt']['detail']}); kurs" if tt and nk < R["min_types"] else f"{names}; kurs") + f" over 50-dagers snitt og sterkere enn {bn} siste 20 d; ingen røde flagg."
     elif price_ok and no_flags and n >= 1 and (stretched or stale or prev_recent):
         cat = "hold"
         if stretched:
@@ -278,18 +295,20 @@ def classify(e: dict, ctx: dict) -> dict:
             kinds = sorted(pos - {"theme_attention"})
             why.append("bare tema-oppmerksomhet" if pos == {"theme_attention"} else
                        "ingen signaler fra kilder med høyere pålitelighet" + (" (bare " + ", ".join(kinds) + ")" if kinds else ""))
-        elif n == 1:
-            why.append(f"bare én uavhengig kildetype ({names})")
+        elif nk < R["min_types"] and not tt:
+            why.append(f"bare én uavhengig kildetype ({names})" if n == 1 else f"bare {nk} tellende kildetype(r) ({names})")
         if above is None:
             why.append("mangler kursdata")
         elif not above:
-            why.append("kurs under 50-dagers snitt")
-        elif beats is False:
+            why.append("kurs under 50-dagerssnittet")
+        if beats is False:
             why.append(f"svakere enn {bn} siste 20 d")
+        if tt and not fresh and newest:
+            why.append(f"rapporten er eldre enn {R['fresh_days']} dager ({newest})")
         if not why and n >= 2 and not fresh:
             why.append("signalene er ikke ferske")
         reason = "Mangler bekreftelse: " + "; ".join(why[:3]) + "."
-    return {"category": cat, "reason": reason, "rules": rules, "types": {k: v["detail"] for k, v in types.items()},
+    return {"category": cat, "reason": reason, "rules": rules, "via_tt": cat == "kjop" and tt and nk < R["min_types"], "types": {k: v["detail"] for k, v in types.items()},
             "flags": list(flags.values()), "flag_keys": list(flags), "warnings": warnings, "info": info, "benchmark": bench}
 
 
@@ -515,7 +534,7 @@ def apply(snap: dict, log_path=LOG_PATH, fetch=True) -> dict:
         c = classify(e, ctx)
         e.update({"category": c["category"], "cat_reason": c["reason"], "cat_rules": c["rules"],
                   "cat_types": c["types"], "cat_flags": c["flags"], "cat_flag_keys": c["flag_keys"],
-                  "cat_warnings": c["warnings"], "cat_info": c["info"], "cat_benchmark": c["benchmark"]})
+                  "cat_warnings": c["warnings"], "cat_info": c["info"], "cat_benchmark": c["benchmark"], "cat_via_tt": c["via_tt"]})
     logdf = append_log(snap, log_path)
     tr = track_record(logdf, {})
     matured = logdf[logdf["date"] <= (today - timedelta(days=7)).isoformat()] if len(logdf) else logdf

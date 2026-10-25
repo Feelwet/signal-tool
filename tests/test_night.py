@@ -27,7 +27,7 @@ def test_pead_counts_as_signal_type():
     e = cand(points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
     e["decision"] = {"pead": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
     r = C.classify(e, ctx())
-    assert "pead" in r["types"] and r["category"] == "kjop", r["reason"]
+    assert "pead_tt" in r["types"] and "pead" not in r["types"] and r["category"] == "kjop", r["reason"]
 
 
 def test_oslo_weak_momentum_is_red_flag():

@@ -35,7 +35,7 @@ def test_kjop_requires_all_rules():
     r = C.classify(cand(points=TWO, dates={"gov_contract": FRESH}), two_ctx())
     assert r["category"] == "kjop", r["reason"]
     assert set(r["types"]) == {"gov_contract", "insider_cluster"}
-    assert all(x[1] for x in r["rules"])
+    assert all(x[1] for x in r["rules"] if not x[0].startswith("…eller"))  # topp/topp-raden er et alternativ, ikke et krav
 
 
 def test_single_source_is_watchlist():
@@ -136,3 +136,55 @@ def test_parse_dates():
     assert C._d("Contracts for Sept. 23, 2026") == date(2026, 9, 23)
     assert C._d("2026-09-25T07:41:09.719Z") == date(2026, 9, 25)
     assert C._d(None) is None
+
+
+# ---------------- PEAD topp/topp
+TT = {"pead": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
+
+
+def _tt(stats=None, dec=None, points=None, dates=None):
+    e = cand(points=points or {}, stats=stats, dates=dates)
+    e["decision"] = {**TT, **(dec or {})}
+    return e
+
+
+def test_tt_alone_is_kjop_and_not_double_counted():
+    r = C.classify(_tt(), ctx())
+    assert r["category"] == "kjop" and r["via_tt"], r["reason"]
+    assert list(r["types"]) == ["pead_tt"]          # samme rapport: aldri både pead og pead_tt
+    assert "via Sterk rapport + reaksjon" in r["reason"]
+
+
+def test_ordinary_pead_does_not_count_for_kjop():
+    e = _tt(dec={"eps_surprise": 9.0}, points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
+    r = C.classify(e, ctx())
+    assert set(r["types"]) == {"pead", "gov_contract"} and r["category"] != "kjop"
+
+
+def test_tt_exempt_from_stretch():
+    hot = {"ret_5d": 0.12, "ret_20d": 0.30, "close": 130.0}
+    assert C.classify(_tt(stats=hot), ctx())["category"] == "kjop"
+    e = _tt(stats=hot, dec={"eps_surprise": 9.0}, points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
+    assert C.classify(e, ctx())["category"] != "kjop"
+    st = next(x for x in C.classify(_tt(stats=hot), ctx())["rules"] if x[0].startswith("Ikke strukket"))
+    assert st[1] is True and "unntatt" in st[2]
+
+
+def test_tt_still_needs_price_confirmation_fresh_and_no_flags():
+    r = C.classify(_tt(stats={"close": 95.0}), ctx())
+    assert r["category"] == "watch" and "kurs under 50-dagerssnittet" in r["reason"] and "én uavhengig" not in r["reason"]
+    r = C.classify(_tt(stats={"ret_20d": -0.05}), ctx())
+    assert r["category"] == "watch" and "svakere enn" in r["reason"]
+    assert C.classify(_tt(dec={"last_earnings": OLD}), ctx())["category"] != "kjop"
+    assert C.classify(_tt(stats={"maxdd20": -0.3}), ctx())["category"] == "watch"
+
+
+def test_tt_display(tmp_path):
+    from signaltool import site
+    from signaltool.config import PEAD_TT_BADGE, PEAD_TT_CAVEAT
+    e = _tt(); r = C.classify(e, ctx())
+    e.update(category=r["category"], cat_reason=r["reason"], cat_rules=r["rules"], cat_types=r["types"], cat_via_tt=r["via_tt"])
+    assert "· 1 type: sterk rapport" in site.cat_cell(e)
+    h = site.cat_rules_html(e)
+    assert "via Sterk rapport + reaksjon" in h and PEAD_TT_CAVEAT.replace("&", "&amp;") in h and "…eller ⚑ sterk rapport" in h
+    assert PEAD_TT_BADGE.replace("&", "&amp;") in site.tt_row(e)

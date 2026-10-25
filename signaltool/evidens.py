@@ -75,6 +75,7 @@ def load_red(path: Path = EVFILE) -> dict[str, tuple[str, str]]:
 
 evidens: dict[str, tuple[str, str]] = {
     **load_red(),
+    "pead_tt": ("testet", "Sterk rapport + reaksjon (topp 20 % på EPS-overraskelse og reaksjon): +1,48 pp (t 3,2) 2006–15 og +1,95 pp (t 3,3) 2016–26; dagens S&P 500-medlemmer (survivorship)."),
     "pead": ("eksp", "Sterk kvartalsrapport (PEAD): eksperimentelt, svak evidens; treffrate måles i forward-loggen."),
     "pead_s": ("eksp", "PEAD-S: eksperimentelt, svak evidens."),
     "theme": ("eksp", "Temascore: ikke testet mot kursutvikling ennå; logges daglig, treffrate måles ved n ≥ 100."),
@@ -90,7 +91,7 @@ RED_FLAGS = ["weak_px", "neg_ebit", "placement", "high_vol"]
 
 CSS = """
 .evb{display:inline-block;border:1px solid #8b949e;color:#9ea9b5;background:transparent;border-radius:0;padding:0 5px;font-size:.72rem;font-weight:600;white-space:nowrap;vertical-align:middle;margin-right:6px}
-.evb.ev-testet{border-color:#f0883e;color:#f0883e}
+.evb.ev-testet{border-color:#f0883e;color:#f0883e;white-space:normal}
 .evb.ev-lit{border-color:#f0883e;border-style:dashed}
 .evb.ev-oppm{border-style:dashed}
 .evrow{display:flex;align-items:flex-start;gap:4px;flex-wrap:wrap}

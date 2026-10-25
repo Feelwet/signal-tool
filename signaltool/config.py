@@ -37,3 +37,7 @@ RATE_LIMITS = {
     "www.norges-bank.no": 1.0,
 }
 DEFAULT_RATE = 1.0
+
+# PEAD topp/topp (topp 20 % på både EPS-overraskelse og kursreaksjon): AnalBots tall, reports/natt/pead_spread.md + pead_stretch.md
+PEAD_TT_BADGE = "⚑ Sterk rapport + reaksjon · snitt +2,4 % vs S&P 500 over 60 d (median ca. +1 %)"
+PEAD_TT_CAVEAT = "Bygger på ett signal. Testet på dagens S&P 500-medlemmer, så resultatet kan være for godt."

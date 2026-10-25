@@ -127,10 +127,19 @@ def cat_badge(cat):
     return f'<span class="cat {cat}">{CAT_LABEL[cat]}</span>' if cat in CAT_LABEL else '<span class="mut">–</span>'
 
 
+def tt_row(e) -> str:
+    """Egen rad øverst blant testede signaler når topp/topp-PEAD er aktiv."""
+    from .config import PEAD_TT_BADGE
+    if "pead_tt" not in (e.get("cat_types") or {}):
+        return ""
+    return (f'<tr class="tt"><td><span class="evb ev-testet">{E(PEAD_TT_BADGE)}</span>'
+            f'<div class="mut">{E(e["cat_types"]["pead_tt"])}</div></td><td>–</td></tr>')
+
+
 def cat_cell(e, why=True):
     if not e or not e.get("category"):
         return '<span class="mut">–</span>'
-    return cat_badge(e["category"]) + (f'<div class="why clamp">Hvorfor: {E(e.get("cat_reason"))}</div><button type="button" class="mer" onclick="var w=this.previousElementSibling;w.classList.toggle(\'open\');this.textContent=w.classList.contains(\'open\')?\'mindre\':\'mer\'">mer</button>' if why else "")
+    return cat_badge(e["category"]) + (' <span class="mut">· 1 type: sterk rapport</span>' if e.get("cat_via_tt") else "") + (f'<div class="why clamp">Hvorfor: {E(e.get("cat_reason"))}</div><button type="button" class="mer" onclick="var w=this.previousElementSibling;w.classList.toggle(\'open\');this.textContent=w.classList.contains(\'open\')?\'mindre\':\'mer\'">mer</button>' if why else "")
 
 
 def theme_cat(catmap, r):
@@ -162,7 +171,10 @@ def cat_rules_html(e):
     meaning = {"kjop": "Alle regler for Kjøp-kandidat er oppfylt i dag. Det betyr «verdt en grundig egen vurdering», ikke en garanti.",
                "hold": "Har du aksjen, støtter signalene den fortsatt – men inngangen er sen/strukket. Ikke jag kursen.",
                "watch": "Noe uvanlig skjer, men bekreftelse mangler. Følg med."}[e["category"]]
-    return (f'<div class="card"><h2 style="margin-top:0">Kategori: {cat_badge(e["category"])}</h2><p><b>Hvorfor:</b> {E(e.get("cat_reason"))}</p>'
+    from .config import PEAD_TT_CAVEAT
+    via = (' <span style="font-weight:400">via Sterk rapport + reaksjon</span>' if e.get("cat_via_tt") else "")
+    cav = f'<p class="mut" style="margin:0 0 6px">{E(PEAD_TT_CAVEAT)}</p>' if e.get("cat_via_tt") else ""
+    return (f'<div class="card"><h2 style="margin-top:0">Kategori: {cat_badge(e["category"])}{via}</h2>{cav}<p><b>Hvorfor:</b> {E(e.get("cat_reason"))}</p>'
             f'<p class="mut">{meaning}</p><div class="tw"><table><tr><th>Regel (Kjøp-kandidat krever alle)</th><th>Status</th><th>Detalj</th></tr>{rows}</table></div>'
             + CAT_NOTE.format(pre="../") + "</div>")
 
@@ -565,7 +577,7 @@ def ticker_page(e, tmap):
 <div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
 <tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
-<div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{pts}</table><ul class="ev">{ev}{flags}</ul></div>
+<div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
 <div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>"""
 
 

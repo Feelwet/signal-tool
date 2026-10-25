@@ -169,7 +169,7 @@ def test_pead_s_uses_vol_median_day_before():
 
 def test_pead_is_labelled_experimental():
     e = cand(points={"dod_contract": 1.5}, dates={"gov_contract": FRESH})
-    e["decision"] = {"pead": True, "pead_s": True, "last_earnings": FRESH, "eps_surprise": 22.0, "earn_reaction": 0.06}
+    e["decision"] = {"pead": True, "pead_s": True, "last_earnings": FRESH, "eps_surprise": 9.0, "earn_reaction": 0.06}  # ikke topp/topp
     r = C.classify(e, ctx())
     assert "eksperimentell" in C.TYPE_NO["pead"] and "PEAD-S" in r["types"]["pead"] and "SPY" in r["types"]["pead"]
 
