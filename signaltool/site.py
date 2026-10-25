@@ -1,7 +1,7 @@
 """Static website generator (Norwegian UI). Output: site/ (plain HTML/CSS, no JS frameworks) -> hostable on
 GitHub Pages / Netlify / Cloudflare Pages for free."""
 from __future__ import annotations
-import html, json, re, shutil
+import hashlib, html, json, re, shutil
 from pathlib import Path
 from .config import ROOT, REPORTS
 from . import categories as C
@@ -17,6 +17,7 @@ from . import evidens as EV
 from . import overview as OV
 
 SITE = ROOT / "site"
+CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
 E = lambda x: html.escape("" if x is None else str(x))
 
 CSS = """
@@ -357,7 +358,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 })();
 </script>"""
     return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
+<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
 <div class="app">
 <aside class="side" id="side">
 <a class="brand" href="{pre}index.html">🛰️ Geo-signal</a>
@@ -424,10 +425,12 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    (SITE / "style.css").write_text(CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + ".ov-low2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ov-low2>*{margin:0;min-width:0}@media(max-width:699px){.ov-low2{grid-template-columns:1fr}}\n" + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
+    CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
+    (SITE / "style.css").write_text(_css)
     Q.FAILED_SECTIONS.clear()
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     (SITE / ".nojekyll").write_text("")
@@ -442,6 +445,7 @@ def build(snap: dict) -> Path:
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [f'<h1>Oversikt {E(str(snap["date"]))} <span class="mut" style="font-size:.55em;font-weight:400">GDELT t.o.m. {E(str(snap.get("gdelt_latest")))}</span></h1>',
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
+         f'<style>{OV.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          sec("Status", OV.strip_html, snap),
          sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
          sec("Kandidater og røde flagg", OV.two_col_html, snap),

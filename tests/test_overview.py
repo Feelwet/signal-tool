@@ -55,3 +55,14 @@ def test_changes_max5_dedup_and_calendar3():
     c = OV.calendar_html(_snap())
     assert c.count("<li>") == 3 and "gammel" not in c and "NB" not in c.split("Hele")[0].replace("(NB)", "")
 
+
+
+def test_change_text_arrows():
+    h = OV.change_text("Tema «Valg»: score 1.48 → 2.65")
+    assert "▲1,17" in h and "nå 2,65" in h and "→" not in h
+    assert "▼0,50" in OV.change_text("Tema «X»: score 1.00 → 0.50")
+    assert OV.change_text("5 nye dokumenter") == "5 nye dokumenter"
+
+
+def test_mobile_bar_name_own_line():
+    assert "@media(max-width:599px){.ov-bar{grid-template-columns:1fr auto auto" in OV.CSS and "grid-column:1/-1" in OV.CSS

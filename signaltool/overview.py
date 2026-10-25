@@ -18,7 +18,7 @@ MIN_N = 30  # under dette: «n for lav (FLAG)»
 CSS = """
 .ov-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0 14px}
 .ov-tile{display:block;background:var(--card,#161b22);border:1px solid #30363d;border-radius:10px;padding:10px 12px;color:inherit;text-decoration:none;min-width:0}
-.ov-tile .lbl{font-size:.8em;color:var(--mut)}.ov-tile .big{font-size:1.5em;font-weight:700;line-height:1.25;margin:2px 0}
+.ov-tile .lbl{font-size:.8em;color:var(--mut)}.ov-tile .lbl a{color:var(--mut);text-decoration:none}.ov-tile .lbl a:hover{color:var(--acc)}.ov-tile .big{font-size:1.5em;font-weight:700;line-height:1.25;margin:2px 0}
 .ov-tile .sub{font-size:.85em;color:var(--mut)}.ov-tile .sub2{font-size:.78em;color:var(--mut);margin-top:3px}
 .ov-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 6px;vertical-align:middle}.ov-dot.up{background:#56d364}.ov-dot.dn{background:#f85149}
 .ov-stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#262d38;margin:6px 0 4px}.ov-stack i{display:block;height:100%}
@@ -31,7 +31,10 @@ CSS = """
 .ov-low h2{font-size:1.05em;margin:0 0 6px}
 .ov-th,.ov-2 .card,.ov-low{padding:10px 14px}.ov-th h2,.ov-2 h2,.ov-low h2{font-size:1.05em;margin:0 0 4px}.ov-bar{padding:0;line-height:1.4}
 .ov-list li{padding:2px 0}.ov-list li>span:last-child{white-space:nowrap;flex:none}.ov-th .vis-alle{margin:2px 0 0}.ov-strip{margin:4px 0 10px}.ov-2>*,.ov-strip>*,.ov-th{min-width:0}.ov-tile{padding:8px 12px}.ov-tile .big{font-size:1.35em}.ov-2{margin:0 0 10px}
-@media(max-width:699px){.ov-strip{grid-template-columns:1fr 1fr}.ov-2{grid-template-columns:1fr}.ov-bar{grid-template-columns:minmax(0,1fr) 30% 2.6em 3.4em}}
+@media(max-width:599px){.ov-bar{grid-template-columns:1fr auto auto;row-gap:2px;padding:3px 0}.ov-bar .nm{grid-column:1/-1;white-space:normal}}
+@media(min-width:600px) and (max-width:699px){.ov-bar{grid-template-columns:minmax(0,1fr) 30% 2.6em 3.4em}}
+@media(max-width:699px){.ov-strip{grid-template-columns:1fr 1fr}.ov-2{grid-template-columns:1fr}}
+.ov-low2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ov-low2>*{margin:0;min-width:0}@media(max-width:699px){.ov-low2{grid-template-columns:1fr}}
 """
 
 
@@ -81,32 +84,32 @@ def strip_html(snap: dict) -> str:
     risk = any(v.get("risk_off") for v in reg.values())
     dots = "".join(f'<span class="ov-dot {"dn" if v.get("below") else "up"}"></span>{E(n)}'
                    for k, n in (("OSEBX.OL", "OSEBX"), ("^GSPC", "S&P")) if (v := reg.get(k)))
-    t1 = (f'<a class="ov-tile" href="metode.html#regler"><div class="lbl">Marked</div><div class="big">{"Halver nye" if risk else "Normalt"}</div>'
-          f'<div class="sub">{dots or "regime ukjent"} <span class="mut">mot 10-mnd snitt</span></div></a>') if reg else \
+    t1 = (f'<div class="ov-tile"><div class="lbl"><a href="metode.html#regler">Marked →</a></div><div class="big">{"Halver nye" if risk else "Normalt"}</div>'
+          f'<div class="sub">{dots or "regime ukjent"} <span class="mut">mot 10-mnd snitt</span></div></div>') if reg else \
          '<div class="ov-tile"><div class="lbl">Marked</div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     tk = snap.get("tickers") or []
     cnt = {k: sum(1 for e in tk if e.get("category") == k) for k, _, _ in CATS}
     tot = sum(cnt.values()) or 1
     seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in CATS if cnt[k])
-    t2 = (f'<a class="ov-tile" href="tickere.html"><div class="lbl">Kategorier</div><div class="big">{cnt["kjop"]} Kjøp</div>'
+    t2 = (f'<div class="ov-tile"><div class="lbl"><a href="tickere.html">Kategorier →</a></div><div class="big">{cnt["kjop"]} Kjøp</div>'
           f'<div class="ov-stack" role="img" aria-label="Kjøp {cnt["kjop"]}, Hold {cnt["hold"]}, Watch {cnt["watch"]}">{seg}</div>'
           f'<div class="sub">' + " · ".join(f'{lab} {cnt[k]}' for k, lab, _ in CATS) + '</div>'
-          f'<div class="sub2" id="kjop-treff">{E(kjop_hit_line(snap.get("track_record")))}</div></a>')
+          f'<div class="sub2" id="kjop-treff">{E(kjop_hit_line(snap.get("track_record")))}</div></div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
-    t3 = (f'<a class="ov-tile" href="rode-flagg.html"><div class="lbl">Røde flagg Oslo</div><div class="big">{m}</div>'
-          f'<div class="sub">med 2+ flagg ({len(rows)} totalt)</div></a>') if c["n"] else \
-         '<a class="ov-tile" href="rode-flagg.html"><div class="lbl">Røde flagg Oslo</div><div class="big">–</div><div class="sub">ikke beregnet</div></a>'
+    t3 = (f'<div class="ov-tile"><div class="lbl"><a href="rode-flagg.html">Røde flagg Oslo →</a></div><div class="big">{m}</div>'
+          f'<div class="sub">med 2+ flagg ({len(rows)} totalt)</div></div>') if c["n"] else \
+         '<div class="ov-tile"><div class="lbl"><a href="rode-flagg.html">Røde flagg Oslo →</a></div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     nx = upcoming(snap, 1)
     if nx:
         e = nx[0]
         d = date.fromisoformat(str(e["date"])[:10])
         dd = (d - date.fromisoformat(str(snap.get("date"))[:10])).days
         when = "I dag" if dd == 0 else "I morgen" if dd == 1 else f"Om {dd} d"
-        t4 = (f'<a class="ov-tile" href="kalender.html"><div class="lbl">Neste hendelse</div><div class="big">{when}</div>'
-              f'<div class="sub">{E(e["title"])}</div></a>')
+        t4 = (f'<div class="ov-tile"><div class="lbl"><a href="kalender.html">Neste hendelse →</a></div><div class="big">{when}</div>'
+              f'<div class="sub">{E(e["title"])}</div></div>')
     else:
-        t4 = '<a class="ov-tile" href="kalender.html"><div class="lbl">Neste hendelse</div><div class="big">–</div><div class="sub">ingen i kalenderen</div></a>'
+        t4 = '<div class="ov-tile"><div class="lbl"><a href="kalender.html">Neste hendelse →</a></div><div class="big">–</div><div class="sub">ingen i kalenderen</div></div>'
     return f'<section class="ov-strip" aria-label="Status">{t1}{t2}{t3}{t4}</section>'
 
 
@@ -166,12 +169,26 @@ def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
             seen.add(k)
             items.append(f'<li>{"🔔" if a.get("level") == "alert" else "ⓘ"} <a href="{E(link(a.get("link", "")))}">{E(a["title"])}</a></li>')
     for x in ((b.get("changes") or {}).get("items") or []):
-        items.append(f'<li>{"🔔 " if x.get("level") == "alert" else ""}{E(x["text"])}</li>')
+        items.append(f'<li>{"🔔 " if x.get("level") == "alert" else ""}{change_text(x["text"])}</li>')
     if not items:
         return ""
     pd = (b.get("changes") or {}).get("prev_date")
     return (f'<div class="card ov-low" id="endringer"><h2>Endringer og varsler{f" <span class=mut style=font-weight:400>siden {E(pd)}</span>" if pd else ""}</h2>'
             f'<ul class="ev" style="margin:0">{"".join(items[:5])}</ul></div>')
+
+
+_ARROW = re.compile(r"^(.*?):?\s*score\s+(-?\d+(?:[.,]\d+)?)\s*→\s*(-?\d+(?:[.,]\d+)?)\s*$")
+
+
+def change_text(t: str) -> str:
+    """«Tema «X»: score 1.48 → 2.48» → «Tema «X» ▲1,00 (nå 2,48)». Bare tall fra teksten; ellers uendret."""
+    m = _ARROW.match(t or "")
+    if not m:
+        return E(t)
+    a, b = (float(x.replace(",", ".")) for x in m.group(2, 3))
+    d = b - a
+    ar, cl = ("▲", "up") if d > 0 else ("▼", "down") if d < 0 else ("=", "mut")
+    return f'{E(m.group(1).rstrip(": "))} <span class="{cl}">{ar}{_nb(abs(d))}</span> <span class="mut">(nå {_nb(b)})</span>'
 
 
 def calendar_html(snap: dict) -> str:

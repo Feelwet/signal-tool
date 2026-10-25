@@ -124,6 +124,6 @@ def test_build_writes_map_pages(tmp_path, monkeypatch):
     out = tmp_path / "site"
     for M in TM.MAPS.values():
         h = (out / "tema" / f"{M['file']}.html").read_text()
-        assert f"Temakart: {M['name']}" in h and 'href="../style.css"' in h
+        assert f"Temakart: {M['name']}" in h and 'href="../style.css?v=' in h
     assert "kart_forsvar.html" in (out / "temaer.html").read_text()
     assert "kart_forsvar.html" in (out / "tema" / "conflict_defense.html").read_text()

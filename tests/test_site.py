@@ -1,3 +1,4 @@
+import re
 """Site generator: dark theme, relative links (works under https://<user>.github.io/<repo>/)."""
 import json, re
 from pathlib import Path
@@ -30,7 +31,7 @@ def test_build_uses_relative_links(tmp_path, monkeypatch):
         txt = f.read_text()
         assert not re.search(r'(href|src)="/(?!/)', txt), f"absolute link in {f}"
         assert "localhost" not in txt and "/workspace" not in txt
-    assert 'href="../style.css"' in (out / "tema" / f"{snap['themes'][0]['key']}.html").read_text()
+    assert 'href="../style.css?v=' in (out / "tema" / f"{snap['themes'][0]['key']}.html").read_text()
 
 
 @pytest.mark.skipif(not SNAP.exists(), reason="no snapshot available")
@@ -65,6 +66,7 @@ def test_dashboard_overview(tmp_path, monkeypatch):
     site.build(snap)
     idx = (tmp_path / "site" / "index.html").read_text()
     assert "ov-strip" in idx and 'id="temascore"' in idx and "ov-2" in idx and "Kjøp-treffrate" in idx
+    assert re.search(r'href="style\.css\?v=[0-9a-f]{10}"', idx) and "<style>" in idx and ".ov-strip{" in idx and '<a class="ov-tile"' not in idx
     assert "donut" not in idx and "Hva bør jeg se på" not in idx and "Newsweb-kontrakter" not in idx and 'metode.html#treffrate' in idx
     assert "tema/" in idx and "ticker/" in idx
 
