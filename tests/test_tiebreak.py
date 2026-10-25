@@ -88,3 +88,17 @@ def test_coverage_cut_and_sources(monkeypatch):
     assert "mangler: GDELT DOC, SEC 8-K, SEC Form 4" in us and "src-bad" in us
     no = SS.line({"ticker": "VAR.OL", "themes": [], "stats": {"close": 1}}, status)
     assert "alle kilder ok" in no and "Form 4" not in no
+
+
+def test_completed_periods(tmp_path):
+    p = tmp_path / "r.csv"
+    p.write_text("date,ticker,types,is_canonical\n2026-01-02,A,pead,true\n2026-01-05,A,pead,true\n2026-04-30,B,x,true\n2026-05-01,C,x,false\n")
+    assert LL.completed_periods(p) == (1, 1)
+
+
+def test_sector_chip():
+    from signaltool import site_sector as SC
+    assert "Sektor: –" in SC.chip({"ticker": "ZZZ", "decision": {}})
+    h = SC.chip({"ticker": "VAR.OL", "decision": {"sector": "Energy"}})
+    assert "sektorer.html#energi" in h and "Sektor: Energi" in h
+    assert "<a" not in SC.chip({"ticker": "HAS", "decision": {"sector": "Consumer Cyclical"}})

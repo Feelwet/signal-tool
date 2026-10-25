@@ -430,7 +430,7 @@ def index_html(fund: dict | None = None) -> str:
         c = counts(k, fund)
         flag = ' <span class="sb miss">FLAG: n&lt;5</span>' if c["n"] < 5 else ""
         drv = "".join(f"<li>{_E(x['name'])}</li>" for x in S["drivers"])
-        cards.append(f'<a class="scard" href="tema/{S["file"]}.html"><h3 style="margin:0 0 6px">{_E(S["name"])}</h3><ul class="mut">{drv}</ul>'
+        cards.append(f'<a class="scard" id="{k}" href="tema/{S["file"]}.html"><h3 style="margin:0 0 6px">{_E(S["name"])}</h3><ul class="mut">{drv}</ul>'
                      '<div>' + " ".join(_badge(st, f" {c[st]}") for st in ("CLEAR", "FAIL", "MISSING")) + '</div>'
                      f'<div class="src">n={c["n"]}{flag}</div></a>')
     stale = " · <b>⏱ Utdatert</b>" if is_stale(fund.get("asof")) else ""
@@ -444,3 +444,11 @@ if __name__ == "__main__":
     doc = fetch_all()
     for k in SECTORS:
         print(k, counts(k, doc))
+
+
+def key_for(ticker: str) -> str | None:
+    """Dokumentert kobling ticker -> sektor (SECTORS[...]["tickers"]). None hvis tickeren ikke står der."""
+    for k, S in SECTORS.items():
+        if ticker in S["tickers"]:
+            return k
+    return None

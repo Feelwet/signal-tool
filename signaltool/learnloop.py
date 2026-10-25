@@ -248,3 +248,35 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
                 flags.append({"date": today, "ticker": t, "type": "log_gap", "from": a, "to": b2, "missing_runs": gap})
     dq_write(flags)
     return {"raw": len(raw), "exits": len(exits), "flags": len(flags)}
+
+
+def completed_periods(path=None) -> tuple[int, int]:
+    """(X, Y) for metodesiden: X = avsluttede 60-dagersperioder i den kanoniske loggen (learn_raw, is_canonical=true),
+    Y = største gruppe (signaltype ved inngang). Periode = sammenhengende kanoniske kjøringsdatoer for en ticker; avsluttet når
+    det har gått minst 60 handelsdager (man–fre) fra inngangsdatoen til siste kanoniske dato."""
+    import numpy as np
+    path = path or RAW
+    if not path.exists():
+        return 0, 0
+    with path.open(newline="") as f:
+        rows = [r for r in csv.DictReader(f) if str(r.get("is_canonical", "true")).lower() == "true"]
+    if not rows:
+        return 0, 0
+    runs = sorted({r["date"] for r in rows})
+    last = runs[-1]
+    by = {}
+    for r in rows:
+        by.setdefault(r["ticker"], {})[r["date"]] = r
+    x, groups = 0, {}
+    for t, rs in by.items():
+        ds = sorted(rs)
+        start = None
+        for d in ds:
+            if start is None or runs.index(d) != runs.index(prev) + 1:
+                start = d
+                if np.busday_count(start, last) >= 60:
+                    x += 1
+                    for ty in (rs[start].get("types") or "–").split("|"):
+                        groups[ty] = groups.get(ty, 0) + 1
+            prev = d
+    return x, max(groups.values()) if groups else 0

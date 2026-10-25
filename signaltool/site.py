@@ -23,6 +23,7 @@ from . import since as SN
 from . import site_risk as RK
 from . import site_congress as CG
 from . import site_sources as SS
+from . import site_sector as SC
 from . import nokkeltall as NK
 from . import pricechart as PC
 
@@ -128,7 +129,7 @@ CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + "</span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + " <a href=\"metode.html#laering\">Slik bruker vi dette tallet ›</a></span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -526,7 +527,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -690,7 +691,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
-{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{e.get("_srcline") or ""}{RK.status()}
+{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
@@ -848,6 +849,22 @@ def oslo_page(snap):
             + fold(raw("Shortposisjoner (Finanstilsynet) – største endringer", len(snap.get("shorts", [])), L.stale_mark(rowsL, ["Finanstilsynet short register"])), f'<p class="mut">Netto shortposisjoner ≥ 0,5 % offentliggjøres. Økende short = noen profesjonelle vedder på fall.</p><table><tr><th>Selskap</th><th>Ticker</th><th>Short</th><th>Endr. 7d (pp)</th><th>Endr. 30d</th><th>Største aktører</th></tr>{sh}</table>', open_=False, hid="short"))
 
 
+LEARN = ("Hvordan vi lærer: Hver kveld logger vi hvordan aksjene på lista går mot indeksen på samme børs, regnet fra dagen de kom inn. "
+         "Vi ser aldri på én aksje alene. Vi samler resultatene per regel og signaltype, og vi konkluderer først når en gruppe har minst 30 "
+         "avsluttede perioder på 60 handelsdager. En regel endres bare når en forhåndsregistrert test består. Foreløpig har vi for lite data "
+         "til å si noe om hvor godt signalene treffer.")
+
+
+def _learn_html():
+    from .learnloop import completed_periods
+    try:
+        x, y = completed_periods()
+    except Exception:
+        return ""
+    return (f'<div class="card" id="laering"><h2 style="margin-top:0">Slik lærer vi av resultatene</h2><p style="font-size:14px">{E(LEARN)}</p>'
+            f'<p class="mut" style="font-size:12px;margin:0">Avsluttede 60-dagersperioder: {x} totalt. Største gruppe: {y} av 30 som trengs for å konkludere.</p></div>')
+
+
 def metode_page(snap):
     st = snap.get("status") or {}
     rowsL = L.load_log()
@@ -872,6 +889,7 @@ def metode_page(snap):
     hon = X.honesty_html(extra=Q.section("Datakvalitet", Q.dq_line, snap, snap=snap))
     return (L.head("Metode", "Hvordan signalene lages, hva som er testet, kildestatus og hva som fortsatt er eksperimentelt.",
                    [(f"{ok}/{n}", "Kilder OK", "siste kjøring", "#kilder"), (str(len(tested)), "Testet, ingen effekt", "fjernet fra Makro", "#testet"), (str(len(exp)), "Eksperimentelt", "ikke testet", "#eksperimentelt")])
+            + _learn_html()
             + fold(T("Ærlig status", "hva verktøyet kan og ikke kan"), hon, open_=False, hid="status")
             + fold(T("Porteføljeregler og markedsregime", "regler for posisjoner"), X.portfolio_rules_html() + Q.section("Markedsregime", X.regime_html, snap, snap=snap), open_=False, hid="regler")
             + fold(T("Treffrate", "fremoverlogg, Følg og Kjøp"), L.watch_text(snap.get("track_record")), open_=False, hid="treffrate")

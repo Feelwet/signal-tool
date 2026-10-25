@@ -109,7 +109,7 @@ NOTE = NOTE_T.replace(" (inn {dm})", "")   # felles (i) i kolonneoverskriften: i
 
 
 def tip_html(s: dict | None) -> str:
-    return f'<p id="rt-tip" class="rk-tip" hidden>{E(note_for(s))}</p>'
+    return f'<p id="rt-tip" class="rk-tip" hidden>{E(note_for(s))} <a href="../metode.html#laering">Slik bruker vi dette tallet ›</a></p>'
 
 
 def note_for(s: dict | None) -> str:
