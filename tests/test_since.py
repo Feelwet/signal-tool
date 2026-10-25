@@ -82,3 +82,10 @@ def test_sparkline_needs_4_consecutive_quarters_and_ebit_never_derived():
     n = N.compute(e); f = {x["key"]: x for x in n["fields"]}
     assert f["ebit"]["value"] is None and "quarters" in f["rev"] and "quarters" not in f["eps"]
     assert "siste 5 kv." in N.html(n)
+
+
+def test_decision_keeps_lists_bools_and_text():
+    import inspect
+    from signaltool import decision as D
+    src = inspect.getsource(D)
+    assert '"info_date"' in src and "isinstance(v, (bool, list))" in src

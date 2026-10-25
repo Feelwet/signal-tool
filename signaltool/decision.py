@@ -310,8 +310,9 @@ def compute(snap: dict, max_info=80) -> dict:
         m = price_metrics(df, ser(benchmark_for(t)), ser(sector_of[t]) if t in sector_of else None)
         m["sector_etf"] = sector_of.get(t)
         inf = infos.get(t, {})
-        txt_keys = ("recommendationKey", "currency", "sector", "next_earnings")
-        m.update({k: (v if k in txt_keys else _f(v)) for k, v in inf.items()})
+        txt_keys = ("recommendationKey", "currency", "sector", "next_earnings", "quoteType", "financialCurrency", "info_date")
+        # tekst, ja/nei og kvartalsrekker beholdes som de er; bare tall går gjennom _f
+        m.update({k: (v if k in txt_keys or isinstance(v, (bool, list)) else _f(v)) for k, v in inf.items()})
         if inf.get("targetMeanPrice") and m.get("close"):
             m["target_upside"] = _f(inf["targetMeanPrice"] / m["close"] - 1)
         if m.get("next_earnings"):
