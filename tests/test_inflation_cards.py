@@ -9,7 +9,7 @@ def test_cn_lpr_and_de_bundesbank_label():
     assert lab.startswith("Bundesbank juni 2026") and not old
     assert I._fc_label(F["DE"], date(2027, 1, 20))[2]  # >6 mnd -> Utdatert
     src = pathlib.Path(I.__file__).read_text()
-    assert "LPR settes den 20. hver måned" in src and "Rente: ingen fri kilde" in src
+    assert "LPR settes den 20. hver måned" in src and "<span class=mut>ingen fri kilde</span>" in src and "Rente: ingen fri kilde" not in src
     assert "ingen faste rentemøter" not in src
 
 

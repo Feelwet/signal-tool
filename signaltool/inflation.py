@@ -334,7 +334,7 @@ def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel
     if target is not None:
         g.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(target):.1f}" y2="{Y(target):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/>')
         if tlabel:
-            g.append(f'<text class="tlabel" x="{W - R - 2}" y="{Y(target) - 3:.1f}" text-anchor="end">{_E(tlabel)}</text>')
+            g.append(f'<text class="tlabel" x="{W - R - 2}" y="{Y(target) - 9:.1f}" text-anchor="end">{_E(tlabel)}</text>')
     pts = " ".join(f"{X(_mi(m)):.1f},{Y(v):.1f}" for m, v in hist)
     g.append(f'<polyline fill="none" stroke="{col}" stroke-width="1.8" points="{pts}"/>')
     if steps:
@@ -416,7 +416,7 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
                      f'<div class="src">{_E(msrc)}{f" · {_E(last[0])}" if last else " · Mangler data"}{" · <b>⏱ Utdatert</b>" if stale else ""}</div>{sub}'
                      f'{(card_chart(hist, f, col, today, floor=-2.0, target=2.0, tlabel=CN_TARGET["label"]) if k == "CN" else card_chart(hist, f, col, today)) if len(hist) > 1 else ""}{fcl}'
                      f'{tgt}'
-                     f'<p style="margin:6px 0 0">Styringsrente: {f"<b>{_nf(rt["rate"], 2)} %</b> <span class=src>{_E(rt["source"])}, {_E(rt["date"])}</span>" if rt else ("<span class=mut>Rente: ingen fri kilde</span>" if k == "CN" else "<span class=mut>ikke hentet</span>")}<br>'
+                     f'<p style="margin:6px 0 0">Styringsrente: {f"<b>{_nf(rt["rate"], 2)} %</b> <span class=src>{_E(rt["source"])}, {_E(rt["date"])}</span>" if rt else ("<span class=mut>ingen fri kilde</span>" if k == "CN" else "<span class=mut>ikke hentet</span>")}<br>'
                      f'Neste møte: {"<span class=mut>LPR settes den 20. hver måned</span>" if k == "CN" else ""}{"" if k == "CN" else f"{_E(nm["date"])} {_E(nm.get("time") or "")}" + (" (estimert)" if "estimert" in nm.get("source", "").lower() else "") if nm else "<span class=mut>ikke i kalenderen (45 dager frem)</span>"}</p></div>'.replace("Neste møte: <span class=mut>LPR settes den 20. hver måned</span><span class=mut>ikke i kalenderen (45 dager frem)</span>", "Neste møte: <span class=mut>LPR settes den 20. hver måned</span>"))
     two = f'<line x1="{L}" x2="{W-8}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/><text x="{W-10}" y="{Y(2)-4:.1f}" text-anchor="end">2 % mål</text>'
     svg = (f'<svg class="infl-svg" viewBox="0 0 {W} {H}" role="img" aria-label="Inflasjon siste 5 år, årlig prosent, per land">{grid}{years}{two}{"".join(lines)}</svg>')
