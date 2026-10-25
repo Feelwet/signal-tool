@@ -424,8 +424,11 @@ RET_NOTE = f'<p class="mut retnote">Avkastning: {E(SN.NOTE)}</p>'
 IKKE_RANGERT_INFO = ("Har en hendelse, men data fra færre enn 4 av 7 kilder, så den får ingen score og ingen plass på lista. "
                      "Det sier ikke at aksjen er dårlig, bare at vi vet for lite. Telles ikke i resultatene.")   # UxBot/AnalBot 25.10, ordrett
 UR_I = ('<button type="button" class="rk-i ur-i" aria-expanded="false" aria-controls="ur-tip" aria-label="Om Ikke rangert">ⓘ</button>'
-        f'<p id="ur-tip" class="rk-tip" hidden style="font-weight:400;white-space:normal">{E(IKKE_RANGERT_INFO)}</p>')
-FRZ_CSS = ".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n"
+        f'<p id="ur-tip" class="rk-tip ur-tip" hidden>{E(IKKE_RANGERT_INFO)}</p>')
+FRZ_CSS = (".ur-head{display:block;width:100%;box-sizing:border-box;padding:12px;white-space:normal;overflow-wrap:anywhere;border-top:1px solid #30363d}"
+           ".ur-tip{display:block;width:100%;box-sizing:border-box;margin:8px 0 0;font-weight:400;white-space:normal}.ur-tip[hidden]{display:none}"
+           "table.ur-tab .lowchip{white-space:normal;height:auto;min-height:20px;line-height:14px;padding:2px 7px;max-width:100%;overflow:visible;text-overflow:clip}"
+           "@media(max-width:599px){#tf-table table.ur-tab td{white-space:normal}}") + "\n" + (".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n")
 
 
 def frz_text(d: str) -> str:
@@ -604,10 +607,12 @@ def build(snap: dict) -> Path:
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
     (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">{E(frz_text(snap["frozen_from"]))}</p>' if snap.get("frozen_from") else "")
-                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
-                                            + "".join(ticker_row(e) for e in tickers if not e.get("unranked"))
-                                            + ("<tr class=\"grp\"><th colspan=\"9\">Ikke rangert <span class=\"mut\" style=\"font-weight:400\">· for lite data (under 4/7 grunnfelt)</span>" + UR_I + "</th></tr>" + "".join(ticker_row(e) for e in tickers if e.get("unranked")) if any(e.get("unranked") for e in tickers) else "")
-                                            + "</table>" + RET_NOTE + "</div></div>"
+                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card"><div class="tw"><table>' + TICKER_HEAD + ''
+                                            + "".join(ticker_row(e) for e in tickers if not e.get("unranked")) + "</table></div>"
+                                            # UxBot 25.10: overskrift + (i)-tekst utenfor scrollboksen, full bredde, bryter linjer
+                                            + ('<div class="ur-head"><b>Ikke rangert</b> <span class="mut">· for lite data (under 4/7 grunnfelt)</span>' + UR_I + "</div>"
+                                               + '<div class="tw"><table class="ur-tab">' + "".join(ticker_row(e) for e in tickers if e.get("unranked")) + "</table></div>" if any(e.get("unranked") for e in tickers) else "")
+                                            + RET_NOTE + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>'
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
                                             + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS + RK.JS, 0, snap))

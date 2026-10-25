@@ -116,3 +116,9 @@ def test_frozen_line_uses_lastgood_date(tmp_path, monkeypatch):
     pipeline._coverage_cut(snap, [], {})
     assert snap["frozen_from"] == "2026-10-23"
     assert site.frz_text(snap["frozen_from"]) == "Lista er fryst fra 23.10 fordi Yahoo-data feilet i dag. Tallene oppdateres når kilden svarer igjen."
+
+
+def test_ikke_rangert_mobile_css():
+    from signaltool import site
+    assert "table.ur-tab .lowchip{white-space:normal" in site.FRZ_CSS and ".ur-head{display:block;width:100%" in site.FRZ_CSS
+    assert "padding:12px" in site.FRZ_CSS and "ellipsis" not in site.FRZ_CSS
