@@ -144,11 +144,19 @@ def _officer_director(roles: str) -> bool:
 
 def pead_kind(dec: dict) -> str:
     """Samme rapport gir aldri to typer: topp/topp (EPS-overraskelse og reaksjon begge over ~80-persentilen) erstatter vanlig PEAD."""
-    from .decision import PEAD_SURPRISE, PEAD_REACTION
     if not CFG.PEAD_TT_ENABLED:   # av: gammel regel (vanlig PEAD, teller ikke mot Kjøp)
         return "pead"
-    sur, ear = dec.get("eps_surprise"), dec.get("earn_reaction")
-    return "pead_tt" if sur is not None and ear is not None and sur >= PEAD_SURPRISE and ear >= PEAD_REACTION else "pead"
+    return "pead_tt" if rolling_hit(dec) else "pead"
+
+
+def rolling_hit(dec: dict) -> bool:
+    """Rullerende topp/topp (pead_roll): overraskelse og reaksjon begge ≥ 80-persentilen av S&P 500-rapporter siste 365 d før rapportdagen."""
+    from . import pead_roll
+    sur, ear, d = dec.get("eps_surprise"), dec.get("earn_reaction"), dec.get("last_earnings")
+    if sur is None or ear is None or not d:
+        return False
+    th = pead_roll.thresholds(d)
+    return bool(th and sur >= th["surprise"] and ear >= th["reaction"])
 
 
 NOT_FOR_KJOP = {"pead"}

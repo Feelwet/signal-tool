@@ -9,18 +9,17 @@ from . import names as NM
 from . import portfolio as P
 from .portfolio_rules import RULES, RULES_VERSION
 
+RULES_LOCKED = "25.10.2026"
+# AnalBots tekst, ordrett (25.10.2026)
 RULES_TEXT = [
-    "Start: 1 000 000 fiktive kroner.",
-    "Kjøp: bare tickere i kategori Kjøp, til sluttkurs dagen etter signalet.",
-    "Størrelse: 5 % av kontoverdien ved kjøp, maks 20 posisjoner, ingen påfyll i eksisterende posisjon. Resten står som kontanter til 0 %.",
-    "Salg: etter 60 handelsdager; tidligere ved rødt flagg; tidligere hvis kategorien faller til Følg eller lavere (ute av lista). Hold gir ikke salg.",
-    "Ingen kursmål og ingen stopp-loss.",
-    "Kostnader: 0,2 % hver vei, 0,5 % for illikvide tickere.",
-    "US-aksjer: omregnet til NOK med samme dags kurs; valutaeffekten logges separat.",
-    "Referanse: OSEBX og S&P 500, vektet etter porteføljens faktiske beholdning.",
-    "Logg: logs/portfolio_trades.csv, bare tillegg, rules_version på hver rad. Ordren logges ved signalet før kursen er kjent; fyllet legges til dagen etter.",
-    "Avkastning vises først når 30 handler er lukket.",
+    "Kontoen kjøper bare tickere i kategorien Kjøp, til sluttkurs dagen etter signalet. Hold og Følg blir aldri kjøpt.",
+    "Hver posisjon er 5 % av kontoverdien når den kjøpes, og kontoen har maks 20 posisjoner. Det kjøpes ikke mer i en posisjon den allerede har. Kontanter gir 0 % rente.",
+    "Den selger etter 60 handelsdager, ved rødt flagg, eller når kategorien faller til Følg eller lavere. Den bruker ikke kursmål eller stopp-loss.",
+    "Hver handel koster 0,2 % hver vei, og 0,5 % for lite omsatte aksjer. Amerikanske aksjer regnes om til NOK med dagskurs, og valutaeffekten vises for seg.",
+    "Avkastningen sammenlignes med en blanding av OSEBX og S&P 500, vektet slik porteføljen faktisk er fordelt. Resultatet vises først når kontoen har minst 30 lukkede handler.",
+    "Handler kan ikke endres i etterkant. Endres reglene, blir det en ny versjon og en ny konto.",
 ]
+RULES_FOOT = "Fiktive penger. Ikke investeringsråd."
 
 CSS = """
 .pf-h1{margin:0 0 2px;font-size:22px}.pf-h1 a{color:var(--acc)}.pf-sub{margin:0 0 10px;font-size:13px}
@@ -76,6 +75,6 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
     logh = ('<div class="card"><h2 style="margin-top:0">Handelslogg</h2>' + (f'<ul class="ev">{pl}</ul>' if pl else "") +
             (f'<div class="tw"><table><tr><th>Dato</th><th>Kjøp/salg</th><th>Ticker</th><th>Kurs</th><th>Kostnad</th><th>Regel</th></tr>{lg}</table></div>' if lg
              else '<p class="mut">Ingen gjennomførte handler ennå.</p>') + "</div>")
-    rules = (f'<details class="fold" id="regler"><summary><h2>Regler {RULES_VERSION}</h2></summary><div class="fold-body"><ol>'
-             + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT) + "</ol></div></details>")
+    rules = (f'<details class="fold" id="regler"><summary><h2>Regler <code>{RULES_VERSION}</code> (låst {RULES_LOCKED})</h2></summary><div class="fold-body"><ol>'
+             + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT) + f'</ol><p class="mut">{E(RULES_FOOT)}</p></div></details>')
     return f"<style>{CSS}</style>" + top + pos + logh + rules

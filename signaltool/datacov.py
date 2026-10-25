@@ -48,7 +48,7 @@ def chip(e: dict) -> str:
 def _fmt(k: str, v) -> str:
     if k == "marketCap":
         v = float(v)
-        return f"{v/1e12:.2f} bill." if v >= 1e12 else f"{v/1e9:.1f} mrd." if v >= 1e9 else f"{v/1e6:.0f} mill."
+        return f"{v/1e12:.2f}".replace(".", ",") + " bill." if v >= 1e12 else f"{v/1e9:.1f}".replace(".", ",") + " mrd." if v >= 1e9 else f"{v/1e6:.0f} mill."
     if k in ("close", "sma50", "trailingPE"):
         return f"{float(v):.2f}".replace(".", ",")
     if k == "numberOfAnalystOpinions":

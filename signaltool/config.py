@@ -41,6 +41,11 @@ DEFAULT_RATE = 1.0
 # AV (AnalBot 2026-10-25): live-regelen bruker faste grenser (15 % / 4 %), ikke den testede topp-20 %-rangeringen;
 # faste grenser gir t 2,8 i 2016–26 og består ikke. Av til rangeringen er bygget og testet.
 PEAD_TT_ENABLED = False
+# Eksperimentell visning av rullerende topp/topp (⚗-linje, teller aldri mot Kjøp eller Signal-boka). Av til AnalBot har sjekket
+# live-terskler (logs/pead_tt_thresholds.csv) mot testen.
+PEAD_TT_EXPERIMENTAL = False
+PEAD_TT_EXP_LINE = "⚗ Sterk rapport + reaksjon · snitt ca. +2 % vs S&P 500 over 60 d (median ca. +1 %)"
+PEAD_TT_EXP_NOTE = "Bestod testen med minst mulig margin."
 # PEAD topp/topp (topp 20 % på både EPS-overraskelse og kursreaksjon): AnalBots tall, reports/natt/pead_spread.md + pead_stretch.md
 PEAD_TT_BADGE = "⚑ Sterk rapport + reaksjon · snitt +2,4 % vs S&P 500 over 60 d (median ca. +1 %)"
 PEAD_TT_CAVEAT = "Bygger på ett signal. Testet på dagens S&P 500-medlemmer 2006–26, så snittet kan være for høyt."

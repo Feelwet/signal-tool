@@ -190,7 +190,7 @@ def decision_html(e: dict) -> str:
     mc = d.get("marketCap")
     rows_v = [("P/E siste 12 mnd / fremover", f'{num(d.get("trailingPE"), 1)} / {num(d.get("forwardPE"), 1)}'),
               ("EV/EBITDA", num(d.get("enterpriseToEbitda"), 1)), ("P/B", num(d.get("priceToBook"), 1)),
-              ("Markedsverdi", "–" if not mc else f"{mc/1e9:,.1f} mrd. {E(cur)}"),
+              ("Markedsverdi", "–" if not mc else (f"{mc/1e9:,.1f}".replace(",", " ").replace(".", ",") + f" mrd. {E(cur)}")),
               ("Utbytte", "–" if d.get("dividendYield") is None else f'{d["dividendYield"]:.2f} %'),
               ("Analytikere (gratis Yahoo-data)", "–" if not d.get("numberOfAnalystOpinions") else
                f'{E(REC_NO.get(d.get("recommendationKey"), d.get("recommendationKey")))}, {int(d["numberOfAnalystOpinions"])} stk, snittmål {num(d.get("targetMeanPrice"))} ({pct(d.get("target_upside"))})')]
@@ -332,6 +332,18 @@ def oslo_insider_html(snap: dict) -> str:
 
 # ---------------------------------------------------------------- thesis, base rates, entry/exit plan (signaltool/plan.py)
 from . import plan as P
+
+
+def pead_exp_html(e: dict) -> str:
+    """Eksperimentell topp/topp-linje under kategori-chipen. Kun visning; påvirker ikke kategori, Kjøp-filter eller Signal-boka."""
+    from . import config as CFG
+    if not CFG.PEAD_TT_EXPERIMENTAL:
+        return ""
+    from .categories import rolling_hit
+    if not rolling_hit(e.get("decision") or {}):
+        return ""
+    return (f'<p class="ttexp" style="margin:-4px 0 8px;font-size:13px">{E(CFG.PEAD_TT_EXP_LINE)}'
+            f'<span class="mut" style="display:block">{E(CFG.PEAD_TT_EXP_NOTE)}</span></p>')
 
 
 def thesis_html(e: dict, themes: dict) -> str:

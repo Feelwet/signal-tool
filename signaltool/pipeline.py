@@ -431,6 +431,14 @@ def run(fast: bool = False) -> dict:
     # «Signal-boka»: papirkonto etter fryste regler (portfolio_rules.py); bare logger, ingen avkastning før 30 lukkede
     from . import portfolio
     portfolio.run(snap, status)
+    # Rullerende topp/topp-terskler (bak PEAD_TT_ENABLED) logges hver natt så AnalBot kan sammenligne med testen
+    try:
+        from . import pead_roll
+        th = pead_roll.log_today()
+        status["pead_tt_thresholds"] = (f"ok (overraskelse ≥ {th['surprise']:.1f} %, reaksjon ≥ {th['reaction']*100:.1f} %, n {th['n']})"
+                                        if th else "skipped (< 200 rapporter i vinduet)")
+    except Exception as ex:
+        status["pead_tt_thresholds"] = f"error: {ex}"
 
     # ---------- raw tables for report/site ----------
     snap["insider_clusters"] = _records(clusters, ["ticker", "issuer", "n_insiders", "n_tx", "total_value", "owners", "roles", "last_date", "url", "cluster"], 30) if not clusters.empty else []
