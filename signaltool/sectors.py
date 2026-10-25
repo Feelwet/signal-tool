@@ -8,6 +8,7 @@ Fundamentaldata hentes med yfinance og lagres i signaltool/sector_fundamentals.j
 from __future__ import annotations
 import html
 import json
+import re
 from datetime import date
 from pathlib import Path
 
@@ -252,12 +253,20 @@ CLS = {"CLEAR": "clear", "FAIL": "fail", "MISSING": "miss"}
 from urllib.parse import quote
 
 
-def tv_symbol(ticker: str) -> str | None:
-    """TradingView-symbol for en ticker, eller None hvis vi ikke kjenner børsen (da ingen lenke)."""
+def tv_symbol(ticker: str, exchange: str | None = None) -> str | None:
+    """TradingView-symbol for en ticker, eller None hvis vi ikke kjenner børsen (da ingen lenke).
+    US (ingen suffiks): EXCHANGE:SYM hvis børs er kjent i data, ellers bart symbol (TradingView løser selv)."""
     t = (ticker or "").strip().upper()
     if t.endswith(".OL"):
         base = t[:-3]
         return f"OSL:{base}" if base else None
+    if t.endswith(".L"):
+        base = t[:-2]
+        return f"LSE:{base.replace('-', '.')}" if base else None
+    if re.fullmatch(r"[A-Z]{1,5}(-[A-Z])?", t):
+        sym = t.replace("-", ".")
+        ex = (exchange or "").strip().upper()
+        return f"{ex}:{sym}" if ex else sym
     return None   # andre suffikser/ukjente: ingen lenke, vi gjetter ikke
 
 

@@ -49,11 +49,11 @@ def test_pages_render():
 def test_tv_url_builder():
     assert S.tv_url("FRO.OL") == "https://www.tradingview.com/chart/?symbol=OSL%3AFRO"
     assert S.tv_symbol("NORBT.OL") == "OSL:NORBT"
-    assert S.tv_url("BRK-B") is None and S.tv_url("AAPL") is None and S.tv_url("") is None
+    assert S.tv_url("BRK-B").endswith("BRK.B") and S.tv_url("AAPL").endswith("AAPL") and S.tv_url("") is None
     assert S.tv_url("SUBC.OL").endswith("OSL%3ASUBC")
     link = S.tv_ticker("FRO.OL")
     assert 'target="_blank"' in link and 'rel="noopener"' in link and "↗" in link and "FRO.OL" in link
-    assert S.tv_ticker("AAPL") == "<b>AAPL</b>" and S.tv_ext("AAPL") == ""
+    assert "↗" in S.tv_ext("AAPL") and S.tv_ext("ERIC-B.ST") == ""
 
 
 def test_every_column_has_info_text():
@@ -108,3 +108,15 @@ def test_source_state_and_log(tmp_path):
     P.append_source_status(st, p)
     rows = [json.loads(l) for l in p.read_text().splitlines()]
     assert len(rows) == 5 and rows[1]["code"] == "403" and rows[0]["state"] == "ok"
+
+
+def test_tv_symbol_us_and_unknown():
+    from signaltool.sectors import tv_symbol, tv_url
+    assert tv_symbol("HAS") == "HAS" and tv_symbol("CLF") == "CLF"
+    assert tv_symbol("HAS", "NASDAQ") == "NASDAQ:HAS" and tv_symbol("CLF", "nyse") == "NYSE:CLF"
+    assert tv_symbol("BRK-B") == "BRK.B"
+    assert tv_symbol("KOG.OL") == "OSL:KOG"
+    assert tv_symbol("BA.L") == "LSE:BA" and tv_symbol("SPY") == "SPY"
+    for t in ("ERIC-B.ST", "^GSPC", "EURUSD=X", "2020.OL"[:0], "CL=F"):
+        assert tv_symbol(t) is None
+    assert tv_url("HAS").endswith("symbol=HAS")
