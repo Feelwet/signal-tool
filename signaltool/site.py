@@ -539,7 +539,7 @@ def build(snap: dict) -> Path:
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
     (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
-                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
+                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + '<p class="catdisc" style="margin:2px 0 4px;font-size:12px;line-height:16px;color:#8b949e">Kategoriene er ikke bekreftet i historiske tester ennå og er ikke kjøpsråd.</p>' + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers) + "</table>" + RET_NOTE + CAT_NOTE.format(pre="") + "</div></div>"
                                             + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
@@ -644,7 +644,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2))}
-{SN.line(e.get("_since"), cat_badge(e.get('category')), e.get("_ret"))}
+{SN.line(e.get("_since"), cat_badge(e.get('category')), e.get("_ret"))}<p class="catdisc" style="margin:2px 0 4px;font-size:12px;line-height:16px;color:#8b949e">Kategoriene er ikke bekreftet i historiske tester ennå og er ikke kjøpsråd.</p>
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
