@@ -125,7 +125,7 @@ def cat_badge(cat):
 def cat_cell(e, why=True):
     if not e or not e.get("category"):
         return '<span class="mut">–</span>'
-    return cat_badge(e["category"]) + (f'<div class="why">Hvorfor: {E(e.get("cat_reason"))}</div>' if why else "")
+    return cat_badge(e["category"]) + (f'<div class="why clamp">Hvorfor: {E(e.get("cat_reason"))}</div><button type="button" class="mer" onclick="var w=this.previousElementSibling;w.classList.toggle(\'open\');this.textContent=w.classList.contains(\'open\')?\'mindre\':\'mer\'">mer</button>' if why else "")
 
 
 def theme_cat(catmap, r):
@@ -392,7 +392,14 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0)
     return (f'<tr><td><a href="{pre}ticker/{slug(e["ticker"])}.html"><b>{E(e["ticker"])}</b></a>{SEC.tv_ext(e["ticker"])}<br><span class="mut">{E(e.get("name") or "")}</span></td>'
-            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td><td>{pct(st.get("ret_5d"))}</td><td>{pct(st.get("ret_20d"))}</td></tr>')
+            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}</tr>')
+
+
+def tint(x):
+    """5d/20d cell: faint background tint instead of green/red text."""
+    if x is None:
+        return "<td>–</td>"
+    return f'<td class="tint {"tup" if x > 0 else "tdn" if x < 0 else ""}">{x*100:+.1f}%</td>'
 
 
 def _prep(snap: dict) -> dict:

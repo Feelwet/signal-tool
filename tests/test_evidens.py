@@ -39,3 +39,18 @@ def test_summary_zero_kjop():
 def test_mapping_single_place():
     assert all(k in V.evidens for k in V.RED_FLAGS + ["pead", "theme", "gdelt", "unusual_volume"])
     assert V.level("unknown") == "oppm"
+
+
+def test_sort_and_fold():
+    s = _snap()
+    s["oslo_universe_flags"] = [{"ticker": f"T{i:02d}.OL", "flags": {"neg_ebit": "x"}, "asof": "d"} for i in range(20)] + [
+        {"ticker": "Z.OL", "flags": {"high_vol": "v"}, "asof": "d"}, {"ticker": "Y.OL", "flags": {"weak_px": "w"}, "asof": "d"},
+        {"ticker": "X.OL", "flags": {"placement": "p", "neg_ebit": "e"}, "asof": "d"}]
+    assert [r["ticker"] for r in V.red_rows(s)[:4]] == ["X.OL", "Y.OL", "Z.OL", "T00.OL"]
+    h = V.red_page(s)
+    assert "2+ flagg (1)" in h and "1 flagg (22), ingen målt underavkastning" in h and "Sortert etter antall flagg." in h
+
+
+def test_two_plus_text():
+    t = V.evidens["two_plus"][1]
+    assert "−6,9 %" in t and "t −3,7" in t and "Ikke bestått testkravet: t −0,8 i 2014–18" in t and "robust" not in t.lower()

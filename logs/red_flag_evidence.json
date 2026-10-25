@@ -30,5 +30,13 @@
   "t_is": null,
   "t_oos": null,
   "merknad": "Repoet har bare siste årlige EBIT per selskap (data/cache/fund_ol, ett øyeblikksbilde fra yfinance), ingen kvartalshistorikk eller rapportdatoer. Point-in-time test umulig uten look-ahead; ingen tall diktet."
+ },
+ "to_pluss_flagg": {
+  "evidens": "eksperimentell",
+  "n": 3.7,
+  "effekt_60d": -0.0685,
+  "t_is": -0.78,
+  "t_oos": -3.67,
+  "merknad": "≥2 av (mom bunn20, vol topp20, emisjon 60d). Mot 1 flagg 60d: IS -0,73 % (t -0,2), OOS -8,08 % (t -4,1). Netto vs OSEBX OOS -7,41 % (t -3,4). IS bare mom+vol (emisjon fra 2019), n IS ~2,3/dato. Samme fortegn, men IS |t|<3,1 -> ikke robust."
  }
 }

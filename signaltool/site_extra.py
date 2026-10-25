@@ -520,9 +520,7 @@ def dashboard_html(snap: dict) -> str:
     focus_n = len(((snap.get("briefing") or {}).get("focus")) or [])
 
     kpis = [
-        ("kpi hot" if hot else "kpi", str(hot), "Hete temaer (≥2)", f"{warm} varme (≥1)", "temaer.html"),
-        ("kpi ok" if cats["kjop"] else "kpi", str(cats["kjop"]), "Kjøp-kandidater", f"Hold {cats['hold']} · Watch {cats['watch']}", "tickere.html"),
-        ("kpi warn" if risk_off else "kpi ok", "Halver" if risk_off else "Normal", "Markedsregime", "størrelse på nye posisjoner", "index.html#regime"),
+        # Hete temaer, Kjøp-kandidater og Markedsregime står i oppsummeringen øverst
         ("kpi", str(focus_n), "Fokus i dag", "prioriterte punkter", "index.html#fokus"),
         ("kpi", str(nw), "Newsweb-kontrakter", "siste 14 dager", "oslo.html"),
     ]
