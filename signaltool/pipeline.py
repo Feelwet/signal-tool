@@ -428,6 +428,9 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:  # never break the run
         log.exception("categories failed")
         status["Kategorier (Kjøp/Hold/Følg)"] = f"FAILED: {ex}"
+    # «Signal-boka»: papirkonto etter fryste regler (portfolio_rules.py); bare logger, ingen avkastning før 30 lukkede
+    from . import portfolio
+    portfolio.run(snap, status)
 
     # ---------- raw tables for report/site ----------
     snap["insider_clusters"] = _records(clusters, ["ticker", "issuer", "n_insiders", "n_tx", "total_value", "owners", "roles", "last_date", "url", "cluster"], 30) if not clusters.empty else []

@@ -133,11 +133,11 @@ jobs:
         run: |
           test -s logs/categories.csv || { echo "no forward log to commit"; exit 0; }
           git add logs/categories.csv
-          for f in logs/calendar.json logs/source_status.jsonl logs/theme_score.csv; do test -f "$f" && git add "$f"; done
-          if git diff --cached --quiet -- logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv; then
+          for f in logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv; do test -f "$f" && git add "$f"; done
+          if git diff --cached --quiet -- logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv; then
             echo "forward log unchanged - nothing to commit"; exit 0
           fi
-          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv $(test -f logs/calendar.json && echo logs/calendar.json) $(test -f logs/source_status.jsonl && echo logs/source_status.jsonl) $(test -f logs/theme_score.csv && echo logs/theme_score.csv)
+          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv $(test -f logs/calendar.json && echo logs/calendar.json) $(test -f logs/source_status.jsonl && echo logs/source_status.jsonl) $(test -f logs/theme_score.csv && echo logs/theme_score.csv) $(test -f logs/portfolio_trades.csv && echo logs/portfolio_trades.csv) $(test -f logs/portfolio_nav.csv && echo logs/portfolio_nav.csv)
           for i in 1 2 3; do
             git -c user.name=GrokBot -c user.email=bot@box pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
               && git push origin "HEAD:${GITHUB_REF_NAME}" && { echo "forward log pushed ($(wc -l < logs/categories.csv) lines)"; exit 0; }

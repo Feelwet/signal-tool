@@ -524,6 +524,11 @@ def build(snap: dict) -> Path:
     (SITE / "metode.html").write_text(page("Metode", fold_tables(sec("Metode", metode_page, snap)), 0, snap))
     (SITE / "kilder.html").write_text(L.redirect("metode.html", "Metode"))
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
+    try:
+        from . import portfolio
+        portfolio.write_json(SITE / "portfolio.json")   # for siden UxBot skisserer; ingen avkastning før 30 lukkede handler
+    except Exception as ex:
+        print(f"portfolio.json: {ex}")
     if C.LOG_PATH.exists():  # public forward log of every day's categories (also restores CI state if the cache is lost)
         (SITE / "historikk").mkdir(exist_ok=True)
         shutil.copy(C.LOG_PATH, SITE / "historikk" / "kategorier.csv")
