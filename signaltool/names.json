@@ -1,0 +1,430 @@
+{
+ "fetched": "2026-10-25",
+ "names": {
+  "2020.OL": {
+   "exchange": "Oslo",
+   "name": "2020 Bulkers Ltd."
+  },
+  "AKAST.OL": {
+   "exchange": "Oslo",
+   "name": "Akastor ASA"
+  },
+  "AKRBP.OL": {
+   "exchange": "Oslo",
+   "name": "Aker BP ASA"
+  },
+  "ARCH.OL": {
+   "exchange": "Oslo",
+   "name": "Archer Limited"
+  },
+  "ATEA.OL": {
+   "exchange": "Oslo",
+   "name": "Atea ASA"
+  },
+  "AUTO.OL": {
+   "exchange": "Oslo",
+   "name": "AutoStore Holdings Ltd."
+  },
+  "BCPC": {
+   "exchange": "NasdaqGS",
+   "name": "Balchem Corporation"
+  },
+  "BORR.OL": {
+   "exchange": "Oslo",
+   "name": "Borr Drilling Limited"
+  },
+  "BOUV.OL": {
+   "exchange": "Oslo",
+   "name": "Bouvet ASA"
+  },
+  "BRG.OL": {
+   "exchange": "Oslo",
+   "name": "Borregaard ASA"
+  },
+  "BRUT.OL": {
+   "exchange": "Oslo",
+   "name": "Bruton Limited"
+  },
+  "CF": {
+   "exchange": "NYSE",
+   "name": "CF Industries Holdings, Inc."
+  },
+  "CLF": {
+   "exchange": "NYSE",
+   "name": "Cleveland-Cliffs Inc."
+  },
+  "COSH.OL": {
+   "exchange": "Oslo",
+   "name": "Constellation Oil Services Holding S.A."
+  },
+  "CRNA.OL": {
+   "exchange": "Oslo",
+   "name": "Circio Holding ASA"
+  },
+  "CVX": {
+   "exchange": "NYSE",
+   "name": "Chevron Corporation"
+  },
+  "CYVIZ.OL": {
+   "exchange": "Oslo",
+   "name": "Cyviz AS"
+  },
+  "DDRIL.OL": {
+   "exchange": "Oslo",
+   "name": "Dolphin Drilling AS"
+  },
+  "DFENS.OL": {
+   "exchange": "Oslo",
+   "name": "Fjord Defence Group ASA"
+  },
+  "DHT": {
+   "exchange": "NYSE",
+   "name": "DHT Holdings, Inc."
+  },
+  "DNB.OL": {
+   "exchange": "Oslo",
+   "name": "DNB Bank ASA"
+  },
+  "DOFG.OL": {
+   "exchange": "Oslo",
+   "name": "DOF Group ASA"
+  },
+  "DVD.OL": {
+   "exchange": "Oslo",
+   "name": "Deep Value Driller AS"
+  },
+  "EIOF.OL": {
+   "exchange": "Oslo",
+   "name": "Eidesvik Offshore ASA"
+  },
+  "ELK.OL": {
+   "exchange": "Oslo",
+   "name": "Elkem ASA"
+  },
+  "ELO.OL": {
+   "exchange": "Oslo",
+   "name": "Elopak ASA"
+  },
+  "ENDUR.OL": {
+   "exchange": "Oslo",
+   "name": "Endúr ASA"
+  },
+  "ENH.OL": {
+   "exchange": "Oslo",
+   "name": "SED Energy Holdings Plc"
+  },
+  "ENTRA.OL": {
+   "exchange": "Oslo",
+   "name": "Entra ASA"
+  },
+  "ENVIP.OL": {
+   "exchange": "Oslo",
+   "name": "Envipco Holding N.V."
+  },
+  "EPR.OL": {
+   "exchange": "Oslo",
+   "name": "Europris ASA"
+  },
+  "EQNR.OL": {
+   "exchange": "Oslo",
+   "name": "Equinor ASA"
+  },
+  "EWG": {
+   "exchange": "NYSEArca",
+   "name": "iShares MSCI Germany ETF"
+  },
+  "EWW": {
+   "exchange": "NYSEArca",
+   "name": "iShares MSCI Mexico ETF"
+  },
+  "EWZ": {
+   "exchange": "NYSEArca",
+   "name": "iShares MSCI Brazil ETF"
+  },
+  "FEZ": {
+   "exchange": "NYSEArca",
+   "name": "State Street SPDR EURO STOXX 50 ETF"
+  },
+  "FRO": {
+   "exchange": "NYSE",
+   "name": "Frontline plc"
+  },
+  "GDX": {
+   "exchange": "NYSEArca",
+   "name": "VanEck Gold Miners ETF"
+  },
+  "GLD": {
+   "exchange": "NYSEArca",
+   "name": "SPDR Gold Shares"
+  },
+  "GS": {
+   "exchange": "NYSE",
+   "name": "The Goldman Sachs Group, Inc."
+  },
+  "GSF.OL": {
+   "exchange": "Oslo",
+   "name": "Grieg Seafood ASA"
+  },
+  "HAFNI.OL": {
+   "exchange": "Oslo",
+   "name": "Hafnia Limited"
+  },
+  "HAUTO.OL": {
+   "exchange": "Oslo",
+   "name": "Höegh Autoliners ASA"
+  },
+  "HAV.OL": {
+   "exchange": "Oslo",
+   "name": "HAV Group ASA"
+  },
+  "HAVI.OL": {
+   "exchange": "Oslo",
+   "name": "Havila Shipping ASA"
+  },
+  "HD": {
+   "exchange": "NYSE",
+   "name": "The Home Depot, Inc."
+  },
+  "HEX.OL": {
+   "exchange": "Oslo",
+   "name": "Hexagon Composites ASA"
+  },
+  "HUNT.OL": {
+   "exchange": "Oslo",
+   "name": "Hunter Group ASA"
+  },
+  "IBM": {
+   "exchange": "NYSE",
+   "name": "International Business Machines Corporation"
+  },
+  "KIT.OL": {
+   "exchange": "Oslo",
+   "name": "Kitron ASA"
+  },
+  "KOG.OL": {
+   "exchange": "Oslo",
+   "name": "Kongsberg Gruppen ASA"
+  },
+  "KOMPL.OL": {
+   "exchange": "Oslo",
+   "name": "Komplett ASA"
+  },
+  "LINK.OL": {
+   "exchange": "Oslo",
+   "name": "LINK Mobility Group Holding ASA"
+  },
+  "LMT": {
+   "exchange": "NYSE",
+   "name": "Lockheed Martin Corporation"
+  },
+  "LSG.OL": {
+   "exchange": "Oslo",
+   "name": "Lerøy Seafood Group ASA"
+  },
+  "MGN.OL": {
+   "exchange": "Oslo",
+   "name": "Magnora ASA"
+  },
+  "MORLD.OL": {
+   "exchange": "Oslo",
+   "name": "Moreld ASA"
+  },
+  "MOS": {
+   "exchange": "NYSE",
+   "name": "The Mosaic Company"
+  },
+  "MOWI.OL": {
+   "exchange": "Oslo",
+   "name": "Mowi ASA"
+  },
+  "MPCC.OL": {
+   "exchange": "Oslo",
+   "name": "MPC Container Ships ASA"
+  },
+  "MSFT": {
+   "exchange": "NasdaqGS",
+   "name": "Microsoft Corporation"
+  },
+  "MULTI.OL": {
+   "exchange": "Oslo",
+   "name": "Multiconsult ASA"
+  },
+  "NAPA.OL": {
+   "exchange": "Oslo",
+   "name": "Napatech A/S"
+  },
+  "NAS.OL": {
+   "exchange": "Oslo",
+   "name": "Norwegian Air Shuttle ASA"
+  },
+  "NEL.OL": {
+   "exchange": "Oslo",
+   "name": "Nel ASA"
+  },
+  "NEM": {
+   "exchange": "NYSE",
+   "name": "Newmont Corporation"
+  },
+  "NFLX": {
+   "exchange": "NasdaqGS",
+   "name": "Netflix, Inc."
+  },
+  "NHY.OL": {
+   "exchange": "Oslo",
+   "name": "Norsk Hydro ASA"
+  },
+  "NOFIN.OL": {
+   "exchange": "Oslo",
+   "name": "Nordic Financials ASA"
+  },
+  "NORBT.OL": {
+   "exchange": "Oslo",
+   "name": "Norbit ASA"
+  },
+  "NORCO.OL": {
+   "exchange": "Oslo",
+   "name": "Norconsult ASA"
+  },
+  "NRC.OL": {
+   "exchange": "Oslo",
+   "name": "NRC Group ASA"
+  },
+  "NSKOG.OL": {
+   "exchange": "Oslo",
+   "name": "Norske Skog ASA"
+  },
+  "NTR": {
+   "exchange": "NYSE",
+   "name": "Nutrien Ltd."
+  },
+  "NYKD.OL": {
+   "exchange": "Oslo",
+   "name": "Nykode Therapeutics AS"
+  },
+  "ONCIN.OL": {
+   "exchange": "Oslo",
+   "name": "Oncoinvent ASA"
+  },
+  "PARB.OL": {
+   "exchange": "Oslo",
+   "name": "Pareto Bank ASA"
+  },
+  "PLT.OL": {
+   "exchange": "Oslo",
+   "name": "poLight ASA"
+  },
+  "PRS.OL": {
+   "exchange": "Oslo",
+   "name": "Prosafe SE"
+  },
+  "PUBLI.OL": {
+   "exchange": "Oslo",
+   "name": "PPI Public Property Invest AB (publ)"
+  },
+  "PWR": {
+   "exchange": "NYSE",
+   "name": "Quanta Services, Inc."
+  },
+  "RTX": {
+   "exchange": "NYSE",
+   "name": "RTX Corporation"
+  },
+  "SALME.OL": {
+   "exchange": "Oslo",
+   "name": "Salmon Evolution ASA"
+  },
+  "SMOP.OL": {
+   "exchange": "Oslo",
+   "name": "Smartoptics Group ASA"
+  },
+  "SNOW": {
+   "exchange": "NYSE",
+   "name": "Snowflake Inc."
+  },
+  "SPY": {
+   "exchange": "NYSEArca",
+   "name": "State Street SPDR S&P 500 ETF Trust"
+  },
+  "STB.OL": {
+   "exchange": "Oslo",
+   "name": "Storebrand ASA"
+  },
+  "STNG": {
+   "exchange": "NYSE",
+   "name": "Scorpio Tankers Inc."
+  },
+  "T": {
+   "exchange": "NYSE",
+   "name": "AT&T Inc."
+  },
+  "TECH.OL": {
+   "exchange": "Oslo",
+   "name": "Techstep ASA"
+  },
+  "TEKNA.OL": {
+   "exchange": "Oslo",
+   "name": "Tekna Holding ASA"
+  },
+  "TEL.OL": {
+   "exchange": "Oslo",
+   "name": "Telenor ASA"
+  },
+  "TOM.OL": {
+   "exchange": "Oslo",
+   "name": "Tomra Systems ASA"
+  },
+  "TRMED.OL": {
+   "exchange": "Oslo",
+   "name": "Thor Medical ASA"
+  },
+  "TSM": {
+   "exchange": "NYSE",
+   "name": "Taiwan Semiconductor Manufacturing Company Limited"
+  },
+  "VAR.OL": {
+   "exchange": "Oslo",
+   "name": "Vår Energi ASA"
+  },
+  "VEI.OL": {
+   "exchange": "Oslo",
+   "name": "Veidekke ASA"
+  },
+  "VEND.OL": {
+   "exchange": "Oslo",
+   "name": "Vend Marketplaces ASA"
+  },
+  "VOW.OL": {
+   "exchange": "Oslo",
+   "name": "Vow ASA"
+  },
+  "WAWI.OL": {
+   "exchange": "Oslo",
+   "name": "Wallenius Wilhelmsen ASA"
+  },
+  "WWI.OL": {
+   "exchange": "Oslo",
+   "name": "Wilh. Wilhelmsen Holding ASA"
+  },
+  "XLE": {
+   "exchange": "NYSEArca",
+   "name": "State Street Energy Select Sector SPDR ETF"
+  },
+  "XOM": {
+   "exchange": "NYSE",
+   "name": "ExxonMobil Holdings Corporation"
+  },
+  "XPLRA.OL": {
+   "exchange": "Oslo",
+   "name": "Xplora Technologies AS"
+  },
+  "YAR.OL": {
+   "exchange": "Oslo",
+   "name": "Yara International ASA"
+  },
+  "ZAP.OL": {
+   "exchange": "Oslo",
+   "name": "Zaptec ASA"
+  }
+ },
+ "source": "Yahoo Finance via yfinance (longName, ellers shortName; fullExchangeName)"
+}

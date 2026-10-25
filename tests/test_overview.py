@@ -99,3 +99,23 @@ def test_tickere_page_redirect_and_menu(tmp_path, monkeypatch):
     from signaltool import site, site_layout as L
     assert "rode-flagg.html" not in str(L.NAV) if hasattr(L, "NAV") else True
     assert "rode-flagg.html" not in L.nav_html("Tickere", "")
+
+
+def test_names_from_cache_and_fallback(monkeypatch):
+    from signaltool import names as NM
+    monkeypatch.setattr(NM, "_C", {"LMT": {"name": "Lockheed Martin Corporation", "exchange": "NYSE"}})
+    c = NM.cell("LMT", "ticker/LMT.html")
+    assert c.index("Lockheed Martin Corporation") < c.index(">LMT") or c.index("Lockheed") < c.index("LMT<")
+    assert "tradingview.com" in c and "…" not in c
+    nn = NM.cell("ZZZ")
+    assert "ZZZ" in nn and 'class="nm">ZZZ' in nn  # ingen navn → bare tickeren
+    h = NM.header("LMT")
+    assert 'class="nm1">Lockheed Martin Corporation</h1>' in h and "LMT · NYSE" in h and "Chart ↗" in h
+    assert "· " not in NM.header("ZZZ")  # ingen gjettet børs
+
+
+def test_names_file_covers_real_source():
+    import json
+    from signaltool import names as NM
+    d = json.loads(NM.PATH.read_text())
+    assert "yfinance" in d["source"] and len(d["names"]) >= 60

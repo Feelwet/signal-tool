@@ -4,6 +4,7 @@ from __future__ import annotations
 from html import escape as E
 
 from . import evidens as EV
+from . import names as NM
 
 FILTERS = (("alle", "Alle"), ("kjop", "Kjøp"), ("hold", "Hold"), ("folg", "Følg"), ("flagg", "Røde flagg"))
 CAT_OF = {"kjop": "kjop", "hold": "hold", "folg": "watch"}
@@ -61,7 +62,7 @@ def flag_block(snap: dict) -> str:
               (f'Bare negativ EBIT, ikke testet', [r for r in rows if EV.ntest(r) == 0]))
     def row(r):
         t = r["ticker"]
-        return (f'<div class="rfr"><b>{E(t)}</b>{SEC.tv_ext(t)}{chip(r)}'
+        return (f'<div class="rfr">{NM.cell(t, extra=chip(r))}'
                 f'<div class="fb">{"".join(EV.short_badge(k) for k in EV.RED_FLAGS if k in r["flags"])}</div></div>')
     body = "".join(f'<h3 class="grp">{t} ({len(rs)})</h3>' + "".join(row(r) for r in rs) for t, rs in groups if rs)
     return (f'<div id="tf-flag" class="tf-flag card" hidden><p class="tf-only">Bare Oslo-aksjer er sjekket for røde flagg. '
