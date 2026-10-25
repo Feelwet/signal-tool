@@ -44,9 +44,9 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
     tk = (out / "tickere.html").read_text()  # full kategoritekst på Tickere etter opprydding
-    assert 'class="cat kjop"' in tk and "Hvorfor: test-grunn" in tk and "ikke bevist å slå markedet" in tk and "Kjøp-treffrate" in idx and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
+    assert 'class="rk ' in tk and 'Risiko</th>' in tk and 'cat kjop' not in tk and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
     tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
-    assert "✔ oppfylt" in tp and "✘ ikke oppfylt" in tp and "ikke bevist å slå markedet" in tp
+    assert "Risiko:" in tp and "Risikonivå er testet på historiske data. Kategoriene er ikke bekreftet." in tp and "✔ oppfylt" not in tp
     tk = (out / "tickere.html").read_text()
     assert 'id="treffsikkerhet"' in tk
     assert "Kjøp-kandidat" in (out / "metode.html").read_text() and "metode.html" in (out / "kilder.html").read_text()
@@ -65,7 +65,7 @@ def test_dashboard_overview(tmp_path, monkeypatch):
     monkeypatch.setattr(site, "SITE", tmp_path / "site")
     site.build(snap)
     idx = (tmp_path / "site" / "index.html").read_text()
-    assert "ov-strip" in idx and 'id="temascore"' in idx and "ov-2" in idx and "Kjøp-treffrate" in idx
+    assert "ov-strip" in idx and 'id="temascore"' in idx and "ov-2" in idx and "Risikonivå" in idx
     assert re.search(r'href="style\.css\?v=[0-9a-f]{10}"', idx) and "<style>" in idx and ".ov-strip{" in idx and '<a class="ov-tile"' not in idx
     assert "donut" not in idx and "Hva bør jeg se på" not in idx and "Newsweb-kontrakter" not in idx and 'metode.html#treffrate' in idx
     assert "tema/" in idx and "ticker/" in idx

@@ -89,14 +89,15 @@ def strip_html(snap: dict) -> str:
           f'<div class="sub">{dots or "regime ukjent"} <span class="mut">mot 10-mnd snitt</span></div></div>') if reg else \
          '<div class="ov-tile"><div class="lbl">Marked</div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     tk = snap.get("tickers") or []
-    cnt = {k: sum(1 for e in tk if e.get("category") == k) for k, _, _ in CATS}
+    from . import site_risk as RK
+    RC = (("Høy", "hoy", "#4B5563"), ("Middels", "middels", "#9CA3AF"), ("Lav", "lav", "#E5E7EB"))
+    cnt = {k: sum(1 for e in tk if (e.get("_risk") or {}).get("level") == k) for k, _, _ in RC}
     tot = sum(cnt.values()) or 1
-    seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in CATS if cnt[k])
-    fk = {"kjop": "kjop", "hold": "hold", "watch": "folg"}
-    t2 = (f'<div class="ov-tile tap"><div class="lbl">Kategorier<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["kjop"]} Kjøp</div>'
-          f'<div class="ov-stack" role="img" aria-label="Kjøp {cnt["kjop"]}, Hold {cnt["hold"]}, Følg {cnt["watch"]}">{seg}</div>'
-          f'<div class="sub">' + " · ".join(f'<a class="in" href="tickere.html?filter={fk[k]}">{lab} {cnt[k]}</a>' for k, lab, _ in CATS) + '</div>'
-          f'<div class="sub2" id="kjop-treff">{E(kjop_hit_line(snap.get("track_record")))}</div>'
+    seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in RC if cnt[k])
+    t2 = (f'<div class="ov-tile tap"><div class="lbl">Risikonivå<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["Høy"]} Høy</div>'
+          f'<div class="ov-stack" role="img" aria-label="Høy {cnt["Høy"]}, Middels {cnt["Middels"]}, Lav {cnt["Lav"]}">{seg}</div>'
+          f'<div class="sub">' + " · ".join(f'<a class="in" href="tickere.html?filter={f}">{k} {cnt[k]}</a>' for k, f, _ in RC) + '</div>'
+          f'<div class="sub2">{E(RK.STATUS)}</div>'
           '</div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
@@ -148,9 +149,9 @@ def themes_html(snap: dict, wk: dict | None = None, stale: str = "") -> str:
 
 def two_col_html(snap: dict) -> str:
     tk = sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])[:5]
-    lab = {k: l for k, l, _ in CATS}
+    from . import site_risk as RK
     li = "".join(f'<li><span>{NM.cell(e["ticker"], "ticker/" + _slug(e["ticker"]) + ".html", e.get("name"))} '
-                 f'<span class="cat {E(e.get("category") or "")}">{E(lab.get(e.get("category"), "–"))}</span></span><span class="mut">{_nb(e["score"], 1)} p</span></li>' for e in tk)
+                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="mut">{_nb(e["score"], 1)} p</span></li>' for e in tk)
     left = (f'<div class="card"><h2>Kandidater</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
@@ -169,7 +170,7 @@ NOTICE_UNTIL = "2026-11-01"
 def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
     b = snap.get("briefing") or {}
     items, seen = [], set()
-    if str(snap.get("date") or "") <= NOTICE_UNTIL:   # fast melding i 7 dager (t.o.m. 01.11.2026)
+    if False and str(snap.get("date") or "") <= NOTICE_UNTIL:   # Kjøp vises ikke lenger (risikorunden)   # fast melding i 7 dager (t.o.m. 01.11.2026)
         items.append(f'<li>ⓘ {E(NOTICE)}</li>')
     for a in b.get("alerts") or []:
         k = a["title"].split(":")[0].strip().lower()
@@ -177,6 +178,8 @@ def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
             seen.add(k)
             items.append(f'<li>{"🔔" if a.get("level") == "alert" else "ⓘ"} <a href="{E(link(a.get("link", "")))}">{E(a["title"])}</a></li>')
     for x in ((b.get("changes") or {}).get("items") or []):
+        if x.get("kind") in ("ny", "opp", "ned"):   # kategoriendringer vises ikke (risikorunden); logges fortsatt
+            continue
         items.append(f'<li>{"🔔 " if x.get("level") == "alert" else ""}{change_text(x["text"])}</li>')
     if not items:
         return ""

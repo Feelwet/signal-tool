@@ -20,6 +20,7 @@ from . import names as NM
 from . import mine as MINE
 from . import datacov as DC
 from . import since as SN
+from . import site_risk as RK
 from . import nokkeltall as NK
 from . import pricechart as PC
 
@@ -125,7 +126,7 @@ CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th>Kategori</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + "</span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + "</span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -312,7 +313,7 @@ def fold(title: str, body: str, *, open_: bool = True, hid: str | None = None) -
 
 
 def page(title: str, body: str, depth=0, snap=None) -> str:
-    body = L.no_robust(body)
+    body = L.no_robust(body).replace("(eksperimentell, teller ikke mot Kjøp)", "(eksperimentell)").replace("(eksperimentell – teller ikke mot Kjøp)", "(eksperimentell)")
     pre = "../" * depth
     gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
     active = {
@@ -422,8 +423,8 @@ def ticker_row(e, pre=""):
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))} {v:.1f}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + an
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E(e.get("category") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
-            f'<td>{cat_cell(e)}</td><td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
+            f'{RK.cell(e.get("_risk"))}<td>{score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{tint(st.get("ret_5d"))}{tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -473,7 +474,43 @@ def _prep(snap: dict) -> dict:
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
         e["_ret"] = SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"])
+    try:
+        from . import risk
+        rk = risk.refresh([e["ticker"] for e in snap.get("tickers", [])])
+    except Exception as ex:
+        print(f"risk: {ex}"); rk = {}
+    for e in snap.get("tickers", []):
+        e["_risk"] = rk.get(e["ticker"])
+    _factor_fix(snap)
     return snap
+
+
+def _factor_fix(snap):
+    """Yahoo har justert historikken bakover med konstant faktor (f.eks. TECH.OL): juster innkursen med samme faktor og logg det
+    (logs/dq_flags.jsonl). Rålogger endres ikke."""
+    from . import learnloop as LL
+    tk = [e for e in snap.get("tickers", []) if e.get("_since") and e["_since"].get("price")]
+    if not tk:
+        return
+    pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+    rows = SN.load()
+    idx = _index_closes()
+    flags = []
+    for e in tk:
+        s, t = e["_since"], e["ticker"]
+        ser = {d: v for d, v in (pxs.get(t) or []) if v is not None}
+        lg = [(r["price_date"], float(r["price"])) for r in rows if r["ticker"] == t and r.get("price") and r.get("price_date") and r["date"] >= s["since"]]
+        fc = LL.factor_check(t, lg, ser)
+        if not fc or s.get("price_date") not in fc["dates"]:
+            continue
+        old = s["price"]
+        s["price"] = round(old * fc["factor"], 6); s["factor"] = fc["factor"]
+        st = e.get("stats") or {}
+        e["_ret"] = SN.ret(s, st.get("close"), st.get("last_date"), idx, t)
+        flags.append({"date": str(snap.get("date")), "ticker": t, "type": "factor_adjusted_entry", "entry_date": s["price_date"],
+                      "logged_price": old, "adjusted_price": s["price"], **fc})
+    if flags:
+        LL.dq_write(flags)
 
 
 def build(snap: dict) -> Path:
@@ -482,7 +519,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -538,12 +575,12 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med kategori og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
-                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + '<p class="catdisc" style="margin:2px 0 4px;font-size:12px;line-height:16px;color:#8b949e">Kategoriene er ikke bekreftet i historiske tester ennå og er ikke kjøpsråd.</p>' + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
-                                            + "".join(ticker_row(e) for e in tickers) + "</table>" + RET_NOTE + CAT_NOTE.format(pre="") + "</div></div>"
-                                            + '<div id="treffsikkerhet"></div>' + sec("Treffsikkerhet", track_html, snap)
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>'
+                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card tw"><table>' + TICKER_HEAD + ''
+                                            + "".join(ticker_row(e) for e in tickers) + "</table>" + RET_NOTE + "</div></div>"
+                                            + '<div id="treffsikkerhet"></div>'
                                             + (f'<div class="card tw"><h2 style="margin-top:0">Innsidekjøp i USA (SEC Form 4, 7 dager)</h2><table><tr><th>Ticker</th><th>Selskap</th><th>Innsidere</th><th>Verdi</th><th>Roller</th></tr>{ins}</table></div>' if ins else "")
-                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS, 0, snap))
+                                            + (f'<div class="card"><h2 style="margin-top:0">🚩 Forsinkede regnskap (NT 10-K/10-Q, 7 dager)</h2><p class="mut">Klassisk varselsignal (regnskapsproblemer). Ikke automatisk negativt, men verdt å sjekke før kjøp.</p><ul class="ev">{lf}</ul></div>' if lf else ""), 1000, "Vis flere") + TL.JS + SN.JS + RK.JS, 0, snap))
     tmap = {t["key"]: t for t in themes}
     from .theme_maps import log_rows as _tema_rows
     tema = [r for r in _tema_rows(snap) if r["ticker"] not in {e["ticker"] for e in tickers}]
@@ -644,25 +681,22 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=score_badge(e['score'], 4, 2))}
-{SN.line(e.get("_since"), cat_badge(e.get('category')), e.get("_ret"))}<p class="catdisc" style="margin:2px 0 4px;font-size:12px;line-height:16px;color:#8b949e">Kategoriene er ikke bekreftet i historiske tester ennå og er ikke kjøpsråd.</p>
+{SN.line_rk(e.get("_since"), RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret"))}{RK.tip()}{RK.src(e.get("_risk"))}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
-{cat_rules_html(e)}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}
 {X.flags_html(e)}
 {TM.ticker_html(e)}
-{X.plan_html(e, compact=False) if e.get("category") in ("kjop", "hold") else ""}
 {X.base_rate_html(e)}
 {X.decision_html(e)}
-{X.plan_html(e, compact=True) if e.get("category") == "watch" else ""}
 <div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
 <tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
 {DC.card(e)}
 <div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
-<div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>"""
+<div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p><h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>{RK.JS}"""
 
 
 

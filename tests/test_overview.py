@@ -26,9 +26,8 @@ def test_hit_line_uses_real_n_and_flags():
 
 def test_strip_has_four_tiles_and_stacked_bar():
     h = OV.strip_html(_snap())
-    assert h.count('class="ov-tile') == 4 and 'href="tickere.html?filter=kjop"' in h and 'href="tickere.html?filter=folg"' in h and "ov-stack" in h and "I morgen" in h and "NUE" in h
+    assert h.count('class="ov-tile') == 4 and 'href="tickere.html?filter=hoy"' in h and 'href="tickere.html?filter=lav"' in h and "ov-stack" in h and "I morgen" in h and "NUE" in h
     assert 'class="ov-dot up"></span>OSEBX' in h and 'class="ov-dot dn"></span>S&amp;P' in h
-    assert "for lav (FLAG)" in h
 
 
 def test_week_change_none_without_history(tmp_path):
@@ -85,7 +84,7 @@ def test_tickerlist_filter_row_and_flag_groups():
     from signaltool import tickerlist as TL
     s = _fsnap()
     fr = TL.filter_row(s)
-    assert [x in fr for x in ("Alle", "Kjøp", "Hold", "Følg", "Røde flagg (3)")] == [True] * 5 and fr.count("<button") == 6
+    assert [x in fr for x in ("Alle", "Høy", "Middels", "Lav", "Røde flagg (3)")] == [True] * 5 and fr.count("<button") == 6
     fb = TL.flag_block(s)
     assert "Bare Oslo-aksjer er sjekket for røde flagg" in fb and "Z.OL" in fb and "E.OL" in fb  # alle flaggede, også utenfor tickerlisten
     assert fb.index("2+ flagg") < fb.index("1 flagg") < fb.index("Bare negativ EBIT")
@@ -128,6 +127,5 @@ def test_names_file_covers_real_source():
 def test_tt_withdrawn_notice_7_days():
     from signaltool import overview as OV
     on = OV.changes_alerts_html({"date": "2026-10-25"})
-    assert "HAS, CLF: Kjøp trukket tilbake. Regelen på siden var ikke den som ble testet. Ny test før den slås på igjen." in on
-    assert "trukket tilbake" in OV.changes_alerts_html({"date": "2026-11-01"})
+    assert "Kjøp trukket tilbake" not in on   # risikorunden: Kjøp vises ikke
     assert "trukket tilbake" not in OV.changes_alerts_html({"date": "2026-11-02"})

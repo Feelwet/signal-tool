@@ -1,4 +1,4 @@
-"""Tickere-listen med filterrad (Alle · Kjøp · Hold · Følg · Røde flagg) lagret i URL (?filter=)."""
+"""Tickere-listen med filterrad (Alle · Høy · Middels · Lav · Røde flagg) lagret i URL (?filter=)."""
 from __future__ import annotations
 
 from html import escape as E
@@ -7,8 +7,8 @@ from . import evidens as EV
 from . import names as NM
 from .mine import EMPTY
 
-FILTERS = (("mine", "★ Mine"), ("alle", "Alle"), ("kjop", "Kjøp"), ("hold", "Hold"), ("folg", "Følg"), ("flagg", "Røde flagg"))
-CAT_OF = {"kjop": "kjop", "hold": "hold", "folg": "watch"}
+FILTERS = (("mine", "★ Mine"), ("alle", "Alle"), ("hoy", "Høy"), ("middels", "Middels"), ("lav", "Lav"), ("flagg", "Røde flagg"))
+CAT_OF = {"hoy": "Høy", "middels": "Middels", "lav": "Lav"}
 NAME = dict(FILTERS)
 
 CSS = """
@@ -22,11 +22,11 @@ CSS = """
 #tf-table th:nth-child(4),#tf-table td:nth-child(4){display:none}#tf-table .why,#tf-table .mer,#tf-table td:first-child .mut{display:none}#tf-table td{padding:6px 4px;white-space:nowrap;font-size:.9em}#tf-table th{padding:6px 4px}}
 """
 
-JS = """<script>(()=>{const F=['mine','alle','kjop','hold','folg','flagg'],NM={mine:'★ Mine',alle:'Alle',kjop:'Kjøp',hold:'Hold',folg:'Følg',flagg:'Røde flagg'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
+JS = """<script>(()=>{const F=['mine','alle','hoy','middels','lav','flagg'],NM={mine:'★ Mine',alle:'Alle',hoy:'Risiko Høy',middels:'Risiko Middels',lav:'Risiko Lav',flagg:'Røde flagg'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
 let cur='alle';function mine(){return window.STMine?window.STMine.load():[]}
 function set(f,push){if(!F.includes(f))f='alle';cur=f;B.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f?'true':'false'));
 const fl=f==='flagg';if(G)G.hidden=!fl;if(T)T.hidden=fl;let n=0;const M=mine();
-document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||(f==='mine'?M.includes(r.dataset.t):r.dataset.cat===({kjop:'kjop',hold:'hold',folg:'watch'})[f]);r.hidden=!on;if(on)n++});
+document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||(f==='mine'?M.includes(r.dataset.t):r.dataset.cat===({hoy:'Høy',middels:'Middels',lav:'Lav'})[f]);r.hidden=!on;if(on)n++});
 if(fl&&G)n=G.querySelectorAll('.rfr').length;
 if(P){P.hidden=n>0;P.textContent=f==='mine'?'""" + EMPTY + """':'Ingen tickere i '+NM[f]+' nå.';if(fl&&G)G.after(P);else if(T)T.prepend(P)}
 if(push){const u=new URL(location.href);if(f==='alle')u.searchParams.delete('filter');else u.searchParams.set('filter',f);history.replaceState(null,'',u)}}

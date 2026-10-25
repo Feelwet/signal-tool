@@ -431,6 +431,21 @@ def run(fast: bool = False) -> dict:
     # «Signal-boka»: papirkonto etter fryste regler (portfolio_rules.py); bare logger, ingen avkastning før 30 lukkede
     from . import portfolio
     portfolio.run(snap, status)
+    # Læringsløkka (rådata, privat i logs/) + risikonivå (ukentlig, cache i data/) – feiler aldri kjøringen
+    try:
+        from . import learnloop
+        n = learnloop.record(snap, ranked)
+        status["Læringsløkke (rådata)"] = f"ok ({n['raw']} rader, {n['exits']} ut, {n['flags']} flagg)"
+    except Exception as ex:
+        log.exception("learnloop failed")
+        status["Læringsløkke (rådata)"] = f"FAILED: {ex}"
+    try:
+        from . import risk
+        rk = risk.refresh([e["ticker"] for e in snap["tickers"]])
+        status["Risikonivå"] = f"ok ({sum(1 for e in snap['tickers'] if (rk.get(e['ticker']) or {}).get('level'))}/{len(snap['tickers'])} med nivå)"
+    except Exception as ex:
+        log.exception("risk failed")
+        status["Risikonivå"] = f"FAILED: {ex}"
     # Rullerende topp/topp-terskler (bak PEAD_TT_ENABLED) logges hver natt så AnalBot kan sammenligne med testen
     try:
         from . import pead_roll

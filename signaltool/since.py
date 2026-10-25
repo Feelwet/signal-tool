@@ -87,6 +87,19 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
     return f'<p class="since mut">{chip + " " if chip else ""}{E(" · ".join(parts))}</p>'
 
 
+def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
+    """Risikochip + (i) først (aldri klippet), deretter «Siden … · inn … · +x %» med ellipsis. Ingen kategoridager."""
+    parts = []
+    if s:
+        parts.append(f"Siden {_dm(s['since'])}")
+        if s.get("price") is not None:
+            parts.append(f"inn {_price(s['price'])}" + (f" ({_dm(s['price_date'])})" if s.get("price_date") else ""))
+        if ret and ret.get("r") is not None:
+            parts.append(pct(ret["r"]))
+    t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
+    return f'<p class="since mut rk-line">{lead}{t}</p>'
+
+
 MIN_DAYS = 0   # AnalBot 25.10: avkastning fra price_date fra første dag
 NOTE = ("Kursendring fra sluttkursen dagen før aksjen kom på lista, til siste sluttkurs. I lokal valuta, uten kostnader og utbytte. "
         "Grått tall: mot hovedindeksen på børsen aksjen er notert på. Ikke en treffrate og ikke et kjøpsråd – det er kategorien som avgjør.")
@@ -173,7 +186,7 @@ th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-
 """
 
 JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
-function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h');
+function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h')||h.classList.contains('rk-h');
 rows.sort((a,b)=>{const x=a.children[i].dataset.v,y=b.children[i].dataset.v;if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;const c=num?(+x)-(+y):x.localeCompare(y);return asc?c:-c});
 const p=rows[0]&&rows[0].parentNode;rows.forEach(r=>p.appendChild(r));tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending')}
 h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});

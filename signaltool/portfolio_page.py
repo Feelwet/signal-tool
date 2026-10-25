@@ -51,7 +51,7 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
     w = min(100, n_closed / need * 100)
     top = (f'<h1 class="pf-h1">Signal-boka · fiktive penger · regler <a href="#regler">{RULES_VERSION}</a></h1>'
            f'<p class="pf-sub mut">Ikke investeringsråd</p>'
-           f'<div class="card pf-status"><b>{E(status)}</b><div class="pf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{need}" aria-valuenow="{n_closed}"><i style="width:{w:.0f}%"></i></div></div>'
+           f'<div class="card pf-status">' + (f'<p class="mut pf-empty" style="margin:0;font-size:12px;line-height:20px;color:#8b949e">Ingen avsluttede handler ennå. Resultater vises etter 30.</p>' if not n_closed else f'<b>{E(status)}</b>') + f'<div class="pf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{need}" aria-valuenow="{n_closed}"><i style="width:{w:.0f}%"></i></div></div>'
            f'<div class="pf-k3"><div class="card"><span>Kontoverdi</span><b>{_nok(nav)}</b></div>'
            f'<div class="card"><span>Kontanter</span><b>{cash / nav * 100 if nav else 100:.0f} %</b></div>'
            f'<div class="card"><span>Åpne posisjoner</span><b>{len(s["open"])} av {RULES["max_positions"]}</b></div></div>')

@@ -135,15 +135,20 @@ jobs:
         continue-on-error: true   # a failed push must not block the Pages deploy (shows as an error annotation)
         run: |
           test -s logs/categories.csv || { echo "no forward log to commit"; exit 0; }
-          git add logs/categories.csv
-          for f in logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv; do test -f "$f" && git add "$f"; done
-          if git diff --cached --quiet -- logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv; then
-            echo "forward log unchanged - nothing to commit"; exit 0
-          fi
-          git -c user.name=GrokBot -c user.email=bot@box commit -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]" -- logs/categories.csv $(test -f logs/calendar.json && echo logs/calendar.json) $(test -f logs/source_status.jsonl && echo logs/source_status.jsonl) $(test -f logs/theme_score.csv && echo logs/theme_score.csv) $(test -f logs/portfolio_trades.csv && echo logs/portfolio_trades.csv) $(test -f logs/portfolio_nav.csv && echo logs/portfolio_nav.csv)
-          for i in 1 2 3; do
-            git -c user.name=GrokBot -c user.email=bot@box pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
-              && git push origin "HEAD:${GITHUB_REF_NAME}" && { echo "forward log pushed ($(wc -l < logs/categories.csv) lines)"; exit 0; }
+          # En annen kjøring kan ha pushet loggene i mellomtiden (25.10: to kjøringer samme dag -> rebase-konflikt, logg tapt).
+          # Ingen rebase: hent origin, slå sammen hver logg (vår rad vinner per date,ticker; union for jsonl), commit på toppen.
+          FILES="logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv logs/learn_raw.csv logs/learn_exits.csv logs/dq_flags.jsonl logs/risk_levels.csv"
+          mkdir -p /tmp/ours && for f in $FILES; do test -f "$f" && cp "$f" "/tmp/ours/$(basename $f)"; done
+          for i in 1 2 3 4 5; do
+            git fetch -q origin "${GITHUB_REF_NAME}" && git reset -q --hard "origin/${GITHUB_REF_NAME}"
+            for f in $FILES; do
+              o="/tmp/ours/$(basename $f)"; test -f "$o" || continue
+              if [ -f "$f" ] && [ "$f" != logs/calendar.json ] && [ "$f" != logs/portfolio_nav.csv ]; then python -m signaltool.logmerge "$o" "$f" "$f"; else cp "$o" "$f"; fi
+              git add "$f"
+            done
+            git diff --cached --quiet && { echo "forward log already up to date"; exit 0; }
+            git -c user.name=GrokBot -c user.email=bot@box commit -q -m "Fremoverlogg: oppdatert $(date +%F) [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}" && { echo "forward log pushed ($(wc -l < logs/categories.csv) lines)"; exit 0; }
             sleep $((i * 5))
           done
           echo "::error::could not push forward log"; exit 1
