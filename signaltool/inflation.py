@@ -20,7 +20,11 @@ COUNTRIES = [  # key, navn, farge, serienotat, sentralbank-navn i kalenderen
     ("EA", "Eurosonen", "#3fb950", "HICP (Eurostat)", ("ECB", "European Central Bank")),
     ("UK", "Storbritannia", "#d2a8ff", "ONS KPI (D7G7) – Eurostat HICP stopper nov. 2020, seriebrudd", ("Bank of England",)),
     ("US", "USA", "#f0883e", "KPI-U, ikke HICP (FRED CPIAUCSL, årlig endring)", ("Federal Reserve", "FOMC")),
+    ("DE", "Tyskland", "#79c0ff", "HICP (Eurostat)", ("ECB", "European Central Bank")),
+    ("CN", "Kina", "#f778ba", "KPI (NBS), ikke HICP – via OECD", ()),
 ]
+CN_TARGET = {"label": "regjeringens mål ~2 %", "url": "https://english.www.gov.cn/news/202603/13/content_WS69b4b144c6d00ca5f9a09dfd.html",
+             "source": "Government Work Report 2026 (godkjent 12.03.2026): «CPI increase of around 2 percent»"}
 MONTHS = 60
 
 
@@ -30,7 +34,7 @@ def _get(url, **kw):
     return r
 
 
-def eurostat_hicp(geos=("NO", "SE", "DK", "EA")) -> dict:
+def eurostat_hicp(geos=("NO", "SE", "DK", "EA", "DE")) -> dict:
     q = [("format", "JSON"), ("coicop18", "TOTAL"), ("unit", "RCH_A"), ("sinceTimePeriod", "2020-01")] + [("geo", g) for g in geos]
     d = _get("https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_minr", params=q).json()
     gi, ti = d["dimension"]["geo"]["category"]["index"], d["dimension"]["time"]["category"]["index"]
@@ -59,6 +63,42 @@ def fred(ids: str, start="2019-01-01") -> dict:
             if v not in ("", "."):
                 out[k].append([r[0][:10], float(v)])
     return out
+
+
+def cn_cpi_yoy() -> list:
+    """Kina KPI 12-mnd endring (NBS-tall) via OECD SDMX (DF_PRICES_ALL, CHN.M.N.CPI.PA._T.N.GY). NBS selv gir 403 fra CI."""
+    t = _get("https://sdmx.oecd.org/public/rest/data/OECD.SDD.TPS,DSD_PRICES@DF_PRICES_ALL,1.0/CHN.M.N.CPI.PA._T.N.GY",
+             params={"startPeriod": "2020-01", "dimensionAtObservation": "AllDimensions", "format": "csvfile"}).text
+    rows = list(csv.DictReader(io.StringIO(t)))
+    out = sorted([[r["TIME_PERIOD"][:7], float(r["OBS_VALUE"])] for r in rows if r.get("OBS_VALUE") not in (None, "")])
+    if not out:
+        raise ValueError("ingen observasjoner")
+    return out
+
+
+def imf_weo_cn(today=None) -> dict:
+    """IMF WEO PCPIPCH (årssnitt KPI) for Kina fra DataMapper. Utgave: april (apr–sep) eller oktober (okt–mar)."""
+    from datetime import date
+    today = today or date.today()
+    v = _get("https://www.imf.org/external/datamapper/api/v1/PCPIPCH/CHN").json()["values"]["PCPIPCH"]["CHN"]
+    y, m = today.year, today.month
+    ed, pub = (("apr.", f"{y}-04-14") if 4 <= m < 10 else (("okt.", f"{y}-10-13") if m >= 10 else ("okt.", f"{y - 1}-10-13")))
+    pts = [[k, float(x)] for k, x in sorted(v.items()) if int(k) >= today.year and int(k) <= today.year + 3]
+    return {"source": "IMF WEO", "edition": f"{ed} {pub[:4]}", "measure": "KPI årssnitt", "kind": "annual", "published": pub,
+            "url": "https://www.imf.org/external/datamapper/PCPIPCH@WEO/CHN", "grey": True, "points": pts}
+
+
+def _prev_card(k):
+    from .config import ROOT
+    for load in (lambda: json.loads((ROOT / "data" / "snapshots" / "latest.json").read_text()),
+                 lambda: requests.get("https://feelwet.github.io/signal-tool/data.json", timeout=30).json()):
+        try:
+            v = load()["macro"]["inflation"]["cards"][k]
+            if v:
+                return v
+        except Exception:
+            pass
+    return None
 
 
 def us_cpi_yoy() -> list:
@@ -95,6 +135,8 @@ CARD_MEASURE = {  # mål sentralbanken bruker (kortgraf): (kort navn, kilde)
     "EA": ("HICP", "Eurostat HICP"),
     "UK": ("CPI", "ONS CPI (D7G7)"),
     "US": ("PCE", "FRED PCEPI, årlig endring"),
+    "DE": ("HICP", "Eurostat HICP (prc_hicp_minr)"),
+    "CN": ("KPI", "KPI (NBS), ikke HICP – hentet via OECD SDMX (DF_PRICES_ALL)"),
 }
 
 
@@ -209,7 +251,14 @@ def collect() -> tuple[dict, dict]:
     if uk: series["UK"] = uk
     us = run("Inflasjon USA KPI-U (FRED CPIAUCSL)", us_cpi_yoy)
     if us: series["US"] = us
-    for k in ("DK", "EA"):
+    cn = run("Inflasjon Kina KPI (NBS via OECD)", cn_cpi_yoy)
+    stale = set()
+    if not cn:
+        cn = _prev_card("CN")
+        if cn: stale.add("CN")
+    if cn:
+        series["CN"] = cn; cards["CN"] = cn
+    for k in ("DK", "EA", "DE"):
         if k in h: cards[k] = h[k]
     if uk: cards["UK"] = uk
     for k, lab, fn in (("NO", "Inflasjon Norge KPI (SSB)", ssb_kpi_yoy), ("SE", "Inflasjon Sverige KPIF (SCB)", scb_kpif), ("US", "Inflasjon USA PCE (FRED)", us_pce_yoy)):
@@ -218,8 +267,13 @@ def collect() -> tuple[dict, dict]:
     fc.update(load_forecasts())
     sep = run("Prognose Fed SEP (FRED PCECTPIMD)", fed_sep)
     if sep: fc["US"] = sep
+    imf = run("Prognose Kina (IMF WEO PCPIPCH)", imf_weo_cn)
+    if imf: fc["CN"] = imf
+    rates = policy_rates()
+    if rates.get("EA"):
+        rates["DE"] = {**rates["EA"], "source": "ECB-renten (innskuddsrente, FRED ECBDFR) – gjelder Tyskland"}
     return {"series": {k: v[-MONTHS:] for k, v in series.items()}, "cards": {k: v[-MONTHS:] for k, v in cards.items()},
-            "forecasts": fc, "rates": policy_rates()}, st
+            "forecasts": fc, "rates": rates, "stale": sorted(stale)}, st
 
 
 # ---------------- html ----------------
@@ -251,7 +305,7 @@ def _fc_label(f, today):
     return f'{f["source"]} {when}, {f["measure"]}', pub, old
 
 
-def card_chart(hist, fc, col, today, W=300, H=170):
+def card_chart(hist, fc, col, today, W=300, H=170, floor=0.0, target=2.0, tlabel=None):
     """Historikk (heltrukket) + prognose (stiplet, trinn per år) i samme mål. Ingen interpolering utover publiserte punkter."""
     L, R, T, B = 28, 6, 8, 18
     last = hist[-1]
@@ -263,7 +317,8 @@ def card_chart(hist, fc, col, today, W=300, H=170):
     x0 = _mi(hist[0][0])
     x1 = max(_mi(last[0]), *(y * 12 + 11 for y, _ in steps)) if steps else _mi(last[0])
     tm = today.year * 12 + today.month - 1
-    vals = [v for _, v in hist] + [v for _, v in steps] + [2.0, 0.0]
+    fcol = "#8b949e" if fc and fc.get("grey") else col
+    vals = [v for _, v in hist] + [v for _, v in steps] + [floor] + ([target] if target is not None else [])
     lo, hi = min(vals), max(vals)
     X = lambda i: L + (i - x0) / max(1, x1 - x0) * (W - L - R)
     Y = lambda v: T + (hi - v) / ((hi - lo) or 1) * (H - T - B)
@@ -276,7 +331,10 @@ def card_chart(hist, fc, col, today, W=300, H=170):
             g.append(f'<text x="{L - 3}" y="{Y(v) + 3:.1f}" text-anchor="end">{v}</text>')
     for yy in range(int(hist[0][0][:4]) + 1, x1 // 12 + 1):
         g.append(f'<text x="{X(yy * 12):.1f}" y="{H - 4}" text-anchor="middle">{str(yy)[2:]}</text>')
-    g.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/>')
+    if target is not None:
+        g.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(target):.1f}" y2="{Y(target):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/>')
+        if tlabel:
+            g.append(f'<text x="{L + 2}" y="{Y(target) - 3:.1f}">{_E(tlabel)}</text>')
     pts = " ".join(f"{X(_mi(m)):.1f},{Y(v):.1f}" for m, v in hist)
     g.append(f'<polyline fill="none" stroke="{col}" stroke-width="1.8" points="{pts}"/>')
     if steps:
@@ -288,8 +346,8 @@ def card_chart(hist, fc, col, today, W=300, H=170):
             else:
                 xa, xb = X(max(y * 12, _mi(last[0]))), X(y * 12 + 11)
                 d += f" L{xa:.1f},{Y(v):.1f} L{xb:.1f},{Y(v):.1f}"
-        g.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="1.8" stroke-dasharray="5 4"/>')
-        g += [f'<circle cx="{X(y * 12 + (7 if q3 else 6)):.1f}" cy="{Y(v):.1f}" r="3" fill="{col}"><title>{y}: {_nf(v)} %</title></circle>' for y, v in steps]
+        g.append(f'<path d="{d}" fill="none" stroke="{fcol}" stroke-width="1.8" stroke-dasharray="5 4"/>')
+        g += [f'<circle cx="{X(y * 12 + (7 if q3 else 6)):.1f}" cy="{Y(v):.1f}" r="3" fill="{fcol}"><title>{y}: {_nf(v)} %</title></circle>' for y, v in steps]
     return (f'<svg class="cchart" viewBox="0 0 {W} {H}" width="100%" height="{H}" role="img" aria-label="Inflasjon og prognose">{"".join(g)}</svg>')
 
 
@@ -334,38 +392,40 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
         if v:
             pts = " ".join(f"{X(idx[m]):.1f},{Y(x):.1f}" for m, x in v)
             lines.append(f'<polyline data-c="{k}" fill="none" stroke="{col}" stroke-width="2" points="{pts}"><title>{_E(name)}: {_E(note)}</title></polyline>')
-            leg.append(f'<button data-c="{k}" aria-pressed="true"><i style="background:{col}"></i>{_E(name)}</button>')
+            leg.append(f'<button data-c="{k}" aria-pressed="true"><i style="background:{col}"></i>{_E(name + (" – KPI (NBS), ikke HICP" if k == "CN" else ""))}</button>')
         meas, msrc = CARD_MEASURE[k]
         hist = C.get(k) or []
         last = hist[-1] if hist else None
-        stale = last and (today.year * 12 + today.month - 1) - _mi(last[0]) > 3
+        stale = (last and (today.year * 12 + today.month - 1) - _mi(last[0]) > 3) or k in (inf.get("stale") or [])
         hicp = S.get(k, [])[-1] if S.get(k) else None
         sub = (f'<div class="src">{"KPI-U" if k == "US" else ("ONS CPI" if k == "UK" else "HICP")} {_nf(hicp[1])} % ({_E(hicp[0])}) – samme som i felles graf</div>'
-               if hicp and meas != "HICP" and k != "UK" else "")
+               if hicp and meas != "HICP" and k not in ("UK", "CN") else "")
         f = F.get(k)
         if f:
             lab, pub, old = _fc_label(f, today)
             src = f' · <a href="{_E(f["url"])}" target="_blank" rel="noopener">kilde</a>' if f.get("url") else ""
-            fcl = (f'<div class="fcl" style="color:{col}" title="Publisert {_E(pub or "ukjent")}">- - Prognose: {_E(lab)}{src}'
+            fcl = (f'<div class="fcl" style="color:{"#9ea9b5" if f.get("grey") else col}" title="Publisert {_E(pub or "ukjent")}">- - Prognose: {_E(lab)}{", ikke sentralbank" if f.get("grey") else ""}{src}'
                    f'{" · <b>⏱ Utdatert</b>" if old else ""}</div>')
         else:
             fcl = '<div class="fcl mut">Ingen prognose</div>'
         rt = R.get(k)
+        tgt = (f'<div class="src">Mål: <a href="{_E(CN_TARGET["url"])}" target="_blank" rel="noopener">{_E(CN_TARGET["label"])}</a> – {_E(CN_TARGET["source"])}</div>' if k == "CN" else "")
         nm = _next_meeting(cal, cb)
         cards.append(f'<div class="infl-card"><b>{_E(name)}</b>'
                      f'<div class="big" style="color:{col}">{_E(meas)} {"–" if not last else _nf(last[1]) + " %"}</div>'
                      f'<div class="src">{_E(msrc)}{f" · {_E(last[0])}" if last else " · Mangler data"}{" · <b>⏱ Utdatert</b>" if stale else ""}</div>{sub}'
-                     f'{card_chart(hist, f, col, today) if len(hist) > 1 else ""}{fcl}'
+                     f'{(card_chart(hist, f, col, today, floor=-2.0, target=2.0, tlabel=CN_TARGET["label"]) if k == "CN" else card_chart(hist, f, col, today)) if len(hist) > 1 else ""}{fcl}'
+                     f'{tgt}'
                      f'<p style="margin:6px 0 0">Styringsrente: {f"<b>{_nf(rt["rate"], 2)} %</b> <span class=src>{_E(rt["source"])}, {_E(rt["date"])}</span>" if rt else "<span class=mut>ikke hentet</span>"}<br>'
-                     f'Neste møte: {f"{_E(nm["date"])} {_E(nm.get("time") or "")}" + (" (estimert)" if "estimert" in nm.get("source", "").lower() else "") if nm else "<span class=mut>ikke i kalenderen (45 dager frem)</span>"}</p></div>')
+                     f'Neste møte: {"<span class=mut>ingen faste rentemøter</span>" if k == "CN" else ""}{"" if k == "CN" else f"{_E(nm["date"])} {_E(nm.get("time") or "")}" + (" (estimert)" if "estimert" in nm.get("source", "").lower() else "") if nm else "<span class=mut>ikke i kalenderen (45 dager frem)</span>"}</p></div>'.replace("Neste møte: <span class=mut>ingen faste rentemøter</span><span class=mut>ikke i kalenderen (45 dager frem)</span>", "Neste møte: <span class=mut>ingen faste rentemøter</span>"))
     two = f'<line x1="{L}" x2="{W-8}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/><text x="{W-10}" y="{Y(2)-4:.1f}" text-anchor="end">2 % mål</text>'
     svg = (f'<svg class="infl-svg" viewBox="0 0 {W} {H}" role="img" aria-label="Inflasjon siste 5 år, årlig prosent, per land">{grid}{years}{two}{"".join(lines)}</svg>')
     return (f'{CSS}<div class="card" id="inflasjon"><h2 style="margin-top:0">Inflasjon siste 5 år (årlig %, faktiske tall)</h2>'
             f'<div class="infl-chart"><div class="infl-leg" role="group" aria-label="Vis/skjul land">{"".join(leg)}</div>{svg}'
-            f'<p class="src">Felles graf: Eurostat HICP (prc_hicp_minr) for Norge, Sverige, Danmark og eurosonen – sammenlignbare. '
+            f'<p class="src">Felles graf: Eurostat HICP (prc_hicp_minr) for Norge, Sverige, Danmark, eurosonen og Tyskland – sammenlignbare. Kina: KPI (NBS), ikke HICP, hentet via OECD SDMX. '
             f'UK: ONS KPI (D7G7); Eurostat HICP for UK stopper nov. 2020 (seriebrudd). USA: KPI-U, ikke HICP (FRED CPIAUCSL, årlig endring). Ingen prognoser i denne grafen.</p></div>'
             f'<h3>Per land – målet sentralbanken bruker, med offisiell prognose der den finnes</h3>'
-            f'<p class="src">Prognoser er årssnitt og vises som trinn per år (stiplet). Vi viser bare publiserte sentralbankprognoser; ingen egne anslag. '
+            f'<p class="src">Prognoser er årssnitt og vises som trinn per år (stiplet). Offisielle prognoser fra sentralbanker, eller fra IMF der sentralbanken ikke publiserer noen (grå stiplet); ingen egne anslag. '
             f'Forventninger fra markeder/spørreundersøkelser: Ingen fri kilde.</p>'
             f'<div class="infl-cards">{"".join(cards)}</div></div>{JS}')
 

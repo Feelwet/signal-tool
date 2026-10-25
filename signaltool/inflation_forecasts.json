@@ -1,18 +1,143 @@
 {
  "_note": "Kun tall lest direkte i publisert dokument/tabell. Ingen egne anslag. Oppdater manuelt ved ny rapport. kind=annual: årssnitt; kind=q3: 4-kvartalsvekst i Q3 (BoE).",
- "NO": {"source": "Norges Bank PPR 3/2026", "measure": "KPI", "kind": "annual", "published": "2026-09-24",
-        "url": "https://www.norges-bank.no/contentassets/fc580519ec63404980e5daada0ca7790/ppr-3-26.pdf",
-        "where": "Tabell over anslag, rad KPI (2025 3,0 faktisk)", "points": [["2026", 3.3], ["2027", 2.6], ["2028", 2.3], ["2029", 2.1]]},
- "SE": {"source": "Riksbanken PPR", "measure": "KPIF", "kind": "annual", "published": "2026-09-24",
-        "url": "https://www.riksbank.se/globalassets/media/rapporter/ppr/penningpolitiska-rapporter-och-uppdateringar/svenska/2026/penningpolitisk-rapport-september-2026.pdf",
-        "where": "Tabell 3. Nyckeltal för inflation, rad KPIF", "points": [["2026", 1.5], ["2027", 2.1], ["2028", 2.4]]},
- "EA": {"source": "ECB staff projections", "measure": "HICP", "kind": "annual", "published": "2026-09-10",
-        "url": "https://www.ecb.europa.eu/press/projections/html/ecb.projections202609_ecbstaff~8e340fc69d.en.html",
-        "where": "Baseline: HICP 3,0 (2026), 2,5 (2027), 2,1 (2028)", "points": [["2026", 3.0], ["2027", 2.5], ["2028", 2.1]]},
- "DK": {"source": "Nationalbanken prognose", "measure": "HICP", "kind": "annual", "published": "2026-09-23",
-        "url": "https://www.nationalbanken.dk/media/puvbfjmm/dansk-oekonomi-trodser-global-uro.pdf",
-        "where": "Tabel 1, rad Forbrugerpriser (HICP; 2025 1,8 = Eurostat HICP-snitt)", "points": [["2026", 1.7], ["2027", 2.4], ["2028", 2.1]]},
- "UK": {"source": "BoE MPR", "measure": "CPI (Q3, 4-kv.)", "kind": "q3", "published": "2026-07-30",
-        "url": "https://www.bankofengland.co.uk/monetary-policy-report/2026/july-2026",
-        "where": "Table 3.B, central projection, CPI inflation", "points": [["2026", 2.9], ["2027", 2.6], ["2028", 1.8], ["2029", 1.9]]}
+ "NO": {
+  "source": "Norges Bank PPR 3/2026",
+  "measure": "KPI",
+  "kind": "annual",
+  "published": "2026-09-24",
+  "url": "https://www.norges-bank.no/contentassets/fc580519ec63404980e5daada0ca7790/ppr-3-26.pdf",
+  "where": "Tabell over anslag, rad KPI (2025 3,0 faktisk)",
+  "points": [
+   [
+    "2026",
+    3.3
+   ],
+   [
+    "2027",
+    2.6
+   ],
+   [
+    "2028",
+    2.3
+   ],
+   [
+    "2029",
+    2.1
+   ]
+  ]
+ },
+ "SE": {
+  "source": "Riksbanken PPR",
+  "measure": "KPIF",
+  "kind": "annual",
+  "published": "2026-09-24",
+  "url": "https://www.riksbank.se/globalassets/media/rapporter/ppr/penningpolitiska-rapporter-och-uppdateringar/svenska/2026/penningpolitisk-rapport-september-2026.pdf",
+  "where": "Tabell 3. Nyckeltal för inflation, rad KPIF",
+  "points": [
+   [
+    "2026",
+    1.5
+   ],
+   [
+    "2027",
+    2.1
+   ],
+   [
+    "2028",
+    2.4
+   ]
+  ]
+ },
+ "EA": {
+  "source": "ECB staff projections",
+  "measure": "HICP",
+  "kind": "annual",
+  "published": "2026-09-10",
+  "url": "https://www.ecb.europa.eu/press/projections/html/ecb.projections202609_ecbstaff~8e340fc69d.en.html",
+  "where": "Baseline: HICP 3,0 (2026), 2,5 (2027), 2,1 (2028)",
+  "points": [
+   [
+    "2026",
+    3.0
+   ],
+   [
+    "2027",
+    2.5
+   ],
+   [
+    "2028",
+    2.1
+   ]
+  ]
+ },
+ "DK": {
+  "source": "Nationalbanken prognose",
+  "measure": "HICP",
+  "kind": "annual",
+  "published": "2026-09-23",
+  "url": "https://www.nationalbanken.dk/media/puvbfjmm/dansk-oekonomi-trodser-global-uro.pdf",
+  "where": "Tabel 1, rad Forbrugerpriser (HICP; 2025 1,8 = Eurostat HICP-snitt)",
+  "points": [
+   [
+    "2026",
+    1.7
+   ],
+   [
+    "2027",
+    2.4
+   ],
+   [
+    "2028",
+    2.1
+   ]
+  ]
+ },
+ "UK": {
+  "source": "BoE MPR",
+  "measure": "CPI (Q3, 4-kv.)",
+  "kind": "q3",
+  "published": "2026-07-30",
+  "url": "https://www.bankofengland.co.uk/monetary-policy-report/2026/july-2026",
+  "where": "Table 3.B, central projection, CPI inflation",
+  "points": [
+   [
+    "2026",
+    2.9
+   ],
+   [
+    "2027",
+    2.6
+   ],
+   [
+    "2028",
+    1.8
+   ],
+   [
+    "2029",
+    1.9
+   ]
+  ]
+ },
+ "DE": {
+  "source": "Bundesbank Deutschland-Prognose",
+  "measure": "HICP",
+  "kind": "annual",
+  "published": "2026-06-12",
+  "url": "https://www.bundesbank.de/de/presse/pressemitteilungen/deutschland-prognose-der-bundesbank-energiepreis-schock-bremst-konjunkturerholung-964728",
+  "where": "Pressemitteilung 12.06.2026: HVPI 2,9 (2026), 2,7 (2027), 1,9 (2028)",
+  "points": [
+   [
+    "2026",
+    2.9
+   ],
+   [
+    "2027",
+    2.7
+   ],
+   [
+    "2028",
+    1.9
+   ]
+  ]
+ }
 }

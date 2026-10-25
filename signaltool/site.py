@@ -641,7 +641,7 @@ def makro_page(snap):
     ]
     infl = mac.get("inflation") or {}
     nb = (infl.get("rates") or {}).get("NO") or {}
-    hd = L.head("Makro", "Inflasjon, renter og fysisk oljemarked – faktiske tall og sentralbankenes egne prognoser.",
+    hd = L.head("Makro", "Inflasjon, renter og fysisk oljemarked – faktiske tall og offisielle prognoser fra sentralbanker, eller fra IMF der sentralbanken ikke publiserer noen.",
                 [(f'{len((infl.get("cards") or {}))}', "Land med inflasjon", "siste måned", "#inflasjon"),
                  (("–" if nb.get("rate") is None else f'{nb["rate"]:.2f} %'.replace(".", ",")), "Norges Bank", "styringsrente", "#inflasjon"),
                  (str(len((infl.get("forecasts") or {}))), "Offisielle prognoser", "sentralbanker", "#inflasjon")])
