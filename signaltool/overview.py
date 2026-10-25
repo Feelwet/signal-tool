@@ -90,7 +90,7 @@ def strip_html(snap: dict) -> str:
          '<div class="ov-tile"><div class="lbl">Marked</div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     tk = snap.get("tickers") or []
     from . import site_risk as RK
-    RC = (("Høy", "hoy", "#4B5563"), ("Middels", "middels", "#9CA3AF"), ("Lav", "lav", "#E5E7EB"))
+    RC = (("Høy", "hoy", "#FEE2E2"), ("Middels", "middels", "#FEF3C7"), ("Lav", "lav", "#DCFCE7"))
     cnt = {k: sum(1 for e in tk if (e.get("_risk") or {}).get("level") == k) for k, _, _ in RC}
     tot = sum(cnt.values()) or 1
     seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in RC if cnt[k])
