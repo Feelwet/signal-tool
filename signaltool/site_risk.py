@@ -46,7 +46,7 @@ EMPTY_BOOK = "Ingen avsluttede handler ennå. Resultater vises etter 30."
 
 CSS = """
 .rk{display:inline-flex;align-items:center;box-sizing:border-box;height:28px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;color:#fff;vertical-align:middle}
-.rk-lav{background:#E5E7EB;color:#111827}.rk-middels{background:#9CA3AF;color:#111827}.rk-hoy{background:#4B5563;color:#fff}.rk-na{background:transparent;color:var(--mut);border:1px solid #30363d}
+.rk-lav{background:#E5E7EB}.rk-middels{background:#9CA3AF}.rk-hoy{background:#4B5563}.rk-na{background:transparent;color:var(--mut);border:1px solid #30363d}
 .rk.rk-s{height:20px;padding:0 7px;font-size:11px;border-radius:5px}
 p.since.rk-line{display:flex;align-items:center;gap:0;overflow:visible;white-space:nowrap;margin:0 0 8px;min-height:28px}
 p.since.rk-line .sl-t{overflow:hidden;text-overflow:ellipsis;min-width:0}
