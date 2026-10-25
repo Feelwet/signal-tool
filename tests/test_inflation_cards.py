@@ -27,4 +27,5 @@ def test_combined_chart_lines_clickable():
     src = pathlib.Path(I.__file__).read_text()
     assert 'class="hit"' in src and 'stroke="transparent" stroke-width="14"' in src
     assert "pointer-events:stroke;cursor:pointer" in src
-    assert "b.onclick=()=>tog(b.dataset.c)" in src and "if(h)tog(h.dataset.c)" in src
+    assert "if(h)pick(h.dataset.c,e.shiftKey)" in src and "pick(c,e.shiftKey)" in src
+    assert "Vis alle" in src and "searchParams.set('land'" in src and ">Bare</button>" in src and "'.15'" in src
