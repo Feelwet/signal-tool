@@ -87,7 +87,7 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
     return f'<p class="since mut">{chip + " " if chip else ""}{E(" · ".join(parts))}</p>'
 
 
-MIN_DAYS = 5
+MIN_DAYS = 0   # AnalBot 25.10: avkastning fra price_date fra første dag
 NOTE = ("Kursendring fra sluttkursen dagen før aksjen kom på lista, til siste sluttkurs. I lokal valuta, uten kostnader og utbytte. "
         "Grått tall: mot OSEBX (Oslo) eller S&P 500 (USA). Ikke en treffrate og ikke et kjøpsråd.")
 
@@ -145,7 +145,7 @@ td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
-th.ret-h,td.ret-c{display:none}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}#tf-table .ret-m{display:block;font-size:12px}#tf-table .ret-m .rex{display:inline;margin-left:4px;font-size:12px}}
+#tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:72px;min-width:72px}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:11px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
 """
 
 JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;

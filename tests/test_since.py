@@ -51,7 +51,7 @@ def test_return():
     r = S.ret(s, 17.8, "2026-10-23", idx, "EIOF.OL")
     assert S.pct(r["r"]) == "+4,7 %" and S.pct(r["ex"]) == "+3,7 %" and r["illiquid"]
     assert "+4,7 %" in S.line(s, "", r) and "⚠" in S.ret_cell(r) and "rup" in S.ret_cell(r)
-    assert S.ret(dict(s, list_days=4), 17.8, "2026-10-23", idx, "EIOF.OL") is None
+    assert S.ret(dict(s, list_days=0), 17.8, "2026-10-23", idx, "EIOF.OL")["r"] > 0
     assert S.ret(s, None, None, idx, "EIOF.OL") is None and S.ret_cell(None).count("–") == 1
     assert "mot" not in S.ret_inner(S.ret(s, 17.8, "2026-10-23", {}, "EIOF.OL"))
 
