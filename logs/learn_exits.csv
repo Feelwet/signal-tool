@@ -125,3 +125,8 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-26,NPRO.OL,2026-10-25,for lite data,6,3.0,,,,40243488228,false
 2026-10-26,PWR,2026-10-25,score0,,,,,,40243488228,false
 2026-10-26,SNOW,2026-10-25,cut60,73,0.5,,,,40243488228,false
+2026-10-26,GS,2026-10-25,cut60,71,0.5,,,,40245766426,false
+2026-10-26,IBM,2026-10-25,cut60,72,0.5,,,,40245766426,false
+2026-10-26,NPRO.OL,2026-10-25,for lite data,6,3.0,,,,40245766426,false
+2026-10-26,PWR,2026-10-25,score0,,,,,,40245766426,false
+2026-10-26,SNOW,2026-10-25,cut60,73,0.5,,,,40245766426,false
