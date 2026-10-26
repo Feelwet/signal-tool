@@ -77,4 +77,5 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
              else '<p class="mut">Ingen gjennomførte handler ennå.</p>') + "</div>")
     rules = (f'<details class="fold" id="regler"><summary><h2>Regler <code>{RULES_VERSION}</code> (låst {RULES_LOCKED})</h2></summary><div class="fold-body"><ol>'
              + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT) + f'</ol><p class="mut">{E(RULES_FOOT)}</p></div></details>')
-    return f"<style>{CSS}</style>" + top + pos + logh + rules
+    from . import gs_index   # egen seksjon øverst; tom streng til >= 60 handelsdager (UxBot/AnalBot 26.10)
+    return f"<style>{CSS}</style>" + gs_index.section_html() + top + pos + logh + rules

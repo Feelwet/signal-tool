@@ -533,6 +533,9 @@ def run(fast: bool = False) -> dict:
     # «Signal-boka»: papirkonto etter fryste regler (portfolio_rules.py); bare logger, ingen avkastning før 30 lukkede
     from . import portfolio
     portfolio.run(snap, status)
+    # GS-indeksen (AnalBot 26.10): regnes på nytt fra loggen hver natt -> logs/gs_index.csv; skjult på siden til 60 handelsdager
+    from . import gs_index
+    gs_index.run(status)
     # Læringsløkka (rådata, privat i logs/) + risikonivå (ukentlig, cache i data/) – feiler aldri kjøringen
     try:
         from . import learnloop
