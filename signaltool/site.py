@@ -440,6 +440,11 @@ FRZ_CSS = (".ur-head{display:block;width:100%;box-sizing:border-box;padding:12px
            "table.ur-tab .lowchip{white-space:normal;height:auto;min-height:20px;line-height:14px;padding:2px 7px;max-width:100%;overflow:visible;text-overflow:clip}"
            "table.ur-tab .nm,#tf-table table:not(.ur-tab) .nm{word-break:normal;overflow-wrap:normal;hyphens:none;-webkit-hyphens:none}table.ur-tab td:first-child{min-width:110px}"
            "@media(max-width:599px){#tf-table table.ur-tab td{white-space:normal}table.ur-tab td:has(>.lowchip){min-width:140px}}") + "\n" + (".frz-line{margin:8px 0;font-size:12px;color:#92400E}.ur-i{width:44px;height:44px;font-size:16px;margin:-12px 0 -12px -6px;vertical-align:middle}\n")
+# UxBot 26.10: stjernen minst 8 px fra kortkanten ved 390 px (sentrert i 44 px-kolonnen, kortet 8 px høyre-padding, ingen
+# intern rulling; ⚑-chipen kan brekke så navnekolonnen krymper), scrollWidth = 390
+STAR_CSS = ("@media(max-width:699px){#tf-table .card{padding-right:8px}#tf-table .card .tw,#tf-table .card .xscroll{overflow-x:visible}"
+            "#tf-table td.mcol{text-align:center}#tf-table td.mcol .mstar{display:block;margin:0 auto}#tf-table .fchip{white-space:normal}"
+            "#tf-table table.ur-tab td:has(>.lowchip){min-width:0}}\n")
 
 
 def frz_text(d: str) -> str:
@@ -561,7 +566,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + STAR_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")

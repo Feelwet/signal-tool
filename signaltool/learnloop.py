@@ -175,7 +175,7 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
         s, bs = px.get(t) or {}, (px.get(b[0]) if b else None) or {}
         rr = {"date": today, "ticker": t, "rank": crank.get(t, ""), "score": e.get("score"), "types": "|".join(sorted(k for k, v in (e.get("points") or {}).items() if v > 0)),
               "close": round(s[max(s)], 4) if s else "", "close_date": max(s) if s else "", "index": b[0] if b else "",
-              "source_fallback": 1 if ((e.get("decision") or {}).get("fund_fallback") or e.get("frozen")) else 0}
+              "source_fallback": 1 if ((e.get("decision") or {}).get("fund_fallback") or e.get("frozen") or e.get("source_fallback")) else 0}
         for n in (5, 20, 60):
             a, x = _ret(s, n), _ret(bs, n)
             rr[f"r{n}"] = "" if a is None else round(a, 6)
@@ -260,7 +260,8 @@ def completed_periods(path=None) -> tuple[int, int]:
     if not path.exists():
         return 0, 0
     with path.open(newline="") as f:
-        rows = [r for r in csv.DictReader(f) if str(r.get("is_canonical", "true")).lower() == "true"]
+        rows = [r for r in csv.DictReader(f) if str(r.get("is_canonical", "true")).lower() == "true"
+                and str(r.get("source_fallback") or "0").strip() not in ("1", "1.0")]   # fallback-rader holdes utenfor læringen
     if not rows:
         return 0, 0
     runs = sorted({r["date"] for r in rows})

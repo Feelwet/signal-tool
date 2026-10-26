@@ -59,6 +59,9 @@ def _f(x):
 def load_rows(cat_path: Path = CAT_LOG, corr_path: Path = CORR) -> list[dict]:
     with open(cat_path, newline="") as f:
         rows = [dict(r) for r in csv.DictReader(f) if r.get("date") and r.get("ticker")]
+    from .source_health import excluded   # source_fallback=1 (kildefeil, siste gode brukt) holdes utenfor indeksen den dagen
+    fb = excluded()
+    rows = [r for r in rows if (r["date"], r["ticker"]) not in fb]
     if corr_path and Path(corr_path).exists():
         with open(corr_path, newline="") as f:
             corr = list(csv.DictReader(f))

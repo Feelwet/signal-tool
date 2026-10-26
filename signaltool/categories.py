@@ -508,6 +508,13 @@ def track_record(logdf: pd.DataFrame, closes: dict[str, pd.Series], min_n: int |
     """Excess return (stock - benchmark) after 5/20/60 trading days for independent new entries, per category, per signal
     type and per flag. Numbers are shown only from min_n (default 30) independent entries, with 95 % intervals."""
     min_n = min_n or RULES["min_track_n"]
+    try:   # source_fallback=1 (kildefeil, siste gode brukt) holdes utenfor treffratene
+        from .source_health import excluded
+        fb = excluded()
+        if fb and len(logdf):
+            logdf = logdf[[(str(d), str(t)) not in fb for d, t in zip(logdf["date"], logdf["ticker"])]]
+    except Exception as ex:
+        log.warning("source_fallback filter: %s", ex)
     full = logdf
     if len(logdf):
         keep = logdf["ticker"].map(loggable)

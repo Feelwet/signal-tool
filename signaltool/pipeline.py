@@ -519,10 +519,21 @@ def run(fast: bool = False) -> dict:
     # decision data (priced-in / risk / invalidation / PEAD) + new free collectors, before categories use them
     from . import extras
     extras.decision(snap, status)
+    try:   # nattlig kildekontroll: dekning per kilde/felt, siste gode ved kildefeil, source_fallback=1 (26.10)
+        from . import source_health as SH
+        SH.check(snap, status)
+    except Exception as ex:
+        log.exception("source health failed")
+        status["Kildekontroll"] = f"FAILED: {_err(ex)}"
     _coverage_cut(snap, [e for e in ranked if e["score"] > 0], status)
     extras.collectors(snap, status)
     extras.flags(snap, status, nw=nw)
     # rule-based categories (Kjøp-kandidat / Hold / Følg) + forward log + track record
+    try:
+        from . import source_health as SH
+        SH.append_rows(snap)
+    except Exception as ex:
+        log.warning("source_fallback log failed: %s", ex)
     try:
         from . import categories
         categories.apply(snap)

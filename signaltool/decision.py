@@ -422,6 +422,10 @@ def fb_date(e: dict):
 
 
 def fb_text(e: dict) -> str:
+    sf = e.get("source_fallback") or {}
+    if sf.get("source") and sf.get("source") != "Fundamentaldata (Yahoo)":
+        from .source_health import text
+        return text(e)
     d = fb_date(e)
     return f"Fundamentaldata fra {d[8:10]}.{d[5:7]} (Yahoo feilet i dag)" if d else ""
 
