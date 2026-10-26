@@ -14,11 +14,13 @@ def _dm(d: str | None) -> str:
     return f"{d[8:10]}.{d[5:7]}" if d else "–"
 
 
-def chip(r: dict | None, small: bool = False) -> str:
+def chip(r: dict | None, small: bool = False, bare: bool = False) -> str:
+    """bare=True: kun nivået (tabellceller under kolonneoverskriften «Risiko»)."""
     lv = (r or {}).get("level")
+    pre = "" if bare else "Risiko: "
     if lv not in ORDER:
-        return f'<span class="rk rk-na{" rk-s" if small else ""}">Risiko: –</span>'
-    return f'<span class="rk rk-{KEY[lv]}{" rk-s" if small else ""}">Risiko: {lv}</span>'
+        return f'<span class="rk rk-na{" rk-s" if small else ""}">{pre}–</span>'
+    return f'<span class="rk rk-{KEY[lv]}{" rk-s" if small else ""}">{pre}{lv}</span>'
 
 
 def info_btn() -> str:
@@ -39,7 +41,7 @@ def status() -> str:
 
 def cell(r: dict | None) -> str:
     lv = (r or {}).get("level")
-    return f'<td class="rk-c" data-v="{ORDER.get(lv, "")}">{chip(r, small=True)}</td>'
+    return f'<td class="rk-c" data-v="{ORDER.get(lv, "")}">{chip(r, small=True, bare=True)}</td>'
 
 
 EMPTY_BOOK = "Ingen avsluttede handler ennå. Resultater vises etter 30."
@@ -57,6 +59,7 @@ p.since.rk-line .sl-t{overflow:hidden;text-overflow:ellipsis;min-width:0}
 p.catdisc.rk-status{margin:2px 0 4px;font-size:11px;line-height:1.3;color:#8b949e;white-space:nowrap}
 @media(max-width:599px){p.since.rk-line{margin:-8px 0 8px}}
 td.rk-c{white-space:nowrap}
+td.rk-c,th.rk-h{width:1%;min-width:64px;box-sizing:border-box}
 """
 
 JS = """<script>(()=>{const B=[...document.querySelectorAll('.rk-i,.rt-i')];const close=x=>B.forEach(b=>{if(b!==x){b.setAttribute('aria-expanded','false');const t=document.getElementById(b.getAttribute('aria-controls'));if(t)t.hidden=true}});
