@@ -78,10 +78,15 @@ def load_rows(cat_path: Path = CAT_LOG, corr_path: Path = CORR) -> list[dict]:
     return rows
 
 
+def _rv(v):
+    from .categories import rangert_val
+    return rangert_val(v)
+
+
 def lists_by_date(rows: list[dict], start: str = START) -> dict[str, dict[str, dict]]:
     out: dict[str, dict[str, dict]] = {}
     for r in rows:
-        if r["date"] >= start and r.get("category") in LIST_CATS and str(r.get("rangert") or "").strip() not in ("0", "0.0"):
+        if r["date"] >= start and r.get("category") in LIST_CATS and _rv(r.get("rangert")) != 0:
             out.setdefault(r["date"], {})[r["ticker"]] = r
     return out
 
@@ -90,7 +95,7 @@ def unflagged_dates(rows: list[dict]) -> set[str]:
     """Logg-datoer der rangert-feltet (1/0) finnes på alle radene, så «Ikke rangert» kan skilles ut."""
     by: dict[str, bool] = {}
     for r in rows:
-        ok = str(r.get("rangert") or "").strip() in ("0", "1", "0.0", "1.0")
+        ok = _rv(r.get("rangert")) is not None
         by[r["date"]] = by.get(r["date"], True) and ok
     return {d for d, ok in by.items() if ok}
 

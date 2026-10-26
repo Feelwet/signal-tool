@@ -346,6 +346,16 @@ def previous_kjop(logdf: pd.DataFrame, before: date) -> dict:
     return {t: _d(d) for t, d in k.groupby("ticker")["date"].max().items()}
 
 
+def rangert_val(v) -> int | None:
+    """rangert-feltet som 1/0; godtar 1/0, 1.0/0.0 (eldre rader) og tomt/NaN (None = feltet mangler)."""
+    s = str(v if v is not None else "").strip().lower()
+    if s in ("1", "1.0", "true"):
+        return 1
+    if s in ("0", "0.0", "false"):
+        return 0
+    return None
+
+
 def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
     """One row per loggable ticker (single US / Oslo stocks) and run date; re-runs the same date replace the rows.
     `types` = independent signal types ("pead|gov_contract") plus the experimental "tema_kat" tag (never counted as a type for
@@ -359,8 +369,15 @@ def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
             for e in snap.get("tickers", []) if e.get("category") and loggable(e["ticker"], (e.get("decision") or {}).get("quoteType"))]
     from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Følg stats)
     rows += [dict(r, rangert=1) for r in log_rows(snap)]   # tema-rader: ikke «Ikke rangert» (AnalBot 26.10)
-    old = read_log(path)
+    # eksisterende rader leses som tekst og skrives tilbake uendret (aldri 1.0 -> 1 eller omvendt)
+    old = pd.DataFrame(columns=LOG_COLS)
+    if path.exists():
+        try:
+            old = pd.read_csv(path, dtype=str, keep_default_na=False)
+        except Exception as ex:
+            log.warning("categories log unreadable: %s", ex)
     new = pd.DataFrame(rows, columns=LOG_COLS)
+    new["rangert"] = pd.array([rangert_val(v) for v in new["rangert"]], dtype="Int64")   # heltall 1/0, ikke 1.0/0.0
     if snap.get("fast"):
         # a fast/partial run (fewer sources) must never overwrite a full run's rows for the same day: keep the existing
         # rows of today and only add tickers that are not logged yet
@@ -372,7 +389,7 @@ def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
     df = df.reindex(columns=LOG_COLS)
     path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(path, index=False)
-    return df
+    return read_log(path)
 
 
 def _explode(logdf: pd.DataFrame, col: str) -> pd.DataFrame:

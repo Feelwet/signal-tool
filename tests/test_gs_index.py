@@ -137,3 +137,33 @@ def test_logmerge_new_column():
     theirs = "date,ticker,x\n2026-10-01,A,1\n2026-10-02,A,2\n"
     ours = "date,ticker,x,rangert\n2026-10-01,A,1,\n2026-10-27,B,3,1\n"
     assert merge(ours, theirs, "c.csv") == "date,ticker,x,rangert\n2026-10-01,A,1,\n2026-10-02,A,2,\n2026-10-27,B,3,1\n"
+
+
+def test_append_log_rangert_integer_and_old_rows_untouched(tmp_path):
+    from signaltool import categories as C
+    p = tmp_path / "c.csv"
+    old = ("date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,rangert\n"
+           "2026-09-27,A.OL,watch,1.0,2026-09-25,OSEBX.OL,1.0,0,,,\n"
+           "2026-10-26,A.OL,watch,1.0,2026-10-23,OSEBX.OL,1.0,0,,,1.0\n"
+           "2026-10-26,Z.OL,watch,2.0,2026-10-23,OSEBX.OL,,0,,,0.0\n")
+    p.write_text(old)
+    snap = {"date": "2026-10-27", "tickers": [{"ticker": "B.OL", "category": "watch"}, {"ticker": "C.OL", "category": "watch", "unranked": True}]}
+    C.append_log(snap, p)
+    lines = p.read_text().splitlines()
+    assert "\n".join(lines[:4]) + "\n" == old                     # eksisterende rader byte-for-byte uendret
+    assert lines[4].endswith(",1") and lines[5].endswith(",0")    # nye rader: heltall, ikke 1.0/0.0
+    assert not any(l.endswith((",1.0", ",0.0")) for l in lines[4:])
+
+
+def test_rangert_reader_accepts_float_int_and_empty():
+    from signaltool.categories import rangert_val
+    assert [rangert_val(v) for v in ("1", "1.0", 1, 1.0, "0", "0.0", 0, "", None, float("nan"))] == [1, 1, 1, 1, 0, 0, 0, None, None, None]
+    rows = [{"date": "2026-10-26", "ticker": "A.OL", "category": "watch", "rangert": "1.0"},
+            {"date": "2026-10-26", "ticker": "X.OL", "category": "watch", "rangert": "0.0"},
+            {"date": "2026-10-27", "ticker": "A.OL", "category": "watch", "rangert": "1"},
+            {"date": "2026-10-27", "ticker": "X.OL", "category": "watch", "rangert": "0"},
+            {"date": "2026-10-28", "ticker": "A.OL", "category": "watch", "rangert": ""}]
+    lists = G.lists_by_date(rows)
+    assert set(lists["2026-10-26"]) == {"A.OL"} and set(lists["2026-10-27"]) == {"A.OL"}   # begge dagene telles
+    assert set(lists["2026-10-28"]) == {"A.OL"}                                             # tomt felt: med, men FLAG
+    assert G.unflagged_dates(rows) == {"2026-10-26", "2026-10-27"}

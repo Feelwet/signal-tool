@@ -12,13 +12,18 @@ CAT_OF = {"hoy": "Høy", "middels": "Middels", "lav": "Lav"}
 NAME = dict(FILTERS)
 
 CSS = """
-.tf-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
-.tf-row button{min-height:44px;min-width:44px;padding:0 14px;border-radius:22px;border:1px solid #30363d;background:#161b22;color:inherit;font:inherit;cursor:pointer}
+/* UxBot 26.10: knapper 36 px, 12 px padding, 8 px mellomrom; fade 24 px til høyre, skjult når raden er scrollet helt ut */
+.tf-wrap{position:relative;margin:6px 0 10px}
+.tf-wrap::after{content:"";position:absolute;top:0;right:0;bottom:0;width:24px;pointer-events:none;background:linear-gradient(to right,transparent,var(--bg,#0d1117))}
+.tf-wrap.at-end::after{display:none}
+.tf-row{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.tf-row button{height:36px;min-height:36px;padding:0 12px;white-space:nowrap;flex:none;border-radius:22px;border:1px solid #30363d;background:#161b22;color:inherit;font:inherit;cursor:pointer}
 .tf-row button[aria-pressed=true]{background:var(--acc,#6cb6ff);color:#06101c;border-color:var(--acc,#6cb6ff);font-weight:700}
 .fchip{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;background:#3a1418;color:#ff7b72;border:1px solid #f8514966;font-size:.8em;white-space:nowrap}
 .tf-empty{padding:10px 0}.tf-flag .grp{margin:10px 0 4px}.tf-flag .rfr{padding:5px 0;border-bottom:1px solid #21262d}.tf-flag .fb{margin-top:3px}
+.nokurs{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;font-size:11px;line-height:16px;color:#64748b;background:#1e293b;white-space:nowrap}
 .tf-only{font-size:.85em;color:var(--mut);margin:0 0 6px}
-@media(max-width:599px){.tf-row{flex-wrap:nowrap;overflow-x:auto;gap:4px}.tf-row button{padding:0 10px;flex:none}
+@media(max-width:599px){.tf-row{flex-wrap:nowrap;overflow-x:auto;gap:8px;scrollbar-width:none}.tf-row::-webkit-scrollbar{display:none}
 #tf-table th:nth-child(4),#tf-table td:nth-child(4){display:none}#tf-table .why,#tf-table .mer,#tf-table td:first-child .mut{display:none}#tf-table td{padding:6px 4px;white-space:nowrap;font-size:.9em}#tf-table th{padding:6px 4px}}
 """
 
@@ -46,11 +51,21 @@ def chip(r: dict | None) -> str:
     return f'<span class="fchip">⚑ {E(EV.nlabel(r))}</span>'
 
 
+FADE_JS = ("<script>(()=>{const r=document.querySelector('.tf-row'),w=r&&r.parentElement;if(!w)return;"
+           "const u=()=>w.classList.toggle('at-end',r.scrollLeft+r.clientWidth>=r.scrollWidth-1);"
+           "r.addEventListener('scroll',u,{passive:true});addEventListener('resize',u);u()})()</script>")
+
+
+def nokurs(e: dict) -> str:
+    """Grå chip når tickeren mangler kursdata (UxBot 26.10): raden vises, hullet synes."""
+    return "" if (e.get("stats") or {}).get("close") is not None else '<span class="nokurs">Ingen kursdata</span>'
+
+
 def filter_row(snap: dict) -> str:
     n = len(EV.red_rows(snap))
-    return '<div class="tf-row" role="group" aria-label="Filter">' + "".join(
+    return '<div class="tf-wrap"><div class="tf-row" role="group" aria-label="Filter">' + "".join(
         f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ' (<span class="mine-n">0</span>)' if k == "mine" else ""}</button>'
-        for k, lab in FILTERS) + "</div>"
+        for k, lab in FILTERS) + "</div></div>" + FADE_JS
 
 
 def flag_block(snap: dict) -> str:

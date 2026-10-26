@@ -56,10 +56,13 @@ details.fold[open]>summary::before{transform:rotate(90deg)}
 details.fold>summary h2,details.fold>summary h3{margin:0;font-size:1.15rem;flex:1}
 details.fold .fold-body{padding:0 16px 14px}
 details.fold .fold-body>:first-child{margin-top:0}
-.side-toggle{display:none;background:transparent;border:1px solid var(--line);color:#cfd9e4;border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
-header.top{display:none;background:var(--hdr);color:#fff;padding:10px 14px;border-bottom:1px solid var(--line);align-items:center;gap:10px}
-header.top .brand{font-weight:700;color:#fff;text-decoration:none;flex:1}
-header.top .gen{color:#a8b5c4;font-size:.78rem}
+/* UxBot 26.10: topplinje én rad, 48 px på mobil og PC; meny 40×40, logo+navn 16 px, «Oppdatert» 12 px #94a3b8 til høyre */
+.side-toggle{display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;padding:0;background:transparent;border:1px solid var(--line);color:#cfd9e4;border-radius:8px;font-size:18px;line-height:1;cursor:pointer}
+header.top{display:flex;flex-wrap:nowrap;height:48px;min-height:48px;max-height:48px;overflow:hidden;background:var(--hdr);color:#fff;padding:0 12px 0 4px;border-bottom:0;box-shadow:inset 0 -1px 0 var(--line);align-items:center;gap:8px}
+header.top .brand{font-weight:700;font-size:16px;line-height:20px;color:#fff;text-decoration:none;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top .gen{color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap;flex:0 0 auto}
+.side .brand,.side .gen{display:none!important}
+@media (min-width:901px){body.nav-open .side{display:none}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
 .card.hl{border-left:4px solid var(--acc)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -92,7 +95,6 @@ svg.spark{vertical-align:middle}svg.spark polyline{stroke:var(--acc)}
 @media (max-width:900px){
 .app{flex-direction:column}.side{position:fixed;inset:0 auto 0 0;transform:translateX(-105%);transition:transform .18s ease;z-index:40;height:100vh;box-shadow:8px 0 24px rgba(0,0,0,.45)}
 body.nav-open .side{transform:none}body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30}
-header.top{display:flex}.side-toggle{display:inline-block}
 }
 @media (max-width:600px){body{font-size:15px}main{padding:10px}th,td{padding:5px}}
 """
@@ -315,10 +317,16 @@ def fold(title: str, body: str, *, open_: bool = True, hid: str | None = None) -
             f'<div class="fold-body">{body}</div></details>')
 
 
+def gen_short(g) -> str:
+    """«2026-10-26 21:05» -> «26.10 21:05» (UxBot 26.10: Oppdatert DD.MM HH:MM)."""
+    m = re.match(r"\s*\d{4}-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})", str(g or ""))
+    return f"{m.group(2)}.{m.group(1)} {m.group(3)}:{m.group(4)}" if m else str(g or "")
+
+
 def page(title: str, body: str, depth=0, snap=None) -> str:
     body = L.no_robust(body).replace("(eksperimentell, teller ikke mot Kjøp)", "(eksperimentell)").replace("(eksperimentell – teller ikke mot Kjøp)", "(eksperimentell)")
     pre = "../" * depth
-    gen = f"Oppdatert {E(snap['generated'])} (norsk tid)" if snap else ""
+    gen = f"Oppdatert {E(gen_short(snap['generated']))}" if snap and snap.get("generated") else ""
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
@@ -384,8 +392,6 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
 <div class="app">
 <aside class="side" id="side">
-<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a>
-<span class="gen">{gen}</span>
 <nav>{nav}</nav>
 {search}
 <div class="tools">
@@ -394,7 +400,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 </div>
 </aside>
 <div class="content">
-<header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰ Meny</button>
+<header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
 <a class="brand" href="{pre}index.html">🛰️ Geo-signal</a><span class="gen">{gen}</span></header>
 <main>{body}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
@@ -447,7 +453,7 @@ def ticker_row(e, pre=""):
     unr = bool(e.get("unranked"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
             f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
