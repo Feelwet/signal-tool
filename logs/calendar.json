@@ -101,13 +101,6 @@
 "date": "2026-10-28",
 "time": "",
 "source": "Yahoo",
-"title": "Kvartalsrapport DHT",
-"kind": "resultat"
-},
-{
-"date": "2026-10-28",
-"time": "",
-"source": "Yahoo",
 "title": "Kvartalsrapport STNG",
 "kind": "resultat"
 },
@@ -116,6 +109,13 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport EQNR.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-10-28",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport DHT",
 "kind": "resultat"
 },
 {
@@ -348,6 +348,13 @@
 "source": "BLS",
 "title": "Employment Situation",
 "kind": "makro"
+},
+{
+"date": "2026-11-09",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport DHT",
+"kind": "resultat"
 },
 {
 "date": "2026-11-12",
