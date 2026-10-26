@@ -3502,3 +3502,77 @@
 {"ts": "2026-10-26T21:35", "source": "Risikonivå", "state": "ok", "code": null, "msg": null}
 {"ts": "2026-10-26T21:35", "source": "pead_tt_thresholds", "state": "ok", "code": null, "msg": null}
 {"ts": "2026-10-26T21:35", "source": "Datakvalitet (kurs)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "GDELT 1.0 daily events", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "GDELT DOC 2.0 API", "state": "fail", "code": "429", "msg": "FAILED after 0 queries: 429 for https://api.gdeltproject.org/api/v2/doc/doc -> using GDELT daily event files instead – ikke oppdatert (siste: ukjent)"}
+{"ts": "2026-10-26T22:09", "source": "News RSS", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Prices (yfinance)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Google Trends (pytrends)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "SEC EDGAR 8-K full-text", "state": "fail", "code": "403", "msg": "partial: 403 Client Error: Forbidden for url: https://efts.sec.gov/LATEST/search-index?q=%22Ukraine%22&forms=8-K&dateRange=custom&startdt=2026-10-20&enddt=2026-"}
+{"ts": "2026-10-26T22:09", "source": "SEC EDGAR Form 4", "state": "fail", "code": "403", "msg": "FAILED listing: 403 Client Error: Forbidden for url: https://efts.sec.gov/LATEST/search-index?q=&forms=4&dateRange=custom&startdt=2026-10-19&enddt=2026-10-26&fr"}
+{"ts": "2026-10-26T22:09", "source": "SEC late-filing notices (NT 10-K/Q)", "state": "fail", "code": "403", "msg": "FAILED: 403 Client Error: Forbidden for url: https://efts.sec.gov/LATEST/search-index?q=&forms=NT+10-K%2CNT+10-Q&dateRange=custom&startdt=2026-10-19&enddt=2026-"}
+{"ts": "2026-10-26T22:09", "source": "US House PTR (congress trades)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "US Senate eFD", "state": "skip", "code": null, "msg": "not automated (requires interactive terms acceptance); see research/sources.md"}
+{"ts": "2026-10-26T22:09", "source": "USAspending awards", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "SAM.gov", "state": "skip", "code": null, "msg": "not used (API requires free key via sign-up)"}
+{"ts": "2026-10-26T22:09", "source": "OFAC recent actions", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Reddit (public RSS)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Polymarket (Gamma API)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Kalshi", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Oslo Børs Newsweb", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Norges Bank", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Oil spreads & curves (yfinance futures)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "US DoD daily contracts (war.gov)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Finanstilsynet short register", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: SSB", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: Eurostat", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: FRED/EIA", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: FRED/Federal Reserve", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: FRED/BLS", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: FRED/Census", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: EIA WPSR", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: ONS", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: SCB", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: DST", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: OECD", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: IMF WEO (DataMapper)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: World Bank API", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: Eurostat update RSS", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "BLS release calendar (ICS)", "state": "fail", "code": "403", "msg": "FAILED: 403 Client Error: Forbidden for url: https://www.bls.gov/schedule/news_release/bls.ics – ikke oppdatert (siste: ukjent)"}
+{"ts": "2026-10-26T22:09", "source": "BEA release calendar (ICS)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "ONS release calendar API", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Makro: Destatis GENESIS", "state": "skip", "code": null, "msg": "not automated: GENESIS web service returned an HTML page for guest access (new API needs registration/token)"}
+{"ts": "2026-10-26T22:09", "source": "Makro: China NBS", "state": "fail", "code": "403", "msg": "FAILED: data.stats.gov.cn returned 403 from this box – ikke oppdatert (siste: ukjent)"}
+{"ts": "2026-10-26T22:09", "source": "Makro: BLS API v1", "state": "skip", "code": null, "msg": "not used: shared daily quota exhausted from this IP; BLS series taken via FRED CSV"}
+{"ts": "2026-10-26T22:09", "source": "Makro: EIA API v2 / FRED API / BEA API", "state": "skip", "code": null, "msg": "need free API keys (sign-up) - not used; FRED graph CSV + EIA weekly CSV used instead"}
+{"ts": "2026-10-26T22:09", "source": "Fed FOMC calendar", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "ECB meeting calendar", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Norges Bank meeting calendar", "state": "skip", "code": null, "msg": "not automated (dates rendered client-side); press releases RSS used"}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon HICP (Eurostat)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon UK (ONS D7G7)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon USA KPI-U (FRED CPIAUCSL)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon Kina KPI (NBS via OECD)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon Norge KPI (SSB)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon Sverige KPIF (SCB)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Inflasjon USA PCE (FRED)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Prognose Fed SEP (FRED PCECTPIMD)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Prognose Kina (IMF WEO PCPIPCH)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Earnings calendar (yfinance)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Sterke kvartalsrapporter (S&P 500, Yahoo)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Beslutningsdata (Yahoo: risiko, verdsettelse, stopp)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Yahoo-fundamentaldata (vakt > 50 %)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Datakvalitet (≥ 4/7 for rangering)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "IMF PortWatch (sundpassasjer)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Politikkvarsler (Federal Register / EU)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "EIA lagre vs 5-årssnitt", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Taiwan månedlig omsetning (MOPS)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Newsweb innsidehandel: kjøp/salg (meldingstekst)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Oslo-flagg (kurs, EBIT, emisjon, tilbakekjøp)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Temakart + Tema-katalysator (eksperimentell)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Markedsregime (10-mnd snitt, volatilitet)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Kategorier (Kjøp/Hold/Følg)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Signal-boka (papirkonto)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "GS-indeks (intern)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Læringsløkke (rådata)", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Risikonivå", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "pead_tt_thresholds", "state": "ok", "code": null, "msg": null}
+{"ts": "2026-10-26T22:09", "source": "Datakvalitet (kurs)", "state": "ok", "code": null, "msg": null}
