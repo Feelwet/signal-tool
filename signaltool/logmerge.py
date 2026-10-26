@@ -8,6 +8,10 @@ def merge(ours: str, theirs: str, path_hint: str) -> str:
     a, b = ours.splitlines(), theirs.splitlines()
     if path_hint.endswith(".csv") and a and b and a[0] != b[0] and "run_id" in a[0].split(","):
         return ours if ours.endswith("\n") else ours + "\n"   # første gang med nye kolonner: vår migrerte fil er et overmengde
+    if path_hint.endswith(".csv") and a and b and a[0] != b[0] and a[0].startswith(b[0] + ","):
+        # ny kolonne lagt til på slutten (f.eks. rangert 27.10): origin-radene får tomme felt, verdiene endres ikke
+        extra = "," * (a[0].count(",") - b[0].count(","))
+        b = [a[0]] + [l + extra if l else l for l in b[1:]]
     if path_hint.endswith(".csv") and a and b and a[0] == b[0]:
         head = a[0]
         if "run_id" in head.split(","):   # append-logger per kjøring: alle rader beholdes (union)

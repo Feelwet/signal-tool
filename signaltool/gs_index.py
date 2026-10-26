@@ -1,8 +1,12 @@
 """GS-indeksen (AnalBots spek, 26.10.2026): likevektet indeks over lista slik den faktisk så ut hver dag (point-in-time).
 
 Metode
-- Medlemmer: rader i logs/categories.csv med kategori kjop/hold/watch (den rangerte lista; «tema» er temakart-tickere utenfor
-  lista). NB: loggen skiller ikke «Ikke rangert» fra rangerte rader; de få ikke-rangerte radene telles derfor med.
+- Medlemmer: rader i logs/categories.csv med kategori kjop/hold/watch/tema og rangert=1 (AnalBot 26.10: tema tas med igjen;
+  utelukkelsen var aldri godkjent). Logg-datoer uten rangert-feltet (før feltet kom) kan ikke skille «Ikke rangert» fra
+  rangerte rader: alle radene tas med, og dagene som bruker en slik liste får flag=FLAG (telles).
+- Ugyldige dagsavkastninger: |r| > 30 % uten kjent splitt (SPLITS) er ugyldige: ute av dagens avkastning (ikke et tap),
+  vekten står, telles i n_invalid og logges i logs/gs_invalid.csv.
+- NOKBF (OTC/PNK) er med og regnes på US-siden av referansen (^NYA).
 - logs/categories_corrections.csv brukes (exclude-rader tas ut, korrigerte priser brukes). categories.csv endres aldri.
 - Logg-dato L = lista kjent den dagen. Inngang/utgang skjer på sluttkurs første handelsdag ETTER L (holdingene som gjelder fra
   sluttkurs dag t er lista fra siste logg-dato < t).
@@ -14,7 +18,7 @@ Metode
   Stengt egen børs den dagen (indeksen har ingen kurs) = 0 % avkastning, ikke «uten kurs».
 - Referanse: OSEBX / Nasdaq Composite / NYSE Composite vektet etter lista sin børsfordeling den dagen (samme mapping som
   since.bench_for: Oslo -> OSEBX.OL, Nasdaq -> ^IXIC, NYSE/Arca/American -> ^NYA). Ingen kostnader.
-- gs_ex_tech: samme beregning uten TECH.OL (bare internt, aldri på siden).
+- gs_index = hovedindeksen = uten TECH.OL til årsaken til kurshoppet er bekreftet; gs_with_tech = med TECH.OL (internt).
 - Start: 100 på første handelsdag etter første logg-dato (27.09.2026).
 """
 from __future__ import annotations
@@ -32,11 +36,15 @@ log = logging.getLogger(__name__)
 CAT_LOG = LOGS / "categories.csv"
 CORR = LOGS / "categories_corrections.csv"
 OUT = LOGS / "gs_index.csv"
-LIST_CATS = {"kjop", "hold", "watch"}
+LIST_CATS = {"kjop", "hold", "watch", "tema"}
+MAX_DAY_MOVE = 0.30
+SPLITS: frozenset = frozenset()   # {(ticker, dato)} kjente splitter/hendelser som gjør |r| > 30 % gyldig
+MAIN_EXCLUDE = frozenset({"TECH.OL"})
+INVALID = LOGS / "gs_invalid.csv"
 START = "2026-09-27"
 MIN_DAYS_PUBLIC = 60
 FLAG_TEXT = "FLAG: kort periode, ikke skilt fra tilfeldig"
-COLS = ["date", "gs_index", "benchmark", "n_members", "n_no_price", "gs_ex_tech"]
+COLS = ["date", "gs_index", "benchmark", "n_members", "n_no_price", "n_invalid", "flag", "gs_with_tech"]
 IDX = {"oslo": "OSEBX.OL", "nasdaq": "^IXIC", "nyse": "^NYA"}
 
 
@@ -73,9 +81,18 @@ def load_rows(cat_path: Path = CAT_LOG, corr_path: Path = CORR) -> list[dict]:
 def lists_by_date(rows: list[dict], start: str = START) -> dict[str, dict[str, dict]]:
     out: dict[str, dict[str, dict]] = {}
     for r in rows:
-        if r["date"] >= start and r.get("category") in LIST_CATS:
+        if r["date"] >= start and r.get("category") in LIST_CATS and str(r.get("rangert") or "").strip() not in ("0", "0.0"):
             out.setdefault(r["date"], {})[r["ticker"]] = r
     return out
+
+
+def unflagged_dates(rows: list[dict]) -> set[str]:
+    """Logg-datoer der rangert-feltet (1/0) finnes på alle radene, så «Ikke rangert» kan skilles ut."""
+    by: dict[str, bool] = {}
+    for r in rows:
+        ok = str(r.get("rangert") or "").strip() in ("0", "1", "0.0", "1.0")
+        by[r["date"]] = by.get(r["date"], True) and ok
+    return {d for d, ok in by.items() if ok}
 
 
 def logged_prices(rows: list[dict]) -> dict[str, dict[str, tuple]]:
@@ -90,7 +107,8 @@ def logged_prices(rows: list[dict]) -> dict[str, dict[str, tuple]]:
 
 
 def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp: dict, exch: dict, idx: dict,
-            exclude: frozenset = frozenset()) -> list[dict]:
+            exclude: frozenset = frozenset(), known: set | None = None, splits: frozenset = SPLITS,
+            invalid_log: list | None = None) -> list[dict]:
     """lists: {logdato: {ticker: rad}}, days: handelsdager (stigende), logp/yfp: {ticker: {dato: kurs}},
     exch: {ticker: 'oslo'|'nasdaq'|'nyse'|None}, idx: {indeksticker: {dato: kurs}}. Returnerer rader fra første handelsdag > første logg-dato."""
     ldates = sorted(lists)
@@ -101,8 +119,8 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
     def members(t):
         prev = [d for d in ldates if d < t]
         if not prev:
-            return {}
-        return {k: v for k, v in lists[prev[-1]].items() if k not in exclude}
+            return {}, None
+        return {k: v for k, v in lists[prev[-1]].items() if k not in exclude}, prev[-1]
 
     def ex_open(tk, d):
         e = exch.get(tk)
@@ -124,7 +142,7 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
 
     out, gs, bm, w, prev, carry, seen = [], 100.0, 100.0, {}, None, 0.0, {}
     for t in days:
-        n_no = 0
+        n_no = n_inv = 0
         if prev is not None and w:
             # avkastning prev -> t for holdingene w
             gr, kept, drift, ret_ok = 0.0, 0.0, {}, {}
@@ -133,6 +151,12 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
                     r = 0.0
                 else:
                     r = ret(tk, last_open(tk, prev, exch, idx), t)
+                if r is not None and abs(r) > MAX_DAY_MOVE and (tk, t) not in splits:
+                    n_inv += 1         # ugyldig (splitt-/faktorfeil): ute av dagens avkastning, ikke et tap; vekten står
+                    if invalid_log is not None:
+                        invalid_log.append({"date": t, "prev": prev, "ticker": tk, "ret": r})
+                    drift[tk] = wt
+                    continue
                 if r is None:          # ingen kurs: ute av dagens avkastning, vekten står (ingen handel)
                     n_no += 1
                     drift[tk] = wt
@@ -159,7 +183,7 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
                     br += c / n * (b / a - 1)
             bm *= 1 + br
         # rebalansering på sluttkurs t mot lista fra siste logg-dato < t
-        mem = members(t)
+        mem, ld = members(t)
         tgt = {k: 1 / len(mem) for k in mem} if mem else {}
         cost = 0.0
         for k in set(w) | set(tgt):
@@ -172,7 +196,8 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
         carry = cost if prev is None else 0.0
         seen.update(mem)
         w, prev = tgt, t
-        out.append({"date": t, "gs_index": gs, "benchmark": bm, "n_members": len(mem), "n_no_price": n_no})
+        out.append({"date": t, "gs_index": gs, "benchmark": bm, "n_members": len(mem), "n_no_price": n_no,
+                    "n_invalid": n_inv, "flag": "FLAG" if (known is not None and ld is not None and ld not in known) else ""})
     return out
 
 
@@ -198,6 +223,9 @@ def _exch(tickers, cache_path: Path) -> dict:
     out = {}
     for t in tickers:
         b = bench_for(t)
+        if not b and (cache.get(t) or "").lower() in ("pnk", "oth", "otc", "oqx", "oqb"):
+            out[t] = "nyse"   # OTC (f.eks. NOKBF): US-siden av referansen (AnalBot 26.10)
+            continue
         if b:
             out[t] = rev[b[0]]
             continue
@@ -237,15 +265,25 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     exch = _exch(tks, DATA / "cache" / "gs_exchange.json")
     today = date.today().isoformat()
     days = sorted({d for s in idx.values() for d in s if d < today or d == max(s)})
-    res = compute(lists, days, logged_prices(rows), yfp, exch, idx)
-    ex = {r["date"]: r["gs_index"] for r in compute(lists, days, logged_prices(rows), yfp, exch, idx, frozenset({"TECH.OL"}))}
+    known = unflagged_dates(rows)
+    res = compute(lists, days, logged_prices(rows), yfp, exch, idx, MAIN_EXCLUDE, known)
+    inv: list = []
+    wt = {r["date"]: r for r in compute(lists, days, logged_prices(rows), yfp, exch, idx, frozenset(), known, invalid_log=inv)}
+    with open(Path(out_path).with_name("gs_invalid.csv"), "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["date", "prev", "ticker", "ret"])
+        w.writeheader()
+        for x in inv:
+            w.writerow(dict(x, ret=f"{x['ret']:.4f}"))
+    if inv:
+        log.warning("gs_index: %d ugyldige dagsavkastninger (|r| > 30 %%): %s", len(inv), inv)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="") as f:
         wr = csv.DictWriter(f, fieldnames=COLS)
         wr.writeheader()
         for r in res:
             wr.writerow({"date": r["date"], "gs_index": f"{r['gs_index']:.4f}", "benchmark": f"{r['benchmark']:.4f}",
-                         "n_members": r["n_members"], "n_no_price": r["n_no_price"], "gs_ex_tech": f"{ex.get(r['date'], float('nan')):.4f}"})
+                         "n_members": r["n_members"], "n_no_price": r["n_no_price"], "n_invalid": r["n_invalid"], "flag": r["flag"],
+                         "gs_with_tech": f"{wt[r['date']]['gs_index']:.4f}" if r["date"] in wt else ""})
     return res
 
 
@@ -266,7 +304,7 @@ def read(path: Path = OUT) -> list[dict]:
 
 
 def section_html(path: Path = OUT) -> str:
-    """Seksjon øverst i Signal-boka (UxBot-spek). Tom streng (ingenting i HTML) til >= 60 handelsdager. gs_ex_tech vises aldri."""
+    """Seksjon øverst i Signal-boka (UxBot-spek). Tom streng (ingenting i HTML) til >= 60 handelsdager. gs_with_tech vises aldri."""
     rs = read(path)
     if len(rs) < MIN_DAYS_PUBLIC:
         return ""

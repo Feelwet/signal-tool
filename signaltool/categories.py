@@ -45,7 +45,7 @@ _OLD_LOG_PATH = HISTORY / "categories.csv"   # pre-2026-09-28 location (git-igno
 if not LOG_PATH.exists() and _OLD_LOG_PATH.exists():  # one-time migration from the old cache-only location
     import shutil as _sh
     _sh.copy2(_OLD_LOG_PATH, LOG_PATH)
-LOG_COLS = ["date", "ticker", "category", "price", "price_date", "benchmark", "score", "n_types", "types", "flags"]
+LOG_COLS = ["date", "ticker", "category", "price", "price_date", "benchmark", "score", "n_types", "types", "flags", "rangert"]
 
 RULES = dict(min_types=2, fresh_days=7, stretch_5d=0.10, stretch_20d=0.25, stretch_sma=0.25, crash=-0.20,
              min_adv_usd=1_000_000, min_price_usd=1.0, short_7d=0.3, short_30d=0.75, theme_min=1.0,
@@ -354,10 +354,11 @@ def append_log(snap: dict, path=LOG_PATH) -> pd.DataFrame:
              "price": (e.get("stats") or {}).get("close"), "price_date": (e.get("stats") or {}).get("last_date"),
              "benchmark": e.get("cat_benchmark"), "score": e.get("score"), "n_types": len(e.get("cat_types") or {}),
              "types": "|".join(sorted(list(e.get("cat_types") or {}) + (["tema_kat"] if (e.get("temakart") or {}).get("tema_kat") else []))),
-             "flags": "|".join(list(e.get("cat_flag_keys") or []) + sorted(e.get("cat_warnings") or {}))}
+             "flags": "|".join(list(e.get("cat_flag_keys") or []) + sorted(e.get("cat_warnings") or {})),
+             "rangert": 0 if e.get("unranked") else 1}
             for e in snap.get("tickers", []) if e.get("category") and loggable(e["ticker"], (e.get("decision") or {}).get("quoteType"))]
     from .theme_maps import log_rows   # theme-map tickers outside the snapshot: category "tema" (not in Kjøp/Hold/Følg stats)
-    rows += log_rows(snap)
+    rows += [dict(r, rangert=1) for r in log_rows(snap)]   # tema-rader: ikke «Ikke rangert» (AnalBot 26.10)
     old = read_log(path)
     new = pd.DataFrame(rows, columns=LOG_COLS)
     if snap.get("fast"):

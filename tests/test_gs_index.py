@@ -54,7 +54,7 @@ def test_corrections_and_mixed_basis(tmp_path):
     assert {r["ticker"] for r in rows} == {"A.OL", "T.OL"}
     lp = G.logged_prices(rows)
     assert lp["A.OL"]["2026-09-29"] == (2.178, True) and lp["A.OL"]["2026-09-25"] == (5.0, False)
-    assert set(G.lists_by_date(rows)["2026-09-27"]) == {"A.OL"}   # tema er ikke lista
+    assert set(G.lists_by_date(rows)["2026-09-27"]) == {"A.OL", "T.OL"}   # tema er med (AnalBot 26.10)
     assert "2.178" not in cat.read_text()                         # categories.csv endres aldri
 
 
@@ -73,7 +73,7 @@ def _write(p, n):
         w = csv.DictWriter(f, fieldnames=G.COLS)
         w.writeheader()
         for i in range(n):
-            w.writerow({"date": f"2026-{i:04d}", "gs_index": 100 + i % 3, "benchmark": 100, "n_members": 50, "n_no_price": 2, "gs_ex_tech": 123.4567})
+            w.writerow({"date": f"2026-{i:04d}", "gs_index": 100 + i % 3, "benchmark": 100, "n_members": 50, "n_no_price": 2, "n_invalid": 0, "flag": "", "gs_with_tech": 123.4567})
 
 
 def test_hide_gate(tmp_path):
@@ -84,3 +84,56 @@ def test_hide_gate(tmp_path):
     h = G.section_html(p)
     assert "GS-indeksen" in h and G.FLAG_TEXT in h and "uten kurs" in h
     assert "123.4567" not in h and "123,4567" not in h and "%" not in h.replace("100%", "")   # ingen ex-TECH, ingen %-hero
+
+
+def test_rangert_filter_and_flag_days():
+    rows = [{"date": "2026-09-27", "ticker": "A.OL", "category": "watch"},
+            {"date": "2026-09-28", "ticker": "A.OL", "category": "watch", "rangert": "1"},
+            {"date": "2026-09-28", "ticker": "B.OL", "category": "watch", "rangert": "0"}]
+    lists = G.lists_by_date(rows)
+    assert set(lists["2026-09-28"]) == {"A.OL"}            # rangert=0 («Ikke rangert») er ikke med
+    assert G.unflagged_dates(rows) == {"2026-09-28"}
+    yfp = {"A.OL": {d: 100.0 for d in DAYS}}
+    r = G.compute(lists, DAYS, {}, yfp, EX, IDX, known=G.unflagged_dates(rows))
+    assert [x["flag"] for x in r] == ["FLAG", "", "", ""]   # 28.09 bruker lista fra 27.09 (uten rangert-felt)
+
+
+def test_invalid_jump_excluded_not_a_loss():
+    lists = {"2026-09-27": {"A.OL": row("A.OL"), "B.OL": row("B.OL")}}
+    yfp = {"A.OL": {"2026-09-28": 5.50, "2026-09-29": 2.178, "2026-09-30": 2.178, "2026-10-01": 2.178},
+           "B.OL": {"2026-09-28": 100.0, "2026-09-29": 110.0, "2026-09-30": 110.0, "2026-10-01": 110.0}}
+    inv = []
+    r = G.compute(lists, DAYS, {}, yfp, EX, IDX, invalid_log=inv)
+    assert r[1]["n_invalid"] == 1 and inv[0]["ticker"] == "A.OL" and inv[0]["date"] == "2026-09-29"
+    assert 109 < r[1]["gs_index"] < 110   # bare B (+10 %) teller; A sitt −60 % er ikke et tap
+    r2 = G.compute(lists, DAYS, {}, yfp, EX, IDX, splits=frozenset({("A.OL", "2026-09-29")}))
+    assert r2[1]["n_invalid"] == 0
+
+
+def test_otc_on_us_side(tmp_path, monkeypatch):
+    import json
+    c = tmp_path / "ex.json"
+    c.write_text(json.dumps({"NOKBF": "PNK"}))
+    import signaltool.since as S
+    monkeypatch.setattr(S, "bench_for", lambda t: None)
+    assert G._exch(["NOKBF"], c) == {"NOKBF": "nyse"}
+
+
+def test_append_log_writes_rangert(tmp_path):
+    from signaltool import categories as C
+    p = tmp_path / "c.csv"
+    old = "date,ticker,category,price,price_date,benchmark,score,n_types,types,flags\n2026-09-27,A.OL,watch,1.0,2026-09-25,OSEBX.OL,1.0,0,,\n"
+    p.write_text(old)
+    snap = {"date": "2026-10-27", "tickers": [{"ticker": "B.OL", "category": "watch"}, {"ticker": "C.OL", "category": "watch", "unranked": True}]}
+    df = C.append_log(snap, p)
+    assert "rangert" in df.columns
+    got = {r["ticker"]: r["rangert"] for _, r in df.iterrows()}
+    assert got.get("B.OL") == 1 and got.get("C.OL") == 0
+    assert str(df[df.ticker == "A.OL"]["rangert"].iloc[0]) == "nan"   # gamle rader skrives ikke om
+
+
+def test_logmerge_new_column():
+    from signaltool.logmerge import merge
+    theirs = "date,ticker,x\n2026-10-01,A,1\n2026-10-02,A,2\n"
+    ours = "date,ticker,x,rangert\n2026-10-01,A,1,\n2026-10-27,B,3,1\n"
+    assert merge(ours, theirs, "c.csv") == "date,ticker,x,rangert\n2026-10-01,A,1,\n2026-10-02,A,2,\n2026-10-27,B,3,1\n"
