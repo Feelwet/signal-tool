@@ -88,3 +88,26 @@ def test_star_css_present():
     from signaltool import site
     assert "#tf-table .card{padding-right:8px}" in site.STAR_CSS and "overflow-x:visible" in site.STAR_CSS
     assert "#tf-table td.mcol{text-align:center}" in site.STAR_CSS
+
+
+def test_fallback_join_on_date_and_ticker(tmp_path, monkeypatch):
+    """AnalBot 26.10: koblingen er (dato, ticker). Hver fallback-rad holdes utenfor både treffratene (track_record) og
+    GS-indeksen (load_rows); samme ticker en annen dag, og en annen ticker samme dag, blir med. Fallback-tickere som
+    ikke står i loggen den dagen kan ikke trekke fra grunnlaget."""
+    from signaltool import gs_index as G, categories as C
+    hdr = "date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,rangert\n"
+    rows = [("2026-10-23", "AAA.OL"), ("2026-10-26", "AAA.OL"), ("2026-10-26", "AAA.OL"),   # dublett samme dag
+            ("2026-10-26", "BBB"), ("2026-10-23", "BBB"), ("2026-10-26", "CCC")]
+    cat = tmp_path / "c.csv"
+    cat.write_text(hdr + "".join(f"{d},{t},hold,1,{d},,1,1,,,1\n" for d, t in rows))
+    side = tmp_path / "sf.csv"
+    fb = [("2026-10-26", "AAA.OL"), ("2026-10-26", "BBB"), ("2026-10-26", "NOTLOGGED")]
+    side.write_text("date,ticker,source,fallback_date,source_fallback\n"
+                    + "".join(f"{d},{t},Kurs (Yahoo),2026-10-23,1\n" for d, t in fb))
+    monkeypatch.setattr(SH, "SIDELOG", side)
+    keep = [("2026-10-23", "AAA.OL"), ("2026-10-23", "BBB"), ("2026-10-26", "CCC")]
+    assert sorted((r["date"], r["ticker"]) for r in G.load_rows(cat, None)) == sorted(keep)
+    df = pd.read_csv(cat, dtype=str)
+    tr = C.track_record(df, {})
+    assert tr["n_log_rows"] == len(keep) == len(df) - 3   # 3 loggrader treffes (inkl. dublett), NOTLOGGED trekker 0
+    assert not set(SH.excluded()) & set(keep)
