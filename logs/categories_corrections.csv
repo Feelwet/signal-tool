@@ -1,0 +1,14 @@
+date,ticker,field,old,new,reason
+2026-10-01,TECH.OL,price,4.66,2.178,"Yahoo-sluttkurs 2026-09-29 hentet 2026-10-26 er 2.178; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-02,TECH.OL,price,3.96,1.8509,"Yahoo-sluttkurs 2026-09-30 hentet 2026-10-26 er 1.8509; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-03,TECH.OL,price,3.67,1.7153,"Yahoo-sluttkurs 2026-10-01 hentet 2026-10-26 er 1.7153; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-04,TECH.OL,price,3.76,1.7574,"Yahoo-sluttkurs 2026-10-02 hentet 2026-10-26 er 1.7574; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-05,TECH.OL,price,3.9,1.8228,"Yahoo-sluttkurs 2026-10-05 hentet 2026-10-26 er 1.8228; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-06,TECH.OL,price,3.76,1.7574,"Yahoo-sluttkurs 2026-10-02 hentet 2026-10-26 er 1.7574; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-07,TECH.OL,price,3.9,1.8228,"Yahoo-sluttkurs 2026-10-05 hentet 2026-10-26 er 1.8228; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-10-08,TECH.OL,price,3.79,1.7714,"Yahoo-sluttkurs 2026-10-06 hentet 2026-10-26 er 1.7714; logget pris ligger paa annen justeringsbasis (faktor ~2,14); ingen split i Yahoo actions; aarsak ubekreftet (FLAG)"
+2026-09-28,OUTLT.OL,price,,38.5,"manglet: notert 24.09, under 31 handelsdager i markets.download; Yahoo-sluttkurs 2026-09-28 (samme price_date som flertallet av radene den dagen)"
+2026-09-28,OUTLT.OL,price_date,,2026-09-28,se price-raden
+2026-09-29,OUTLT.OL,price,,37.5,"manglet: notert 24.09, under 31 handelsdager i markets.download; Yahoo-sluttkurs 2026-09-25 (samme price_date som flertallet av radene den dagen)"
+2026-09-29,OUTLT.OL,price_date,,2026-09-25,se price-raden
+2026-09-27,BA.L,exclude,,1,"London-aksje, ingen matchende indeks (logget mot ^GSPC); ekskludert av loggable() fra 8f47b80"

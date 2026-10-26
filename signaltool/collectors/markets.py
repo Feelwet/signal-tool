@@ -9,19 +9,39 @@ import yfinance as yf
 log = logging.getLogger(__name__)
 
 
-def download(tickers: list[str], period="2y") -> dict[str, pd.DataFrame]:
-    d = _http.yf_download(tickers, period=period, progress=False, auto_adjust=True, group_by="ticker", threads=True)
-    out = {}
+def _split_short(d, tickers: list[str]) -> tuple[dict[str, pd.DataFrame], dict[str, pd.DataFrame]]:
+    """(>30 sessions, 1-30 sessions). Short series = new listings (e.g. OUTLT.OL, listed 24.09.2026)."""
+    out, short = {}, {}
     for t in tickers:
         try:
             df = d[t].dropna(subset=["Close"])
-            if len(df) > 30:
-                out[t] = df
         except KeyError:
-            pass
+            continue
+        if len(df) > 30:
+            out[t] = df
+        elif len(df):
+            short[t] = df
+    return out, short
+
+
+def download(tickers: list[str], period="2y", short: dict | None = None) -> dict[str, pd.DataFrame]:
+    """Series with > 30 sessions. Pass a dict as `short` to also receive the 1-30-session series (not cleaned, no stats)."""
+    d = _http.yf_download(tickers, period=period, progress=False, auto_adjust=True, group_by="ticker", threads=True)
+    out, sh = _split_short(d, tickers)
+    if short is not None:
+        short.update(sh)
     from ..data_quality import clean_universe   # repair spike-and-revert bars before any stats (data_quality.py)
     out, _ = clean_universe(out, "Kurser (tema- og kandidataksjer)")
     return out
+
+
+def short_stats(df: pd.DataFrame) -> dict:
+    """Only the last close and its date for a too-short history: the forward log gets an entry price; every anomaly/rule
+    input stays NaN, so the category logic sees exactly what it saw before (missing data)."""
+    c = df["Close"]
+    nan = np.nan
+    return {"last_date": str(c.index[-1].date()), "close": float(c.iloc[-1]), "ret_1d": nan, "ret_5d": nan, "ret_20d": nan,
+            "ret5_z": nan, "vol5_z": nan, "vol1_z": nan, "vol_ratio_5d": nan, "sma50": nan, "maxdd20": nan, "adv20": nan}
 
 
 def ticker_stats(df: pd.DataFrame) -> dict:
@@ -53,11 +73,13 @@ def ticker_stats(df: pd.DataFrame) -> dict:
 
 def collect(tickers: list[str]) -> tuple[pd.DataFrame, dict[str, pd.DataFrame], str]:
     try:
-        data = download(tickers)
+        short: dict = {}
+        data = download(tickers, short=short)
     except Exception as e:
         return pd.DataFrame(), {}, f"FAILED: {e}"
     stats = {t: ticker_stats(df) for t, df in data.items()}
-    missing = sorted(set(tickers) - set(data))
+    stats.update({t: short_stats(df) for t, df in short.items() if t not in stats})
+    missing = sorted(set(tickers) - set(data) - set(short))
     msg = f"ok ({len(data)}/{len(tickers)} tickers)" + (f"; missing {missing}" if missing else "")
     return pd.DataFrame(stats).T, data, msg
 
