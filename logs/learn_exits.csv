@@ -175,3 +175,4 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-26,NPRO.OL,2026-10-25,for lite data,8,3.0,,,,40408425080,false
 2026-10-26,PWR,2026-10-25,score0,,,,,,40408425080,false
 2026-10-26,SNOW,2026-10-25,cut60,71,0.5,,,,40408425080,false
+2026-10-27,NPRO.OL,2026-10-26,for lite data,9,3.0,,,,40457319855,true

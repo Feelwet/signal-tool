@@ -357,6 +357,13 @@
 "kind": "resultat"
 },
 {
+"date": "2026-11-10",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Konsumprisindeksen (KPI)",
+"kind": "makro"
+},
+{
 "date": "2026-11-12",
 "time": "",
 "source": "Yahoo",
