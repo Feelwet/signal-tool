@@ -176,3 +176,8 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-26,PWR,2026-10-25,score0,,,,,,40408425080,false
 2026-10-26,SNOW,2026-10-25,cut60,71,0.5,,,,40408425080,false
 2026-10-27,NPRO.OL,2026-10-26,for lite data,9,3.0,,,,40457319855,true
+2026-10-27,CF,2026-10-26,cut60,135,0.26,,,,40535608728,false
+2026-10-27,COCO,2026-10-26,"lik score, kutt 60",61,0.5,3,1,BCPC:på:1|BRUT.OL:på:1,40535608728,false
+2026-10-27,MOS,2026-10-26,cut60,136,0.26,,,,40535608728,false
+2026-10-27,NPRO.OL,2026-10-26,score0,,,,,,40535608728,false
+2026-10-27,NTR,2026-10-26,cut60,137,0.26,,,,40535608728,false
