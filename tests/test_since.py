@@ -41,8 +41,20 @@ def test_category_days_from_current_category():
 
 def test_cells_and_mobile():
     s = {"since": "2026-10-08", "price": 17.0, "price_date": "2026-10-06", "category": "watch", "days": 1}
-    assert 'data-v="2026-10-08">08.10<' in S.cell(s) and "siden 08.10" in S.mobile(s) and "· 1 dag" in S.line(s)
-    assert S.line(None) == "" and S.mobile(None) == "" and "–" in S.cell(None)
+    assert 'data-v="2026-10-08"' in S.cell(s) and 'data-sort="2026-10-08">08.10<' in S.cell(s)
+    assert "siden 08.10" in S.mobile(s) and "· 1 dag" in S.line(s)
+    assert S.line(None) == "" and S.mobile(None) == "" and "–" in S.cell(None) and 'data-sort=""' in S.cell(None)
+
+
+def test_dato_sort_js_uxbot():
+    """UxBot 27.10: ISO data-sort, første klikk nyeste (▼), URL ?sort=dato_*, tomme nederst, poeng-tiebreak."""
+    js, css = S.JS, S.CSS
+    assert "data-sort" in S.cell({"since": "2026-10-08"}) and "dataset.sort" in js
+    assert "dato_desc" in js and "dato_asc" in js and "history.replaceState" in js
+    assert "descending" in js and "ascending" in js
+    assert "score(b)-score(a)" in js
+    assert "if(!x)return 1;if(!y)return -1" in js
+    assert 'font-size:12px' in css and 'content:" ▼"' in css and 'content:" ▲"' in css
 
 
 def test_return():

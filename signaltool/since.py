@@ -177,8 +177,8 @@ def ret_cell(r: dict | None) -> str:
 
 def cell(s: dict | None) -> str:
     if not s:
-        return '<td class="since-c" data-v="">–</td>'
-    return f'<td class="since-c" data-v="{E(s["since"])}">{_dm(s["since"])}</td>'
+        return '<td class="since-c" data-v="" data-sort="">–</td>'
+    return f'<td class="since-c" data-v="{E(s["since"])}" data-sort="{E(s["since"])}">{_dm(s["since"])}</td>'
 
 
 def mobile(s: dict | None, r: dict | None = None) -> str:
@@ -191,16 +191,27 @@ CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hid
 td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
-th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
 #tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:11px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
 """
 
-JS = r"""<script>(()=>{document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
-function go(e){if(e&&e.target.closest('.ri'))return;const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]:not([data-unr])')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h')||h.classList.contains('rk-h');
+JS = r"""<script>(()=>{const score=r=>{const t=(r.children[2]&&r.children[2].querySelector('.score'));const n=t?parseFloat(t.textContent):NaN;return Number.isFinite(n)?n:-Infinity};
+const place=(tb,rows)=>{const p=rows[0]&&rows[0].parentNode,g=tb.querySelector('tr.grp');if(!p)return;rows.forEach(r=>g&&g.parentNode===p?p.insertBefore(r,g):p.appendChild(r))};
+const urlSort=dir=>{const u=new URL(location.href);if(dir==='descending')u.searchParams.set('sort','dato_desc');else if(dir==='ascending')u.searchParams.set('sort','dato_asc');else u.searchParams.delete('sort');history.replaceState(null,'',u)};
+const clearSortUrl=()=>{const u=new URL(location.href);if(u.searchParams.has('sort')){u.searchParams.delete('sort');history.replaceState(null,'',u)}};
+function sortDato(h,dir){const tb=h.closest('table'),rows=[...tb.querySelectorAll('tr[data-cat]:not([data-unr])')],desc=dir==='descending';
+rows.sort((a,b)=>{const x=(a.querySelector('td.since-c')||{}).dataset.sort||'',y=(b.querySelector('td.since-c')||{}).dataset.sort||'';
+if(!x&&!y)return score(b)-score(a);if(!x)return 1;if(!y)return -1;const c=x.localeCompare(y);if(c)return desc?-c:c;return score(b)-score(a)});
+place(tb,rows);tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',dir);urlSort(dir)}
+document.querySelectorAll('#tf-table th.sortable').forEach(h=>{h.setAttribute('role','button');h.tabIndex=0;
+function go(e){if(e&&e.target.closest('.ri'))return;if(h.classList.contains('since-h')){const next=h.getAttribute('aria-sort')==='descending'?'ascending':'descending';return sortDato(h,next)}
+const tb=h.closest('table'),i=[...h.parentNode.children].indexOf(h),rows=[...tb.querySelectorAll('tr[data-cat]:not([data-unr])')],asc=h.getAttribute('aria-sort')!=='ascending',num=h.classList.contains('ret-h')||h.classList.contains('rk-h');
 rows.sort((a,b)=>{const x=a.children[i].dataset.v,y=b.children[i].dataset.v;if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;const c=num?(+x)-(+y):x.localeCompare(y);return asc?c:-c});
-const p=rows[0]&&rows[0].parentNode,g=tb.querySelector('tr.grp');rows.forEach(r=>g&&g.parentNode===p?p.insertBefore(r,g):p.appendChild(r));tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending')}
+place(tb,rows);tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttribute('aria-sort'));h.setAttribute('aria-sort',asc?'ascending':'descending');clearSortUrl()}
 h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+const sp=new URL(location.href).searchParams.get('sort'),sh=document.querySelector('#tf-table th.since-h');
+if(sh&&(sp==='dato_desc'||sp==='dato_asc'))sortDato(sh,sp==='dato_desc'?'descending':'ascending');
 document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));const riX=()=>document.querySelectorAll('.ri[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.ri'))riX()});document.addEventListener('keydown',e=>{if(e.key==='Escape')riX()});
 document.querySelectorAll('tr.rowlink').forEach(r=>{const skip=e=>e.target.closest('a,button,input,label,.ri,.mstar');
 const go=(e,nt)=>{if(skip(e))return;const u=r.dataset.href;if(nt||e.ctrlKey||e.metaKey||e.shiftKey)window.open(u,'_blank','noopener');else location.href=u};
