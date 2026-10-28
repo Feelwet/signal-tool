@@ -41,8 +41,10 @@ def chip(e: dict) -> str:
     c = coverage(e)
     if c["have"] >= c["of"]:
         return ""
-    tip = "Mangler: " + ", ".join(c["missing"])
-    return f'<span class="dchip" title="{E(tip)}" aria-label="Data {c["have"]} av {c["of"]}. {E(tip)}">Data {c["have"]}/{c["of"]}</span>'
+    # UxBot/AnalBot 28.10: trykk-popover (samme ⓘ-mønster som avkastningscellen), tekst fra `missing`
+    tip = f'{c["have"]} av {c["of"]} grunnfelt finnes. Mangler: {", ".join(c["missing"])}.'
+    return (f'<span class="ri ri-c dci" tabindex="0" aria-expanded="false" aria-label="{E(tip)}">'
+            f'<span class="dchip">Data {c["have"]}/{c["of"]}</span><span class="tip">{E(tip)}</span></span>')
 
 
 def _fmt(k: str, v) -> str:
@@ -71,7 +73,7 @@ def card(e: dict) -> str:
             f'{" (ETF)" if etf else ""}</span></h2><table>{"".join(rows)}</table></div>')
 
 
-CSS = ".dchip{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;background:#21262d;color:var(--mut);border:1px solid #30363d;font-size:.8em;white-space:nowrap;cursor:help}\n"
+CSS = ".ri.ri-c.dci{font-size:inherit;padding:0}.ri.ri-c.dci .tip{font-weight:400}.dchip{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;background:#21262d;color:var(--mut);border:1px solid #30363d;font-size:.8em;white-space:nowrap;cursor:help}\n"
 
 
 MIN_HAVE = 4   # AnalBot/rom 25.10: score vises og rangeres bare med minst 4/7 grunnfelt (ETF: 2/2 teller som fullt)

@@ -135,23 +135,23 @@ def test_ticker_page_tip_has_date():
 def test_entry_sidelog_same_day_only(tmp_path):
     p = tmp_path / "entry_prices.csv"
     with p.open("w", newline="") as f:
-        csv.writer(f).writerows([S.ENTRY_COLS, ["2026-10-27", "SPY", "watch", "760.0", "2026-10-24"]])
-    snap = {"date": "2026-10-28", "tickers": [
-        {"ticker": "SPY", "category": "watch", "stats": {"close": 769.66, "last_date": "2026-10-27"}},
-        {"ticker": "EWZ", "category": "", "stats": {"close": 34.3, "last_date": "2026-10-27"}},
-        {"ticker": "DNB.OL", "category": "watch", "stats": {"close": 324.9, "last_date": "2026-10-27"}},
+        csv.writer(f).writerows([S.ENTRY_COLS, ["2026-10-30", "SPY", "watch", "760.0", "2026-10-29"]])
+    snap = {"date": "2026-10-31", "tickers": [
+        {"ticker": "SPY", "category": "watch", "stats": {"close": 769.66, "last_date": "2026-10-30"}},
+        {"ticker": "EWZ", "category": "", "stats": {"close": 34.3, "last_date": "2026-10-30"}},
+        {"ticker": "DNB.OL", "category": "watch", "stats": {"close": 324.9, "last_date": "2026-10-30"}},
         {"ticker": "ITA", "stats": {}}]}
     assert S.append_entries(snap, {"DNB.OL"}, p) == 2
     snap["tickers"][0]["stats"]["close"] = 770.0
     assert S.append_entries(snap, {"DNB.OL"}, p) == 2                     # ny kjøring samme dag erstatter dagens rader
     rows = list(csv.DictReader(p.open()))
-    assert rows[0] == {"date": "2026-10-27", "ticker": "SPY", "category": "watch", "price": "760.0", "price_date": "2026-10-24"}
-    assert [(r["date"], r["ticker"], r["price"]) for r in rows[1:]] == [("2026-10-28", "SPY", "770.0"), ("2026-10-28", "EWZ", "34.3")]
+    assert rows[0] == {"date": "2026-10-30", "ticker": "SPY", "category": "watch", "price": "760.0", "price_date": "2026-10-29"}
+    assert [(r["date"], r["ticker"], r["price"]) for r in rows[1:]] == [("2026-10-31", "SPY", "770.0"), ("2026-10-31", "EWZ", "34.3")]
     log = tmp_path / "categories.csv"
     with log.open("w", newline="") as f:
-        csv.writer(f).writerows([["date", "ticker", "category", "price", "price_date"], ["2026-10-28", "DNB.OL", "watch", "324.9", "2026-10-27"]])
-    sin = S.compute(S.load(log, p), "2026-10-28")
-    assert sin["EWZ"]["price"] == 34.3 and sin["EWZ"]["price_date"] == "2026-10-27" and sin["DNB.OL"]["price"] == 324.9
+        csv.writer(f).writerows([["date", "ticker", "category", "price", "price_date"], ["2026-10-31", "DNB.OL", "watch", "324.9", "2026-10-30"]])
+    sin = S.compute(S.load(log, p), "2026-10-31")
+    assert sin["EWZ"]["price"] == 34.3 and sin["EWZ"]["price_date"] == "2026-10-30" and sin["DNB.OL"]["price"] == 324.9
     assert S.load(log) == S._read(log)                                    # egen loggsti: ingen sidelogg blandes inn
 
 
@@ -224,3 +224,87 @@ def test_popover_trigger_wraps_text_and_name_clamp():
     assert 'aria-label="Kurs mangler etter 23.10"><span class="rv rst">–</span>ⓘ' in st
     assert "max-width:260px;font-size:13px" in S.CSS and "width:max(100%,32px);height:max(100%,32px)" in S.CSS and "riPos" in S.JS
     assert "-webkit-line-clamp:2" in NM.CSS and 'title="DNB Bank ASA"' in NM.cell("DNB.OL", "x.html", "DNB Bank ASA")
+
+
+def test_data_chip_popover_and_hidden_when_complete(monkeypatch):
+    from signaltool import datacov as DC
+    monkeypatch.setattr(DC, "coverage", lambda e: {"have": 6, "of": 7, "missing": ["Neste rapport"]})
+    h = DC.chip({})
+    assert 'class="ri ri-c dci"' in h and "Data 6/7" in h and "6 av 7 grunnfelt finnes. Mangler: Neste rapport." in h
+    monkeypatch.setattr(DC, "coverage", lambda e: {"have": 7, "of": 7, "missing": []})
+    assert DC.chip({}) == ""
+
+
+def test_type_sizes_and_updated_line():
+    from signaltool import site as SITE
+    assert "td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}" in S.CSS
+    assert ".rex{display:block;color:#94a3b8;font-size:12px}" in S.CSS and "#tf-table .since-m{display:block;color:#94a3b8;font-size:12px}" in S.CSS
+    html = SITE.page("Tickere", "<p>x</p>", 0, {"generated": "2026-10-28 21:13"})
+    assert '<p class="gen gen-line">Oppdatert 28.10 kl. 21:13</p>' in html and ".gen-line{" in SITE.CSS and "font-size:12px" in SITE.CSS
+
+
+def test_entry_line_shown_price_equals_return_basis():
+    import re
+    s = S.compute([{"date": "2026-10-28", "ticker": "A", "category": "watch", "price": "109.52", "price_date": "2026-10-27"}], "2026-10-28")["A"]
+    s["price"] = 109.52 * 1.0                                            # samme objekt som ret() bruker
+    r = S.ret(s, 120.0, "2026-10-28", {}, "A", "2026-10-28")
+    m = S.mobile(s, r, "USD")
+    shown = float(re.search(r"inn ([\d ]+,\d\d) USD", m).group(1).replace(" ", "").replace(",", "."))
+    assert shown == round(s["price"], 2) and abs(r["r"] - (120.0 / shown - 1)) < 1e-4
+    assert 'siden 28.10<span class=inn-m><span class="ri ri-c"' in m and "inn 109,52 USD (27.10)" in m and "Sluttkurs 27.10, brukt som innkurs" in m
+    c = S.cell(s, "USD")
+    assert c.startswith('<td class="since-c" data-v="2026-10-28" data-sort="2026-10-28">siden 28.10<span class=inn-d> · ') and "inn 109,52 USD (27.10)" in c
+    assert "inn 109,52 (27.10)" in S.cell(s, "")                         # ukjent valuta: uten valuta
+    assert "inn " not in S.cell({"since": "2026-10-28"}) and S.mobile({"since": "2026-10-28"}) == '<span class="since-m">siden 28.10</span>'
+    assert "font-variant-numeric:tabular-nums" in S.CSS
+
+
+def test_entry_deviation_warning():
+    s = {"since": "2026-10-20", "price": 100.0, "price_date": "2026-10-17", "dev": 100.0 / 101.2 - 1, "yclose": 101.2}
+    h = S.entry_html(s, "NOK")
+    assert '<span class="inn-w">⚠</span>' in h and "Innkursen avviker 1,2 % fra Yahoos sluttkurs samme dag (101,20 NOK). Avkastningen er regnet fra den loggede kursen." in h
+    assert "⚠" not in S.entry_html(dict(s, dev=0.004, yclose=100.4), "NOK") and "⚠" not in S.entry_html(dict(s, dev=None), "NOK")
+    assert "color:#f59e0b;font-size:12px" in S.CSS
+
+
+def test_entry_check_compares_with_yahoo_close(monkeypatch):
+    from signaltool import site as SITE
+    snap = {"tickers": [{"ticker": "X.OL", "_since": {"since": "2026-10-20", "price": 100.0, "price_date": "2026-10-17"}},
+                        {"ticker": "Y.OL", "_since": {"since": "2026-10-20", "price": None, "price_date": None}}]}
+    monkeypatch.setattr(SITE.PC, "download", lambda t: {"X.OL": [("2026-10-16", 99.0), ("2026-10-17", 102.0)]})
+    SITE._entry_check(snap)
+    s = snap["tickers"][0]["_since"]
+    assert s["yclose"] == 102.0 and abs(s["dev"] - (100 / 102 - 1)) < 1e-12 and s["price"] == 100.0   # innkursen endres ikke
+    assert "dev" not in snap["tickers"][1]["_since"]
+    assert SITE._cur({"decision": {"currency": "GBp"}}) == "GBp" and SITE._cur({}) == ""
+
+
+def test_log_gap_makes_entry_uncertain_not_new():
+    """EWZ: categories 27.09, så ingen loggrad 28.09–27.10; sideloggens 28.10-rad er før SIDE_START og starter ikke periode."""
+    rows = [{"date": d, "ticker": "X", "category": "watch", "price": "1", "price_date": d} for d in
+            ["2026-09-27"] + [f"2026-{m:02d}-{x:02d}" for m, x in [(9, 28), (9, 29), (9, 30)] + [(10, i) for i in range(1, 29)]]]
+    rows.append({"date": "2026-09-27", "ticker": "EWZ", "category": "watch", "price": "36.82", "price_date": "2026-09-25"})
+    assert S.uncertain(rows, "EWZ", "2026-10-28") == ("2026-09-28", "2026-10-27")
+    s = {"uncertain": ("2026-09-28", "2026-10-27")}
+    assert S.ret(s, 33.62, "2026-10-28", {}, "EWZ", "2026-10-28") is None
+    c = S.ret_cell(None, s)
+    assert "Innkurs usikker, logg mangler 28.09–27.10" in c and "Ny i dag" not in c and 'data-v=""' in c and "Ingen innkurs" not in c
+    assert S.cell(s) == '<td class="since-c" data-v="" data-sort="">–</td>' and S.mobile(s) == ""
+    assert "Innkurs usikker, logg mangler 28.09–27.10" in S.line(s) and "Innkurs usikker" in S.line_rk(s, "")
+    one = rows + [{"date": "2026-10-27", "ticker": "Y", "category": "watch", "price": "1", "price_date": "2026-10-27"}]
+    assert S.uncertain(one, "Y", "2026-10-28") is None                    # ingen hull
+    assert S.SIDE_START == "2026-10-29"
+
+
+def test_sidelog_rows_before_side_start_ignored(tmp_path):
+    p = tmp_path / "entry_prices.csv"
+    with p.open("w", newline="") as f:
+        csv.writer(f).writerows([S.ENTRY_COLS, ["2026-10-28", "EWZ", "watch", "33.62", "2026-10-28"], ["2026-10-29", "EWZ", "watch", "34.0", "2026-10-29"]])
+    log = tmp_path / "categories.csv"
+    with log.open("w", newline="") as f:
+        csv.writer(f).writerows([["date", "ticker", "category", "price", "price_date"], ["2026-09-27", "EWZ", "watch", "36.82", "2026-09-25"]]
+                                + [[d, "A", "watch", "1", d] for d in ("2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29")])
+    rows = S.load(log, p)
+    assert ("2026-10-28", "EWZ") not in {(r["date"], r["ticker"]) for r in rows}
+    s = S.compute(rows, "2026-10-29")["EWZ"]
+    assert s["since"] == "2026-10-29" and s["price"] == 34.0                # ny periode fra neste kjøring, ikke 27.09/36,82

@@ -41,7 +41,7 @@ def test_category_days_from_current_category():
 
 def test_cells_and_mobile():
     s = {"since": "2026-10-08", "price": 17.0, "price_date": "2026-10-06", "category": "watch", "days": 1}
-    assert 'data-v="2026-10-08"' in S.cell(s) and 'data-sort="2026-10-08">08.10<' in S.cell(s)
+    assert 'data-v="2026-10-08"' in S.cell(s) and 'data-sort="2026-10-08">siden 08.10<' in S.cell(s)
     assert "siden 08.10" in S.mobile(s) and "· 1 dag" in S.line(s)
     assert S.line(None) == "" and S.mobile(None) == "" and "–" in S.cell(None) and 'data-sort=""' in S.cell(None)
 

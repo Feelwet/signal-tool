@@ -61,6 +61,8 @@ details.fold .fold-body>:first-child{margin-top:0}
 header.top{display:flex;flex-wrap:nowrap;height:48px;min-height:48px;max-height:48px;overflow:hidden;background:var(--hdr);color:#fff;padding:0 12px 0 4px;border-bottom:0;box-shadow:inset 0 -1px 0 var(--line);align-items:center;gap:8px}
 header.top .brand{font-weight:700;font-size:16px;line-height:20px;color:#fff;text-decoration:none;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 header.top .gen{color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap;flex:0 0 auto}
+/* UxBot 28.10: «Oppdatert DD.MM kl. HH:MM» (kjøretidspunkt) 12 px under toppbaren */
+.gen-line{margin:6px 0 0;padding:0 16px;color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap}
 .side .brand,.side .gen{display:none!important}
 @media (min-width:901px){body.nav-open .side{display:none}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
@@ -326,7 +328,7 @@ def gen_short(g) -> str:
 def page(title: str, body: str, depth=0, snap=None) -> str:
     body = L.no_robust(body).replace("(eksperimentell, teller ikke mot Kjøp)", "(eksperimentell)").replace("(eksperimentell – teller ikke mot Kjøp)", "(eksperimentell)")
     pre = "../" * depth
-    gen = f"Oppdatert {E(gen_short(snap['generated']))}" if snap and snap.get("generated") else ""
+    gen = f"Oppdatert {E(gen_short(snap['generated']).replace(' ', ' kl. ', 1))}" if snap and snap.get("generated") else ""
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
@@ -401,7 +403,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 </aside>
 <div class="content">
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
-<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a><span class="gen">{gen}</span></header>
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line">{gen}</p>' if gen else ""}
 <main>{body}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
@@ -458,8 +460,8 @@ def ticker_row(e, pre=""):
     unr = bool(e.get("unranked"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
-            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
+            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -501,9 +503,13 @@ def _prep(snap: dict) -> dict:
     _rows = SN.load()
     sin = SN.compute(_rows, str(snap.get("date") or "") or None)
     _hist = SN.compute(_rows)          # hele historikken (MAX_MISS uendret): tickere som mangler i dagens kategorier
+    _today = str(snap.get("date") or "")
     for e in snap.get("tickers", []):
         if e["ticker"] not in sin and e["ticker"] in _hist:
-            sin[e["ticker"]] = _hist[e["ticker"]]
+            # AnalBot 28.10: hull i loggen (> MAX_MISS kjøringer) = innkurs usikker, ingen «siden»/avkastning (før: gammel
+            # periode fra _hist, f.eks. EWZ 27.09 −6,8 % selv om ingen logg viste at den sto på lista 28.09–27.10)
+            u = SN.uncertain(_rows, e["ticker"], _today) if _today else None
+            sin[e["ticker"]] = {"uncertain": u} if u else _hist[e["ticker"]]
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
@@ -514,7 +520,7 @@ def _prep(snap: dict) -> dict:
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
         e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"], str(snap.get("date") or "") or None)
-        if e.get("unranked") and e["_since"]:
+        if e.get("unranked") and e["_since"] and not e["_since"].get("uncertain"):
             e["_since"] = {"since": e["_since"]["since"]}   # «Ikke rangert»: bare datoen, ingen tall
     try:
         from . import risk
@@ -526,10 +532,33 @@ def _prep(snap: dict) -> dict:
         e["_congress"] = CG.rows_for(snap, e["ticker"])
         e["_srcline"] = SS.line(e, snap.get("status") or {})
     _factor_fix(snap)
+    _entry_check(snap)
     for e in snap.get("tickers", []):
         if e.get("_ret"):
             e["_ret"]["note"] = SN.note_for(e.get("_since"))
     return snap
+
+
+def _cur(e: dict) -> str:
+    """Valuta fra kursdataene (Yahoo currency i decision-data, f.eks. NOK, USD, GBp); ukjent = tom."""
+    return str((e.get("decision") or {}).get("currency") or "").strip()
+
+
+def _entry_check(snap):
+    """AnalBot 28.10: logget innkurs (s['price'], samme tall som avkastningen) mot Yahoos sluttkurs samme price_date.
+    Avvik lagres i s['dev']/s['yclose']; siden viser ⚠ når |avvik| > 0,5 %. Loggen endres ikke."""
+    tk = [e for e in snap.get("tickers", []) if (e.get("_since") or {}).get("price") and (e.get("_since") or {}).get("price_date")]
+    if not tk:
+        return
+    try:
+        pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+    except Exception as ex:
+        print(f"entry check: {ex}"); return
+    for e in tk:
+        s = e["_since"]
+        y = dict((d, v) for d, v in (pxs.get(e["ticker"]) or []) if v is not None).get(s["price_date"])
+        if y:
+            s["yclose"], s["dev"] = float(y), float(s["price"]) / float(y) - 1
 
 
 def _factor_fix(snap):

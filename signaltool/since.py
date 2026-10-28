@@ -24,6 +24,9 @@ def _dm(d: str) -> str:
 
 ENTRY_LOG = LOGS / "entry_prices.csv"
 ENTRY_COLS = ["date", "ticker", "category", "price", "price_date"]
+# AnalBot 28.10: sideloggen startet 28.10 uten bevis for at ETF-ene/BA.L sto sammenhengende på lista 28.09–27.10 (ingen daglige
+# snapshots/sider bevart). Rader før SIDE_START beholdes i filen, men kan ikke starte en periode: ny periode fra neste kjøring.
+SIDE_START = "2026-10-29"
 
 
 def _read(path: Path) -> list[dict]:
@@ -41,7 +44,7 @@ def load(path: Path = LOG, entry_path: Path | None = None) -> list[dict]:
         entry_path = ENTRY_LOG if path == LOG else None
     if entry_path is not None:
         have = {(r["date"], r["ticker"]) for r in rows}
-        rows += [r for r in _read(entry_path) if (r["date"], r["ticker"]) not in have]
+        rows += [r for r in _read(entry_path) if (r["date"], r["ticker"]) not in have and r["date"] >= SIDE_START]
     return rows
 
 
@@ -110,13 +113,60 @@ def _price(p: float) -> str:
     return f"{p:,.2f}".replace(",", " ").replace(".", ",")
 
 
+def uncertain(rows: list[dict], ticker: str, today: str) -> tuple[str, str] | None:
+    """(første, siste) kjøring uten loggrad for tickeren før i dag, når hullet er større enn MAX_MISS; ellers None.
+    Hull i loggen er ikke bevis for at tickeren falt av lista (AnalBot 28.10)."""
+    mine = [r["date"] for r in rows if r["ticker"] == ticker and r["date"] < today]
+    if not mine:
+        return None
+    last = max(mine)
+    miss = sorted(d for d in {r["date"] for r in rows} if last < d < today)
+    return (miss[0], miss[-1]) if len(miss) > MAX_MISS else None
+
+
+def unc_text(s: dict | None) -> str:
+    u = (s or {}).get("uncertain")
+    return f"Innkurs usikker, logg mangler {_dm(u[0])}–{_dm(u[1])}" if u else ""
+
+
+def inn_text(s: dict | None, cur: str = "") -> str:
+    """«inn 109,52 USD (27.10)» – samme innkurs (s['price']) som avkastningen regnes fra; valuta fra kursdataene, ukjent = uten."""
+    if not s or s.get("price") in (None, 0):
+        return ""
+    return f"inn {_price(s['price'])}" + (f" {cur}" if cur else "") + (f" ({_dm(s['price_date'])})" if s.get("price_date") else "")
+
+
+def dev_pct(x: float) -> str:
+    return f"{abs(x)*100:.1f}".replace(".", ",")
+
+
+DEV_MAX = 0.005   # AnalBot 28.10: |avvik| > 0,5 % mot Yahoos sluttkurs samme price_date -> ⚠
+
+
+def entry_html(s: dict | None, cur: str = "") -> str:
+    """Innkurs med popover «Sluttkurs DD.MM, brukt som innkurs» og ev. ⚠-avviksvarsel (s['dev'], s['yclose'] fra site._prep)."""
+    t = inn_text(s, cur)
+    if not t:
+        return ""
+    pd_ = s.get("price_date")
+    tip = f"Sluttkurs {_dm(pd_)}, brukt som innkurs" if pd_ else "Sluttkurs brukt som innkurs"
+    h = ri(tip, f'<span class="inn-p">{E(t)}</span>', glyph=False)
+    if s.get("dev") is not None and abs(s["dev"]) > DEV_MAX and s.get("yclose"):
+        w = (f"Innkursen avviker {dev_pct(s['dev'])} % fra Yahoos sluttkurs samme dag ({_price(s['yclose'])}"
+             f"{' ' + cur if cur else ''}). Avkastningen er regnet fra den loggede kursen.")
+        h += ri(w, '<span class="inn-w">⚠</span>', glyph=False)
+    return h
+
+
 def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
     """«[chip] Siden DD.MM · inn 109,52 (DD.MM) · N dager · +4,7 %» – én linje, nowrap + ellipsis."""
     if not s:
         return f'<p class="since mut">{chip}</p>' if chip else ""
+    if s.get("uncertain"):
+        return f'<p class="since mut">{chip + " " if chip else ""}{E(unc_text(s))}</p>'
     parts = [f"Siden {_dm(s['since'])}"]
     if s.get("price") is not None:
-        parts.append(f"inn {_price(s['price'])}" + (f" ({_dm(s['price_date'])})" if s.get("price_date") else ""))
+        parts.append(inn_text(s))
     if s.get("category") in CAT:
         n = s["days"]
         parts.append(f"{n} {'dag' if n == 1 else 'dager'}")
@@ -128,10 +178,12 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
 def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
     """Risikochip + (i) først (aldri klippet), deretter «Siden … · inn … · +x %» med ellipsis. Ingen kategoridager."""
     parts = []
-    if s:
+    if s and s.get("uncertain"):
+        parts.append(unc_text(s))
+    elif s:
         parts.append(f"Siden {_dm(s['since'])}")
         if s.get("price") is not None:
-            parts.append(f"inn {_price(s['price'])}" + (f" ({_dm(s['price_date'])})" if s.get("price_date") else ""))
+            parts.append(inn_text(s))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
     if ret and ret.get("new"):
         t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(NEW_TIP)}'
@@ -216,10 +268,10 @@ def _cls(x):
 NO_ENTRY = "Ingen innkurs ennå"
 
 
-def ri(text: str, label: str = "") -> str:
+def ri(text: str, label: str = "", glyph: bool = True) -> str:
     """Eksisterende ⓘ-mønster (som i kolonneoverskriften), kompakt variant i tabellcellen. `label` (f.eks. «Ny i dag» eller «–»)
     ligger inne i trykkflaten, så et trykk på teksten åpner samme popover som ⓘ (UxBot 28.10)."""
-    return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">{label}ⓘ<span class="tip">{E(text)}</span></span>'
+    return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">{label}{"ⓘ" if glyph else ""}<span class="tip">{E(text)}</span></span>'
 
 
 NEW_T, NEW_TIP = "Ny i dag", "Avkastning vises fra neste handelsdag"
@@ -231,6 +283,8 @@ def ret_tip(r: dict | None, s: dict | None = None) -> str:
         return f"Kurs mangler etter {_dm(r['last'])}" if r.get("last") else "Kurs mangler"
     if r and r.get("last"):
         return f"Kurs per {_dm(r['last'])}"
+    if not r and s and s.get("uncertain"):
+        return unc_text(s)
     if not r and (not s or s.get("price") in (None, 0)):
         return NO_ENTRY
     return ""
@@ -256,25 +310,30 @@ def ret_cell(r: dict | None, s: dict | None = None) -> str:
     return f'<td class="ret-c" data-v="{v}"{st}{lt}>{ret_inner(r, s)}</td>'
 
 
-def cell(s: dict | None) -> str:
-    if not s:
+def cell(s: dict | None, cur: str = "") -> str:
+    """PC: «siden 28.10 · inn 109,52 USD (27.10)» på én linje, høyrejustert. Sortering på data-sort (ISO-dato) uendret."""
+    if not s or s.get("uncertain"):
         return '<td class="since-c" data-v="" data-sort="">–</td>'
-    return f'<td class="since-c" data-v="{E(s["since"])}" data-sort="{E(s["since"])}">{_dm(s["since"])}</td>'
+    inn = entry_html(s, cur)
+    return (f'<td class="since-c" data-v="{E(s["since"])}" data-sort="{E(s["since"])}">siden {_dm(s["since"])}'
+            f'{"<span class=inn-d> · " + inn + "</span>" if inn else ""}</td>')
 
 
-def mobile(s: dict | None, r: dict | None = None) -> str:
-    if not s:
+def mobile(s: dict | None, r: dict | None = None, cur: str = "") -> str:
+    """390 px: linje 1 «siden 28.10», linje 2 «inn 109,52 USD (27.10)» (bare med innkurs)."""
+    if not s or s.get("uncertain"):
         return ""
-    return f'<span class="since-m">siden {_dm(s["since"])}{"<span class=ret-m>" + ret_inner(r, s) + "</span>" if r else ""}</span>' 
+    inn = entry_html(s, cur)
+    return f'<span class="since-m">siden {_dm(s["since"])}{"<span class=inn-m>" + inn + "</span>" if inn else ""}{"<span class=ret-m>" + ret_inner(r, s) + "</span>" if r else ""}</span>' 
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:11px;color:#94a3b8;white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:11px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:11px;color:#94a3b8;white-space:nowrap}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:11px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
-@media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:var(--mut);font-size:.8em}
-#tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:11px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
+@media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:#94a3b8;font-size:12px}
+#tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:12px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
 """
 
 JS = r"""<script>(()=>{const score=r=>{const t=(r.children[2]&&r.children[2].querySelector('.score'));const n=t?parseFloat(t.textContent):NaN;return Number.isFinite(n)?n:-Infinity};
