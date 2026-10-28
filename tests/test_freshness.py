@@ -310,3 +310,21 @@ def test_sidelog_rows_before_side_start_ignored(tmp_path):
     assert ("2026-10-28", "EWZ") not in {(r["date"], r["ticker"]) for r in rows}
     s = S.compute(rows, "2026-10-29")["EWZ"]
     assert s["since"] == "2026-10-29" and s["price"] == 34.0                # ny periode fra neste kjøring, ikke 27.09/36,82
+
+
+def test_uncertain_gap_ends_day_before_learn_raw():
+    """AnalBot 28.10: hullet slutter dagen før learn_raw.csv viser tickeren (EWZ: 28.09–24.10), avkastning skjult."""
+    from signaltool import since as SN
+    runs = ["2026-09-27", "2026-09-28", "2026-10-05", "2026-10-25", "2026-10-26", "2026-10-27"]
+    rows = [{"date": d, "ticker": "A"} for d in runs] + [{"date": "2026-09-27", "ticker": "EWZ"}]
+    seen = {"2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28"}
+    u = SN.uncertain(rows, "EWZ", "2026-10-28", seen)
+    assert u == ("2026-09-28", "2026-10-24")
+    assert SN.unc_text({"uncertain": u}) == "Innkurs usikker, logg mangler 28.09–24.10"
+    assert SN.uncertain(rows, "EWZ", "2026-10-28") == ("2026-09-28", "2026-10-27")
+    assert SN.ret({"uncertain": u}, 30.0, "2026-10-27", ticker="EWZ", run_date="2026-10-28") is None
+
+
+def test_mobile_390_data_chip_on_ticker_line_css():
+    from signaltool import since as SN
+    assert "#tf-table .tk .dchip::before{content:\"· \"}" in SN.CSS and "font-size:11px;line-height:14px" in SN.CSS

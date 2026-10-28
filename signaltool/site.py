@@ -504,11 +504,12 @@ def _prep(snap: dict) -> dict:
     sin = SN.compute(_rows, str(snap.get("date") or "") or None)
     _hist = SN.compute(_rows)          # hele historikken (MAX_MISS uendret): tickere som mangler i dagens kategorier
     _today = str(snap.get("date") or "")
+    _seen = SN.seen_dates() if _today else {}
     for e in snap.get("tickers", []):
         if e["ticker"] not in sin and e["ticker"] in _hist:
             # AnalBot 28.10: hull i loggen (> MAX_MISS kjøringer) = innkurs usikker, ingen «siden»/avkastning (før: gammel
             # periode fra _hist, f.eks. EWZ 27.09 −6,8 % selv om ingen logg viste at den sto på lista 28.09–27.10)
-            u = SN.uncertain(_rows, e["ticker"], _today) if _today else None
+            u = SN.uncertain(_rows, e["ticker"], _today, _seen.get(e["ticker"])) if _today else None
             sin[e["ticker"]] = {"uncertain": u} if u else _hist[e["ticker"]]
     snap["_sin"] = sin
     idx = _index_closes()

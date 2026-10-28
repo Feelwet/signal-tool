@@ -7,7 +7,7 @@ Kursen er sluttkursen i periodens første rad, med price_date."""
 from __future__ import annotations
 
 import csv
-from datetime import date
+from datetime import date, timedelta
 from html import escape as E
 from pathlib import Path
 
@@ -113,15 +113,34 @@ def _price(p: float) -> str:
     return f"{p:,.2f}".replace(",", " ").replace(".", ",")
 
 
-def uncertain(rows: list[dict], ticker: str, today: str) -> tuple[str, str] | None:
-    """(første, siste) kjøring uten loggrad for tickeren før i dag, når hullet er større enn MAX_MISS; ellers None.
-    Hull i loggen er ikke bevis for at tickeren falt av lista (AnalBot 28.10)."""
+def uncertain(rows: list[dict], ticker: str, today: str, seen: set | None = None) -> tuple[str, str] | None:
+    """(første kjøring uten loggrad, siste dag uten bevis) før i dag, når hullet er større enn MAX_MISS; ellers None.
+    Hull i loggen er ikke bevis for at tickeren falt av lista (AnalBot 28.10). `seen` = datoer der tickeren beviselig sto på
+    lista i en annen logg (logs/learn_raw.csv). Hullet slutter dagen før første slike dato etter siste loggrad (AnalBot 28.10:
+    «logg mangler 28.09–24.10»). Bevisene starter ingen periode; ny periode fra SIDE_START."""
     mine = [r["date"] for r in rows if r["ticker"] == ticker and r["date"] < today]
     if not mine:
         return None
     last = max(mine)
     miss = sorted(d for d in {r["date"] for r in rows} if last < d < today)
-    return (miss[0], miss[-1]) if len(miss) > MAX_MISS else None
+    ev = sorted(d for d in (seen or ()) if last < d < today)
+    if ev:
+        miss = [d for d in miss if d < ev[0]]
+    if len(miss) <= MAX_MISS:
+        return None
+    end = (date.fromisoformat(ev[0]) - timedelta(days=1)).isoformat() if ev else miss[-1]
+    return (miss[0], end)
+
+
+LEARN_RAW = LOGS / "learn_raw.csv"
+
+
+def seen_dates(path: Path = LEARN_RAW) -> dict[str, set]:
+    """{ticker: {datoer}} fra logs/learn_raw.csv (lista slik den sto i hver kjøring, også ETF-er). Bare bevis for hull-lengden."""
+    out: dict[str, set] = {}
+    for r in _read(path):
+        out.setdefault(r["ticker"], set()).add(r["date"][:10])
+    return out
 
 
 def unc_text(s: dict | None) -> str:
@@ -335,6 +354,10 @@ td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
 @media(max-width:599px){#tf-table th.since-h,#tf-table td.since-c{display:none}#tf-table .since-m{display:block;color:#94a3b8;font-size:12px}
+/* UxBot 28.10 (390 px): «siden»/«inn» 11 px, linjehøyde 14 px; «Data X/7» på tickerlinjen («KOMPL.OL ↗ · Data 5/7», 11 px), flagg-brikker etter */
+#tf-table .since-m,#tf-table .since-m .inn-p,#tf-table .since-m .ri.ri-c>.inn-p,#tf-table .since-m .inn-w,#tf-table .since-m .ri.ri-c>.inn-w{font-size:11px;line-height:14px}
+#tf-table .tn .tk{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;font-size:11px;line-height:14px}#tf-table .tk .dci{order:1}#tf-table .tk .fchip,#tf-table .tk .nokurs,#tf-table .tk .fb-dot{order:2}
+#tf-table .tk .dchip{font-size:11px;line-height:14px;margin:0;padding:0;border:0;background:none}#tf-table .tk .dchip::before{content:"· "}
 #tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:12px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
 """
 
