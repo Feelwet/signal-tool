@@ -24,10 +24,21 @@ def _split_short(d, tickers: list[str]) -> tuple[dict[str, pd.DataFrame], dict[s
     return out, short
 
 
+LAST_FRESH: dict = {}
+
+
 def download(tickers: list[str], period="2y", short: dict | None = None) -> dict[str, pd.DataFrame]:
     """Series with > 30 sessions. Pass a dict as `short` to also receive the 1-30-session series (not cleaned, no stats)."""
     d = _http.yf_download(tickers, period=period, progress=False, auto_adjust=True, group_by="ticker", threads=True)
     out, sh = _split_short(d, tickers)
+    try:   # AnalBot 28.10: morgenkjøringen manglet forrige Oslo-handelsdag -> hent etternølere på nytt (freshness.py)
+        from .. import freshness
+        both = {**out, **sh}
+        LAST_FRESH.clear(); LAST_FRESH.update(freshness.repair_lagging(both))
+        out = {t: both[t] for t in out}
+        sh = {t: both[t] for t in sh}
+    except Exception as ex:
+        log.warning("freshness repair failed: %s", ex)
     if short is not None:
         short.update(sh)
     from ..data_quality import clean_universe   # repair spike-and-revert bars before any stats (data_quality.py)
@@ -80,7 +91,8 @@ def collect(tickers: list[str]) -> tuple[pd.DataFrame, dict[str, pd.DataFrame], 
     stats = {t: ticker_stats(df) for t, df in data.items()}
     stats.update({t: short_stats(df) for t, df in short.items() if t not in stats})
     missing = sorted(set(tickers) - set(data) - set(short))
-    msg = f"ok ({len(data)}/{len(tickers)} tickers)" + (f"; missing {missing}" if missing else "")
+    from ..freshness import summary
+    msg = f"ok ({len(data)}/{len(tickers)} tickers)" + (f"; missing {missing}" if missing else "") + summary(LAST_FRESH)
     return pd.DataFrame(stats).T, data, msg
 
 

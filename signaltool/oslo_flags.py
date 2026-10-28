@@ -65,22 +65,46 @@ def universe_prices(fetch: bool = True, today: date | None = None) -> dict[str, 
     14-month refresh cached for ~20 hours (one batched yfinance call for ~275 tickers)."""
     from .backtest import universe
     today = today or date.today()
-    p = universe.DIR / "oslo.pkl"
+    if _UNI.get("key") == (str(today), fetch):    # én henting per kjøring (kalles fra flere moduler)
+        return _UNI["v"]
+    _UNI["key"], _UNI["v"] = (str(today), fetch), _universe_prices(fetch, today, universe.DIR / "oslo.pkl")
+    return _UNI["v"]
+
+
+_UNI: dict = {}
+
+
+def _universe_prices(fetch: bool, today: date, p: Path) -> dict[str, pd.DataFrame]:
+    from .freshness import expected_session
+    exp = expected_session("OSEBX.OL")
+    if exp and today < exp:
+        exp = today
+    stale_cache = None
     for path in (p, RECENT):
         if path.exists():
             try:
                 d = pd.read_pickle(path)
                 last = max(v.index[-1] for v in d.values())
-                if (today - last.date()).days <= 5 or (path == RECENT and time.time() - path.stat().st_mtime < 20 * 3600):
+                # AnalBot 28.10: cachen godtas bare når siste bar er minst forventet Oslo-handelsdag (før: inntil 5
+                # kalenderdager gammel, så temakart-radene sto på 23.10 i kjøringen 28.10)
+                if exp is not None and last.date() >= exp:
                     return _clean(d)
+                if exp is None and ((today - last.date()).days <= 5 or (path == RECENT and time.time() - path.stat().st_mtime < 20 * 3600)):
+                    return _clean(d)
+                if stale_cache is None or last > stale_cache[0]:
+                    stale_cache = (last, d)
             except Exception as ex:
                 log.info("oslo cache %s: %s", path, ex)
     if not fetch:
-        return {}
+        return _clean(stale_cache[1]) if stale_cache else {}
     tick = universe_tickers()
     if not tick:
-        return {}
-    d = _http.yf_download(tick, period="14mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
+        return _clean(stale_cache[1]) if stale_cache else {}
+    try:
+        d = _http.yf_download(tick, period="14mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
+    except Exception as ex:
+        log.warning("oslo universe download failed, using freshest cache: %s", ex)
+        return _clean(stale_cache[1]) if stale_cache else {}
     out = {}
     for t in tick:
         try:

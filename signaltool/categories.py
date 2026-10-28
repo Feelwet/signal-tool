@@ -578,6 +578,12 @@ def apply(snap: dict, log_path=LOG_PATH, fetch=True) -> dict:
                   "cat_types": c["types"], "cat_flags": c["flags"], "cat_flag_keys": c["flag_keys"],
                   "cat_warnings": c["warnings"], "cat_info": c["info"], "cat_benchmark": c["benchmark"], "cat_via_tt": c["via_tt"]})
     logdf = append_log(snap, log_path)
+    if log_path == LOG_PATH:   # innkurs for ikke-loggbare tickere (ETF-er, BA.L): egen sidelogg, aldri i treffratene
+        try:
+            from . import since as _SN
+            _SN.append_entries(snap, set(logdf.loc[logdf["date"].astype(str) == str(snap["date"]), "ticker"]))
+        except Exception as ex:
+            log.warning("entry_prices: %s", ex)
     tr = track_record(logdf, {})
     matured = logdf[logdf["date"] <= (today - timedelta(days=7)).isoformat()] if len(logdf) else logdf
     if fetch and len(matured):

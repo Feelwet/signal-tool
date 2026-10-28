@@ -191,6 +191,14 @@ def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True, prices
     from .categories import _d
     today = _d(snap.get("date")) or date.today()
     prices = O.universe_prices(fetch=fetch, today=today) if prices is None else prices
+    if fetch and prices:   # AnalBot 28.10: temakart-tickere bak forventet Oslo-handelsdag hentes på nytt (freshness.py)
+        try:
+            from .freshness import repair_lagging
+            sub = {t: prices[t] for k in MAPS for t in oslo_tickers(k) + [BENCH] if t in prices}
+            repair_lagging(sub)
+            prices.update(sub)
+        except Exception as ex:
+            log.warning("theme maps freshness: %s", ex)
     meta, m = O.price_ranks(prices)
     if nw is None:
         nw = O.LAST_NW

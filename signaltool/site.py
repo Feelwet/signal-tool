@@ -459,7 +459,7 @@ def ticker_row(e, pre=""):
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"))}</td>'
-            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -513,7 +513,7 @@ def _prep(snap: dict) -> dict:
         e["_since"] = sin.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
-        e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"])
+        e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"], str(snap.get("date") or "") or None)
         if e.get("unranked") and e["_since"]:
             e["_since"] = {"since": e["_since"]["since"]}   # «Ikke rangert»: bare datoen, ingen tall
     try:
@@ -553,7 +553,7 @@ def _factor_fix(snap):
         old = s["price"]
         s["price"] = round(old * fc["factor"], 6); s["factor"] = fc["factor"]
         st = e.get("stats") or {}
-        e["_ret"] = SN.ret(s, st.get("close"), st.get("last_date"), idx, t)
+        e["_ret"] = SN.ret(s, st.get("close"), st.get("last_date"), idx, t, str(snap.get("date") or "") or None)
         flags.append({"date": str(snap.get("date")), "ticker": t, "type": "factor_adjusted_entry", "entry_date": s["price_date"],
                       "logged_price": old, "adjusted_price": s["price"], **fc})
     if flags:
@@ -732,7 +732,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
-{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since")) if e.get("_ret") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
+{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}

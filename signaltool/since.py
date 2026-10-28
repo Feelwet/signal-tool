@@ -22,11 +22,49 @@ def _dm(d: str) -> str:
     return f"{d[8:10]}.{d[5:7]}"
 
 
-def load(path: Path = LOG) -> list[dict]:
+ENTRY_LOG = LOGS / "entry_prices.csv"
+ENTRY_COLS = ["date", "ticker", "category", "price", "price_date"]
+
+
+def _read(path: Path) -> list[dict]:
     if not path.exists():
         return []
     with path.open(newline="") as f:
         return [r for r in csv.DictReader(f) if r.get("date") and r.get("ticker")]
+
+
+def load(path: Path = LOG, entry_path: Path | None = None) -> list[dict]:
+    """Rader fra fremoverloggen + innkurs-sideloggen (logs/entry_prices.csv) for tickere som ikke logges i categories.csv
+    (ETF-er, BA.L o.l.). Sideloggen brukes bare til «siden»/innkurs/avkastning på siden, aldri i treffrater eller GS-indeks."""
+    rows = _read(path)
+    if entry_path is None:
+        entry_path = ENTRY_LOG if path == LOG else None
+    if entry_path is not None:
+        have = {(r["date"], r["ticker"]) for r in rows}
+        rows += [r for r in _read(entry_path) if (r["date"], r["ticker"]) not in have]
+    return rows
+
+
+def append_entries(snap: dict, logged: set[str], path: Path = ENTRY_LOG) -> int:
+    """AnalBot 28.10: snapshot-tickere som ikke får rad i categories.csv (ikke loggbare) får innkurs (sluttkurs + price_date)
+    i sideloggen. Bare dagens rader skrives (en ny kjøring samme dag erstatter dem); rader for andre datoer røres aldri."""
+    day = str(snap.get("date") or "")
+    if not day:
+        return 0
+    new = []
+    for e in snap.get("tickers", []):
+        st = e.get("stats") or {}
+        if e["ticker"] in logged or st.get("close") in (None, "") or st.get("close") != st.get("close"):
+            continue
+        new.append({"date": day, "ticker": e["ticker"], "category": e.get("category") or "", "price": round(float(st["close"]), 4),
+                    "price_date": str(st.get("last_date") or "")[:10]})
+    old = [r for r in _read(path) if r["date"] != day]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=ENTRY_COLS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(old + new)
+    return len(new)
 
 
 def compute(rows: list[dict], today: str | None = None) -> dict:
@@ -98,6 +136,8 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
     if ret and ret.get("r") is not None:
         t += (f'<span class="sl-r">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span><button type="button" class="rt-i" aria-expanded="false" '
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
+    elif ret and ret.get("stale"):
+        t += f'<span class="sl-r rst">&nbsp;·&nbsp;–</span>{ri(ret_tip(ret))}'
     return f'<p class="since mut rk-line">{lead}{t}</p>'
 
 
@@ -108,8 +148,9 @@ NOTE_T = ("Avkastningen er regnet fra sluttkursen dagen aksjen kom på lista (in
 NOTE = NOTE_T.replace(" (inn {dm})", "")   # felles (i) i kolonneoverskriften: ingen enkeltdato
 
 
-def tip_html(s: dict | None) -> str:
-    return f'<p id="rt-tip" class="rk-tip" hidden>{E(note_for(s))} <a href="../metode.html#laering">Slik bruker vi dette tallet ›</a></p>'
+def tip_html(s: dict | None, r: dict | None = None) -> str:
+    k = ret_tip(r, s) if r and r.get("last") and not r.get("stale") else ""
+    return f'<p id="rt-tip" class="rk-tip" hidden>{E(k + ". ") if k else ""}{E(note_for(s))} <a href="../metode.html#laering">Slik bruker vi dette tallet ›</a></p>'
 
 
 def note_for(s: dict | None) -> str:
@@ -142,11 +183,17 @@ def pp(x: float) -> str:
     return f"{x*100:+.1f} pp".replace(".", ",").replace("-", "−")
 
 
-def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, ticker: str = "") -> dict | None:
+def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, ticker: str = "", run_date: str | None = None) -> dict | None:
     """Avkastning fra innkurs (sluttkurs på price_date) til siste sluttkurs. None ved manglende data eller < 5 dager på lista.
-    Meravkastning (prosentpoeng) mot hovedindeksen på tickerens børs over samme datoer, bare med ekte indeksdata for begge datoene."""
+    Meravkastning (prosentpoeng) mot hovedindeksen på tickerens børs over samme datoer, bare med ekte indeksdata for begge datoene.
+    AnalBot 28.10: «last» = datoen for siste sluttkurs; er den mer enn 2 handelsdager eldre enn kjøringsdatoen (run_date),
+    skjules tallet (r = None, stale = True)."""
     if not s or s.get("price") in (None, 0) or close in (None, 0) or s.get("list_days", 0) < MIN_DAYS:
         return None
+    from .freshness import is_stale
+    last = str(last_date)[:10] if last_date else None
+    if run_date and is_stale(last, run_date):
+        return {"r": None, "ex": None, "bench": None, "illiquid": bool(s.get("illiquid")), "stale": True, "last": last}
     r = float(close) / float(s["price"]) - 1
     ex, bn = None, None
     b = bench_for(ticker)
@@ -155,24 +202,47 @@ def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, t
         ser = (idx or {}).get(b[0])
         if ser and s.get("price_date") and last_date and s["price_date"] in ser and last_date in ser:
             ex = r - (ser[last_date] / ser[s["price_date"]] - 1)
-    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid"))}
+    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid")), "stale": False, "last": last}
 
 
 def _cls(x):
     return "rup" if x > 0.0005 else "rdn" if x < -0.0005 else "r0"
 
 
-def ret_inner(r: dict | None) -> str:
-    if not r:
-        return "–"
+NO_ENTRY = "Ingen innkurs ennå"
+
+
+def ri(text: str) -> str:
+    """Eksisterende ⓘ-mønster (som i kolonneoverskriften), kompakt variant i tabellcellen."""
+    return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">ⓘ<span class="tip">{E(text)}</span></span>'
+
+
+def ret_tip(r: dict | None, s: dict | None = None) -> str:
+    """Tooltip-tekst: «Kurs per DD.MM», «Kurs mangler etter DD.MM» eller «Ingen innkurs ennå»."""
+    if r and r.get("stale"):
+        return f"Kurs mangler etter {_dm(r['last'])}" if r.get("last") else "Kurs mangler"
+    if r and r.get("last"):
+        return f"Kurs per {_dm(r['last'])}"
+    if not r and (not s or s.get("price") in (None, 0)):
+        return NO_ENTRY
+    return ""
+
+
+def ret_inner(r: dict | None, s: dict | None = None) -> str:
+    tip = ret_tip(r, s)
+    if not r or r.get("r") is None:
+        cls = "rv rst" if r and r.get("stale") else "rv rna"
+        return f'<span class="{cls}">–</span>' + (ri(tip) if tip else "")
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
-    return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{w}{ex}'
+    return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(tip) if tip else ""}{w}{ex}'
 
 
-def ret_cell(r: dict | None) -> str:
-    v = f"{r['r']:.6f}" if r else ""
-    return f'<td class="ret-c" data-v="{v}">{ret_inner(r)}</td>'
+def ret_cell(r: dict | None, s: dict | None = None) -> str:
+    v = f"{r['r']:.6f}" if r and r.get("r") is not None else ""
+    st = ' data-stale="1"' if r and r.get("stale") else ""
+    lt = f' data-last="{E(r["last"])}"' if r and r.get("last") else ""
+    return f'<td class="ret-c" data-v="{v}"{st}{lt}>{ret_inner(r, s)}</td>'
 
 
 def cell(s: dict | None) -> str:
@@ -184,11 +254,11 @@ def cell(s: dict | None) -> str:
 def mobile(s: dict | None, r: dict | None = None) -> str:
     if not s:
         return ""
-    return f'<span class="since-m">siden {_dm(s["since"])}{"<span class=ret-m>" + ret_inner(r) + "</span>" if r else ""}</span>' 
+    return f'<span class="since-m">siden {_dm(s["since"])}{"<span class=ret-m>" + ret_inner(r, s) + "</span>" if r else ""}</span>' 
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline}.ri.ri-c .tip{width:180px}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
