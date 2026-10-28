@@ -364,6 +364,20 @@
 "kind": "makro"
 },
 {
+"date": "2026-11-11",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-11-11",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
 "date": "2026-11-12",
 "time": "",
 "source": "Yahoo",
@@ -375,6 +389,13 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport NVDA",
+"kind": "resultat"
+},
+{
+"date": "2026-11-18",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport HAFNI.OL",
 "kind": "resultat"
 },
 {
