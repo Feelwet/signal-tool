@@ -249,12 +249,14 @@ def test_entry_line_shown_price_equals_return_basis():
     s["price"] = 109.52 * 1.0                                            # samme objekt som ret() bruker
     r = S.ret(s, 120.0, "2026-10-28", {}, "A", "2026-10-28")
     m = S.mobile(s, r, "USD")
+    txt = lambda h: re.sub(r"<span class=\"tip\">.*?</span>", "", h).replace("<span class=\"nw\">", "").replace("</span>", "")
     shown = float(re.search(r"inn ([\d ]+,\d\d) USD", m).group(1).replace(" ", "").replace(",", "."))
     assert shown == round(s["price"], 2) and abs(r["r"] - (120.0 / shown - 1)) < 1e-4
-    assert 'siden 28.10<span class=inn-m><span class="ri ri-c"' in m and "inn 109,52 USD (27.10)" in m and "Sluttkurs 27.10, brukt som innkurs" in m
+    assert 'siden 28.10<span class=inn-m><span class="ri ri-c"' in m and "inn 109,52 USD (27.10)" in txt(m) and "Sluttkurs 27.10, brukt som innkurs" in m
+    assert '<span class="nw">inn 109,52 USD</span> <span class="nw">(27.10)</span>' in m
     c = S.cell(s, "USD")
-    assert c.startswith('<td class="since-c" data-v="2026-10-28" data-sort="2026-10-28">siden 28.10<span class=inn-d> · ') and "inn 109,52 USD (27.10)" in c
-    assert "inn 109,52 (27.10)" in S.cell(s, "")                         # ukjent valuta: uten valuta
+    assert c.startswith('<td class="since-c" data-v="2026-10-28" data-sort="2026-10-28">siden 28.10<span class=inn-d> · ') and "inn 109,52 USD (27.10)" in txt(c)
+    assert "inn 109,52 (27.10)" in txt(S.cell(s, ""))                         # ukjent valuta: uten valuta
     assert "inn " not in S.cell({"since": "2026-10-28"}) and S.mobile({"since": "2026-10-28"}) == '<span class="since-m">siden 28.10</span>'
     assert "font-variant-numeric:tabular-nums" in S.CSS
 
