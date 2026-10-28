@@ -39,8 +39,14 @@ def status() -> str:
     return f'<p class="catdisc rk-status">{E(STATUS)}</p>'
 
 
+NA_TIP = "Risikonivå mangler data"
+
+
 def cell(r: dict | None) -> str:
     lv = (r or {}).get("level")
+    if lv not in ORDER:   # UxBot 28.10: «–» beholdes, ⓘ-tooltip som i avkastningscellen
+        return (f'<td class="rk-c" data-v=""><span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{NA_TIP}">'
+                f'<span class="rk rk-na rk-s" title="{NA_TIP}">–</span>ⓘ<span class="tip">{NA_TIP}</span></span></td>')
     return f'<td class="rk-c" data-v="{ORDER.get(lv, "")}">{chip(r, small=True, bare=True)}</td>'
 
 

@@ -195,7 +195,7 @@ def apply(snap: dict, nw: pd.DataFrame | None = None, fetch: bool = True, prices
         try:
             from .freshness import repair_lagging
             sub = {t: prices[t] for k in MAPS for t in oslo_tickers(k) + [BENCH] if t in prices}
-            repair_lagging(sub)
+            repair_lagging(sub, scope="universe")
             prices.update(sub)
         except Exception as ex:
             log.warning("theme maps freshness: %s", ex)

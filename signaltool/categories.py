@@ -584,6 +584,18 @@ def apply(snap: dict, log_path=LOG_PATH, fetch=True) -> dict:
             _SN.append_entries(snap, set(logdf.loc[logdf["date"].astype(str) == str(snap["date"]), "ticker"]))
         except Exception as ex:
             log.warning("entry_prices: %s", ex)
+        try:   # AnalBot 28.10: kilde for siste sluttkurs per rad (logs/price_source.csv)
+            from . import freshness as _FR
+            today_rows = logdf[logdf["date"].astype(str) == str(snap["date"])]
+            ps = [{"ticker": r["ticker"], "price_date": r["price_date"], "close": r["price"],
+                   "source": _FR.source_of(r["ticker"], "universe" if r["category"] == "tema" else "markets")}
+                  for _, r in today_rows.iterrows() if str(r["price"]) not in ("", "nan", "None")]
+            have = {p["ticker"] for p in ps}
+            ps += [{"ticker": r["ticker"], "price_date": r["price_date"], "close": r["price"], "source": _FR.source_of(r["ticker"])}
+                   for r in _SN._read(_SN.ENTRY_LOG) if r["date"] == str(snap["date"]) and r["ticker"] not in have]
+            _FR.write_price_source(str(snap["date"]), ps)
+        except Exception as ex:
+            log.warning("price_source: %s", ex)
     tr = track_record(logdf, {})
     matured = logdf[logdf["date"] <= (today - timedelta(days=7)).isoformat()] if len(logdf) else logdf
     if fetch and len(matured):

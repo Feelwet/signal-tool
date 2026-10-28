@@ -132,7 +132,11 @@ def _meta_close(ticker: str):
     return (ts.tz_convert(tz or "UTC").date(), float(px))
 
 
-def repair_lagging(frames: dict, now: datetime | None = None, refetch=None, meta=None, max_meta: int = 80) -> dict:
+SOURCES: dict[tuple[str, str], str] = {}   # (scope, ticker) -> "refetch" | "meta"; mangler = vanlig dagsbar ("daily")
+PS_COLS = ["date", "ticker", "price_date", "close", "source"]
+
+
+def repair_lagging(frames: dict, now: datetime | None = None, refetch=None, meta=None, max_meta: int = 80, scope: str = "markets") -> dict:
     """Henter tickere som ligger bak forventet handelsdag på nytt (in place i `frames`). Returnerer
     {"lagging": n, "refetched": [...], "meta": [...], "still": {t: siste}}."""
     now = now or datetime.now(ZoneInfo("Europe/Oslo"))
@@ -150,7 +154,7 @@ def repair_lagging(frames: dict, now: datetime | None = None, refetch=None, meta
         if t in got:
             frames[t] = _merge(frames[t], got[t], last)
             if (_last(frames[t]) or last) > last:
-                info["refetched"].append(t)
+                info["refetched"].append(t); SOURCES[(scope, t)] = "refetch"
     meta = meta or _meta_close
     for t, (last, exp) in list(lagging({t: frames[t] for t in lag}, now).items())[:max_meta]:
         try:
@@ -164,7 +168,7 @@ def repair_lagging(frames: dict, now: datetime | None = None, refetch=None, meta
                 ts = ts.tz_localize(df.index.tz)
             row = pd.DataFrame({c: [mc[1] if c in ("Close", "Open", "High", "Low") else np.nan] for c in df.columns}, index=[ts])
             frames[t] = pd.concat([df, row]).sort_index()
-            info["meta"].append(t)
+            info["meta"].append(t); SOURCES[(scope, t)] = "meta"
     for t, (last, exp) in lagging({t: frames[t] for t in lag}, now).items():
         info["still"][t] = str(last)
     log.info("freshness: hentet på nytt %s, fra metadata %s, fortsatt bak %s", info["refetched"], info["meta"], info["still"])
@@ -176,3 +180,27 @@ def summary(info: dict) -> str:
         return ""
     return (f"; ferskhet: {info['lagging']} bak forventet dag, {len(info['refetched'])} hentet på nytt, "
             f"{len(info['meta'])} fra Yahoo-metadata, {len(info['still'])} fortsatt bak")
+
+
+def source_of(ticker: str, scope: str = "markets") -> str:
+    return SOURCES.get((scope, ticker), "daily")
+
+
+def write_price_source(day: str, rows: list[dict], path=None) -> int:
+    """AnalBot 28.10: kilden til siste sluttkurs per rad (daily = dagsbar i det samlede kallet, refetch = hentet på nytt med
+    start/slutt, meta = Yahoo chart-metadata). Bare dagens rader skrives (ny kjøring samme dag erstatter); andre datoer røres ikke.
+    rows: [{"ticker", "price_date", "close", "source"}]."""
+    import csv
+    from pathlib import Path
+    from .config import LOGS
+    path = Path(path or LOGS / "price_source.csv")
+    old = []
+    if path.exists():
+        with path.open(newline="") as f:
+            old = [r for r in csv.DictReader(f) if r.get("date") and r["date"] != day]
+    new = [{"date": day, **{k: r.get(k) for k in PS_COLS[1:]}} for r in rows]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=PS_COLS, extrasaction="ignore")
+        w.writeheader(); w.writerows(old + new)
+    return len(new)

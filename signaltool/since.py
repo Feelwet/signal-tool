@@ -121,7 +121,7 @@ def line(s: dict | None, chip: str = "", ret: dict | None = None) -> str:
         n = s["days"]
         parts.append(f"{n} {'dag' if n == 1 else 'dager'}")
     if ret and ret.get("r") is not None:
-        parts.append(pct(ret["r"]))
+        parts.append(NEW_T if ret.get("new") else pct(ret["r"]))
     return f'<p class="since mut">{chip + " " if chip else ""}{E(" · ".join(parts))}</p>'
 
 
@@ -133,7 +133,9 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
         if s.get("price") is not None:
             parts.append(f"inn {_price(s['price'])}" + (f" ({_dm(s['price_date'])})" if s.get("price_date") else ""))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
-    if ret and ret.get("r") is not None:
+    if ret and ret.get("new"):
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(NEW_TIP)}'
+    elif ret and ret.get("r") is not None:
         t += (f'<span class="sl-r">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span><button type="button" class="rt-i" aria-expanded="false" '
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
     elif ret and ret.get("stale"):
@@ -202,7 +204,9 @@ def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, t
         ser = (idx or {}).get(b[0])
         if ser and s.get("price_date") and last_date and s["price_date"] in ser and last_date in ser:
             ex = r - (ser[last_date] / ser[s["price_date"]] - 1)
-    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid")), "stale": False, "last": last}
+    # UxBot/AnalBot 28.10: kom på lista i dag (innkursdato = siste kursdato) -> «Ny i dag», sorteres som tom
+    new = bool(last and s.get("price_date") and str(s["price_date"])[:10] == last)
+    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid")), "stale": False, "last": last, "new": new}
 
 
 def _cls(x):
@@ -212,9 +216,13 @@ def _cls(x):
 NO_ENTRY = "Ingen innkurs ennå"
 
 
-def ri(text: str) -> str:
-    """Eksisterende ⓘ-mønster (som i kolonneoverskriften), kompakt variant i tabellcellen."""
-    return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">ⓘ<span class="tip">{E(text)}</span></span>'
+def ri(text: str, label: str = "") -> str:
+    """Eksisterende ⓘ-mønster (som i kolonneoverskriften), kompakt variant i tabellcellen. `label` (f.eks. «Ny i dag» eller «–»)
+    ligger inne i trykkflaten, så et trykk på teksten åpner samme popover som ⓘ (UxBot 28.10)."""
+    return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">{label}ⓘ<span class="tip">{E(text)}</span></span>'
+
+
+NEW_T, NEW_TIP = "Ny i dag", "Avkastning vises fra neste handelsdag"
 
 
 def ret_tip(r: dict | None, s: dict | None = None) -> str:
@@ -232,16 +240,19 @@ def ret_inner(r: dict | None, s: dict | None = None) -> str:
     tip = ret_tip(r, s)
     if not r or r.get("r") is None:
         cls = "rv rst" if r and r.get("stale") else "rv rna"
-        return f'<span class="{cls}">–</span>' + (ri(tip) if tip else "")
+        return ri(tip, f'<span class="{cls}">–</span>') if tip else f'<span class="{cls}">–</span>'
+    if r.get("new"):
+        return ri(NEW_TIP, f'<span class="rnew">{NEW_T}</span>')
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
     return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(tip) if tip else ""}{w}{ex}'
 
 
 def ret_cell(r: dict | None, s: dict | None = None) -> str:
-    v = f"{r['r']:.6f}" if r and r.get("r") is not None else ""
+    v = f"{r['r']:.6f}" if r and r.get("r") is not None and not r.get("new") else ""
     st = ' data-stale="1"' if r and r.get("stale") else ""
     lt = f' data-last="{E(r["last"])}"' if r and r.get("last") else ""
+    lt += ' data-new="1"' if r and r.get("new") else ""
     return f'<td class="ret-c" data-v="{v}"{st}{lt}>{ret_inner(r, s)}</td>'
 
 
@@ -258,7 +269,7 @@ def mobile(s: dict | None, r: dict | None = None) -> str:
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline}.ri.ri-c .tip{width:180px}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:11px;color:#94a3b8;white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:11px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:var(--mut);font-size:.8em}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
@@ -282,7 +293,8 @@ place(tb,rows);tb.querySelectorAll('th.sortable').forEach(o=>o!==h&&o.removeAttr
 h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 const sp=new URL(location.href).searchParams.get('sort'),sh=document.querySelector('#tf-table th.since-h');
 if(sh&&(sp==='dato_desc'||sp==='dato_asc'))sortDato(sh,sp==='dato_desc'?'descending':'ascending');
-document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));const riX=()=>document.querySelectorAll('.ri[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.ri'))riX()});document.addEventListener('keydown',e=>{if(e.key==='Escape')riX()});
+const riPos=b=>{const t=b.querySelector('.tip');if(!t||!b.classList.contains('ri-c'))return;t.classList.add('pop');const r=b.getBoundingClientRect(),w=Math.min(260,innerWidth-16);t.style.maxWidth=w+'px';const tw=Math.min(t.offsetWidth||w,w);t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,innerWidth-tw-8))+'px';t.style.top=(r.bottom+6)+'px'};
+document.querySelectorAll('.ri').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const o=b.getAttribute('aria-expanded')==='true';document.querySelectorAll('.ri[aria-expanded=true]').forEach(x=>x!==b&&x.setAttribute('aria-expanded','false'));b.setAttribute('aria-expanded',o?'false':'true');if(!o)riPos(b)}));addEventListener('scroll',()=>document.querySelectorAll('.ri.ri-c[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false')),{passive:true});const riX=()=>document.querySelectorAll('.ri[aria-expanded=true]').forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.ri'))riX()});document.addEventListener('keydown',e=>{if(e.key==='Escape')riX()});
 document.querySelectorAll('tr.rowlink').forEach(r=>{const skip=e=>e.target.closest('a,button,input,label,.ri,.mstar');
 const go=(e,nt)=>{if(skip(e))return;const u=r.dataset.href;if(nt||e.ctrlKey||e.metaKey||e.shiftKey)window.open(u,'_blank','noopener');else location.href=u};
 r.addEventListener('click',e=>go(e,false));r.addEventListener('auxclick',e=>{if(e.button===1){e.preventDefault();go(e,true)}});

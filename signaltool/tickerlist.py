@@ -27,11 +27,11 @@ CSS = """
 #tf-table th:nth-child(4),#tf-table td:nth-child(4){display:none}#tf-table .why,#tf-table .mer,#tf-table td:first-child .mut{display:none}#tf-table td{padding:6px 4px;white-space:nowrap;font-size:.9em}#tf-table th{padding:6px 4px}}
 """
 
-JS = """<script>(()=>{const F=['mine','alle','hoy','middels','lav','flagg'],NM={mine:'★ Mine',alle:'Alle',hoy:'Risiko Høy',middels:'Risiko Middels',lav:'Risiko Lav',flagg:'Røde flagg'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
+JS = """<script>(()=>{const F=['mine','alle','hoy','middels','lav','flagg'].concat(document.querySelector('.tf-row button[data-f=ny]')?['ny']:[]),NM={mine:'★ Mine',alle:'Alle',hoy:'Risiko Høy',middels:'Risiko Middels',lav:'Risiko Lav',flagg:'Røde flagg',ny:'Ny i dag'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
 let cur='alle';function mine(){return window.STMine?window.STMine.load():[]}
 function set(f,push){if(!F.includes(f))f='alle';cur=f;B.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f?'true':'false'));
 const fl=f==='flagg';if(G)G.hidden=!fl;if(T)T.hidden=fl;let n=0;const M=mine();
-document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||(f==='mine'?M.includes(r.dataset.t):r.dataset.cat===({hoy:'Høy',middels:'Middels',lav:'Lav'})[f]);r.hidden=!on;if(on)n++});
+document.querySelectorAll('#tf-table tr[data-cat]').forEach(r=>{const on=f==='alle'||(f==='mine'?M.includes(r.dataset.t):f==='ny'?!!r.querySelector('td.ret-c[data-new]'):r.dataset.cat===({hoy:'Høy',middels:'Middels',lav:'Lav'})[f]);r.hidden=!on;if(on)n++});
 if(fl&&G)n=G.querySelectorAll('.rfr').length;
 if(P){P.hidden=n>0;P.textContent=f==='mine'?'""" + EMPTY + """':'Ingen tickere i '+NM[f]+' nå.';if(fl&&G)G.after(P);else if(T)T.prepend(P)}
 if(push){const u=new URL(location.href);if(f==='alle')u.searchParams.delete('filter');else u.searchParams.set('filter',f);history.replaceState(null,'',u)}}
@@ -61,11 +61,17 @@ def nokurs(e: dict) -> str:
     return "" if (e.get("stats") or {}).get("close") is not None else '<span class="nokurs">Ingen kursdata</span>'
 
 
+def n_new(snap: dict) -> int:
+    """Rader der innkursdato = siste kursdato (samme regel som «Ny i dag» i avkastningscellen)."""
+    return sum(1 for e in snap.get("tickers", []) if (e.get("_ret") or {}).get("new") and not e.get("unranked"))
+
+
 def filter_row(snap: dict) -> str:
-    n = len(EV.red_rows(snap))
+    n, nn = len(EV.red_rows(snap)), n_new(snap)
+    ny = f'<button type="button" data-f="ny" aria-pressed="false">Ny i dag ({nn})</button>' if nn else ""   # UxBot 28.10: sist, skjult når 0
     return '<div class="tf-wrap"><div class="tf-row" role="group" aria-label="Filter">' + "".join(
         f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ' (<span class="mine-n">0</span>)' if k == "mine" else ""}</button>'
-        for k, lab in FILTERS) + "</div></div>" + FADE_JS
+        for k, lab in FILTERS) + ny + "</div></div>" + FADE_JS
 
 
 def flag_block(snap: dict) -> str:

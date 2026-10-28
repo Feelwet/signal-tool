@@ -158,3 +158,69 @@ def test_entry_sidelog_same_day_only(tmp_path):
 def test_entry_sidelog_not_in_track_record():
     from signaltool import categories as C
     assert "entry_prices" not in C.LOG_PATH.name and C.LOG_PATH.name == "categories.csv"
+
+
+def test_ny_i_dag_replaces_whole_cell_and_sorts_empty():
+    s = dict(S0, price_date="2026-10-28")
+    r = S.ret(s, 10.0, "2026-10-28", {"OSEBX.OL": {"2026-10-28": 1.0}}, "DNB.OL", "2026-10-28")
+    c = S.ret_cell(r, s)
+    assert r["new"] and 'data-v=""' in c and 'data-new="1"' in c
+    assert '<span class="rnew">Ny i dag</span>' in c and "Avkastning vises fra neste handelsdag" in c and 'class="ri ri-c"' in c
+    assert "+0,0" not in c and "rex" not in c and "vs " not in c and "pp" not in c
+    assert "Ny i dag" in S.line(s, "", r) and "+0,0" not in S.line(s, "", r)
+    assert "Ny i dag" in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
+    assert ".rnew{font-size:11px;color:#94a3b8" in S.CSS
+    old = S.ret(S0, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28")       # innkurs 30.09: vanlig tall, også +0,0 %
+    assert not old["new"] and "+0,0 %" in S.ret_cell(old, S0) and "Ny i dag" not in S.ret_cell(old, S0)
+
+
+def test_rk_na_cell_tooltip():
+    from signaltool import site_risk as RK
+    c = RK.cell(None)
+    assert ">–</span>" in c and 'title="Risikonivå mangler data"' in c and '<span class="tip">Risikonivå mangler data</span>' in c
+    assert 'data-v=""' in c and "Risikonivå mangler data" not in RK.cell({"level": "Lav"})
+
+
+def test_price_source_log_same_day_only(tmp_path):
+    p = tmp_path / "price_source.csv"
+    F.SOURCES.clear()
+    now = datetime(2026, 10, 28, 7, 1, tzinfo=OSLO)
+    fr = {"DNB.OL": _df(["2026-10-23", "2026-10-26"]), "NHY.OL": _df(["2026-10-23", "2026-10-26"]), "LMT": _df(["2026-10-26", "2026-10-27"])}
+    F.repair_lagging(fr, now, refetch=lambda *a: {"NHY.OL": _df(["2026-10-27"])}, meta={"DNB.OL": (date(2026, 10, 27), 324.9)}.get)
+    assert (F.source_of("DNB.OL"), F.source_of("NHY.OL"), F.source_of("LMT")) == ("meta", "refetch", "daily")
+    assert F.source_of("DNB.OL", "universe") == "daily"
+    F.write_price_source("2026-10-27", [{"ticker": "DNB.OL", "price_date": "2026-10-27", "close": 324.0, "source": "daily"}], p)
+    rows = [{"ticker": t, "price_date": "2026-10-27", "close": 1.0, "source": F.source_of(t)} for t in ("DNB.OL", "NHY.OL")]
+    F.write_price_source("2026-10-28", rows, p)
+    F.write_price_source("2026-10-28", rows, p)                         # ny kjøring samme dag erstatter
+    got = list(csv.DictReader(p.open()))
+    assert [(r["date"], r["ticker"], r["source"]) for r in got] == [("2026-10-27", "DNB.OL", "daily"), ("2026-10-28", "DNB.OL", "meta"), ("2026-10-28", "NHY.OL", "refetch")]
+    assert list(got[0]) == F.PS_COLS
+    F.SOURCES.clear()
+
+
+def test_workflow_commits_new_logs():
+    from pathlib import Path
+    wf = (Path(__file__).resolve().parent.parent / ".github" / "workflows" / "nightly.yml").read_text()
+    files = [l for l in wf.splitlines() if l.strip().startswith("FILES=")][0]
+    for f in ("logs/entry_prices.csv", "logs/price_source.csv", "logs/source_fallback.csv"):
+        assert f in files
+
+
+def test_filter_ny_i_dag_last_hidden_when_zero():
+    from signaltool import tickerlist as TL
+    assert 'data-f="ny"' not in TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": False}}]})
+    h = TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": True}}, {"ticker": "B", "_ret": {"new": True}}, {"ticker": "C", "_ret": None}]})
+    assert '<button type="button" data-f="ny" aria-pressed="false">Ny i dag (2)</button></div></div>' in h
+    assert "f==='ny'?!!r.querySelector('td.ret-c[data-new]')" in TL.JS and "ny:'Ny i dag'" in TL.JS
+
+
+def test_popover_trigger_wraps_text_and_name_clamp():
+    from signaltool import names as NM
+    s = dict(S0, price_date="2026-10-28")
+    c = S.ret_cell(S.ret(s, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28"), s)
+    assert '<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="Avkastning vises fra neste handelsdag"><span class="rnew">Ny i dag</span>ⓘ' in c
+    st = S.ret_cell(S.ret(S0, 11.0, "2026-10-23", {}, "DNB.OL", "2026-10-28"), S0)
+    assert 'aria-label="Kurs mangler etter 23.10"><span class="rv rst">–</span>ⓘ' in st
+    assert "max-width:260px;font-size:13px" in S.CSS and "width:max(100%,32px);height:max(100%,32px)" in S.CSS and "riPos" in S.JS
+    assert "-webkit-line-clamp:2" in NM.CSS and 'title="DNB Bank ASA"' in NM.cell("DNB.OL", "x.html", "DNB Bank ASA")

@@ -36,6 +36,7 @@ def exchange(ticker: str) -> str | None:
 
 
 CSS = """
+#tf-table .tn .nm{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .tn{display:inline-flex;flex-direction:column;min-width:0;white-space:normal;line-height:1.25}.tn .nm{font-weight:700;overflow-wrap:anywhere}
 .tn .tk{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}.tn .tk a.tv{font-family:inherit}
 .thead{margin:0 0 8px}.thead .nm1{font-size:24px;font-weight:700;line-height:1.2;margin:0;overflow-wrap:anywhere}
@@ -53,7 +54,7 @@ def cell(ticker: str, href: str | None = None, fallback: str | None = None, extr
     if not n:
         return f'<span class="tn"><span class="nm">{tk}</span><span class="tk">{SEC.tv_ext(ticker).strip()}{extra}</span></span>'
     nm = f'<a href="{E(href)}">{E(n)}</a>' if href else E(n)
-    return f'<span class="tn"><span class="nm">{nm}</span><span class="tk">{E(ticker)}{SEC.tv_ext(ticker)}{extra}</span></span>'
+    return f'<span class="tn"><span class="nm" title="{E(n)}">{nm}</span><span class="tk">{E(ticker)}{SEC.tv_ext(ticker)}{extra}</span></span>'
 
 
 def header(ticker: str, fallback: str | None = None, after: str = "", star: str = "") -> str:
