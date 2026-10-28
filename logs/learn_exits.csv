@@ -199,3 +199,8 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-28,MORLD.OL,2026-10-27,score0,,,,,,40767937418,false
 2026-10-28,NEL.OL,2026-10-27,score0,,,,,,40767937418,false
 2026-10-28,T,2026-10-27,cut60,67,0.5,,,,40767937418,false
+2026-10-28,MORLD.OL,2026-10-27,score0,,,,,,40772402270,false
+2026-10-28,NEL.OL,2026-10-27,score0,,,,,,40772402270,false
+2026-10-28,NOC,2026-10-27,"lik score, kutt 60",61,0.5,3,1,BCPC:på:1|BRUT.OL:på:1|GD:på:1|KOG.OL:på:1|LHX:på:1,40772402270,false
+2026-10-28,RTX,2026-10-27,"lik score, kutt 60",62,0.5,3,1,BCPC:på:1|BRUT.OL:på:1|GD:på:1|KOG.OL:på:1|LHX:på:1,40772402270,false
+2026-10-28,T,2026-10-27,"lik score, kutt 60",63,0.5,3,1,BCPC:på:1|BRUT.OL:på:1|GD:på:1|KOG.OL:på:1|LHX:på:1,40772402270,false
