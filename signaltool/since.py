@@ -207,7 +207,7 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
             parts.append(inn_text(s))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
     if ret and ret.get("new"):
-        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(NEW_TIP)}'
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(new_tip(s))}'
     elif ret and ret.get("r") is not None:
         t += (f'<span class="sl-r">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span><button type="button" class="rt-i" aria-expanded="false" '
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
@@ -295,7 +295,14 @@ def ri(text: str, label: str = "", glyph: bool = True) -> str:
     return f'<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{E(text)}">{label}{"ⓘ" if glyph else ""}<span class="tip">{E(text)}</span></span>'
 
 
-NEW_T, NEW_TIP = "Ny i dag", "Avkastning vises fra neste handelsdag"
+# UxBot 29.10 (kun tekst, logikk uendret): «Ny i dag» -> «Venter på første sluttkurs» (12 px); ⓘ med tickerens innkursdato (price_date).
+NEW_T = "Venter på første sluttkurs"
+NEW_TIP = "Avkastning vises etter første sluttkurs etter inntak."
+
+
+def new_tip(s: dict | None) -> str:
+    d = (s or {}).get("price_date")   # AnalBot 29.10: tickerens egen innkursdato
+    return f"Avkastning vises etter første sluttkurs etter inntak ({_dm(d)})." if d else NEW_TIP
 
 
 def ret_tip(r: dict | None, s: dict | None = None) -> str:
@@ -317,7 +324,7 @@ def ret_inner(r: dict | None, s: dict | None = None) -> str:
         cls = "rv rst" if r and r.get("stale") else "rv rna"
         return ri(tip, f'<span class="{cls}">–</span>') if tip else f'<span class="{cls}">–</span>'
     if r.get("new"):
-        return ri(NEW_TIP, f'<span class="rnew">{NEW_T}</span>')
+        return ri(new_tip(s), f'<span class="rnew">{NEW_T}</span>')
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
     return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(tip) if tip else ""}{w}{ex}'
@@ -349,7 +356,7 @@ def mobile(s: dict | None, r: dict | None = None, cur: str = "") -> str:
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:11px;color:#94a3b8;white-space:nowrap}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:11px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}

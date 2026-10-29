@@ -27,7 +27,7 @@ CSS = """
 #tf-table th:nth-child(4),#tf-table td:nth-child(4){display:none}#tf-table .why,#tf-table .mer,#tf-table td:first-child .mut{display:none}#tf-table td{padding:6px 4px;white-space:nowrap;font-size:.9em}#tf-table th{padding:6px 4px}}
 """
 
-JS = """<script>(()=>{const F=['mine','alle','hoy','middels','lav','flagg'].concat(document.querySelector('.tf-row button[data-f=ny]')?['ny']:[]),NM={mine:'★ Mine',alle:'Alle',hoy:'Risiko Høy',middels:'Risiko Middels',lav:'Risiko Lav',flagg:'Røde flagg',ny:'Ny i dag'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
+JS = """<script>(()=>{const F=['mine','alle','hoy','middels','lav','flagg'].concat(document.querySelector('.tf-row button[data-f=ny]')?['ny']:[]),NM={mine:'★ Mine',alle:'Alle',hoy:'Risiko Høy',middels:'Risiko Middels',lav:'Risiko Lav',flagg:'Røde flagg',ny:'Ingen avkastning ennå'},B=[...document.querySelectorAll('.tf-row button')],T=document.getElementById('tf-table'),G=document.getElementById('tf-flag'),P=document.getElementById('tf-empty');
 let cur='alle';function mine(){return window.STMine?window.STMine.load():[]}
 function set(f,push){if(!F.includes(f))f='alle';cur=f;B.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f?'true':'false'));
 const fl=f==='flagg';if(G)G.hidden=!fl;if(T)T.hidden=fl;let n=0;const M=mine();
@@ -68,7 +68,7 @@ def n_new(snap: dict) -> int:
 
 def filter_row(snap: dict) -> str:
     n, nn = len(EV.red_rows(snap)), n_new(snap)
-    ny = f'<button type="button" data-f="ny" aria-pressed="false">Ny i dag ({nn})</button>' if nn else ""   # UxBot 28.10: sist, skjult når 0
+    ny = f'<button type="button" data-f="ny" aria-pressed="false">Ingen avkastning ennå ({nn})</button>' if nn else ""   # UxBot 28.10: sist, skjult når 0
     return '<div class="tf-wrap"><div class="tf-row" role="group" aria-label="Filter">' + "".join(
         f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ' (<span class="mine-n">0</span>)' if k == "mine" else ""}</button>'
         for k, lab in FILTERS) + ny + "</div></div>" + FADE_JS

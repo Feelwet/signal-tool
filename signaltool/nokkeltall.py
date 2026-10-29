@@ -109,7 +109,7 @@ CSS = """.nk{display:grid;grid-template-columns:repeat(4,1fr);column-gap:24px}
 #nokkeltall .nk{gap:8px}#nokkeltall .nk .r{height:auto;min-height:60px;padding:8px 10px;gap:2px;background:#111821;border:0;border-radius:6px;box-sizing:border-box}
 #nokkeltall .nk .l{font-size:12px;line-height:16px;text-transform:uppercase;letter-spacing:.03em;color:#cbd5e1}#nokkeltall .nk .l .nkd{text-transform:none;letter-spacing:0;font-size:12px;color:#cbd5e1}#nokkeltall .nk .l .nkd .tip{text-transform:none;letter-spacing:normal;font-weight:400}
 #nokkeltall .nk .v{font-size:20px;line-height:24px;font-weight:600;font-family:inherit;font-variant-numeric:tabular-nums}
-@media(max-width:599px){#nokkeltall .nk .r{min-height:56px;padding:6px 8px;position:relative}#nokkeltall .nk .v .spk{position:absolute;top:4px;right:4px;margin:0}#nokkeltall .nk .r:has(.spk) .l{padding-right:64px}#nokkeltall .nk .r[data-k=next] .v{white-space:normal}#nokkeltall .nk .r{min-width:0}}"""
+@media(max-width:599px){#nokkeltall .nk .r{min-height:56px;padding:6px 8px;position:relative}#nokkeltall .nk .v .spk{position:absolute;top:4px;right:2px;margin:0}#nokkeltall .nk .r:has(.spk) .l{padding-right:58px;letter-spacing:0}#nokkeltall .nk .r[data-k=next] .v{white-space:normal}#nokkeltall .nk .r{min-width:0}}"""
 
 
 MISS_HTML = (f'– <span class="ri" tabindex="0" aria-expanded="false" aria-label="{MISSING_INFO}">ⓘ<span class="tip">{MISSING_INFO}</span></span>')

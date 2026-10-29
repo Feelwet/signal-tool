@@ -165,13 +165,13 @@ def test_ny_i_dag_replaces_whole_cell_and_sorts_empty():
     r = S.ret(s, 10.0, "2026-10-28", {"OSEBX.OL": {"2026-10-28": 1.0}}, "DNB.OL", "2026-10-28")
     c = S.ret_cell(r, s)
     assert r["new"] and 'data-v=""' in c and 'data-new="1"' in c
-    assert '<span class="rnew">Ny i dag</span>' in c and "Avkastning vises fra neste handelsdag" in c and 'class="ri ri-c"' in c
+    assert '<span class="rnew">Venter på første sluttkurs</span>' in c and "Avkastning vises etter første sluttkurs etter inntak (28.10)." in c and 'class="ri ri-c"' in c
     assert "+0,0" not in c and "rex" not in c and "vs " not in c and "pp" not in c
-    assert "Ny i dag" in S.line(s, "", r) and "+0,0" not in S.line(s, "", r)
-    assert "Ny i dag" in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
-    assert ".rnew{font-size:11px;color:#94a3b8" in S.CSS
+    assert "Venter på første sluttkurs" in S.line(s, "", r) and "+0,0" not in S.line(s, "", r)
+    assert "Venter på første sluttkurs" in S.line_rk(s, "", r) and "inntak (28.10)." in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
+    assert ".rnew{font-size:12px;color:#94a3b8" in S.CSS and "#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px" in S.CSS
     old = S.ret(S0, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28")       # innkurs 30.09: vanlig tall, også +0,0 %
-    assert not old["new"] and "+0,0 %" in S.ret_cell(old, S0) and "Ny i dag" not in S.ret_cell(old, S0)
+    assert not old["new"] and "+0,0 %" in S.ret_cell(old, S0) and "Venter på første sluttkurs" not in S.ret_cell(old, S0)
 
 
 def test_rk_na_cell_tooltip():
@@ -211,15 +211,15 @@ def test_filter_ny_i_dag_last_hidden_when_zero():
     from signaltool import tickerlist as TL
     assert 'data-f="ny"' not in TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": False}}]})
     h = TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": True}}, {"ticker": "B", "_ret": {"new": True}}, {"ticker": "C", "_ret": None}]})
-    assert '<button type="button" data-f="ny" aria-pressed="false">Ny i dag (2)</button></div></div>' in h
-    assert "f==='ny'?!!r.querySelector('td.ret-c[data-new]')" in TL.JS and "ny:'Ny i dag'" in TL.JS
+    assert '<button type="button" data-f="ny" aria-pressed="false">Ingen avkastning ennå (2)</button></div></div>' in h
+    assert "f==='ny'?!!r.querySelector('td.ret-c[data-new]')" in TL.JS and "ny:'Ingen avkastning ennå'" in TL.JS and "Ny i dag" not in TL.JS
 
 
 def test_popover_trigger_wraps_text_and_name_clamp():
     from signaltool import names as NM
     s = dict(S0, price_date="2026-10-28")
     c = S.ret_cell(S.ret(s, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28"), s)
-    assert '<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="Avkastning vises fra neste handelsdag"><span class="rnew">Ny i dag</span>ⓘ' in c
+    assert '<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="Avkastning vises etter første sluttkurs etter inntak (28.10)."><span class="rnew">Venter på første sluttkurs</span>ⓘ' in c
     st = S.ret_cell(S.ret(S0, 11.0, "2026-10-23", {}, "DNB.OL", "2026-10-28"), S0)
     assert 'aria-label="Kurs mangler etter 23.10"><span class="rv rst">–</span>ⓘ' in st
     assert "max-width:260px;font-size:13px" in S.CSS and "width:max(100%,32px);height:max(100%,32px)" in S.CSS and "riPos" in S.JS
@@ -290,7 +290,7 @@ def test_log_gap_makes_entry_uncertain_not_new():
     s = {"uncertain": ("2026-09-28", "2026-10-27")}
     assert S.ret(s, 33.62, "2026-10-28", {}, "EWZ", "2026-10-28") is None
     c = S.ret_cell(None, s)
-    assert "Innkurs usikker, logg mangler 28.09–27.10" in c and "Ny i dag" not in c and 'data-v=""' in c and "Ingen innkurs" not in c
+    assert "Innkurs usikker, logg mangler 28.09–27.10" in c and "Venter på første sluttkurs" not in c and 'data-v=""' in c and "Ingen innkurs" not in c
     assert S.cell(s) == '<td class="since-c" data-v="" data-sort="">–</td>' and S.mobile(s) == ""
     assert "Innkurs usikker, logg mangler 28.09–27.10" in S.line(s) and "Innkurs usikker" in S.line_rk(s, "")
     one = rows + [{"date": "2026-10-27", "ticker": "Y", "category": "watch", "price": "1", "price_date": "2026-10-27"}]
