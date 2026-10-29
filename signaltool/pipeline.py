@@ -268,6 +268,8 @@ def run(fast: bool = False) -> dict:
     nw = S("Oslo Børs Newsweb", lambda: newsweb.collect(days=95), E())   # 95 d: private placements are flagged for 60 trading days
     nb = S("Norges Bank", norgesbank.collect, {})
     oilx = S("Oil spreads & curves (yfinance futures)", oil.collect, {})
+    from .collectors import mstrip as _mstrip
+    mstripx = S("Markedsstripe (Yahoo BZ=F, BTC-USD)", _mstrip.collect, {})
     dodx, dod_days = S("US DoD daily contracts (war.gov)", dod.collect, (E(), []))
     sh = S("Finanstilsynet short register", shorts.collect, E())
     try:
@@ -589,6 +591,7 @@ def run(fast: bool = False) -> dict:
         snap["nok_fx"] = {"dates": [d.strftime("%Y-%m-%d") for d in fx.index], **{c: [_f(x) for x in fx[c]] for c in fx.columns}}
     snap["norgesbank_press"] = nb.get("press", [])
     snap["oil"] = oilx
+    snap["mstrip"] = mstripx
     snap["late_filings"] = nt[:30]
     snap["dod_days"] = dod_days[:10]
     snap["dod_awards"] = _records(dodx.sort_values("amount", ascending=False) if not dodx.empty else dodx, ["day", "company", "amount", "ticker", "text", "url"], 25) if not dodx.empty else []

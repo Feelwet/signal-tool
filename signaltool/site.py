@@ -8,6 +8,7 @@ from . import categories as C
 from . import site_extra as X
 from . import analyst as AN
 from . import theme_maps as TM
+from . import mstrip as MS
 from . import sectors as SEC
 from . import calendar_view as CV
 from . import inflation as INF
@@ -722,8 +723,9 @@ def build(snap: dict) -> Path:
     today = str(snap.get("date") or date.today())
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [f'<h1 style="margin:0 0 6px">Oversikt {E(str(snap["date"]))} <span class="mut" style="font-size:.55em;font-weight:400">GDELT t.o.m. {E(str(snap.get("gdelt_latest")))}</span></h1>',
+         f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
+         MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
-         f'<style>{OV.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MINE.tile(),
          sec("Status", OV.strip_html, snap),
          sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
