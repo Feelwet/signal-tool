@@ -1,10 +1,15 @@
 {
- "fetched": "2026-10-25",
+ "fetched": "2026-10-29",
  "names": {
   "2020.OL": {
    "exchange": "Oslo",
    "name": "2020 Bulkers Ltd.",
    "website": "https://2020bulkers.com"
+  },
+  "ADI": {
+   "exchange": "NasdaqGS",
+   "name": "Analog Devices, Inc.",
+   "website": "https://www.analog.com"
   },
   "AKAST.OL": {
    "exchange": "Oslo",
@@ -15,6 +20,11 @@
    "exchange": "Oslo",
    "name": "Aker BP ASA",
    "website": "https://akerbp.com"
+  },
+  "ALGM": {
+   "exchange": "NasdaqGS",
+   "name": "Allegro MicroSystems, Inc.",
+   "website": "https://www.allegromicro.com"
   },
   "ARCH.OL": {
    "exchange": "Oslo",
@@ -151,10 +161,20 @@
    "name": "Envipco Holding N.V.",
    "website": "https://www.envipco.com"
   },
+  "EPAC": {
+   "exchange": "NYSE",
+   "name": "Enerpac Tool Group Corp.",
+   "website": "https://www.enerpactoolgroup.com"
+  },
   "EPR.OL": {
    "exchange": "Oslo",
    "name": "Europris ASA",
    "website": "https://www.europris.no"
+  },
+  "EQIX": {
+   "exchange": "NasdaqGS",
+   "name": "Equinix, Inc.",
+   "website": "https://www.equinix.com"
   },
   "EQNR.OL": {
    "exchange": "Oslo",
@@ -195,6 +215,11 @@
    "exchange": "NYSEArca",
    "name": "SPDR Gold Shares",
    "website": null
+  },
+  "GOOG": {
+   "exchange": "NasdaqGS",
+   "name": "Alphabet Inc.",
+   "website": "https://abc.xyz"
   },
   "GS": {
    "exchange": "NYSE",
@@ -266,6 +291,11 @@
    "name": "Komplett ASA",
    "website": "https://www.komplettgroup.com"
   },
+  "LHX": {
+   "exchange": "NYSE",
+   "name": "L3Harris Technologies, Inc.",
+   "website": "https://www.l3harris.com"
+  },
   "LINK.OL": {
    "exchange": "Oslo",
    "name": "LINK Mobility Group Holding ASA",
@@ -275,6 +305,11 @@
    "exchange": "NYSE",
    "name": "Lockheed Martin Corporation",
    "website": "https://www.lockheedmartin.com"
+  },
+  "LNG": {
+   "exchange": "NYSE",
+   "name": "Cheniere Energy, Inc.",
+   "website": "https://www.cheniere.com"
   },
   "LSG.OL": {
    "exchange": "Oslo",
@@ -345,6 +380,11 @@
    "exchange": "Oslo",
    "name": "Norsk Hydro ASA",
    "website": "https://www.hydro.com"
+  },
+  "NKT.CO": {
+   "exchange": "Copenhagen",
+   "name": "NKT A/S",
+   "website": "https://www.nkt.com"
   },
   "NOFIN.OL": {
    "exchange": "Oslo",
@@ -500,6 +540,11 @@
    "exchange": "Oslo",
    "name": "Vow ASA",
    "website": "https://www.vowasa.com"
+  },
+  "VRT": {
+   "exchange": "NYSE",
+   "name": "Vertiv Holdings Co",
+   "website": "https://www.vertiv.com"
   },
   "WAWI.OL": {
    "exchange": "Oslo",

@@ -3,6 +3,7 @@ theme scenarios, chokepoints, oil nowcast, Taiwan radar, policy alerts, classifi
 from __future__ import annotations
 import html, re
 from . import scenarios
+from . import briefing as BR
 from . import evidens as EV
 
 E = lambda x: html.escape("" if x is None else str(x))
@@ -159,7 +160,7 @@ def priced_in_verdict(d: dict) -> list[str]:
         out.append(f"Analytikerne har {'oppjustert' if d['eps_rev30'] > 0 else 'nedjustert'} årets resultatestimat {pct(d['eps_rev30'])} siste 30 dager – "
                    + ("kursen kan allerede reflektere dette." if d["eps_rev30"] > 0 else "sjekk om kursen har tatt det inn."))
     if d.get("days_to_earnings") is not None and 0 <= d["days_to_earnings"] <= 14:
-        out.append(f"Kvartalsrapport om {d['days_to_earnings']} dager ({E(d.get('next_earnings'))}) – hendelsesrisiko.")
+        out.append(f"Kvartalsrapport {BR.when_days(d['days_to_earnings'], 'dager')} ({E(d.get('next_earnings'))}) – hendelsesrisiko.")
     if d.get("pead"):
         out.append(f"Sterk kvartalsrapport {E(d.get('last_earnings'))}: EPS-overraskelse {d.get('eps_surprise'):+.0f} % og kursreaksjon {pct(d.get('earn_reaction'))} mot SPY"
                    + (" (PEAD-S: volatilitet over median)" if d.get("pead_s") else "")
@@ -198,7 +199,7 @@ def decision_html(e: dict) -> str:
               (f"Beta mot {bn} (1 år)", num(d.get("beta1y"))), ("Daglig svingning (ATR 14)", f'{num(d.get("atr14"))} ({ppct(d.get("atr_pct"), 1)})'),
               ("Likviditet (median omsetning 20 d)", "–" if not (e.get("stats") or {}).get("adv20") else f'{(e["stats"]["adv20"])/1e6:,.1f} mill. {E(cur)}/dag'),
               ("Short i % av fri flyt (Yahoo)", "–" if d.get("shortPercentOfFloat") is None else f'{d["shortPercentOfFloat"]*100:.1f} %'),
-              ("Neste kvartalsrapport", "–" if not d.get("next_earnings") else f'{E(d["next_earnings"])} (om {d.get("days_to_earnings")} d)')]
+              ("Neste kvartalsrapport", "–" if not d.get("next_earnings") else f'{E(d["next_earnings"])} ({BR.when_days(d.get("days_to_earnings"))})')]
     if d.get("last_earnings"):
         rows_r.append(("Siste rapport: EPS-overraskelse / reaksjon", f'{E(d.get("last_earnings"))}: {num(d.get("eps_surprise"), 0)} % / {pct(d.get("earn_reaction"))}'))
     rows_i = [("Siste kurs", f"{num(close)} {E(cur)}"), ("50-dagers snitt", num(d.get("sma50")) + dist(d.get("sma50"))),

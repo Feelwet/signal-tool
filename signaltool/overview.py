@@ -11,9 +11,11 @@ from pathlib import Path
 from . import evidens as EV
 from . import site_layout as L
 from . import names as NM
+from . import briefing as BR
 
 THEME_LOG = Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv"
 CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Følg", "#e3b341"))
+MARKET_HREF = "metode.html#regime"   # Markedsregime-kortet (OSEBX/S&P mot 10-mnd snitt) – det flisa viser; HASH_JS åpner folden
 MIN_N = 30  # under dette: «n for lav (FLAG)»
 
 CSS = """
@@ -85,7 +87,7 @@ def strip_html(snap: dict) -> str:
     risk = any(v.get("risk_off") for v in reg.values())
     dots = "".join(f'<span class="ov-dot {"dn" if v.get("below") else "up"}"></span>{E(n)}'
                    for k, n in (("OSEBX.OL", "OSEBX"), ("^GSPC", "S&P")) if (v := reg.get(k)))
-    t1 = (f'<div class="ov-tile"><div class="lbl"><a href="metode.html#regler">Marked →</a></div><div class="big">{"Halver nye" if risk else "Normalt"}</div>'
+    t1 = (f'<div class="ov-tile"><div class="lbl"><a href="{MARKET_HREF}">Marked →</a></div><div class="big">{"Halver nye" if risk else "Normalt"}</div>'
           f'<div class="sub">{dots or "regime ukjent"} <span class="mut">mot 10-mnd snitt</span></div></div>') if reg else \
          '<div class="ov-tile"><div class="lbl">Marked</div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     tk = snap.get("tickers") or []
@@ -176,7 +178,7 @@ def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
         k = a["title"].split(":")[0].strip().lower()
         if k not in seen:
             seen.add(k)
-            items.append(f'<li>{"🔔" if a.get("level") == "alert" else "ⓘ"} <a href="{E(link(a.get("link", "")))}">{E(a["title"])}</a></li>')
+            items.append(f'<li>{"🔔" if a.get("level") == "alert" else "ⓘ"} <a href="{E(link(a.get("link", "")))}">{E(BR.fix_days_text(a["title"]))}</a></li>')
     for x in ((b.get("changes") or {}).get("items") or []):
         if x.get("kind") in ("ny", "opp", "ned"):   # kategoriendringer vises ikke (risikorunden); logges fortsatt
             continue

@@ -26,6 +26,12 @@ def name(ticker: str, fallback: str | None = None) -> str | None:
     return r.get("name") or fallback or None
 
 
+def missing(tickers, fallbacks: dict | None = None) -> list:
+    """Tickere uten selskapsnavn i names.json (og uten navn i snapshot). Logges ved bygg; navn diktes aldri opp."""
+    fb = fallbacks or {}
+    return sorted({t for t in tickers if t and not name(t, fb.get(t))})
+
+
 def website(ticker: str) -> str | None:
     w = (_load().get(ticker) or {}).get("website") or None
     return w if w and w.startswith(("http://", "https://")) else None

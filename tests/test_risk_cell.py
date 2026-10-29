@@ -21,7 +21,7 @@ def test_merged_risk_score_cell_390():
     assert h.index(">Lav</span>") < h.index('<span class="rkp-s">' + sc)
     assert '<span class="rkp-s">' in RK.cell(None, sc)
     assert "rkp-s" not in RK.cell({"level": "Lav"})
-    assert 'Risiko<span class="rkp-m"> · Poeng</span>' in S.TICKER_HEAD and '<th class="pt-h">Poeng</th>' in S.TICKER_HEAD
+    assert 'Risiko<span class="rkp-m"> · Poeng <button' in S.TICKER_HEAD and '<th class="pt-h">Poeng <button' in S.TICKER_HEAD and S.TICKER_HEAD.count("Rangering, ikke testet") == 2   # GSbot 29.10: ⓘ ved poengsum
     css = RK.CSS
     assert ".rkp-m,.rkp-s{display:none}" in css
     mob = css[css.index("@media(max-width:599px){#tf-table th.pt-h"):]

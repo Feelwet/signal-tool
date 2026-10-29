@@ -44,7 +44,7 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
     tk = (out / "tickere.html").read_text()  # full kategoritekst på Tickere etter opprydding
-    assert 'class="rk ' in tk and 'Risiko<span class="rkp-m"> · Poeng</span></th>' in tk and 'cat kjop' not in tk and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
+    assert 'class="rk ' in tk and 'Risiko<span class="rkp-m"> · Poeng <button' in tk and 'cat kjop' not in tk and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
     tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
     assert "Risiko:" in tp and "Risikonivå er testet på historiske data. Kategoriene er ikke bekreftet." in tp and "✔ oppfylt" not in tp
     tk = (out / "tickere.html").read_text()

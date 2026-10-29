@@ -162,7 +162,7 @@ CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko<span class=\"rkp-m\"> · Poeng</span></th><th class=\"pt-h\">Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + " <a href=\"metode.html#laering\">Slik bruker vi dette tallet ›</a></span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko<span class=\"rkp-m\"> · Poeng <button type=\"button\" class=\"ri ri-c sc-i\" aria-expanded=\"false\" aria-label=\"Om poengsummen\">ⓘ<span class=\"tip\">Rangering, ikke testet</span></button></span></th><th class=\"pt-h\">Poeng <button type=\"button\" class=\"ri ri-c sc-i\" aria-expanded=\"false\" aria-label=\"Om poengsummen\">ⓘ<span class=\"tip\">Rangering, ikke testet</span></button></th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + " <a href=\"metode.html#laering\">Slik bruker vi dette tallet ›</a></span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -311,9 +311,57 @@ def rel_label(txt):
     return f'<span class="rel {lvl}">{E(txt)}</span>'
 
 
-def score_badge(s, hi=2.0, mid=1.0):
+SCORE_TIP = "Rangering, ikke testet"   # AnalBot/UxBot 29.10: poengsummen er ikke testet mot avkastning (tiltak 1)
+SCORE_CSS = (".score.mu{background:rgba(148,163,184,.08);color:#94a3b8;border-color:rgba(148,163,184,.3)}"
+             ".score.mu .sv{font-size:14px;line-height:1}"   # boksen beholder størrelsen (em fra cellen), bare tallet er 14 px
+             ".sc-i.ri.ri-c{font-size:12px;color:#94a3b8;margin-left:2px}\n")
+
+
+def score_badge(s, hi=2.0, mid=1.0, muted=False):
+    """Poengboks. Dempet (grå #94a3b8, tall 14 px) til poengtesten består; tallet og sorteringen er uendret."""
+    if muted:
+        return f'<span class="score mu" title="{SCORE_TIP}"><span class="sv">{s:.2f}</span></span>'
     cls = "hot" if s >= hi else "warm" if s >= mid else ""
     return f'<span class="score {cls}">{s:.2f}</span>'
+
+
+SCORE_I_JS = ("<script>(()=>{const B=[...document.querySelectorAll('.thead .sc-i')];if(!B.length)return;"
+              "B.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));"
+              "const x=()=>B.forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.sc-i'))x()});"
+              "document.addEventListener('keydown',e=>{if(e.key==='Escape')x()})})()</script>")
+
+
+def score_info(label: str = "Om poengsummen", js: bool = False) -> str:
+    """ⓘ «Rangering, ikke testet». js=True på tickersiden (der finnes ingen felles .ri-klikkhåndterer for trykk på touch)."""
+    return (f'<button type="button" class="ri ri-c sc-i" aria-expanded="false" aria-label="{label}">ⓘ'
+            f'<span class="tip">{SCORE_TIP}</span></button>' + (SCORE_I_JS if js else ""))
+
+
+CHIP_MAX = 3   # UxBot 29.10: maks 3 signalbrikker på PC, resten bak «+N»
+
+
+def chips_html(chips: list) -> str:
+    """Første CHIP_MAX brikker i dagens rekkefølge; resten bak en «+N»-brikke med popover (ⓘ-regler: hover/fokus på PC,
+    trykk på touch, Esc). Under 700 px er innpakningen display:contents og alle brikker vises som før (mobil uendret)."""
+    chips = [c.strip() for c in chips if c and c.strip()]
+    if len(chips) <= CHIP_MAX:
+        return " ".join(chips)
+    vis, rest = chips[:CHIP_MAX], chips[CHIP_MAX:]
+    extra = " ".join(c.replace('class="pill"', 'class="pill px"', 1) for c in rest)
+    more = (f'<button type="button" class="ri ri-c pill pmore" aria-expanded="false" aria-label="Vis {len(rest)} signal{"er" if len(rest) > 1 else ""} til">'
+            f'+{len(rest)}<span class="tip">{" ".join(rest)}</span></button>')
+    return (f'<span class="sgw">{" ".join(vis[:-1])} <span class="sgl">{vis[-1]} {extra} {more}</span></span>')
+
+
+CHIP_CSS = ("#tf-table .pmore{display:none}#tf-table .sgw,#tf-table .sgl{display:contents}#tf-table th.pt-h .sc-i.ri.ri-c{display:block;margin:0;padding:0}"
+            "@media(min-width:700px){#tf-table td.sg-c{width:160px;max-width:160px}#tf-table .pill.px{display:none}"
+            "#tf-table td.sg-c .pill{white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;box-sizing:border-box;margin:1px 4px 1px 0;line-height:16px;font-size:12px}"
+            "#tf-table .sgw{display:flex;flex-wrap:wrap;align-items:center;max-width:160px}#tf-table .sgl{display:flex;align-items:center;min-width:0;max-width:100%}"
+            "#tf-table .sgl>.pill{min-width:0;flex:0 1 auto}#tf-table .sgl>.pmore{flex:none}"
+            "#tf-table td.sg-c .pmore.ri.ri-c{display:inline-block;min-width:0;min-height:0;margin:1px 0;font:inherit;font-size:12px;line-height:16px;padding:1px 8px;"
+            "border:1px solid #333b47;border-radius:999px;background:var(--pill);color:#d5dde6;cursor:pointer;overflow:visible}"
+            "#tf-table td.sg-c .pmore .tip{white-space:normal;width:auto;max-width:260px}#tf-table td.sg-c .pmore .tip .pill{max-width:none;display:inline-block;margin:2px 4px 2px 0}}"
+            "@media(min-width:1100px){#tf-table table:not(.ur-tab) tr.rowlink>td:first-child{min-width:160px}}\n")
 
 
 def spark(vals, w=140, h=32):
@@ -487,11 +535,11 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     unr = bool(e.get("unranked"))
-    pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
+    pts = chips_html([f'<span class="pill" title="{E(POINT_NO.get(k, k))}">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0] + ([] if unr else [an]))
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
-    ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
+    ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
     return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
-            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c">{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -626,7 +674,7 @@ def build(snap: dict) -> Path:
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + STAR_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + STAR_CSS + SCORE_CSS + CHIP_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -637,6 +685,9 @@ def build(snap: dict) -> Path:
     (SITE / ".nojekyll").write_text("")
     themes, tickers = snap["themes"], snap["tickers"]
 
+    _miss = NM.missing([e["ticker"] for e in tickers], {e["ticker"]: e.get("name") for e in tickers})
+    if _miss:   # UxBot/GSbot 29.10: navn mangler i data -> logg (vises bare som ticker), oppdater med python3 -m signaltool.names
+        print(f"::warning::selskapsnavn mangler ({len(_miss)}): {', '.join(_miss)} – python3 -m signaltool.names {' '.join(_miss)}")
     SEARCH["mine"] = MINE.script(tickers, slug)
     SEARCH["html"] = L.search_html([e["ticker"] for e in tickers], "{PRE}", slug)
     st = snap.get("status") or {}
@@ -792,7 +843,7 @@ def ticker_page(e, tmap):
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
+    return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info(js=True))}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}

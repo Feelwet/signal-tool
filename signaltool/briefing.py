@@ -1,6 +1,8 @@
 """'Hva bør jeg se på i dag?' (3-5 prioritised items), 'Nytt siden i går' (diff vs the previous dated snapshot) and
 alert flags. Pure functions over snapshot dicts -> easy to test; no network."""
 from __future__ import annotations
+
+import re
 import json
 from datetime import date, timedelta
 from pathlib import Path
@@ -65,6 +67,23 @@ def changes(snap: dict, prev: dict | None) -> dict:
     return {"prev_date": prev.get("date"), "items": items, "note": "" if items else "Ingen vesentlige endringer siden forrige kjøring."}
 
 
+def when_days(n, unit: str = "d") -> str:
+    """0 -> «i dag», 1 -> «i morgen», ellers «om N d» (UxBot 29.10: aldri «om 0 d»)."""
+    try:
+        n = int(n)
+    except (TypeError, ValueError):
+        return f"om {n} {unit}"
+    return "i dag" if n == 0 else "i morgen" if n == 1 else f"om {n} {unit}"
+
+
+_OM_N = re.compile(r"\bom ([01]) (d|dager)\b")
+
+
+def fix_days_text(t: str) -> str:
+    """Retter ferdige tekster fra eldre snapshots: «om 0 d» -> «i dag», «om 1 d» -> «i morgen»."""
+    return _OM_N.sub(lambda m: "i dag" if m.group(1) == "0" else "i morgen", t or "")
+
+
 def alerts(snap: dict) -> list[dict]:
     """Things worth a notification. Each: {level, title, why, link}."""
     out = []
@@ -73,7 +92,7 @@ def alerts(snap: dict) -> list[dict]:
         if c in ("kjop", "hold"):
             dte = d.get("days_to_earnings")
             if dte is not None and 0 <= dte <= 7:
-                out.append({"level": "info", "title": f"{e['ticker']}: kvartalsrapport om {dte} d ({d.get('next_earnings')})",
+                out.append({"level": "info", "title": f"{e['ticker']}: kvartalsrapport {when_days(dte)} ({d.get('next_earnings')})",
                             "why": "hendelsesrisiko – kursen kan bevege seg kraftig", "link": f"ticker/{e['ticker']}"})
             close, stop = d.get("close") or st.get("close"), d.get("stop_atr")
             if close is not None and stop is not None and close < stop:
