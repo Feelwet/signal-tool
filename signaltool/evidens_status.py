@@ -91,10 +91,16 @@ def dot(key: str) -> tuple[str, str]:
     return f'<i class="evd evd-{CLS[klass(r["status"])]}" aria-hidden="true"></i>', f"Evidens: {text(r)}"
 
 
+# AnalBots tabell: «Dato = siste commit av rapporten, eller filens endringsdato når den ikke er committet (merket *)»
+STAR_T = "* dato = filens endringsdato (rapporten er ikke committet)"
+
+
 def legend(dnb: bool = False) -> str:
     it = "".join(f'<span class="evs evs-{CLS[k]}"><i class="evd" aria-hidden="true"></i>{E(k)}</span>' for k in ORDER)
     d = '<span class="evs evs-dnb"><i class="evd" aria-hidden="true">◌</i>DNB-råd, teller ikke</span>' if dnb else ""
-    return f'<p class="evleg" aria-label="Forklaring evidensmerker">Evidens: {it}{d}</p>'
+    st = (f'<span class="evs evs-ast">{STAR_T}</span>'
+          if any("*" in str(r.get("dato") or "") for r in rows() if r["signaltype"] not in HIDE) else "")
+    return f'<p class="evleg" aria-label="Forklaring evidensmerker">Evidens: {it}{d}{st}</p>'
 
 
 def table_html() -> str:
@@ -104,7 +110,7 @@ def table_html() -> str:
     tr = "".join(f'<tr><td>{E(r["signaltype"])}</td><td>{chip(r)}</td><td class="mut">{E(r["rapport"])}</td></tr>' for r in rs)
     return (f'{legend()}'
             '<p class="mut">Status, n og dato er kopiert fra AnalBots oversikt (reports/natt/evidens_signaltyper.md, 29.10). '
-            'Dato med * er filens endringsdato. Bare risikonivået har bestått, og bare for svingninger, ikke avkastning.</p>'
+            'Bare risikonivået har bestått, og bare for svingninger, ikke avkastning.</p>'
             f'<div class="tw"><table class="evtab"><tr><th>Signaltype</th><th>Evidens</th><th>Rapport</th></tr>{tr}</table></div>')
 
 

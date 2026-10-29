@@ -101,7 +101,7 @@ def test_evidence_colors():
 
 def test_legend_order():
     t = re.sub(r"<[^>]+>", " ", ES.legend())
-    assert [x for x in t.split() if x] [1:] == ["Bestått", "For", "lav", "n", "Ikke", "testet", "Ikke", "bestått"]
+    assert [x for x in t.split() if x] [1:9] == ["Bestått", "For", "lav", "n", "Ikke", "testet", "Ikke", "bestått"]
 
 
 # 5. Resultatregler
@@ -126,13 +126,38 @@ def test_watch_text_no_flag():
     assert "Følg: For få handler (n=12)" in t and "60 %" not in t and "FLAG" not in t
 
 
-def test_short_period_return_grey():
+def test_short_period_return_coloured_with_label():
     r = SN.ret({"price": 100, "price_date": "2026-10-27", "list_days": 2}, 105, "2026-10-29", ticker="X")
     assert r["short"] and r["td"] == 2
     h = SN.ret_inner(r, {})
-    assert 'class="rv rsh"' in h and 'aria-label="Kort periode, mest tilfeldig svingning."' in h
+    assert 'class="rv rup"' in h and '<span class="rsh-t">kort periode</span>' in h
+    assert 'aria-label="Kort periode, mest tilfeldig svingning."' in h and "rsh\"" not in h
+    rd = SN.ret({"price": 100, "price_date": "2026-10-27", "list_days": 2}, 95, "2026-10-29", ticker="X")
+    assert 'class="rv rdn"' in SN.ret_inner(rd, {})
     r2 = SN.ret({"price": 100, "price_date": "2026-10-20", "list_days": 9}, 105, "2026-10-29", ticker="X")
-    assert not r2["short"] and "rsh" not in SN.ret_inner(r2, {})
+    assert not r2["short"] and "rsh-t" not in SN.ret_inner(r2, {}) and 'class="rv rup"' in SN.ret_inner(r2, {})
+    ln = SN.line_rk({"since": "2026-10-27"}, "", r)
+    assert 'class="rn rup"' in ln and "kort periode" in ln
+
+
+def test_return_colours_css():
+    import signaltool.since as m
+    src = open(m.__file__, encoding="utf-8").read()
+    assert "main .rv.rup,main .rn.rup{color:#22c55e}" in src and "main .rv.rdn,main .rn.rdn{color:#ef4444}" in src
+    assert ".rsh-t{font-size:11px;font-weight:400;color:#94a3b8" in src and ".rv.rsh" not in src
+
+
+def test_short_cell_compact_class():
+    r = SN.ret({"price": 100, "price_date": "2026-10-27", "list_days": 2}, 105, "2026-10-29", ticker="X")
+    h = SN.ret_inner(r, {})
+    assert h.index('class="rv rup"') < h.index("Kort periode, mest tilfeldig") < h.index('class="rsh-t"')
+    assert '<td class="ret-c rsh-c"' in SN.ret_cell(r, {})
+    r2 = SN.ret({"price": 100, "price_date": "2026-10-20", "list_days": 9}, 105, "2026-10-29", ticker="X")
+    assert '<td class="ret-c"' in SN.ret_cell(r2, {})
+
+
+def test_legend_explains_star():
+    assert "* dato = filens endringsdato" in ES.legend()
 
 
 # 6. Ferskhet og «Ingen handel»
