@@ -271,6 +271,11 @@
    "name": "Hexagon Composites ASA",
    "website": "https://www.hexagongroup.com"
   },
+  "HII": {
+   "exchange": "NYSE",
+   "name": "Huntington Ingalls Industries, Inc.",
+   "website": "https://www.hii.com"
+  },
   "HUNT.OL": {
    "exchange": "Oslo",
    "name": "Hunter Group ASA",
@@ -280,6 +285,11 @@
    "exchange": "NYSE",
    "name": "International Business Machines Corporation",
    "website": "https://www.ibm.com"
+  },
+  "KIM": {
+   "exchange": "NYSE",
+   "name": "Kimco Realty Corporation",
+   "website": "https://www.kimcorealty.com"
   },
   "KIT.OL": {
    "exchange": "Oslo",
@@ -305,6 +315,11 @@
    "exchange": "Oslo",
    "name": "LINK Mobility Group Holding ASA",
    "website": "https://www.linkmobility.com"
+  },
+  "LLY": {
+   "exchange": "NYSE",
+   "name": "Eli Lilly and Company",
+   "website": "https://www.lilly.com"
   },
   "LMT": {
    "exchange": "NYSE",
@@ -346,6 +361,11 @@
    "name": "MPC Container Ships ASA",
    "website": "https://www.mpc-container.com"
   },
+  "MRK": {
+   "exchange": "NYSE",
+   "name": "Merck & Co., Inc.",
+   "website": "https://www.merck.com"
+  },
   "MSFT": {
    "exchange": "NasdaqGS",
    "name": "Microsoft Corporation",
@@ -365,6 +385,11 @@
    "exchange": "Oslo",
    "name": "Norwegian Air Shuttle ASA",
    "website": "https://www.norwegian.com"
+  },
+  "NCLH": {
+   "exchange": "NYSE",
+   "name": "Norwegian Cruise Line Holdings Ltd.",
+   "website": "https://www.nclhltd.com"
   },
   "NEL.OL": {
    "exchange": "Oslo",
@@ -526,6 +551,11 @@
    "name": "Taiwan Semiconductor Manufacturing Company Limited",
    "website": "https://www.tsmc.com"
   },
+  "TXT": {
+   "exchange": "NYSE",
+   "name": "Textron Inc.",
+   "website": "https://www.textron.com"
+  },
   "VAR.OL": {
    "exchange": "Oslo",
    "name": "Vår Energi ASA",
@@ -555,6 +585,16 @@
    "exchange": "Oslo",
    "name": "Wallenius Wilhelmsen ASA",
    "website": "https://www.walleniuswilhelmsen.com"
+  },
+  "WEC": {
+   "exchange": "NYSE",
+   "name": "WEC Energy Group, Inc.",
+   "website": "https://www.wecenergygroup.com"
+  },
+  "WST": {
+   "exchange": "NYSE",
+   "name": "West Pharmaceutical Services, Inc.",
+   "website": "https://www.westpharma.com"
   },
   "WWI.OL": {
    "exchange": "Oslo",

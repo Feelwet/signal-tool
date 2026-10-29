@@ -160,6 +160,23 @@ TKP_CSS = ("<style>main{--mut:#cbd5e1}main .card,main details.fold{background:#1
            "table.kt td,table.kt th{white-space:nowrap}table.kt td{font-variant-numeric:tabular-nums}</style>")
 
 
+# UxBot 29.10 (bindende): kortstilen fra tickersidene på modulene Makro, Sektorer, Oslo og Temaer. Metode får bare kortstilen.
+# Ingen tall endres. Nøkkeltallfelt (a.kpi i L.head): #111821, 12 px label i caps, 20 px semibold verdi, ⓘ ved labelen.
+MOD_CARD_CSS = ("main .card,main details.fold,main a.scard{background:#1c2430;border:1px solid #3b4757;border-top:3px solid #58a6ff;border-radius:12px}"
+                "main .card,main a.scard{padding:16px}@media(max-width:599px){main .card,main a.scard{padding:12px}}"
+                "main details.fold>.card,main details.fold .card{border:0;border-top:0;background:transparent}")
+MOD_CSS = ("<style>main{--mut:#cbd5e1}" + MOD_CARD_CSS +
+           "main .pintro,main p.mut,main .mut,main .src,main .src-line,main .sec-src,main .fold-sum{color:#cbd5e1}"
+           "main .src-line.src-bad,main .warnline,main .stale{color:#fdba74}"
+           "main .kpis a.kpi,main .kpis.k3 a.kpi{background:#111821;border:0;border-radius:6px;padding:10px 12px}"
+           "main .kpis a.kpi .lbl,main .kpis.k3 a.kpi .lbl{font-size:12px;line-height:16px;text-transform:uppercase;letter-spacing:.03em;color:#cbd5e1;overflow-wrap:anywhere}"
+           "main .kpis a.kpi .lbl .sc-i{text-transform:none;letter-spacing:0}"
+           "main .kpis a.kpi .val,main .kpis.k3 a.kpi .val{font-size:20px;line-height:24px;font-weight:600;margin:4px 0 2px;font-variant-numeric:tabular-nums}"
+           "main .kpis a.kpi .sub,main .kpis.k3 a.kpi .sub{font-size:12px;line-height:16px;color:#cbd5e1}"
+           "@media(max-width:699px){main .kpis.k3 a.kpi{padding:8px}main .kpis.k3 a.kpi .lbl,main .kpis.k3 a.kpi .val{overflow-wrap:anywhere}}</style>")
+MET_CSS = "<style>" + MOD_CARD_CSS + "</style>"
+
+
 CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Følg"}
 CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er regelbaserte og mekaniske – ikke personlig '
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
@@ -750,7 +767,7 @@ def build(snap: dict) -> Path:
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")]) + L.EXP() + f'<div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
+    (SITE / "temaer.html").write_text(page("Temaer", MOD_CSS + L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")]) + L.EXP() + f'<div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
     have = {e["ticker"] for e in tickers}
     for M in TM.MAPS.values():
         (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", sec(f"Temakart: {M['name']}", TM.map_html, M["key"], snap, have), 1, snap))
@@ -792,16 +809,16 @@ def build(snap: dict) -> Path:
         NK.write_json(e["_nk"], SITE / "data" / "nokkeltall" / f"{slug(t)}.json")
         (SITE / "ticker" / f"{slug(t)}.html").write_text(page(t, sec(t, tema_ticker_page, e), 1, snap))
 
-    (SITE / "makro.html").write_text(page("Makro", fold_tables(sec("Makro", makro_page, snap)), 0, snap))
+    (SITE / "makro.html").write_text(page("Makro", MOD_CSS + fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
     (SITE / "rode-flagg.html").write_text(L.redirect("tickere.html?filter=flagg", "Røde flagg Oslo"))
-    (SITE / "oslo.html").write_text(page("Oslo Børs", fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
+    (SITE / "oslo.html").write_text(page("Oslo Børs", MOD_CSS + fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
     ssnap = {**snap, "generated": _f.get("fetched") or _f.get("asof") or snap.get("generated")}
-    (SITE / "sektorer.html").write_text(page("Sektorer", sec("Sektorer", SEC.index_html), 0, ssnap))
+    (SITE / "sektorer.html").write_text(page("Sektorer", MOD_CSS + sec("Sektorer", SEC.index_html), 0, ssnap))
     for k, S in SEC.SECTORS.items():
         (SITE / "tema" / f"{S['file']}.html").write_text(page(f"Sektor: {S['name']}", sec(f"Sektor: {S['name']}", SEC.sector_html, k), 1, ssnap))
-    (SITE / "metode.html").write_text(page("Metode", fold_tables(sec("Metode", metode_page, snap)), 0, snap))
+    (SITE / "metode.html").write_text(page("Metode", MET_CSS + fold_tables(sec("Metode", metode_page, snap)), 0, snap))
     (SITE / "kilder.html").write_text(L.redirect("metode.html", "Metode"))
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
     try:

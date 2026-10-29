@@ -117,13 +117,24 @@ K3_JS = ("<script>(()=>{document.querySelectorAll('.kpis.k3 .kpi').forEach(b=>b.
          "document.querySelectorAll('.kpis.k3 .kpi.open').forEach(o=>o.classList.remove('open'));b.classList.add('open')}}))})()</script>")
 
 
+KPI_I = ("Makro", "Oslo", "Temaer")   # UxBot 29.10: nøkkeltallfelt med ⓘ på modulene (Metode/Kalender uendret)
+
+
+def kpi_i(label: str, sub: str) -> str:
+    """ⓘ ved nøkkeltall-labelen: samme 14 px ikon/32×32 trykkflate som .sc-i (SCORE_I_JS). Teksten er feltets egen label + undertekst,
+    ingen nye tall. <span role=button> fordi feltet ligger i en lenke; SCORE_I_JS stopper navigasjonen ved trykk på ⓘ."""
+    t = f"{label}: {sub}" if sub else label
+    return (f' <span role="button" tabindex="0" class="ri ri-c sc-i" aria-expanded="false" aria-label="{E(t)}">ⓘ'
+            f'<span class="tip">{E(t)}</span></span>')
+
+
 def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = False) -> str:
     """Felles sidetopp: tittel, én setning, nøkkeltall."""
     k = ""
     if kpis:
         k3 = title in ("Makro", "Kalender") and len(kpis) == 3
         k = f'<div class="kpis small{" k4" if k4 else ""}{" k3" if k3 else ""}">' + "".join(
-            f'<a class="kpi" href="{E(h or "#")}"><div class="lbl">{E(l)}</div><div class="val">{E(v)}</div><div class="sub">{E(s)}</div></a>'
+            f'<a class="kpi" href="{E(h or "#")}"><div class="lbl">{E(l)}{kpi_i(l, s) if title in KPI_I else ""}</div><div class="val">{E(v)}</div><div class="sub">{E(s)}</div></a>'
             for v, l, s, h in kpis) + "</div>"
     js = K3_JS if kpis and title in ("Makro", "Kalender") and len(kpis) == 3 else ""
     return f'<h1>{E(title)}</h1><p class="pintro">{E(sentence)}</p>{k}{js}'
