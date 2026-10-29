@@ -16,7 +16,7 @@ from . import briefing as BR
 THEME_LOG = Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv"
 CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Følg", "#e3b341"))
 MARKET_HREF = "metode.html#regime"   # Markedsregime-kortet (OSEBX/S&P mot 10-mnd snitt) – det flisa viser; HASH_JS åpner folden
-MIN_N = 30  # under dette: «n for lav (FLAG)»
+MIN_N = 30  # under dette: «For få handler (n=X)» (results.py)
 
 CSS = """
 .ov-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0 14px}
@@ -51,13 +51,16 @@ def _nb(x: float, d: int = 2) -> str:
 
 def kjop_hit_line(tr: dict | None) -> str:
     """Kjøp-treffrate fra fremoverloggen, med faktisk n. FLAG når n er for lav eller KI ikke skiller fra 50 %."""
+    from . import results as RS
     h = (((tr or {}).get("cats") or {}).get("kjop") or {}).get("h5") or {}
     n = int(h.get("n") or 0)
-    if n < MIN_N or h.get("hit") is None:
-        return f'Kjøp-treffrate: n={n}, for lav (FLAG)'
+    if not RS.enough(n) or h.get("hit") is None:
+        return f'Kjøp-treffrate: {RS.few(n)}'
     ci = h.get("hit_ci") or [None, None]
     ok = ci[0] is not None and ci[0] > 0.5
-    return f'Kjøp-treffrate 5 d: {_nb(h["hit"] * 100, 0)} %, n={n}' + ("" if ok else " (FLAG: ikke skilt fra tilfeldig)")
+    ct = RS.control_text((((tr or {}).get("null") or {}).get("cats") or {}).get("kjop"))
+    return (f'Kjøp-treffrate 5 d: slo indeks {_nb(h["hit"] * 100, 0)} % (95 %: {_nb(ci[0] * 100, 0)}–{_nb(ci[1] * 100, 0)} %), n={n}'
+            + ("" if ok else ", ikke skilt fra tilfeldig") + (f"; {ct}" if ct else "; kontroll: ikke beregnet"))
 
 
 def week_change(path: Path = THEME_LOG, today: str | None = None) -> dict:
@@ -131,7 +134,7 @@ def _bar(t, mx, wk) -> str:
     wkh = (f'<span class="wk {"u" if ch[0] > 0 else "d" if ch[0] < 0 else ""}">{"▲" if ch[0] > 0 else "▼" if ch[0] < 0 else "="}{_nb(abs(ch[0]), 1)}</span>'
            if ch else '<span class="wk"></span>')
     return (f'<a class="ov-bar" href="tema/{E(t["key"])}.html"><span class="nm">{E(t["name"])}</span>'
-            f'<span class="tr"><i style="width:{w:.0f}%"></i></span><span class="sc">{_nb(s)}</span>{wkh}</a>')
+            f'<span class="tr"><i class="mu" style="width:{w:.0f}%"></i></span><span class="sc sc-mu">{_nb(s)}</span>{wkh}</a>')   # dempet (plan 29.10)
 
 
 def themes_html(snap: dict, wk: dict | None = None, stale: str = "") -> str:
@@ -145,7 +148,8 @@ def themes_html(snap: dict, wk: dict | None = None, stale: str = "") -> str:
     rest = th[6:]
     more = (f'<details class="vis-alle"><summary>Alle temaer ({len(th)})</summary>{"".join(_bar(t, mx, wk) for t in rest)}'
             f'<p class="mut" style="margin:6px 0 0"><a href="temaer.html">Temaer og temakart →</a></p></details>') if rest else ""
-    return (f'<section class="card ov-th" id="temascore"><h2>Temascore {L.EXP()} {stale}</h2>'
+    from .site import score_info   # én ⓘ i overskriften, ikke på hver stolpe (plan 29.10)
+    return (f'<section class="card ov-th" id="temascore"><h2>Temascore {score_info("Om temascore")} {stale}</h2>'
             f'{"".join(_bar(t, mx, wk) for t in th[:6])}<div class="ov-foot">{more}{note}</div></section>')
 
 
@@ -153,8 +157,9 @@ def two_col_html(snap: dict) -> str:
     tk = sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])[:5]
     from . import site_risk as RK
     li = "".join(f'<li><span>{NM.cell(e["ticker"], "ticker/" + _slug(e["ticker"]) + ".html", e.get("name"))} '
-                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="mut">{_nb(e["score"], 1)} p</span></li>' for e in tk)
-    left = (f'<div class="card"><h2>Kandidater</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
+                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="sc-mu" title="Rangering, ikke testet">{_nb(e["score"], 1)} p</span></li>' for e in tk)
+    from .site import score_info
+    left = (f'<div class="card"><h2>Kandidater {score_info()}</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     rl = "".join(f'<li><span>{NM.cell(r["ticker"])}</span>'

@@ -44,7 +44,7 @@ def test_category_badges_and_disclaimer(tmp_path, monkeypatch):
     out = tmp_path / "site"
     idx = (out / "index.html").read_text()
     tk = (out / "tickere.html").read_text()  # full kategoritekst på Tickere etter opprydding
-    assert 'class="rk ' in tk and 'Risiko<span class="rkp-m"> · Poeng <button' in tk and 'cat kjop' not in tk and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
+    assert 'class="rk ' in tk and 'Risiko<span class="rk-ev">' in tk and '<span class="rkp-m"> · Poeng <button' in tk and 'cat kjop' not in tk and "Treffrate fra fremoverloggen" in (tmp_path / "site" / "metode.html").read_text()
     tp = (out / "ticker" / f"{site.slug(e['ticker'])}.html").read_text()
     assert "Risiko:" in tp and "Risikonivå er testet på historiske data. Kategoriene er ikke bekreftet." in tp and "✔ oppfylt" not in tp
     tk = (out / "tickere.html").read_text()
@@ -81,7 +81,7 @@ def test_layout_staleness_and_watch_text():
     assert not L.staleness(rows, "S", date(2026, 10, 5))["stale"]
     assert L.staleness(rows, "S", date(2026, 10, 30))["dead"]
     t = L.watch_text({"cats": {"watch": {"h5": {"n": 136, "hit": 0.537, "hit_ci": [0.453, 0.618]}}, "kjop": {"h5": {"n": 0}}}})
-    assert "53,7 %" in t and "45–62 %" in t and "n=136" in t and "FLAG: ikke skilt fra tilfeldig" in t and "Kjøp: n=0, ikke målt ennå" in t and "0 %" not in t.replace("53,7 %", "")
+    assert "53,7 %" in t and "45–62 %" in t and "n=136" in t and "ikke skilt fra tilfeldig" in t and "FLAG" not in t and "Kjøp: For få handler (n=0)" in t and "0 %" not in t.replace("53,7 %", "")
 
 
 def test_theme_score_log(tmp_path):

@@ -1,0 +1,286 @@
+{
+ "kilde": "reports/natt/evidens_signaltyper.md (AnalBot 29.10.2026). Status, n og dato kopiert ordrett; DNB-delen er ikke med.",
+ "merknad": "Dato med * = filens endringsdato (rapporten er ikke committet), som i tabellen.",
+ "rader": [
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Kjøp (live-regel)",
+   "status": "For lav n",
+   "n": "0 / 0 (US og Oslo)",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Kjøp v2 (vinner c: Oslo kontrakt + kurs)",
+   "status": "Ikke bestått",
+   "n": "88 / 82",
+   "rapport": "kjop_v2.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Hold US",
+   "status": "Ikke bestått",
+   "n": "250 / 157",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Hold Oslo",
+   "status": "Ikke bestått",
+   "n": "99 / 87",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Følg US",
+   "status": "Ikke bestått",
+   "n": "892 / 547",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Følg Oslo",
+   "status": "Ikke bestått",
+   "n": "780 / 519",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Poengsum (score)",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "regeltest_2026-10.md, poengtest.md",
+   "dato": "29.10"
+  },
+  {
+   "seksjon": "Kategorier og risiko",
+   "signaltype": "Risikonivå Lav/Middels/Høy",
+   "status": "Bestått (på svingninger, IKKE avkastning)",
+   "n": "US 499 tickere/1023 uker; Oslo 264/762",
+   "rapport": "risiko.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "Innsidekjøp-klynge (US, Form 4)",
+   "status": "Ikke bestått",
+   "n": "982 (20d), ingen IS/OOS",
+   "rapport": "backtest.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "Offentlig kontrakt (DoD/USAspending)",
+   "status": "Ikke bestått",
+   "n": "335, ingen IS/OOS",
+   "rapport": "dod_size.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "Kontraktsmelding Oslo (Newsweb)",
+   "status": "Ikke bestått",
+   "n": "545 / 622 (20d)",
+   "rapport": "contracts_oslo.md",
+   "dato": "28.09"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "Tema med markedsbekreftelse (theme_market)",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "PEAD topp/topp (live: faste 15 %/4 %)",
+   "status": "Ikke bestått (skjult, PEAD_TT_ENABLED=False)",
+   "n": "1137 / 1367",
+   "rapport": "pead_rolling.txt",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Signaltyper som teller mot Kjøp",
+   "signaltype": "PEAD topp/topp (testet: topp 20 % rangering, ikke live)",
+   "status": "Bestått, minimal margin, FLAG survivorship",
+   "n": "1194 / 1325",
+   "rapport": "pead_spread.md, pead.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Sterk kvartalsrapport (PEAD, overraskelse topp 20 %)",
+   "status": "Ikke bestått",
+   "n": "3304 / 4023",
+   "rapport": "pead.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "PEAD-S",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "–",
+   "dato": "–"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Kongresskjøp",
+   "status": "Ikke bestått, FLAG",
+   "n": "5583 / 7533 (var. A)",
+   "rapport": "congress_test.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Innsidemeldinger Oslo (Newsweb)",
+   "status": "Ikke bestått",
+   "n": "510 / 449 (alle kjøp, 20d)",
+   "rapport": "insider_oslo.md",
+   "dato": "28.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Uvanlig volum",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "–",
+   "dato": "–"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Uvanlig kursbevegelse",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "–",
+   "dato": "–"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Reddit-omtale",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "–",
+   "dato": "–"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Tema-oppmerksomhet / temascore",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "–",
+   "dato": "–"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "GDELT-oppmerksomhet",
+   "status": "Ikke bestått",
+   "n": "35–50 topper per par, 8 par",
+   "rapport": "backtest.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Prediksjonsmarked (Polymarket)",
+   "status": "Ikke bestått",
+   "n": "577 hendelser",
+   "rapport": "polymarket.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Flaskehalser (PortWatch)",
+   "status": "Ikke bestått",
+   "n": "21–31 hendelser per flaskehals",
+   "rapport": "chokepoint.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Poeng-/oppmerksomhetssignaler (teller ikke mot Kjøp)",
+   "signaltype": "Kursbekreftelse (del av Kjøp-regel)",
+   "status": "Ikke bestått",
+   "n": "~187 / 205 aksjer per dato (US)",
+   "rapport": "price_rules.md",
+   "dato": "27.09"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Svak kurs (mom 12-1 bunn 20 %, Oslo)",
+   "status": "Ikke bestått",
+   "n": "4,4 / 7,9 aksjer per dato",
+   "rapport": "red_flags_oslo.md",
+   "dato": "25.10"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Høy volatilitet (Oslo)",
+   "status": "Ikke bestått",
+   "n": "5,5 / 9,1 per dato",
+   "rapport": "red_flags_oslo.md",
+   "dato": "25.10"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Rettet emisjon 60 d (Oslo)",
+   "status": "Ikke bestått",
+   "n": "ingen IS; 101 / 90 (regeltest)",
+   "rapport": "kjop_v2.md, red_flags_oslo.md",
+   "dato": "25.10"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Negativ EBIT",
+   "status": "Ikke testet",
+   "n": "–",
+   "rapport": "red_flags_oslo.md",
+   "dato": "25.10"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "2+ røde flagg (Oslo)",
+   "status": "Ikke bestått",
+   "n": "2,3 / 3,7 per dato",
+   "rapport": "red_flags_oslo.md",
+   "dato": "25.10"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Krasj ≥ 20 %",
+   "status": "Ikke bestått",
+   "n": "US 54/33, Oslo 122/65",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Illikvid (Oslo)",
+   "status": "Ikke bestått",
+   "n": "721 / 469",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Penny (Oslo)",
+   "status": "Ikke bestått",
+   "n": "352 / 280",
+   "rapport": "regeltest_2026-10.md",
+   "dato": "25.10*"
+  },
+  {
+   "seksjon": "Røde flagg",
+   "signaltype": "Økende short (Oslo)",
+   "status": "For lav n",
+   "n": "0 / 25",
+   "rapport": "regeltest_2026-10.md, shorts_oslo.md",
+   "dato": "25.10*"
+  }
+ ]
+}

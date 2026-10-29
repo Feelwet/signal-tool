@@ -138,14 +138,18 @@ def watch_text(tr: dict | None) -> str:
     cats = (tr or {}).get("cats") or {}
     w = (cats.get("watch") or {}).get("h5") or {}
     k = (cats.get("kjop") or {}).get("h5") or {}
-    if w.get("n") and w.get("hit") is not None:
-        ci = w.get("hit_ci") or [None, None]
+    from . import results as RS
+    nul = ((tr or {}).get("null") or {}).get("cats") or {}
+
+    def one(lab, x, nc):
+        if not RS.enough(x.get("n")) or x.get("hit") is None:
+            return f"{lab}: {RS.few(x.get('n'))}"
+        ci = x.get("hit_ci") or [None, None]
         sig = ci[0] is not None and ci[0] > 0.5
-        wt = (f'Følg (5 dager): <b>{_pc(w["hit"])} %</b> (95 %-KI {_pc(ci[0], 0)}–{_pc(ci[1], 0)} %), n={w["n"]}'
-              + ("" if sig else ', <span class="xbadge">FLAG: ikke skilt fra tilfeldig</span>'))
-    else:
-        wt = "Følg: n=0, ikke målt ennå"
-    kt = f'Kjøp: n={k.get("n") or 0}, ikke målt ennå' if not k.get("n") else f'Kjøp (5 dager): {_pc(k["hit"])} %, n={k["n"]}'
+        ct = RS.control_text(nc)
+        return (f'{lab} (5 dager): slo indeks <b>{_pc(x["hit"])} %</b> (95 %: {_pc(ci[0], 0)}–{_pc(ci[1], 0)} %), n={x["n"]}'
+                + ("" if sig else ", ikke skilt fra tilfeldig") + (f"; {html.escape(ct)}" if ct else "; kontroll: ikke beregnet"))
+    wt, kt = one("Følg", w, nul.get("watch")), one("Kjøp", k, nul.get("kjop"))
     return f'<p class="mut" style="margin:6px 0 0">Treffrate fra fremoverloggen – {wt}. {kt}. <a href="tickere.html#treffsikkerhet">Detaljer</a></p>'
 
 

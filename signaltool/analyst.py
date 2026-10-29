@@ -9,7 +9,7 @@ CSV = Path(__file__).resolve().parent.parent / "logs" / "analyst_recs.csv"
 RATING = {"kjop": "Kjøp", "hold": "Hold", "selg": "Selg"}
 FIRM = "DNB Carnegie"
 # Hook: AnalBot's verified re-run of reports/dnb_eval_2026.md sets this text later. No numbers hardcoded.
-HIT_RATE_TEXT = "Kjøpsråd 2026: 40–44 % slo OSEBX (n=194–221, FLAG). Kilde: reports/dnb_eval_2026.md"
+HIT_RATE_TEXT = "Kjøpsråd 2026: 40–44 % slo OSEBX (n=194–221, ikke bestått). Kilde: reports/dnb_eval_2026.md"
 OLD_DAYS = 90
 
 

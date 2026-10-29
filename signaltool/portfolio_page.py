@@ -47,11 +47,11 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
     nav = P._f(navs[-1]["nav"]) if navs else RULES["start_nok"]
     cash = s["cash"]
     status = ("0 handler: ingen tickere har oppfylt Kjøp-reglene ennå" if not trades
-              else f"{n_closed} av {need} lukkede handler før resultatet vises")
+              else (f"For få handler (n={n_closed})" if n_closed < need else f"{n_closed} lukkede handler"))
     w = min(100, n_closed / need * 100)
     top = (f'<h1 class="pf-h1">Signal-boka · fiktive penger · regler <a href="#regler">{RULES_VERSION}</a></h1>'
            f'<p class="pf-sub mut">Ikke investeringsråd</p>'
-           f'<div class="card pf-status">' + (f'<p class="mut pf-empty" style="margin:0;font-size:12px;line-height:20px;color:#8b949e">Ingen avsluttede handler ennå. Resultater vises etter 30.</p>' if not n_closed else '') + (f'<b>{E(status)}</b>' if trades else '') + f'<div class="pf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{need}" aria-valuenow="{n_closed}"><i style="width:{w:.0f}%"></i></div></div>'
+           f'<div class="card pf-status">' + (f'<p class="mut pf-empty" style="margin:0;font-size:12px;line-height:20px;color:#8b949e">For få handler (n=0). Resultater vises fra 30 lukkede handler.</p>' if not n_closed else '') + (f'<b>{E(status)}</b>' if trades else '') + f'<div class="pf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{need}" aria-valuenow="{n_closed}"><i style="width:{w:.0f}%"></i></div></div>'
            f'<div class="pf-k3"><div class="card"><span>Kontoverdi</span><b>{_nok(nav)}</b></div>'
            f'<div class="card"><span>Kontanter</span><b>{cash / nav * 100 if nav else 100:.0f} %</b></div>'
            f'<div class="card"><span>Åpne posisjoner</span><b>{len(s["open"])} av {RULES["max_positions"]}</b></div></div>')

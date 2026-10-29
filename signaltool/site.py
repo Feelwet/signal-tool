@@ -26,6 +26,8 @@ from . import site_sources as SS
 from . import site_sector as SC
 from . import nokkeltall as NK
 from . import pricechart as PC
+from . import evidens_status as ES
+from . import rowfresh as RF
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -175,7 +177,7 @@ def tt_row(e) -> str:
     if "pead_tt" not in (e.get("cat_types") or {}):
         return ""
     return (f'<tr class="tt"><td><span class="evb ev-testet">{E(PEAD_TT_BADGE)}</span>'
-            f'<div class="mut">{E(e["cat_types"]["pead_tt"])}</div></td><td>–</td></tr>')
+            f'<div class="mut">{E(e["cat_types"]["pead_tt"])}</div></td><td>{ES.for_key("pead_tt")}</td><td>–</td></tr>')
 
 
 def cat_cell(e, why=True):
@@ -225,15 +227,19 @@ def _ci(v):
     return "" if not v or v[0] != v[0] else f"{v[0]*100:+.1f} til {v[1]*100:+.1f} %"
 
 
-def _track_cells(v, min_n):
+def _track_cells(v, min_n, ctrl: dict | None = None):
+    """Resultatregler (results.py): under 30 «For få handler (n=X)»; fra 30 snitt mot indeks og kontroll med 95 %-intervall."""
+    from . import results as RS
     cells = ""
     for h in C.HORIZONS:
         x = v.get(f"h{h}", {})
-        if "mean" in x:
+        if "mean" in x and RS.enough(x.get("n")):
+            ct = RS.control_text(ctrl, h) if ctrl and h == (ctrl.get("h") or 20) else ""
             cells += (f'<td>{pct(x["mean"])} <span class="mut">(95 %: {_ci(x.get("mean_ci")) or "–"})</span><br>'
-                      f'<span class="mut">slo indeks {x["hit"]*100:.0f} % (95 %: {x["hit_ci"][0]*100:.0f}–{x["hit_ci"][1]*100:.0f} %), median {pct(x["median"])}, n={x["n"]}</span></td>')
+                      f'<span class="mut">slo indeks {x["hit"]*100:.0f} % (95 %: {x["hit_ci"][0]*100:.0f}–{x["hit_ci"][1]*100:.0f} %), median {pct(x["median"])}, n={x["n"]}'
+                      f'<br>{E(ct) if ct else "kontroll: ikke beregnet for denne horisonten"}</span></td>')
         else:
-            cells += f'<td class="mut">n={x.get("n", 0)} – for få (vises fra {min_n})</td>'
+            cells += f'<td class="mut">{RS.few(x.get("n", 0))}</td>'
     return cells
 
 
@@ -248,7 +254,8 @@ def track_html(snap):
     if not tr:
         return head + "<p><b>Ikke nok data ennå.</b></p></div>"
     mn = tr.get("min_n")
-    rows = "".join(f'<tr><td>{cat_badge(cat)}</td><td>{v["entries"]}</td>{_track_cells(v, mn)}</tr>' for cat, v in tr["cats"].items())
+    nul = tr.get("null") or {}
+    rows = "".join(f'<tr><td>{cat_badge(cat)}</td><td>{v["entries"]}</td>{_track_cells(v, mn, {**((nul.get("cats") or {}).get(cat) or {}), "h": nul.get("h")} if nul else None)}</tr>' for cat, v in tr["cats"].items())
     TN = {**C.TYPE_NO}
     trows = "".join(f'<tr><td>{E(TN.get(k, k))}</td><td>{v["entries"]}</td>{_track_cells(v, mn)}</tr>' for k, v in (tr.get("types") or {}).items())
     from .site_extra import _flag_info
@@ -314,7 +321,11 @@ def rel_label(txt):
 SCORE_TIP = "Rangering, ikke testet"   # AnalBot/UxBot 29.10: poengsummen er ikke testet mot avkastning (tiltak 1)
 SCORE_CSS = (".score.mu{background:rgba(148,163,184,.08);color:#94a3b8;border-color:rgba(148,163,184,.3)}"
              ".score.mu .sv{font-size:14px;line-height:1}"   # boksen beholder størrelsen (em fra cellen), bare tallet er 14 px
-             ".sc-i.ri.ri-c{font-size:12px;color:#94a3b8;margin-left:2px}\n")
+             ".sc-i.ri.ri-c{display:inline-flex;align-items:center;justify-content:center;position:relative;width:14px;height:14px;font-size:14px;line-height:14px;"
+             "padding:0;margin:0 0 0 4px;color:#94a3b8;vertical-align:middle}"
+             ".sc-i.ri.ri-c::before{content:\"\";position:absolute;left:50%;top:50%;width:32px;height:32px;transform:translate(-50%,-50%)}"   # trykkflate 32×32
+             ".sc-i .tip{font-size:12px;line-height:1.35}"
+             ".sc-mu{font-size:14px;color:#94a3b8}.ov-bar .sc.sc-mu{font-size:14px;color:#94a3b8}.ov-bar .tr i.mu{background:#475569}\n")
 
 
 def score_badge(s, hi=2.0, mid=1.0, muted=False):
@@ -325,16 +336,24 @@ def score_badge(s, hi=2.0, mid=1.0, muted=False):
     return f'<span class="score {cls}">{s:.2f}</span>'
 
 
-SCORE_I_JS = ("<script>(()=>{const B=[...document.querySelectorAll('.thead .sc-i')];if(!B.length)return;"
-              "B.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')}));"
-              "const x=()=>B.forEach(b=>b.setAttribute('aria-expanded','false'));document.addEventListener('click',e=>{if(!e.target.closest('.sc-i'))x()});"
-              "document.addEventListener('keydown',e=>{if(e.key==='Escape')x()})})()</script>")
+# ⓘ ved dempet poengsum/evidens (.sc-i): delegert klikk på document, så det virker også etter at kort pakkes inn i <details>
+# (innerHTML flyttes) og på sider uten felles .ri-håndterer. På tickere.html stopper since.JS klikket før det når hit (ingen dobbel veksling).
+SCORE_I_JS = ("<script>(()=>{if(window.__scI)return;window.__scI=1;const d=document,x=k=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(b=>b!==k&&b.setAttribute('aria-expanded','false'));"
+              "d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.sc-i');if(!b){x(null);return}e.preventDefault();x(b);"
+              "b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')});"
+              "d.addEventListener('keydown',e=>{if(e.key==='Escape')x(null)})})()</script>")
 
 
-def score_info(label: str = "Om poengsummen", js: bool = False) -> str:
-    """ⓘ «Rangering, ikke testet». js=True på tickersiden (der finnes ingen felles .ri-klikkhåndterer for trykk på touch)."""
-    return (f'<button type="button" class="ri ri-c sc-i" aria-expanded="false" aria-label="{label}">ⓘ'
-            f'<span class="tip">{SCORE_TIP}</span></button>' + (SCORE_I_JS if js else ""))
+def score_info(label: str = "Om poengsummen", tip: str = SCORE_TIP) -> str:
+    """ⓘ (14 px ikon, 32×32 px trykkflate via ::before). Klikk/trykk håndteres av SCORE_I_JS (på alle sider)."""
+    return (f'<button type="button" class="ri ri-c sc-i" aria-expanded="false" aria-label="{E(label)}">ⓘ'
+            f'<span class="tip">{E(tip)}</span></button>')
+
+
+# Risiko-kolonnen (PC): evidensmerke «Bestått» + ⓘ (bare for svingninger, ikke avkastning). Skjult under 700 px, mobil uendret.
+TICKER_HEAD = TICKER_HEAD.replace('title="Sorter etter risiko">Risiko', 'title="Sorter etter risiko">Risiko<span class="rk-ev">'
+                                  + ES.dot("risk")[0].replace('aria-hidden="true"', 'role="img" aria-label="' + E(ES.dot("risk")[1]) + '"', 1)
+                                  + score_info("Om risikonivåets evidens", ES.RISK_TIP) + '</span>', 1)
 
 
 CHIP_MAX = 3   # UxBot 29.10: maks 3 signalbrikker på PC, resten bak «+N»
@@ -353,7 +372,7 @@ def chips_html(chips: list) -> str:
     return (f'<span class="sgw">{" ".join(vis[:-1])} <span class="sgl">{vis[-1]} {extra} {more}</span></span>')
 
 
-CHIP_CSS = ("#tf-table .pmore{display:none}#tf-table .sgw,#tf-table .sgl{display:contents}#tf-table th.pt-h .sc-i.ri.ri-c{display:block;margin:0;padding:0}"
+CHIP_CSS = ("#tf-table .pmore{display:none}#tf-table .sgw,#tf-table .sgl{display:contents}#tf-table th.pt-h .sc-i.ri.ri-c{display:flex;margin:2px 0 0;padding:0}.evleg-pc,#tf-table .rk-ev{display:none}@media(min-width:700px){.evleg-pc{display:flex}#tf-table .rk-ev{display:inline-flex;align-items:center;gap:2px;margin-left:4px}}"
             "@media(min-width:700px){#tf-table td.sg-c{width:160px;max-width:160px}#tf-table .pill.px{display:none}"
             "#tf-table td.sg-c .pill{white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;box-sizing:border-box;margin:1px 4px 1px 0;line-height:16px;font-size:12px}"
             "#tf-table .sgw{display:flex;flex-wrap:wrap;align-items:center;max-width:160px}#tf-table .sgl{display:flex;align-items:center;min-width:0;max-width:100%}"
@@ -484,7 +503,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <main>{body}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
-{script}{SEARCH.get("mine", "")}{L.TIP_JS}</body></html>"""
+{script}{SEARCH.get("mine", "")}{L.TIP_JS}{SCORE_I_JS}</body></html>"""
 
 
 def theme_card(t, pre=""):
@@ -535,10 +554,15 @@ def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
     unr = bool(e.get("unranked"))
-    pts = chips_html([f'<span class="pill" title="{E(POINT_NO.get(k, k))}">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0] + ([] if unr else [an]))
+    def _pl(k, v):   # evidenssymbol først i brikken; status, n og dato i aria-label/title (plan 29.10, tiltak 4)
+        d, lab = ES.dot(k)
+        nm = f'{POINT_NO.get(k, k)}{"" if unr else f" {v:.1f}"}'
+        return f'<span class="pill" title="{E(nm + (". " + lab if lab else ""))}" aria-label="{E(nm + (". " + lab if lab else ""))}">{d}{E(nm)}</span>'
+    an = an.replace('>DNB</span>', '><i class="evd evd-dnb" aria-hidden="true">◌</i>DNB</span>', 1) if an else an   # DNB forblir ◌
+    pts = chips_html([_pl(k, v) for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0] + ([] if unr else [an]))
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
             f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c">{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -670,11 +694,12 @@ def _factor_fix(snap):
 
 def build(snap: dict) -> Path:
     snap = _prep(snap)
+    RF.set_now(snap.get("generated"))
     if SITE.exists():
         shutil.rmtree(SITE)
     (SITE / "tema").mkdir(parents=True)
     (SITE / "ticker").mkdir()
-    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + STAR_CSS + SCORE_CSS + CHIP_CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
+    _css = (CSS + RTAB_CSS + NK.CSS + "\n" + PC.CSS + "\n" + MINE.CSS + DC.CSS + SN.CSS + RK.CSS + CG.CSS + SS.CSS + FRZ_CSS + STAR_CSS + SCORE_CSS + CHIP_CSS + ES.CSS + RF.CSS + SC.CSS + X.CSS_EXTRA + L.CSS + EV.CSS + OV.CSS + TL.CSS + NM.CSS + ".card.stale{border-left:4px solid var(--down)}\n"
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
@@ -722,8 +747,8 @@ def build(snap: dict) -> Path:
     (SITE / "index.html").write_text(page("Oversikt", "".join(b), 0, snap))
 
     # ---------- themes list + pages ----------
-    rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"])}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")]) + L.EXP() + f'<div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
+    rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
+    (SITE / "temaer.html").write_text(page("Temaer", L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")]) + L.EXP() + f'<div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
     have = {e["ticker"] for e in tickers}
     for M in TM.MAPS.values():
         (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", sec(f"Temakart: {M['name']}", TM.map_html, M["key"], snap, have), 1, snap))
@@ -734,7 +759,7 @@ def build(snap: dict) -> Path:
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
     (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">{E(frz_text(snap["frozen_from"]))}</p>' if snap.get("frozen_from") else "")
-                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card"><div class="tw"><table>' + TICKER_HEAD + ''
+                                            + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card">' + ES.legend(dnb=True).replace('class="evleg"', 'class="evleg evleg-pc"', 1) + '<div class="tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers if not e.get("unranked")) + "</table></div>"
                                             # UxBot 25.10: overskrift + (i)-tekst utenfor scrollboksen, full bredde, bryter linjer
                                             + ('<div class="ur-head"><b>Ikke rangert</b> <span class="mut">· for lite data (under 4/7 grunnfelt)</span>' + UR_I + "</div>"
@@ -811,7 +836,7 @@ def theme_page(t, catmap=None, snap=None):
     heads = "".join(f'<li><a href="{E(h["link"])}">{E(h["title"])}</a> <span class="mut">– {E(h["source"])}, {E(str(h.get("published") or "")[:16].replace("T", " "))} UTC</span></li>' for h in t["headlines"])
     red = "".join(f'<li><a href="{E(r["link"])}">{E(r["title"])}</a> <span class="mut">r/{E(r["sub"])}</span></li>' for r in t["reddit"])
     ek = "".join(f'<li><a href="{E(x["url"])}">{E(x["company"])}</a> <span class="mut">{E(x["date"])}</span></li>' for x in t["eightk_examples"])
-    return f"""<h1>{E(t['name'])} {score_badge(t['score'])}</h1>
+    return f"""<h1>{E(t['name'])} {score_badge(t['score'], muted=True)}{score_info("Om temascore")}</h1>
 <div class="card"><h2 style="margin-top:0">Geopolitisk scenario</h2><p>{E(t['reasoning'])}</p>
 <p><b>⚠️ Hva kan gå galt:</b> {E(t['risks'])}</p>
 <p><b>Sektorer:</b> {E(', '.join(t['sectors']))}<br><b>Vinnere ved eskalering (eksempler):</b> USA: {E(', '.join(t['tickers_us']))}; Oslo: {E(', '.join(t['tickers_ose']) or '–')}{('; andre: ' + E(', '.join(t['tickers_other']))) if t['tickers_other'] else ''}<br>
@@ -839,12 +864,12 @@ def tema_ticker_page(e):
 def ticker_page(e, tmap):
     st = e.get("stats") or {}
     kd = lambda k: NK.info_i(NK.KT_DEFS[k], (e.get("_nk") or {}).get("date") or st.get("last_date"))
-    pts = "".join(f'<tr><td>{EV.badge(k)}{E(POINT_NO.get(k, k))}</td><td>{v:.2f}</td></tr>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
+    pts = "".join(f'<tr><td>{E(POINT_NO.get(k, k))}</td><td>{ES.for_key(k) or "<span class=mut>–</span>"}</td><td>{v:.2f}</td></tr>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info(js=True))}
-{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
+    return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info())}
+{SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn() + ES.for_key("risk", short=True), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RF.line(e)}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
@@ -857,7 +882,7 @@ def ticker_page(e, tmap):
 <tr><td data-k="close" data-d="2">{num_no(st.get('close'))}</td><td data-k="ret_1d" data-d="1" data-p="1">{pct_no(st.get('ret_1d'))}</td><td data-k="ret_5d" data-d="1" data-p="1">{pct_no(st.get('ret_5d'))}</td><td data-k="ret_20d" data-d="1" data-p="1">{pct_no(st.get('ret_20d'))}</td><td data-k="ret5_z" data-d="1">{num_no(st.get('ret5_z'),1)}</td><td data-k="vol_ratio_5d" data-d="1">{num_no(st.get('vol_ratio_5d'),1)}{"x" if st.get('vol_ratio_5d') is not None else ""}</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
 {DC.card(e)}
-<div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
+<div class="card"><h2 style="margin-top:0">Signaler og bevis</h2>{ES.legend()}<table><tr><th>Signal</th><th>Evidens</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>
 <div class="card"><h3>Hvorfor dette kan bety noe</h3><p>{E(e['why'])}</p>{CG.html(e.get("_congress") or [])}<h3>Hva kan gå galt</h3><p>{E(e['risks'])}</p></div>{RK.JS}"""
 
 
@@ -1043,6 +1068,7 @@ def metode_page(snap):
     return (L.head("Metode", "Hvordan signalene lages, hva som er testet, kildestatus og hva som fortsatt er eksperimentelt.",
                    [(f"{ok}/{n}", "Kilder OK", "siste kjøring", "#kilder"), (str(len(tested)), "Testet, ingen effekt", "fjernet fra Makro", "#testet"), (str(len(exp)), "Eksperimentelt", "ikke testet", "#eksperimentelt")])
             + _learn_html()
+            + fold(T("Evidens per signaltype", "status, n og dato fra AnalBots oversikt"), ES.table_html(), open_=False, hid="evidens")
             + fold(T("Ærlig status", "hva verktøyet kan og ikke kan"), hon, open_=False, hid="status")
             + fold(T("Porteføljeregler og markedsregime", "regler for posisjoner"), X.portfolio_rules_html() + Q.section("Markedsregime", X.regime_html, snap, snap=snap), open_=False, hid="regler")
             + fold(T("Treffrate", "fremoverlogg, Følg og Kjøp"), L.watch_text(snap.get("track_record")), open_=False, hid="treffrate")

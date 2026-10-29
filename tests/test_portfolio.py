@@ -119,9 +119,9 @@ def test_page_empty_and_with_trades(tmp_path):
     from signaltool import portfolio_page as PP
     h = PP.html({"tickers": []}, tmp_path / "t.csv", tmp_path / "n.csv")
     assert "Signal-boka · fiktive penger · regler <a href=\"#regler\">rules_v1</a>" in h and "Ikke investeringsråd" in h
-    assert "Ingen avsluttede handler ennå. Resultater vises etter 30." in h and "0 av 20" in h and 'id="regler"' in h
+    assert "For få handler (n=0)" in h and "0 av 20" in h and 'id="regler"' in h
     assert "%" in h and "avkastning" not in h.split('id="regler"')[0].lower()
     run(tmp_path, "2026-10-02", tk("A.OL", d="2026-10-01"))
     run(tmp_path, "2026-10-03", tk("A.OL", d="2026-10-02"))
     h = PP.html(snap("2026-10-03", tk("A.OL", d="2026-10-02")), tmp_path / "t.csv", tmp_path / "n.csv")
-    assert "0 av 30 lukkede handler før resultatet vises" in h and "1 av 20" in h and "dag 0 av 60" in h and "pf-cards" in h
+    assert "For få handler (n=0)" in h and "1 av 20" in h and "dag 0 av 60" in h and "pf-cards" in h

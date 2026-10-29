@@ -52,7 +52,17 @@ def short_stats(df: pd.DataFrame) -> dict:
     c = df["Close"]
     nan = np.nan
     return {"last_date": str(c.index[-1].date()), "close": float(c.iloc[-1]), "ret_1d": nan, "ret_5d": nan, "ret_20d": nan,
-            "ret5_z": nan, "vol5_z": nan, "vol1_z": nan, "vol_ratio_5d": nan, "sma50": nan, "maxdd20": nan, "adv20": nan}
+            "ret5_z": nan, "vol5_z": nan, "vol1_z": nan, "vol_ratio_5d": nan, "sma50": nan, "maxdd20": nan, "adv20": nan,
+            "vol_1d": _vol1(df)}
+
+
+def _vol1(df: pd.DataFrame) -> float:
+    """Rått volum for siste bar (0 = ingen handel). NaN når volumet mangler (f.eks. sluttkurs fra chart-metadata)."""
+    try:
+        v = df["Volume"].iloc[-1]
+        return float(v) if v == v else np.nan
+    except Exception:
+        return np.nan
 
 
 def ticker_stats(df: pd.DataFrame) -> dict:
@@ -79,6 +89,7 @@ def ticker_stats(df: pd.DataFrame) -> dict:
     out["maxdd20"] = float((last20 / last20.cummax() - 1).min()) if len(last20) >= 5 else np.nan  # worst peak-to-trough, 20 sessions
     dv = (c * df["Volume"]).iloc[-20:]
     out["adv20"] = float(dv.median()) if dv.notna().sum() >= 10 else np.nan  # median daily turnover, local currency
+    out["vol_1d"] = _vol1(df)   # plan 29.10: «Ingen handel» bare når dagens volum er 0 (rowfresh.py)
     return out
 
 

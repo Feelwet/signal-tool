@@ -196,6 +196,11 @@
    "name": "iShares MSCI Brazil ETF",
    "website": null
   },
+  "F": {
+   "exchange": "NYSE",
+   "name": "Ford Motor Company",
+   "website": "https://www.ford.com"
+  },
   "FEZ": {
    "exchange": "NYSEArca",
    "name": "State Street SPDR EURO STOXX 50 ETF",

@@ -208,6 +208,9 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
     if ret and ret.get("new"):
         t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(new_tip(s))}'
+    elif ret and ret.get("r") is not None and ret.get("short"):
+        from .results import SHORT_TIP
+        t += f'<span class="sl-r rsh">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span>{ri(SHORT_TIP)}'
     elif ret and ret.get("r") is not None:
         t += (f'<span class="sl-r">&nbsp;·&nbsp;{E(pct(ret["r"]))}</span><button type="button" class="rt-i" aria-expanded="false" '
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
@@ -265,7 +268,7 @@ def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, t
     skjules tallet (r = None, stale = True)."""
     if not s or s.get("price") in (None, 0) or close in (None, 0) or s.get("list_days", 0) < MIN_DAYS:
         return None
-    from .freshness import is_stale
+    from .freshness import is_stale, tdays_old
     last = str(last_date)[:10] if last_date else None
     if run_date and is_stale(last, run_date):
         return {"r": None, "ex": None, "bench": None, "illiquid": bool(s.get("illiquid")), "stale": True, "last": last}
@@ -279,7 +282,10 @@ def ret(s: dict | None, close, last_date: str | None, idx: dict | None = None, t
             ex = r - (ser[last_date] / ser[s["price_date"]] - 1)
     # UxBot/AnalBot 28.10: kom på lista i dag (innkursdato = siste kursdato) -> «Ny i dag», sorteres som tom
     new = bool(last and s.get("price_date") and str(s["price_date"])[:10] == last)
-    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid")), "stale": False, "last": last, "new": new}
+    from .results import short_period
+    td = tdays_old(s.get("price_date"), last)   # plan 29.10: under 5 handelsdager vises grått med ⓘ (mest støy)
+    return {"r": r, "ex": ex, "bench": bn, "illiquid": bool(s.get("illiquid")), "stale": False, "last": last, "new": new,
+            "td": td, "short": bool(short_period(td))}
 
 
 def _cls(x):
@@ -326,7 +332,11 @@ def ret_inner(r: dict | None, s: dict | None = None) -> str:
     if r.get("new"):
         return ri(new_tip(s), f'<span class="rnew">{NEW_T}</span>')
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
-    ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
+    sh = r.get("short")
+    ex = f'<span class="rex{" rsh" if sh else ""}">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
+    if sh:   # results.py: under 5 handelsdager -> grått + ⓘ «Kort periode, mest tilfeldig svingning.»
+        from .results import SHORT_TIP
+        return f'<span class="rv rsh">{pct(r["r"])}</span>{ri(SHORT_TIP)}{w}{ex}'
     return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(tip) if tip else ""}{w}{ex}'
 
 
@@ -356,7 +366,7 @@ def mobile(s: dict | None, r: dict | None = None, cur: str = "") -> str:
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}.rv.rup{color:#3fb950}.rv.rdn{color:#f85149}.rv.r0{color:var(--mut)}.rv.rst,.sl-r.rst{color:#64748b}.rv.rsh,.sl-r.rsh,.rex.rsh{color:#94a3b8}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}

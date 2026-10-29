@@ -43,7 +43,7 @@ MAIN_EXCLUDE = frozenset({"TECH.OL"})
 INVALID = LOGS / "gs_invalid.csv"
 START = "2026-09-27"
 MIN_DAYS_PUBLIC = 60
-FLAG_TEXT = "FLAG: kort periode, ikke skilt fra tilfeldig"
+FLAG_TEXT = "Kort periode, mest tilfeldig svingning."   # results.SHORT_TIP; ordet FLAG vises aldri
 COLS = ["date", "gs_index", "benchmark", "n_members", "n_no_price", "n_invalid", "flag", "gs_with_tech"]
 IDX = {"oslo": "OSEBX.OL", "nasdaq": "^IXIC", "nyse": "^NYA"}
 

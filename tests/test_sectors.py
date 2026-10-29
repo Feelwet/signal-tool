@@ -43,7 +43,7 @@ def test_pages_render():
     b = S.sector_html("bank", fund)
     assert "ROE &gt;10 %" in b and "ROIC" not in b.split("<table")[2] and "kvartalsrapport" in b
     i = S.index_html(fund)
-    assert "sektor_shipping.html" in i and "FLAG: n&lt;5" in i
+    assert "sektor_shipping.html" in i and "For få (n=" in i and "FLAG" not in i
 
 
 def test_tv_url_builder():

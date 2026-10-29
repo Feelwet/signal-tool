@@ -228,6 +228,6 @@ def test_site_sections():
     assert "Ærlig status" in X.honesty_html() and "maks 5 %" in X.portfolio_rules_html().replace("Maks", "maks")
     tr = C.track_record(_log([{"date": "2026-09-28", "ticker": "AAA", "category": "watch", "price": 1.0, "types": "pead"}]), {})
     t = site.track_html({"track_record": tr})
-    assert "vises fra 30" in t and "Per signaltype" in t
+    assert "For få handler (n=" in t and "FLAG" not in t and "Per signaltype" in t
     r = X.regime_html({"regime": {"^GSPC": {"name": "S&P 500", "last": 1, "sma10m": 2, "dist": -0.5, "vol1m": 0.3, "below": True, "high_vol": True, "risk_off": True, "asof": "x"}}})
     assert "halver nye posisjoner" in r and "Ikke et salgssignal" in r

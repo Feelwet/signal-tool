@@ -428,7 +428,7 @@ def index_html(fund: dict | None = None) -> str:
     cards = []
     for k, S in SECTORS.items():
         c = counts(k, fund)
-        flag = ' <span class="sb miss">FLAG: n&lt;5</span>' if c["n"] < 5 else ""
+        flag = f' <span class="sb miss">For få (n={c["n"]})</span>' if c["n"] < 5 else ""   # ordet FLAG vises aldri (plan 29.10)
         drv = "".join(f"<li>{_E(x['name'])}</li>" for x in S["drivers"])
         cards.append(f'<a class="scard" id="{k}" href="tema/{S["file"]}.html"><h3 style="margin:0 0 6px">{_E(S["name"])}</h3><ul class="mut">{drv}</ul>'
                      '<div>' + " ".join(_badge(st, f" {c[st]}") for st in ("CLEAR", "FAIL", "MISSING")) + '</div>'

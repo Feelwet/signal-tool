@@ -63,7 +63,7 @@ def main(argv=None):
                 st = ms.loc[e["ticker"]]
                 old = e.get("stats") or {}
                 old.update({k: (None if st.get(k) is None or st.get(k) != st.get(k) else round(float(st.get(k)), 4))
-                            for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20"]})
+                            for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20", "vol_1d"]})
                 old["last_date"] = st.get("last_date")
                 e["stats"] = old
         from . import extras, briefing

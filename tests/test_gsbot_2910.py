@@ -62,7 +62,7 @@ def test_chips_max3_plus_n_in_order():
 
 def test_chip_css_pc_only():
     c = S.CHIP_CSS
-    assert "#tf-table .pmore{display:none}" in c and "@media(min-width:700px){" in c and "#tf-table .pill.px{display:none}" in c.split("@media(min-width:700px){")[1]
+    assert "#tf-table .pmore{display:none}" in c and "@media(min-width:700px){" in c and "#tf-table .pill.px{display:none}" in c.split("@media(min-width:700px){#tf-table td.sg-c")[1]
 
 
 def test_score_muted_value_unchanged():
@@ -71,4 +71,4 @@ def test_score_muted_value_unchanged():
     assert 'class="score mu"' in m and 'title="Rangering, ikke testet"' in m and "hot" not in m
     assert n == '<span class="score hot">4.00</span>'   # tema-poeng (ikke dempet) uendret
     assert ".score.mu .sv{font-size:14px" in S.SCORE_CSS and "color:#94a3b8" in S.SCORE_CSS
-    assert "Rangering, ikke testet" in S.score_info() and "<script>" in S.score_info(js=True)
+    assert "Rangering, ikke testet" in S.score_info() and "<script>" not in S.score_info() and "window.__scI" in S.SCORE_I_JS

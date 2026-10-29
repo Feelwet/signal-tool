@@ -498,7 +498,7 @@ def run(fast: bool = False) -> dict:
     for t, e in cand.items():
         if t in mstats.index:
             st = mstats.loc[t]
-            e["stats"] = {k: _f(st.get(k)) for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20"]}
+            e["stats"] = {k: _f(st.get(k)) for k in ["close", "ret_1d", "ret_5d", "ret_20d", "ret5_z", "vol5_z", "vol_ratio_5d", "sma50", "maxdd20", "adv20", "vol_1d"]}
             e["stats"]["last_date"] = st.get("last_date")
             vz = e["stats"].get("vol5_z")
             if vz is not None and vz > 1.5:

@@ -17,11 +17,12 @@ def _snap(**kw):
 
 
 def test_hit_line_uses_real_n_and_flags():
-    assert OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 0}}}}) == "Kjøp-treffrate: n=0, for lav (FLAG)"
+    assert OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 0}}}}) == "Kjøp-treffrate: For få handler (n=0)"   # plan 29.10: ordet FLAG vises aldri
     assert "n=12" in OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 12, "hit": 0.9}}}})
     ok = OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 40, "hit": 0.7, "hit_ci": [0.55, 0.8]}}}})
     assert "70 %" in ok and "FLAG" not in ok
-    assert "FLAG" in OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 40, "hit": 0.55, "hit_ci": [0.4, 0.7]}}}})
+    weak = OV.kjop_hit_line({"cats": {"kjop": {"h5": {"n": 40, "hit": 0.55, "hit_ci": [0.4, 0.7]}}}})
+    assert "ikke skilt fra tilfeldig" in weak and "FLAG" not in weak and "95 %: 40–70 %" in weak
 
 
 def test_strip_has_four_tiles_and_stacked_bar():
@@ -36,7 +37,7 @@ def test_week_change_none_without_history(tmp_path):
     assert OV.week_change(p, "2026-10-25") == {}
     h = OV.themes_html(_snap(), {})
     assert "▲" not in h and "▼" not in h and h.count('class="ov-bar"') == 8 and "Alle temaer (8)" in h
-    assert "Eksperimentelt" in h
+    assert "Rangering, ikke testet" in h   # plan 29.10: én ⓘ i overskriften (erstatter «Eksperimentelt»-merket)
 
 
 def test_week_change_from_log(tmp_path):
