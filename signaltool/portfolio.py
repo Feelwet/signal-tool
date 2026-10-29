@@ -96,13 +96,21 @@ def _value(s: dict, by: dict, usdnok: float) -> float:
     return v
 
 
-def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV) -> dict:
-    """Én kjøring: fyll ventende ordre (sluttkurs dagen etter signalet), legg nye ordre, skriv NAV-rad."""
+def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV,
+         rules: dict = RULES, picks: list[dict] | None = None, extra: list[dict] | None = None, why_buy: str = "Kjøp",
+         cols: list[str] = T_COLS, annotate=None) -> dict:
+    """Én kjøring: fyll ventende ordre (sluttkurs dagen etter signalet), legg nye ordre, skriv NAV-rad.
+    Standardverdiene = bok 1 (rules_v1, kjøp kun Kjøp). Andre bøker (portfolio_books.py) sender egne regler, ferdig valgte
+    kandidater (`picks`, i rekkefølge), `extra` (tema-rader utenfor snapshot, for kurs og røde flagg), egne kolonner (`cols`) og
+    `annotate(e)` -> dict med begrunnelse på kjøpsordren (signaldagen). Da logges også referanseindeksens nivå ved inngang (fill)."""
+    RULES, RULES_VERSION = rules, rules["version"]   # lokale navn: bok 1 bruker de fryste rules_v1 uendret
     today = str(snap.get("date"))
     trades = _read(trades_path)
     if any(r["run_date"] == today for r in trades) or any(r["date"] == today for r in _read(nav_path)):
         return state(trades)                                      # allerede kjørt i dag
     by = {e["ticker"]: e for e in snap.get("tickers", [])}
+    for e in extra or []:
+        by.setdefault(e["ticker"], e)
     s = state(trades)
     new = []
     runs = sorted({r["date"] for r in _read(nav_path)})
@@ -122,6 +130,8 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
                 sh = nok / (px * fxv)
                 r = {**o, "event": "fill", "run_date": today, "price_date": pdt, "price": px, "fx": fxv, "shares": round(sh, 6),
                      "nok_value": round(nok, 2), "cost_nok": round(nok * _cost_rate(illq), 2)}
+                if annotate:
+                    r["bench_entry"] = (bench or {}).get("spx" if is_us(o["ticker"]) else "osebx")
             else:
                 p = s["open"].get(o["ticker"])
                 if not p:
@@ -147,32 +157,39 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
         seq += 1
         px, pdt = _px(e)
         illq = "illiquid" in ((e or {}).get("cat_flags") or {})
-        return {"rules_version": RULES_VERSION, "event": "order", "order_id": f"{today}-{seq:04d}", "run_date": today, "signal_date": today,
-                "ticker": t, "side": side, "reason": why + (";illiquid" if illq else ""), "price_date": pdt or today,
-                "currency": "USD" if is_us(t) else "NOK"}
+        row = {"rules_version": RULES_VERSION, "event": "order", "order_id": f"{today}-{seq:04d}", "run_date": today, "signal_date": today,
+               "ticker": t, "side": side, "reason": why + (";illiquid" if illq else ""), "price_date": pdt or today,
+               "currency": "USD" if is_us(t) else "NOK"}
+        if annotate and side == "buy":
+            row.update(annotate(e))
+            row["bench_signal"] = (bench or {}).get("spx" if is_us(t) else "osebx")
+        return row
     for t, p in s["open"].items():
         if (t, "sell") in pend_t:
             continue
         e = by.get(t)
         _, pdt = _px(e)
         why = None
-        if e is None or e.get("category") not in ("kjop", "hold"):
+        if e is None and not RULES["sell_on_folg_or_lower"]:
+            pdt = today                                               # ute av lista: holdetid telles mot kjøringsdatoen
+        if RULES["sell_on_folg_or_lower"] and (e is None or e.get("category") not in ("kjop", "hold")):
             why = "under Hold"
         elif e.get("cat_flags"):
             why = "rødt flagg"
         elif pdt and int(np.busday_count(p["date"], pdt)) >= RULES["hold_trading_days"]:
-            why = "60 handelsdager"
+            why = f"{RULES['hold_trading_days']} handelsdager"
         if why:
             new.append(order(t, "sell", why, e or {"stats": {}}))
     # 3) kjøpsordre: Kjøp, ikke eid, ikke ventende, plass igjen
     slots = RULES["max_positions"] - len(s["open"]) - len([o for o in s["pending"].values() if o["side"] == "buy"])
-    for e in sorted(snap.get("tickers", []), key=lambda x: -(x.get("score") or 0)):
+    cands = sorted(snap.get("tickers", []), key=lambda x: -(x.get("score") or 0)) if picks is None else picks
+    for e in cands:
         if slots <= 0:
             break
         t = e["ticker"]
-        if e.get("category") == RULES["buy_category"] and t not in s["open"] and (t, "buy") not in pend_t:
-            new.append(order(t, "buy", "Kjøp", e)); slots -= 1
-    _append(trades_path, T_COLS, new)
+        if (picks is not None or e.get("category") == RULES["buy_category"]) and t not in s["open"] and (t, "buy") not in pend_t:
+            new.append(order(t, "buy", why_buy, e)); slots -= 1
+    _append(trades_path, cols, new)
     s = state(trades + new)
     # 4) NAV + vektet referanse
     nav = _value(s, by, usdnok or 0)
@@ -216,15 +233,22 @@ def run(snap: dict, status: dict) -> None:
     except Exception as ex:
         log.exception("portfolio failed")
         status["Signal-boka (papirkonto)"] = f"FAILED: {ex}"
+    try:   # bok 2 (høy risiko, eksperimentell) + bok 3 (tilfeldig kontroll) – egne logger, påvirker aldri bok 1
+        from . import portfolio_books
+        portfolio_books.run(snap, status, usd, bench)
+    except Exception as ex:
+        log.exception("portfolio books failed")
+        status["Papirbøker 2/3"] = f"FAILED: {ex}"
 
 
-def summary(trades_path: Path = TRADES, nav_path: Path = NAV) -> dict:
+def summary(trades_path: Path = TRADES, nav_path: Path = NAV, rules: dict = RULES, name: str = "Signal-boka") -> dict:
     """JSON for siden. Ingen avkastningstall før RULES['min_closed_for_returns'] lukkede handler."""
+    RULES, RULES_VERSION = rules, rules["version"]
     trades, navs = _read(trades_path), _read(nav_path)
     s = state(trades)
     n = len(s["closed"])
     show = n >= RULES["min_closed_for_returns"]
-    out = {"name": "Signal-boka", "rules_version": RULES_VERSION, "rules": RULES, "start_nok": RULES["start_nok"],
+    out = {"name": name, "rules_version": RULES_VERSION, "rules": RULES, "start_nok": RULES["start_nok"],
            "closed_trades": n, "open_positions": [{"ticker": p["ticker"], "since": p["date"], "currency": p["currency"]} for p in s["open"].values()],
            "pending_orders": [{"ticker": o["ticker"], "side": o["side"], "signal_date": o["signal_date"], "reason": o["reason"]} for o in s["pending"].values()],
            "as_of": navs[-1]["date"] if navs else None, "returns_visible": show,
