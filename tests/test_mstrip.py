@@ -53,7 +53,9 @@ def test_freshness_warning():
 def test_zero_change_grey():
     s = {"dates": ["2026-10-27", "2026-10-28"], "close": [50.0, 50.0]}
     h = M.field(M.FIELDS[0], {"BZ=F": s}, NOW)
-    assert 'class="ms0">1d 0,0\u00a0%' in h and 'class="ms0">20d –' in h
+    assert 'class="ms0">1d 0,0\u00a0%' in h and "20d" not in h   # Brent: bare 1d (AnalBot 29.10)
+    b = M.field(M.FIELDS[1], {"BTC-USD": s}, NOW)
+    assert 'class="ms0">20d –' in b
 
 
 def test_collector_drops_unfinished_bars(monkeypatch):

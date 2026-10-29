@@ -1,4 +1,4 @@
-"""Markedsstripe øverst i Oversikt (UxBot 29.10): to felt, Brent og Bitcoin. Pris 20 px, «1d x % · 20d y %» 13 px med farge/fortegn,
+"""Markedsstripe øverst i Oversikt (UxBot 29.10): to felt, Brent og Bitcoin. Pris 20 px, «1d x % · 20d y %» 13 px med farge/fortegn (Brent bare 1d, AnalBot 29.10),
 kilde og dato 11 px grått. Ingen poengsum, signal eller vurderingsord. Dikter aldri opp en pris: mangler data -> «Ingen kursdata»."""
 from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
@@ -6,7 +6,6 @@ from html import escape as E
 
 NO_DATA = "Ingen kursdata"
 ROLL_TIP = "Kontraktsbytte i dag"
-ROLL_TIP_20 = "Kontraktsbytte i perioden"   # AnalBot 29.10 (bindende): bytte innenfor 20d-vinduet -> «–»
 FIELDS = (
     {"sym": "BZ=F", "title": "Brent-olje, futures (USD/fat)", "dec": 2,
      "tip": "Sluttkurs nærmeste future (BZ=F) · Yahoo · {dato}", "src": "Yahoo BZ=F · {dato}"},
@@ -144,15 +143,15 @@ def field(f: dict, data: dict | None, now: datetime) -> str:
     else:
         one = '<span class="ms0">1d –</span>'
     r20, c20 = _pct(last / pairs[-21][1] - 1) if len(pairs) >= 21 else ("–", "ms0")
-    roll20 = (not btc) and len(pairs) >= 21 and roll_in_window(pairs[-21][0], d)
-    twenty = f'<span class="ms0">20d –</span>{ri(ROLL_TIP_20)}' if roll20 else f'<span class="{c20}">20d {r20}</span>'
+    # AnalBot 29.10 (endelig): Brent viser bare 1d – 20d fjernes helt (21 handelsdager rommer nesten alltid et ICE-bytte).
+    twenty = "" if not btc else f' · <span class="{c20}">20d {r20}</span>'
     exp = (now.astimezone(timezone.utc).date() - timedelta(days=1)) if btc else last_session(now)
     stale = d < exp
     warn = (f'<span class="ms-w" aria-label="Kursen er fra {dato}, eldre enn {"i går" if btc else "siste handelsdag"}">⚠ eldre kurs</span>'
             if stale else "")
     return (f'<div class="ms-f" data-sym="{E(f["sym"])}">{t}'
             f'<div class="ms-p">{_num(last, f["dec"])}{ri(f["tip"].format(dato=dato))}</div>'
-            f'<div class="ms-c">{one} · {twenty}</div>'
+            f'<div class="ms-c">{one}{twenty}</div>'
             f'<div class="ms-s">{E(f["src"].format(dato=dato))}{warn}</div></div>')
 
 

@@ -49,9 +49,11 @@ def test_brent_rolls_ice_rule():
     assert rows[0]["utlop_siste_handelsdag"] == "2026-01-30" and rows[0]["ny_frontkontrakt_bz"] == "H26" and len(rows) == 24
 
 
-def test_brent_20d_dash_when_roll_in_window():
+def test_brent_has_no_20d_btc_keeps_it():
     now = datetime(2026, 11, 25, 6, 0, tzinfo=timezone.utc)
     h = M.field(M.FIELDS[0], {"BZ=F": _ser(date(2026, 11, 24))}, now)
-    assert "20d –</span>" in h and "Kontraktsbytte i perioden" in h and "FLAG" not in h
+    assert "20d" not in h and "Kontraktsbytte i perioden" not in h and "1d +" in h and "FLAG" not in h
+    roll = M.field(M.FIELDS[0], {"BZ=F": _ser(date(2026, 11, 2))}, datetime(2026, 11, 3, 6, 0, tzinfo=timezone.utc))
+    assert "1d –</span>" in roll and "Kontraktsbytte i dag" in roll and "20d" not in roll
     bt = M.field(M.FIELDS[1], {"BTC-USD": _ser(date(2026, 11, 24))}, now)
-    assert "Kontraktsbytte" not in bt and "20d +" in bt
+    assert "Kontraktsbytte" not in bt and "20d +" in bt and "1d +" in bt
