@@ -46,10 +46,26 @@ def test_candidates_top10_filter_and_categories():
     assert not {"NEG.OL", "ZERO.OL", "NONE.OL", "KJOP.OL", "NOSCORE.OL"} & set(got)
 
 
-def test_universe_includes_tema_not_kjop():
+def test_same_universe_tema_excluded_in_both():
     tr = {"ticker": "TEMA.OL", "has_data": True, "close": 10.0, "asof": "2026-10-01", "flags": {}}
-    u = B.universe(snap("2026-10-02", tk("A.OL"), tk("K.OL", cat="kjop"), tk("H.OL", cat="hold"), theme_rows=[tr]))
-    assert sorted((e["ticker"], e["category"]) for e in u) == [("A.OL", "watch"), ("H.OL", "hold"), ("TEMA.OL", "tema")]
+    ts = [tk("A.OL"), tk("K.OL", cat="kjop"), tk("H.OL", cat="hold"), tk("T2.OL", cat="tema", score=5),
+          tk("NEG.OL", r20=-0.1), tk("NOS.OL", score=None)]
+    s = snap("2026-10-02", *ts, theme_rows=[tr])
+    u = B.universe(s)
+    assert sorted((e["ticker"], e["category"]) for e in u) == [("A.OL", "watch"), ("H.OL", "hold")]
+    h = B.hoy_candidates(u)
+    c, _ = B.control_candidates(u, len(h), "2026-10-02")
+    assert {e["ticker"] for e in c} == {e["ticker"] for e in h} == {"A.OL", "H.OL"}   # hele universet trukket når n = univers
+    assert not {"TEMA.OL", "T2.OL", "K.OL"} & {e["ticker"] for e in h + c}
+
+
+def test_control_draws_only_from_book2_universe():
+    ts = [tk(f"T{i}.OL", score=float(i), r20=(0.1 if i % 2 else -0.1)) for i in range(60)]
+    u = B.universe(snap("2026-10-02", *ts))
+    assert len(u) == 30 and all(e["stats"]["ret_20d"] > 0 for e in u)
+    for d in ("2026-10-02", "2026-10-03", "2026-10-04"):
+        c, _ = B.control_candidates(u, 10, d)
+        assert len(c) == 10 and {e["ticker"] for e in c} <= {e["ticker"] for e in u}
 
 
 def test_control_same_n_same_universe_reproducible_seed():
@@ -67,7 +83,7 @@ def test_control_same_n_same_universe_reproducible_seed():
 
 
 def test_run_logs_both_books_with_reasons_and_bench(tmp_path, monkeypatch):
-    monkeypatch.setattr(B, "risk_levels", lambda: {"A.OL": {"level": "Høy"}})
+    monkeypatch.setattr(B, "risk_levels", lambda: {"A.OL": {"level": "Høy", "date": "2026-09-30"}})
     ts = [tk("A.OL", score=5, types={"pead": 1, "volume": 1}), tk("B.OL", score=4, r20=-0.2), tk("C.OL", cat="hold", score=3)]
     st = {}
     B.run(snap("2026-10-02", *ts), st, 10.0, {"osebx": 1500.0, "spx": 6000.0}, logs=tmp_path)
@@ -75,14 +91,15 @@ def test_run_logs_both_books_with_reasons_and_bench(tmp_path, monkeypatch):
     assert [(r["ticker"], r["event"], r["side"]) for r in h] == [("A.OL", "order", "buy"), ("C.OL", "order", "buy")]
     a = h[0]
     assert a["rules_version"] == "hoy_risiko_v1" and a["score"] == "5" and a["signal_types"] == "pead|volume"
-    assert a["risk_level"] == "Høy" and a["sector"] == "Energy" and a["category"] == "watch" and a["ret_20d"] == "0.05"
+    assert a["risk_level"] == "Høy" and a["risk_date"] == "2026-09-30" and h[1]["risk_date"] == "" and a["sector"] == "Energy" and a["category"] == "watch" and a["ret_20d"] == "0.05"
     assert a["bench"].startswith("OSEBX") and float(a["bench_signal"]) == 1500.0 and a["bench_entry"] == ""
     assert list(h[0])[:len(P.T_COLS)] == P.T_COLS
     k = rows(tmp_path / "portfolio_kontroll_tilfeldig_v1_trades.csv")
     assert len(k) == 2 and all(r["reason"] == f"tilfeldig seed={B.seed_for('2026-10-02')}" for r in k)
     cands = rows(tmp_path / "portfolio_candidates.csv")
     assert [(c["book_id"], c["n"]) for c in cands] == [("hoy_risiko_v1", "2"), ("kontroll_tilfeldig_v1", "2")]
-    assert cands[1]["seed"] == str(B.seed_for("2026-10-02")) and cands[0]["universe_n"] == "3"
+    assert cands[1]["seed"] == str(B.seed_for("2026-10-02")) and cands[0]["universe_n"] == cands[1]["universe_n"] == "2"
+    assert cands[0]["n"] == cands[1]["n"] and "B.OL" not in cands[1]["tickers"]
     assert len(rows(tmp_path / "portfolio_hoy_risiko_v1_nav.csv")) == 1
     # neste dag: fill med indeksnivå ved inngang; samme dag igjen: ingenting nytt
     ts2 = [tk("A.OL", score=5, close=110, d="2026-10-02"), tk("C.OL", cat="hold", score=3, close=50, d="2026-10-02")]
