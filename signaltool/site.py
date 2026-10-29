@@ -372,7 +372,7 @@ def chips_html(chips: list) -> str:
     return (f'<span class="sgw">{" ".join(vis[:-1])} <span class="sgl">{vis[-1]} {extra} {more}</span></span>')
 
 
-CHIP_CSS = ("#tf-table .pmore{display:none}#tf-table .sgw,#tf-table .sgl{display:contents}#tf-table th.pt-h .sc-i.ri.ri-c{display:flex;margin:2px 0 0;padding:0}.evleg-pc,#tf-table .rk-ev{display:none}@media(min-width:700px){.evleg-pc{display:flex}#tf-table .rk-ev{display:inline-flex;align-items:center;gap:2px;margin-left:4px}}"
+CHIP_CSS = ("#tf-table .pmore{display:none}#tf-table .sgw,#tf-table .sgl{display:contents}#tf-table th.pt-h .sc-i.ri.ri-c{display:flex;margin:2px 0 0 4px;padding:0}.evleg-pc,#tf-table .rk-ev{display:none}@media(min-width:700px){.evleg-pc{display:flex}#tf-table .rk-ev{display:inline-flex;align-items:center;gap:2px;margin-left:4px}}"
             "@media(min-width:700px){#tf-table td.sg-c{width:160px;max-width:160px}#tf-table .pill.px{display:none}"
             "#tf-table td.sg-c .pill{white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;box-sizing:border-box;margin:1px 4px 1px 0;line-height:16px;font-size:12px}"
             "#tf-table .sgw{display:flex;flex-wrap:wrap;align-items:center;max-width:160px}#tf-table .sgl{display:flex;align-items:center;min-width:0;max-width:100%}"
