@@ -128,12 +128,41 @@ def num(x, d=2):
     return "–" if x is None else f"{x:.{d}f}"
 
 
+def num_no(x, d=2):
+    """Samme avrunding som num(), norsk format: desimalkomma og ekte minustegn (U+2212). AnalBot 29.10: kun format, ikke verdi."""
+    return "–" if x is None else f"{x:.{d}f}".replace(".", ",").replace("-", "\u2212")
+
+
+def pct_no(x, d=1):
+    """Samme avrunding og fortegn som pct(), norsk format «+1,1 %» (hard mellomrom før %)."""
+    if x is None:
+        return "–"
+    cls = "up" if x > 0 else "down" if x < 0 else ""
+    return f'<span class="{cls}">{f"{x*100:+.{d}f}".replace(".", ",").replace("-", "\u2212")}\u00a0%</span>'
+
+
+# Kort-tittel for kurstabellen på tickersiden (UxBot avgjør endelig navn – bytt her). Uten volumdata: KT_TITLE.
+KT_TITLE_VOL = "Kursutvikling og volum"
+KT_TITLE = "Kursutvikling"
+
+
+def kt_title(st: dict) -> str:
+    return KT_TITLE_VOL if (st or {}).get("vol_ratio_5d") is not None else KT_TITLE
+
+
+# UxBot 29.10 (bindende), kun tickersidene: kort, hjelpetekst, kildevarsel og kurstabell (nowrap). Emittert inline i ticker_page/tema_ticker_page.
+TKP_CSS = ("<style>main{--mut:#cbd5e1}main .card,main details.fold{background:#1c2430;border:1px solid #3b4757;border-top:3px solid #58a6ff}"
+           "main .rk-src,main .sec-src,main p.catdisc.rk-status,main .cg-src,main .cg-2,main .src-line,main .since,main .sl-t,main .sl-r,main .pcs,main .nksrc{color:#cbd5e1}"
+           "main .src-line.src-bad{color:#fdba74}"
+           "table.kt td,table.kt th{white-space:nowrap}table.kt td{font-variant-numeric:tabular-nums}</style>")
+
+
 CAT_LABEL = {"kjop": 'Kjøp<small>kandidat</small>', "hold": "Hold", "watch": "Følg"}
 CAT_NOTE = ('<p class="catnote">ⓘ Kategoriene Kjøp-kandidat / Hold / Følg er regelbaserte og mekaniske – ikke personlig '
             'finansiell rådgivning, og <b>ikke bevist å slå markedet</b> (ingen kjøpssignal har pålitelig støtte i våre tester; «sterk kvartalsrapport» er eksperimentell med svak evidens – '
             'styrken er de røde flaggene som hjelper deg å unngå svake aksjer). '
             '<a href="{pre}metode.html#kategorier">Reglene</a> · <a href="{pre}tickere.html#treffsikkerhet">Treffsikkerhet</a></p>')
-TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko</th><th>Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + " <a href=\"metode.html#laering\">Slik bruker vi dette tallet ›</a></span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
+TICKER_HEAD = "<tr><th>Ticker</th><th class=\"sortable rk-h\" title=\"Sorter etter risiko\">Risiko<span class=\"rkp-m\"> · Poeng</span></th><th class=\"pt-h\">Poeng</th><th>Signaler</th><th>5d</th><th>20d</th><th class=\"sortable since-h\" title=\"Sorter etter dato\">Dato registrert</th><th class=\"sortable ret-h\" title=\"Sorter etter avkastning\">Avkastning <span class=\"ri\" tabindex=\"0\" aria-expanded=\"false\" aria-label=\"Om avkastning\">ⓘ<span class=\"tip\">" + SN.NOTE + " <a href=\"metode.html#laering\">Slik bruker vi dette tallet ›</a></span></span></th><th><span class=\"sr\">★ Mine</span></th></tr>"
 
 
 def cat_badge(cat):
@@ -460,8 +489,9 @@ def ticker_row(e, pre=""):
     unr = bool(e.get("unranked"))
     pts = " ".join(f'<span class="pill">{E(POINT_NO.get(k, k))}{"" if unr else f" {v:.1f}"}</span>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0) + ("" if unr else an)
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
+    ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
     return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
-            f'{RK.cell(e.get("_risk"))}<td>{DC.low_chip(e) if e.get("unranked") else score_badge(e["score"], 4, 2)}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def tint(x):
@@ -748,7 +778,7 @@ def tema_ticker_page(e):
     """Side for temakart-ticker (fremoverlogg-kategori «tema»): ikke kandidat, ingen Kjøp/Hold/Følg-vurdering."""
     s = e.get("_since")
     line = SN.line(s, '<span class="cat">Tema</span>') if s else ""
-    return (f"""{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
+    return (f"""{TKP_CSS}{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
 {line}
 {PC.html(e["ticker"], e.get("_px"), (s or {}).get("price_date"), e.get("_px_date"))}
 {NK.html(e["_nk"])}
@@ -757,11 +787,12 @@ def tema_ticker_page(e):
 
 def ticker_page(e, tmap):
     st = e.get("stats") or {}
+    kd = lambda k: NK.info_i(NK.KT_DEFS[k], (e.get("_nk") or {}).get("date") or st.get("last_date"))
     pts = "".join(f'<tr><td>{EV.badge(k)}{E(POINT_NO.get(k, k))}</td><td>{v:.2f}</td></tr>' for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]))
     ev = "".join(f'<li>{("<a href=" + chr(34) + E(x["url"]) + chr(34) + ">" + E(x["text"]) + "</a>") if x.get("url") else E(x["text"])}</li>' for x in e["evidence"])
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
-    return f"""{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
+    return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2))}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn(), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RK.status()}
 {X.pead_exp_html(e)}
 {PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
@@ -771,8 +802,8 @@ def ticker_page(e, tmap):
 {X.flags_html(e)}
 {TM.ticker_html(e)}
 {X.base_rate_html(e)}
-<div class="card"><p>{th}</p><table><tr><th>Kurs</th><th>1d</th><th>5d</th><th>20d</th><th>5d-z</th><th>Volum 5d vs normalt</th><th>Sist handlet</th></tr>
-<tr><td>{num(st.get('close'))}</td><td>{pct(st.get('ret_1d'))}</td><td>{pct(st.get('ret_5d'))}</td><td>{pct(st.get('ret_20d'))}</td><td>{num(st.get('ret5_z'),1)}</td><td>{num(st.get('vol_ratio_5d'),1)}x</td><td>{E(st.get('last_date'))}</td></tr></table>
+<div class="card"><h2 class="kt-h" style="margin-top:0">{E(kt_title(st))}</h2><p>{th}</p><table class="kt"><tr><th>Kurs</th><th>1d{kd("ret")}</th><th>5d{kd("ret")}</th><th>20d{kd("ret")}</th><th>5d-z{kd("z")}</th><th>Volum 5d vs normalt{kd("vol")}</th><th>Sist handlet</th></tr>
+<tr><td data-k="close" data-d="2">{num_no(st.get('close'))}</td><td data-k="ret_1d" data-d="1" data-p="1">{pct_no(st.get('ret_1d'))}</td><td data-k="ret_5d" data-d="1" data-p="1">{pct_no(st.get('ret_5d'))}</td><td data-k="ret_20d" data-d="1" data-p="1">{pct_no(st.get('ret_20d'))}</td><td data-k="ret5_z" data-d="1">{num_no(st.get('ret5_z'),1)}</td><td data-k="vol_ratio_5d" data-d="1">{num_no(st.get('vol_ratio_5d'),1)}{"x" if st.get('vol_ratio_5d') is not None else ""}</td><td>{E(st.get('last_date'))}</td></tr></table>
 <p class="mut"><a href="https://finance.yahoo.com/quote/{E(e['ticker'])}">Yahoo Finance</a></p></div>
 {DC.card(e)}
 <div class="card"><h2 style="margin-top:0">Signaler og bevis</h2><table><tr><th>Signal</th><th>Poeng</th></tr>{tt_row(e)}{pts}</table><ul class="ev">{ev}{flags}</ul></div>

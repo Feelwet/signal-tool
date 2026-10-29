@@ -7,6 +7,34 @@ from html import escape as E
 
 FIELDS = [("mcap", "Børsverdi"), ("pe", "P/E"), ("rev", "Omsetning"), ("ebit", "EBIT"), ("eps", "EPS"),
           ("dps", "Utbytte per aksje"), ("yld", "Direkteavkastning"), ("pb", "P/B"), ("ps", "P/S"), ("next", "Neste rapport")]
+# AnalBot-godkjente ⓘ-tekster 29.10 (ordrett). Hver popover avsluttes med «Yahoo · DD.MM» (info_date).
+DEFS = {"mcap": "Antall aksjer × siste sluttkurs.",
+        "pe": "Siste sluttkurs delt på resultat per aksje siste 12 mnd (faktisk, ikke estimat). «Negativ» betyr underskudd.",
+        "rev": "Salgsinntekter siste 12 mnd, i selskapets regnskapsvaluta.",
+        "ebit": "Driftsresultat, summen av de fire siste kvartalene.",
+        "eps": "Resultat per aksje siste 12 mnd (faktisk).",
+        "dps": "Faktisk utbetalt utbytte siste 12 mnd.",
+        "yld": "Utbytte per aksje siste 12 mnd delt på siste sluttkurs. Historisk, ikke en lovnad om neste utbytte.",
+        "pb": "Siste sluttkurs delt på bokført egenkapital per aksje.",
+        "ps": "Børsverdi delt på omsetning siste 12 mnd.",
+        "next": "Dato for neste kvartalsrapport. «(anslått)» betyr at selskapet ikke har bekreftet datoen."}
+# Pristabellen på tickersiden (kolonnenøkkel -> tekst), samme godkjenning.
+KT_DEFS = {"ret": "Kursendring siste 1, 5 og 20 handelsdager.",
+           "z": "Hvor uvanlig 5-dagersendringen er mot aksjens eget siste år. ±2 eller mer er sjelden.",
+           "vol": "Snittvolum siste 5 dager delt på normalen (60 handelsdager som slutter for en uke siden). 3,8x betyr nesten fire ganger normalt."}
+
+
+def src_tail(date) -> str:
+    from .since import _dm
+    return f"Yahoo · {_dm(date)}" if date else "Yahoo"
+
+
+def info_i(text: str, date=None) -> str:
+    """ⓘ med godkjent tekst + «Yahoo · DD.MM». Samme oppførsel som øvrige ⓘ (hover/fokus på PC, tap på mobil)."""
+    t = f"{text} {src_tail(date)}"
+    return f' <span class="ri ri-c nkd" tabindex="0" aria-expanded="false" aria-label="{E(t)}">ⓘ<span class="tip">{E(t)}</span></span>'
+
+
 MISSING = "–"
 MISSING_INFO = "Tallet mangler hos kilden."
 MOBILE_SHOW = 6
@@ -77,16 +105,24 @@ CSS = """.nk{display:grid;grid-template-columns:repeat(4,1fr);column-gap:24px}
 @media(max-width:599px){#nokkeltall{padding:6px 10px;margin:0 0 12px}#nokkeltall h2{margin:0;font-size:14px;line-height:20px}
 .nk{grid-template-columns:1fr 1fr;column-gap:12px}.nk .r{height:36px;gap:2px}.nk .l{font-size:11px;line-height:12px}.nk .v{font-size:15px;line-height:18px}
 .nk .r.mx{display:none}.nkall .nk .r.mx{display:flex}
-.nkmore{display:block;height:32px;line-height:32px;padding:0;margin:0;background:none;border:0;color:#58a6ff;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}}"""
+.nkmore{display:block;height:32px;line-height:32px;padding:0;margin:0;background:none;border:0;color:#58a6ff;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}}
+#nokkeltall .nk{gap:8px}#nokkeltall .nk .r{height:auto;min-height:60px;padding:8px 10px;gap:2px;background:#111821;border:0;border-radius:6px;box-sizing:border-box}
+#nokkeltall .nk .l{font-size:12px;line-height:16px;text-transform:uppercase;letter-spacing:.03em;color:#cbd5e1}#nokkeltall .nk .l .nkd{text-transform:none;letter-spacing:0;font-size:12px;color:#cbd5e1}#nokkeltall .nk .l .nkd .tip{text-transform:none;letter-spacing:normal;font-weight:400}
+#nokkeltall .nk .v{font-size:20px;line-height:24px;font-weight:600;font-family:inherit;font-variant-numeric:tabular-nums}
+@media(max-width:599px){#nokkeltall .nk .r{min-height:56px;padding:6px 8px;position:relative}#nokkeltall .nk .v .spk{position:absolute;top:4px;right:4px;margin:0}#nokkeltall .nk .r:has(.spk) .l{padding-right:64px}#nokkeltall .nk .r[data-k=next] .v{white-space:normal}#nokkeltall .nk .r{min-width:0}}"""
 
 
 MISS_HTML = (f'– <span class="ri" tabindex="0" aria-expanded="false" aria-label="{MISSING_INFO}">ⓘ<span class="tip">{MISSING_INFO}</span></span>')
 
 
+def _def(key, date=None) -> str:
+    return info_i(DEFS[key], date) if key in DEFS else ""
+
+
 def html(n: dict) -> str:
     from .since import _dm
     fs = n["fields"]
-    rows = "".join(f'<div class="r{" mx" if i >= MOBILE_SHOW else ""}"><span class="l">{E(f["label"])}</span><span class="v">{E(f["value"]) if f["value"] else MISS_HTML}{spark_svg(f["quarters"]) if f.get("quarters") else ""}</span></div>'
+    rows = "".join(f'<div class="r{" mx" if i >= MOBILE_SHOW else ""}" data-k="{E(f.get("key") or "")}"><span class="l">{E(f["label"])}{_def(f.get("key"), n.get("date"))}</span><span class="v">{E(f["value"]) if f["value"] else MISS_HTML}{spark_svg(f["quarters"]) if f.get("quarters") else ""}</span></div>'
                    for i, f in enumerate(fs))
     per = (len(fs) + 1) // 2
     more = (f'<button type="button" class="nkmore" onclick="this.closest(\'.card\').classList.add(\'nkall\');this.remove()">Vis alle ({len(fs)})</button>'
