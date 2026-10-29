@@ -385,6 +385,62 @@
 "kind": "resultat"
 },
 {
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "Index of Production, UK: September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "UK trade: September 2026 time series",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "GDP first quarterly estimate, UK: July to September 2026 time series",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "GDP monthly estimate, UK: September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "UK Trade: September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "Construction output in Great Britain: September 2026, new orders and Construction Output Price Indices, July to September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "GDP first quarterly estimate, UK: July to September 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
+"title": "GDP monthly estimate, UK: September 2026 time series",
+"kind": "makro"
+},
+{
 "date": "2026-11-17",
 "time": "",
 "source": "Yahoo",
@@ -396,6 +452,34 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport HAFNI.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-19",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport ZIM",
+"kind": "resultat"
+},
+{
+"date": "2026-11-19",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport HAUTO.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-19",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport SUBC.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-19",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport NKT.CO",
 "kind": "resultat"
 },
 {
