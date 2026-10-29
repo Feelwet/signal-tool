@@ -1,0 +1,11 @@
+rules_version,event,order_id,run_date,signal_date,ticker,side,reason,price_date,price,currency,fx,shares,nok_value,cost_nok,fx_effect_nok,pnl_nok,score,signal_types,risk_level,risk_date,sector,category,ret_20d,bench,bench_signal,bench_entry
+hoy_risiko_v1,order,2026-10-29-0001,2026-10-29,2026-10-29,KOG.OL,buy,topp10 20d>0,2026-10-29,,NOK,,,,,,,5.06,ose_contract,Lav,2026-10-23,Industrials,hold,0.1323,OSEBX (OSEBX.OL),2137.72998046875,
+hoy_risiko_v1,order,2026-10-29-0002,2026-10-29,2026-10-29,BRG.OL,buy,topp10 20d>0,2026-10-29,,NOK,,,,,,,4.34,,Lav,2026-10-23,Basic Materials,watch,0.0424,OSEBX (OSEBX.OL),2137.72998046875,
+hoy_risiko_v1,order,2026-10-29-0003,2026-10-29,2026-10-29,EQIX,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,4.0,pead,Lav,2026-10-23,Real Estate,hold,0.0437,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0004,2026-10-29,2026-10-29,VRT,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,4.0,pead,Høy,2026-10-23,Industrials,watch,0.0198,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0005,2026-10-29,2026-10-29,LMT,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,2.85,,Middels,2026-10-23,Industrials,watch,0.2798,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0006,2026-10-29,2026-10-29,STNG,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,2.58,theme_market,Høy,2026-10-23,Energy,hold,0.0921,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0007,2026-10-29,2026-10-29,EPAC,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,2.38,,Middels,2026-10-23,Industrials,watch,0.1211,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0008,2026-10-29,2026-10-29,LHX,buy,topp10 20d>0,2026-10-29,,USD,,,,,,,2.23,,Middels,2026-10-23,Industrials,watch,0.1727,S&P 500 (^GSPC),7714.56005859375,
+hoy_risiko_v1,order,2026-10-29-0009,2026-10-29,2026-10-29,EQNR.OL,buy,topp10 20d>0,2026-10-29,,NOK,,,,,,,2.16,theme_market,Lav,2026-10-23,Energy,watch,0.0836,OSEBX (OSEBX.OL),2137.72998046875,
+hoy_risiko_v1,order,2026-10-29-0010,2026-10-29,2026-10-29,DNB.OL,buy,topp10 20d>0,2026-10-29,,NOK,,,,,,,2.02,,Lav,2026-10-23,Financial Services,watch,0.0356,OSEBX (OSEBX.OL),2137.72998046875,

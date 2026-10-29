@@ -1,0 +1,11 @@
+rules_version,event,order_id,run_date,signal_date,ticker,side,reason,price_date,price,currency,fx,shares,nok_value,cost_nok,fx_effect_nok,pnl_nok,score,signal_types,risk_level,risk_date,sector,category,ret_20d,bench,bench_signal,bench_entry
+kontroll_tilfeldig_v1,order,2026-10-29-0001,2026-10-29,2026-10-29,TECH.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,2.0,,Høy,2026-10-23,Technology,watch,0.1222,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0002,2026-10-29,2026-10-29,EIOF.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.5,ose_contract,Middels,2026-10-23,Energy,watch,0.0117,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0003,2026-10-29,2026-10-29,EQNR.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,2.16,theme_market,Lav,2026-10-23,Energy,watch,0.0836,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0004,2026-10-29,2026-10-29,PUBLI.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.0,,Middels,2026-10-23,Real Estate,watch,0.0777,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0005,2026-10-29,2026-10-29,BRG.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,4.34,,Lav,2026-10-23,Basic Materials,watch,0.0424,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0006,2026-10-29,2026-10-29,AKRBP.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.16,theme_market,Lav,2026-10-23,Energy,watch,0.138,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0007,2026-10-29,2026-10-29,NKT.CO,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.12,,Høy,2026-10-23,Industrials,watch,0.0069,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0008,2026-10-29,2026-10-29,STECH.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.5,ose_contract,Lav,2026-10-23,Industrials,watch,0.0386,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0009,2026-10-29,2026-10-29,STB.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.0,,Lav,2026-10-23,Financial Services,watch,0.0236,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,order,2026-10-29-0010,2026-10-29,2026-10-29,HAFNI.OL,buy,tilfeldig seed=1394855593,2026-10-29,,NOK,,,,,,,1.16,theme_market,Lav,2026-10-23,Industrials,watch,0.065,OSEBX (OSEBX.OL),2137.72998046875,
