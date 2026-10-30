@@ -334,3 +334,6 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-10-30,GJF.OL,2026-10-29,cut60,61,1.0,,,,41035994999,false
 2026-10-30,KOMPL.OL,2026-10-29,cut60,62,1.0,,,,41035994999,false
 2026-10-30,NHY.OL,2026-10-29,cut60,169,0.13,,,,41035994999,false
+2026-10-30,EIOF.OL,2026-10-29,score0,,,,,,41047972138,true
+2026-10-30,KOMPL.OL,2026-10-29,"lik score, kutt 60",61,1.0,3,1,GJF.OL:på:1,41047972138,true
+2026-10-30,NHY.OL,2026-10-29,cut60,168,0.11,,,,41047972138,true
