@@ -10,7 +10,7 @@ def _r(d, t="A", c="watch", p="10", pd=None):
 
 
 def test_eiof_from_real_log():
-    s = S.compute(S.load(LOG), "2026-10-25")["EIOF.OL"]
+    s = S.compute([r for r in S.load(LOG) if r["date"] <= "2026-10-25"], "2026-10-25")["EIOF.OL"]  # fast utsnitt: EIOF.OL gikk av lista 30.10
     assert s["since"] == "2026-10-08" and s["price"] == 17.0 and s["price_date"] == "2026-10-06" and s["days"] == 17
     assert S.line(s) == '<p class="since mut">Siden 08.10 · inn 17,00 (06.10) · 17 dager</p>'
 
