@@ -149,7 +149,7 @@ def field(f: dict, data: dict | None, now: datetime) -> str:
     stale = d < exp
     warn = (f'<span class="ms-w" aria-label="Kursen er fra {dato}, eldre enn {"i går" if btc else "siste handelsdag"}">⚠ eldre kurs</span>'
             if stale else "")
-    return (f'<div class="ms-f" data-sym="{E(f["sym"])}">{t}'
+    return (f'<div class="ms-f" data-sym="{E(f["sym"])}" data-d="{d.isoformat()}">{t}'
             f'<div class="ms-p">{_num(last, f["dec"])}{ri(f["tip"].format(dato=dato))}</div>'
             f'<div class="ms-c">{one}{twenty}</div>'
             f'<div class="ms-s">{E(f["src"].format(dato=dato))}{warn}</div></div>')

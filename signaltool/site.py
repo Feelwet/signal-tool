@@ -9,6 +9,7 @@ from . import site_extra as X
 from . import analyst as AN
 from . import theme_maps as TM
 from . import mstrip as MS
+from . import pwa as PWA
 from . import sectors as SEC
 from . import calendar_view as CV
 from . import inflation as INF
@@ -504,8 +505,8 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
   });
 })();
 </script>"""
-    return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#060a10"><meta name="robots" content="noindex"></head><body>
+    return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark">{PWA.head(pre)}<meta name="robots" content="noindex"></head><body>
 <div class="app">
 <aside class="side" id="side">
 <nav>{nav}</nav>
@@ -518,10 +519,10 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 <div class="content">
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
 <a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line">{gen}</p>' if gen else ""}
-<main>{body}</main>
+<main>{body}{PWA.install_html() if title == "Oversikt" else ""}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
-{script}{SEARCH.get("mine", "")}{L.TIP_JS}{SCORE_I_JS}</body></html>"""
+{script}{SEARCH.get("mine", "")}{L.TIP_JS}{SCORE_I_JS}{PWA.js(pre)}</body></html>"""
 
 
 def theme_card(t, pre=""):
@@ -721,8 +722,10 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
+    _css += PWA.CSS
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
+    PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
     Q.FAILED_SECTIONS.clear()
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     (SITE / ".nojekyll").write_text("")
