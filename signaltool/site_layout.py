@@ -128,7 +128,10 @@ def kpi_i(label: str, sub: str) -> str:
             f'<span class="tip">{E(t)}</span></span>')
 
 
-def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = False) -> str:
+INTRO_I = ("Makro", "Oslo", "Temaer")   # UxBot 01.11: ingressen i ⓘ ved tittelen (generell beskrivelse, ingen usikkerhetstekst)
+
+
+def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = False, meta: str = "", visible: str = "") -> str:
     """Felles sidetopp: tittel, én setning, nøkkeltall."""
     k = ""
     if kpis:
@@ -137,7 +140,11 @@ def head(title: str, sentence: str, kpis: list[tuple] | None = None, k4: bool = 
             f'<a class="kpi" href="{E(h or "#")}"><div class="lbl">{E(l)}{kpi_i(l, s) if title in KPI_I else ""}</div><div class="val">{E(v)}</div><div class="sub">{E(s)}</div></a>'
             for v, l, s, h in kpis) + "</div>"
     js = K3_JS if kpis and title in ("Makro", "Kalender") and len(kpis) == 3 else ""
-    return f'<h1>{E(title)}</h1><p class="pintro">{E(sentence)}</p>{k}{js}'
+    if title in INTRO_I:
+        from .ux2 import i as _i
+        vis = f'<p class="pintro">{E(visible)}</p>' if visible else ""
+        return f'<h1>{E(title)} {_i(sentence, "Om siden")}</h1>{meta}{vis}{k}{js}'
+    return f'<h1>{E(title)}</h1>{meta}<p class="pintro">{E(sentence)}</p>{k}{js}'
 
 
 # ---------------- treffrate ----------------

@@ -47,8 +47,28 @@ def test_head_and_js():
               'apple-mobile-web-app-capable', 'apple-mobile-web-app-title" content="Signal"', 'black-translucent'):
         assert x in h
     j = P.js("../")
-    assert "register('../sw.js',{scope:'../'})" in j and "register('sw.js',{scope:'./'})" in P.js("") and "Frakoblet, viser data fra {dato}" in j and "beforeinstallprompt" in j and "prompt()" in j
-    assert "Del → Legg til på Hjem-skjerm" in P.install_html() and "hidden" in P.install_html()
+    assert "register('../sw.js',{scope:'../'})" in j and "register('sw.js',{scope:'./'})" in P.js("") and "Frakoblet, viser kurser per {kurs} (hentet {hentet})" in j and "beforeinstallprompt" in j and "prompt()" in j
+    h = P.install_html()
+    assert 'id="pwa-help"' in h and "hidden" in h and "tip" not in h          # UxBot 01.11: tekstblokk, ingen popup
+    import json; assert json.dumps(P.INSTALL_SAFARI) in j and json.dumps(P.INSTALL_OTHER) in j and "CriOS|FxiOS|EdgiOS" in j and "navigator.standalone" in j
+    assert ".pwa-help{" in P.CSS and "max-width:100%" in P.CSS and "padding:16px" in P.CSS and "color:#cbd5e1" in P.CSS and "min-height:32px" in P.CSS
+
+
+def test_kurs_date_and_offline_line():
+    snap = {"tickers": [{"_ret": {"last": "2026-10-30"}}, {"_ret": {"last": "2026-10-30"}}, {"_ret": {"last": "2026-10-29"}}, {}]}
+    assert P.kurs_date(snap) == "2026-10-30" and P.kurs_date({}) == ""
+    from signaltool import site as S
+    html = S.page("Oversikt", "<p>x</p>", 0, dict(snap, generated="2026-11-01 21:19"))
+    assert 'data-kd="30.10"' in html and 'data-hent="01.11 kl. 21:19"' in html
+
+
+def test_changes_skip_theme_scores():
+    from signaltool import overview as OV
+    snap = {"briefing": {"changes": {"prev_date": "2026-10-31", "items": [
+        {"kind": "tema", "level": "alert", "text": "Tema «A»: score 0.88 → 1.42"},
+        {"kind": "politikk", "level": "info", "text": "1 nye relevante politikkdokumenter"}]}}}
+    h = OV.changes_alerts_html(snap)
+    assert "Tema «A»" not in h and "politikkdokumenter" in h
     assert "env(safe-area-inset-top" in P.CSS and "#fdba74" in P.CSS and "13px" in P.CSS and "#94a3b8" in P.CSS
 
 

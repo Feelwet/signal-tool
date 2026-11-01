@@ -457,13 +457,22 @@ def html_block(inf: dict | None, cal: list | None, today=None) -> str:
     two = f'<line x1="{L}" x2="{W-8}" y1="{Y(2):.1f}" y2="{Y(2):.1f}" stroke="#8b949e" stroke-dasharray="1 3" stroke-width="1"/><text x="{W-10}" y="{Y(2)-4:.1f}" text-anchor="end">2 % mål</text>'
     svg = (f'<svg class="infl-svg" viewBox="0 0 {W} {H}" role="img" aria-label="Inflasjon siste 5 år, årlig prosent, per land">{grid}{years}{two}{"".join(lines)}</svg>')
     return (f'{CSS}<div class="card" id="inflasjon"><h2 style="margin-top:0">Inflasjon siste 5 år (årlig %, faktiske tall)</h2>'
-            f'<div class="infl-chart"><button class="infl-all" type="button">Vis alle</button><div class="infl-leg" role="group" aria-label="Fremhev land">{"".join(leg)}</div><p class="src infl-hint">Klikk eller trykk på en linje eller et land for å fremheve det (Shift-klikk: flere). Trykk på det valgte landet igjen for å vise alle. «Bare», dobbeltklikk eller langt trykk viser bare det landet. «Vis alle» nullstiller.</p>{svg}'
+            f'<div class="infl-chart"><div class="infl-leg" role="group" aria-label="Fremhev land">{"".join(leg)}<button class="infl-all" type="button">Vis alle</button>{_UXI(HINT, "Slik bruker du grafen")}</div>{svg}'
             f'<p class="src">Felles graf: Eurostat HICP (prc_hicp_minr) for Norge, Sverige, Danmark, eurosonen og Tyskland – sammenlignbare. Kina: KPI (NBS), ikke HICP, hentet via OECD SDMX. '
             f'UK: ONS KPI (D7G7); Eurostat HICP for UK stopper nov. 2020 (seriebrudd). USA: KPI-U, ikke HICP (FRED CPIAUCSL, årlig endring). Ingen prognoser i denne grafen.</p></div>'
             f'<h3>Per land – målet sentralbanken bruker, med offisiell prognose der den finnes</h3>'
             f'<p class="src">Prognoser er årssnitt og vises som trinn per år (stiplet). Offisielle prognoser fra sentralbanker, eller fra IMF der sentralbanken ikke publiserer noen (grå stiplet); ingen egne anslag. '
             f'Forventninger fra markeder/spørreundersøkelser: Ingen fri kilde.</p>'
             f'<div class="infl-cards">{"".join(cards)}</div></div>{JS}')
+
+
+# UxBot 01.11: generell veiledning i ⓘ (ikke usikkerhetstekst), knappene 32 px på én–tre rader
+HINT = "Klikk eller trykk på en linje eller et land for å fremheve det (Shift-klikk: flere). Trykk på det valgte landet igjen for å vise alle. «Bare», dobbeltklikk eller langt trykk viser bare det landet. «Vis alle» nullstiller."
+
+
+def _UXI(t, lab):
+    from .ux2 import i
+    return i(t, lab)
 
 
 if __name__ == "__main__":

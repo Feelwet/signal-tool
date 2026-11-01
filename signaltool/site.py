@@ -10,6 +10,8 @@ from . import analyst as AN
 from . import theme_maps as TM
 from . import mstrip as MS
 from . import pwa as PWA
+from . import ux2 as UX2
+from . import tabbar as TB
 from . import sectors as SEC
 from . import calendar_view as CV
 from . import inflation as INF
@@ -359,7 +361,12 @@ def score_badge(s, hi=2.0, mid=1.0, muted=False):
 # (innerHTML flyttes) og på sider uten felles .ri-håndterer. På tickere.html stopper since.JS klikket før det når hit (ingen dobbel veksling).
 SCORE_I_JS = ("<script>(()=>{if(window.__scI)return;window.__scI=1;const d=document,x=k=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(b=>b!==k&&b.setAttribute('aria-expanded','false'));"
               "d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.sc-i');if(!b){x(null);return}e.preventDefault();x(b);"
-              "b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')});"
+              "b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');if(b.getAttribute('aria-expanded')==='true')P(b)});"
+              # kant-sikker boble (01.11): fast plassert, klemt 8 px innenfor viewport, snur opp ved bunnkant
+              "const P=b=>{const t=b.querySelector('.tip');if(!t)return;t.classList.add('pop');const W=innerWidth,w=Math.min(280,W-16);t.style.maxWidth=w+'px';t.style.left='8px';t.style.top='0px';"
+              "const r=b.getBoundingClientRect(),tw=Math.min(t.offsetWidth||w,w),th=t.offsetHeight;t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,W-tw-8))+'px';"
+              "let y=r.bottom+6;if(y+th>innerHeight-8&&r.top-th-6>8)y=r.top-th-6;t.style.top=y+'px'};"
+              "addEventListener('scroll',()=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(P),{passive:true});addEventListener('resize',()=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(P));"
               "d.addEventListener('keydown',e=>{if(e.key==='Escape')x(null)})})()</script>")
 
 
@@ -444,6 +451,8 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     body = L.no_robust(body).replace("(eksperimentell, teller ikke mot Kjøp)", "(eksperimentell)").replace("(eksperimentell – teller ikke mot Kjøp)", "(eksperimentell)")
     pre = "../" * depth
     gen = f"Oppdatert {E(gen_short(snap['generated']).replace(' ', ' kl. ', 1))}" if snap and snap.get("generated") else ""
+    kd = PWA.kurs_date(snap)   # AnalBot 01.11: frakoblet-linja viser kursdato (fra data) + hentetid (fra build)
+    gattr = (f' data-kd="{kd[8:10]}.{kd[5:7]}"' if kd else "") + (f' data-hent="{E(gen_short(snap["generated"]).replace(" ", " kl. ", 1))}"' if gen else "")
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
@@ -506,7 +515,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 })();
 </script>"""
     return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark">{PWA.head(pre)}<meta name="robots" content="noindex"></head><body>
+<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark">{PWA.head(pre)}<meta name="robots" content="noindex"></head><body class="{UX2.body_class(cur)}">
 <div class="app">
 <aside class="side" id="side">
 <nav>{nav}</nav>
@@ -518,11 +527,11 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 </aside>
 <div class="content">
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
-<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line">{gen}</p>' if gen else ""}
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line"{gattr}>{gen}</p>' if gen else ""}
 <main>{body}{PWA.install_html() if title == "Oversikt" else ""}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
-{script}{SEARCH.get("mine", "")}{L.TIP_JS}{SCORE_I_JS}{PWA.js(pre)}</body></html>"""
+{script}{SEARCH.get("mine", "")}{L.TIP_JS}{SCORE_I_JS}{PWA.js(pre)}{TB.html(cur, pre)}{TB.JS}</body></html>"""
 
 
 def theme_card(t, pre=""):
@@ -722,7 +731,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS
+    _css += PWA.CSS + UX2.CSS + TB.CSS
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -742,7 +751,7 @@ def build(snap: dict) -> Path:
     bad = [k for k in used if X.source_state(st[k]) == "fail"]
     today = str(snap.get("date") or date.today())
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
-    b = [f'<h1 style="margin:0 0 6px">Oversikt {E(str(snap["date"]))} <span class="mut" style="font-size:.55em;font-weight:400">GDELT t.o.m. {E(str(snap.get("gdelt_latest")))}</span></h1>',
+    b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest")),   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
          f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
@@ -770,7 +779,7 @@ def build(snap: dict) -> Path:
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", MOD_CSS + L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")]) + L.EXP() + f'<div class="card tw"><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
+    (SITE / "temaer.html").write_text(page("Temaer", MOD_CSS + L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")], meta=UX2.meta("GDELT", snap.get("gdelt_latest"))) + L.EXP() + f'<div class="card tw"><h2 style="margin-top:0">Temascore{UX2.csrc("GDELT", snap.get("gdelt_latest"))}</h2><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
     have = {e["ticker"] for e in tickers}
     for M in TM.MAPS.values():
         (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", sec(f"Temakart: {M['name']}", TM.map_html, M["key"], snap, have), 1, snap))
@@ -925,6 +934,14 @@ def fold_tables(h: str, keep: int = 12, label: str = "Vis alle") -> str:
     return re.sub(r"<table[^>]*>.*?</table>", one, h, flags=re.S)
 
 
+def _makro_meta(infl: dict) -> str:
+    """Metalinje Makro: kildene i inflasjonsgrafen + siste måned som faktisk finnes i dataene (MM.ÅÅÅÅ). Ingen data -> bare kildene."""
+    ms = [str(v[-1][0])[:7] for v in ((infl or {}).get("series") or {}).values() if v]
+    src = "Eurostat, SSB, ONS, FRED, OECD"
+    last = max(ms) if ms else ""
+    return f'<p class="pmeta">{E(src)}{" t.o.m. " + E(last[5:7] + "." + last[:4]) if len(last) == 7 else ""}</p>'
+
+
 def makro_page(snap):
     mac = snap.get("macro") or {}
     rows = ""
@@ -1004,7 +1021,7 @@ def makro_page(snap):
     ]
     infl = mac.get("inflation") or {}
     nb = (infl.get("rates") or {}).get("NO") or {}
-    hd = L.head("Makro", "Inflasjon, renter og fysisk oljemarked – faktiske tall og offisielle prognoser fra sentralbanker, eller fra IMF der sentralbanken ikke publiserer noen.",
+    hd = L.head("Makro", "Inflasjon, renter og fysisk oljemarked – faktiske tall og offisielle prognoser fra sentralbanker, eller fra IMF der sentralbanken ikke publiserer noen.", meta=_makro_meta(infl), kpis=
                 [(f'{len((infl.get("cards") or {}))}', "Land med inflasjon", "siste måned", "#inflasjon"),
                  (("–" if nb.get("rate") is None else f'{nb["rate"]:.2f} %'.replace(".", ",")), "Norges Bank", "styringsrente", "#inflasjon"),
                  (str(len((infl.get("forecasts") or {}))), "Offisielle prognoser", "sentralbanker", "#inflasjon")])
@@ -1040,12 +1057,17 @@ def oslo_page(snap):
     nx = max(0, (ins_x or "").count("<tr") - 1)
     T = lambda name, summ: f'{name} <span class="fold-sum">– {E(summ)}</span>'
     raw = lambda t, n, extra="": T(t, f"{n} rader") + " " + L.RAW() + extra
+    _ld = lambda rs: max((str(r.get("published") or "")[:10] for r in rs), default="") or None
+    lc, li = _ld(snap.get("newsweb_contracts", [])), _ld(snap.get("newsweb_insider", []))
+    raw = lambda t, n, extra="", src="": T(t, f"{n} rader") + " " + L.RAW() + extra + src
     return (L.head("Oslo", "Rådata fra Oslo Børs: kontraktsmeldinger, innsidehandel og short – ikke filtrert eller testet som signal.",
-                  [(str(nc), "Kontraktsmeldinger", "14 dager", "#kontrakter"), (str(ni), "Innsidemeldinger", "14 dager", "#innside-meld"), ("Rådata", "Status", "ikke signal", "#")])
+                  [(str(nc), "Kontraktsmeldinger", "14 dager", "#kontrakter"), (str(ni), "Innsidemeldinger", "14 dager", "#innside-meld"), ("Rådata", "Status", "ikke signal", "#")],
+                  meta=UX2.meta("Oslo Børs Newsweb, Finanstilsynet", max([x for x in (lc, li) if x], default=None)),
+                  visible="Ikke filtrert eller testet som signal.")
             + Q.source_note(snap, "Oslo Børs Newsweb", "Finanstilsynet short register")
-            + fold(raw("Kontrakts- og ordremeldinger (Newsweb, 14 dager)", min(nc, 40), L.stale_mark(rowsL, ["Oslo Børs Newsweb"])), f'<table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{con}</table>', open_=False, hid="kontrakter")
+            + fold(raw("Kontrakts- og ordremeldinger (Newsweb, 14 dager)", min(nc, 40), L.stale_mark(rowsL, ["Oslo Børs Newsweb"]), UX2.csrc("Newsweb", lc) if lc else ""), f'<table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{con}</table>', open_=False, hid="kontrakter")
             + (fold(raw(mx.group(1), nx), mx.group(2), open_=False, hid="innside") if mx else ins_x)
-            + fold(raw("Meldepliktige handler – primærinnsidere (14 dager)", min(ni, 40)), f'<p class="mut">Tittelen sier ikke alltid om det er kjøp eller salg – åpne meldingen.</p><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{ins}</table>', open_=False, hid="innside-meld")
+            + fold(raw("Meldepliktige handler – primærinnsidere (14 dager)", min(ni, 40), "", UX2.csrc("Newsweb", li) if li else ""), f'<p class="mut">Tittelen sier ikke alltid om det er kjøp eller salg – åpne meldingen.</p><table><tr><th>Dato</th><th>Selskap</th><th>Melding</th></tr>{ins}</table>', open_=False, hid="innside-meld")
             + fold(raw("Shortposisjoner (Finanstilsynet) – største endringer", len(snap.get("shorts", [])), L.stale_mark(rowsL, ["Finanstilsynet short register"])), f'<p class="mut">Netto shortposisjoner ≥ 0,5 % offentliggjøres. Økende short = noen profesjonelle vedder på fall.</p><table><tr><th>Selskap</th><th>Ticker</th><th>Short</th><th>Endr. 7d (pp)</th><th>Endr. 30d</th><th>Største aktører</th></tr>{sh}</table>', open_=False, hid="short"))
 
 

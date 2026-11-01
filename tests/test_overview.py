@@ -46,7 +46,7 @@ def test_week_change_from_log(tmp_path):
     wk = OV.week_change(p, "2026-10-25")
     assert round(wk["t0"][0], 2) == 0.5 and wk["t0"][1] == "2026-10-18"
     h = OV.themes_html(_snap(), wk)
-    assert "▲0,5" in h and "▼0,4" in h
+    assert "+0,5" in h and "−0,4" in h and "▲" not in h and "▼" not in h and "Rangering, ikke testet" in h   # AnalBot 01.11: grå, uten piler
 
 
 def test_changes_max5_dedup_and_calendar3():

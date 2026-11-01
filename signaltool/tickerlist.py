@@ -69,9 +69,10 @@ def n_new(snap: dict) -> int:
 def filter_row(snap: dict) -> str:
     n, nn = len(EV.red_rows(snap)), n_new(snap)
     ny = f'<button type="button" data-f="ny" aria-pressed="false">Ingen avkastning ennå ({nn})</button>' if nn else ""   # UxBot 28.10: sist, skjult når 0
-    return '<div class="tf-wrap"><div class="tf-row" role="group" aria-label="Filter">' + "".join(
+    from .ux2 import SEARCH_HTML, SEARCH_JS   # UxBot 01.11: sticky søk + filterrad
+    return '<div class="tf-wrap">' + SEARCH_HTML + '<div class="tf-row" role="group" aria-label="Filter">' + "".join(
         f'<button type="button" data-f="{k}" aria-pressed="{"true" if k == "alle" else "false"}">{E(lab)}{f" ({n})" if k == "flagg" else ' (<span class="mine-n">0</span>)' if k == "mine" else ""}</button>'
-        for k, lab in FILTERS) + ny + "</div></div>" + FADE_JS
+        for k, lab in FILTERS) + ny + "</div></div>" + FADE_JS + SEARCH_JS
 
 
 def flag_block(snap: dict) -> str:
@@ -85,12 +86,15 @@ def flag_block(snap: dict) -> str:
     groups = ((f'{EV.badge("two_plus")} 2+ flagg', [r for r in rows if EV.ntest(r) >= 2]),
               ("1 flagg, ingen målt underavkastning", [r for r in rows if EV.ntest(r) == 1]),
               (f'Bare negativ EBIT, ikke testet', [r for r in rows if EV.ntest(r) == 0]))
-    def row(r):
+    from .ux2 import dm
+
+    def row(r):   # UxBot 01.11: ett kort per ticker, antall som brikke til høyre, flaggene som liste med dato
         t = r["ticker"]
-        return (f'<div class="rfr">{NM.cell(t, extra=chip(r))}'
-                f'<div class="fb">{"".join(EV.short_badge(k) for k in EV.RED_FLAGS if k in r["flags"])}</div></div>')
+        li = "".join(f'<li>{EV.short_badge(k)}<span class="d">{E(dm(r.get("asof") or c["asof"]))}</span></li>' for k in EV.RED_FLAGS if k in r["flags"])
+        return (f'<div class="rfr rfc"><div class="rfc-h">{NM.cell(t)}<span class="rfc-n">⚑ {E(EV.nlabel(r))}</span></div>'
+                f'<ul class="fb">{li}</ul></div>')
     body = "".join(f'<h3 class="grp">{t} ({len(rs)})</h3>' + "".join(row(r) for r in rs) for t, rs in groups if rs)
-    return (f'<div id="tf-flag" class="tf-flag card" hidden><p class="tf-only">Bare Oslo-aksjer er sjekket for røde flagg. '
+    return (f'<div id="tf-flag" class="tf-flag" hidden><p class="tf-only">Bare Oslo-aksjer er sjekket for røde flagg. '
             f'{len(rows)} av {c["n"]} likvide Oslo-aksjer har minst ett flagg; data per {E(c["asof"] or "–")}.</p>'
             f'<details class="vis-alle"><summary>Hva betyr flaggene?</summary>{legend}'
             f'<p class="mut">Ingen flagg har bestått testkravet. Se <a href="metode.html">Metode</a> og <a href="{EV.EVREPORT}">testrapport</a>.</p></details>'

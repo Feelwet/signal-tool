@@ -1,3 +1,4 @@
+import re
 """Ferskhet for sluttkurser (AnalBot 28.10): forventet handelsdag, etternølere hentes på nytt, cache-TTL for Oslo-universet,
 «Kurs per DD.MM»-tooltip, skjult avkastning ved > 2 handelsdager gammel kurs, innkurs-sidelogg for ikke-loggbare tickere."""
 import csv
@@ -240,7 +241,7 @@ def test_type_sizes_and_updated_line():
     assert "td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}" in S.CSS
     assert ".rex{display:block;color:#94a3b8;font-size:12px}" in S.CSS and "#tf-table .since-m{display:block;color:#94a3b8;font-size:12px}" in S.CSS
     html = SITE.page("Tickere", "<p>x</p>", 0, {"generated": "2026-10-28 21:13"})
-    assert '<p class="gen gen-line">Oppdatert 28.10 kl. 21:13</p>' in html and ".gen-line{" in SITE.CSS and "font-size:12px" in SITE.CSS
+    assert re.search(r'<p class="gen gen-line"[^>]*>Oppdatert 28\.10 kl\. 21:13</p>', html) and ".gen-line{" in SITE.CSS and "font-size:12px" in SITE.CSS
 
 
 def test_entry_line_shown_price_equals_return_basis():

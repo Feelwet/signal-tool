@@ -12,6 +12,7 @@ from . import evidens as EV
 from . import site_layout as L
 from . import names as NM
 from . import briefing as BR
+from . import ux2 as UX2
 
 THEME_LOG = Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv"
 CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Følg", "#e3b341"))
@@ -27,7 +28,7 @@ CSS = """
 .ov-stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#262d38;margin:6px 0 4px}.ov-stack i{display:block;height:100%}
 .ov-th{margin:0 0 8px}.ov-th h2{margin:0 0 6px}.ov-bar{display:grid;grid-template-columns:minmax(0,15em) 1fr 3.2em 4em;gap:8px;align-items:center;padding:3px 0;color:inherit;text-decoration:none}
 .ov-bar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ov-bar .tr{background:#262d38;height:10px;border-radius:5px;overflow:hidden}.ov-bar .tr i{display:block;height:100%;background:var(--acc,#6cb6ff)}
-.ov-bar .sc{text-align:right;font-variant-numeric:tabular-nums}.ov-bar .wk{font-size:.85em;text-align:right}.ov-bar .wk.u{color:#56d364}.ov-bar .wk.d{color:#f85149}
+.ov-bar .sc{text-align:right;font-variant-numeric:tabular-nums}.ov-bar .wk{font-size:.85em;text-align:right}.ov-bar .wk{color:#94a3b8}
 .ov-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}.ov-2 .card{margin:0}.ov-2 h2{margin:0 0 6px;font-size:1.05em}
 .ov-list{list-style:none;margin:0;padding:0}.ov-list li{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid #21262d;min-width:0}
 .ov-list li>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -102,7 +103,7 @@ def strip_html(snap: dict) -> str:
     t2 = (f'<div class="ov-tile tap"><div class="lbl">Risikonivå<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["Høy"]} Høy</div>'
           f'<div class="ov-stack" role="img" aria-label="Høy {cnt["Høy"]}, Middels {cnt["Middels"]}, Lav {cnt["Lav"]}">{seg}</div>'
           f'<div class="sub">' + " · ".join(f'<a class="in" href="tickere.html?filter={f}">{k} {cnt[k]}</a>' for k, f, _ in RC) + '</div>'
-          f'<div class="sub2">{E(RK.STATUS)}</div>'
+          f'<div class="sub2 rkl">{E(UX2.RISK_LINE)}{UX2.i(RK.STATUS, "Om risikonivået")}</div>'   # AnalBot 01.11
           '</div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
@@ -131,7 +132,8 @@ def _bar(t, mx, wk) -> str:
     s = float(t.get("score") or 0)
     w = min(100, max(2, s / mx * 100))
     ch = wk.get(t["key"])
-    wkh = (f'<span class="wk {"u" if ch[0] > 0 else "d" if ch[0] < 0 else ""}">{"▲" if ch[0] > 0 else "▼" if ch[0] < 0 else "="}{_nb(abs(ch[0]), 1)}</span>'
+    # AnalBot 01.11: temascoreendring grå, uten piler og farge (rangering, ikke testet)
+    wkh = (f'<span class="wk">{"+" if ch[0] > 0 else "−" if ch[0] < 0 else "±"}{_nb(abs(ch[0]), 1)}</span>'
            if ch else '<span class="wk"></span>')
     return (f'<a class="ov-bar" href="tema/{E(t["key"])}.html"><span class="nm">{E(t["name"])}</span>'
             f'<span class="tr"><i class="mu" style="width:{w:.0f}%"></i></span><span class="sc sc-mu">{_nb(s)}</span>{wkh}</a>')   # dempet (plan 29.10)
@@ -143,13 +145,13 @@ def themes_html(snap: dict, wk: dict | None = None, stale: str = "") -> str:
         return ""
     wk = week_change(today=str(snap.get("date"))) if wk is None else wk
     mx = max(float(t.get("score") or 0) for t in th) or 1
-    note = (f'<span class="mut" style="font-size:.85em">▲/▼ = endring mot {E(next(iter(wk.values()))[1])}</span>' if wk
-            else '<span class="mut" style="font-size:.85em">Ukeendring vises når loggen har en uke historikk.</span>')
+    note = (f'<span class="mut" style="font-size:.85em">Endring mot {E(next(iter(wk.values()))[1])}. Rangering, ikke testet.</span>' if wk
+            else '<span class="mut" style="font-size:.85em">Ukeendring vises når loggen har en uke historikk. Rangering, ikke testet.</span>')
     rest = th[6:]
     more = (f'<details class="vis-alle"><summary>Alle temaer ({len(th)})</summary>{"".join(_bar(t, mx, wk) for t in rest)}'
             f'<p class="mut" style="margin:6px 0 0"><a href="temaer.html">Temaer og temakart →</a></p></details>') if rest else ""
     from .site import score_info   # én ⓘ i overskriften, ikke på hver stolpe (plan 29.10)
-    return (f'<section class="card ov-th" id="temascore"><h2>Temascore {score_info("Om temascore")} {stale}</h2>'
+    return (f'<section class="card ov-th" id="temascore"><h2>Temascore {score_info("Om temascore")} {stale}{UX2.csrc("GDELT", snap.get("gdelt_latest")) if snap.get("gdelt_latest") else ""}</h2>'
             f'{"".join(_bar(t, mx, wk) for t in th[:6])}<div class="ov-foot">{more}{note}</div></section>')
 
 
@@ -185,7 +187,7 @@ def changes_alerts_html(snap: dict, link=lambda x: x) -> str:
             seen.add(k)
             items.append(f'<li>{"🔔" if a.get("level") == "alert" else "ⓘ"} <a href="{E(link(a.get("link", "")))}">{E(BR.fix_days_text(a["title"]))}</a></li>')
     for x in ((b.get("changes") or {}).get("items") or []):
-        if x.get("kind") in ("ny", "opp", "ned"):   # kategoriendringer vises ikke (risikorunden); logges fortsatt
+        if x.get("kind") in ("ny", "opp", "ned", "tema"):   # kategoriendringer vises ikke (risikorunden); temascore ut av «Endringer» (AnalBot 01.11); logges fortsatt
             continue
         items.append(f'<li>{"🔔 " if x.get("level") == "alert" else ""}{change_text(x["text"])}</li>')
     if not items:

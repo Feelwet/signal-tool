@@ -25,8 +25,8 @@ CSS = """
 .pf-h1{margin:0 0 2px;font-size:22px}.pf-h1 a{color:var(--acc)}.pf-sub{margin:0 0 10px;font-size:13px}
 .pf-status{margin:0 0 10px}.pf-bar{height:8px;border-radius:4px;background:#21262d;overflow:hidden;margin-top:8px}.pf-bar i{display:block;height:100%;background:var(--acc)}
 .pf-k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}.pf-k3 .card{margin:0;padding:10px}.pf-k3 b{display:block;font-size:20px}.pf-k3 span{font-size:12px;color:var(--mut)}
-.pf-cards{display:none}.pf-card{border-bottom:1px solid #21262d;padding:8px 0}
-@media(max-width:599px){.pf-k3 b{font-size:16px}.pf-k3 .card{padding:8px}.pf-tab{display:none}.pf-cards{display:block}}
+.pf-cards{display:block}
+@media(max-width:599px){.pf-k3 b{font-size:16px}.pf-k3 .card{padding:8px}}
 """
 
 
@@ -36,6 +36,30 @@ def _nok(x):
 
 def _px(x):
     return "–" if x is None else f"{x:,.2f}".replace(",", " ").replace(".", ",")
+
+
+def signal_card(t: str, p: dict, e: dict, day: int, fl: str, trades: list, show_ret: bool) -> str:
+    """UxBot 01.11: ett kort per signal. Topp: ticker + signaltype + dato. Felt: innpris, siste kurs, avkastning (3 kolonner).
+    AnalBot 25.10: avkastning vises først fra 30 lukkede handler – til da «–» med synlig forklaring. «kort periode» under 5 dager."""
+    from .ux2 import dm
+    buy = [r for r in trades if r.get("event") == "fill" and r.get("side") == "buy" and r.get("ticker") == t]
+    typ = (buy[-1].get("reason") or "").split(";")[0] if buy else ""
+    st = e.get("stats") or {}
+    last = st.get("close")
+    nm = NM.name(t, e.get("name")) or ""
+    if show_ret and last is not None and p.get("price"):
+        v = round((last / p["price"] - 1) * 100, 1)
+        cls = "rup" if v > 0 else "rdn" if v < 0 else "r0"
+        ret = f'<span class="v rv {cls}">{("+" if v > 0 else "") + f"{v:.1f}".replace(".", ",").replace("-", "\u2212")}\u00a0%</span>'
+        ret += '<span class="s">kort periode</span>' if day < 5 else ""
+    else:
+        ret = f'<span class="v">–</span><span class="s">vises fra {RULES["min_closed_for_returns"]} lukkede handler</span>'
+    return (f'<div class="pfs pf-card"><div class="pfs-h"><b><a href="ticker/{E(t.replace(".", "_"))}.html">{E(t)}</a></b>'
+            f'<span class="t">{E(typ or nm)}</span><span class="d">{E(dm(p.get("date")))}</span></div>'
+            f'<div class="pfs-k"><div><span class="l">Innpris</span><span class="v">{_px(p.get("price"))}</span><span class="s">dag {day} av {RULES["hold_trading_days"]}</span></div>'
+            f'<div><span class="l">Siste kurs</span><span class="v">{_px(last)}</span><span class="s">{E(dm(st.get("last_date")))}</span></div>'
+            f'<div><span class="l">Avkastning</span>{ret}</div></div>'
+            f'<p class="mut" style="margin:6px 0 0;font-size:12px">Flagg: {E(fl)}</p></div>')
 
 
 def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
@@ -63,9 +87,9 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
         fl = "; ".join(str(v) for v in (e.get("cat_flags") or {}).values()) or "–"
         nm = NM.name(t, e.get("name")) or ""
         rows.append(f'<tr><td><a href="ticker/{E(t.replace(".", "_"))}.html">{E(t)}</a></td><td>{E(nm)}</td><td>{E(p["date"])}</td><td>{_px(p["price"])}</td><td>dag {day} av {RULES["hold_trading_days"]}</td><td>{E(fl)}</td></tr>')
-        cards.append(f'<div class="pf-card"><b>{E(t)}</b> <span class="mut">{E(nm)}</span><br>Inn {E(p["date"])} på {_px(p["price"])} · dag {day} av {RULES["hold_trading_days"]}<br><span class="mut">Flagg: {E(fl)}</span></div>')
+        cards.append(signal_card(t, p, e, day, fl, trades, n_closed >= need))
     pos = ('<div class="card"><h2 style="margin-top:0">Åpne posisjoner</h2>' +
-           (f'<div class="tw pf-tab"><table><tr><th>Ticker</th><th>Navn</th><th>Inn</th><th>Kurs</th><th>Holdetid</th><th>Flagg</th></tr>{"".join(rows)}</table></div><div class="pf-cards">{"".join(cards)}</div>'
+           (f'<div class="pf-cards">{"".join(cards)}</div>'
             if rows else '<p class="mut">Ingen åpne posisjoner.</p>') + "</div>")
     fills = [r for r in trades if r["event"] == "fill"]
     lg = "".join(f'<tr><td>{E(r["price_date"])}</td><td>{"Kjøp" if r["side"] == "buy" else "Salg"}</td><td>{E(r["ticker"])}</td><td>{_px(P._f(r["price"]))}</td>'

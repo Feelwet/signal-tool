@@ -1,3 +1,4 @@
+import re
 """UxBot 26.10: topplinje 48 px, filterknapper 36 px + fade, stjernekolonne 44 px, «Ingen kursdata»-chip."""
 from signaltool import site as S, tickerlist as TL, since as SN
 
@@ -9,7 +10,7 @@ def test_gen_short():
 
 def test_top_bar_single_row_48px():
     html = S.page("Tickere", "<p>x</p>", 0, {"generated": "2026-10-26 21:05"})
-    assert '</header><p class="gen gen-line">Oppdatert 26.10 kl. 21:05</p>' in html     # UxBot 28.10: under toppbaren
+    assert re.search(r'</header><p class="gen gen-line"[^>]*>Oppdatert 26\.10 kl\. 21:05</p>', html)     # UxBot 28.10: under toppbaren
     assert html.count('gen-line') == 1 and 'class="gen"' not in html                       # egen datolinje i sidemenyen er fjernet
     css = S.CSS
     assert "height:48px" in css and "width:40px;height:40px" in css
@@ -20,7 +21,7 @@ def test_top_bar_single_row_48px():
 
 def test_filter_buttons_and_fade():
     h = TL.filter_row({"tickers": []})
-    assert h.startswith('<div class="tf-wrap"><div class="tf-row"') and "at-end" in h
+    assert h.startswith('<div class="tf-wrap">') and '<div class="tf-row"' in h and 'id="tf-q"' in h and "at-end" in h   # UxBot 01.11: søk først i den sticky raden
     assert "height:36px" in TL.CSS and "padding:0 12px" in TL.CSS and "gap:8px" in TL.CSS
     assert "width:24px" in TL.CSS and "white-space:nowrap" in TL.CSS and ".tf-wrap.at-end::after{display:none}" in TL.CSS
 

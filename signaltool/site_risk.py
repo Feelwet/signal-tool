@@ -36,7 +36,9 @@ def src(r: dict | None) -> str:
 
 
 def status() -> str:
-    return f'<p class="catdisc rk-status">{E(STATUS)}</p>'
+    """AnalBot 01.11: kort synlig linje ved risikofeltet; resten av STATUS-teksten i ⓘ."""
+    from .ux2 import RISK_LINE, i
+    return f'<p class="catdisc rk-status">{E(RISK_LINE)}{i(STATUS, "Om risikonivået")}</p>'
 
 
 NA_TIP = "Risikonivå mangler data"
@@ -80,7 +82,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.rk-tip'))close(null
 # Klikk mens hover-åpen fester popoveren (lukkes med klikk utenfor / Esc). Touch: uendret (bare trykk).
 HOVER_JS = r"""<script>(()=>{if(window.__stHov)return;window.__stHov=1;const mq=matchMedia('(hover:hover) and (pointer:fine)'),d=document,Q='.ri,.rk-i,.rt-i';
 const tgt=b=>b.classList.contains('ri')?null:d.getElementById(b.getAttribute('aria-controls'));
-const pos=b=>{const t=b.querySelector('.tip');if(!t||!b.classList.contains('ri-c'))return;t.classList.add('pop');const r=b.getBoundingClientRect(),w=Math.min(260,innerWidth-16);t.style.maxWidth=w+'px';const tw=Math.min(t.offsetWidth||w,w);t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,innerWidth-tw-8))+'px';t.style.top=(r.bottom+6)+'px'};
+const pos=b=>{const t=b.querySelector('.tip');if(!t||!b.classList.contains('ri-c'))return;t.classList.add('pop');const r=b.getBoundingClientRect(),w=Math.min(260,innerWidth-16);t.style.maxWidth=w+'px';const tw=Math.min(t.offsetWidth||w,w);t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,innerWidth-tw-8))+'px';const th=t.offsetHeight;let y=r.bottom+6;if(y+th>innerHeight-8&&r.top-th-6>8)y=r.top-th-6;t.style.top=y+'px'};
 const set=(b,o)=>{b.setAttribute('aria-expanded',o?'true':'false');const t=tgt(b);if(t)t.hidden=!o;if(o)pos(b)};
 const fine=e=>mq.matches&&e.pointerType==='mouse';
 d.querySelectorAll(Q).forEach(b=>{

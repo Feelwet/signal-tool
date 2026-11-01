@@ -11,8 +11,19 @@ ICONS = (("icon-192.png", 192, False), ("icon-512.png", 512, False), ("icon-mask
 BG, FG, THEME = "#111821", "#58a6ff", "#1c2430"
 SCOPE = "/signal-tool/"
 NAME, SHORT = "Signal-tool", "Signal"
-INSTALL_TIP = "Del → Legg til på Hjem-skjerm"
-OFFLINE_TXT = "Frakoblet, viser data fra {dato}"
+INSTALL_SAFARI = "Trykk ⋯ eller Del i Safari, velg Del og så Legg til på Hjem-skjerm."
+INSTALL_OTHER = "Åpne siden i Safari for å installere."
+INSTALL_TIP = INSTALL_SAFARI
+OFFLINE_TXT = "Frakoblet, viser kurser per {kurs} (hentet {hentet})"
+OFFLINE_NOKD = "Frakoblet, viser data hentet {hentet}"
+
+
+def kurs_date(snap) -> str:
+    """Siste sluttkursdato i dataene (vanligste _ret.last blant tickerne; likt antall -> nyeste). '' når ukjent."""
+    from collections import Counter
+    c = Counter(str((e.get("_ret") or {}).get("last") or "")[:10] for e in (snap or {}).get("tickers") or [])
+    c.pop("", None)
+    return max(c.items(), key=lambda kv: (kv[1], kv[0]))[0] if c else ""
 
 
 def make_icons(out: Path = ICON_DIR) -> None:
@@ -57,7 +68,7 @@ catch(err){const m=await c.match(req,{ignoreSearch:true});if(!m)throw err;
  if((m.headers.get('content-type')||'').includes('text/html')){const t=(await m.text()).replace('<html ','<html data-offline="1" ');
   return new Response(t,{headers:{'content-type':'text/html; charset=utf-8'}})}return m}}
 self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==location.origin)return;
- if(isShell(u)){e.respondWith(caches.open(V).then(c=>c.match(r,{ignoreSearch:true}).then(m=>m||fetch(r).then(x=>{if(x.ok)c.put(r,x.clone());return x}))));return}
+ if(isShell(u)){e.respondWith(caches.open(V).then(c=>c.match(r).then(m=>m||fetch(r).then(x=>{if(x.ok)c.put(r,x.clone());return x}))));return}
  e.respondWith(net(r))});
 """
 
@@ -76,15 +87,16 @@ CSS = ("header.top{height:calc(48px + env(safe-area-inset-top,0px));min-height:c
        "footer{padding-bottom:env(safe-area-inset-bottom,0px)}"
        "html[data-offline] .gen-line{color:#fdba74}"
        ".pwa-inst{margin:16px 0 4px;font-size:13px;line-height:18px;color:#94a3b8}.pwa-inst[hidden]{display:none}"
-       ".pwa-inst a,.pwa-inst button.pwa-go{color:#94a3b8;font:inherit;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}"
+       ".pwa-inst button.pwa-go{color:#94a3b8;font:inherit;background:none;border:0;padding:0;min-height:32px;display:inline-flex;align-items:center;text-decoration:underline;cursor:pointer}"
+       ".pwa-help{box-sizing:border-box;max-width:100%;margin:4px 0 0;padding:16px;font-size:13px;line-height:1.45;color:#cbd5e1;text-align:left;white-space:normal;overflow-wrap:break-word;background:#111821;border-radius:6px}.pwa-help[hidden]{display:none}"
        "@media(display-mode:standalone){.pwa-inst{display:none!important}}\n")
 
 
 def install_html() -> str:
-    """Lenke nederst på Oversikt. Skjult til JS vet at installering er mulig (beforeinstallprompt) eller at det er iPhone/iPad."""
-    return (f'<p class="pwa-inst" id="pwa-inst" hidden><button type="button" class="pwa-go" id="pwa-go">Installer som app</button>'
-            f'<span id="pwa-ios" hidden> <button type="button" class="ri ri-c sc-i" aria-expanded="false" aria-label="{INSTALL_TIP}">ⓘ'
-            f'<span class="tip">{INSTALL_TIP}</span></button></span></p>')
+    """Lenke nederst på Oversikt. Skjult til JS vet at installering er mulig (beforeinstallprompt) eller at det er iPhone/iPad.
+    iOS: trykk folder ut en tekstblokk rett under lenken (ingen popup)."""
+    return ('<div class="pwa-inst" id="pwa-inst" hidden><button type="button" class="pwa-go" id="pwa-go" aria-expanded="false" aria-controls="pwa-help">Installer som app</button>'
+            '<p class="pwa-help" id="pwa-help" hidden></p></div>')
 
 
 def js(pre: str) -> str:
@@ -93,9 +105,9 @@ def js(pre: str) -> str:
     sc = pre or "./"
     return ("<script>(()=>{const d=document,H=d.documentElement;"
             f"if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('{pre}sw.js',{{scope:'{sc}'}}).catch(()=>0));"
-            # frakoblet: siden kom fra cache (SW merker <html data-offline>)
-            "if(H.dataset.offline){const g=d.querySelector('header.top+p.gen');if(g){const t=g.textContent.replace(/^Oppdatert\\s*/,'');"
-            f"g.textContent={off}.replace('{{dato}}',t||'ukjent dato')}}}}"
+            # frakoblet: siden kom fra cache (SW merker <html data-offline>); kursdato fra data, hentetid fra build
+            "if(H.dataset.offline){const g=d.querySelector('header.top+p.gen');if(g){const h=g.dataset.hent||g.textContent.replace(/^Oppdatert\\s*/,'')||'ukjent tid';"
+            f"g.textContent=g.dataset.kd?{json.dumps(OFFLINE_TXT)}.replace('{{kurs}}',g.dataset.kd).replace('{{hentet}}',h):{json.dumps(OFFLINE_NOKD)}.replace('{{hentet}}',h)}}}}"
             # ferskhet: Brent = siste handelsdag (UTC >= 23 -> i dag, ellers i går; helg tilbake), BTC = i går UTC
             "const day=86400000,iso=x=>new Date(x+'T00:00:00Z').getTime(),n=new Date(),u=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());"
             "d.querySelectorAll('.ms-f[data-d]').forEach(f=>{if(f.querySelector('.ms-w'))return;let e;"
@@ -105,7 +117,9 @@ def js(pre: str) -> str:
             # installer-lenke: aldri auto-popup, bare ved trykk
             "const box=d.getElementById('pwa-inst');if(!box)return;const sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(sa)return;"
             "const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);let ev=null;"
-            "if(ios){box.hidden=false;d.getElementById('pwa-ios').hidden=false;const g=d.getElementById('pwa-go');g.addEventListener('click',e=>{e.stopPropagation();d.querySelector('#pwa-ios .sc-i').click()})}"
+            "if(ios){box.hidden=false;const g=d.getElementById('pwa-go'),hp=d.getElementById('pwa-help'),oth=/CriOS|FxiOS|EdgiOS|OPiOS|OPT\\/|GSA\\/|DuckDuckGo|YaBrowser|Brave/.test(navigator.userAgent);"
+            f"hp.textContent=oth?{json.dumps(INSTALL_OTHER)}:{json.dumps(INSTALL_SAFARI)};"
+            "g.addEventListener('click',e=>{e.stopPropagation();const o=hp.hidden;hp.hidden=!o;g.setAttribute('aria-expanded',o?'true':'false')})}"
             "addEventListener('beforeinstallprompt',e=>{e.preventDefault();ev=e;box.hidden=false});"
             "d.getElementById('pwa-go').addEventListener('click',async()=>{if(!ev)return;ev.prompt();try{await ev.userChoice}catch(x){}ev=null;box.hidden=true});"
             "addEventListener('appinstalled',()=>{box.hidden=true})})()</script>")
