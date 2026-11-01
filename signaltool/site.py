@@ -357,16 +357,16 @@ def score_badge(s, hi=2.0, mid=1.0, muted=False):
     return f'<span class="score {cls}">{s:.2f}</span>'
 
 
-# ⓘ ved dempet poengsum/evidens (.sc-i): delegert klikk på document, så det virker også etter at kort pakkes inn i <details>
+# ⓘ ved dempet poengsum/evidens (.sc-i) og tabell-ⓘ (.ri.ri-c, f.eks. tickertabellene på Metode, 02.11): delegert klikk på document, så det virker også etter at kort pakkes inn i <details>
 # (innerHTML flyttes) og på sider uten felles .ri-håndterer. På tickere.html stopper since.JS klikket før det når hit (ingen dobbel veksling).
-SCORE_I_JS = ("<script>(()=>{if(window.__scI)return;window.__scI=1;const d=document,x=k=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(b=>b!==k&&b.setAttribute('aria-expanded','false'));"
-              "d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.sc-i');if(!b){x(null);return}e.preventDefault();x(b);"
+SCORE_I_JS = ("<script>(()=>{if(window.__scI)return;window.__scI=1;const d=document,Q='.sc-i,.ri.ri-c',QO='.sc-i[aria-expanded=true],.ri.ri-c[aria-expanded=true]',x=k=>d.querySelectorAll(QO).forEach(b=>b!==k&&b.setAttribute('aria-expanded','false'));"
+              "d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest(Q);if(!b){x(null);return}if(e.target.closest('.tip a'))return;e.preventDefault();x(b);"
               "b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');if(b.getAttribute('aria-expanded')==='true')P(b)});"
               # kant-sikker boble (01.11): fast plassert, klemt 8 px innenfor viewport, snur opp ved bunnkant
               "const P=b=>{const t=b.querySelector('.tip');if(!t)return;t.classList.add('pop');const W=innerWidth,w=Math.min(280,W-16);t.style.maxWidth=w+'px';t.style.left='8px';t.style.top='0px';"
               "const r=b.getBoundingClientRect(),tw=Math.min(t.offsetWidth||w,w),th=t.offsetHeight;t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,W-tw-8))+'px';"
               "let y=r.bottom+6;if(y+th>innerHeight-8&&r.top-th-6>8)y=r.top-th-6;t.style.top=y+'px'};"
-              "addEventListener('scroll',()=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(P),{passive:true});addEventListener('resize',()=>d.querySelectorAll('.sc-i[aria-expanded=true]').forEach(P));"
+              "addEventListener('scroll',()=>d.querySelectorAll(QO).forEach(P),{passive:true});addEventListener('resize',()=>d.querySelectorAll(QO).forEach(P));"
               "d.addEventListener('keydown',e=>{if(e.key==='Escape')x(null)})})()</script>")
 
 

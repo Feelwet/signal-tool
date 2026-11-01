@@ -62,3 +62,14 @@ def test_signal_card_hides_return_until_30_closed():
     assert "Innpris" in h and "Siste kurs" in h and "Avkastning" in h and "vises fra 30 lukkede handler" in h and "+10" not in h
     h2 = PP.signal_card("AAA.OL", p, e, 2, "–", [], True)
     assert "+10,0" in h2 and "kort periode" in h2
+
+
+def test_score_i_js_covers_table_ri():
+    from signaltool import site as S
+    j = S.SCORE_I_JS
+    assert "Q='.sc-i,.ri.ri-c'" in j and "closest(Q)" in j and ".ri.ri-c[aria-expanded=true]" in j and "closest('.tip a')" in j
+
+
+def test_ov_tile_sub_wraps_no_ellipsis():
+    from signaltool import ux2 as U
+    assert "body.pg-index .ov-tile .sub{white-space:normal;overflow:visible;text-overflow:clip" in U.CSS

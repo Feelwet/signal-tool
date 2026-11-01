@@ -76,6 +76,7 @@ CSS = (
     "body.pg-index .ov-tile .lbl a{color:#cbd5e1}body.pg-index .ov-tile .stretch{font-size:12px;text-transform:none;letter-spacing:0}"
     "body.pg-index .ov-tile .big{font-size:20px;line-height:24px;font-weight:600;margin:2px 0 0}"
     "body.pg-index .ov-tile .sub,body.pg-index .ov-tile .sub2{font-size:12px;line-height:16px;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}"
+    "body.pg-index .ov-tile .sub{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word}"   # 02.11: bryt (maks 2 linjer), ingen ellipse
     "body.pg-index .ov-tile .sub a.in{padding:0}"
     "body.pg-index .ov-tile .sub2.rkl{white-space:normal;overflow:visible;display:flex;align-items:center;gap:2px}body.pg-index .ov-tile .sub2.rkl .sc-i{flex:none}"
     "body.pg-index .ov-stack{height:6px;margin:4px 0}"
