@@ -2078,7 +2078,7 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,ranger
 2026-10-31,NOD.OL,tema,177.2,2026-10-30,OSEBX.OL,,0,,,1
 2026-10-31,NORBT.OL,tema,163.7,2026-10-30,OSEBX.OL,,0,,weak_px,1
 2026-10-31,NTI.OL,tema,1.058,2026-10-30,OSEBX.OL,,0,,weak_px|neg_ebit|high_vol,1
-2026-11-01,KOG.OL,hold,355.8,2026-10-30,OSEBX.OL,6.33,1,ose_contract,high_vol,1
+2026-11-01,KOG.OL,hold,355.8,2026-10-30,OSEBX.OL,6.3,1,ose_contract,high_vol,1
 2026-11-01,GOOG,watch,278.22,2026-10-30,SPY,4.69,0,,crash,1
 2026-11-01,BRG.OL,watch,153.8,2026-10-30,OSEBX.OL,4.68,0,,weak_px,1
 2026-11-01,VRT,watch,232.5,2026-10-30,SPY,4.31,1,pead,crash,1
@@ -2091,8 +2091,8 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,ranger
 2026-11-01,NCLH,hold,17.57,2026-10-30,SPY,3.51,1,pead,,1
 2026-11-01,NAVA.OL,watch,11.15,2026-10-30,OSEBX.OL,3.5,0,,illiquid|weak_px|neg_ebit,1
 2026-11-01,SCATC.OL,watch,84.65,2026-10-30,OSEBX.OL,3.28,0,,crash|weak_px,1
+2026-11-01,LNG,watch,330.32,2026-10-30,SPY,3.25,0,,,1
 2026-11-01,LLY,hold,1417.54,2026-10-30,SPY,3.23,1,pead,,1
-2026-11-01,LNG,watch,330.32,2026-10-30,SPY,3.22,0,,,1
 2026-11-01,PWR,watch,620.73,2026-10-30,SPY,3.22,1,pead,crash,1
 2026-11-01,WEC,watch,116.07,2026-10-30,SPY,3.0,1,pead,,1
 2026-11-01,ENDUR.OL,watch,124.6,2026-10-30,OSEBX.OL,3.0,1,ose_contract,,1
@@ -2100,10 +2100,10 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,ranger
 2026-11-01,HKY.OL,watch,43.0,2026-10-30,OSEBX.OL,3.0,1,ose_contract,illiquid|weak_px|high_vol,1
 2026-11-01,VEI.OL,watch,210.0,2026-10-30,OSEBX.OL,3.0,1,ose_contract,,1
 2026-11-01,YAR.OL,watch,393.9,2026-10-30,OSEBX.OL,2.56,0,,weak_px,1
-2026-11-01,LMT,watch,636.95,2026-10-30,SPY,2.3,0,,,1
-2026-11-01,DNB.OL,watch,321.3,2026-10-30,OSEBX.OL,2.26,0,,,1
+2026-11-01,LMT,watch,636.95,2026-10-30,SPY,2.27,0,,,1
+2026-11-01,DNB.OL,watch,321.3,2026-10-30,OSEBX.OL,2.27,0,,,1
 2026-11-01,ALGM,watch,30.53,2026-10-30,SPY,2.19,0,,crash,1
-2026-11-01,LHX,watch,277.61,2026-10-30,SPY,2.15,0,,,1
+2026-11-01,LHX,watch,277.61,2026-10-30,SPY,2.12,0,,,1
 2026-11-01,HAS,hold,119.09,2026-10-30,SPY,2.0,1,pead,,1
 2026-11-01,KIM,watch,24.52,2026-10-30,SPY,2.0,1,pead,,1
 2026-11-01,MRK,watch,149.52,2026-10-30,SPY,2.0,1,pead,,1
@@ -2113,9 +2113,9 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,ranger
 2026-11-01,NXPI,watch,259.61,2026-10-30,SPY,1.93,0,,,1
 2026-11-01,BONHR.OL,watch,265.0,2026-10-30,OSEBX.OL,1.9,0,,illiquid,1
 2026-11-01,BHE,watch,68.37,2026-10-30,SPY,1.87,0,,crash,1
-2026-11-01,EQNR.OL,watch,447.5,2026-10-30,OSEBX.OL,1.73,0,,,1
-2026-11-01,GD,watch,372.59,2026-10-30,SPY,1.69,0,,,1
-2026-11-01,WAWI.OL,watch,169.0,2026-10-30,OSEBX.OL,1.61,1,ose_contract,placement,1
+2026-11-01,EQNR.OL,watch,447.5,2026-10-30,OSEBX.OL,1.83,1,theme_market,,1
+2026-11-01,GD,watch,372.59,2026-10-30,SPY,1.66,0,,,1
+2026-11-01,WAWI.OL,watch,169.0,2026-10-30,OSEBX.OL,1.65,1,ose_contract,placement,1
 2026-11-01,META,watch,614.99,2026-10-30,SPY,1.6,0,,,1
 2026-11-01,CAT,watch,622.75,2026-10-30,SPY,1.59,0,,crash,1
 2026-11-01,CINF,watch,181.19,2026-10-30,SPY,1.59,0,,,1
@@ -2131,8 +2131,8 @@ date,ticker,category,price,price_date,benchmark,score,n_types,types,flags,ranger
 2026-11-01,STECH.OL,watch,89.0,2026-10-30,OSEBX.OL,1.5,1,ose_contract,illiquid,1
 2026-11-01,STRO.OL,watch,10.2,2026-10-30,OSEBX.OL,1.5,1,ose_contract,illiquid|penny,1
 2026-11-01,TEKNA.OL,watch,6.28,2026-10-30,OSEBX.OL,1.5,1,ose_contract,illiquid|penny|neg_ebit|high_vol,1
-2026-11-01,NHY.OL,watch,66.14,2026-10-30,OSEBX.OL,1.28,0,,weak_px,1
-2026-11-01,CVX,watch,235.52,2026-10-30,SPY,1.23,0,,,1
+2026-11-01,CVX,watch,235.52,2026-10-30,SPY,1.33,1,theme_market,,1
+2026-11-01,NHY.OL,watch,66.14,2026-10-30,OSEBX.OL,1.29,0,,weak_px,1
 2026-11-01,CMMB.OL,watch,,,OSEBX.OL,1.5,1,ose_contract,,0
 2026-11-01,ELK.OL,tema,31.46,2026-10-30,OSEBX.OL,,0,,,1
 2026-11-01,KIT.OL,tema,90.5,2026-10-30,OSEBX.OL,,0,,,1
