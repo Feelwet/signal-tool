@@ -28,7 +28,7 @@ CSS = """
 .om-chip{flex:none;font-size:12px;line-height:18px;padding:0 8px;border-radius:9px;border:1px solid currentColor}
 .om-chip.on{color:#58a6ff}.om-chip.pl{color:#94a3b8}.om-li .dt{flex:none;font-size:12px;color:#94a3b8;margin-left:auto;white-space:nowrap}
 .om-old{color:#fdba74;font-size:12px;margin:0 0 8px}
-@media(max-width:599px){.om-c{padding:16px}}
+@media(max-width:599px){.om{padding:0 6px}}   /* main har 10 px; totalt 16 px */
 """
 
 
