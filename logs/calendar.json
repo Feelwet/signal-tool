@@ -462,6 +462,13 @@
 "kind": "makro"
 },
 {
+"date": "2026-11-16",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Utenrikshandel med varer, månedlig (08792)",
+"kind": "makro"
+},
+{
 "date": "2026-11-17",
 "time": "",
 "source": "Yahoo",
@@ -504,10 +511,24 @@
 "kind": "resultat"
 },
 {
+"date": "2026-11-23",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport BWLPG.OL",
+"kind": "resultat"
+},
+{
 "date": "2026-12-09",
 "time": "20:00",
 "source": "Federal Reserve",
 "title": "FOMC rentebeslutning + prognoser (SEP)",
+"kind": "sentralbank"
+},
+{
+"date": "2026-12-17",
+"time": "14:15",
+"source": "ECB",
+"title": "ECB rentebeslutning og pressekonferanse",
 "kind": "sentralbank"
 }
 ]

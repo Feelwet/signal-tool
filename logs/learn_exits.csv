@@ -356,3 +356,4 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-01,CMMB.OL,2026-10-31,for lite data,49,1.5,,,,41353789928,false
 2026-11-01,KIT.OL,2026-10-31,cut60,63,1.12,,,,41353789928,false
 2026-11-01,TSM,2026-10-31,cut60,62,1.15,,,,41353789928,false
+2026-11-02,CMMB.OL,2026-11-01,for lite data,49,1.5,,,,41361721155,false
