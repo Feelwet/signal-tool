@@ -5,4 +5,5 @@ feedparser>=6.0
 yfinance>=0.2.50
 pytrends>=4.9
 pytest>=8.0
+pyyaml>=6.0
 # system dependency: poppler-utils (pdftotext) for US House PTR PDFs
