@@ -28,6 +28,45 @@ def is_us(t: str) -> bool:
     return "." not in t and not t.startswith("^") and "=" not in t
 
 
+# AnalBot 02.11: handelsvaluta etter børssuffiks. Før 02.11 ble alt som ikke var USD regnet som NOK (NKT.CO er i DKK).
+CCY_SUFFIX = {".CO": "DKK", ".ST": "SEK", ".HE": "EUR"}
+FX_TICKERS = {"DKK": "DKKNOK=X", "SEK": "SEKNOK=X", "EUR": "EURNOK=X"}
+
+
+def ccy(t: str) -> str:
+    if is_us(t):
+        return "USD"
+    for suf, c in CCY_SUFFIX.items():
+        if t.endswith(suf):
+            return c
+    return "NOK"
+
+
+def _rate(cur: str, usdnok, fx: dict | None):
+    """NOK per enhet valuta. None = ukjent (ingen fylling; verdi 0 og logget)."""
+    if cur == "NOK":
+        return 1.0
+    if cur == "USD":
+        return usdnok or None
+    return (fx or {}).get(cur) or None
+
+
+CORR = LOGS / "portfolio_corrections.csv"
+K_COLS = ["date", "book_id", "order_id", "event", "ticker", "kind", "logged", "corrected", "fx", "fx_date", "note"]
+
+
+def load_corrections(path: Path = CORR) -> dict:
+    """{(book_id, order_id, event): {felt: korrigert verdi}} for kind=valuta. Handelsradene endres aldri; korreksjonene legges på."""
+    out = {}
+    for r in _read(path):
+        if r.get("kind") == "valuta" and r.get("corrected"):
+            try:
+                out[(r["book_id"], r["order_id"], r["event"])] = json.loads(r["corrected"])
+            except ValueError:
+                pass
+    return out
+
+
 def _read(p: Path) -> list[dict]:
     if not p.exists():
         return []
@@ -55,10 +94,13 @@ def _f(x):
         return None
 
 
-def state(trades: list[dict]) -> dict:
-    """Kontanter, åpne posisjoner, ventende ordre og lukkede handler fra loggen."""
+def state(trades: list[dict], corr: dict | None = None) -> dict:
+    """Kontanter, åpne posisjoner, ventende ordre og lukkede handler fra loggen. `corr` = korreksjoner (load_corrections)."""
     cash, opn, pend, closed = RULES["start_nok"], {}, {}, []
     for r in trades:
+        k = corr.get((r.get("rules_version"), r.get("order_id"), r.get("event"))) if corr else None
+        if k:
+            r = {**r, **{f: str(v) for f, v in k.items()}}
         ev, oid, t = r["event"], r["order_id"], r["ticker"]
         if ev == "order":
             pend[oid] = r
@@ -118,17 +160,18 @@ def _mark(t: str, by: dict, last: dict | None):
     return None, ""
 
 
-def _value(s: dict, by: dict, usdnok: float, last: dict | None = None) -> float:
+def _value(s: dict, by: dict, usdnok: float, last: dict | None = None, fx: dict | None = None) -> float:
     v = s["cash"]
     for t, p in s["open"].items():
         px, _ = _mark(t, by, last)
-        v += p["shares"] * (px or 0.0) * (usdnok if p["currency"] == "USD" else 1.0)
+        v += p["shares"] * (px or 0.0) * (_rate(p["currency"], usdnok, fx) or 0.0)
     return v
 
 
 def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV,
          rules: dict = RULES, picks: list[dict] | None = None, extra: list[dict] | None = None, why_buy: str = "Kjøp",
-         cols: list[str] = T_COLS, annotate=None, px_extra: dict | None = None, logs: Path | None = None) -> dict:
+         cols: list[str] = T_COLS, annotate=None, px_extra: dict | None = None, logs: Path | None = None,
+         fx: dict | None = None) -> dict:
     """Én kjøring: fyll ventende ordre (sluttkurs dagen etter signalet), legg nye ordre, skriv NAV-rad.
     Standardverdiene = bok 1 (rules_v1, kjøp kun Kjøp). Andre bøker (portfolio_books.py) sender egne regler, ferdig valgte
     kandidater (`picks`, i rekkefølge), `extra` (tema-rader utenfor snapshot, for kurs og røde flagg), egne kolonner (`cols`) og
@@ -136,12 +179,13 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     RULES, RULES_VERSION = rules, rules["version"]   # lokale navn: bok 1 bruker de fryste rules_v1 uendret
     today = str(snap.get("date"))
     trades = _read(trades_path)
+    corr = load_corrections(Path(logs or Path(nav_path).parent) / CORR.name)
     if any(r["run_date"] == today for r in trades) or any(r["date"] == today for r in _read(nav_path)):
-        return state(trades)                                      # allerede kjørt i dag
+        return state(trades, corr)                                # allerede kjørt i dag
     by = {e["ticker"]: e for e in snap.get("tickers", [])}
     for e in extra or []:
         by.setdefault(e["ticker"], e)
-    s = state(trades)
+    s = state(trades, corr)
     logs = logs or Path(nav_path).parent
     cpath, mpath = logs / CLOSES.name, logs / MISSING.name
     held = set(s["open"]) | {o["ticker"] for o in s["pending"].values() if o["side"] == "sell"}
@@ -154,18 +198,19 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     # 1) fyll ventende ordre
     for oid, o in list(s["pending"].items()):
         px, pdt = _px(by.get(o["ticker"]))
-        fxv = usdnok if is_us(o["ticker"]) else 1.0
+        cur = ccy(o["ticker"])                                       # valuta etter suffiks (ordreraden kunne før 02.11 si NOK for DKK)
+        fxv = _rate(cur, usdnok, fx)
         if px and pdt and pdt > (o["price_date"] or "") and fxv:
             illq = o["reason"].endswith("illiquid")
             if o["side"] == "buy":
                 if len(s["open"]) >= RULES["max_positions"] or o["ticker"] in s["open"]:
                     new.append({**o, "event": "cancel", "run_date": today, "reason": "full eller allerede eid"}); continue
-                nok = RULES["position_pct"] * _value(s, by, usdnok or 0, last)
+                nok = RULES["position_pct"] * _value(s, by, usdnok or 0, last, fx)
                 nok = min(nok, s["cash"] / (1 + _cost_rate(illq)))
                 if nok <= 0:
                     new.append({**o, "event": "cancel", "run_date": today, "reason": "ingen kontanter"}); continue
                 sh = nok / (px * fxv)
-                r = {**o, "event": "fill", "run_date": today, "price_date": pdt, "price": px, "fx": fxv, "shares": round(sh, 6),
+                r = {**o, "event": "fill", "run_date": today, "price_date": pdt, "price": px, "fx": fxv, "shares": round(sh, 6), "currency": cur,
                      "nok_value": round(nok, 2), "cost_nok": round(nok * _cost_rate(illq), 2)}
                 if annotate:
                     r["bench_entry"] = (bench or {}).get("spx" if is_us(o["ticker"]) else "osebx")
@@ -175,17 +220,17 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
                     new.append({**o, "event": "cancel", "run_date": today, "reason": "ingen posisjon"}); continue
                 nok = p["shares"] * px * fxv
                 cost = nok * _cost_rate(illq)
-                fx_eff = p["shares"] * px * (fxv - p["fx"]) if p["currency"] == "USD" else 0.0
+                fx_eff = p["shares"] * px * (fxv - p["fx"]) if p["currency"] != "NOK" else 0.0
                 r = {**o, "event": "fill", "run_date": today, "price_date": pdt, "price": px, "fx": fxv, "shares": p["shares"],
                      "nok_value": round(nok, 2), "cost_nok": round(cost, 2), "fx_effect_nok": round(fx_eff, 2),
                      "pnl_nok": round(nok - cost - p["nok_cost"], 2)}
             new.append(r)
-            s = state(trades + new)
+            s = state(trades + new, corr)
         elif o["side"] == "buy":                                      # salg kanselleres aldri (AnalBot 02.11): venter på første kurs
             n_runs = len([d for d in runs if d > o["run_date"]]) + 1
             if n_runs >= RULES["order_expiry_runs"]:
                 new.append({**o, "event": "cancel", "run_date": today, "reason": "ingen kurs"})
-                s = state(trades + new)
+                s = state(trades + new, corr)
     # 2) salgsordre for åpne posisjoner
     pend_t = {(o["ticker"], o["side"]) for o in s["pending"].values()}
     seq = len(trades) + len(new)
@@ -196,7 +241,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
         illq = "illiquid" in ((e or {}).get("cat_flags") or {})
         row = {"rules_version": RULES_VERSION, "event": "order", "order_id": f"{today}-{seq:04d}", "run_date": today, "signal_date": today,
                "ticker": t, "side": side, "reason": why + (";illiquid" if illq else ""), "price_date": pdt or ("" if why == NO_PRICE else today),
-               "currency": "USD" if is_us(t) else "NOK"}
+               "currency": ccy(t)}
         if annotate and side == "buy":
             row.update(annotate(e))
             row["bench_signal"] = (bench or {}).get("spx" if is_us(t) else "osebx")
@@ -229,9 +274,9 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
         if (picks is not None or e.get("category") == RULES["buy_category"]) and t not in s["open"] and (t, "buy") not in pend_t:
             new.append(order(t, "buy", why_buy, e)); slots -= 1
     _append(trades_path, cols, new)
-    s = state(trades + new)
+    s = state(trades + new, corr)
     # 4) NAV + vektet referanse
-    nav = _value(s, by, usdnok or 0, last)
+    nav = _value(s, by, usdnok or 0, last, fx)
     prev = (_read(nav_path) or [None])[-1]
     bi = 100.0
     if prev:
@@ -242,7 +287,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
             if a and b and _f(prev.get(w)):
                 r += _f(prev[w]) * (b / a - 1)
         bi *= 1 + r
-    w_ose = sum(p["shares"] * (_mark(t, by, last)[0] or 0.0) for t, p in s["open"].items() if p["currency"] != "USD") / nav if nav else 0
+    w_ose = sum(p["shares"] * (_mark(t, by, last)[0] or 0.0) * (_rate(p["currency"], usdnok, fx) or 0.0) for t, p in s["open"].items() if p["currency"] != "USD") / nav if nav else 0
     w_us = sum(p["shares"] * (_mark(t, by, last)[0] or 0.0) * (usdnok or 0) for t, p in s["open"].items() if p["currency"] == "USD") / nav if nav else 0
     # kurslogg (markedskurser for åpne posisjoner) + price_missing per dag
     seen = {(r["date"], r["ticker"]) for r in _read(cpath)}
@@ -274,6 +319,37 @@ def fetch_market() -> tuple[float | None, dict]:
     except Exception as ex:
         log.warning("portfolio market data: %s", ex)
         return None, out
+
+
+def fetch_fx() -> dict:
+    """Dagskurs NOK per DKK/SEK/EUR (Yahoo, siste sluttkurs). Mangler = utelatt (ingen fylling i den valutaen den dagen)."""
+    out = {}
+    try:
+        import yfinance as yf
+        d = yf.download(sorted(FX_TICKERS.values()), period="10d", progress=False, auto_adjust=False)["Close"].ffill()
+        for c, t in FX_TICKERS.items():
+            v = _f(d[t].dropna().iloc[-1]) if t in d and len(d[t].dropna()) else None
+            if v:
+                out[c] = v
+    except Exception as ex:
+        log.warning("portfolio fx: %s", ex)
+    return out
+
+
+def fx_history(cur: str, day: str) -> tuple[float | None, str | None]:
+    """Sluttkurs NOK per `cur` på `day` eller siste handelsdag før (Yahoo). Brukes til korreksjoner bakover."""
+    try:
+        import datetime as dt
+        import yfinance as yf
+        d0 = dt.date.fromisoformat(day[:10])
+        h = yf.download(FX_TICKERS[cur], start=str(d0 - dt.timedelta(days=10)), end=str(d0 + dt.timedelta(days=1)),
+                        progress=False, auto_adjust=False)["Close"]
+        h = h.iloc[:, 0] if hasattr(h, "columns") else h
+        h = h.dropna()
+        return (float(h.iloc[-1]), str(h.index[-1])[:10]) if len(h) else (None, None)
+    except Exception as ex:
+        log.warning("fx history %s %s: %s", cur, day, ex)
+        return None, None
 
 
 def fetch_closes(tickers: list[str]) -> dict:
@@ -345,7 +421,7 @@ def sync_logs_from_origin(logs: Path = LOGS, show=None) -> dict:
 
 
 def run(snap: dict, status: dict) -> None:
-    px_extra = {}
+    px_extra, fx = {}, {}
     try:
         sy = sync_logs_from_origin()
         print(f"Papirbøker: logger fra origin {sy}", flush=True)
@@ -358,14 +434,20 @@ def run(snap: dict, status: dict) -> None:
         log.warning("portfolio off-list closes: %s", ex)
     try:
         usd, bench = fetch_market()
-        s = step(snap, usd, bench, px_extra=px_extra)
+        fx = fetch_fx()
+        try:
+            from . import portfolio_books as PB
+            PB.ensure_corrections(fx_hist=fx_history)
+        except Exception as ex:
+            log.warning("portfolio corrections: %s", ex)
+        s = step(snap, usd, bench, px_extra=px_extra, fx=fx)
         status["Signal-boka (papirkonto)"] = f"ok ({len(s['open'])} åpne, {len(s['pending'])} ventende, {len(s['closed'])} lukket)"
     except Exception as ex:
         log.exception("portfolio failed")
         status["Signal-boka (papirkonto)"] = f"FAILED: {ex}"
     try:   # bok 2 (høy risiko, eksperimentell) + bok 3 (tilfeldig kontroll) – egne logger, påvirker aldri bok 1
         from . import portfolio_books
-        portfolio_books.run(snap, status, usd, bench, px_extra=px_extra)
+        portfolio_books.run(snap, status, usd, bench, px_extra=px_extra, fx=fx)
     except Exception as ex:
         log.exception("portfolio books failed")
         status["Papirbøker 2/3"] = f"FAILED: {ex}"

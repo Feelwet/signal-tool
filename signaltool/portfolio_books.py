@@ -91,7 +91,7 @@ def _log_cands(path: Path, row: dict) -> None:
     P._append(path, C_COLS, [row])
 
 
-def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict | None = None) -> dict:
+def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict | None = None, fx: dict | None = None) -> dict:
     day = str(snap.get("date"))
     univ = universe(snap)
     hoy = hoy_candidates(univ)
@@ -102,7 +102,7 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
         tp, npth = paths(book, logs)
         ran = any(r["date"] == day for r in P._read(npth))
         s = P.step(snap, usd, bench, tp, npth, rules=BOOKS[book], picks=picks, why_buy=why,
-                   cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs)
+                   cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs, fx=fx)
         if not ran:   # 02.11: kandidatraden skrives først etter at steget har gått (morgenkjøringen 02.11 krasjet etter å ha logget)
             _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
                                            "tickers": "|".join(e["ticker"] for e in picks)})
@@ -162,6 +162,85 @@ STATIC_DEVIATIONS = [
               "ble skrevet av morgenkjøringen 41361721155 som krasjet før ordrene ble lagt. Raden står urettet. Faktiske ordre "
               "2026-11-02 (2026-11-02-0042..0046): BRG.OL, GD, KOG.OL, TECH.OL, NCLH.")},
 ]
+
+
+# AnalBot 02.11: TECH.OL-kurshoppet er uavklart (samme liste som GS-indeksens MAIN_EXCLUDE). Alle handler i disse merkes
+# invalid_price i korreksjonsloggen. Ingen regelendring: handlene står; resultat kan regnes internt med og uten. Vises ikke på siden.
+from .gs_index import MAIN_EXCLUDE as INVALID_PRICE
+
+
+def _all_trade_files(logs: Path) -> list[tuple[str, Path]]:
+    return [("rules_v1", logs / P.TRADES.name)] + [(b, paths(b, logs)[0]) for b in BOOKS]
+
+
+def ensure_corrections(logs: Path = LOGS, fx_hist=None) -> list[dict]:
+    """Korreksjonslogg (bare tillegg, én rad per berørt handelsrad; handelsradene endres aldri):
+    - kind=invalid_price: alle rader (ordre/fill) i tickere med uavklart kurshopp (INVALID_PRICE).
+    - kind=valuta: rader der valutafeltet ikke stemmer med børsens valuta (P.ccy), f.eks. NKT.CO logget som NOK men i DKK.
+      For fill regnes antall, NOK-verdi, kostnad og resultat om med dagskurs på kursdatoen (fx_hist(valuta, dato)); NAV bruker
+      korreksjonene via P.state(..., corr). Uten dagskurs hoppes raden over og prøves igjen neste kjøring."""
+    path = logs / P.CORR.name
+    have = {(r["book_id"], r["order_id"], r["event"], r["kind"]) for r in P._read(path)}
+    today = __import__("datetime").date.today().isoformat()
+    new = []
+    for book, tp in _all_trade_files(logs):
+        trades = P._read(tp)
+        shares_c, cost_c = {}, {}
+        for r in trades:
+            t, key = r["ticker"], (book, r["order_id"], r["event"])
+            if t in INVALID_PRICE and (*key, "invalid_price") not in have:
+                new.append({"date": today, "book_id": book, "order_id": r["order_id"], "event": r["event"], "ticker": t,
+                            "kind": "invalid_price", "logged": r.get("price") or "", "corrected": "", "fx": "", "fx_date": "",
+                            "note": "kurshopp uavklart; handelen står (ingen regelendring), resultat regnes internt med og uten"})
+                have.add((*key, "invalid_price"))
+            want = P.ccy(t)
+            if (r.get("currency") or want) == want:
+                if r["event"] == "fill" and r["side"] == "buy":
+                    shares_c[t], cost_c[t] = P._f(r["shares"]), (P._f(r["nok_value"]) or 0) + (P._f(r["cost_nok"]) or 0)
+                continue
+            if (*key, "valuta") in have:
+                continue
+            c = {"currency": want}
+            fxv = fxd = None
+            if r["event"] == "fill":
+                fxv, fxd = (fx_hist or P.fx_history)(want, r["price_date"])
+                if not fxv:
+                    continue
+                px = P._f(r["price"])
+                if r["side"] == "buy":
+                    nok, cost = P._f(r["nok_value"]), P._f(r["cost_nok"]) or 0
+                    sh = nok / (px * fxv)
+                    shares_c[t], cost_c[t] = sh, nok + cost
+                    c.update({"fx": fxv, "shares": round(sh, 6)})
+                else:
+                    sh = shares_c.get(t, P._f(r["shares"]))
+                    nok = sh * px * fxv
+                    rate = (P._f(r["cost_nok"]) or 0) / (P._f(r["nok_value"]) or 1)
+                    cost = nok * rate
+                    c.update({"fx": fxv, "shares": round(sh, 6), "nok_value": round(nok, 2), "cost_nok": round(cost, 2),
+                              "pnl_nok": round(nok - cost - cost_c.get(t, 0), 2)})
+            new.append({"date": today, "book_id": book, "order_id": r["order_id"], "event": r["event"], "ticker": t, "kind": "valuta",
+                        "logged": r.get("currency"), "corrected": __import__("json").dumps(c), "fx": fxv or "", "fx_date": fxd or "",
+                        "note": f"{t} handles i {want}, logget som {r.get('currency')}; regnet om til NOK med dagskurs"})
+            have.add((*key, "valuta"))
+    P._append(path, P.K_COLS, new)
+    return new
+
+
+def internal_result(book: str, logs: Path = LOGS, exclude: frozenset = INVALID_PRICE, usdnok=None, fx=None) -> dict:
+    """Internt (vises ikke): resultat med og uten handlene i `exclude`. Uten = som om handlene ikke fantes (kontantstrømmene tas ut).
+    Verdsetting av åpne posisjoner: siste loggede markedskurs (portfolio_closes), aldri innkurs; mangler den, teller posisjonen 0."""
+    tp = logs / P.TRADES.name if book == "rules_v1" else paths(book, logs)[0]
+    trades, corr, last = P._read(tp), P.load_corrections(logs / P.CORR.name), P.last_closes(logs / P.CLOSES.name)
+    out = {}
+    for k, tr in (("med", trades), ("uten", [r for r in trades if r["ticker"] not in exclude])):
+        s = P.state(tr, corr)
+        val = sum(p["shares"] * (last.get(t, (0.0, None))[0] or 0.0) * (P._rate(p["currency"], usdnok, fx) or 0.0) for t, p in s["open"].items())
+        out[k] = {"closed": len(s["closed"]), "pnl_closed_nok": round(sum(c["pnl_nok"] or 0 for c in s["closed"]), 2),
+                  "open": len(s["open"]), "cash": round(s["cash"], 2), "nav_est": round(s["cash"] + val, 2),
+                  "unpriced": sorted(t for t in s["open"] if t not in last or (P._rate(s["open"][t]["currency"], usdnok, fx) is None))}
+    out["excluded"] = sorted(exclude)
+    return out
 
 
 def summaries(logs: Path = LOGS) -> dict:

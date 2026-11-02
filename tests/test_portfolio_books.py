@@ -305,3 +305,95 @@ def test_candidates_logged_only_after_step_0211(tmp_path, monkeypatch):
     with pytest.raises(AttributeError):
         B.run(snap("2026-10-02", tk("A.OL")), {}, 10.0, {"osebx": 1.0, "spx": 1.0}, logs=tmp_path)
     assert not (tmp_path / "portfolio_candidates.csv").exists()
+
+
+def _w(p, rws, cols=None):
+    P._append(p, cols or B.B_COLS, rws)
+
+
+def _tr(book, ev, oid, run, t, side, **k):
+    return {"rules_version": book, "event": ev, "order_id": oid, "run_date": run, "signal_date": k.pop("sig", run), "ticker": t,
+            "side": side, "reason": k.pop("reason", "x"), "price_date": k.pop("pdt", run), "currency": k.pop("cur", "NOK"), **k}
+
+
+def test_tech_invalid_price_marked_and_internal_with_without_0211(tmp_path):
+    bk = "kontroll_tilfeldig_v1"
+    tp = B.paths(bk, tmp_path)[0]
+    _w(tp, [_tr(bk, "order", "o1", "2026-10-29", "TECH.OL", "buy"),
+            _tr(bk, "fill", "o1", "2026-10-30", "TECH.OL", "buy", price=1.835, fx=1.0, shares=27247.956403, nok_value=50000.0, cost_nok=100.0),
+            _tr(bk, "order", "o2", "2026-10-30", "TECH.OL", "sell"),
+            _tr(bk, "fill", "o2", "2026-11-02", "TECH.OL", "sell", price=2.14, fx=1.0, shares=27247.956403, nok_value=58310.63, cost_nok=116.62, pnl_nok=8093.99),
+            _tr(bk, "order", "o3", "2026-10-29", "EQNR.OL", "buy"),
+            _tr(bk, "fill", "o3", "2026-10-30", "EQNR.OL", "buy", price=440.0, fx=1.0, shares=100.0, nok_value=44000.0, cost_nok=88.0)])
+    P._append(tmp_path / "portfolio_closes.csv", P.C_COLS, [{"date": "2026-11-02", "ticker": "EQNR.OL", "close": 450.0, "price_date": "2026-11-02", "source": "snapshot"}])
+    new = B.ensure_corrections(tmp_path, fx_hist=lambda c, d: (1.0, d))
+    inv = [r for r in new if r["kind"] == "invalid_price"]
+    assert [(r["order_id"], r["event"]) for r in inv] == [("o1", "order"), ("o1", "fill"), ("o2", "order"), ("o2", "fill")]
+    assert B.ensure_corrections(tmp_path, fx_hist=lambda c, d: (1.0, d)) == []          # idempotent
+    t = rows(tp)
+    assert len(t) == 6 and t[1]["price"] == "1.835"                                     # handelsradene uendret
+    r = B.internal_result(bk, tmp_path)
+    assert r["med"]["closed"] == 1 and r["med"]["pnl_closed_nok"] == 8093.99
+    assert r["uten"]["closed"] == 0 and r["uten"]["pnl_closed_nok"] == 0
+    assert r["uten"]["cash"] == 1e6 - 44088.0 and r["uten"]["nav_est"] == 1e6 - 44088.0 + 45000.0
+    assert r["excluded"] == ["TECH.OL"]
+
+
+def test_internal_result_not_on_page():
+    import signaltool.testbooks_page as T, signaltool.portfolio_page as PP
+    for m in (T, PP):
+        src = open(m.__file__).read()
+        assert "internal_result" not in src and "invalid_price" not in src
+
+
+def test_ccy_by_suffix_0211():
+    assert P.ccy("NKT.CO") == "DKK" and P.ccy("VOLV-B.ST") == "SEK" and P.ccy("NOKIA.HE") == "EUR"
+    assert P.ccy("EQNR.OL") == "NOK" and P.ccy("LMT") == "USD"
+
+
+def test_dkk_order_logged_and_filled_in_dkk_0211(tmp_path):
+    tp, npth = tmp_path / "t.csv", tmp_path / "n.csv"
+    R = B.BOOKS["kontroll_tilfeldig_v1"]
+    go = lambda day, ts, picks: P.step(snap(day, *ts), 10.0, {"osebx": 1.0, "spx": 1.0}, tp, npth, rules=R, picks=picks,
+                                       cols=B.B_COLS, annotate=B.annotator({}), fx={"DKK": 1.5})
+    go("2026-10-02", [tk("NKT.CO", close=700.0, d="2026-10-01")], [tk("NKT.CO", close=700.0, d="2026-10-01")])
+    go("2026-10-05", [tk("NKT.CO", close=700.0, d="2026-10-02")], [])
+    o, f = [r for r in rows(tp) if r["ticker"] == "NKT.CO"]
+    assert o["currency"] == "DKK" and f["currency"] == "DKK" and float(f["fx"]) == 1.5
+    assert abs(float(f["shares"]) - 50000.0 / (700.0 * 1.5)) < 1e-4
+    n = rows(npth)[-1]
+    assert abs(float(n["nav"]) - (float(n["cash"]) + float(f["shares"]) * 700.0 * 1.5)) < 0.02   # verdsatt i NOK
+
+
+def test_legacy_nok_logged_dkk_order_fills_in_dkk_and_correction_row_0211(tmp_path):
+    bk = "kontroll_tilfeldig_v1"
+    tp, npth = B.paths(bk, tmp_path)
+    _w(tp, [_tr(bk, "order", "2026-10-29-0007", "2026-10-29", "NKT.CO", "buy", cur="NOK", pdt="2026-10-29")])
+    new = B.ensure_corrections(tmp_path, fx_hist=lambda c, d: (1.47, d))
+    v = [r for r in new if r["kind"] == "valuta"]
+    assert len(v) == 1 and v[0]["order_id"] == "2026-10-29-0007" and v[0]["logged"] == "NOK" and '"DKK"' in v[0]["corrected"]
+    P.step(snap("2026-10-30", tk("NKT.CO", close=700.0, d="2026-10-30")), 10.0, {"osebx": 1.0, "spx": 1.0}, tp, npth,
+           rules=B.BOOKS[bk], picks=[], cols=B.B_COLS, annotate=B.annotator({}), fx={"DKK": 1.47})
+    f = [r for r in rows(tp) if r["event"] == "fill"][0]
+    assert f["currency"] == "DKK" and abs(float(f["shares"]) - 50000.0 / (700.0 * 1.47)) < 1e-4
+    assert rows(tp)[0]["currency"] == "NOK"                                               # ordreraden er ikke skrevet om
+
+
+def test_backward_fx_correction_for_existing_wrong_fill_used_in_nav_0211(tmp_path):
+    bk = "kontroll_tilfeldig_v1"
+    tp, npth = B.paths(bk, tmp_path)
+    _w(tp, [_tr(bk, "order", "a", "2026-10-29", "NKT.CO", "buy", cur="NOK"),
+            _tr(bk, "fill", "a", "2026-10-30", "NKT.CO", "buy", cur="NOK", price=700.0, fx=1.0, shares=50000.0 / 700.0, nok_value=50000.0, cost_nok=100.0),
+            _tr(bk, "order", "b", "2026-11-02", "NKT.CO", "sell", cur="NOK"),
+            _tr(bk, "fill", "b", "2026-11-03", "NKT.CO", "sell", cur="NOK", pdt="2026-11-03", price=770.0, fx=1.0,
+                shares=50000.0 / 700.0, nok_value=55000.0, cost_nok=110.0, pnl_nok=4790.0)])
+    B.ensure_corrections(tmp_path, fx_hist=lambda c, d: ({"2026-10-30": 1.5, "2026-11-03": 1.4}[d], d))
+    k = [r for r in rows(tmp_path / "portfolio_corrections.csv") if r["kind"] == "valuta"]
+    assert len(k) == 4                                                                   # én rad per berørt handelsrad
+    corr = P.load_corrections(tmp_path / "portfolio_corrections.csv")
+    s = P.state(rows(tp), corr)
+    sh = 50000.0 / (700.0 * 1.5)
+    nok = sh * 770.0 * 1.4
+    assert abs(s["closed"][0]["pnl_nok"] - (nok - nok * 0.002 - 50100.0)) < 0.05
+    assert abs(s["cash"] - (1e6 - 50100.0 + nok - nok * 0.002)) < 0.05
+    assert rows(tp)[1]["shares"] == str(50000.0 / 700.0)                                 # handelsraden uendret
