@@ -88,17 +88,47 @@ def _px(e: dict | None):
     return _f(st.get("close")), st.get("last_date")
 
 
-def _value(s: dict, by: dict, usdnok: float) -> float:
+# AnalBot 02.11 (alle bøker): sluttkurs hentes for alle åpne posisjoner, også de som har falt ut av lista. Verdsetting til innkurs
+# er ikke lov. Mangler kurs: siste markedskurs fra closes-loggen (aldri innkursen); finnes ingen, teller posisjonen 0 og dagen
+# logges i price_missing. Posisjonen merkes «uten kurs» og selges første dag det finnes kurs, til den kursen. Salg kanselleres aldri.
+CLOSES = LOGS / "portfolio_closes.csv"
+C_COLS = ["date", "ticker", "close", "price_date", "source"]
+MISSING = LOGS / "portfolio_price_missing.csv"
+M_COLS = ["date", "book_id", "ticker", "status", "valued_at", "valued_from"]
+NO_PRICE = "uten kurs"
+
+
+def last_closes(path: Path = CLOSES) -> dict:
+    """Siste loggede markedskurs per ticker: {ticker: (close, price_date)}. Bare markedskurser, aldri fill-/innkurs."""
+    out = {}
+    for r in sorted(_read(path), key=lambda r: (r["price_date"] or "", r["date"] or "")):
+        c = _f(r["close"])
+        if c:
+            out[r["ticker"]] = (c, r["price_date"])
+    return out
+
+
+def _mark(t: str, by: dict, last: dict | None):
+    """Kurs for verdsetting: dagens (snapshot/henting) eller siste loggede markedskurs. (kurs, kilde) – (None, '') = ingen kurs."""
+    px, pdt = _px(by.get(t))
+    if px:
+        return px, "dagens"
+    if last and t in last:
+        return last[t][0], f"siste kjente {last[t][1]}"
+    return None, ""
+
+
+def _value(s: dict, by: dict, usdnok: float, last: dict | None = None) -> float:
     v = s["cash"]
     for t, p in s["open"].items():
-        px, _ = _px(by.get(t))
-        v += p["shares"] * (px or p["price"]) * (usdnok if p["currency"] == "USD" else 1.0)
+        px, _ = _mark(t, by, last)
+        v += p["shares"] * (px or 0.0) * (usdnok if p["currency"] == "USD" else 1.0)
     return v
 
 
 def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV,
          rules: dict = RULES, picks: list[dict] | None = None, extra: list[dict] | None = None, why_buy: str = "Kjøp",
-         cols: list[str] = T_COLS, annotate=None) -> dict:
+         cols: list[str] = T_COLS, annotate=None, px_extra: dict | None = None, logs: Path | None = None) -> dict:
     """Én kjøring: fyll ventende ordre (sluttkurs dagen etter signalet), legg nye ordre, skriv NAV-rad.
     Standardverdiene = bok 1 (rules_v1, kjøp kun Kjøp). Andre bøker (portfolio_books.py) sender egne regler, ferdig valgte
     kandidater (`picks`, i rekkefølge), `extra` (tema-rader utenfor snapshot, for kurs og røde flagg), egne kolonner (`cols`) og
@@ -112,6 +142,13 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     for e in extra or []:
         by.setdefault(e["ticker"], e)
     s = state(trades)
+    logs = logs or Path(nav_path).parent
+    cpath, mpath = logs / CLOSES.name, logs / MISSING.name
+    held = set(s["open"]) | {o["ticker"] for o in s["pending"].values() if o["side"] == "sell"}
+    for t, (c, d) in (px_extra or {}).items():   # utenfor lista: hentet sluttkurs (bare for åpne posisjoner / ventende salg)
+        if t in held and t not in by and c:
+            by[t] = {"ticker": t, "stats": {"close": c, "last_date": d}, "off_list": True}
+    last = last_closes(cpath)
     new = []
     runs = sorted({r["date"] for r in _read(nav_path)})
     # 1) fyll ventende ordre
@@ -123,7 +160,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
             if o["side"] == "buy":
                 if len(s["open"]) >= RULES["max_positions"] or o["ticker"] in s["open"]:
                     new.append({**o, "event": "cancel", "run_date": today, "reason": "full eller allerede eid"}); continue
-                nok = RULES["position_pct"] * _value(s, by, usdnok or 0)
+                nok = RULES["position_pct"] * _value(s, by, usdnok or 0, last)
                 nok = min(nok, s["cash"] / (1 + _cost_rate(illq)))
                 if nok <= 0:
                     new.append({**o, "event": "cancel", "run_date": today, "reason": "ingen kontanter"}); continue
@@ -144,7 +181,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
                      "pnl_nok": round(nok - cost - p["nok_cost"], 2)}
             new.append(r)
             s = state(trades + new)
-        else:
+        elif o["side"] == "buy":                                      # salg kanselleres aldri (AnalBot 02.11): venter på første kurs
             n_runs = len([d for d in runs if d > o["run_date"]]) + 1
             if n_runs >= RULES["order_expiry_runs"]:
                 new.append({**o, "event": "cancel", "run_date": today, "reason": "ingen kurs"})
@@ -158,7 +195,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
         px, pdt = _px(e)
         illq = "illiquid" in ((e or {}).get("cat_flags") or {})
         row = {"rules_version": RULES_VERSION, "event": "order", "order_id": f"{today}-{seq:04d}", "run_date": today, "signal_date": today,
-               "ticker": t, "side": side, "reason": why + (";illiquid" if illq else ""), "price_date": pdt or today,
+               "ticker": t, "side": side, "reason": why + (";illiquid" if illq else ""), "price_date": pdt or ("" if why == NO_PRICE else today),
                "currency": "USD" if is_us(t) else "NOK"}
         if annotate and side == "buy":
             row.update(annotate(e))
@@ -174,6 +211,8 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
             pdt = today                                               # ute av lista: holdetid telles mot kjøringsdatoen
         if RULES["sell_on_folg_or_lower"] and (e is None or e.get("category") not in ("kjop", "hold")):
             why = "under Hold"
+        elif not _px(e)[0]:
+            why = NO_PRICE                                            # ingen kurs i dag: selges første dag det finnes kurs
         elif (e or {}).get("cat_flags"):   # e er None når tickeren har falt ut av lista (bok 2/3); før 02.11 krasjet det her
             why = "rødt flagg"
         elif pdt and int(np.busday_count(p["date"], pdt)) >= RULES["hold_trading_days"]:
@@ -192,7 +231,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     _append(trades_path, cols, new)
     s = state(trades + new)
     # 4) NAV + vektet referanse
-    nav = _value(s, by, usdnok or 0)
+    nav = _value(s, by, usdnok or 0, last)
     prev = (_read(nav_path) or [None])[-1]
     bi = 100.0
     if prev:
@@ -203,8 +242,20 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
             if a and b and _f(prev.get(w)):
                 r += _f(prev[w]) * (b / a - 1)
         bi *= 1 + r
-    w_ose = sum(p["shares"] * (_px(by.get(t))[0] or p["price"]) for t, p in s["open"].items() if p["currency"] != "USD") / nav if nav else 0
-    w_us = sum(p["shares"] * (_px(by.get(t))[0] or p["price"]) * (usdnok or 0) for t, p in s["open"].items() if p["currency"] == "USD") / nav if nav else 0
+    w_ose = sum(p["shares"] * (_mark(t, by, last)[0] or 0.0) for t, p in s["open"].items() if p["currency"] != "USD") / nav if nav else 0
+    w_us = sum(p["shares"] * (_mark(t, by, last)[0] or 0.0) * (usdnok or 0) for t, p in s["open"].items() if p["currency"] == "USD") / nav if nav else 0
+    # kurslogg (markedskurser for åpne posisjoner) + price_missing per dag
+    seen = {(r["date"], r["ticker"]) for r in _read(cpath)}
+    _append(cpath, C_COLS, [{"date": today, "ticker": t, "close": _px(by.get(t))[0], "price_date": _px(by.get(t))[1],
+                             "source": "yahoo" if (by.get(t) or {}).get("off_list") else "snapshot"}
+                            for t in s["open"] if _px(by.get(t))[0] and (today, t) not in seen])
+    miss = []
+    for t in sorted(set(s["open"]) | {o["ticker"] for o in s["pending"].values() if o["side"] == "sell"}):
+        if not _px(by.get(t))[0]:
+            v, src = _mark(t, by, last)
+            miss.append({"date": today, "book_id": RULES_VERSION, "ticker": t, "status": "åpen" if t in s["open"] else "ventende salg",
+                         "valued_at": v if v else "", "valued_from": src or "ingen kurs: teller 0"})
+    _append(mpath, M_COLS, miss)
     _append(nav_path, N_COLS, [{"rules_version": RULES_VERSION, "date": today, "nav": round(nav, 2), "cash": round(s["cash"], 2),
                                 "n_open": len(s["open"]), "usdnok": usdnok, "osebx": bench.get("osebx"), "spx": bench.get("spx"),
                                 "w_ose": round(w_ose, 4), "w_us": round(w_us, 4), "bench_index": round(bi, 4)}])
@@ -225,17 +276,52 @@ def fetch_market() -> tuple[float | None, dict]:
         return None, out
 
 
+def fetch_closes(tickers: list[str]) -> dict:
+    """Siste sluttkurs (Yahoo, 1 mnd) for tickere utenfor dagens liste: {ticker: (close, 'YYYY-MM-DD')}. Mangler = utelatt."""
+    out = {}
+    if not tickers:
+        return out
+    try:
+        import yfinance as yf
+        d = yf.download(sorted(tickers), period="1mo", progress=False, auto_adjust=False)["Close"]
+        if not hasattr(d, "columns"):
+            d = d.to_frame(sorted(tickers)[0])
+        for t in d.columns:
+            ser = d[t].dropna()
+            if len(ser):
+                out[str(t)] = (float(ser.iloc[-1]), str(ser.index[-1])[:10])
+    except Exception as ex:
+        log.warning("portfolio closes: %s", ex)
+    return out
+
+
+def held_off_list(snap: dict, paths: list[Path]) -> list[str]:
+    """Åpne posisjoner og ventende salg i alle bøkene som ikke er i dagens liste."""
+    on = {e["ticker"] for e in snap.get("tickers", [])}
+    out = set()
+    for tp in paths:
+        s = state(_read(tp))
+        out |= set(s["open"]) | {o["ticker"] for o in s["pending"].values() if o["side"] == "sell"}
+    return sorted(out - on)
+
+
 def run(snap: dict, status: dict) -> None:
+    px_extra = {}
+    try:
+        from . import portfolio_books as PB
+        px_extra = fetch_closes(held_off_list(snap, [TRADES] + [PB.paths(b)[0] for b in PB.BOOKS]))
+    except Exception as ex:
+        log.warning("portfolio off-list closes: %s", ex)
     try:
         usd, bench = fetch_market()
-        s = step(snap, usd, bench)
+        s = step(snap, usd, bench, px_extra=px_extra)
         status["Signal-boka (papirkonto)"] = f"ok ({len(s['open'])} åpne, {len(s['pending'])} ventende, {len(s['closed'])} lukket)"
     except Exception as ex:
         log.exception("portfolio failed")
         status["Signal-boka (papirkonto)"] = f"FAILED: {ex}"
     try:   # bok 2 (høy risiko, eksperimentell) + bok 3 (tilfeldig kontroll) – egne logger, påvirker aldri bok 1
         from . import portfolio_books
-        portfolio_books.run(snap, status, usd, bench)
+        portfolio_books.run(snap, status, usd, bench, px_extra=px_extra)
     except Exception as ex:
         log.exception("portfolio books failed")
         status["Papirbøker 2/3"] = f"FAILED: {ex}"

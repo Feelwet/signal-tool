@@ -102,4 +102,5 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
     rules = (f'<details class="fold" id="regler"><summary><h2>Regler <code>{RULES_VERSION}</code> (låst {RULES_LOCKED})</h2></summary><div class="fold-body"><ol>'
              + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT) + f'</ol><p class="mut">{E(RULES_FOOT)}</p></div></details>')
     from . import gs_index   # egen seksjon øverst; tom streng til >= 60 handelsdager (UxBot/AnalBot 26.10)
-    return f"<style>{CSS}</style>" + gs_index.section_html() + top + pos + logh + rules
+    from . import testbooks_page as TB   # bruker 02.11: testporteføljer + GS-indeksen med egne regelbokser (utkast til AnalBots veto)
+    return f"<style>{CSS}</style>" + gs_index.section_html() + top + pos + TB.section_html(snap=snap) + logh + rules + TB.rules_html()

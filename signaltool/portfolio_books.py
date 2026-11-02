@@ -91,7 +91,7 @@ def _log_cands(path: Path, row: dict) -> None:
     P._append(path, C_COLS, [row])
 
 
-def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS) -> dict:
+def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict | None = None) -> dict:
     day = str(snap.get("date"))
     univ = universe(snap)
     hoy = hoy_candidates(univ)
@@ -105,7 +105,7 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS) -> dict:
             _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
                                            "tickers": "|".join(e["ticker"] for e in picks)})
         s = P.step(snap, usd, bench, tp, npth, rules=BOOKS[book], picks=picks, why_buy=why,
-                   cols=B_COLS, annotate=why_fn)
+                   cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs)
         out[book] = s
         status[f"Papirbok {book}"] = (f"ok ({len(picks)} kandidater i dag, {len(s['open'])} åpne, {len(s['pending'])} ventende, "
                                       f"{len(s['closed'])} lukket)" + (" – allerede kjørt i dag" if ran else ""))
@@ -113,7 +113,36 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS) -> dict:
                  f" seed={seed}" if sd != "" else "")
         print(f"Papirbok {book} {day}: {len(picks)} kandidater [{','.join(e['ticker'] for e in picks)}]"
               + (f" seed={seed}" if sd != "" else "") + (" (allerede kjørt i dag)" if ran else ""), flush=True)
+    log_late_fills(logs)
     return out
+
+
+DEV = LOGS / "portfolio_deviations.csv"
+D_COLS = ["date", "book_id", "kind", "order_id", "ticker", "side", "order_run", "fill_run", "missed_runs", "n_missed", "note"]
+
+
+def log_late_fills(logs: Path = LOGS) -> list[dict]:
+    """Avvik (AnalBot 02.11): fill som kom senere enn neste kjøring fordi boka manglet kjøringer som de andre bøkene hadde.
+    Leses fra loggene (idempotent, også i etterkant). Kjøringene fylles aldri inn."""
+    navs = {b: [r["date"] for r in P._read(paths(b, logs)[1])] for b in BOOKS}
+    navs["rules_v1"] = [r["date"] for r in P._read(logs / P.NAV.name)]
+    runs = sorted({d for v in navs.values() for d in v})
+    path = logs / DEV.name
+    have = {(r["book_id"], r["order_id"], r["kind"]) for r in P._read(path)}
+    new = []
+    for b in BOOKS:
+        own = set(navs[b])
+        for r in P._read(paths(b, logs)[0]):
+            if r["event"] != "fill":
+                continue
+            miss = [d for d in runs if r["signal_date"] < d < r["run_date"] and d not in own]
+            if miss and (b, r["order_id"], "sen_fylling") not in have:
+                new.append({"date": r["run_date"], "book_id": b, "kind": "sen_fylling", "order_id": r["order_id"], "ticker": r["ticker"],
+                            "side": r["side"], "order_run": r["signal_date"], "fill_run": r["run_date"], "missed_runs": "|".join(miss),
+                            "n_missed": len(miss), "note": f"fylt {len(miss)} kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)"})
+                have.add((b, r["order_id"], "sen_fylling"))
+    P._append(path, D_COLS, new)
+    return new
 
 
 def summaries(logs: Path = LOGS) -> dict:
