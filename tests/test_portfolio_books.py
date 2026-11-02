@@ -138,3 +138,20 @@ def test_book1_ignores_books(tmp_path):
     P.step(snap("2026-10-03", tk("K.OL", cat="kjop")), 10.0, {}, tmp_path / "t.csv", tmp_path / "n.csv")
     r = rows(tmp_path / "t.csv")
     assert len(r) == 1 and r[0]["rules_version"] == "rules_v1" and list(r[0]) == P.T_COLS
+
+
+def test_position_out_of_list_does_not_crash_0211(tmp_path):
+    """02.11: kontroll_tilfeldig_v1 krasjet 31.10 og 01.11 (AttributeError i step) fordi en åpen posisjon hadde falt ut av lista
+    (e = None). Nå: ingen krasj, NAV-rad skrives, holdetid telles mot kjøringsdatoen, ingen salg før 20 handelsdager."""
+    tp, npth = tmp_path / "t.csv", tmp_path / "n.csv"
+    R = B.BOOKS["kontroll_tilfeldig_v1"]
+    go = lambda day, ts, picks: P.step(snap(day, *ts), 10.0, {"osebx": 1.0, "spx": 1.0}, tp, npth, rules=R, picks=picks,
+                                       cols=B.B_COLS, annotate=B.annotator({}))
+    go("2026-10-02", [tk("A.OL", d="2026-10-01")], [tk("A.OL", d="2026-10-01")])
+    go("2026-10-05", [tk("A.OL", d="2026-10-02")], [])                              # fylt
+    go("2026-10-06", [tk("B.OL", d="2026-10-06")], [])                              # A.OL ute av lista
+    assert [r["date"] for r in rows(npth)] == ["2026-10-02", "2026-10-05", "2026-10-06"]
+    assert not [r for r in rows(tp) if r["side"] == "sell"]
+    go("2026-10-31", [tk("B.OL", d="2026-10-30")], [])                              # 20 handelsdager mot kjøringsdatoen
+    s = [r for r in rows(tp) if r["side"] == "sell"]
+    assert len(s) == 1 and s[0]["ticker"] == "A.OL" and s[0]["reason"] == "20 handelsdager"

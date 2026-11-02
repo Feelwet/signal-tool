@@ -174,7 +174,7 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
             pdt = today                                               # ute av lista: holdetid telles mot kjøringsdatoen
         if RULES["sell_on_folg_or_lower"] and (e is None or e.get("category") not in ("kjop", "hold")):
             why = "under Hold"
-        elif e.get("cat_flags"):
+        elif (e or {}).get("cat_flags"):   # e er None når tickeren har falt ut av lista (bok 2/3); før 02.11 krasjet det her
             why = "rødt flagg"
         elif pdt and int(np.busday_count(p["date"], pdt)) >= RULES["hold_trading_days"]:
             why = f"{RULES['hold_trading_days']} handelsdager"
