@@ -17,9 +17,9 @@ def _rm(p, upd="2026-11-02"):
 jobbes_med:
   - {{tekst: GS-indeksen vises når den har 60 handelsdager, type: teller, kilde: gs_index}}
   - {{tekst: Testporteføljene får resultat ved 30 lukkede handler per bok, type: teller, kilde: papirboker}}
-  - {{tekst: Sjekk av røde flagg, type: dato, dato: 2027-01-22}}
-  - {{tekst: Sektortesten, type: dato, dato: 2027-01-25}}
-paa_vei: [Kursgrafer med valg av tidsrom, Nøkkeltall på Sektorer, Privat side, "Brent 20d, når den har bestått testen"]
+  - {{tekst: Sjekk av røde flagg, type: dato, test: rode_flagg_sjekk}}
+  - {{tekst: Sektortesten, type: dato, test: sektortest_forste_maling}}
+paa_vei: [Kursgrafer med valg av tidsrom, Nøkkeltall på Sektorer, Privat side, "Brent 20d, hvis den består kontrollen mot EIA"]
 """)
 
 
@@ -31,13 +31,15 @@ def test_cards_counts_dates(tmp_path):
         assert f'id="{cid}"' in h
     assert h.index("om-hva") < h.index("om-slik") < h.index("om-jobbes") < h.index("om-vei")
     assert "Ikke finansiell rådgivning" in t and "Sist oppdatert 02.11" in t and "Metode →" in t
-    assert "26 av 60" in t and "0 · 0 · 0 av 30" in t and "22.01" in t and "25.01" in t
+    assert "26 av 60" in t and "Kjøp-regler 0, Høy risiko 0, Kontroll 0 av 30 lukkede handler" in t
+    assert "22.01" in t and "25.01" in t and "tidlige" not in t
+    assert "Testet 25.10 uten at noen kategoriregel besto." in t and "hvis den består kontrollen mot EIA" in t
     assert h.count('om-chip on">Pågår') == 4 and h.count('om-chip pl">Planlagt') == 4
     assert "Listen er ikke oppdatert" not in t
     assert "123" not in t                                                        # gs_with_tech aldri
     for bad in ("FLAG", "robust", "forutsier avkastning.", "treffrate", "slår markedet"):
         assert bad not in t or bad == "forutsier avkastning." and "ingenting her forutsier avkastning" in t
-    assert "Bare risikonivået er testet, og bare for kurssvingninger." in t and t.count("Ikke testet.") == 2
+    assert "Bare risikonivået er testet, og bare for kurssvingninger." in t and t.count("Ikke testet.") == 1
 
 
 def test_stale_roadmap_warning(tmp_path):
@@ -56,3 +58,17 @@ def test_more_sheet_first_and_overview_link():
     assert TB.MORE[0] == ("om.html", "Om siden")
     src = open(__import__("signaltool.site", fromlist=["x"]).__file__).read()
     assert 'href="om.html"' in src and "Hva er dette? →" in src
+
+
+def test_dates_from_planned_config(tmp_path):
+    import json
+    _gs(tmp_path / "gs_index.csv", 1); _rm(tmp_path / "r.yaml")
+    (tmp_path / "p.json").write_text(json.dumps({"tester": {"rode_flagg_sjekk": {"dato": "2027-02-03"}}}))
+    t = re.sub("<[^>]+>", " ", O.html({"generated": "2026-11-02 16:00"}, logs=tmp_path, roadmap=tmp_path / "r.yaml", planned=tmp_path / "p.json"))
+    assert "03.02" in t and "Sektortesten" not in t and "22.01" not in t       # dato kun fra config; mangler -> vises ikke
+
+
+def test_real_planned_config():
+    pt = O.load_planned()
+    assert pt["rode_flagg_sjekk"]["dato"] == "2027-01-22" and pt["sektortest_forste_maling"]["dato"] == "2027-01-25"
+    assert "  dato:" not in O.ROADMAP.read_text()                                  # ingen dato i roadmap

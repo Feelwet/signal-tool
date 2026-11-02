@@ -1,6 +1,6 @@
 # «Om siden» › Jobbes med nå / På vei (UxBot/AnalBot 02.11). Bare vedtatte saker.
 # jobbes_med: låste milepæler. type=teller -> antallet leses fra loggene ved bygging (ingen estimert dato).
-#             type=dato -> låst dato (AnalBot 02.11), vises som dd.mm.
+#             type=dato -> datoen leses fra config/planlagte_tester.json (nøkkel «test»), vises som dd.mm.
 # paa_vei: byggesaker uten dato og uten løfter.
 oppdatert: 2026-11-02
 jobbes_med:
@@ -12,14 +12,12 @@ jobbes_med:
     kilde: papirboker
   - tekst: Sjekk av røde flagg
     type: dato
-    dato: 2027-01-22
-    last: AnalBot 02.11
+    test: rode_flagg_sjekk
   - tekst: Sektortesten, første måling
     type: dato
-    dato: 2027-01-25
-    last: AnalBot 02.11 (logs/sector_forward.json first_measurement 2027-01)
+    test: sektortest_forste_maling
 paa_vei:
   - Kursgrafer med valg av tidsrom
   - Nøkkeltall på Sektorer
   - Privat side
-  - Brent 20d, når den har bestått testen
+  - Brent 20d, hvis den består kontrollen mot EIA

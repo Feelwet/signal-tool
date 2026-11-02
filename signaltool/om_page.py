@@ -11,7 +11,9 @@ from pathlib import Path
 
 from .config import LOGS
 
-ROADMAP = Path(__file__).resolve().parent.parent / "site_config" / "roadmap.yaml"
+ROOT = Path(__file__).resolve().parent.parent
+ROADMAP = ROOT / "site_config" / "roadmap.yaml"
+PLANNED = ROOT / "config" / "planlagte_tester.json"   # låste testdatoer (AnalBot 02.11)
 STALE_DAYS = 14
 
 CSS = """
@@ -40,6 +42,14 @@ def load_roadmap(path: Path = ROADMAP) -> dict:
         return {}
 
 
+def load_planned(path: Path = PLANNED) -> dict:
+    import json
+    try:
+        return json.loads(Path(path).read_text()).get("tester", {})
+    except Exception:
+        return {}
+
+
 def _dm(d) -> str:
     s = str(d or "")[:10]
     return f"{s[8:10]}.{s[5:7]}" if len(s) == 10 else "–"
@@ -51,17 +61,18 @@ def counters(logs: Path = LOGS) -> dict:
     from . import portfolio as P
     from . import portfolio_books as B
     out = {"gs_days": len(G.read(logs / G.OUT.name)), "gs_need": G.MIN_DAYS_PUBLIC, "books": []}
-    for book, tp in [("Signal-boka", logs / P.TRADES.name)] + [({"hoy_risiko_v1": "Høy risiko", "kontroll_tilfeldig_v1": "Kontroll"}[b],
+    for book, tp in [("Kjøp-regler", logs / P.TRADES.name)] + [({"hoy_risiko_v1": "Høy risiko", "kontroll_tilfeldig_v1": "Kontroll"}[b],
                                                              B.paths(b, logs)[0]) for b in B.BOOKS]:
         out["books"].append((book, len(P.state(P._read(tp))["closed"])))
     out["need"] = P.RULES["min_closed_for_returns"]
     return out
 
 
-def html(snap: dict | None = None, logs: Path = LOGS, roadmap: Path = ROADMAP, today: date | None = None) -> str:
+def html(snap: dict | None = None, logs: Path = LOGS, roadmap: Path = ROADMAP, today: date | None = None,
+         planned: Path = PLANNED) -> str:
     from .categories import CAT_NO, TYPE_NO
     from .site_sources import SRC
-    rm, c = load_roadmap(roadmap), counters(logs)
+    rm, c, pt = load_roadmap(roadmap), counters(logs), load_planned(planned)
     built = str((snap or {}).get("generated") or (today or date.today()).isoformat())[:10]
     today = today or date.fromisoformat(built)
     cats = f'{CAT_NO["kjop"]}, {CAT_NO["hold"]} og {CAT_NO["watch"]}'
@@ -70,11 +81,11 @@ def html(snap: dict | None = None, logs: Path = LOGS, roadmap: Path = ROADMAP, t
     srcs = ", ".join(sl[:-1]) + " og " + sl[-1]
     types = " og ".join(TYPE_NO[k].split(" (")[0] for k in ("ose_contract", "insider_cluster"))
     c1 = ('<div class="om-c" id="om-hva"><h2>Hva er dette</h2>'
-          '<p>Et personlig verktøy som sorterer og logger tidlige signaler på aksjer i Oslo og USA. '
+          '<p>Et personlig verktøy som sorterer og logger signaler på aksjer i Oslo og USA. '
           'Papirbøkene bruker fiktive penger, og ingenting her forutsier avkastning. <b>Ikke finansiell rådgivning.</b></p></div>')
     steps = [("Kilder", f"Hver natt hentes data fra blant annet {srcs}."),
              ("Temascore", "Nyheter og hendelser samles til en score per tema. Ikke testet."),
-             ("Signaler", f"Regler sorterer aksjene i {cats} ut fra signaltyper som {types}. Ikke testet."),
+             ("Signaler", f"Regler sorterer aksjene i {cats} ut fra signaltyper som {types}. Testet 25.10 uten at noen kategoriregel besto."),
              ("Test", "Bare risikonivået er testet, og bare for kurssvingninger. Testbøkene og GS-indeksen er under måling.")]
     c2 = ('<div class="om-c" id="om-slik"><h2>Slik virker det</h2><ol class="om-steps">'
           + "".join(f"<li><b>{E(t)}</b>{E(x)}</li>" for t, x in steps) + '</ol><a href="metode.html">Metode →</a></div>')
@@ -83,13 +94,15 @@ def html(snap: dict | None = None, logs: Path = LOGS, roadmap: Path = ROADMAP, t
         if it.get("type") == "teller" and it.get("kilde") == "gs_index":
             right = f'{min(c["gs_days"], c["gs_need"])} av {c["gs_need"]}'
         elif it.get("type") == "teller" and it.get("kilde") == "papirboker":
-            right = " · ".join(str(k) for _, k in c["books"]) + f' av {c["need"]}'
-        elif it.get("type") == "dato":
-            right = _dm(it.get("dato"))
+            right = ""
+        elif it.get("type") == "dato" and pt.get(it.get("test"), {}).get("dato"):
+            right = _dm(pt[it["test"]]["dato"])
         else:
             continue
-        tx = it["tekst"] + (f' ({" · ".join(b for b, _ in c["books"])})' if it.get("kilde") == "papirboker" else "")
-        items.append(f'<li><span class="om-chip on">Pågår</span><span class="tx">{E(tx)}</span><span class="dt">{E(right)}</span></li>')
+        tx = E(it["tekst"])
+        if it.get("kilde") == "papirboker":
+            tx += "<br>" + E(", ".join(f"{b} {k}" for b, k in c["books"]) + f' av {c["need"]} lukkede handler')
+        items.append(f'<li><span class="om-chip on">Pågår</span><span class="tx">{tx}</span><span class="dt">{E(right)}</span></li>')
     upd = rm.get("oppdatert")
     old = ""
     if upd and (today - date.fromisoformat(str(upd))).days > STALE_DAYS:
@@ -99,6 +112,6 @@ def html(snap: dict | None = None, logs: Path = LOGS, roadmap: Path = ROADMAP, t
           + "".join(f'<li><span class="om-chip pl">Planlagt</span><span class="tx">{E(str(x))}</span></li>' for x in (rm.get("paa_vei") or [])[:5])
           + "</ul></div>")
     return (f'<style>{CSS}</style><div class="om"><h1>Om siden</h1><p class="om-meta">Sist oppdatert {E(_dm(built))}</p>'
-            '<p class="om-lead">Signal-tool samler tidlige signaler fra åpne kilder og logger hvordan de går. '
+            '<p class="om-lead">Signal-tool samler signaler fra åpne kilder og logger hvordan de går. '
             'Det meste er ikke testet ennå, og det står ved hvert punkt.</p>'
             f'<div class="om-grid">{c1}{c2}{c3}{c4}</div></div>')
