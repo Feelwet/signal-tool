@@ -101,11 +101,11 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
     for book, picks, why, sd in (("hoy_risiko_v1", hoy, "topp10 20d>0", ""), ("kontroll_tilfeldig_v1", ctl, f"tilfeldig seed={seed}", seed)):
         tp, npth = paths(book, logs)
         ran = any(r["date"] == day for r in P._read(npth))
-        if not ran:
-            _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
-                                           "tickers": "|".join(e["ticker"] for e in picks)})
         s = P.step(snap, usd, bench, tp, npth, rules=BOOKS[book], picks=picks, why_buy=why,
                    cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs)
+        if not ran:   # 02.11: kandidatraden skrives først etter at steget har gått (morgenkjøringen 02.11 krasjet etter å ha logget)
+            _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
+                                           "tickers": "|".join(e["ticker"] for e in picks)})
         out[book] = s
         status[f"Papirbok {book}"] = (f"ok ({len(picks)} kandidater i dag, {len(s['open'])} åpne, {len(s['pending'])} ventende, "
                                       f"{len(s['closed'])} lukket)" + (" – allerede kjørt i dag" if ran else ""))
@@ -141,8 +141,27 @@ def log_late_fills(logs: Path = LOGS) -> list[dict]:
                             "side": r["side"], "order_run": r["signal_date"], "fill_run": r["run_date"], "missed_runs": "|".join(miss),
                             "n_missed": len(miss), "note": f"fylt {len(miss)} kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)"})
                 have.add((b, r["order_id"], "sen_fylling"))
+    for r in STATIC_DEVIATIONS:
+        if (r["book_id"], r["order_id"], r["kind"]) not in have:
+            new.append(r); have.add((r["book_id"], r["order_id"], r["kind"]))
     P._append(path, D_COLS, new)
     return new
+
+
+# Faste avviksrader (AnalBot 02.11). Skrives én gang (idempotent); eksisterende rader endres aldri.
+STATIC_DEVIATIONS = [
+    {"date": "2026-11-02", "book_id": "kontroll_tilfeldig_v1", "kind": "overskrevet_kjoring", "order_id": "run-2026-11-02",
+     "ticker": "", "side": "", "order_run": "2026-11-02", "fill_run": "2026-11-02", "missed_runs": "", "n_missed": "",
+     "note": ("Kjøringen 2026-11-02 ble regnet to ganger: run 41442171788 (logger i c5852bb: NAV 1000100.7, 11 åpne, nye ordre "
+              "2026-11-02-0041..0044 BRG.OL|GD|KOG.OL|TEKNA.OL) ble overskrevet av run 41443441078 (2bba4c5: NAV 1000737.51, 10 åpne, "
+              "ordre 2026-11-02-0042..0046). Den andre hentet koden før den første hadde pushet loggene, og loggene kopieres hele. "
+              "2bba4c5-versjonen gjelder. Rettet: loggene hentes fra origin rett før papirbøkene kjøres.")},
+    {"date": "2026-11-02", "book_id": "kontroll_tilfeldig_v1", "kind": "kandidatlogg_avvik", "order_id": "cands-2026-11-02",
+     "ticker": "BRG.OL|GD|KOG.OL|TECH.OL|NCLH", "side": "buy", "order_run": "2026-11-02", "fill_run": "", "missed_runs": "", "n_missed": "",
+     "note": ("Kandidatraden 2026-11-02 i portfolio_candidates.csv (BONHR.OL|GILD|LHX|NOFIN.OL|WEC|KOG.OL|DNB.OL|DOFG.OL|NXPI|LNG) "
+              "ble skrevet av morgenkjøringen 41361721155 som krasjet før ordrene ble lagt. Raden står urettet. Faktiske ordre "
+              "2026-11-02 (2026-11-02-0042..0046): BRG.OL, GD, KOG.OL, TECH.OL, NCLH.")},
+]
 
 
 def summaries(logs: Path = LOGS) -> dict:

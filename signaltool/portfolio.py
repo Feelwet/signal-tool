@@ -305,8 +305,52 @@ def held_off_list(snap: dict, paths: list[Path]) -> list[str]:
     return sorted(out - on)
 
 
+def sync_logs_from_origin(logs: Path = LOGS, show=None) -> dict:
+    """AnalBot 02.11: rett før papirbøkene kjøres hentes portfolio_*-loggene fra origin på nytt (en annen kjøring kan ha pushet
+    samme dato i mellomtiden; 02.11 ble kontroll-boka overskrevet slik). Loggene er bare-tillegg: er lokal fil et prefiks av
+    origin-versjonen, tas origin-versjonen; ellers beholdes lokal fil (konflikt logges). Bøker/datoer som da allerede finnes,
+    hoppes over av step() («allerede kjørt»). `show(name) -> bytes | None` kan byttes ut i tester; standard er git i CI."""
+    import os, subprocess
+    if show is None:
+        if not os.environ.get("GITHUB_ACTIONS"):
+            return {"skipped": "ikke CI"}
+        ref = os.environ.get("GITHUB_REF_NAME") or "master"
+        subprocess.run(["git", "fetch", "-q", "origin", ref], check=True, timeout=180)
+        names = subprocess.run(["git", "ls-tree", "--name-only", f"origin/{ref}", f"{logs.name}/"], capture_output=True, text=True,
+                               check=True).stdout.split()
+
+        def show(name):
+            r = subprocess.run(["git", "show", f"origin/{ref}:{logs.name}/{name}"], capture_output=True)
+            return r.stdout if r.returncode == 0 else None
+        files = sorted({Path(n).name for n in names if Path(n).name.startswith("portfolio_")} |
+                       {p.name for p in logs.glob("portfolio_*")})
+    else:
+        files = sorted({p.name for p in logs.glob("portfolio_*")} | set(getattr(show, "names", [])))
+    out = {"updated": [], "same": [], "conflict": []}
+    for name in files:
+        o = show(name)
+        if o is None:
+            continue
+        p = logs / name
+        loc = p.read_bytes() if p.exists() else b""
+        if o == loc:
+            out["same"].append(name)
+        elif o.startswith(loc):
+            p.write_bytes(o)
+            out["updated"].append(name)
+        else:
+            out["conflict"].append(name)
+            log.warning("portfolio log %s: lokal fil er ikke et prefiks av origin – beholdes lokalt", name)
+    return out
+
+
 def run(snap: dict, status: dict) -> None:
     px_extra = {}
+    try:
+        sy = sync_logs_from_origin()
+        print(f"Papirbøker: logger fra origin {sy}", flush=True)
+    except Exception as ex:
+        log.warning("portfolio log sync: %s", ex)
     try:
         from . import portfolio_books as PB
         px_extra = fetch_closes(held_off_list(snap, [TRADES] + [PB.paths(b)[0] for b in PB.BOOKS]))

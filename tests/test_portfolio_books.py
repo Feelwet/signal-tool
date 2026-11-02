@@ -254,6 +254,54 @@ def test_late_fill_deviation_logged_not_backfilled_0211(tmp_path):
         {"rules_version": "kontroll_tilfeldig_v1", "event": "fill", "order_id": "2026-10-29-0001", "run_date": "2026-10-30", "signal_date": "2026-10-29", "ticker": "X.OL", "side": "buy"},
         {"rules_version": "kontroll_tilfeldig_v1", "event": "fill", "order_id": "2026-10-30-0022", "run_date": "2026-11-02", "signal_date": "2026-10-30", "ticker": "MRK", "side": "buy"}])
     new = B.log_late_fills(tmp_path)
-    assert [(r["order_id"], r["n_missed"], r["missed_runs"]) for r in new] == [("2026-10-30-0022", 2, "2026-10-31|2026-11-01")]
+    assert [(r["order_id"], r["n_missed"], r["missed_runs"]) for r in new if r["kind"] == "sen_fylling"] == [("2026-10-30-0022", 2, "2026-10-31|2026-11-01")]
     assert B.log_late_fills(tmp_path) == []                                        # idempotent
     assert [r["date"] for r in rows(tmp_path / "portfolio_kontroll_tilfeldig_v1_nav.csv")] == ["2026-10-29", "2026-10-30", "2026-11-02"]
+
+
+def test_sync_from_origin_takes_superset_skips_existing_date_0211(tmp_path):
+    hdr = ",".join(P.N_COLS) + "\n"
+    r1 = "kontroll_tilfeldig_v1,2026-10-30,1,1,0,,,,0,0,100\n"
+    r2 = "kontroll_tilfeldig_v1,2026-11-02,2,2,0,,,,0,0,100\n"
+    (tmp_path / "portfolio_kontroll_tilfeldig_v1_nav.csv").write_text(hdr + r1)
+    (tmp_path / "portfolio_hoy_risiko_v1_nav.csv").write_text(hdr + "x\n")
+    origin = {"portfolio_kontroll_tilfeldig_v1_nav.csv": (hdr + r1 + r2).encode(),
+              "portfolio_hoy_risiko_v1_nav.csv": (hdr + "y\n").encode(),            # ikke prefiks: konflikt, lokal beholdes
+              "portfolio_deviations.csv": b"a\n"}
+    show = lambda n: origin.get(n)
+    show.names = list(origin)
+    out = P.sync_logs_from_origin(tmp_path, show=show)
+    assert out["updated"] == ["portfolio_deviations.csv", "portfolio_kontroll_tilfeldig_v1_nav.csv"]
+    assert out["conflict"] == ["portfolio_hoy_risiko_v1_nav.csv"]
+    assert (tmp_path / "portfolio_hoy_risiko_v1_nav.csv").read_text() == hdr + "x\n"
+    # step hopper over datoen som nå finnes fra origin
+    n = len(rows(tmp_path / "portfolio_kontroll_tilfeldig_v1_nav.csv"))
+    P.step(snap("2026-11-02", tk("A.OL")), 10.0, {"osebx": 1.0, "spx": 1.0}, tmp_path / "t.csv",
+           tmp_path / "portfolio_kontroll_tilfeldig_v1_nav.csv", rules=B.BOOKS["kontroll_tilfeldig_v1"], picks=[tk("A.OL")], cols=B.B_COLS)
+    assert len(rows(tmp_path / "portfolio_kontroll_tilfeldig_v1_nav.csv")) == n and not (tmp_path / "t.csv").exists()
+
+
+def test_sync_noop_outside_ci(tmp_path, monkeypatch):
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    assert P.sync_logs_from_origin(tmp_path) == {"skipped": "ikke CI"}
+
+
+def test_static_deviations_once_0211(tmp_path):
+    B.log_late_fills(tmp_path)
+    d = rows(tmp_path / "portfolio_deviations.csv")
+    kinds = [(r["kind"], r["book_id"]) for r in d]
+    assert kinds.count(("overskrevet_kjoring", "kontroll_tilfeldig_v1")) == 1
+    c = [r for r in d if r["kind"] == "kandidatlogg_avvik"]
+    assert len(c) == 1 and c[0]["ticker"] == "BRG.OL|GD|KOG.OL|TECH.OL|NCLH" and "står urettet" in c[0]["note"]
+    B.log_late_fills(tmp_path)
+    assert len(rows(tmp_path / "portfolio_deviations.csv")) == len(d)
+
+
+def test_candidates_logged_only_after_step_0211(tmp_path, monkeypatch):
+    def boom(*a, **k):
+        raise AttributeError("x")
+    monkeypatch.setattr(P, "step", boom)
+    import pytest
+    with pytest.raises(AttributeError):
+        B.run(snap("2026-10-02", tk("A.OL")), {}, 10.0, {"osebx": 1.0, "spx": 1.0}, logs=tmp_path)
+    assert not (tmp_path / "portfolio_candidates.csv").exists()
