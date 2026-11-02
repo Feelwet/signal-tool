@@ -15,6 +15,8 @@ from .config import LOGS
 from .portfolio_rules import RULES
 
 MIN_CLOSED = RULES["min_closed_for_returns"]
+# AnalBot 02.11, ordrett i regelboksene for alle tre bøkene
+NO_PRICE_RULE = "Mangler sluttkurs for en åpen posisjon, står den som «uten kurs» og selges første dag kursen finnes, til den kursen. Innkurs brukes aldri som verdi."
 # Kjente hull med kjent årsak (dato -> årsak). Ukjente hull vises uten årsak.
 KNOWN_GAPS = {("kontroll_tilfeldig_v1", "2026-10-31"): "programfeil (posisjon utenfor lista), rettet 02.11",
               ("kontroll_tilfeldig_v1", "2026-11-01"): "programfeil (posisjon utenfor lista), rettet 02.11",
@@ -123,7 +125,8 @@ def rules_items(book: str, start: str | None) -> list[str]:
         f"Salg etter {R['hold_trading_days']} handelsdager eller ved rødt flagg. "
         + ("Ingen salg på kategori. " if not R["sell_on_folg_or_lower"] else "")
         + ("Ingen kursmål eller stopp-loss. " if R["price_target"] is None and R["stop_loss"] is None else "")
-        + "Faller en aksje ut av lista, hentes sluttkursen likevel, og holdetiden telles videre. Mangler kursen, merkes posisjonen «uten kurs» og selges første dag det finnes kurs, til den kursen. Den verdsettes aldri til innkurs.",
+        + "Faller en aksje ut av lista, hentes sluttkursen likevel, og holdetiden telles videre.",
+        NO_PRICE_RULE,
         f"Hver handel koster {_pct(R['cost_each_way'])} hver vei, {_pct(R['cost_each_way_illiquid'])} for lite omsatte aksjer. "
         "Amerikanske aksjer regnes om til NOK med dagskurs. "
         f"Kjøpsordre som ikke får kurs innen {R['order_expiry_runs']} kjøringer, kanselleres. Salgsordre kanselleres aldri.",

@@ -99,8 +99,9 @@ def html(snap: dict, trades_path=P.TRADES, nav_path=P.NAV) -> str:
     logh = ('<div class="card"><h2 style="margin-top:0">Handelslogg</h2>' + (f'<ul class="ev">{pl}</ul>' if pl else "") +
             (f'<div class="tw"><table><tr><th>Dato</th><th>Kjøp/salg</th><th>Ticker</th><th>Kurs</th><th>Kostnad</th><th>Regel</th></tr>{lg}</table></div>' if lg
              else '<p class="mut">Ingen gjennomførte handler ennå.</p>') + "</div>")
+    from .testbooks_page import NO_PRICE_RULE   # AnalBot 02.11: ordrett, lagt til under de låste punktene (de er uendret)
     rules = (f'<details class="fold" id="regler"><summary><h2>Regler <code>{RULES_VERSION}</code> (låst {RULES_LOCKED})</h2></summary><div class="fold-body"><ol>'
-             + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT) + f'</ol><p class="mut">{E(RULES_FOOT)}</p></div></details>')
+             + "".join(f"<li>{E(x)}</li>" for x in RULES_TEXT + [NO_PRICE_RULE]) + f'</ol><p class="mut">{E(RULES_FOOT)}</p></div></details>')
     from . import gs_index   # egen seksjon øverst; tom streng til >= 60 handelsdager (UxBot/AnalBot 26.10)
     from . import testbooks_page as TB   # bruker 02.11: testporteføljer + GS-indeksen med egne regelbokser (utkast til AnalBots veto)
     return f"<style>{CSS}</style>" + gs_index.section_html() + top + pos + TB.section_html(snap=snap) + logh + rules + TB.rules_html()

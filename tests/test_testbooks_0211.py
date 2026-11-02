@@ -81,7 +81,8 @@ def test_rules_boxes_read_from_config(tmp_path):
     H = B.BOOKS["hoy_risiko_v1"]
     assert f"topp {H['top_n']}" in txt and f"Salg etter {H['hold_trading_days']} handelsdager" in txt
     assert "5 % av kontoverdien" in txt and "maks 20 posisjoner" in txt and "0,2 % hver vei, 0,5 %" in txt
-    assert "Salgsordre kanselleres aldri" in txt and "verdsettes aldri til innkurs" in txt
+    assert "Salgsordre kanselleres aldri" in txt
+    assert txt.count("Mangler sluttkurs for en åpen posisjon, står den som «uten kurs» og selges første dag kursen finnes, til den kursen. Innkurs brukes aldri som verdi.") == 2
     assert "Start: 29.10.2026" in txt and "Start: 100 på 01.10.2026" in txt
     assert "1 av 3 dager bygger på lister fra før rangeringsfeltet" in txt          # står i regelboksen
     assert "vises til sammenligning" not in txt and "gs_with_tech" not in r
@@ -93,3 +94,15 @@ def test_page_includes_section_and_rules():
     import signaltool.portfolio_page as PP
     src = open(PP.__file__).read()
     assert "TB.section_html(snap=snap)" in src and "TB.rules_html()" in src
+
+
+def test_no_price_rule_verbatim_in_all_three_boxes():
+    import json, signaltool.portfolio_page as PP
+    from pathlib import Path
+    snap = {"date": "2026-11-02", "tickers": []}
+    h = PP.html(snap)
+    rx = "Mangler sluttkurs for en åpen posisjon, står den som «uten kurs» og selges første dag kursen finnes, til den kursen. Innkurs brukes aldri som verdi."
+    import html as H
+    assert H.unescape(h).count(rx) == 3
+    for x in PP.RULES_TEXT:                                                     # rules_v1-punktene uendret
+        assert H.escape(x) in h
