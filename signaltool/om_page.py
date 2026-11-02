@@ -1,4 +1,4 @@
-"""om.html – «Om siden» (UxBot-layout og AnalBot-tekst 02.11; UTKAST, ikke publisert).
+"""om.html – «Om siden» (UxBot-layout og AnalBot-tekst 02.11).
 
 Fire kort: Hva er dette · Slik virker det · Jobbes med nå · På vei. «Jobbes med» og «På vei» leses fra site_config/roadmap.yaml.
 Tellere (GS-dager, lukkede handler per bok) leses fra loggene ved bygging; bare låste datoer vises som dato, ellers antallet.
