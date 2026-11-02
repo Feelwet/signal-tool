@@ -20,4 +20,5 @@ paa_vei:
   - Kursgrafer med valg av tidsrom
   - Nøkkeltall på Sektorer
   - Privat side
-  - Brent 20d, hvis den består kontrollen mot EIA
+  - tekst: Brent 20d, hvis den består kontrollen mot EIA
+    merknad: hvis kontrollen mot EIA består
