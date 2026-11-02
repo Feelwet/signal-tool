@@ -456,7 +456,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     active = {
         "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
-        "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html",
+        "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html", "Om siden": "om.html",
     }
     cur = active.get(title)
     if cur is None:
@@ -751,7 +751,8 @@ def build(snap: dict) -> Path:
     bad = [k for k in used if X.source_state(st[k]) == "fail"]
     today = str(snap.get("date") or date.today())
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
-    b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest")),   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
+    b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest"))
+         + '<a class="ov-om" href="om.html" style="display:inline-flex;align-items:center;height:32px;font-size:13px;color:#94a3b8">Hva er dette? →</a>',   # UxBot 02.11   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
          f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
@@ -832,6 +833,8 @@ def build(snap: dict) -> Path:
         (SITE / "tema" / f"{S['file']}.html").write_text(page(f"Sektor: {S['name']}", sec(f"Sektor: {S['name']}", SEC.sector_html, k), 1, ssnap))
     (SITE / "metode.html").write_text(page("Metode", MET_CSS + fold_tables(sec("Metode", metode_page, snap)), 0, snap))
     (SITE / "kilder.html").write_text(L.redirect("metode.html", "Metode"))
+    from . import om_page   # UxBot/AnalBot 02.11: «Om siden» (øverst i Mer-arket)
+    (SITE / "om.html").write_text(page("Om siden", sec("Om siden", om_page.html, snap), 0, snap))
     (SITE / "data.json").write_text(json.dumps(snap, default=str))
     try:
         from . import portfolio
