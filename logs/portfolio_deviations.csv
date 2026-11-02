@@ -1,6 +1,5 @@
 date,book_id,kind,order_id,ticker,side,order_run,fill_run,missed_runs,n_missed,note
 2026-11-02,kontroll_tilfeldig_v1,sen_fylling,2026-10-30-0018,TECH.OL,sell,2026-10-30,2026-11-02,2026-10-31|2026-11-01,2,fylt 2 kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)
-2026-11-02,kontroll_tilfeldig_v1,sen_fylling,2026-10-30-0019,EIOF.OL,sell,2026-10-30,2026-11-02,2026-10-31|2026-11-01,2,fylt 2 kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)
 2026-11-02,kontroll_tilfeldig_v1,sen_fylling,2026-10-30-0020,BRG.OL,sell,2026-10-30,2026-11-02,2026-10-31|2026-11-01,2,fylt 2 kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)
 2026-11-02,kontroll_tilfeldig_v1,sen_fylling,2026-10-30-0021,STECH.OL,sell,2026-10-30,2026-11-02,2026-10-31|2026-11-01,2,fylt 2 kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)
 2026-11-02,kontroll_tilfeldig_v1,sen_fylling,2026-10-30-0022,MRK,buy,2026-10-30,2026-11-02,2026-10-31|2026-11-01,2,fylt 2 kjøringer for sent (boka manglet kjøring; dagene fylles ikke inn)
