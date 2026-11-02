@@ -483,7 +483,7 @@
 "kind": "resultat"
 },
 {
-"date": "2026-11-19",
+"date": "2026-11-18",
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport ZIM",
@@ -508,6 +508,13 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport NKT.CO",
+"kind": "resultat"
+},
+{
+"date": "2026-11-19",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport ZIM",
 "kind": "resultat"
 },
 {

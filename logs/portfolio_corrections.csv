@@ -1,0 +1,6 @@
+date,book_id,order_id,event,ticker,kind,logged,corrected,fx,fx_date,note
+2026-11-02,kontroll_tilfeldig_v1,2026-10-29-0001,order,TECH.OL,invalid_price,,,,,"kurshopp uavklart; handelen står (ingen regelendring), resultat regnes internt med og uten"
+2026-11-02,kontroll_tilfeldig_v1,2026-10-29-0007,order,NKT.CO,valuta,NOK,"{""currency"": ""DKK""}",,,"NKT.CO handles i DKK, logget som NOK; regnet om til NOK med dagskurs"
+2026-11-02,kontroll_tilfeldig_v1,2026-10-29-0001,fill,TECH.OL,invalid_price,1.835,,,,"kurshopp uavklart; handelen står (ingen regelendring), resultat regnes internt med og uten"
+2026-11-02,kontroll_tilfeldig_v1,2026-10-30-0018,order,TECH.OL,invalid_price,,,,,"kurshopp uavklart; handelen står (ingen regelendring), resultat regnes internt med og uten"
+2026-11-02,kontroll_tilfeldig_v1,2026-10-30-0018,fill,TECH.OL,invalid_price,2.0,,,,"kurshopp uavklart; handelen står (ingen regelendring), resultat regnes internt med og uten"
