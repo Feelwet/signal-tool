@@ -1,4 +1,4 @@
-"""«Om siden» (UxBot/AnalBot 02.11): fire kort, roadmap fra data/roadmap.yaml, tellere fra loggene, ingen påstand om avkastning."""
+"""«Om siden» (UxBot/AnalBot 02.11): fire kort, roadmap fra site_config/roadmap.yaml, tellere fra loggene, ingen påstand om avkastning."""
 import csv, re
 from datetime import date
 from signaltool import om_page as O

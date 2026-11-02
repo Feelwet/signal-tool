@@ -1,6 +1,6 @@
 """om.html – «Om siden» (UxBot-layout og AnalBot-tekst 02.11; UTKAST, ikke publisert).
 
-Fire kort: Hva er dette · Slik virker det · Jobbes med nå · På vei. «Jobbes med» og «På vei» leses fra data/roadmap.yaml.
+Fire kort: Hva er dette · Slik virker det · Jobbes med nå · På vei. «Jobbes med» og «På vei» leses fra site_config/roadmap.yaml.
 Tellere (GS-dager, lukkede handler per bok) leses fra loggene ved bygging; bare låste datoer vises som dato, ellers antallet.
 Siden påstår ikke at noe forutsier avkastning. Bare risikonivået er testet (kurssvingninger)."""
 from __future__ import annotations
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .config import LOGS
 
-ROADMAP = Path(__file__).resolve().parent.parent / "data" / "roadmap.yaml"
+ROADMAP = Path(__file__).resolve().parent.parent / "site_config" / "roadmap.yaml"
 STALE_DAYS = 14
 
 CSS = """
