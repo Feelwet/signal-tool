@@ -1,0 +1,13 @@
+{
+  "_merknad": "Låste testdatoer, satt av AnalBot 02.11.2026. Leses av signaltool/om_page.py.",
+  "tester": {
+    "rode_flagg_sjekk": {
+      "navn": "Sjekk av røde flagg",
+      "dato": "2027-01-22"
+    },
+    "sektortest_forste_maling": {
+      "navn": "Sektortesten, første måling",
+      "dato": "2027-01-25"
+    }
+  }
+}
