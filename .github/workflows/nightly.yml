@@ -83,6 +83,12 @@ jobs:
         run: |
           if [ "${{ inputs.fast }}" = "true" ]; then python -m signaltool run --fast; else python -m signaltool run; fi
 
+      # «Verden nå» (AnalBot 03.11): kontroller site_config/verden_naa.json mot dagens hentede titler. Setninger som bryter
+      # reglene fjernes ved bygging og logges append-only i logs/oppsummering_avvik.csv (dette steget skriver dem i loggen).
+      - name: Kontroll av Verden nå-tekst
+        continue-on-error: true
+        run: python -m signaltool.verden
+
       - name: Fallback site build
         if: steps.run.outcome != 'success'
         run: |
@@ -139,13 +145,13 @@ jobs:
           # Ingen rebase: hent origin, slå sammen hver logg (vår rad vinner per date,ticker; union for jsonl), commit på toppen.
           # Papirbøkenes trades/nav-logger (portfolio_*) kopieres hele: logmerge nøkler på kolonne 1-2, som der er rules_version,event.
           # 02.11: men bare når vår kopi er et tillegg til origin-versjonen; ellers beholdes origin (ingen overskriving av en annen kjørings rader).
-          FILES="logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv logs/portfolio_hoy_risiko_v1_trades.csv logs/portfolio_hoy_risiko_v1_nav.csv logs/portfolio_kontroll_tilfeldig_v1_trades.csv logs/portfolio_kontroll_tilfeldig_v1_nav.csv logs/portfolio_candidates.csv logs/portfolio_closes.csv logs/portfolio_price_missing.csv logs/portfolio_deviations.csv logs/portfolio_corrections.csv logs/learn_raw.csv logs/learn_exits.csv logs/dq_flags.jsonl logs/risk_levels.csv logs/gs_index.csv logs/gs_invalid.csv logs/entry_prices.csv logs/price_source.csv logs/source_fallback.csv"
+          FILES="logs/categories.csv logs/calendar.json logs/source_status.jsonl logs/theme_score.csv logs/portfolio_trades.csv logs/portfolio_nav.csv logs/portfolio_hoy_risiko_v1_trades.csv logs/portfolio_hoy_risiko_v1_nav.csv logs/portfolio_kontroll_tilfeldig_v1_trades.csv logs/portfolio_kontroll_tilfeldig_v1_nav.csv logs/portfolio_candidates.csv logs/portfolio_closes.csv logs/portfolio_price_missing.csv logs/portfolio_deviations.csv logs/portfolio_corrections.csv logs/learn_raw.csv logs/learn_exits.csv logs/dq_flags.jsonl logs/risk_levels.csv logs/gs_index.csv logs/gs_invalid.csv logs/entry_prices.csv logs/price_source.csv logs/source_fallback.csv logs/verden_overskrifter.json logs/oppsummering_avvik.csv"
           mkdir -p /tmp/ours && for f in $FILES; do test -f "$f" && cp "$f" "/tmp/ours/$(basename $f)"; done
           for i in 1 2 3 4 5; do
             git fetch -q origin "${GITHUB_REF_NAME}" && git reset -q --hard "origin/${GITHUB_REF_NAME}"
             for f in $FILES; do
               o="/tmp/ours/$(basename $f)"; test -f "$o" || continue
-              if [ -f "$f" ] && [ "$f" != logs/calendar.json ] && [ "$f" != logs/portfolio_nav.csv ] && [ "${f#logs/portfolio_}" = "$f" -o "$f" = logs/portfolio_candidates.csv ] && [ "$f" != logs/gs_index.csv ] && [ "$f" != logs/gs_invalid.csv ]; then python -m signaltool.logmerge "$o" "$f" "$f"; elif [ -f "$f" ] && [ "${f#logs/portfolio_}" != "$f" ] && ! python3 -c 'import sys; sys.exit(0 if open(sys.argv[1],"rb").read().startswith(open(sys.argv[2],"rb").read()) else 1)' "$o" "$f"; then echo "::warning::$f: origin har rader som ikke er i vår kopi (annen kjøring) – origin beholdes"; else cp "$o" "$f"; fi
+              if [ -f "$f" ] && [ "$f" != logs/calendar.json ] && [ "$f" != logs/verden_overskrifter.json ] && [ "$f" != logs/portfolio_nav.csv ] && [ "${f#logs/portfolio_}" = "$f" -o "$f" = logs/portfolio_candidates.csv ] && [ "$f" != logs/gs_index.csv ] && [ "$f" != logs/gs_invalid.csv ]; then python -m signaltool.logmerge "$o" "$f" "$f"; elif [ -f "$f" ] && [ "${f#logs/portfolio_}" != "$f" ] && ! python3 -c 'import sys; sys.exit(0 if open(sys.argv[1],"rb").read().startswith(open(sys.argv[2],"rb").read()) else 1)' "$o" "$f"; then echo "::warning::$f: origin har rader som ikke er i vår kopi (annen kjøring) – origin beholdes"; else cp "$o" "$f"; fi
               git add "$f"
             done
             git diff --cached --quiet && { echo "forward log already up to date"; exit 0; }

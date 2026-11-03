@@ -590,6 +590,13 @@ def run(fast: bool = False) -> dict:
         fx = nb["fx"].tail(30)
         snap["nok_fx"] = {"dates": [d.strftime("%Y-%m-%d") for d in fx.index], **{c: [_f(x) for x in fx[c]] for c in fx.columns}}
     snap["norgesbank_press"] = nb.get("press", [])
+    try:   # «Verden nå» (03.11): titler + lenker siste døgn (GDELT DOC, Newsweb, Norges Bank/ECB/Fed RSS), ingen artikkeltekst
+        from . import verden
+        snap["verden"], status["Verden nå (overskrifter)"] = verden.collect(nw, nb.get("press") if nb else None)
+        verden.save(snap["verden"])
+    except Exception as ex:
+        log.warning("verden nå failed: %s", ex)
+        status["Verden nå (overskrifter)"] = f"FAILED: {_err(ex)}"
     snap["oil"] = oilx
     snap["mstrip"] = mstripx
     snap["late_filings"] = nt[:30]

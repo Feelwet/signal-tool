@@ -9,6 +9,7 @@ from . import site_extra as X
 from . import analyst as AN
 from . import theme_maps as TM
 from . import mstrip as MS
+from . import verden as VN
 from . import pwa as PWA
 from . import ux2 as UX2
 from . import tabbar as TB
@@ -753,6 +754,7 @@ def build(snap: dict) -> Path:
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest"))
          + '<a class="ov-om" href="om.html" style="display:inline-flex;align-items:center;height:32px;font-size:13px;color:#94a3b8">Hva er dette? →</a>',   # UxBot 02.11   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
+         sec("Verden nå", VN.html, snap),   # UxBot/AnalBot 03.11: rett etter metalinja; stripa og nøkkeltallene under
          f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
@@ -777,6 +779,9 @@ def build(snap: dict) -> Path:
         ex.append(("Helgeoppsummering", "siste helg", wk, "helg", []))
     EXTRA_EXP[:] = ex
     (SITE / "index.html").write_text(page("Oversikt", "".join(b), 0, snap))
+    if snap.get("verden"):
+        (SITE / "data").mkdir(exist_ok=True)
+        (SITE / "data" / "verden_overskrifter.json").write_text(json.dumps(snap["verden"], ensure_ascii=False, indent=1))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
