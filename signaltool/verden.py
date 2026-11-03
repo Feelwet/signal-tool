@@ -28,9 +28,14 @@ FEEDS = {"ECB": "https://www.ecb.europa.eu/rss/press.html",
 CB = "sentralbanker"
 CB_NAME = "Sentralbanker"
 WINDOW_H = 24
+MAX_PER_TEMA = 20
+CB_WINDOW_H = 72   # sentralbanker publiserer ikke hvert døgn (03.11: ECB/Fed/Norges Bank ga 0 saker med 24 t)
+GDELT_GKG_LAST = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt"
+GDELT_GKG_FILES = 8   # reserve når DOC-API-et gir 429: 8 GKG-filer spredt over siste døgn (åpne data, bare tittel/URL brukes)
 RESERVE_LINE = "Ingen oppsummering i dag, viser siste overskrifter"
 FOOTNOTE = "Nyhetsoppsummering, ikke signaler eller råd. Rekkefølgen viser hvor mye et tema er omtalt, ikke betydning for kurs."
 WARN = "#fdba74"
+RANK_TIP = "Rangering, ikke testet"
 
 # AnalBot 03.11: ingen ord om kursretning eller sikkerhet. Treff -> setningen fjernes.
 _KURS = r"(?:kurs\w*|aksje\w*|pris\w*|børs\w*|marked\w*|olje\w*|renter?\w*|valuta\w*|krone\w*|dollar\w*|indeks\w*)"
@@ -74,29 +79,121 @@ def _parse_ts(v) -> datetime | None:
         return None
 
 
+# Streng temamatching for «Verden nå» (03.11): bare entydige ord/fraser, hele ord (evt. flertall), i tittelen.
+# Generiske ord som også er firmanavn eller hverdagsord (norway, pipeline, shipping, gulf, chip, strait, war, resign,
+# protest, lng, north sea …) er tatt ut, så «Blue Moon Norway … Nussir» og «Solar Development Pipeline» ikke får tema.
+STRICT: dict[str, list[str]] = {
+    "conflict_defense": ["ukraine", "ukrainian", "russia", "russian", "nato", "kremlin", "zelensky", "zelenskyy", "putin",
+                         "missile", "air defense", "air defence", "artillery", "defence spending", "defense spending", "rearmament"],
+    "mideast_energy": ["iran", "iranian", "israel", "israeli", "hormuz", "tehran", "hezbollah", "gaza", "iraq", "opec",
+                       "saudi arabia", "oil price", "brent crude", "persian gulf"],
+    "sanctions_energy": ["sanction", "sanctioned", "price cap", "shadow fleet", "embargo", "ofac", "gazprom", "rosneft"],
+    "shipping_chokepoints": ["red sea", "houthi", "suez", "panama canal", "bab el-mandeb", "strait of hormuz", "taiwan strait",
+                             "chokepoint", "container ship"],
+    "tariffs_trade": ["tariff", "trade war", "export control", "customs duty", "trade deal", "import tax", "section 232", "anti-dumping"],
+    "rare_earths_semis": ["taiwan", "rare earth", "semiconductor", "gallium", "germanium", "south china sea", "tsmc", "chipmaker"],
+    "elections_political": ["election", "referendum", "coup", "no-confidence", "impeach", "impeachment", "snap election",
+                            "martial law", "parliament dissolved"],
+    "nordic_arctic": ["subsea cable", "undersea cable", "sabotage", "baltic sea", "arctic", "svalbard", "high north", "finnmark", "greenland"],
+    "food_agri": ["grain", "wheat", "fertiliser", "fertilizer", "black sea", "food crisis", "export ban", "potash", "famine", "drought"],
+    "risk_off_haven": ["nuclear war", "world war", "nuclear weapon", "invasion", "gold price", "safe haven", "state of emergency"],
+}
+_STRICT_RX = {k: re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(w).replace(r"\ ", r"[\s-]+") for w in sorted(v, key=len, reverse=True))
+                            + r")(?:s|es)?(?![\w-])", re.I) for k, v in STRICT.items()}
+
+
 def _themes(title: str) -> list[str]:
-    from .themes import match_themes
-    return match_themes(title or "")
+    """Tema bare når et entydig nøkkelord står i tittelen (hele ord). Ellers [] -> saken utelates."""
+    t = title or ""
+    return [k for k, rx in _STRICT_RX.items() if rx.search(t)]
 
 
 def gdelt_query() -> str:
-    from .themes import THEMES
     kw = []
-    for th in THEMES:
-        kw += [k for k in (th.__dict__.get("keywords_en") or th.keywords) if len(k) >= 4][:2]
+    for words in STRICT.values():
+        pick = []
+        for k in words:   # 2 per tema, uten bøyningsvarianter (ukraine/ukrainian)
+            if len(k) >= 4 and not any(k.startswith(p) for p in pick) and len(pick) < 2:
+                pick.append(k)
+        kw += pick
     kw = list(dict.fromkeys(kw))
     return "(" + " OR ".join(f'"{k}"' if " " in k else k for k in kw) + ") sourcelang:english"
 
 
-def _gdelt() -> list[dict]:
+GDELT_WAITS = (10, 30, 60)   # pause før forsøk 2, 3, 4 (GDELT: maks 1 kall / 5 s; etter 429 må det gå lenger tid)
+
+
+def _gdelt_doc(sleep=None) -> list[dict]:
+    """GDELT DOC 2.0 artlist. Ett kall, med pauser og nye forsøk ved 429/5xx/ikke-JSON."""
+    import time
+    import requests
+    from .config import USER_AGENT
+    sleep = sleep or time.sleep
+    params = {"query": gdelt_query(), "mode": "artlist", "format": "json", "timespan": f"{WINDOW_H}h", "maxrecords": 250, "sort": "datedesc"}
+    err = None
+    for i in range(len(GDELT_WAITS) + 1):
+        if i:
+            sleep(GDELT_WAITS[i - 1])
+        try:
+            from . import http
+            http._throttle("api.gdeltproject.org")   # felles 6 s-grense med resten av kjøringen
+            r = requests.get(GDELT_API, params=params, timeout=40, headers={"User-Agent": USER_AGENT})
+            if r.status_code == 200 and r.text.lstrip().startswith("{"):
+                return [{"tittel": a.get("title"), "url": a.get("url"), "kilde": "GDELT", "domene": a.get("domain") or "",
+                         "publisert": _parse_ts(a.get("seendate"))} for a in r.json().get("articles") or []]
+            err = f"HTTP {r.status_code}: {r.text.strip()[:60]}"
+        except (requests.RequestException, ValueError) as ex:
+            err = str(ex)[:80]
+    raise RuntimeError(f"GDELT DOC etter {len(GDELT_WAITS) + 1} forsøk: {err}")
+
+
+def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES) -> list[dict]:
+    """Reserve: GDELT 2.0 GKG-filer (data.gdeltproject.org, åpne data uten kallgrense). Bare <PAGE_TITLE>, URL, domene, tid.
+    Filene spres over siste døgn (hver 3. time fra siste oppdatering)."""
+    import io, zipfile
     from . import http
-    j = http.get_json(GDELT_API, params={"query": gdelt_query(), "mode": "artlist", "format": "json", "timespan": f"{WINDOW_H}h",
-                                         "maxrecords": 250, "sort": "datedesc"}, retries=2, timeout=40)
+    last = http.get(GDELT_GKG_LAST, timeout=20, retries=2).text
+    m = re.search(r"/(\d{14})\.gkg\.csv\.zip", last)
+    if not m:
+        raise RuntimeError("GDELT GKG: fant ikke siste fil")
+    t0 = datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
     out = []
-    for a in j.get("articles") or []:
-        out.append({"tittel": a.get("title"), "url": a.get("url"), "kilde": "GDELT", "domene": a.get("domain") or "",
-                    "publisert": _parse_ts(a.get("seendate"))})
+    for k in range(files):
+        ts = t0 - timedelta(hours=3 * k)
+        url = f"https://data.gdeltproject.org/gdeltv2/{ts:%Y%m%d%H%M%S}.gkg.csv.zip"
+        try:
+            z = zipfile.ZipFile(io.BytesIO(http.get(url, timeout=60, retries=2).content))
+        except Exception:
+            continue
+        with z.open(z.namelist()[0]) as f:
+            for line in io.TextIOWrapper(f, encoding="utf-8", errors="replace"):
+                c = line.rstrip("\n").split("\t")
+                if len(c) < 27 or not c[4].startswith("http"):
+                    continue
+                tm = re.search(r"<PAGE_TITLE>(.*?)</PAGE_TITLE>", c[26])
+                if not tm:
+                    continue
+                from html import unescape
+                out.append({"tittel": unescape(tm.group(1)).strip(), "url": c[4], "kilde": "GDELT", "domene": c[3],
+                            "publisert": _parse_ts(c[1][:8] + "T" + c[1][8:] + "Z")})
+    if not out:
+        raise RuntimeError("GDELT GKG: ingen filer lest")
     return out
+
+
+GDELT_MODE = {"siste": ""}
+
+
+def _gdelt() -> list[dict]:
+    """DOC-API-et først (med pauser og nye forsøk); gir det fortsatt 429, brukes GKG-filene (samme kilde, åpne data)."""
+    try:
+        got = _gdelt_doc(); GDELT_MODE["siste"] = "DOC API"
+        return got
+    except Exception as ex:
+        import logging
+        logging.getLogger(__name__).warning("verden: %s – bruker GDELT GKG-filer", ex)
+    got = _gdelt_gkg(); GDELT_MODE["siste"] = "GKG-filer (DOC API ga 429)"
+    return got
 
 
 def _rss(name: str, url: str) -> list[dict]:
@@ -121,7 +218,7 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
     raw, st = [], {}
     for name, fn in fetch.items():
         try:
-            got = fn(); raw += got; st[name] = f"ok ({len(got)})"
+            got = fn(); raw += got; st[name] = f"ok ({len(got)})" + (f" via {GDELT_MODE['siste']}" if name == "GDELT" and GDELT_MODE["siste"] and fn is _gdelt else "")
         except Exception as ex:   # én kilde feiler -> de andre brukes
             st[name] = f"FAILED: {str(ex)[:120]}"
     if newsweb_df is not None and len(newsweb_df):
@@ -133,16 +230,19 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
     if nb_press is not None:
         raw += [{"tittel": p.get("title"), "url": p.get("link"), "kilde": "Norges Bank", "publisert": _parse_ts(p.get("published"))} for p in nb_press]
         st["Norges Bank"] = f"ok ({len(nb_press)})"
+    since_cb = now - timedelta(hours=CB_WINDOW_H)
     items, seen = [], set()
     for it in raw:
         ts, url, title = it.get("publisert"), (it.get("url") or "").strip(), (it.get("tittel") or "").strip()
-        if not ts or not url or not title or url in seen or (it["kilde"], title.lower()) in seen or not (since <= ts <= now + timedelta(minutes=10)):
+        is_cb = it["kilde"] in ("Norges Bank", *FEEDS)
+        if not ts or not url or not title or url in seen or (it["kilde"], title.lower()) in seen \
+                or not ((since_cb if is_cb else since) <= ts <= now + timedelta(minutes=10)):
             continue
-        if it["kilde"] in ("Norges Bank", *FEEDS):
+        if is_cb:
             tema = [CB]
         else:
             tema = _themes(title)
-            if not tema:   # bare saker som kan knyttes til et tema (Newsweb-rutinemeldinger og GDELT-støy tas ikke med)
+            if not tema:   # tema bare når nøkkelordet står i tittelen; ellers utelates saken (Newsweb-rutine, GDELT-støy)
                 continue
         seen.update({url, (it["kilde"], title.lower())})   # samme melding publisert to ganger (Newsweb) telles én gang
         items.append({"tittel": title, "url": url, "kilde": it["kilde"], **({"domene": it["domene"]} if it.get("domene") else {}),
@@ -154,8 +254,16 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
     order = sorted(counts, key=lambda k: (-counts[k], k))
     rank = {k: i for i, k in enumerate(order)}
     items = sorted(items, key=lambda it: (rank[it["tema"]], -datetime.fromisoformat(it["publisert"].replace("Z", "+00:00")).timestamp()))
+    kept: dict[str, int] = {}
+    capped = []
+    for it in items:   # antall per tema telles over alle saker; bare de nyeste MAX_PER_TEMA lagres (GKG gir hundrevis)
+        kept[it["tema"]] = kept.get(it["tema"], 0) + 1
+        if kept[it["tema"]] <= MAX_PER_TEMA:
+            capped.append(it)
+    items = capped
     loc = now.astimezone(OSLO)
     data = {"hentet": loc.strftime("%Y-%m-%dT%H:%M:%S%z"), "dato": loc.date().isoformat(), "vindu_timer": WINDOW_H,
+            "vindu_timer_sentralbanker": CB_WINDOW_H,
             "kilder_status": st, "temaer": [{"tema": k, "antall": counts[k]} for k in order], "saker": items}
     used = sorted({it["kilde"] for it in items})
     return data, f"ok ({len(items)} saker; " + ", ".join(f"{k}: {v}" for k, v in st.items()) + ")" + ("" if used else " – ingen saker")
@@ -290,8 +398,11 @@ def _chip(key: str, snap: dict) -> str:
     from . import ux2 as UX2
     name = _tema_names(snap).get(key, key)
     sc = next((t.get("score") for t in snap.get("themes") or [] if t.get("key") == key), None)
-    s = (f'<span class="vn-sc">· score {str(round(float(sc), 1)).replace(".", ",")}</span>{UX2.i("Rangering, ikke testet")}' if sc is not None else "")
-    return f'<span class="vn-chip"><span class="vn-cn">{E(name)}</span>{s}</span>'
+    if sc is None:
+        return f'<span class="vn-chip"><span class="vn-cn">{E(name)}</span></span>'
+    ri = UX2.i(RANK_TIP).replace('<button type="button"', f'<button type="button" title="{E(RANK_TIP)}"', 1)
+    return (f'<span class="vn-chip" title="{E(RANK_TIP)}"><span class="vn-cn">{E(name)}</span>'
+            f'<span class="vn-sc">· score {str(round(float(sc), 1)).replace(".", ",")}</span>{ri}</span>')
 
 
 def _links(urls) -> str:
@@ -309,6 +420,12 @@ def _wrap(head: str, rows: list[str], foot_more: str = "Vis alle saker ↓") -> 
             f'<p class="vn-fn">{E(FOOTNOTE)}</p></section>')
 
 
+def _old(h: dict, data: dict) -> str:
+    """Sentralbanksaker kan være opptil 72 t gamle: vis datoen når saken er eldre enn 24 t."""
+    ts, ref = _parse_ts(h.get("publisert")), _parse_ts((data or {}).get("hentet"))
+    return f" ({_dm(ts)})" if ts and ref and ref - ts > timedelta(hours=WINDOW_H) else ""
+
+
 def _reserve(data: dict, snap: dict) -> str:
     items = (data or {}).get("saker") or []
     by: dict[str, list] = {}
@@ -321,8 +438,8 @@ def _reserve(data: dict, snap: dict) -> str:
     for k in order[:7]:
         hs = by[k][:2]
         rows.append('<div class="vn-sak">' + f'<p class="vn-t">{E(names.get(k, k))} <span class="vn-sc" style="font-weight:400;font-size:12px">· {counts.get(k, len(by[k]))} saker</span></p>'
-                    + "".join(f'<a class="vn-h" href="{E(h["url"])}" rel="noopener" target="_blank">{E(h["tittel"])} ↗</a>' for h in hs)
-                    + f'<p class="vn-f">{_chip(k, snap)}<span class="vn-k">{E(", ".join(sorted({h["kilde"] for h in by[k]})))}</span></p></div>')
+                    + "".join(f'<a class="vn-h" href="{E(h["url"])}" rel="noopener" target="_blank">{E(h["tittel"])}{_old(h, data)} ↗</a>' for h in hs)
+                    + f'<p class="vn-f">{_chip(k, snap)}<span class="vn-k">{E(", ".join(dict.fromkeys(h["kilde"] + (f' ({h["domene"]})' if h.get("domene") else "") for h in hs)))}</span></p></div>')
     srcs = sorted({it["kilde"] for it in items})
     newest = max((_parse_ts(it["publisert"]) for it in items), default=None)
     h = _parse_ts((data or {}).get("hentet"))
