@@ -48,3 +48,4 @@ kontroll_tilfeldig_v1,fill,2026-11-02-0041,2026-11-03,2026-11-02,BRG.OL,buy,tilf
 kontroll_tilfeldig_v1,fill,2026-11-02-0043,2026-11-03,2026-11-02,KOG.OL,buy,tilfeldig seed=3531309816,2026-11-03,355.3,NOK,1.0,140.084925,49772.17,99.54,,,6.07,ose_contract,Middels,2026-10-30,Industrials,hold,0.1682,OSEBX (OSEBX.OL),2133.340087890625,2096.510009765625
 kontroll_tilfeldig_v1,order,2026-11-03-0048,2026-11-03,2026-11-03,BRG.OL,sell,rødt flagg,2026-11-03,,NOK,,,,,,,,,,,,,,,,
 kontroll_tilfeldig_v1,order,2026-11-03-0049,2026-11-03,2026-11-03,PPG,buy,tilfeldig seed=1053906989,2026-11-02,,USD,,,,,,,3.99,,Middels,2026-10-30,Basic Materials,watch,0.1864,S&P 500 (^GSPC),7541.39990234375,
+kontroll_tilfeldig_v1,fill,2026-11-03-0049,2026-11-04,2026-11-03,PPG,buy,tilfeldig seed=1053906989,2026-11-03,121.24,USD,9.280540466308594,44.226348,49762.28,99.52,,,3.99,,Middels,2026-10-30,Basic Materials,watch,0.1864,S&P 500 (^GSPC),7541.39990234375,7568.919921875

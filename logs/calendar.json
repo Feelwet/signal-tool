@@ -497,6 +497,69 @@
 "kind": "resultat"
 },
 {
+"date": "2026-11-18",
+"time": "07:00",
+"source": "ONS",
+"title": "Consumer price inflation, UK: October 2026 time series",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "07:00",
+"source": "ONS",
+"title": "Producer price inflation, UK: October 2026 time series",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "07:00",
+"source": "ONS",
+"title": "Consumer price inflation, UK: October 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "07:00",
+"source": "ONS",
+"title": "Producer price inflation, UK: October 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "09:30",
+"source": "ONS",
+"title": "Private rent and house prices, UK: November 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "09:30",
+"source": "ONS",
+"title": "Business Register and Employment Survey (BRES): provisional results 2025 and revised results 2024 for Great Britain",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "09:30",
+"source": "ONS",
+"title": "Contributions to the 12-month rate of CPI(H) by import intensity: October 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-18",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
 "date": "2026-11-19",
 "time": "",
 "source": "Yahoo",
@@ -529,6 +592,13 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport BWLPG.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-25",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport MPCC.OL",
 "kind": "resultat"
 },
 {

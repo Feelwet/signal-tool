@@ -443,3 +443,7 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-03,STECH.OL,2026-11-02,"lik score, kutt 60",65,1.5,3,1,CAMBI.OL:på:1|CYVIZ.OL:på:1|DOFG.OL:på:1,41727595626,false
 2026-11-03,TEKNA.OL,2026-11-02,"lik score, kutt 60",66,1.5,3,1,CAMBI.OL:på:1|CYVIZ.OL:på:1|DOFG.OL:på:1,41727595626,false
 2026-11-03,TSM,2026-11-02,cut60,72,1.46,,,,41727595626,false
+2026-11-04,APR.OL,2026-11-03,cut60,117,0.5,,,,41738033823,false
+2026-11-04,CMMB.OL,2026-11-03,data,61,1.5,,,,41738033823,false
+2026-11-04,CYVIZ.OL,2026-11-03,"lik score, kutt 60",62,1.5,3,1,CAMBI.OL:på:1,41738033823,false
+2026-11-04,DOFG.OL,2026-11-03,"lik score, kutt 60",63,1.5,3,1,CAMBI.OL:på:1,41738033823,false
