@@ -120,3 +120,57 @@ def test_older_than_24h_line(tmp_path):
     h = V.html(_snap(d, gen="2026-11-05 01:00"), text_path=p, log_path=tmp_path / "a.csv")
     assert "Oppsummeringen er fra 04.11" in h and V.RESERVE_LINE not in h
 
+
+
+# ---- 03.11 kveld: streng temamatching, sentralbank-vindu, GDELT-pauser, chip-title
+def test_strict_themes_only_on_keyword_in_title():
+    assert V._themes("ACG to Acquire 100% of Blue Moon Norway, Including the Construction-Stage Nussir Copper Mine") == []
+    assert V._themes("Independent Valuation of Italian Solar Development Pipeline Rises to EUR 85.6 Million") == []
+    assert V._themes("Performance Shipping Inc. repurchase and cancellation of share purchase warrants") == []
+    assert V._themes("Star Wars premiere") == [] and V._themes("Gulf Keystone results") == []
+    assert V._themes("Houthi attack in the Red Sea") == ["shipping_chokepoints"]
+    assert V._themes("New US tariffs on EU steel") == ["tariffs_trade"]
+    assert V._themes("Greenland approves security deal") == ["nordic_arctic"]
+
+
+def test_central_banks_72h_window_and_date_marker():
+    fetch = {"ECB": lambda: [{"tittel": "ECB speech", "url": "https://ecb.example/1", "kilde": "ECB", "publisert": V._parse_ts("2026-11-02T09:30:00Z")},
+                             {"tittel": "ECB old", "url": "https://ecb.example/2", "kilde": "ECB", "publisert": V._parse_ts("2026-10-30T09:30:00Z")}]}
+    d, _ = V.collect(None, None, now=NOW, fetch=fetch)
+    assert [s["url"] for s in d["saker"]] == ["https://ecb.example/1"]
+    h = V.html({"verden": d, "generated": "2026-11-04 06:40"}, text_path=__import__("pathlib").Path("/nonexistent.json"))
+    assert "ECB speech (02.11) ↗" in h
+
+
+def test_gdelt_doc_retries_with_pauses(monkeypatch):
+    import requests
+    calls, waits = [], []
+
+    class R:
+        def __init__(self, code, text): self.status_code, self.text = code, text
+        def json(self): return json.loads(self.text)
+
+    seq = [R(429, "Please limit requests to one every 5 seconds"), R(200, "Error"),
+           R(200, json.dumps({"articles": [{"title": "Tariff talks", "url": "https://x.org/1", "domain": "x.org", "seendate": "20261104T040000Z"}]}))]
+    monkeypatch.setattr(requests, "get", lambda *a, **k: calls.append(k) or seq[len(calls) - 1])
+    monkeypatch.setattr("signaltool.http._throttle", lambda h: None)
+    got = V._gdelt_doc(sleep=waits.append)
+    assert len(calls) == 3 and waits == [10, 30] and got[0]["url"] == "https://x.org/1"
+    assert all(k["headers"]["User-Agent"] for k in calls)
+
+
+def test_gdelt_doc_gives_up(monkeypatch):
+    import requests, pytest
+
+    class R:
+        status_code, text = 429, "Please limit requests"
+    monkeypatch.setattr(requests, "get", lambda *a, **k: R())
+    monkeypatch.setattr("signaltool.http._throttle", lambda h: None)
+    with pytest.raises(RuntimeError, match="429"):
+        V._gdelt_doc(sleep=lambda s: None)
+
+
+def test_chip_score_has_visible_i_and_title():
+    c = V._chip("conflict_defense", {"themes": [{"key": "conflict_defense", "score": 2.34}]})
+    assert c.count('title="Rangering, ikke testet"') == 2 and "ⓘ" in c and '<span class="tip">Rangering, ikke testet</span>' in c
+    assert "Rangering" not in V._chip("sentralbanker", {"themes": []})
