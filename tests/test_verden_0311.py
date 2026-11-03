@@ -27,9 +27,8 @@ def test_collect_window_themes_order_no_body():
     d, st = _data()
     urls = [it["url"] for it in d["saker"]]
     assert set(urls) == {U1, U2, U3, U4}                               # >24 t, uten tema og Newsweb-rutinemelding utelatt
-    assert d["temaer"][0] == {"tema": "conflict_defense", "antall": 2}  # mest omtalt først
-    assert urls[:2] == [U1, U2]
-    assert set(d["saker"][0]) <= {"tittel", "url", "kilde", "domene", "publisert", "tema", "temaer"}   # aldri artikkeltekst
+    assert urls == [U1, U2, U3, U4]                                     # 04.11: dato, nyeste først (ikke omtale)
+    assert set(d["saker"][0]) <= {"tittel", "url", "kilde", "domene", "publisert", "tema", "temaer", "matchede_ord"}   # aldri artikkeltekst
     assert "Federal Reserve: FAILED" in st and d["dato"] == "2026-11-04"
 
 
@@ -81,7 +80,8 @@ def test_render_text(tmp_path):
     assert "Automatisk oppsummering · skrevet 04.11 kl. 07:05 · nyeste sak 04.11 · kilder: ECB, GDELT" in h
     assert "m.fl." not in h and V.FOOTNOTE in h and V.RESERVE_LINE not in h and "Oppsummeringen er fra" not in h
     assert "vil stige" not in t and "Kjøp forsvar" not in t
-    assert "score 2,3" in h and "Rangering, ikke testet" in h and "↗" in h
+    assert "score" not in h and "Rangering, ikke testet" not in h and "↗" in h
+    assert "Tema (automatisk): " in h
     for bad in ("FLAG", "robust"):
         assert bad not in h
 
@@ -100,7 +100,7 @@ def test_reserve_missing_file(tmp_path):
     h = V.html(_snap(d), text_path=tmp_path / "finnes_ikke.json", log_path=tmp_path / "a.csv")
     assert V.RESERVE_LINE in h and "#fdba74" in h and V.FOOTNOTE in h
     assert U1 in h and "Automatisk oppsummering" not in h
-    assert h.index(U1) < h.index(U4)                                    # sortert etter hvor mye temaet er omtalt
+    assert h.index(U1) < h.index(U2) < h.index(U3) < h.index(U4)        # 04.11: nyeste først
 
 
 def test_reserve_text_older_than_data(tmp_path):
@@ -129,8 +129,6 @@ def test_strict_themes_only_on_keyword_in_title():
     assert V._themes("Performance Shipping Inc. repurchase and cancellation of share purchase warrants") == []
     assert V._themes("Star Wars premiere") == [] and V._themes("Gulf Keystone results") == []
     assert V._themes("Houthi attack in the Red Sea") == ["shipping_chokepoints"]
-    assert V._themes("New US tariffs on EU steel") == ["tariffs_trade"]
-    assert V._themes("Greenland approves security deal") == ["nordic_arctic"]
 
 
 def test_central_banks_72h_window_and_date_marker():
@@ -139,7 +137,7 @@ def test_central_banks_72h_window_and_date_marker():
     d, _ = V.collect(None, None, now=NOW, fetch=fetch)
     assert [s["url"] for s in d["saker"]] == ["https://ecb.example/1"]
     h = V.html({"verden": d, "generated": "2026-11-04 06:40"}, text_path=__import__("pathlib").Path("/nonexistent.json"))
-    assert "ECB speech (02.11) ↗" in h
+    assert "ECB speech" in h and "ECB · 02.11 10:30" in h
 
 
 def test_gdelt_doc_retries_with_pauses(monkeypatch):
@@ -170,7 +168,61 @@ def test_gdelt_doc_gives_up(monkeypatch):
         V._gdelt_doc(sleep=lambda s: None)
 
 
-def test_chip_score_has_visible_i_and_title():
-    c = V._chip("conflict_defense", {"themes": [{"key": "conflict_defense", "score": 2.34}]})
-    assert c.count('title="Rangering, ikke testet"') == 2 and "ⓘ" in c and '<span class="tip">Rangering, ikke testet</span>' in c
-    assert "Rangering" not in V._chip("sentralbanker", {"themes": []})
+# ---- 04.11: to nøkkelord eller frase, dato-rekkefølge, «Tema (automatisk)», tema_match_sjekk.csv, kilder i meta, UxBot-rad
+def test_single_word_is_not_enough():
+    assert V._themes("Kansas candidates spar over drought relief") == []          # «drought» alene
+    assert V._themes("Opinion: the world's chokepoints are fragile") == []         # «chokepoint» alene
+    assert V._themes("New US tariffs on EU steel") == []
+    assert V._themes("Russia and Russian officials meet") == []                     # bøyningsvarianter = ett ord
+    assert V._themes("Ukraine thanks Ukrainian soldiers") == [] and V._themes("Iran and Iranian media") == []
+    assert V._matches("Russia strikes Ukraine power grid") == {"conflict_defense": ["ukraine", "russia"]}
+    assert V._matches("Houthi rebels attack ship in Red Sea") == {"shipping_chokepoints": ["red sea", "houthi"]}
+    assert V._themes("US imposes new trade war measures") == ["tariffs_trade"]     # frase alene holder
+    assert V._themes("Drought and famine hit grain harvest") == ["food_agri"]
+
+
+def test_tema_match_log_append_only(tmp_path):
+    d, _ = _data(); p = tmp_path / "t.csv"
+    assert V.log_matches(d, p) == 3                                                 # ECB: tema etter kilde, logges ikke
+    rows = list(csv.DictReader(p.open()))
+    assert list(rows[0]) == ["dato", "url", "tittel", "kilde", "tema", "matchede_ord"]
+    assert rows[0]["url"] == U1 and rows[0]["matchede_ord"] == "ukraine; russia" and rows[0]["kilde"] == "ex.org"
+    before = p.read_text()
+    assert V.log_matches(d, p) == 0 and p.read_text() == before                     # ny bygging samme dag: ingen duplikater
+    d2 = {**d, "dato": "2026-11-05"}
+    assert V.log_matches(d2, p) == 3 and p.read_text().startswith(before)           # bare tillegg
+
+
+def test_logmerge_tema_match_never_overwrites():
+    from signaltool.logmerge import merge
+    head = "dato,url,tittel,kilde,tema,matchede_ord"
+    origin = head + "\n2026-11-04,u1,A,x,t,a; b\n"
+    ours = head + "\n2026-11-04,u1,A ENDRET,x,t,a; b\n2026-11-05,u2,B,x,t,c\n"
+    out = merge(ours, origin, "logs/tema_match_sjekk.csv")
+    assert out.startswith(origin) and out.count(head) == 1
+    assert "2026-11-05,u2,B" in out and "A ENDRET" in out.splitlines()[2]           # ny linje lagt til, origin-raden urørt
+    assert out.splitlines()[1] == "2026-11-04,u1,A,x,t,a; b"
+
+
+def test_reserve_flat_list_meta_only_shown_sources(tmp_path):
+    items = [{"tittel": f"Russia and Ukraine talks {i}", "url": f"https://g.org/{i}", "kilde": "GDELT", "domene": "g.org",
+              "publisert": f"2026-11-04T0{i}:00:00Z", "tema": "conflict_defense", "temaer": ["conflict_defense"]} for i in range(8)]
+    items.append({"tittel": "Old ECB note", "url": "https://ecb.example/9", "kilde": "ECB", "publisert": "2026-11-02T09:00:00Z",
+                  "tema": "sentralbanker", "temaer": ["sentralbanker"]})
+    d = {"hentet": "2026-11-04T09:00:00+0100", "dato": "2026-11-04", "saker": items[::-1],
+         "temaer": [{"tema": "conflict_defense", "antall": 8}, {"tema": "sentralbanker", "antall": 1}]}
+    h = V.html({"verden": d, "generated": "2026-11-04 09:05"}, text_path=tmp_path / "nei.json")
+    assert h.count('class="vn-sak"') == 7 and "Old ECB note" not in h               # 7 nyeste
+    assert "kilder: GDELT" in h and "ECB" not in h                                  # meta: bare lenkede kilder som vises
+    pos = [h.index(f"talks {i}<") for i in (7, 6, 5, 4, 3, 2, 1)]
+    assert pos == sorted(pos)                                                       # nyeste først
+    assert "8 saker" not in h and "· 8" not in h                                    # ingen temaoverskrift med antall
+    assert h.count("Tema (automatisk): ") == 7 and "score" not in h
+    assert "g.org · 04.11 08:00" in h                                               # «kilde-domene · dd.mm hh:mm ↗»
+    assert V.FOOTNOTE in h
+
+
+def test_mstrip_warn_own_line():
+    from signaltool import mstrip as M
+    src = open(M.__file__).read()
+    assert '<div class="ms-w"' in src and ".ms-w{display:block;font-size:12px;line-height:16px;color:#fdba74;white-space:normal" in src

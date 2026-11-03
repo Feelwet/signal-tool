@@ -147,12 +147,12 @@ def field(f: dict, data: dict | None, now: datetime) -> str:
     twenty = "" if not btc else f' · <span class="{c20}">20d {r20}</span>'
     exp = (now.astimezone(timezone.utc).date() - timedelta(days=1)) if btc else last_session(now)
     stale = d < exp
-    warn = (f'<span class="ms-w" aria-label="Kursen er fra {dato}, eldre enn {"i går" if btc else "siste handelsdag"}">⚠ eldre kurs</span>'
+    warn = (f'<div class="ms-w" aria-label="Kursen er fra {dato}, eldre enn {"i går" if btc else "siste handelsdag"}">⚠ eldre kurs</div>'
             if stale else "")
     return (f'<div class="ms-f" data-sym="{E(f["sym"])}" data-d="{d.isoformat()}">{t}'
             f'<div class="ms-p">{_num(last, f["dec"])}{ri(f["tip"].format(dato=dato))}</div>'
             f'<div class="ms-c">{one}{twenty}</div>'
-            f'<div class="ms-s">{E(f["src"].format(dato=dato))}{warn}</div></div>')
+            f'<div class="ms-s">{E(f["src"].format(dato=dato))}</div>{warn}</div>')   # UxBot 04.11: varselet på egen linje, kuttes ikke
 
 
 def ri(tip: str) -> str:
@@ -182,7 +182,7 @@ CSS = (".mstrip{display:flex;gap:8px;margin:4px 0 10px;justify-content:flex-star
        ".ms-na{font-size:14px;line-height:24px;font-weight:400;color:#94a3b8}"
        ".ms-c{font-size:13px;line-height:16px;white-space:nowrap;font-variant-numeric:tabular-nums}.ms-c .sc-i{font-size:14px;vertical-align:middle}"
        ".msu{color:#22c55e}.msd{color:#ef4444}.ms0{color:#94a3b8}"
-       ".ms-s{font-size:11px;line-height:14px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ms-w{color:#f59e0b;margin-left:4px}"
+       ".ms-s{font-size:11px;line-height:14px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ms-w{display:block;font-size:12px;line-height:16px;color:#fdba74;white-space:normal;overflow:visible}"
        "@media(max-width:699px){.mstrip{gap:6px}.ms-f{flex:1 1 0;width:auto;min-width:0;padding:5px 8px}}")
 
 

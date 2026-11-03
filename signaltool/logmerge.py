@@ -6,6 +6,9 @@ import sys
 
 def merge(ours: str, theirs: str, path_hint: str) -> str:
     a, b = ours.splitlines(), theirs.splitlines()
+    if path_hint.endswith("tema_match_sjekk.csv"):   # AnalBot 04.11: append-only, origin-radene endres aldri; bare nye linjer legges til
+        have = set(b)
+        return "\n".join(b + [l for l in a[1 if b else 0:] if l and l not in have and not have.add(l)]) + "\n"
     if path_hint.endswith(".csv") and a and b and a[0] != b[0] and "run_id" in a[0].split(","):
         return ours if ours.endswith("\n") else ours + "\n"   # første gang med nye kolonner: vår migrerte fil er et overmengde
     if path_hint.endswith(".csv") and a and b and a[0] != b[0] and a[0].startswith(b[0] + ","):

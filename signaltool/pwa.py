@@ -112,8 +112,8 @@ def js(pre: str) -> str:
             "const day=86400000,iso=x=>new Date(x+'T00:00:00Z').getTime(),n=new Date(),u=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());"
             "d.querySelectorAll('.ms-f[data-d]').forEach(f=>{if(f.querySelector('.ms-w'))return;let e;"
             "if(f.dataset.sym==='BTC-USD')e=u-day;else{e=n.getUTCHours()>=23?u:u-day;while([0,6].includes(new Date(e).getUTCDay()))e-=day}"
-            "if(iso(f.dataset.d)<e){const s=f.querySelector('.ms-s');if(s){const w=d.createElement('span');w.className='ms-w';w.textContent='⚠ eldre kurs';"
-            "w.setAttribute('aria-label','Kursen er eldre enn '+(f.dataset.sym==='BTC-USD'?'i går':'siste handelsdag'));s.appendChild(w)}}});"
+            "if(iso(f.dataset.d)<e){const s=f.querySelector('.ms-s');if(s){const w=d.createElement('div');w.className='ms-w';w.textContent='⚠ eldre kurs';"
+            "w.setAttribute('aria-label','Kursen er eldre enn '+(f.dataset.sym==='BTC-USD'?'i går':'siste handelsdag'));s.after(w)}}});"
             # installer-lenke: aldri auto-popup, bare ved trykk
             "const box=d.getElementById('pwa-inst');if(!box)return;const sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(sa)return;"
             "const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);let ev=null;"

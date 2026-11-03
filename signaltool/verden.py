@@ -33,6 +33,7 @@ CB_WINDOW_H = 72   # sentralbanker publiserer ikke hvert døgn (03.11: ECB/Fed/N
 GDELT_GKG_LAST = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt"
 GDELT_GKG_FILES = 8   # reserve når DOC-API-et gir 429: 8 GKG-filer spredt over siste døgn (åpne data, bare tittel/URL brukes)
 RESERVE_LINE = "Ingen oppsummering i dag, viser siste overskrifter"
+CHIP_PREFIX = "Tema (automatisk)"   # AnalBot 04.11: til temamatchingen har bestått 27/30-kontrollen; ingen score
 FOOTNOTE = "Nyhetsoppsummering, ikke signaler eller råd. Rekkefølgen viser hvor mye et tema er omtalt, ikke betydning for kurs."
 WARN = "#fdba74"
 RANK_TIP = "Rangering, ikke testet"
@@ -98,14 +99,39 @@ STRICT: dict[str, list[str]] = {
     "food_agri": ["grain", "wheat", "fertiliser", "fertilizer", "black sea", "food crisis", "export ban", "potash", "famine", "drought"],
     "risk_off_haven": ["nuclear war", "world war", "nuclear weapon", "invasion", "gold price", "safe haven", "state of emergency"],
 }
-_STRICT_RX = {k: re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(w).replace(r"\ ", r"[\s-]+") for w in sorted(v, key=len, reverse=True))
-                            + r")(?:s|es)?(?![\w-])", re.I) for k, v in STRICT.items()}
+_WORD_RX = {k: [(w, re.compile(r"(?<![\w-])" + re.escape(w).replace(r"\ ", r"[\s-]+") + r"(?:s|es)?(?![\w-])", re.I))
+                 for w in sorted(v, key=len, reverse=True)] for k, v in STRICT.items()}
+
+
+def _same(a: str, b: str) -> bool:
+    """Bøyningsvarianter (ukraine/ukrainian, iran/iranian, israel/israeli) teller som samme ord."""
+    n = min(6, len(a), len(b))
+    return a[:n] == b[:n]
+
+
+def _is_phrase(w: str) -> bool:
+    return " " in w or "-" in w
+
+
+def _matches(title: str) -> dict[str, list[str]]:
+    """AnalBot/GSbot 04.11: tema bare ved minst to ulike nøkkelord fra temaet, eller én hel frase (flere ord), i tittelen.
+    Ett enkeltord alene («drought», «chokepoint», «tariff») gir ikke treff. Bøyningsvarianter (russia/russian) teller som ett ord.
+    Returnerer {tema: [matchede ord]} i STRICT-rekkefølge."""
+    t = title or ""
+    out: dict[str, list[str]] = {}
+    for k, pats in _WORD_RX.items():
+        hit = []
+        for w, rx in pats:
+            if rx.search(t) and not any(_same(h, w) for h in hit):
+                hit.append(w)
+        if any(_is_phrase(w) for w in hit) or len(hit) >= 2:
+            out[k] = hit
+    return out
 
 
 def _themes(title: str) -> list[str]:
-    """Tema bare når et entydig nøkkelord står i tittelen (hele ord). Ellers [] -> saken utelates."""
-    t = title or ""
-    return [k for k, rx in _STRICT_RX.items() if rx.search(t)]
+    """Temaer som oppfyller regelen i _matches. Ellers [] -> saken utelates."""
+    return list(_matches(title))
 
 
 def gdelt_query() -> str:
@@ -182,6 +208,7 @@ def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES) -> lis
 
 
 GDELT_MODE = {"siste": ""}
+ALL_MATCHES: list[dict] = []   # siste collect(): alle saker med nøkkelordtreff før MAX_PER_TEMA-kuttet
 
 
 def _gdelt() -> list[dict]:
@@ -238,23 +265,27 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
         if not ts or not url or not title or url in seen or (it["kilde"], title.lower()) in seen \
                 or not ((since_cb if is_cb else since) <= ts <= now + timedelta(minutes=10)):
             continue
+        words: list[str] = []
         if is_cb:
-            tema = [CB]
+            tema = [CB]   # sentralbanker: tema etter kilde (pressemelding), ikke nøkkelord – logges ikke i tema_match_sjekk
         else:
-            tema = _themes(title)
-            if not tema:   # tema bare når nøkkelordet står i tittelen; ellers utelates saken (Newsweb-rutine, GDELT-støy)
+            m = _matches(title)
+            tema = list(m)
+            if not tema:   # to nøkkelord eller én frase i tittelen; ellers utelates saken (Newsweb-rutine, GDELT-støy)
                 continue
+            words = m[tema[0]]
         seen.update({url, (it["kilde"], title.lower())})   # samme melding publisert to ganger (Newsweb) telles én gang
         items.append({"tittel": title, "url": url, "kilde": it["kilde"], **({"domene": it["domene"]} if it.get("domene") else {}),
-                      "publisert": _iso(ts), "tema": tema[0], "temaer": tema})
+                      "publisert": _iso(ts), "tema": tema[0], "temaer": tema, **({"matchede_ord": words} if words else {})})
     counts: dict[str, int] = {}
     for it in items:
         for k in it["temaer"]:
             counts[k] = counts.get(k, 0) + 1
     order = sorted(counts, key=lambda k: (-counts[k], k))
-    rank = {k: i for i, k in enumerate(order)}
-    items = sorted(items, key=lambda it: (rank[it["tema"]], -datetime.fromisoformat(it["publisert"].replace("Z", "+00:00")).timestamp()))
+    # AnalBot 04.11: til temamatchingen har bestått kontrollen (27 av 30), sorteres sakene etter dato, nyeste først
+    items = sorted(items, key=lambda it: (-_parse_ts(it["publisert"]).timestamp(), it["url"]))
     kept: dict[str, int] = {}
+    ALL_MATCHES[:] = [it for it in items if it.get("matchede_ord")]   # alle treff logges, også de som ikke lagres (cap)
     capped = []
     for it in items:   # antall per tema telles over alle saker; bare de nyeste MAX_PER_TEMA lagres (GKG gir hundrevis)
         kept[it["tema"]] = kept.get(it["tema"], 0) + 1
@@ -269,9 +300,42 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
     return data, f"ok ({len(items)} saker; " + ", ".join(f"{k}: {v}" for k, v in st.items()) + ")" + ("" if used else " – ingen saker")
 
 
+TEMA_LOG = LOGS / "tema_match_sjekk.csv"
+TEMA_COLS = ["dato", "url", "tittel", "kilde", "tema", "matchede_ord"]
+
+
+def log_matches(data: dict, path: Path | None = None, items: list[dict] | None = None) -> int:
+    """AnalBot 04.11: alle nøkkelordtreff append-only i logs/tema_match_sjekk.csv (3 netter -> 30 tilfeldige kontrolleres).
+    Eksisterende rader endres aldri; (dato, url, tema) som allerede finnes, skrives ikke på nytt. Returnerer antall nye rader."""
+    path = path or TEMA_LOG
+    have = set()
+    if path.exists() and path.stat().st_size:
+        with path.open(newline="") as f:
+            have = {(r["dato"], r["url"], r["tema"]) for r in csv.DictReader(f)}
+    dato = (data or {}).get("dato") or ""
+    rows = []
+    for it in (items if items is not None else (data or {}).get("saker") or []):
+        if not it.get("matchede_ord"):
+            continue
+        r = {"dato": dato, "url": it["url"], "tittel": it["tittel"], "kilde": it.get("domene") or it["kilde"], "tema": it["tema"],
+             "matchede_ord": "; ".join(it["matchede_ord"])}
+        k = (r["dato"], r["url"], r["tema"])
+        if k not in have:
+            have.add(k); rows.append(r)
+    new = not (path.exists() and path.stat().st_size)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", newline="") as f:
+        w = csv.DictWriter(f, TEMA_COLS)
+        if new:
+            w.writeheader()
+        w.writerows(rows)
+    return len(rows)
+
+
 def save(data: dict, site: Path | None = None) -> None:
     txt = json.dumps(data, ensure_ascii=False, indent=1)
     DATA_LOG.write_text(txt)
+    log_matches(data, items=list(ALL_MATCHES) if ALL_MATCHES else None)
     if site is not None:
         (site / "data").mkdir(parents=True, exist_ok=True)
         (site / "data" / "verden_overskrifter.json").write_text(txt)
@@ -360,8 +424,11 @@ CSS = (".vn{padding:12px 16px}.vn h2{margin:0 0 2px;font-size:18px;line-height:2
        ".vn-warn{margin:0 0 8px;font-size:12px;line-height:16px;color:#fdba74}"
        ".vn-ing{margin:0 0 10px;font-size:16px;line-height:1.55;color:#e6edf3}"
        ".vn-l{font-size:12px;text-decoration:none;margin-left:3px;white-space:nowrap}"
-       ".vn-sak{padding:7px 0;border-top:1px solid #3b4757;max-height:110px;overflow:hidden}"
-       ".vn-t{margin:0;font-size:15px;line-height:20px;font-weight:700;color:#e6edf3}"
+       ".vn-sak{padding:8px 0;border-top:1px solid #3b4757;min-height:80px;max-height:110px;overflow:hidden}"
+       ".vn-t{margin:0;font-size:15px;line-height:20px;font-weight:600;color:#e6edf3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}"
+       ".vn-m{margin:2px 0 0;font-size:12px;line-height:16px;color:#94a3b8}.vn-m .vn-l{margin-left:2px}"
+       ".vn-c{margin:3px 0 0;font-size:12px;line-height:16px}"
+       ".vn-c .vn-chip{display:inline;padding:0 6px;border-radius:8px;background:#334155;color:#cbd5e1;white-space:normal;box-decoration-break:clone;-webkit-box-decoration-break:clone}"
        ".vn-s{margin:2px 0 0;font-size:14px;line-height:19px;color:#cbd5e1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}"
        ".vn-f{display:flex;align-items:center;gap:6px;margin:3px 0 0;font-size:12px;line-height:16px;color:#94a3b8;white-space:nowrap}"
        ".vn-chip{display:inline-flex;align-items:center;flex:0 1 auto;min-width:0;padding:0 6px;border-radius:8px;background:#334155;color:#cbd5e1}"
@@ -395,14 +462,23 @@ def _tema_names(snap: dict) -> dict:
 
 
 def _chip(key: str, snap: dict) -> str:
-    from . import ux2 as UX2
+    """«Tema (automatisk): <tema>», ingen score (AnalBot 04.11). Kan bryte linja (UxBot 04.11)."""
     name = _tema_names(snap).get(key, key)
-    sc = next((t.get("score") for t in snap.get("themes") or [] if t.get("key") == key), None)
-    if sc is None:
-        return f'<span class="vn-chip"><span class="vn-cn">{E(name)}</span></span>'
-    ri = UX2.i(RANK_TIP).replace('<button type="button"', f'<button type="button" title="{E(RANK_TIP)}"', 1)
-    return (f'<span class="vn-chip" title="{E(RANK_TIP)}"><span class="vn-cn">{E(name)}</span>'
-            f'<span class="vn-sc">· score {str(round(float(sc), 1)).replace(".", ",")}</span>{ri}</span>')
+    return f'<span class="vn-chip">{E(CHIP_PREFIX)}: {E(name)}</span>'
+
+
+def _ts(it: dict) -> float:
+    t = _parse_ts(it.get("publisert"))
+    return t.timestamp() if t else 0.0
+
+
+def _row(h: dict, data: dict, snap: dict, sents: str = "") -> str:
+    """UxBot 04.11: tittel (15 px, maks 2 linjer), «kilde-domene · dd.mm hh:mm ↗» (12 px), chip «Tema (automatisk): …»."""
+    ts = _parse_ts(h.get("publisert"))
+    when = f" · {_dm(ts)} {ts.astimezone(OSLO):%H:%M}" if ts else ""
+    return ('<div class="vn-sak">' + f'<p class="vn-t">{E(h["tittel"])}</p>' + sents
+            + f'<p class="vn-m">{E(h.get("domene") or h["kilde"])}{when}{_links([h["url"]])}</p>'
+            + (f'<p class="vn-c">{_chip(h["tema"], snap)}</p>' if h.get("tema") else "") + '</div>')
 
 
 def _links(urls) -> str:
@@ -427,20 +503,10 @@ def _old(h: dict, data: dict) -> str:
 
 
 def _reserve(data: dict, snap: dict) -> str:
-    items = (data or {}).get("saker") or []
-    by: dict[str, list] = {}
-    for it in items:
-        by.setdefault(it["tema"], []).append(it)
-    counts = {t["tema"]: t["antall"] for t in (data or {}).get("temaer") or []}
-    order = [t["tema"] for t in (data or {}).get("temaer") or [] if t["tema"] in by]
-    names = _tema_names(snap)
-    rows = []
-    for k in order[:7]:
-        hs = by[k][:2]
-        rows.append('<div class="vn-sak">' + f'<p class="vn-t">{E(names.get(k, k))} <span class="vn-sc" style="font-weight:400;font-size:12px">· {counts.get(k, len(by[k]))} saker</span></p>'
-                    + "".join(f'<a class="vn-h" href="{E(h["url"])}" rel="noopener" target="_blank">{E(h["tittel"])}{_old(h, data)} ↗</a>' for h in hs)
-                    + f'<p class="vn-f">{_chip(k, snap)}<span class="vn-k">{E(", ".join(dict.fromkeys(h["kilde"] + (f' ({h["domene"]})' if h.get("domene") else "") for h in hs)))}</span></p></div>')
-    srcs = sorted({it["kilde"] for it in items})
+    """Flat liste, nyeste først (AnalBot/UxBot 04.11). Ingen temaoverskrifter eller antall."""
+    items = sorted((data or {}).get("saker") or [], key=lambda it: (-_ts(it), it["url"]))[:7]
+    rows = [_row(h, data, snap) for h in items]
+    srcs = sorted({it["kilde"] for it in items})   # bare kilder som er lenket i en sak som vises
     newest = max((_parse_ts(it["publisert"]) for it in items), default=None)
     h = _parse_ts((data or {}).get("hentet"))
     meta = " · ".join(x for x in ["Siste overskrifter", f"hentet {_dm(h)} kl. {h.astimezone(OSLO):%H:%M}" if h else "",
@@ -465,7 +531,10 @@ def html(snap: dict, text_path: Path | None = None, log_path: Path | None = None
     if not clean["saker"]:
         return _reserve(data, snap)
     by_url = {it["url"]: it for it in data.get("saker", [])}
-    used_urls = [u for s in clean["ingress"] for u in s.get("lenker") or []] + [u for k in clean["saker"] for s in k["setninger"] for u in s.get("lenker") or []]
+    def newest_of(k):
+        return max((_ts(by_url[u]) for s in k["setninger"] for u in s.get("lenker") or [] if u in by_url), default=0.0)
+    saker = sorted(clean["saker"], key=lambda k: -newest_of(k))[:7]   # nyeste først (AnalBot 04.11)
+    used_urls = [u for s in clean["ingress"][:4] for u in s.get("lenker") or []] + [u for k in saker for s in k["setninger"] for u in s.get("lenker") or []]
     used = [by_url[u] for u in dict.fromkeys(used_urls) if u in by_url]
     srcs = list(dict.fromkeys(sorted(it["kilde"] for it in used)))
     newest = max((_parse_ts(it["publisert"]) for it in used), default=None) or _parse_ts(text.get("newest_item"))
@@ -478,13 +547,16 @@ def html(snap: dict, text_path: Path | None = None, log_path: Path | None = None
     if clean["ingress"]:
         head += '<p class="vn-ing">' + " ".join(_sent(s) for s in clean["ingress"][:4]) + "</p>"
     rows = []
-    for k in clean["saker"][:7]:
-        kil = list(dict.fromkeys(by_url[u]["kilde"] + (f' ({by_url[u]["domene"]})' if by_url[u].get("domene") else "")
-                                 for s in k["setninger"] for u in s.get("lenker") or [] if u in by_url))
-        lk = list(dict.fromkeys(u for s in k["setninger"] for u in s["lenker"]))[:3]
+    for k in saker:
+        lk = list(dict.fromkeys(u for s in k["setninger"] for u in s["lenker"] if u in by_url))[:3]
+        top = max((by_url[u] for u in lk), key=_ts)
+        kil = " · ".join(dict.fromkeys(by_url[u].get("domene") or by_url[u]["kilde"] for u in lk))
+        ts = _parse_ts(top.get("publisert"))
+        when = f" · {_dm(ts)} {ts.astimezone(OSLO):%H:%M}" if ts else ""
         rows.append('<div class="vn-sak">' + f'<p class="vn-t">{E(k.get("tittel") or "")}</p>'
                     + f'<p class="vn-s">{" ".join(E(s.get("tekst") or "") for s in k["setninger"][:2])}</p>'
-                    + f'<p class="vn-f">{_chip(k.get("tema") or "", snap) if k.get("tema") else ""}<span class="vn-k">{E(", ".join(kil))}</span>{_links(lk)}</p></div>')
+                    + f'<p class="vn-m">{E(kil)}{when}{_links(lk)}</p>'
+                    + (f'<p class="vn-c">{_chip(k["tema"], snap)}</p>' if k.get("tema") else "") + '</div>')
     return _wrap(head, rows)
 
 
