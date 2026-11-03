@@ -99,7 +99,8 @@ STRICT: dict[str, list[str]] = {
     "food_agri": ["grain", "wheat", "fertiliser", "fertilizer", "black sea", "food crisis", "export ban", "potash", "famine", "drought"],
     "risk_off_haven": ["nuclear war", "world war", "nuclear weapon", "invasion", "gold price", "safe haven", "state of emergency"],
 }
-_WORD_RX = {k: [(w, re.compile(r"(?<![\w-])" + re.escape(w).replace(r"\ ", r"[\s-]+") + r"(?:s|es)?(?![\w-])", re.I))
+_NOT_AFTER = {"world war": r"(?!\s+(?:I{1,3}|1|2|one|two)\b)"}   # 04.11: «… World War II» (historisk) ga feil tema
+_WORD_RX = {k: [(w, re.compile(r"(?<![\w-])" + re.escape(w).replace(r"\ ", r"[\s-]+") + r"(?:s|es)?(?![\w-])" + _NOT_AFTER.get(w, ""), re.I))
                  for w in sorted(v, key=len, reverse=True)] for k, v in STRICT.items()}
 
 
@@ -424,10 +425,10 @@ CSS = (".vn{padding:12px 16px}.vn h2{margin:0 0 2px;font-size:18px;line-height:2
        ".vn-warn{margin:0 0 8px;font-size:12px;line-height:16px;color:#fdba74}"
        ".vn-ing{margin:0 0 10px;font-size:16px;line-height:1.55;color:#e6edf3}"
        ".vn-l{font-size:12px;text-decoration:none;margin-left:3px;white-space:nowrap}"
-       ".vn-sak{padding:8px 0;border-top:1px solid #3b4757;min-height:80px;max-height:110px;overflow:hidden}"
-       ".vn-t{margin:0;font-size:15px;line-height:20px;font-weight:600;color:#e6edf3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}"
+       ".vn-sak{padding:6px 0;border-top:1px solid #3b4757;min-height:80px}"
+       ".vn-t{margin:0;font-size:15px;line-height:19px;font-weight:600;color:#e6edf3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}"
        ".vn-m{margin:2px 0 0;font-size:12px;line-height:16px;color:#94a3b8}.vn-m .vn-l{margin-left:2px}"
-       ".vn-c{margin:3px 0 0;font-size:12px;line-height:16px}"
+       ".vn-c{margin:3px 0 0;font-size:12px;line-height:15px}"
        ".vn-c .vn-chip{display:inline;padding:0 6px;border-radius:8px;background:#334155;color:#cbd5e1;white-space:normal;box-decoration-break:clone;-webkit-box-decoration-break:clone}"
        ".vn-s{margin:2px 0 0;font-size:14px;line-height:19px;color:#cbd5e1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}"
        ".vn-f{display:flex;align-items:center;gap:6px;margin:3px 0 0;font-size:12px;line-height:16px;color:#94a3b8;white-space:nowrap}"

@@ -179,6 +179,8 @@ def test_single_word_is_not_enough():
     assert V._matches("Houthi rebels attack ship in Red Sea") == {"shipping_chokepoints": ["red sea", "houthi"]}
     assert V._themes("US imposes new trade war measures") == ["tariffs_trade"]     # frase alene holder
     assert V._themes("Drought and famine hit grain harvest") == ["food_agri"]
+    assert V._themes("Local woman celebrates 105 years, including service in World War II") == []
+    assert V._themes("Medvedev warns of world war over missiles") == ["risk_off_haven"]
 
 
 def test_tema_match_log_append_only(tmp_path):
