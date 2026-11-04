@@ -455,3 +455,9 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-04,CMMB.OL,2026-11-03,data,61,1.5,,,,41743613807,false
 2026-11-04,CYVIZ.OL,2026-11-03,"lik score, kutt 60",62,1.5,3,1,CAMBI.OL:på:1,41743613807,false
 2026-11-04,DOFG.OL,2026-11-03,"lik score, kutt 60",63,1.5,3,1,CAMBI.OL:på:1,41743613807,false
+2026-11-04,APR.OL,2026-11-03,cut60,114,0.5,,,,41834300799,true
+2026-11-04,BRG.OL,2026-11-03,cut60,82,1.0,,,,41834300799,true
+2026-11-04,CMMB.OL,2026-11-03,for lite data,56,1.5,,,,41834300799,true
+2026-11-04,CVX,2026-11-03,cut60,68,1.46,,,,41834300799,true
+2026-11-04,CYVIZ.OL,2026-11-03,score0,,,,,,41834300799,true
+2026-11-04,DNO.OL,2026-11-03,cut60,115,0.5,,,,41834300799,true
