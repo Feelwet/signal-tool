@@ -34,7 +34,7 @@ GDELT_GKG_LAST = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt"
 GDELT_GKG_FILES = 8   # reserve når DOC-API-et gir 429: 8 GKG-filer spredt over siste døgn (åpne data, bare tittel/URL brukes)
 RESERVE_LINE = "Ingen oppsummering i dag, viser siste overskrifter"
 CHIP_PREFIX = "Tema (automatisk)"   # AnalBot 04.11: til temamatchingen har bestått 27/30-kontrollen; ingen score
-FOOTNOTE = "Nyhetsoppsummering, ikke signaler eller råd. Rekkefølgen viser hvor mye et tema er omtalt, ikke betydning for kurs."
+FOOTNOTE = "Nyhetsoppsummering, ikke signaler eller råd. Sortert etter tid. Temaene er satt automatisk og ikke kontrollert ennå."
 WARN = "#fdba74"
 RANK_TIP = "Rangering, ikke testet"
 
