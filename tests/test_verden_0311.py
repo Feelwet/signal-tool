@@ -153,7 +153,7 @@ def test_gdelt_doc_retries_with_pauses(monkeypatch):
     monkeypatch.setattr(requests, "get", lambda *a, **k: calls.append(k) or seq[len(calls) - 1])
     monkeypatch.setattr("signaltool.http._throttle", lambda h: None)
     got = V._gdelt_doc(sleep=waits.append)
-    assert len(calls) == 3 and waits == [10, 30] and got[0]["url"] == "https://x.org/1"
+    assert len(calls) == 3 and waits == [10, 20] and got[0]["url"] == "https://x.org/1"
     assert all(k["headers"]["User-Agent"] for k in calls)
 
 

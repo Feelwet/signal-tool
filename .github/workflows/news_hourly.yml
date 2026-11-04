@@ -1,0 +1,81 @@
+name: Verden nå – overskrifter hver time
+
+# 04.11 (brukeren): lett jobb som bare henter nye overskrifter (GDELT GKG-filer først, ECB/Fed RSS) og bygger siden på nytt
+# fra siste snapshot. Skriver aldri site_config/verden_naa.json. Samme concurrency-gruppe som nightly.yml («pages»), så de
+# aldri kjører samtidig. Kjører på minutt 40 for å ligge unna nattkjøringens start (05:17 UTC). Lagrer ikke state-cachen.
+on:
+  schedule:
+    - cron: "40 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TZ: Europe/Oslo
+  PYTHONUNBUFFERED: "1"
+  SIGNAL_UA: ${{ vars.SIGNAL_UA || format('signal-tool news hourly (https://github.com/{0})', github.repository) }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Restore state cache (read-only, siste snapshot)
+        uses: actions/cache/restore@v4
+        with:
+          path: data
+          key: signal-state-${{ github.run_id }}
+          restore-keys: signal-state-
+      - name: Hent nye overskrifter og bygg siden
+        run: python3 -m signaltool.verden --time
+      - name: Kontroll av Verden nå-tekst
+        continue-on-error: true
+        run: python3 -m signaltool.verden
+      - name: Keep report with the site
+        run: mkdir -p site/rapport && cp reports/latest.md site/rapport/latest.md 2>/dev/null || true
+      - name: Sanity check site before deploy
+        run: python3 -m signaltool check-site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Commit overskrifter + tilstand
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/ours && cp logs/verden_overskrifter.json logs/verden_state.json /tmp/ours/ && cp logs/tema_match_sjekk.csv /tmp/ours/ 2>/dev/null || true
+          for i in 1 2 3 4 5; do
+            git fetch -q origin "${GITHUB_REF_NAME}" && git reset -q --hard "origin/${GITHUB_REF_NAME}"
+            cp /tmp/ours/verden_overskrifter.json /tmp/ours/verden_state.json logs/
+            # append-only logg: slå sammen, eksisterende rader endres aldri
+            if [ -f /tmp/ours/tema_match_sjekk.csv ]; then
+              if [ -f logs/tema_match_sjekk.csv ]; then python3 -m signaltool.logmerge /tmp/ours/tema_match_sjekk.csv logs/tema_match_sjekk.csv logs/tema_match_sjekk.csv; else cp /tmp/ours/tema_match_sjekk.csv logs/; fi
+            fi
+            git add logs/verden_overskrifter.json logs/verden_state.json logs/tema_match_sjekk.csv
+            git diff --cached --quiet && { echo "ingen endring"; exit 0; }
+            git -c user.name=GrokBot -c user.email=bot@box commit -q -m "Verden nå: overskrifter $(date '+%F %H:%M') [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          echo "::error::kunne ikke pushe overskriftene"; exit 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

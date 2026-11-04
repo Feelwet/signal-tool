@@ -592,8 +592,9 @@ def run(fast: bool = False) -> dict:
     snap["norgesbank_press"] = nb.get("press", [])
     try:   # «Verden nå» (03.11): titler + lenker siste døgn (GDELT DOC, Newsweb, Norges Bank/ECB/Fed RSS), ingen artikkeltekst
         from . import verden
-        snap["verden"], status["Verden nå (overskrifter)"] = verden.collect(nw, nb.get("press") if nb else None)
-        verden.save(snap["verden"])
+        vst = verden.load_state()   # 04.11: samme tilstand som timesjobben (bare nye GKG-filer hentes)
+        snap["verden"], status["Verden nå (overskrifter)"] = verden.collect(nw, nb.get("press") if nb else None, state=vst)
+        verden.save(snap["verden"]); verden.save_state(vst)
     except Exception as ex:
         log.warning("verden nå failed: %s", ex)
         status["Verden nå (overskrifter)"] = f"FAILED: {_err(ex)}"

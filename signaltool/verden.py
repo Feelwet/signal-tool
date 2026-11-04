@@ -147,7 +147,8 @@ def gdelt_query() -> str:
     return "(" + " OR ".join(f'"{k}"' if " " in k else k for k in kw) + ") sourcelang:english"
 
 
-GDELT_WAITS = (10, 30, 60)   # pause før forsøk 2, 3, 4 (GDELT: maks 1 kall / 5 s; etter 429 må det gå lenger tid)
+GDELT_WAITS = (10, 20, 40, 80, 160)   # 04.11: dobbel ventetid etter hver 429/feil, maks ~3 min (GDELT: maks 1 kall / 5 s)
+GDELT_STATS = {"429": 0}   # antall 429-svar i denne kjøringen (logges i kilder_status)
 
 
 def _gdelt_doc(sleep=None) -> list[dict]:
@@ -168,13 +169,32 @@ def _gdelt_doc(sleep=None) -> list[dict]:
             if r.status_code == 200 and r.text.lstrip().startswith("{"):
                 return [{"tittel": a.get("title"), "url": a.get("url"), "kilde": "GDELT", "domene": a.get("domain") or "",
                          "publisert": _parse_ts(a.get("seendate"))} for a in r.json().get("articles") or []]
+            if r.status_code == 429:
+                GDELT_STATS["429"] += 1
             err = f"HTTP {r.status_code}: {r.text.strip()[:60]}"
         except (requests.RequestException, ValueError) as ex:
             err = str(ex)[:80]
     raise RuntimeError(f"GDELT DOC etter {len(GDELT_WAITS) + 1} forsøk: {err}")
 
 
-def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES) -> list[dict]:
+GKG_STEP = timedelta(minutes=15)
+
+
+def gkg_file_times(t0: datetime, after: datetime | None, files: int = GDELT_GKG_FILES) -> list[datetime]:
+    """Hvilke GKG-filer som hentes. Uten tidligere henting: `files` filer spredt over siste døgn (hver 3. time).
+    Med `after` (siste fil vi allerede har): bare 15-minuttersfilene etter den, nyeste først, maks `files` stk."""
+    if after is None or t0 - after > timedelta(hours=WINDOW_H):
+        return [t0 - timedelta(hours=3 * k) for k in range(files)]
+    out, ts = [], t0
+    while ts > after and len(out) < files:
+        out.append(ts); ts -= GKG_STEP
+    return out
+
+
+GKG_LAST_FILE = {"ts": None}   # nyeste GKG-fil lest i denne kjøringen (lagres i tilstanden)
+
+
+def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES, after: datetime | None = None) -> list[dict]:
     """Reserve: GDELT 2.0 GKG-filer (data.gdeltproject.org, åpne data uten kallgrense). Bare <PAGE_TITLE>, URL, domene, tid.
     Filene spres over siste døgn (hver 3. time fra siste oppdatering)."""
     import io, zipfile
@@ -184,14 +204,18 @@ def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES) -> lis
     if not m:
         raise RuntimeError("GDELT GKG: fant ikke siste fil")
     t0 = datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
-    out = []
-    for k in range(files):
-        ts = t0 - timedelta(hours=3 * k)
+    out, read = [], 0
+    times = gkg_file_times(t0, after, files)
+    if not times:
+        GKG_LAST_FILE["ts"] = t0
+        return []   # ingen nye filer siden forrige henting
+    for ts in times:
         url = f"https://data.gdeltproject.org/gdeltv2/{ts:%Y%m%d%H%M%S}.gkg.csv.zip"
         try:
             z = zipfile.ZipFile(io.BytesIO(http.get(url, timeout=60, retries=2).content))
         except Exception:
             continue
+        read += 1
         with z.open(z.namelist()[0]) as f:
             for line in io.TextIOWrapper(f, encoding="utf-8", errors="replace"):
                 c = line.rstrip("\n").split("\t")
@@ -203,8 +227,9 @@ def _gdelt_gkg(now: datetime | None = None, files: int = GDELT_GKG_FILES) -> lis
                 from html import unescape
                 out.append({"tittel": unescape(tm.group(1)).strip(), "url": c[4], "kilde": "GDELT", "domene": c[3],
                             "publisert": _parse_ts(c[1][:8] + "T" + c[1][8:] + "Z")})
-    if not out:
+    if not read:
         raise RuntimeError("GDELT GKG: ingen filer lest")
+    GKG_LAST_FILE["ts"] = t0
     return out
 
 
@@ -212,15 +237,18 @@ GDELT_MODE = {"siste": ""}
 ALL_MATCHES: list[dict] = []   # siste collect(): alle saker med nøkkelordtreff før MAX_PER_TEMA-kuttet
 
 
-def _gdelt() -> list[dict]:
-    """DOC-API-et først (med pauser og nye forsøk); gir det fortsatt 429, brukes GKG-filene (samme kilde, åpne data)."""
+def _gdelt(after: datetime | None = None, doc=None, gkg=None) -> list[dict]:
+    """04.11 (brukeren): GKG-filene (åpne 15-minuttersfiler, ingen kallgrense) først, bare nye filer siden forrige henting.
+    DOC-API-et (ett samlet søk, dobbel ventetid ved 429) brukes bare hvis GKG feiler. Feiler begge, hoppes GDELT over
+    denne gangen (collect logger det i kilder_status; jobben feiler ikke)."""
+    import logging
+    doc, gkg = doc or _gdelt_doc, gkg or (lambda: _gdelt_gkg(after=after))
     try:
-        got = _gdelt_doc(); GDELT_MODE["siste"] = "DOC API"
+        got = gkg(); GDELT_MODE["siste"] = "GKG-filer" + (" (nye siden forrige henting)" if after else "")
         return got
     except Exception as ex:
-        import logging
-        logging.getLogger(__name__).warning("verden: %s – bruker GDELT GKG-filer", ex)
-    got = _gdelt_gkg(); GDELT_MODE["siste"] = "GKG-filer (DOC API ga 429)"
+        logging.getLogger(__name__).warning("verden: %s – prøver GDELT DOC API", ex)
+    got = doc(); GDELT_MODE["siste"] = "DOC API (GKG feilet)"
     return got
 
 
@@ -238,26 +266,57 @@ def _rss(name: str, url: str) -> list[dict]:
     return out
 
 
-def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=None) -> tuple[dict, str]:
-    """Samle siste døgns titler/lenker. `fetch` (tester) erstatter nettkall: dict kilde -> callable."""
+STATE = LOGS / "verden_state.json"
+
+
+def load_state(path: Path | None = None) -> dict:
+    path = path or STATE
+    try:
+        s = json.loads(path.read_text())
+        return s if isinstance(s, dict) else {}
+    except Exception:
+        return {}
+
+
+def save_state(state: dict, path: Path | None = None) -> None:
+    path = path or STATE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=0))
+
+
+def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=None, state: dict | None = None) -> tuple[dict, str]:
+    """Samle siste døgns titler/lenker. `fetch` (tester) erstatter nettkall: dict kilde -> callable.
+    `state` (04.11, timesjobben): saker fra tidligere hentinger innenfor vinduet slås sammen med de nye, så bare nye
+    GKG-filer må hentes. Oppdateres på plass (saker + sist hentede GKG-fil); lagres av den som kaller (save_state)."""
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     since = now - timedelta(hours=WINDOW_H)
-    fetch = fetch or {"GDELT": _gdelt, **{n: (lambda n=n, u=u: _rss(n, u)) for n, u in FEEDS.items()}}
+    after = _parse_ts((state or {}).get("gkg_siste_fil")) if state is not None else None
+    GKG_LAST_FILE["ts"] = None
+    fetch = fetch or {"GDELT": (lambda: _gdelt(after=after)), **{n: (lambda n=n, u=u: _rss(n, u)) for n, u in FEEDS.items()}}
     raw, st = [], {}
+    n429 = GDELT_STATS["429"]
     for name, fn in fetch.items():
         try:
-            got = fn(); raw += got; st[name] = f"ok ({len(got)})" + (f" via {GDELT_MODE['siste']}" if name == "GDELT" and GDELT_MODE["siste"] and fn is _gdelt else "")
-        except Exception as ex:   # én kilde feiler -> de andre brukes
-            st[name] = f"FAILED: {str(ex)[:120]}"
+            GDELT_MODE["siste"] = ""
+            got = fn(); raw += got; st[name] = f"ok ({len(got)})" + (f" via {GDELT_MODE['siste']}" if name == "GDELT" and GDELT_MODE["siste"] else "")
+        except Exception as ex:   # én kilde feiler -> de andre brukes (GDELT: hoppes over denne timen)
+            st[name] = ("hoppet over denne gangen: " if name == "GDELT" else "FAILED: ") + str(ex)[:120]
+    if GDELT_STATS["429"] - n429:
+        st["GDELT 429"] = str(GDELT_STATS["429"] - n429)
     if newsweb_df is not None and len(newsweb_df):
         nw = [{"tittel": r.get("title"), "url": r.get("url"), "kilde": "Oslo Børs Newsweb", "publisert": _parse_ts(r.get("published"))}
               for r in newsweb_df.to_dict("records")]
         raw += nw; st["Oslo Børs Newsweb"] = f"ok ({len(nw)} i 95d-uttrekket)"
     else:
-        st["Oslo Børs Newsweb"] = "ingen data"
+        st["Oslo Børs Newsweb"] = "ingen data" if not state else "fra forrige henting"
     if nb_press is not None:
         raw += [{"tittel": p.get("title"), "url": p.get("link"), "kilde": "Norges Bank", "publisert": _parse_ts(p.get("published"))} for p in nb_press]
         st["Norges Bank"] = f"ok ({len(nb_press)})"
+    if state is not None:
+        fresh = {(it.get("url") or "").strip() for it in raw}
+        old = [{**it, "publisert": _parse_ts(it.get("publisert"))} for it in state.get("saker") or []
+               if (it.get("url") or "").strip() not in fresh]
+        raw = raw + old   # nye først (vinner ved duplikat); gamle utenfor vinduet faller ut i filteret under
     since_cb = now - timedelta(hours=CB_WINDOW_H)
     items, seen = [], set()
     for it in raw:
@@ -285,6 +344,11 @@ def collect(newsweb_df=None, nb_press=None, now: datetime | None = None, fetch=N
     order = sorted(counts, key=lambda k: (-counts[k], k))
     # AnalBot 04.11: til temamatchingen har bestått kontrollen (27 av 30), sorteres sakene etter dato, nyeste først
     items = sorted(items, key=lambda it: (-_parse_ts(it["publisert"]).timestamp(), it["url"]))
+    if state is not None:
+        state["saker"] = [{k: it[k] for k in ("tittel", "url", "kilde", "domene", "publisert") if k in it} for it in items]
+        if GKG_LAST_FILE["ts"]:
+            state["gkg_siste_fil"] = _iso(GKG_LAST_FILE["ts"])
+        state["hentet"] = _iso(now)
     kept: dict[str, int] = {}
     ALL_MATCHES[:] = [it for it in items if it.get("matchede_ord")]   # alle treff logges, også de som ikke lagres (cap)
     capped = []
@@ -561,11 +625,33 @@ def html(snap: dict, text_path: Path | None = None, log_path: Path | None = None
     return _wrap(head, rows)
 
 
+def hourly() -> int:
+    """04.11: timesjobben (news_hourly.yml). Henter bare nye overskrifter, slår dem sammen med tilstanden og bygger siden på
+    nytt fra siste snapshot. Skriver aldri site_config/verden_naa.json (teksten skrives én gang i døgnet). Exit 0 også når
+    en kilde feiler (status står i kilder_status); 1 bare når det ikke finnes noe snapshot å bygge siden fra."""
+    from .config import DATA
+    state = load_state()
+    data, status = collect(state=state)
+    save(data); save_state(state)
+    print(f"verden nå (time): {status}")
+    print(f"GDELT 429 denne kjøringen: {GDELT_STATS['429']}")
+    snap_p = DATA / "snapshots" / "latest.json"
+    if not snap_p.exists():
+        print("verden nå (time): ingen snapshot – siden bygges ikke"); return 1
+    snap = json.loads(snap_p.read_text())
+    snap["verden"] = data
+    from . import site
+    print(site.build(snap))
+    return 0
+
+
 def main(argv=None) -> int:
     """python -m signaltool.verden [tekstfil] : kontroller teksten mot dagens hentede data (logs/verden_overskrifter.json).
     Skriver fjernede setninger (og logger dem i logs/oppsummering_avvik.csv). Exit 0 alltid; 1 bare ved ulesbar fil."""
     import sys
     a = (argv if argv is not None else sys.argv[1:])
+    if a[:1] == ["--time"]:
+        return hourly()
     p = Path(a[0]) if a else TEXT
     if not p.exists():
         print(f"verden nå: ingen tekstfil ({p}) – siden viser reserven"); return 0
