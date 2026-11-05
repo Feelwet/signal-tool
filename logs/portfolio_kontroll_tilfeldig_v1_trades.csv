@@ -49,3 +49,13 @@ kontroll_tilfeldig_v1,fill,2026-11-02-0043,2026-11-03,2026-11-02,KOG.OL,buy,tilf
 kontroll_tilfeldig_v1,order,2026-11-03-0048,2026-11-03,2026-11-03,BRG.OL,sell,rødt flagg,2026-11-03,,NOK,,,,,,,,,,,,,,,,
 kontroll_tilfeldig_v1,order,2026-11-03-0049,2026-11-03,2026-11-03,PPG,buy,tilfeldig seed=1053906989,2026-11-02,,USD,,,,,,,3.99,,Middels,2026-10-30,Basic Materials,watch,0.1864,S&P 500 (^GSPC),7541.39990234375,
 kontroll_tilfeldig_v1,fill,2026-11-03-0049,2026-11-04,2026-11-03,PPG,buy,tilfeldig seed=1053906989,2026-11-03,121.24,USD,9.280540466308594,44.226348,49762.28,99.52,,,3.99,,Middels,2026-10-30,Basic Materials,watch,0.1864,S&P 500 (^GSPC),7541.39990234375,7568.919921875
+kontroll_tilfeldig_v1,fill,2026-10-29-0004,2026-11-05,2026-10-29,PUBLI.OL,buy,tilfeldig seed=1394855593,2026-11-05,17.85,NOK,1.0,2748.364246,49058.3,98.12,,,1.0,,Middels,2026-10-23,Real Estate,watch,0.0777,OSEBX (OSEBX.OL),2137.72998046875,2091.77001953125
+kontroll_tilfeldig_v1,cancel,2026-10-29-0007,2026-11-05,2026-10-29,NKT.CO,buy,ingen kurs,2026-10-29,,DKK,,,,,,,1.12,,Høy,2026-10-23,Industrials,watch,0.0069,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,cancel,2026-10-29-0009,2026-11-05,2026-10-29,STB.OL,buy,ingen kurs,2026-10-29,,NOK,,,,,,,1.0,,Lav,2026-10-23,Financial Services,watch,0.0236,OSEBX (OSEBX.OL),2137.72998046875,
+kontroll_tilfeldig_v1,fill,2026-10-30-0027,2026-11-05,2026-10-30,FRO,buy,tilfeldig seed=219667133,2026-11-04,48.48,USD,9.296489715576172,108.839735,49053.4,98.11,,,1.08,theme_market,Høy,2026-10-23,Energy,hold,0.0972,S&P 500 (^GSPC),7720.39013671875,7688.6201171875
+kontroll_tilfeldig_v1,fill,2026-11-02-0042,2026-11-05,2026-11-02,GD,buy,tilfeldig seed=3531309816,2026-11-04,364.87,USD,9.296489715576172,14.460007,49048.49,98.1,,,1.71,,Lav,2026-10-30,Industrials,watch,0.1342,S&P 500 (^GSPC),7580.06982421875,7688.6201171875
+kontroll_tilfeldig_v1,fill,2026-11-03-0048,2026-11-05,2026-11-03,BRG.OL,sell,rødt flagg,2026-11-05,155.39999389648438,NOK,1.0,325.766696,50624.14,101.25,0.0,646.19,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-05-0057,2026-11-05,2026-11-05,PUBLI.OL,sell,rødt flagg,2026-11-05,,NOK,,,,,,,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-05-0058,2026-11-05,2026-11-05,MSFT,buy,tilfeldig seed=2000547696,2026-11-04,,USD,,,,,,,2.18,,Lav,2026-10-30,Technology,watch,0.0492,S&P 500 (^GSPC),7688.6201171875,
+kontroll_tilfeldig_v1,order,2026-11-05-0059,2026-11-05,2026-11-05,NCLH,buy,tilfeldig seed=2000547696,2026-11-04,,USD,,,,,,,5.01,pead,Høy,2026-10-30,Consumer Cyclical,hold,0.2359,S&P 500 (^GSPC),7688.6201171875,
+kontroll_tilfeldig_v1,order,2026-11-05-0060,2026-11-05,2026-11-05,BCPC,buy,tilfeldig seed=2000547696,2026-11-04,,USD,,,,,,,2.5,,,,Basic Materials,watch,0.0972,S&P 500 (^GSPC),7688.6201171875,

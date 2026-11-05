@@ -337,6 +337,13 @@
 },
 {
 "date": "2026-11-05",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport CF",
+"kind": "resultat"
+},
+{
+"date": "2026-11-05",
 "time": "09:30",
 "source": "ONS",
 "title": "Local sites and numbers of employees linked to companies involved in international trade in services by subnational areas of the UK: 2024",
@@ -585,6 +592,20 @@
 "time": "",
 "source": "Yahoo",
 "title": "Kvartalsrapport ZIM",
+"kind": "resultat"
+},
+{
+"date": "2026-11-20",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport FRO",
+"kind": "resultat"
+},
+{
+"date": "2026-11-20",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport FRO.OL",
 "kind": "resultat"
 },
 {
