@@ -1,6 +1,571 @@
 {
 "saker": [
 {
+"tittel": "South Korea to expand anti-piracy unit operations closer to Strait of Hormuz",
+"url": "https://www.asiaone.com:443/asia/south-korea-expand-anti-piracy-unit-operations-closer-strait-hormuz",
+"kilde": "GDELT",
+"domene": "asiaone.com",
+"publisert": "2026-11-05T08:30:00Z"
+},
+{
+"tittel": "Tehran burns Trump poster as Iran celebrates Republican midterm defeat",
+"url": "https://www.express.co.uk/news/world/2263418/tehran-burns-trump-poster-iran-celebrates-republican-midterm-defeat",
+"kilde": "GDELT",
+"domene": "express.co.uk",
+"publisert": "2026-11-05T08:30:00Z"
+},
+{
+"tittel": "Unpacking Wheat's Water Use For Drought Research",
+"url": "https://www.foodonline.com/doc/unpacking-wheat-s-water-use-for-drought-research-0001",
+"kilde": "GDELT",
+"domene": "foodonline.com",
+"publisert": "2026-11-05T08:30:00Z"
+},
+{
+"tittel": "Oil Prices Fall for Fourth Straight Day as Iran War Escalation Concerns Ease",
+"url": "https://www.kaok.com/2026/11/05/oil-prices-fall-for-fourth-straight-day-as-iran-war-escalation-concerns-ease/",
+"kilde": "GDELT",
+"domene": "kaok.com",
+"publisert": "2026-11-05T08:30:00Z"
+},
+{
+"tittel": "US stocks surge at midweek close as Democrats win Congress, oil prices plunge",
+"url": "https://aa.com.tr/en/americas/us-stocks-surge-at-midweek-close-as-democrats-win-congress-oil-prices-plunge/4112113",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "North Korea says it tested advanced air-defense missile system",
+"url": "https://aa.com.tr/en/asia-pacific/north-korea-says-it-tested-advanced-air-defense-missile-system/4112147",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Iran says 3 vessels catch fire in Strait of Hormuz",
+"url": "https://aa.com.tr/en/middle-east/iran-says-3-vessels-catch-fire-in-strait-of-hormuz/4112174",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Saudi Arabia extends $3B financing rollover to Pakistan",
+"url": "https://aa.com.tr/en/middle-east/saudi-arabia-extends-3b-financing-rollover-to-pakistan/4112243",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Israeli attacks kill 1 Palestinian, wound 4 others across Gaza",
+"url": "https://aa.com.tr/en/world/-israeli-attacks-kill-1-palestinian-wound-4-others-across-gaza/4112137",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Zelenskyy talks with US envoys ahead of trilateral summit on Ukraine war in Abu Dhabi",
+"url": "https://aa.com.tr/en/world/zelenskyy-talks-with-us-envoys-ahead-of-trilateral-summit-on-ukraine-war-in-abu-dhabi/4112267",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Defence Minister Oprea, U.S. Under Secretary Colby hold talks on Black Sea security",
+"url": "https://actmedia.eu/daily/defence-minister-oprea-u.s.-under-secretary-colby-hold-talks-on-black-sea-security/122491",
+"kilde": "GDELT",
+"domene": "actmedia.eu",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Nicusor Dan and Elbridge Colby discuss security in Black Sea region at Cotroceni Palace",
+"url": "https://actmedia.eu/daily/nicusor-dan-and-elbridge-colby-discuss-security-in-black-sea-region-at-cotroceni-palace/122490",
+"kilde": "GDELT",
+"domene": "actmedia.eu",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Gaza: Israel denies treatment and dignity to children left amputees by its genocide",
+"url": "https://countercurrents.org/2026/11/gaza-israel-denies-treatment-and-dignity-to-children-left-amputees-by-its-genocide/",
+"kilde": "GDELT",
+"domene": "countercurrents.org",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Air defense downs 105 of 128 enemy drones, strikes recorded at 18 locations – Air Force",
+"url": "https://en.interfax.com.ua/news/general/1231438.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Gold Prices Near Dh500 in UAE as Dollar Weakens Post US Midterms",
+"url": "https://gulfnews.com/business/gold-nears-dh500-as-dollar-slips-after-us-midterms-1.500736668",
+"kilde": "GDELT",
+"domene": "gulfnews.com",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Trump Weighs Iran Strikes or Deal After Midterm Loss as Oil Prices Drop to $93",
+"url": "https://gulfnews.com/world/mena/trump-weighs-iran-strikes-or-deal-after-midterm-loss-as-vance-urges-agreement-qatar-mediates-brent-oil-falls-to-93-1.500736556",
+"kilde": "GDELT",
+"domene": "gulfnews.com",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "US sanctions individuals, entities over alleged efforts to supply Iran with air defense systems",
+"url": "https://tribune.com.pk/story/2638773/us-sanctions-individuals-entities-over-alleged-efforts-to-supply-iran-with-air-defense-systems-1",
+"kilde": "GDELT",
+"domene": "tribune.com.pk",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Russia intensifies Ukraine strikes amid US efforts to broker peace talks",
+"url": "https://www.hindustantimes.com/world-news/russia-ukraine-war-strikes-intensify-putin-zelensky-trump-us-broker-peace-talks-latest-updates-101793857348051.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Muthoot Finance, Manappuram shares rise up to 4% as gold prices hit a two-week high",
+"url": "https://www.moneycontrol.com/news/business/markets/muthoot-finance-manappuram-shares-rise-up-to-4-as-gold-prices-hit-a-two-week-high-14071204.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Oil India, ONCG, other upstream companies' stocks fall up to 5% as crude oil prices decline for 4th day",
+"url": "https://www.moneycontrol.com/news/business/markets/oil-india-oncg-other-upstream-companies-stocks-fall-up-to-5-as-crude-oil-prices-decline-for-4th-day-14071120.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "NZX 50 hits record as oil prices slump after US midterms",
+"url": "https://www.nbr.co.nz/market-close/nzx-50-hits-record-as-oil-prices-slump-after-us-midterms/",
+"kilde": "GDELT",
+"domene": "nbr.co.nz",
+"publisert": "2026-11-05T08:15:00Z"
+},
+{
+"tittel": "Gold, silver ETFs rally up to 6% amid soft dollar and falling oil prices. Should investors enter?",
+"url": "https://economictimes.indiatimes.com/mf/mf-news/gold-silver-etfs-rally-up-to-6-amid-soft-dollar-and-falling-oil-prices-should-investors-enter/articleshow/135562136.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Gold price recovery gathers pace after US midterms but $4,200 remains a major hurdle",
+"url": "https://investinglive.com/commodities/gold-price-recovery-gathers-pace-after-us-midterms-but-4-200-remains-a-major-hurdle/",
+"kilde": "GDELT",
+"domene": "investinglive.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Oil prices plunge after US midterms as WTI crude faces a critical technical test",
+"url": "https://investinglive.com/commodities/oil-prices-plunge-after-us-midterms-as-wti-crude-faces-a-critical-technical-test/",
+"kilde": "GDELT",
+"domene": "investinglive.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "China warns Philippines to be cautious over South China Sea",
+"url": "https://nagalandpost.com/china-warns-philippines-to-be-cautious-over-south-china-sea/",
+"kilde": "GDELT",
+"domene": "nagalandpost.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "US midterm loss may push Trump tofast-track India trade deal: Experts",
+"url": "https://nagalandpost.com/us-midterm-loss-may-push-trump-tofast-track-india-trade-deal-experts/",
+"kilde": "GDELT",
+"domene": "nagalandpost.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Azeri Light oil prices fall below $100 at Ceyhan as global crude prices decline",
+"url": "https://www.azernews.az/oil_and_gas/266825.html",
+"kilde": "GDELT",
+"domene": "azernews.az",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Iran says two oil tankers hit naval mines in Strait of Hormuz",
+"url": "https://www.azernews.az/region/266830.html",
+"kilde": "GDELT",
+"domene": "azernews.az",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Isabel Schnabel: Navigating stormy waters: reflections on monetary policy",
+"url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261105_1~5e97d9d5a0.en.html",
+"kilde": "ECB",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Culture was, trade war, foolish war and class war | Number Theory",
+"url": "https://www.hindustantimes.com/editors-pick/culture-was-trade-war-foolish-war-and-class-war-number-theory-101793851531619.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Strong Rare Earth Recoveries | Company Announcement",
+"url": "https://www.investegate.co.uk/announcement/rns/cobra-resources--cobr/strong-rare-earth-recoveries/9859979",
+"kilde": "GDELT",
+"domene": "investegate.co.uk",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Zelensky Seeks Patriot Missiles and Security Guarantees",
+"url": "https://www.kyivpost.com/post/89180",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Kallas Urges US Congress to Back Ukraine, Pressure Russia",
+"url": "https://www.kyivpost.com/post/89181",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Ukrainian Drones Set Russian Oil Refinery Ablaze, Strike Wildberries Hub in Massive Overnight Raid",
+"url": "https://www.kyivpost.com/post/89194",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Iran's IRGC says two tankers, tugboat were ablaze in Hormuz Strait",
+"url": "https://www.middleeasteye.net/live-blog/live-blog-update/irans-irgc-says-two-tankers-tugboat-were-ablaze-hormuz-strait",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Shot in class: Gaza's children return to school under Israeli fire",
+"url": "https://www.middleeasteye.net/news/shot-class-gazas-children-return-school-under-israeli-fire",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Iran reports three vessels on fire in Strait of Hormuz",
+"url": "https://www.samaa.tv/2087359697-iran-reports-three-vessels-on-fire-in-strait-of-hormuz",
+"kilde": "GDELT",
+"domene": "samaa.tv",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "Oil prices fall for fourth day on US-Iran peace hopes",
+"url": "https://www.samaa.tv/2087359703-oil-falls-for-fourth-day-on-iran-war-de-escalation-hopes",
+"kilde": "GDELT",
+"domene": "samaa.tv",
+"publisert": "2026-11-05T08:00:00Z"
+},
+{
+"tittel": "South Korea to Deploy Patrol Aircraft and EOD Team Near Strait of Hormuz",
+"url": "https://kenya-today.com/report-south-korea-to-deploy-patrol-aircraft-and-eod-team-near-strait-of-hormuz-22101/",
+"kilde": "GDELT",
+"domene": "kenya-today.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Iran's IRGC Reports Two Oil Tankers Ablaze in Strait of Hormuz",
+"url": "https://sputnikglobe.com/20261105/irans-irgc-reports-two-oil-tankers-ablaze-in-strait-of-hormuz-1125015578.html",
+"kilde": "GDELT",
+"domene": "sputnikglobe.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Russia Continues Striking Ukraine's Logistics and Port Infrastructure – MoD",
+"url": "https://sputnikglobe.com/20261105/russia-continues-striking-ukraines-logistics-and-port-infrastructure--mod-1125015414.html",
+"kilde": "GDELT",
+"domene": "sputnikglobe.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "North Korea tests new air-defense missile system: state media",
+"url": "https://thefrontierpost.com/north-korea-tests-new-air-defense-missile-system-state-media/",
+"kilde": "GDELT",
+"domene": "thefrontierpost.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Zelensky hopes US election outcome will generate more help for Ukraine",
+"url": "https://thefrontierpost.com/zelensky-hopes-us-election-outcome-will-generate-more-help-for-ukraine/",
+"kilde": "GDELT",
+"domene": "thefrontierpost.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Iran's IRGC says two tankers and tugboat caught fire in Hormuz",
+"url": "https://www.businesstimes.com.sg/international/irans-irgc-says-two-tankers-and-tugboat-caught-fire-strait-hormuz",
+"kilde": "GDELT",
+"domene": "businesstimes.com.sg",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "US first lady to host Ukrainian, Russian officials at White House",
+"url": "https://www.channelnewsasia.com/world/melania-trump-host-ukrainian-russian-officials-white-house-6526616",
+"kilde": "GDELT",
+"domene": "channelnewsasia.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Two Oil Tankers, Tugboat Catch Fire In Strait Of Hormuz: Iran",
+"url": "https://www.deccanchronicle.com/west-asia/two-oil-tankers-tugboat-catch-fire-in-strait-of-hormuz-iran-2001909",
+"kilde": "GDELT",
+"domene": "deccanchronicle.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Referendum and local election review",
+"url": "https://www.foxbangor.com/news/election-results/referendum-and-local-election-review/article_a01c6609-c318-4948-8abc-8d3542572317.html",
+"kilde": "GDELT",
+"domene": "foxbangor.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Trade Minister Clarifies Rs. 280/kg Import Tax Applies Only to Jasmine and Sticky Rice Varieties",
+"url": "https://www.lankanewspapers.com/2026/11/05/trade-minister-clarifies-rs-280-kg-import-tax-applies-only-to-jasmine-and-sticky-rice-varieties",
+"kilde": "GDELT",
+"domene": "lankanewspapers.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Gold Price Today: Bullion Climbs Above $4,100",
+"url": "https://www.markets.com/news/gold-price-today-5-november-2026",
+"kilde": "GDELT",
+"domene": "markets.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Turkey plans railway along its eastern Black Sea coast",
+"url": "https://www.railwaygazette.com/turkey/2026/11/05/turkey-plans-railway-along-its-eastern-black-sea-coast/",
+"kilde": "GDELT",
+"domene": "railwaygazette.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "Crude oil prices fall on hopes of end to West Asia war after US midterms",
+"url": "https://www.thehindubusinessline.com/markets/commodities/crude-oil-prices-fall-as-us-midterm-results-raise-hopes-of-end-to-west-asia-war/article71668597.ece",
+"kilde": "GDELT",
+"domene": "thehindubusinessline.com",
+"publisert": "2026-11-05T07:45:00Z"
+},
+{
+"tittel": "After Saudi Arabia, Pakistan secures $4.3b loan rollover assurances from China and Kuwait",
+"url": "https://dunyanews.tv/en/Business/981327-after-saudi-arabia-pakistan-secures-43b-loan-rollover-assurances-fr",
+"kilde": "GDELT",
+"domene": "dunyanews.tv",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Dozens Still Missing After Russian Strike Hits Ukraine Aid Center - Jowhar News Leader",
+"url": "https://jowhar.com/dozens-still-missing-after-russian-strike-hits-ukraine-aid-center/",
+"kilde": "GDELT",
+"domene": "jowhar.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Zelensky Meets US Envoys Ahead of Upcoming Russia Peace Talks - Jowhar News Leader",
+"url": "https://jowhar.com/zelensky-meets-us-envoys-ahead-of-upcoming-russia-peace-talks/",
+"kilde": "GDELT",
+"domene": "jowhar.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Zelensky Meets With U.S. Envoys Ahead of Talks With Russia - Jowhar News Leader",
+"url": "https://jowhar.com/zelensky-meets-with-u-s-envoys-ahead-of-talks-with-russia/",
+"kilde": "GDELT",
+"domene": "jowhar.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Piero Cipollone: Shaping the future of money",
+"url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261105~6495a0df6f.en.html",
+"kilde": "ECB",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "U.S. solar PPA prices rose in Q3 as Section 232 tariffs began to take effect",
+"url": "https://www.finanznachrichten.de/nachrichten-2026-11/70040918-u-s-solar-ppa-prices-rose-in-q3-as-section-232-tariffs-began-to-take-effect-451.htm",
+"kilde": "GDELT",
+"domene": "finanznachrichten.de",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "N. Korea says test-fired new air defense missile system, long-range cruise missile",
+"url": "https://www.koreaherald.com:443/article/10926818",
+"kilde": "GDELT",
+"domene": "koreaherald.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Oil Prices Fall After Iran Signals Openness to Talks   – NaturalNews.com",
+"url": "https://www.naturalnews.com/2026-11-04-oil-cost-fall-iran-open-to-talks.html",
+"kilde": "GDELT",
+"domene": "naturalnews.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Markets surge on sharp decline in oil prices, hopes of resolution to US-Iran conflict",
+"url": "https://www.newindianexpress.com/business/2026/Nov/05/markets-surge-on-sharp-decline-in-oil-prices-hopes-of-resolution-to-us-iran-conflict",
+"kilde": "GDELT",
+"domene": "newindianexpress.com",
+"publisert": "2026-11-05T07:30:00Z"
+},
+{
+"tittel": "Rupee opens 29 paise higher, Brent crude falls 1 pc on hopes of Iran war exit",
+"url": "https://ianslive.in/rupee-opens-29-paise-higher-brent-crude-falls-1-pc-on-hopes-of-iran-war-exit--20261105100150",
+"kilde": "GDELT",
+"domene": "ianslive.in",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Urgency of a trade deal with US fades for India with midterm outcome: Report",
+"url": "https://ianslive.in/urgency-of-a-trade-deal-with-us-fades-for-india-with-midterm-outcome-report--20261105100454",
+"kilde": "GDELT",
+"domene": "ianslive.in",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Loss may push Trump to seek quick trade deal with India: Experts",
+"url": "https://kashmirreader.com/2026/11/05/loss-may-push-trump-to-seek-quick-trade-deal-with-india-experts/",
+"kilde": "GDELT",
+"domene": "kashmirreader.com",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Oil prices fall below $95 as Trump blames Iran war for midterm losses",
+"url": "https://pakobserver.net/oil-prices-fall-below-95-as-trump-blames-iran-war-for-midterm-losses/",
+"kilde": "GDELT",
+"domene": "pakobserver.net",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Bay resident flies 7,000km from Saudi Arabia to vote after overcoming lost ID hurdle",
+"url": "https://theherald.co.za/politics/2026-11-05-a-7-000km-trip-a-missing-id-and-a-vote/",
+"kilde": "GDELT",
+"domene": "theherald.co.za",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Iran exempts Indian ships, three others from Hormuz transit curbs",
+"url": "https://theshillongtimes.com/2026/11/05/iran-exempts-indian-ships-three-others-from-hormuz-transit-curbs/",
+"kilde": "GDELT",
+"domene": "theshillongtimes.com",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Markets surge on sharp decline in oil prices,  hopes of resolution to US-Iran conflict",
+"url": "https://www.dailyexcelsior.com/markets-surge-on-sharp-decline-in-oil-prices-hopes-of-resolution-to-us-iran-conflict/",
+"kilde": "GDELT",
+"domene": "dailyexcelsior.com",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Oil Prices Slide for Fourth Straight Day as Democratic Midterm Sweep Fuels Bets on Diplomatic End to Iran War",
+"url": "https://www.ibtimes.com.au/oil-prices-fall-us-iran-talks-election-1877940",
+"kilde": "GDELT",
+"domene": "ibtimes.com.au",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Iran burns poster of Donald Trump and allies as Tehran celebrates his midterms defeat",
+"url": "https://www.mirror.co.uk/news/world-news/trump-iran-poster-burn-midterms-37844701",
+"kilde": "GDELT",
+"domene": "mirror.co.uk",
+"publisert": "2026-11-05T07:15:00Z"
+},
+{
+"tittel": "Japan bond yields fall as oil prices slide on hopes of Iran war de-escalation",
+"url": "https://economictimes.indiatimes.com/markets/us-stocks/news/japan-bond-yields-fall-as-oil-prices-slide-on-hopes-of-iran-war-de-escalation/articleshow/135561285.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-05T07:00:00Z"
+},
+{
+"tittel": "Today Gold Rates in Pakistan – New Per Tola Gold Price – 5 November 2026",
+"url": "https://en.dailypakistan.com.pk/05-Nov-2026/today-gold-rates-in-pakistan-new-per-tola-gold-price-5-november-2026",
+"kilde": "GDELT",
+"domene": "dailypakistan.com.pk",
+"publisert": "2026-11-05T07:00:00Z"
+},
+{
+"tittel": "Israeli drone strike kills Palestinian, wounds another at displacement tent in Gaza",
+"url": "https://www.hurriyetdailynews.com/israeli-drone-strike-kills-palestinian-wounds-another-at-displacement-tent-in-gaza-229038",
+"kilde": "GDELT",
+"domene": "hurriyetdailynews.com",
+"publisert": "2026-11-05T07:00:00Z"
+},
+{
+"tittel": "'End Iran war, review Israel aid': Vance charts own course after midterm rout",
+"url": "https://www.rediff.com/news/report/end-iran-war-review-israel-aid-vance-charts-own-course-after-midterm-rout/20261105.htm",
+"kilde": "GDELT",
+"domene": "rediff.com",
+"publisert": "2026-11-05T07:00:00Z"
+},
+{
+"tittel": "Melania Trump to bring Russian, Ukrainian representatives to WH",
+"url": "https://www.wxii12.com/article/melania-trump-russian-ukrainian-representatives-white-house/74323144",
+"kilde": "GDELT",
+"domene": "wxii12.com",
+"publisert": "2026-11-05T07:00:00Z"
+},
+{
+"tittel": "DPRK test-fires new air-defense missile system: KCNA",
+"url": "http://europe.chinadaily.com.cn/a/202611/05/WS6aec1563e4b03ebf8519a7f8.html",
+"kilde": "GDELT",
+"domene": "chinadaily.com.cn",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Iran allows Indian ships Hormuz transit - News Today",
+"url": "https://newstodaynet.com/2026/11/05/iran-allows-indian-ships-hormuz-transit/",
+"kilde": "GDELT",
+"domene": "newstodaynet.com",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Saudi Arabia extends $3 billion loan rollover",
+"url": "https://tribune.com.pk/story/2638735/saudi-arabia-extends-3-billion-loan-rollover",
+"kilde": "GDELT",
+"domene": "tribune.com.pk",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Trafford property price cap for Your First Home revealed",
+"url": "https://www.messengernewspapers.co.uk/news/26697716.trafford-property-price-cap-first-home-revealed/",
+"kilde": "GDELT",
+"domene": "messengernewspapers.co.uk",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Turkey moves to formalise defence commitment to Saudi Arabia",
+"url": "https://www.middle-east-online.com/en/turkey-moves-formalise-defence-commitment-saudi-arabia",
+"kilde": "GDELT",
+"domene": "middle-east-online.com",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Trump Admits War In Iran, Oil Prices Led to Poll Loss; But Says Would 'Do It Again'",
+"url": "https://www.oneindia.com/international/trump-admits-war-in-iran-oil-prices-led-to-poll-loss-but-says-would-do-it-again-8251439.html",
+"kilde": "GDELT",
+"domene": "oneindia.com",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
+"tittel": "Indian Shares Surge As Oil Prices Slump",
+"url": "https://www.rttnews.com/story.aspx?Id=3709947",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-05T06:45:00Z"
+},
+{
 "tittel": "Israel denies Gaza child amputees treatment: rights monitor",
 "url": "http://thepeninsulaqatar.com/article/05/11/2026/israel-denies-gaza-child-amputees-treatment-rights-monitor",
 "kilde": "GDELT",
@@ -1387,13 +1952,6 @@
 "publisert": "2026-11-04T09:45:00Z"
 },
 {
-"tittel": "China warns Philippines to be cautious over South China Sea",
-"url": "https://nypost.com/2026/11/04/world-news/china-warns-philippines-to-be-cautious-over-south-china-sea/",
-"kilde": "GDELT",
-"domene": "nypost.com",
-"publisert": "2026-11-04T09:45:00Z"
-},
-{
 "tittel": "Iran exempts ships of four countries from Strait of Hormuz transit restrictions",
 "url": "https://www.azernews.az/region/266769.html",
 "kilde": "GDELT",
@@ -1450,132 +2008,6 @@
 "publisert": "2026-11-04T09:45:00Z"
 },
 {
-"tittel": "Iran's parliament speaker says US voters rejected war, Tehran backs this message",
-"url": "https://aa.com.tr/en/middle-east/iran-s-parliament-speaker-says-us-voters-rejected-war-tehran-backs-this-message/4110933",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Iran says US reply to Hormuz plan 'unconvincing'; Trump confirms strikes  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
-"url": "https://dominicanrepublicpost.com/iran-says-us-reply-to-hormuz-plan-unconvincing-trump-confirms-strikes/",
-"kilde": "GDELT",
-"domene": "dominicanrepublicpost.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "'We are a threat to Putin': the small Norwegian news outlet with half its staff on Russia's wanted list",
-"url": "https://www.aol.co.uk/articles/threat-putin-small-norwegian-news-060027000.html",
-"kilde": "GDELT",
-"domene": "aol.co.uk",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Gold Price Today: Mumbai, Delhi, Kolkata, Chennai",
-"url": "https://www.indiainfoline.com/news/gold/gold-price-today-mumbai-delhi-kolkata-chennai",
-"kilde": "GDELT",
-"domene": "indiainfoline.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Iran's IRGC says four tankers ablaze after hitting mines in Hormuz Strait",
-"url": "https://www.middleeasteye.net/live-blog/live-blog-update/irans-irgc-says-four-tankers-ablaze-after-hitting-mines-hormuz-strait",
-"kilde": "GDELT",
-"domene": "middleeasteye.net",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "'We are a threat to Putin': the small Norwegian news outlet with half its staff on Russia's wanted list | Norway",
-"url": "https://www.theguardian.com/world/2026/nov/04/small-norwegian-news-outlet-russia-wanted-list-barents-observer",
-"kilde": "GDELT",
-"domene": "theguardian.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "The fake news of Zelensky's \"secret prison\" in Kiev: the \"tortured\" 14-year-old, the ghost ambulance and the TikTok beautician who set Ukraine on fire",
-"url": "https://www.thevermilion.com/the-fake-news-of-zelenskys-secret-prison-in-kiev-the-tortured-14-year-old-the-ghost-ambulance-and-the-tiktok-beautician-who-set-ukraine-on-fire/article_22399/",
-"kilde": "GDELT",
-"domene": "thevermilion.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Stock markets rally in early trade on foreign fund inflows, easing crude oil prices",
-"url": "https://www.tribuneindia.com/news/business/stock-markets-rally-in-early-trade-on-foreign-fund-inflows-easing-crude-oil-prices/",
-"kilde": "GDELT",
-"domene": "tribuneindia.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Iran chokes Hormuz. Egypt's energy crisis could become Israel's problem",
-"url": "https://www.ynetnews.com/opinions-analysis/article/s1ef8goafg",
-"kilde": "GDELT",
-"domene": "ynetnews.com",
-"publisert": "2026-11-04T06:45:00Z"
-},
-{
-"tittel": "Kremlin responds to Melania Trump's Ukraine talks plan",
-"url": "http://www.europesun.com/news/279410152/kremlin-responds-to-melania-trump-ukraine-talks-plan",
-"kilde": "GDELT",
-"domene": "europesun.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "\"Massive win for NATO\": US lauds Greenland's approval of Arctic Security deal with Washington, Denmark",
-"url": "http://www.europesun.com/news/279410206/massive-win-for-nato-us-lauds-greenland-approval-of-arctic-security-deal-with-washington-denmark",
-"kilde": "GDELT",
-"domene": "europesun.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Why is the South China Sea a flashpoint for Asia",
-"url": "https://spacewar.com/why-is-the-south-china-sea-a-flashpoint-for-asia-999/",
-"kilde": "GDELT",
-"domene": "spacewar.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Oil prices edge down as investors await US midterm election results",
-"url": "https://www.business-standard.com/markets/commodities/oil-prices-edge-down-as-investors-await-us-midterm-election-results-126110400110_1.html",
-"kilde": "GDELT",
-"domene": "business-standard.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "In The Aftermath Of The Midterm Elections, How Soon Will The U.S. And Israel Start Bombing Iran?",
-"url": "https://www.investmentwatchblog.com/in-the-aftermath-of-the-midterm-elections-how-soon-will-the-u-s-and-israel-start-bombing-iran/",
-"kilde": "GDELT",
-"domene": "investmentwatchblog.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Ukraine Hits 30 Russian Military Targets in October",
-"url": "https://www.kyivpost.com/post/89059",
-"kilde": "GDELT",
-"domene": "kyivpost.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Qatari Mediators Back in Tehran; Trump Says Iran War \"Wrapped Up Soon\"   – NaturalNews.com",
-"url": "https://www.naturalnews.com/2026-11-03-trump-says-iran-war-wrapped-up-soon.html",
-"kilde": "GDELT",
-"domene": "naturalnews.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Vanushi Walters sees India free trade deal success hinging on first three years",
-"url": "https://www.rnz.co.nz/news/indonz/2336938/vanushi-walters-sees-india-free-trade-deal-success-hinging-on-first-three-years",
-"kilde": "GDELT",
-"domene": "rnz.co.nz",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
-"tittel": "Toronto to unveil statue of First World War flying ace William Barker",
-"url": "https://www.theglobeandmail.com/canada/article-first-world-war-flying-ace-william-barker-toronto-statue/",
-"kilde": "GDELT",
-"domene": "theglobeandmail.com",
-"publisert": "2026-11-04T03:45:00Z"
-},
-{
 "tittel": "ECB wage tracker suggests slightly higher wage growth in first three quarters of 2027 compared with the full year of 2026",
 "url": "https://www.ecb.europa.eu//press/pr/date/2026/html/ecb.pr261104~caf181d7ac.en.html",
 "kilde": "ECB",
@@ -1588,6 +2020,6 @@
 "publisert": "2026-11-02T09:30:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-05T01:00:00Z",
-"hentet": "2026-11-05T01:02:34Z"
+"gkg_siste_fil": "2026-11-05T08:30:00Z",
+"hentet": "2026-11-05T08:27:49Z"
 }
