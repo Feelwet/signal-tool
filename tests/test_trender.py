@@ -37,7 +37,7 @@ def test_navigation():
 
 
 def test_mobile_and_desktop_layout():
-    assert 'minmax(0,720px)' in T.CSS
+    assert 'minmax(0,620fr) minmax(0,356fr)' in T.CSS
     assert 'font-size:17px;line-height:26px' in T.CSS
     assert 'max-width:600px' in T.CSS
     assert 'data-label=' in T.html()

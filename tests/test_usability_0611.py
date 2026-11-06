@@ -16,9 +16,10 @@ class HiddenText(HTMLParser):
 def test_header_before_trend_jumps_and_companies():
     h=trender.html()
     assert h.index('<h1>Trender</h1>')<h.index('aria-label="Trender på siden"')
-    assert h.index('class="tr-company-jumps"')<h.index('class="tr-company"')
+    assert h.index('class="tr-explanation"')<h.index('class="tr-company"')
+    assert 'class="tr-index"' not in h and 'class="tr-company-jumps"' not in h
     assert 'min-height:44px' in trender.CSS
-    assert '200px minmax(0,720px)' in trender.CSS
+    assert 'minmax(0,620fr) minmax(0,356fr)' in trender.CSS
     assert 'font-size:17px;line-height:26px' in trender.CSS
 
 
@@ -27,7 +28,7 @@ def test_uncertainty_not_hidden_in_documentation():
     visible=' '.join(p.visible);hidden=' '.join(p.hidden)
     for text in ['Ikke testet for tidlighet','Mangelstatus: Mangler data','Andel ikke oppgitt','Hva svekker bildet?','avkastningsmåling er ikke startet']:
         assert text in visible
-    assert 'Bakgrunn' in hidden and 'Kildedetaljer' in visible
+    assert 'Bakgrunn' in hidden and 'Dokumentert bruk' in visible
     assert 'Eksponert for trenden (ikke testet for avkastning)' in visible
     assert 'Avhengig av' in visible and 'Avhengig av' not in hidden
     for trend in trender.load()['trends']:
@@ -73,3 +74,30 @@ def test_unranked_details_do_not_reintroduce_suppressed_returns():
     h=site.row_details({'unranked':True,'stats':{'ret_5d':.1,'ret_20d':.2}})
     assert '5d: –' in h and '20d: –' in h
     assert '+10,0' not in h and '+20,0' not in h
+
+
+def test_compact_trends_do_not_duplicate_claims_or_company_cards():
+    from html import escape
+    h=trender.html(); data=trender.load()
+    assert h.count('class="tr-company"')==sum(len(t['companies']) for t in data['trends'])
+    for t in data['trends']:
+        claims=t['background']+t['latest']+[c[k] for c in t['companies'] for k in ['exposure','limits']]
+        for c in claims:
+            assert h.count(escape(c['text'],quote=True))==1
+    assert 'Råvareavhengighet dokumenterer ikke økt fortjeneste hos selskapet.' in h
+    assert 'max-width:1000px' in trender.CSS and '@container(min-width:1000px)' in trender.CSS
+    assert 'grid-template-areas:"chain" "companies" "follow"' in trender.CSS
+    assert '.tr-chain{grid-template-columns:minmax(0,1fr)}' in trender.CSS
+    assert 'grid-template-columns:80px minmax(0,1fr)' in trender.CSS
+
+
+def test_compact_trends_have_progressive_choices_and_old_anchor_targets():
+    h=trender.html()
+    assert h.count('aria-controls=')==3
+    for t in trender.load()['trends']:
+        assert f'href="#{t["id"]}"' in h
+        for i,c in enumerate(t['companies']):
+            assert h.count(f'id="{t["id"]}-selskap-{i}"')==1
+    assert 'p.hidden=p!==panel' in trender.JS
+    assert "addEventListener('popstate'" in trender.JS
+    assert 'localStorage' not in trender.JS and 'fetch(' not in trender.JS
