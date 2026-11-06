@@ -6,7 +6,8 @@ from pathlib import Path
 
 MIN_INDEX, MAX_INDEX = 8_000, 15_000_000      # bytes (ny kompakt forside ~15 kB)
 REQUIRED = {
-    "index.html": ["<nav", "Oversikt", "Temascore"],
+    "index.html": ["<nav", "Oversikt", "Temascore", "trender.html"],
+    "trender.html": ["Eksponert for trenden (ikke testet for avkastning)", "Ikke testet for tidlighet", "Mangelstatus: Mangler data"],
     "metode.html": ['id="datakvalitet"', 'id="kontroll"', "Kildestatus ved siste kjøring", 'id="aerlig"', "Ærlig status"],
     "kilder.html": ["metode.html"],
     "tickere.html": ["Tickere"],

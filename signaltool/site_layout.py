@@ -12,6 +12,7 @@ LOG = Path(__file__).resolve().parent.parent / "logs" / "source_status.jsonl"
 # (label, href | None, [(href, label)])
 NAV = [
     ("Oversikt", "index.html", []),
+    ("Trender", "trender.html", []),
     ("Aksjer", None, [("tickere.html", "Tickere"), ("sektorer.html", "Sektorer"), ("oslo.html", "Oslo")]),
     ("Signal-boka", "portefolje.html", []),
     ("Marked", None, [("makro.html", "Makro"), ("kalender.html", "Kalender")]),

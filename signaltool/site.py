@@ -10,6 +10,7 @@ from . import analyst as AN
 from . import theme_maps as TM
 from . import mstrip as MS
 from . import verden as VN
+from . import trender as TR
 from . import pwa as PWA
 from . import ux2 as UX2
 from . import tabbar as TB
@@ -455,7 +456,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     kd = PWA.kurs_date(snap)   # AnalBot 01.11: frakoblet-linja viser kursdato (fra data) + hentetid (fra build)
     gattr = (f' data-kd="{kd[8:10]}.{kd[5:7]}"' if kd else "") + (f' data-hent="{E(gen_short(snap["generated"]).replace(" ", " kl. ", 1))}"' if gen else "")
     active = {
-        "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
+        "Trender": "trender.html", "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html", "Om siden": "om.html",
     }
@@ -732,10 +733,10 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
-    PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
+    PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
     Q.FAILED_SECTIONS.clear()
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     (SITE / ".nojekyll").write_text("")
@@ -754,6 +755,7 @@ def build(snap: dict) -> Path:
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
     b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest"))
          + '<a class="ov-om" href="om.html" style="display:inline-flex;align-items:center;height:32px;font-size:13px;color:#94a3b8">Hva er dette? →</a>',   # UxBot 02.11   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
+         TR.teaser(),
          sec("Verden nå", VN.html, snap),   # UxBot/AnalBot 03.11: rett etter metalinja; stripa og nøkkeltallene under
          f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
@@ -782,6 +784,8 @@ def build(snap: dict) -> Path:
     if snap.get("verden"):
         (SITE / "data").mkdir(exist_ok=True)
         (SITE / "data" / "verden_overskrifter.json").write_text(json.dumps(snap["verden"], ensure_ascii=False, indent=1))
+
+    (SITE / "trender.html").write_text(page("Trender", TR.html(), 0, snap))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))

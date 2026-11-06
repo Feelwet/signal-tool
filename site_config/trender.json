@@ -1,0 +1,139 @@
+{
+  "reviewed_at": "2026-11-06T17:08:37+01:00",
+  "trends": [
+    {
+      "id": "magneter",
+      "title": "Sjeldne jordarter og permanentmagneter",
+      "first_seen": "2026-11-06T17:08:37+01:00",
+      "status": "Tidlig observasjon",
+      "background": [
+        {
+          "text": "Neodym, praseodym, dysprosium og terbium brukes i magneter til elbilmotorer og vindturbingeneratorer.",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "period": "Bakgrunnsrapport 2023",
+          "published": "2023-07"
+        }
+      ],
+      "latest": [
+        {
+          "text": "MP Materials opplyser at kvalifiseringen av magneter til GM er fullført. Selskapet omtaler leveranser og inntekter fra disse magnetene i fjerde kvartal som neste steg, ikke som et ferdig rapportert kvartalsresultat.",
+          "source": "https://investors.mpmaterials.com/investor-news/news-details/2026/MP-Materials-Reports-Third-Quarter-2026-Results/default.aspx",
+          "period": "Tredje kvartal 2026",
+          "published": "2026-11-05"
+        }
+      ],
+      "chain": [
+        {
+          "material": "Neodym / praseodym / dysprosium / terbium",
+          "component": "Permanentmagneter",
+          "industry": "Elbilmotorer og vindturbingeneratorer",
+          "sector": "Bilindustri og vindkraft",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "published": "2023-07",
+          "period": "Bakgrunnsrapport 2023",
+          "share": null
+        }
+      ],
+      "companies": [
+        {
+          "name": "MP Materials",
+          "ticker": "NYSE: MP",
+          "exposure": {
+            "text": "Selskapet driver utvinning og raffinering av sjeldne jordarter samt produksjon av metall, legeringer og magneter.",
+            "source": "https://investors.mpmaterials.com/investor-news/news-details/2026/MP-Materials-Reports-Third-Quarter-2026-Results/default.aspx",
+            "period": "Tredje kvartal 2026",
+            "published": "2026-11-05"
+          },
+          "growth": null,
+          "limits": {
+            "text": "Selskapet beskriver risiko knyttet til opptrapping av produksjon, etterspørsel, priser og offentlig finansiering.",
+            "source": "https://investors.mpmaterials.com/investor-news/news-details/2026/MP-Materials-Reports-Third-Quarter-2026-Results/default.aspx",
+            "period": "Tredje kvartal 2026",
+            "published": "2026-11-05"
+          }
+        }
+      ]
+    },
+    {
+      "id": "elektroblikk",
+      "title": "Elektroblikk og transformatorer",
+      "first_seen": "2026-11-06T17:08:37+01:00",
+      "status": "Tidlig observasjon",
+      "background": [
+        {
+          "text": "Elektroblikk er et bearbeidet materiale, ikke en egen råvare. DOE beskriver bruken i transformatorer til strømnettet og i elbilmotorer.",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "period": "Bakgrunnsrapport 2023",
+          "published": "2023-07"
+        }
+      ],
+      "latest": [
+        {
+          "text": "Cleveland-Cliffs beskriver en utvidelse av produksjonen av kornorientert elektroblikk ved Butler Works. Materialet brukes i transformatorer; utvidelsen er et prosjekt, ikke dokumentasjon på allerede realisert salgsvekst.",
+          "source": "https://www.clevelandcliffs.com/news/news-releases/detail/704/cleveland-cliffs-to-host-u-s-secretary-of-energy-chris",
+          "period": "Prosjektstatus oktober 2026",
+          "published": "2026-10-05"
+        }
+      ],
+      "chain": [
+        {
+          "material": "Elektroblikk (bearbeidet materiale)",
+          "component": "Transformatorkjerner og motorkjerner",
+          "industry": "Transformatorer og elektriske motorer",
+          "sector": "Strømnett og bilindustri",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "published": "2023-07",
+          "period": "Bakgrunnsrapport 2023",
+          "share": null
+        }
+      ],
+      "companies": [
+        {
+          "name": "Cleveland-Cliffs",
+          "ticker": "NYSE: CLF",
+          "exposure": {
+            "text": "Butler Works produserer kornorientert elektroblikk til transformatorer. Dette dokumenterer en leverandørkobling til strømnettet.",
+            "source": "https://www.clevelandcliffs.com/news/news-releases/detail/704/cleveland-cliffs-to-host-u-s-secretary-of-energy-chris",
+            "period": "Prosjektstatus oktober 2026",
+            "published": "2026-10-05"
+          },
+          "growth": null,
+          "limits": {
+            "text": "Utvidelsen er planlagt ferdigstilt senere. Meldingen dokumenterer ikke realisert inntekts- eller marginvekst fra prosjektet.",
+            "source": "https://www.clevelandcliffs.com/news/news-releases/detail/704/cleveland-cliffs-to-host-u-s-secretary-of-energy-chris",
+            "period": "Prosjektstatus oktober 2026",
+            "published": "2026-10-05"
+          }
+        }
+      ]
+    },
+    {
+      "id": "grafitt",
+      "title": "Grafitt og batterianoder",
+      "first_seen": "2026-11-06T17:08:37+01:00",
+      "status": "Tidlig observasjon",
+      "background": [
+        {
+          "text": "DOE beskriver naturlig grafitt som materiale til batterianoder og knytter batterimaterialer til elbiler og stasjonær energilagring.",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "period": "Bakgrunnsrapport 2023",
+          "published": "2023-07"
+        }
+      ],
+      "latest": [],
+      "chain": [
+        {
+          "material": "Naturlig grafitt",
+          "component": "Batterianoder",
+          "industry": "Batteriproduksjon",
+          "sector": "Elbiler og stasjonær energilagring",
+          "source": "https://www.energy.gov/sites/default/files/2023-07/doe-critical-material-assessment_07312023.pdf",
+          "published": "2023-07",
+          "period": "Bakgrunnsrapport 2023",
+          "share": null
+        }
+      ],
+      "companies": []
+    }
+  ]
+}
