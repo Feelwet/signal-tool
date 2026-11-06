@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-06T20:36:18+0100",
+ "hentet": "2026-11-06T20:58:19+0100",
  "dato": "2026-11-06",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (7768) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1699) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,7 +12,7 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 123
+   "antall": 126
   },
   {
    "tema": "conflict_defense",
@@ -40,7 +40,7 @@
   },
   {
    "tema": "elections_political",
-   "antall": 7
+   "antall": 8
   },
   {
    "tema": "sentralbanker",
@@ -56,6 +56,90 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Cornell faculty senate to release result of no-confidence vote",
+   "url": "https://abc13.com/story/cornell-faculty-senate-release-result-no-confidence-vote/20020301/",
+   "kilde": "GDELT",
+   "domene": "abc13.com",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "After EA, Saudi Arabia Reportedly Wants to Buy Unity",
+   "url": "https://gamerant.com/ea-owner-saudi-arabia-pif-buyout-unity/",
+   "kilde": "GDELT",
+   "domene": "gamerant.com",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Jewellers Report Brisk Dhanteras Sales As Gold Price Drop Lures Buyers; Volumes Seen Flat",
+   "url": "https://www.dailyexcelsior.com/jewellers-report-brisk-dhanteras-sales-as-gold-price-drop-lures-buyers-volumes-seen-flat/",
+   "kilde": "GDELT",
+   "domene": "dailyexcelsior.com",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Syria to Send Some Military Personnel to Saudi Arabia as Riyadh Keeps Grappling With the Houthis",
+   "url": "https://www.ibtimes.com/syria-military-advisers-saudi-arabia-houthi-conflict-3809517",
+   "kilde": "GDELT",
+   "domene": "ibtimes.com",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Cornell faculty votes on no-confidence resolution over sexual assault allegations",
+   "url": "https://www.kasu.org/public-safety-social-justice/2026-11-06/cornell-faculty-votes-on-no-confidence-resolution-over-sexual-assault-allegations",
+   "kilde": "GDELT",
+   "domene": "kasu.org",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Syria Sends Military Advisers to Saudi Arabia Amid Houthi Attacks",
+   "url": "https://www.khaama.com/syria-military-advisers-trainers-saudi-arabia/",
+   "kilde": "GDELT",
+   "domene": "khaama.com",
+   "publisert": "2026-11-06T20:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
   {
    "tittel": "Saudi Arabia inks first defense 'cooperation' agreement with Syria's new leadership",
    "url": "https://breakingdefense.com/2026/11/saudi-arabia-inks-first-defense-cooperation-agreement-with-syrias-new-leadership/",
@@ -239,20 +323,6 @@
    ],
    "matchede_ord": [
     "trade war"
-   ]
-  },
-  {
-   "tittel": "Cornell faculty senate to release result of no-confidence vote",
-   "url": "https://abc11.com/story/cornell-faculty-senate-release-result-no-confidence-vote/20020301/",
-   "kilde": "GDELT",
-   "domene": "abc11.com",
-   "publisert": "2026-11-06T19:15:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
    ]
   },
   {
@@ -515,34 +585,6 @@
    ]
   },
   {
-   "tittel": "Baystreet.ca - Wall Street Banks Raise Oil Price Forecasts as Supply Fears Deepen",
-   "url": "https://baystreet.ca/articles/commodities/124968/Wall-Street-Banks-Raise-Oil-Price-Forecasts-as-Supply-Fears-Deepen",
-   "kilde": "GDELT",
-   "domene": "baystreet.ca",
-   "publisert": "2026-11-06T18:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Baystreet.ca - Chevron Posts Strong Financial Results As Oil Prices Surge",
-   "url": "https://baystreet.ca/articles/commodities/124979/Chevron-Posts-Strong-Financial-Results-As-Oil-Prices-Surge",
-   "kilde": "GDELT",
-   "domene": "baystreet.ca",
-   "publisert": "2026-11-06T18:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
    "tittel": "US presses China to honor Busan trade truce as rare earth shipments fall short.",
    "url": "https://investinglive.com/news/us-presses-china-to-honor-busan-trade-truce-as-rare-earth-shipments-fall-short/",
    "kilde": "GDELT",
@@ -554,22 +596,6 @@
    ],
    "matchede_ord": [
     "rare earth"
-   ]
-  },
-  {
-   "tittel": "Two Oil Tankers, Tugboat Catch Fire in Strait of Hormuz; Iran Reports Mine Strike",
-   "url": "https://voiceofvienna.org/two-oil-tankers-tugboat-catch-fire-in-strait-of-hormuz-iran-reports-mine-strike/",
-   "kilde": "GDELT",
-   "domene": "voiceofvienna.org",
-   "publisert": "2026-11-06T18:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
    ]
   },
   {
@@ -1050,20 +1076,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Jewellers report brisk Dhanteras sales as gold price drop lures buyers; volumes seen flat",
-   "url": "https://economictimes.indiatimes.com/industry/cons-products/fashion-/-cosmetics-/-jewellery/jewellers-report-brisk-dhanteras-sales-as-gold-price-drop-lures-buyers-volumes-seen-flat/articleshow/135612350.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-06T16:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {

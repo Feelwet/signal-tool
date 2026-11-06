@@ -1,6 +1,48 @@
 {
 "saker": [
 {
+"tittel": "Cornell faculty senate to release result of no-confidence vote",
+"url": "https://abc13.com/story/cornell-faculty-senate-release-result-no-confidence-vote/20020301/",
+"kilde": "GDELT",
+"domene": "abc13.com",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
+"tittel": "After EA, Saudi Arabia Reportedly Wants to Buy Unity",
+"url": "https://gamerant.com/ea-owner-saudi-arabia-pif-buyout-unity/",
+"kilde": "GDELT",
+"domene": "gamerant.com",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
+"tittel": "Jewellers Report Brisk Dhanteras Sales As Gold Price Drop Lures Buyers; Volumes Seen Flat",
+"url": "https://www.dailyexcelsior.com/jewellers-report-brisk-dhanteras-sales-as-gold-price-drop-lures-buyers-volumes-seen-flat/",
+"kilde": "GDELT",
+"domene": "dailyexcelsior.com",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
+"tittel": "Syria to Send Some Military Personnel to Saudi Arabia as Riyadh Keeps Grappling With the Houthis",
+"url": "https://www.ibtimes.com/syria-military-advisers-saudi-arabia-houthi-conflict-3809517",
+"kilde": "GDELT",
+"domene": "ibtimes.com",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
+"tittel": "Cornell faculty votes on no-confidence resolution over sexual assault allegations",
+"url": "https://www.kasu.org/public-safety-social-justice/2026-11-06/cornell-faculty-votes-on-no-confidence-resolution-over-sexual-assault-allegations",
+"kilde": "GDELT",
+"domene": "kasu.org",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
+"tittel": "Syria Sends Military Advisers to Saudi Arabia Amid Houthi Attacks",
+"url": "https://www.khaama.com/syria-military-advisers-trainers-saudi-arabia/",
+"kilde": "GDELT",
+"domene": "khaama.com",
+"publisert": "2026-11-06T20:00:00Z"
+},
+{
 "tittel": "Saudi Arabia inks first defense 'cooperation' agreement with Syria's new leadership",
 "url": "https://breakingdefense.com/2026/11/saudi-arabia-inks-first-defense-cooperation-agreement-with-syrias-new-leadership/",
 "kilde": "GDELT",
@@ -90,13 +132,6 @@
 "kilde": "GDELT",
 "domene": "theartnewspaper.com",
 "publisert": "2026-11-06T19:30:00Z"
-},
-{
-"tittel": "Cornell faculty senate to release result of no-confidence vote",
-"url": "https://abc11.com/story/cornell-faculty-senate-release-result-no-confidence-vote/20020301/",
-"kilde": "GDELT",
-"domene": "abc11.com",
-"publisert": "2026-11-06T19:15:00Z"
 },
 {
 "tittel": "Syria aids Saudi Arabia with military advice and training amid Houthi attacks, sources say",
@@ -649,13 +684,6 @@
 "url": "https://drudge.com/news/295396/russia-supply-iran-helicopter",
 "kilde": "GDELT",
 "domene": "drudge.com",
-"publisert": "2026-11-06T16:00:00Z"
-},
-{
-"tittel": "Jewellers report brisk Dhanteras sales as gold price drop lures buyers; volumes seen flat",
-"url": "https://economictimes.indiatimes.com/industry/cons-products/fashion-/-cosmetics-/-jewellery/jewellers-report-brisk-dhanteras-sales-as-gold-price-drop-lures-buyers-volumes-seen-flat/articleshow/135612350.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
 "publisert": "2026-11-06T16:00:00Z"
 },
 {
@@ -2396,6 +2424,6 @@
 "publisert": "2026-11-04T00:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-06T19:45:00Z",
-"hentet": "2026-11-06T19:36:18Z"
+"gkg_siste_fil": "2026-11-06T20:00:00Z",
+"hentet": "2026-11-06T19:58:19Z"
 }
