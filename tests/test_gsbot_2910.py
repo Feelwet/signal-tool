@@ -67,7 +67,8 @@ def test_chip_css_pc_only():
 
 def test_score_muted_value_unchanged():
     m, n = S.score_badge(4.0, 4, 2, muted=True), S.score_badge(4.0, 4, 2)
-    assert re.sub(r"<[^>]+>", "", m) == re.sub(r"<[^>]+>", "", n) == "4.00"   # sortering leser textContent -> samme tall
+    assert re.match(r"[0-9.]+", re.sub(r"<[^>]+>", "", m)).group() == re.sub(r"<[^>]+>", "", n) == "4.00"   # sortering bruker parseFloat(textContent); synlig usikkerhet endrer ikke tallet
+    assert '<span class="score-note">Rangering, ikke testet</span>' in m
     assert 'class="score mu"' in m and 'title="Rangering, ikke testet"' in m and "hot" not in m
     assert n == '<span class="score hot">4.00</span>'   # tema-poeng (ikke dempet) uendret
     assert ".score.mu .sv{font-size:14px" in S.SCORE_CSS and "color:#94a3b8" in S.SCORE_CSS

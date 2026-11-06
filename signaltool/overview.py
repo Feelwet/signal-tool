@@ -159,7 +159,7 @@ def two_col_html(snap: dict) -> str:
     tk = sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])[:5]
     from . import site_risk as RK
     li = "".join(f'<li><span>{NM.cell(e["ticker"], "ticker/" + _slug(e["ticker"]) + ".html", e.get("name"))} '
-                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="sc-mu" title="Rangering, ikke testet">{_nb(e["score"], 1)} p</span></li>' for e in tk)
+                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="sc-mu" title="Rangering, ikke testet">{_nb(e["score"], 1)} p<span class="score-note">Rangering, ikke testet</span></span></li>' for e in tk)
     from .site import score_info
     left = (f'<div class="card"><h2>Kandidater {score_info()}</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')

@@ -48,7 +48,7 @@ def test_overview_themes_muted_one_info():
 
 def test_overview_candidates_muted():
     h = OV.two_col_html(_snap())
-    assert '<span class="sc-mu" title="Rangering, ikke testet">4,0 p</span>' in h and h.split("</h2>")[0].count("sc-i") == 1
+    assert '<span class="sc-mu" title="Rangering, ikke testet">4,0 p<span class="score-note">Rangering, ikke testet</span></span>' in h and h.split("</h2>")[0].count("sc-i") == 1
 
 
 # 4. Evidensmerker

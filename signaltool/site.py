@@ -11,6 +11,7 @@ from . import theme_maps as TM
 from . import mstrip as MS
 from . import verden as VN
 from . import trender as TR
+from . import usability as US
 from . import pwa as PWA
 from . import ux2 as UX2
 from . import tabbar as TB
@@ -354,7 +355,7 @@ SCORE_CSS = (".score.mu{background:rgba(148,163,184,.08);color:#94a3b8;border-co
 def score_badge(s, hi=2.0, mid=1.0, muted=False):
     """Poengboks. Dempet (grå #94a3b8, tall 14 px) til poengtesten består; tallet og sorteringen er uendret."""
     if muted:
-        return f'<span class="score mu" title="{SCORE_TIP}"><span class="sv">{s:.2f}</span></span>'
+        return f'<span class="score mu" title="{SCORE_TIP}"><span class="sv">{s:.2f}</span><span class="score-note">{SCORE_TIP}</span></span>'
     cls = "hot" if s >= hi else "warm" if s >= mid else ""
     return f'<span class="score {cls}">{s:.2f}</span>'
 
@@ -580,6 +581,15 @@ def frz_text(d: str) -> str:
     return f"Lista er fryst fra {d[8:10]}.{d[5:7]} fordi Yahoo-data feilet i dag. Tallene oppdateres når kilden svarer igjen."
 
 
+def row_details(e):
+    st = {} if e.get('unranked') else (e.get('stats') or {})
+    fmt = lambda x: SN.pct(x) if x is not None else '–'
+    since = re.sub(r'^<td[^>]*>', '<div>', SN.cell(e.get('_since'), _cur(e))).replace('</td>', '</div>')
+    return ('<details class="ticker-details"><summary>Detaljer</summary>'
+            f'<p>5d: {E(fmt(st.get("ret_5d")))}<br>20d: {E(fmt(st.get("ret_20d")))}</p>'
+            '<p>Dato registrert og inngangskurs</p>' + since + '</details>')
+
+
 def ticker_row(e, pre=""):
     st = e.get("stats") or {}
     an = AN.tag_html(e.get("_analyst"), st.get("close"))
@@ -592,7 +602,7 @@ def ticker_row(e, pre=""):
     pts = chips_html([_pl(k, v) for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0] + ([] if unr else [an]))
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}</td>'
+    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
             f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c">{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -733,7 +743,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -756,7 +766,6 @@ def build(snap: dict) -> Path:
     b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest"))
          + '<a class="ov-om" href="om.html" style="display:inline-flex;align-items:center;height:32px;font-size:13px;color:#94a3b8">Hva er dette? →</a>',   # UxBot 02.11   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
          TR.teaser(),
-         sec("Verden nå", VN.html, snap),   # UxBot/AnalBot 03.11: rett etter metalinja; stripa og nøkkeltallene under
          f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
          MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
@@ -764,6 +773,7 @@ def build(snap: dict) -> Path:
          sec("Status", OV.strip_html, snap),
          sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
          sec("Kandidater og røde flagg", OV.two_col_html, snap),
+         sec("Verden nå", VN.html, snap),   # UxBot 06.11: under aksjekandidatene
          '<div class="ov-low2">' + sec("Endringer og varsler", OV.changes_alerts_html, snap, X.link) + sec("Kalender", OV.calendar_html, snap) + '</div>']
     # flyttet til Metode › Eksperimentelt (ingenting slettet)
     ex = []
@@ -785,7 +795,7 @@ def build(snap: dict) -> Path:
         (SITE / "data").mkdir(exist_ok=True)
         (SITE / "data" / "verden_overskrifter.json").write_text(json.dumps(snap["verden"], ensure_ascii=False, indent=1))
 
-    (SITE / "trender.html").write_text(page("Trender", TR.html(), 0, snap))
+    (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}), 0, snap))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
