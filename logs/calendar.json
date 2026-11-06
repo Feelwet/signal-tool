@@ -549,14 +549,14 @@
 "date": "2026-11-18",
 "time": "09:30",
 "source": "ONS",
-"title": "Business Register and Employment Survey (BRES): provisional results 2025 and revised results 2024 for Great Britain",
+"title": "Contributions to the 12-month rate of CPI(H) by import intensity: October 2026",
 "kind": "makro"
 },
 {
 "date": "2026-11-18",
 "time": "09:30",
 "source": "ONS",
-"title": "Contributions to the 12-month rate of CPI(H) by import intensity: October 2026",
+"title": "Business Register and Employment Survey (BRES): provisional results 2025 and revised results 2024 for Great Britain",
 "kind": "makro"
 },
 {
@@ -607,6 +607,20 @@
 "source": "Yahoo",
 "title": "Kvartalsrapport FRO.OL",
 "kind": "resultat"
+},
+{
+"date": "2026-11-20",
+"time": "07:00",
+"source": "ONS",
+"title": "Retail sales, Great Britain: October 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-20",
+"time": "07:00",
+"source": "ONS",
+"title": "Retail sales, Great Britain: October 2026 time series",
+"kind": "makro"
 },
 {
 "date": "2026-11-23",
