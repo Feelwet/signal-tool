@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-06T17:47:06+0100",
+ "hentet": "2026-11-06T19:22:25+0100",
  "dato": "2026-11-06",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (3265) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (9171) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,19 +12,19 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 97
+   "antall": 112
   },
   {
    "tema": "mideast_energy",
-   "antall": 96
+   "antall": 107
   },
   {
    "tema": "risk_off_haven",
-   "antall": 34
+   "antall": 36
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 19
+   "antall": 22
   },
   {
    "tema": "tariffs_trade",
@@ -32,7 +32,7 @@
   },
   {
    "tema": "rare_earths_semis",
-   "antall": 9
+   "antall": 11
   },
   {
    "tema": "food_agri",
@@ -40,22 +40,665 @@
   },
   {
    "tema": "elections_political",
-   "antall": 6
+   "antall": 7
   },
   {
    "tema": "sentralbanker",
    "antall": 6
   },
   {
-   "tema": "nordic_arctic",
-   "antall": 2
+   "tema": "sanctions_energy",
+   "antall": 3
   },
   {
-   "tema": "sanctions_energy",
+   "tema": "nordic_arctic",
    "antall": 2
   }
  ],
  "saker": [
+  {
+   "tittel": "Gulf oil flows drop as Strait of Hormuz shipping risks rise",
+   "url": "http://www.japanherald.com/news/279409887/gulf-oil-flows-drop-as-strait-of-hormuz-shipping-risks-rise",
+   "kilde": "GDELT",
+   "domene": "japanherald.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Shipping firms email Houthis to cross Red Sea safely, wait for 24 hours. This is why",
+   "url": "https://article.wn.com/view/2026/11/06/Shipping_firms_email_Houthis_to_cross_Red_Sea_safely_wait_fo/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "red sea",
+    "houthi"
+   ]
+  },
+  {
+   "tittel": "Zelensky: Ukraine may receive increased U.S. assistance following 'new political infrastructure'",
+   "url": "https://article.wn.com/view/2026/11/06/Zelensky_Ukraine_may_receive_increased_US_assistance_followi/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "Baystreet.ca - Wall Street Banks Raise Oil Price Forecasts as Supply Fears Deepen",
+   "url": "https://baystreet.ca/articles/commodities/124968/Wall-Street-Banks-Raise-Oil-Price-Forecasts-as-Supply-Fears-Deepen",
+   "kilde": "GDELT",
+   "domene": "baystreet.ca",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Baystreet.ca - Chevron Posts Strong Financial Results As Oil Prices Surge",
+   "url": "https://baystreet.ca/articles/commodities/124979/Chevron-Posts-Strong-Financial-Results-As-Oil-Prices-Surge",
+   "kilde": "GDELT",
+   "domene": "baystreet.ca",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "US presses China to honor Busan trade truce as rare earth shipments fall short.",
+   "url": "https://investinglive.com/news/us-presses-china-to-honor-busan-trade-truce-as-rare-earth-shipments-fall-short/",
+   "kilde": "GDELT",
+   "domene": "investinglive.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Two Oil Tankers, Tugboat Catch Fire in Strait of Hormuz; Iran Reports Mine Strike",
+   "url": "https://voiceofvienna.org/two-oil-tankers-tugboat-catch-fire-in-strait-of-hormuz-iran-reports-mine-strike/",
+   "kilde": "GDELT",
+   "domene": "voiceofvienna.org",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Trump meets Putin envoy, says Ukraine peace deal could come very soon",
+   "url": "https://www.business-standard.com/world-news/trump-meets-putin-envoy-says-ukraine-peace-deal-could-come-very-soon-126110602047_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Lufthansa Group crews to avoid overnight stays in Israel amid Iranian threat",
+   "url": "https://www.jpost.com/business-and-innovation/article-914070",
+   "kilde": "GDELT",
+   "domene": "jpost.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "israel"
+   ]
+  },
+  {
+   "tittel": "US South builds a rare earth supply chain - The Northern Miner",
+   "url": "https://www.northernminer.com/news/us-south-builds-a-rare-earth-supply-chain/1003897469/",
+   "kilde": "GDELT",
+   "domene": "northernminer.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia cuts December Asia oil prices to fresh 6-year low",
+   "url": "https://www.zawya.com/en/business/oil-gas/saudi-arabia-cuts-december-asia-oil-prices-to-fresh-6-year-low-2044829",
+   "kilde": "GDELT",
+   "domene": "zawya.com",
+   "publisert": "2026-11-06T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia",
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Gulf oil exports dip amid heightened Strait of Hormuz risks",
+   "url": "http://www.azerbaijannews.net/news/279409887/gulf-oil-exports-dip-amid-heightened-strait-of-hormuz-risks",
+   "kilde": "GDELT",
+   "domene": "azerbaijannews.net",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Cornell faculty senate to release result of no-confidence vote",
+   "url": "https://abcnews.com/US/cornell-faculty-senate-release-result-confidence-vote/story?id=137911777",
+   "kilde": "GDELT",
+   "domene": "abcnews.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Lower Crude Oil Prices Ease Pressure at Texas Gas Pumps",
+   "url": "https://b93.net/ixp/195/p/texas-gas-prices-1106/",
+   "kilde": "GDELT",
+   "domene": "b93.net",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Budanov to lead Ukrainian Delegation in talks with USA, Russia in Abu Dhabi next week – media",
+   "url": "https://en.interfax.com.ua/news/general/1232635.html",
+   "kilde": "GDELT",
+   "domene": "interfax.com.ua",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Sybiha: Ukraine takes meeting in Abu Dhabi seriously, expects corresponding stance from Russia",
+   "url": "https://en.interfax.com.ua/news/general/1232641.html",
+   "kilde": "GDELT",
+   "domene": "interfax.com.ua",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Medical source: Number of birth defects in newborns in Gaza rises since Israel's genocide - Shafaqna English",
+   "url": "https://en.shafaqna.com/489650/medical-source-number-of-birth-defects-in-newborns-in-gaza-rises-since-israels-genocide/",
+   "kilde": "GDELT",
+   "domene": "shafaqna.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Melania Trump 'Saved 800 People' in Russia and Ukraine",
+   "url": "https://radaronline.com/p/melania-trump-saved-800-people-russia-ukraine-advisor/",
+   "kilde": "GDELT",
+   "domene": "radaronline.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russia using its own version of Starlink for strikes on Ukraine, Kyiv says",
+   "url": "https://www.businessday.co.za/world/2026-11-06-russia-using-its-own-version-of-starlink-for-strikes-on-ukraine-kyiv-says/",
+   "kilde": "GDELT",
+   "domene": "businessday.co.za",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "EU must have role in Ukraine peace deal, Kallas warns Putin",
+   "url": "https://www.dailysabah.com/world/europe/eu-must-have-role-in-ukraine-peace-deal-kallas-warns-putin",
+   "kilde": "GDELT",
+   "domene": "dailysabah.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Diaspora Iranians continue to sympathize with Israel three years after Oct. 7",
+   "url": "https://www.heritagefl.com/story/2026/11/06/news/diaspora-iranians-continue-to-sympathize-with-israel-three-years-after-oct-7/24259.html",
+   "kilde": "GDELT",
+   "domene": "heritagefl.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "israel"
+   ]
+  },
+  {
+   "tittel": "Israeli soldier who lost leg in Gaza completes NYC Marathon",
+   "url": "https://www.heritagefl.com/story/2026/11/06/news/israeli-soldier-who-lost-leg-in-gaza-completes-nyc-marathon/24252.html",
+   "kilde": "GDELT",
+   "domene": "heritagefl.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia assures Pakistan of easier visa process for workers",
+   "url": "https://www.samaa.tv/2087359805-saudi-arabia-assures-pakistan-of-easier-visa-process-for-workers-pakistan-news",
+   "kilde": "GDELT",
+   "domene": "samaa.tv",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "First-time buyers face slim pickings as price caps bite across West Midlands",
+   "url": "https://www.thebusinessdesk.com/westmidlands/news/2119107-first-time-buyers-face-slim-pickings-as-price-caps-bite-across-west-midlands/",
+   "kilde": "GDELT",
+   "domene": "thebusinessdesk.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "Budget raises questions about defence spending targets after 2030",
+   "url": "https://www.wingsmagazine.com/budget-raises-questions-about-defence-spending-targets-after-2030/",
+   "kilde": "GDELT",
+   "domene": "wingsmagazine.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "defence spending"
+   ]
+  },
+  {
+   "tittel": "Syria sends military advisers to Saudi Arabia as Houthi attacks intensify, sources sa",
+   "url": "https://www.ynetnews.com/article/sya9ryoamg",
+   "kilde": "GDELT",
+   "domene": "ynetnews.com",
+   "publisert": "2026-11-06T18:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Trump's latest Ukraine offer may only tempt Putin to step up his war",
+   "url": "https://cyprusnews.eu/cnn-kosmos/trumps-latest-ukraine-offer-may-only-tempt-putin-to-step-up-his-war/",
+   "kilde": "GDELT",
+   "domene": "cyprusnews.eu",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "The Dnipro, the impregnable river and military frontier between Ukrainian and Russian forces: 'We're in a war of drone pilots' | International",
+   "url": "https://english.elpais.com/international/2026-11-06/the-dnipro-the-impregnable-river-and-military-frontier-between-ukrainian-and-russian-forces-were-in-a-war-of-drone-pilots.html",
+   "kilde": "GDELT",
+   "domene": "elpais.com",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Russians repel attack by Ukrainian ground-robots armed with RPGs, in futuristic assault (Ukraine Battlefield update, Day 1,716)",
+   "url": "https://euobserver.com/247493/russians-repel-attack-by-ukrainian-ground-robots-armed-with-rpgs-in-futuristic-assault-ukraine-battlefield-update-day-1716/",
+   "kilde": "GDELT",
+   "domene": "euobserver.com",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Trump vows 'beautiful' Russia deal, as EU agonises over which envoy to send to Ukraine peace talks – EUobserver",
+   "url": "https://euobserver.com/247519/trump-vows-beautiful-russia-deal-as-eu-agonises-over-which-envoy-to-send-to-ukraine-peace-talks/",
+   "kilde": "GDELT",
+   "domene": "euobserver.com",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Oil prices surge nearly 4% as fresh tanker attacks spark fears of global supply disruptions",
+   "url": "https://tert.am/en/news/2026/11/06/Oil%20prices/4289536",
+   "kilde": "GDELT",
+   "domene": "tert.am",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Häkkänen to Euronews: US political delays are holding up Patriot missiles for Ukraine",
+   "url": "https://www.helsinkitimes.fi/world-int/29461-haekkaenen-to-euronews-us-political-delays-are-holding-up-patriot-missiles-for-ukraine.html",
+   "kilde": "GDELT",
+   "domene": "helsinkitimes.fi",
+   "publisert": "2026-11-06T17:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Putin says it has no details of Trump's \"beautiful\" deal on Ukraine war",
+   "url": "https://www.newsweek.com/putin-says-he-has-no-details-of-trumps-beautiful-deal-on-ukraine-war-12677148",
+   "kilde": "GDELT",
+   "domene": "newsweek.com",
+   "publisert": "2026-11-06T17:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Russian opposition leader: release of political prisoners should be part of Ukraine ceasefire negotiations",
+   "url": "https://www.voanews.com/a/russian-voanews-interview-kara-murza/8219639.html",
+   "kilde": "GDELT",
+   "domene": "voanews.com",
+   "publisert": "2026-11-06T17:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Two Tankers in Strait of Hormuz on Fire, US MQ-1 Drone Destroyed",
+   "url": "https://sputnikglobe.com/20261106/two-tankers-in-strait-of-hormuz-on-fire-us-mq-1-drone-destroyed---irgc-1125026653.html",
+   "kilde": "GDELT",
+   "domene": "sputnikglobe.com",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Arab News | Saudi Arabia sets out AI principles for media, calls for disclosure of synthetic content",
+   "url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-sets-out-ai-principles-for-media-calls-for-disclosure-of-synthetic-content-3010195",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Trump teases 'big agreement' after meeting Putin envoy but not with Ukrainian officials",
+   "url": "https://www.independent.co.uk/news/world/americas/us-politics/trump-big-beautiful-agreement-putin-russia-ukraine-b3080217.html",
+   "kilde": "GDELT",
+   "domene": "independent.co.uk",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Ukrainian President Zelenskyy presses Western allies for clear postwar security guarantees",
+   "url": "https://www.independent.co.uk/news/world/europe/russia-donald-trump-united-states-kyiv-democrats-b3080389.html",
+   "kilde": "GDELT",
+   "domene": "independent.co.uk",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "zelenskyy"
+   ]
+  },
+  {
+   "tittel": "Why gold prices are surprisingly low",
+   "url": "https://www.klcc.org/npr-news/2026-11-06/why-gold-prices-are-surprisingly-low",
+   "kilde": "GDELT",
+   "domene": "klcc.org",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Iran Guards say two tankers caught fire in Hormuz",
+   "url": "https://www.thehindu.com/news/international/iran-guards-say-two-tankers-caught-fire-in-hormuz/article71675787.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-06T17:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "'I don't view it as a hit on me': Trump dismisses election humiliation as Ukraine faces another winter under Russian fire - London Business News",
+   "url": "https://londonlovesbusiness.com/i-dont-view-it-as-a-hit-on-me-trump-dismisses-election-humiliation-as-ukraine-faces-another-winter-under-russian-fire/",
+   "kilde": "GDELT",
+   "domene": "londonlovesbusiness.com",
+   "publisert": "2026-11-06T17:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Coca-Cola HBC's Russian operations could fall under Kremlin control",
+   "url": "https://www.foodmanufacture.co.uk/Article/2026/11/06/coca-cola-hbcs-russian-operations-could-fall-under-kremlin-control/",
+   "kilde": "GDELT",
+   "domene": "foodmanufacture.co.uk",
+   "publisert": "2026-11-06T17:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Jewellers report brisk Dhanteras sales as gold price drop lures buyers; volumes seen flat- Moneycontrol.com",
+   "url": "https://www.moneycontrol.com/news/india/jewellers-report-brisk-dhanteras-sales-as-gold-price-drop-lures-buyers-volumes-seen-flat-14073825.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-06T17:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Jewellery demand remains resilient for Q3 despite gold price surge",
+   "url": "https://www.thehindu.com/incoming/jewellery-demand-remains-resilient-for-q3-despite-gold-price-surge/article71675165.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-06T17:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
   {
    "tittel": "Gold prices edge higher amid anticipation of US interest rate trajectory",
    "url": "http://thepeninsulaqatar.com/article/06/11/2026/gold-prices-edge-higher-amid-anticipation-of-us-interest-rate-trajectory",
@@ -86,49 +729,6 @@
    ]
   },
   {
-   "tittel": "Gulf oil flows drop as Strait of Hormuz shipping risks rise",
-   "url": "http://www.cincinnatisun.com/news/279409887/gulf-oil-flows-drop-as-strait-of-hormuz-shipping-risks-rise",
-   "kilde": "GDELT",
-   "domene": "cincinnatisun.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Gulf oil exports dip amid heightened Strait of Hormuz risks",
-   "url": "http://www.myanmarnews.net/news/279409887/gulf-oil-exports-dip-amid-heightened-strait-of-hormuz-risks",
-   "kilde": "GDELT",
-   "domene": "myanmarnews.net",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Russia and Ukraine emergency apps hacked with fake nuclear alerts",
-   "url": "https://attackofthefanboy.com/news/russias-emergency-app-warned-33-regions-that-nuclear-warheads-were-in-the-air-and-the-whole-thing-was-a-hack/",
-   "kilde": "GDELT",
-   "domene": "attackofthefanboy.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Elections Alberta projects referendum cost at $84.3 million - DiscoverAirdrie.com - Local News, Weather, Sports, and Job Listings for Airdrie, Alberta, and the Rocky View County region.",
    "url": "https://discoverairdrie.com/articles/elections-alberta-projects-referendum-cost-at-843-million",
    "kilde": "GDELT",
@@ -144,35 +744,6 @@
    ]
   },
   {
-   "tittel": "Lower Crude Oil Prices Ease Pressure at Texas Gas Pumps",
-   "url": "https://kbat.com/ixp/195/p/texas-gas-prices-1106/",
-   "kilde": "GDELT",
-   "domene": "kbat.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Russia discusses supplying advanced missiles to Iran",
-   "url": "https://news.az/news/russia-discusses-supplying-advanced-missiles-to-iran",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "missile",
-    "russia"
-   ]
-  },
-  {
    "tittel": "India-U.S. Trade Deal Draft Is Ready, But Still There Are Few Gaps",
    "url": "https://thearabianpost.com/india-u-s-trade-deal-draft-is-ready-but-still-there-are-few-gaps/",
    "kilde": "GDELT",
@@ -184,21 +755,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "The UK, EU Spent Billions On Ukraine To Proxy-Fight Russia",
-   "url": "https://thearabianpost.com/the-uk-eu-spent-billions-on-ukraine-to-proxy-fight-russia/",
-   "kilde": "GDELT",
-   "domene": "thearabianpost.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -227,36 +783,6 @@
    ],
    "matchede_ord": [
     "gold price"
-   ]
-  },
-  {
-   "tittel": "Trump Says Ukraine Deal 'Very Close' After Meeting Putin Envoy",
-   "url": "https://www.hngn.com/articles/273723/20261106/trump-says-ukraine-deal-very-close-after-meeting-putin-envoy.htm",
-   "kilde": "GDELT",
-   "domene": "hngn.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Putin Seizes Japan Tobacco's Russian Assets; Tokyo Protests",
-   "url": "https://www.hngn.com/articles/273725/20261106/putin-seizes-japan-tobaccos-russian-assets-tokyo-protests.htm",
-   "kilde": "GDELT",
-   "domene": "hngn.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "putin"
    ]
   },
   {
@@ -305,20 +831,6 @@
    ]
   },
   {
-   "tittel": "Why gold prices are surprisingly low",
-   "url": "https://www.wmra.org/2026-11-06/why-gold-prices-are-surprisingly-low",
-   "kilde": "GDELT",
-   "domene": "wmra.org",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
-   ]
-  },
-  {
    "tittel": "Lula's election win dashes US hopes of quick access to Brazil's rare earths",
    "url": "https://kaieteurnewsonline.com/2026/11/06/lulas-election-win-dashes-us-hopes-of-quick-access-to-brazils-rare-earths/",
    "kilde": "GDELT",
@@ -360,21 +872,6 @@
    "matchede_ord": [
     "semiconductor",
     "taiwan"
-   ]
-  },
-  {
-   "tittel": "Ukrainian President Zelenskyy presses Western allies for clear postwar security guarantees",
-   "url": "https://www.butlereagle.com/20261106/ukrainian-president-zelenskyy-presses-western-allies-for-clear-postwar-security-guarantees/",
-   "kilde": "GDELT",
-   "domene": "butlereagle.com",
-   "publisert": "2026-11-06T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "zelenskyy"
    ]
   },
   {
@@ -432,80 +929,6 @@
    ],
    "matchede_ord": [
     "oil price"
-   ]
-  },
-  {
-   "tittel": "Russia using its own version of Starlink for strikes on Ukraine, Kyiv says",
-   "url": "https://www.timeslive.co.za/news/world/2026-11-06-russia-using-its-own-version-of-starlink-for-strikes-on-ukraine-kyiv-says/",
-   "kilde": "GDELT",
-   "domene": "timeslive.co.za",
-   "publisert": "2026-11-06T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Lufthansa Group crews to avoid overnight stays in Israel amid Iranian threat",
-   "url": "http://www.jpost.com/business-and-innovation/article-914070",
-   "kilde": "GDELT",
-   "domene": "jpost.com",
-   "publisert": "2026-11-06T16:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "israel"
-   ]
-  },
-  {
-   "tittel": "Russia Strikes Ship With Military Equipment, Dual-Use Cargo for Ukraine",
-   "url": "https://sputnikglobe.com/20261106/russia-strikes-ship-with-military-equipment-dual-use-cargo-for-ukraine---mod-1125026274.html",
-   "kilde": "GDELT",
-   "domene": "sputnikglobe.com",
-   "publisert": "2026-11-06T16:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Budget raises questions about defence spending targets after 2030",
-   "url": "https://www.niagarafallsreview.ca/news/canada/budget-raises-questions-about-defence-spending-targets-after-2030/article_7e69c801-b041-5b0b-ac58-e69df1fe941e.html",
-   "kilde": "GDELT",
-   "domene": "niagarafallsreview.ca",
-   "publisert": "2026-11-06T16:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "defence spending"
-   ]
-  },
-  {
-   "tittel": "Russia to Supply Iran with Helicopter Missile Launchers",
-   "url": "https://drudge.com/news/295396/russia-supply-iran-helicopter",
-   "kilde": "GDELT",
-   "domene": "drudge.com",
-   "publisert": "2026-11-06T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "missile",
-    "russia"
    ]
   },
   {
@@ -582,64 +1005,6 @@
    ]
   },
   {
-   "tittel": "Heating oil prices drop slightly in Maine",
-   "url": "https://www.bangordailynews.com/2026/11/06/business/business-energy/maine-heating-oil-prices-november-2-2026/",
-   "kilde": "GDELT",
-   "domene": "bangordailynews.com",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Zelensky leaves Ukraine: Which are the 5 places where he can hide with his stolen billions",
-   "url": "https://www.bankingnews.gr/diethni/articles/909563/zelensky-leaves-ukraine-which-are-the-5-places-where-he-can-hide-with-his-stolen-billions",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine"
-   ]
-  },
-  {
-   "tittel": "Persian Gulf nightmare: Missile hits Diamantidis tanker MT Velos Sapphire, 1 dead",
-   "url": "https://www.bankingnews.gr/diethni/articles/909567/persian-gulf-nightmare-missile-hits-diamantidis-tanker-mt-velos-sapphire-1-dead",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "persian gulf"
-   ]
-  },
-  {
-   "tittel": "Coca-Cola HBC's Russian operations could fall under Kremlin control",
-   "url": "https://www.beveragedaily.com/Article/2026/11/06/coca-cola-hbcs-russian-operations-could-fall-under-kremlin-control/",
-   "kilde": "GDELT",
-   "domene": "beveragedaily.com",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "kremlin"
-   ]
-  },
-  {
    "tittel": "The Houthis are Reportedly Clearing Ships For Passage Through Red Sea Via Email, Cementing Their Control",
    "url": "https://www.ibtimes.com/houthis-red-sea-ship-passage-email-approval-3809498",
    "kilde": "GDELT",
@@ -652,92 +1017,6 @@
    "matchede_ord": [
     "red sea",
     "houthi"
-   ]
-  },
-  {
-   "tittel": "After taking over EA, Saudi Arabia and their private equity cronies have reportedly held talks about buying Unity",
-   "url": "https://www.rockpapershotgun.com/after-taking-over-ea-saudi-arabia-and-their-private-equity-cronies-have-reportedly-held-talks-about-buying-unity",
-   "kilde": "GDELT",
-   "domene": "rockpapershotgun.com",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Brent Crude Stays on Track for 16% Weekly Drop Despite Friday Gain",
-   "url": "https://econotimes.com/Brent-Crude-Stays-on-Track-for-16-Weekly-Drop-Despite-Friday-Gain-1772114",
-   "kilde": "GDELT",
-   "domene": "econotimes.com",
-   "publisert": "2026-11-06T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "brent crude"
-   ]
-  },
-  {
-   "tittel": "Iran's Rezaei Ties Hormuz Reopening and U.S. Talks to Seven Conditions",
-   "url": "https://econotimes.com/Iran-s-Rezaei-Ties-Hormuz-Reopening-and-U-S-Talks-to-Seven-Conditions-1771926",
-   "kilde": "GDELT",
-   "domene": "econotimes.com",
-   "publisert": "2026-11-06T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Energy headquarters has worked in Kyiv since spring, but stable operation impossible without air defense protecting key facilities – Klitschko",
-   "url": "https://en.interfax.com.ua/news/general/1232484.html",
-   "kilde": "GDELT",
-   "domene": "interfax.com.ua",
-   "publisert": "2026-11-06T15:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense"
-   ]
-  },
-  {
-   "tittel": "Unity Engine Creator is in Talks to Be Acquired by Saudi Arabia's PIF, Silver Lake – Rumor",
-   "url": "https://gamingbolt.com/unity-engine-creator-is-in-talks-to-be-acquired-by-saudi-arabias-pif-silver-lake-rumor",
-   "kilde": "GDELT",
-   "domene": "gamingbolt.com",
-   "publisert": "2026-11-06T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Oil prices rebound as US results, Iran war shape markets",
-   "url": "https://www.omanobserver.om/article/1199200/business/energy/oil-prices-rebound-as-us-results-iran-war-shape-markets",
-   "kilde": "GDELT",
-   "domene": "omanobserver.om",
-   "publisert": "2026-11-06T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price",
-    "iran"
    ]
   },
   {
@@ -769,125 +1048,6 @@
    ]
   },
   {
-   "tittel": "Trump says peace agreement between Russia and Ukraine may involve whole of Europe – The Indian Awaaz",
-   "url": "https://theindianawaaz.com/trump-says-peace-agreement-between-russia-and-ukraine-may-involve-whole-of-europe/",
-   "kilde": "GDELT",
-   "domene": "theindianawaaz.com",
-   "publisert": "2026-11-06T15:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Trump says he met with Putin envoy, sees Ukraine deal soon",
-   "url": "https://www.nbcnews.com/world/russia/trump-says-met-putin-envoy-sees-ukraine-deal-soon-rcna607804",
-   "kilde": "GDELT",
-   "domene": "nbcnews.com",
-   "publisert": "2026-11-06T15:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "NATO's Mark Rutte sees compromise as key to Ukraine peace deal",
-   "url": "https://www.thenews.com.pk/latest/1422730-natos-mark-rutte-sees-compromise-as-key-to-ukraine-peace-deal",
-   "kilde": "GDELT",
-   "domene": "thenews.com.pk",
-   "publisert": "2026-11-06T15:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Israeli hack talks of Iranian armageddon - Antony Loewenstein",
-   "url": "https://antonyloewenstein.com/israeli-hack-talks-of-iranian-armageddon/",
-   "kilde": "GDELT",
-   "domene": "antonyloewenstein.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "israeli"
-   ]
-  },
-  {
-   "tittel": "Kremlin accuses Europe of struggling to decide who will speak for it at future Ukraine talks",
-   "url": "https://cyprus-mail.com/2026/11/06/kremlin-accuses-europe-of-struggling-to-decide-who-will-speak-for-it-at-future-ukraine-talks",
-   "kilde": "GDELT",
-   "domene": "cyprus-mail.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
-   ]
-  },
-  {
-   "tittel": "Arab News | 'Pure fabrication' — Saudi Arabia rejects Wall Street Journal report on Houthi demands",
-   "url": "https://www.arabnews.com/saudi-arabia/pure-fabrication-saudi-arabia-rejects-wall-street-journal-report-on-houthi-demands-3010048",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Trump prepares new strike on Iran on November 9 – Tehran warns with uncontrollable retaliation",
-   "url": "https://www.bankingnews.gr/diethni/articles/909554/trump-prepares-new-strike-on-iran-on-november-9-tehran-warns-with-uncontrollable-retaliation",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Countdown begins for Kyiv as NATO admits no protection against Russian weapons",
-   "url": "https://www.bankingnews.gr/diethni/articles/909556/countdown-begins-for-kyiv-as-nato-admits-no-protection-against-russian-weapons",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "nato"
-   ]
-  },
-  {
    "tittel": "Elections Alberta pegs cost of separation referendum at $84 million – Brandon Sun",
    "url": "https://www.brandonsun.com/local/2026/11/05/cp-newsalert-elections-alberta-pegs-separation-referendum-cost-at-84-million",
    "kilde": "GDELT",
@@ -914,49 +1074,6 @@
    ],
    "matchede_ord": [
     "gold price"
-   ]
-  },
-  {
-   "tittel": "Egypt condemns missile attack targeting Medina, reaffirms support for Saudi Arabia",
-   "url": "https://www.egyptindependent.com/egypt-condemns-missile-attack-targeting-medina-reaffirms-support-for-saudi-arabia/",
-   "kilde": "GDELT",
-   "domene": "egyptindependent.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "After gobbling up EA, Saudi Arabia and private equity firm Silver Lake reportedly looking to buy Unity",
-   "url": "https://www.eurogamer.net/unity-game-engine-saudi-arabia-silver-lake",
-   "kilde": "GDELT",
-   "domene": "eurogamer.net",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Ukrainian President Zelensky presses Western allies for clear postwar security guarantees",
-   "url": "https://www.naharnet.com/stories/en/323601-ukrainian-president-zelensky-presses-western-allies-for-clear-postwar-security-guarantees",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "zelensky"
    ]
   },
   {
@@ -1339,20 +1456,6 @@
    ]
   },
   {
-   "tittel": "Gold Rate Today November 6: Check latest Gold prices in Delhi, Mumbai, Kolkata, Chennai, Bengaluru, Hyderabad, Pune & Other Cities",
-   "url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-delhi-mumbai-kolkata-chennai-bengaluru-hyderabad-pune-gold-rates-metro-cities-november-6-2026/article71673483.ece",
-   "kilde": "GDELT",
-   "domene": "thehindubusinessline.com",
-   "publisert": "2026-11-06T10:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
-   ]
-  },
-  {
    "tittel": "China Launches Two Anti-Dumping Probes into EU Imports Despite Recent Agreement with Brussels",
    "url": "http://www.bgnes.com/economy/china-launches-two-anti-dumping-probes-into-eu-imports-despite-recent-agreement-with-brussels",
    "kilde": "GDELT",
@@ -1393,20 +1496,6 @@
    "matchede_ord": [
     "trade deal",
     "tariff"
-   ]
-  },
-  {
-   "tittel": "Gold price forecast: Rs 1.68 lakh per 10 grams expected amid global uncertainties, investment demand",
-   "url": "https://www.rediff.com/business/report/gold-price-forecast-rs-168-lakh-per-10-grams-expected-amid-global-uncertainties-investment-demand/20261106.htm",
-   "kilde": "GDELT",
-   "domene": "rediff.com",
-   "publisert": "2026-11-06T10:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
