@@ -101,3 +101,11 @@ def test_compact_trends_have_progressive_choices_and_old_anchor_targets():
     assert 'p.hidden=p!==panel' in trender.JS
     assert "addEventListener('popstate'" in trender.JS
     assert 'localStorage' not in trender.JS and 'fetch(' not in trender.JS
+
+
+def test_company_panel_aligns_with_explanation_panel():
+    # Overskriften er inne i det samme synlige kortet, ikke over korttoppen.
+    assert '.tr-explanation,.tr-companies,.tr-follow{background:#1c2430;' in trender.CSS
+    assert '.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}' in trender.CSS
+    assert '.tr-company{margin:0;min-width:0;' in trender.CSS
+    assert 'align-items:start' in trender.CSS

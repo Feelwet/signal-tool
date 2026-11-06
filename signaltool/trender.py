@@ -23,14 +23,14 @@ body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-source,.tr-source-short{display:block;font-size:13px;line-height:20px;color:#cbd5e1;overflow-wrap:anywhere}
 .tr-layout{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"chain" "companies" "follow";grid-template-rows:auto;gap:16px;align-items:start}
 .tr-explanation{grid-area:chain}.tr-companies{grid-area:companies;min-width:0}.tr-follow{grid-area:follow}
-.tr-explanation,.tr-follow{background:#1c2430;border:1px solid #3b4757;border-top:3px solid #58a6ff;border-radius:12px;padding:20px;min-width:0}
-.tr-company{background:#111821;border:1px solid #3b4757;border-radius:8px;padding:16px;margin:0 0 16px;min-width:0;scroll-margin-top:24px}.tr-company>h4:first-child{font-size:18px;line-height:26px;margin:0 0 8px}
+.tr-explanation,.tr-companies,.tr-follow{background:#1c2430;border:1px solid #3b4757;border-top:3px solid #58a6ff;border-radius:12px;padding:20px;min-width:0}
+.tr-company{margin:0;min-width:0;scroll-margin-top:24px}.tr-company+.tr-company{margin-top:20px;padding-top:20px;border-top:1px solid #3b4757}.tr-company>h4:first-child{font-size:18px;line-height:26px;margin:0 0 8px}
 .tr-chain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
 .tr-chain>div{padding:10px;background:#111821;border:1px solid #3b4757;border-radius:6px;min-width:0}
 .tr-chain dt{font-size:13px;line-height:20px;color:#cbd5e1}.tr-chain dd{margin:4px 0 0;font-size:17px;line-height:26px}
 .tr-page .tr-doc{margin:16px 0 0}.tr-doc>summary{min-height:44px;cursor:pointer;color:#58a6ff;padding:8px 0;box-sizing:border-box}.tr-follow h3:not(:first-child){margin-top:24px}
 @container(min-width:1000px){.tr-layout{grid-template-columns:minmax(0,620fr) minmax(0,356fr);grid-template-areas:"chain companies" "follow companies";grid-template-rows:auto 1fr;gap:24px}}
-@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-follow{padding:16px 12px}.tr-company{padding:14px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:8px}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
+@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:8px}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
 '''
 
 JS = r'''<script>(()=>{
