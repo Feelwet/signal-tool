@@ -5,7 +5,7 @@ from html import escape as E
 TABS = [("index.html", "Oversikt", "home"), ("tickere.html", "Tickere", "list"), ("oslo.html", "Oslo", "pin"),
         ("portefolje.html", "Signal-boka", "book")]
 # Alle sider fra ☰ som ikke har egen fane + undersider/ankre som hadde egen lenke (Røde flagg, Treffrate, Kilder)
-MORE = [("om.html", "Om siden"), ("trender.html", "Trender"), ("temaer.html", "Temaer"), ("sektorer.html", "Sektorer"), ("makro.html", "Makro"), ("kalender.html", "Kalender"),
+MORE = [("trender.html", "Trender"), ("om.html", "Om siden"), ("temaer.html", "Temaer"), ("sektorer.html", "Sektorer"), ("makro.html", "Makro"), ("kalender.html", "Kalender"),
         ("metode.html", "Metode"), ("tickere.html?filter=flagg", "Røde flagg Oslo"), ("metode.html#treffrate", "Treffrate"),
         ("kilder.html", "Kilder og metode")]
 MORE_ON = {"trender.html", "om.html", "temaer.html", "sektorer.html", "makro.html", "kalender.html", "metode.html", "kilder.html"}

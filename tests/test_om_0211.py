@@ -55,7 +55,8 @@ def test_real_roadmap_only_agreed_items():
 
 
 def test_more_sheet_first_and_overview_link():
-    assert TB.MORE[0] == ("om.html", "Om siden")
+    # UxBot 06.11: Trender først i Mer; Om siden beholdes like under.
+    assert TB.MORE[:2] == [("trender.html", "Trender"), ("om.html", "Om siden")]
     src = open(__import__("signaltool.site", fromlist=["x"]).__file__).read()
     assert 'href="om.html"' in src and "Hva er dette? →" in src
 

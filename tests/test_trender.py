@@ -30,7 +30,7 @@ def test_no_invented_growth_shortages_or_returns():
 
 def test_navigation():
     assert ('Trender','trender.html',[]) in site_layout.NAV
-    assert ('trender.html','Trender') in tabbar.MORE
+    assert tabbar.MORE[0] == ('trender.html','Trender')
     assert 'href="trender.html"' in T.teaser()
     assert 'aria-current=page' not in tabbar.html('trender.html','')
     assert 'tb-more on' in tabbar.html('trender.html','')
