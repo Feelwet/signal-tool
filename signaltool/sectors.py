@@ -434,8 +434,9 @@ def index_html(fund: dict | None = None) -> str:
                      '<div>' + " ".join(_badge(st, f" {c[st]}") for st in ("CLEAR", "FAIL", "MISSING")) + '</div>'
                      f'<div class="src">n={c["n"]}{flag}</div></a>')
     stale = " · <b>⏱ Utdatert</b>" if is_stale(fund.get("asof")) else ""
-    from .ux2 import i as _i, meta as _meta   # UxBot 01.11: tittel 24 px + metalinje; beskrivelsen i ⓘ, framovertesten synlig
-    return (f'{CSS}<h1>Oslo-sektorer {_i("Per sektor: hva som driver den, tre målbare drivere med kilde, og kandidater screenet med fem nøkkeltall-regler (egne regler for bank).", "Om siden")}</h1>'
+    from .site_intro import html as intro_html
+    from .ux2 import meta as _meta
+    return (f'{CSS}<h1>Oslo-sektorer</h1>' + intro_html("Sektorer") +
             f'{_meta("Yahoo Finance", fund.get("fetched") or fund.get("asof"))}'
             f'<div class="warnbox">{_E(DISCLAIMER)}</div>'
             f'<p class="pintro">{_E(FORWARD_TXT)}.{stale}</p>'

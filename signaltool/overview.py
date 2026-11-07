@@ -39,6 +39,12 @@ CSS = """
 @media(min-width:600px) and (max-width:699px){.ov-bar{grid-template-columns:minmax(0,1fr) 30% 2.6em 3.4em}}
 @media(max-width:699px){.ov-strip{grid-template-columns:1fr 1fr}.ov-2{grid-template-columns:1fr}}
 .ov-low2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ov-low2>*{margin:0;min-width:0}@media(max-width:699px){.ov-low2{grid-template-columns:1fr}}
+
+.ov-page{font-size:16px;line-height:24px}.ov-page>header,.ov-page>section,.ov-page>.ov-low2{margin:0 0 32px}
+.ov-page h2{margin:0 0 16px}.ov-market{display:grid;gap:16px}.ov-market h2{margin:0}.ov-page .ov-market .ov-strip{margin:0;gap:16px}.ov-strip-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ov-page .ov-candidates{padding:20px;margin:0 0 16px}.ov-page .ov-candidates>h2{margin:0 0 16px}.ov-page .ov-list li{padding:8px 0;gap:16px;align-items:flex-start}.ov-page .ov-list li>span:first-child{overflow:visible;text-overflow:clip;white-space:normal}.ov-page .ov-list .nm{white-space:normal;overflow:visible;text-overflow:clip}.ov-page .ov-list a{min-height:44px;display:inline-flex;align-items:center;white-space:normal}.ov-page .ov-list .tn{line-height:24px}
+.ov-entries{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.ov-entries>a{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}.ov-entries span{color:#cbd5e1;font-size:14px;line-height:22px}.ov-page .ov-low2{gap:16px}.ov-page .ov-low2>.ov-low{padding:0}.ov-page .ov-about{display:inline-flex;align-items:center;min-height:44px}.ov-page .ov-tile .lbl>a{display:inline-flex;align-items:center;min-height:44px}body.pg-index .ov-page .ov-tile .sub a.in{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}.ov-page .sc-i{min-width:44px;min-height:44px}.ov-page .ov-low2 a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:699px){.ov-page>header,.ov-page>section,.ov-page>.ov-low2{margin-bottom:24px}.ov-market .ov-strip{grid-template-columns:minmax(0,1fr)}.ov-entries{grid-template-columns:minmax(0,1fr)}.ov-page .ov-candidates{padding:16px}}
 """
 
 
@@ -86,7 +92,7 @@ def week_change(path: Path = THEME_LOG, today: str | None = None) -> dict:
     return {k: (v - by[ref][k], ref) for k, v in by[str(t)].items() if k in by[ref]}
 
 
-def strip_html(snap: dict) -> str:
+def strip_html(snap: dict, include_calendar: bool = True) -> str:
     reg = snap.get("regime") or {}
     risk = any(v.get("risk_off") for v in reg.values())
     dots = "".join(f'<span class="ov-dot {"dn" if v.get("below") else "up"}"></span>{E(n)}'
@@ -108,7 +114,7 @@ def strip_html(snap: dict) -> str:
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
     t3 = (f'<div class="ov-tile tap"><div class="lbl">Røde flagg Oslo<a class="stretch" href="tickere.html?filter=flagg">Vis alle →</a></div><div class="big">{m}</div>'
-          f'<div class="sub">med 2+ flagg ({len(rows)} totalt)</div></div>') if c["n"] else \
+          f'<div class="sub">med 2+ flagg ({len(rows)} totalt)</div><div class="sub2">data per {E(c["asof"] or "–")}</div></div>') if c["n"] else \
          '<div class="ov-tile"><div class="lbl"><a href="tickere.html?filter=flagg">Røde flagg Oslo →</a></div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     nx = upcoming(snap, 1)
     if nx:
@@ -120,7 +126,7 @@ def strip_html(snap: dict) -> str:
               f'<div class="sub">{E(e["title"])}</div></div>')
     else:
         t4 = '<div class="ov-tile"><div class="lbl"><a href="kalender.html">Neste hendelse →</a></div><div class="big">–</div><div class="sub">ingen i kalenderen</div></div>'
-    return f'<section class="ov-strip" aria-label="Status">{t1}{t2}{t3}{t4}</section>'
+    return f'<section class="ov-strip{" ov-strip-three" if not include_calendar else ""}" aria-label="Status">{t1}{t2}{t3}{t4 if include_calendar else ""}</section>'
 
 
 def upcoming(snap: dict, n: int) -> list:
@@ -155,7 +161,7 @@ def themes_html(snap: dict, wk: dict | None = None, stale: str = "") -> str:
             f'{"".join(_bar(t, mx, wk) for t in th[:6])}<div class="ov-foot">{more}{note}</div></section>')
 
 
-def two_col_html(snap: dict) -> str:
+def candidates_html(snap: dict) -> str:
     tk = sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])[:5]
     from . import site_risk as RK
     li = "".join(f'<li><span>{NM.cell(e["ticker"], "ticker/" + _slug(e["ticker"]) + ".html", e.get("name"))} '
@@ -163,6 +169,11 @@ def two_col_html(snap: dict) -> str:
     from .site import score_info
     left = (f'<div class="card"><h2>Kandidater {score_info()}</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')
+    return left
+
+
+def two_col_html(snap: dict) -> str:
+    left = candidates_html(snap)
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     rl = "".join(f'<li><span>{NM.cell(r["ticker"])}</span>'
                  f'<span class="mut">{E(EV.nlabel(r))}</span></li>' for r in rows[:5])
@@ -218,3 +229,9 @@ def calendar_html(snap: dict) -> str:
     return ('<div class="card ov-low"><h2>Kalender</h2><ul class="ev" style="margin:0">'
             + "".join(f'<li>{E(e["date"])} {E(e.get("time") or "")} – {E(e["title"])} <span class="mut">({E(e["source"])})</span></li>' for e in nx)
             + '</ul><a href="kalender.html">Hele kalenderen →</a></div>')
+
+
+def entries_html() -> str:
+    return ('<nav class="ov-entries" aria-label="Undersøk videre">'
+            '<a href="temaer.html"><b>Temaer</b><span>Nyhetsoppmerksomhet og temakart</span></a>'
+            '<a href="trender.html"><b>Trender</b><span>Dokumentert bruk og selskapskoblinger</span></a></nav>')

@@ -66,8 +66,8 @@ def test_layout_does_not_change_scoring_or_order():
     assert '-webkit-line-clamp:unset!important' in css
     assert '#tf-table table td:nth-child(7){display:none}' in css
     src=open(site.__file__).read()
-    assert src.index('sec("Kandidater og røde flagg"')<src.index('sec("Verden nå"')
-    assert 'TR.teaser()' in src
+    assert src.index('sec("Kandidater"')<src.index('sec("Verden nå"')
+    assert 'TR.teaser()' not in src and 'OV.entries_html()' in src
 
 
 def test_unranked_details_do_not_reintroduce_suppressed_returns():
@@ -84,7 +84,8 @@ def test_compact_trends_do_not_duplicate_claims_or_company_cards():
         claims=t['background']+t['latest']+[c[k] for c in t['companies'] for k in ['exposure','limits']]
         for c in claims:
             assert h.count(escape(c['text'],quote=True))==1
-    assert 'Råvareavhengighet dokumenterer ikke økt fortjeneste hos selskapet.' in h
+    assert 'Råvareavhengighet dokumenterer ikke økt fortjeneste hos selskapet.' not in h
+    assert 'Tilknytning betyr ikke at selskapet vil tjene mer eller aksjen stige.' in h
     assert 'max-width:1000px' in trender.CSS and '@container(min-width:1000px)' in trender.CSS
     assert 'grid-template-areas:"chain" "companies" "follow"' in trender.CSS
     assert '.tr-chain{grid-template-columns:minmax(0,1fr)}' in trender.CSS

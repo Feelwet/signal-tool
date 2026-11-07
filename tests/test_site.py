@@ -65,10 +65,10 @@ def test_dashboard_overview(tmp_path, monkeypatch):
     monkeypatch.setattr(site, "SITE", tmp_path / "site")
     site.build(snap)
     idx = (tmp_path / "site" / "index.html").read_text()
-    assert "ov-strip" in idx and 'id="temascore"' in idx and "ov-2" in idx and "Risikonivå" in idx
+    assert "ov-strip-three" in idx and 'id="temascore"' not in idx and "ov-candidates" in idx and "Risikonivå" in idx
     assert re.search(r'href="style\.css\?v=[0-9a-f]{10}"', idx) and "<style>" in idx and ".ov-strip{" in idx and '<a class="ov-tile"' not in idx
     assert "donut" not in idx and "Hva bør jeg se på" not in idx and "Newsweb-kontrakter" not in idx and 'metode.html#treffrate' in idx
-    assert "tema/" in idx and "ticker/" in idx
+    assert "temaer.html" in idx and "trender.html" in idx and "ticker/" in idx
 
 
 def test_layout_staleness_and_watch_text():

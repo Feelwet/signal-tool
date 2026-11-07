@@ -15,7 +15,7 @@ def test_dm_and_meta():
 
 def test_head_intro_in_i_and_visible_line():
     h = L.head("Oslo", "Rådata fra Oslo Børs", [("1", "A", "b", "#")], meta=U.meta("Newsweb", "2026-10-30"), visible="Ikke filtrert eller testet som signal.")
-    assert "Rådata fra Oslo Børs" in h and 'class="tip">Rådata fra Oslo Børs' in h      # beskrivelse i ⓘ
+    assert 'class="page-intro"' in h and "Her finner du børsmeldinger" in h and 'class="tip">Rådata fra Oslo Børs' not in h      # beskrivelse i ⓘ
     assert '<p class="pintro">Ikke filtrert eller testet som signal.</p>' in h          # usikkerhet synlig
     assert "t.o.m. 30.10" in h
     assert '<p class="pintro">Kommende' in L.head("Kalender", "Kommende", None)        # Kalender uendret

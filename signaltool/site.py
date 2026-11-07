@@ -732,6 +732,23 @@ def _factor_fix(snap):
         LL.dq_write(flags)
 
 
+def overview_html(snap: dict, bad=()) -> str:
+    """One overview composition, shared by production and offline layout tests."""
+    sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
+    b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + L.INTRO.html("Oversikt") + UX2.meta("GDELT", snap.get("gdelt_latest"))
+         + '<a class="ov-about" href="om.html">Hva er dette? →</a></header>',
+         f'<style>{OV.CSS}{MS.CSS}</style>',
+         '<section class="ov-market" aria-labelledby="marked-risiko"><h2 id="marked-risiko">Marked og risiko</h2>',
+         MS.html(snap),
+         (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
+         sec("Status", OV.strip_html, snap, False), '</section>',
+         '<section aria-label="Aksjekandidater">' + sec("Kandidater", OV.candidates_html, snap).replace('<div class="card">', '<div class="card ov-candidates">', 1) + MINE.tile() + '</section>',
+         '<section aria-label="Temaer og Trender">' + OV.entries_html() + '</section>',
+         '<section aria-label="Nyheter">' + sec("Verden nå", VN.html, snap) + '</section>',
+         '<div class="ov-low2">' + sec("Endringer og varsler", OV.changes_alerts_html, snap, X.link) + sec("Kalender", OV.calendar_html, snap) + '</div></div>']
+    return "".join(b)
+
+
 def build(snap: dict) -> Path:
     snap = _prep(snap)
     RF.set_now(snap.get("generated"))
@@ -763,18 +780,7 @@ def build(snap: dict) -> Path:
     bad = [k for k in used if X.source_state(st[k]) == "fail"]
     today = str(snap.get("date") or date.today())
     nxt = [e for e in snap.get("calendar", []) if str(e.get("date")) >= today][:5]
-    b = [f'<h1>Oversikt</h1>' + UX2.meta("GDELT", snap.get("gdelt_latest"))
-         + '<a class="ov-om" href="om.html" style="display:inline-flex;align-items:center;height:32px;font-size:13px;color:#94a3b8">Hva er dette? →</a>',   # UxBot 02.11   # UxBot 01.11: tittel 24 px + én metalinje (dato som 31.10)
-         TR.teaser(),
-         f'<style>{OV.CSS}{MS.CSS}</style>',  # kritisk CSS inline: forsiden ser riktig ut selv med gammel style.css i cache
-         MS.html(snap),  # markedsstripe rett under overskriften (Brent BZ=F, Bitcoin BTC-USD)
-         (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
-         MINE.tile(),
-         sec("Status", OV.strip_html, snap),
-         sec("Temascore", OV.themes_html, snap, None, L.stale_mark(rowsL, ["GDELT 1.0 daily events"])),
-         sec("Kandidater og røde flagg", OV.two_col_html, snap),
-         sec("Verden nå", VN.html, snap),   # UxBot 06.11: under aksjekandidatene
-         '<div class="ov-low2">' + sec("Endringer og varsler", OV.changes_alerts_html, snap, X.link) + sec("Kalender", OV.calendar_html, snap) + '</div>']
+    b = [overview_html(snap, bad)]
     # flyttet til Metode › Eksperimentelt (ingenting slettet)
     ex = []
     pmm = snap.get("polymarket_movers") or []

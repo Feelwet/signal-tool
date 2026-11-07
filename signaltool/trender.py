@@ -7,13 +7,14 @@ from html import escape
 import json
 from pathlib import Path
 from urllib.parse import urlsplit
+from . import site_intro as INTRO
 
 DATA = Path(__file__).resolve().parent.parent / 'site_config' / 'trender.json'
 CSS = r'''
 body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-page{font-size:17px;line-height:26px;overflow-wrap:anywhere;max-width:1000px;margin:0 auto;container-type:inline-size}
 .tr-head h1{font-size:26px;line-height:32px;margin:0}.tr-head>p{margin:6px 0 16px}
-.tr-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.tr-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 32px}
 .tr-tabs a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid #3b4757;border-radius:8px;color:#cbd5e1;font-size:15px;line-height:22px;text-decoration:none;box-sizing:border-box;white-space:normal}
 .tr-tabs a[aria-current=true]{background:#1c2430;color:#fff;border-color:#58a6ff}.tr-tabs a:focus-visible{outline:2px solid #58a6ff;outline-offset:3px}
 .tr-card{margin:0 0 24px;scroll-margin-top:16px}.tr-card[hidden]{display:none}
@@ -25,12 +26,14 @@ body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-explanation{grid-area:chain}.tr-companies{grid-area:companies;min-width:0}.tr-follow{grid-area:follow}
 .tr-explanation,.tr-companies,.tr-follow{background:#1c2430;border:1px solid #3b4757;border-top:3px solid #58a6ff;border-radius:12px;padding:20px;min-width:0}
 .tr-company{margin:0;min-width:0;scroll-margin-top:24px}.tr-company+.tr-company{margin-top:20px;padding-top:20px;border-top:1px solid #3b4757}.tr-company>h4:first-child{font-size:18px;line-height:26px;margin:0 0 8px}
-.tr-chain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
-.tr-chain>div{padding:10px;background:#111821;border:1px solid #3b4757;border-radius:6px;min-width:0}
+.tr-chain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 16px}
+.tr-chain>div{padding:0;background:none;border:0;border-radius:0;min-width:0}
 .tr-chain dt{font-size:13px;line-height:20px;color:#cbd5e1}.tr-chain dd{margin:4px 0 0;font-size:17px;line-height:26px}
 .tr-page .tr-doc{margin:16px 0 0}.tr-doc>summary{min-height:44px;cursor:pointer;color:#58a6ff;padding:8px 0;box-sizing:border-box}.tr-follow h3:not(:first-child){margin-top:24px}
 @container(min-width:1000px){.tr-layout{grid-template-columns:minmax(0,620fr) minmax(0,356fr);grid-template-areas:"chain companies" "follow companies";grid-template-rows:auto 1fr;gap:24px}}
-@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:8px}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
+@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:0}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
+.tr-page .tr-source a,.tr-page .tr-source-short a,.tr-company h4>a{display:inline-flex;align-items:center;min-height:44px;max-width:100%}.tr-doc li{margin:0 0 16px}.tr-card{margin-bottom:32px}
+@media(max-width:600px){.tr-tabs{margin-bottom:24px}.tr-card{margin-bottom:24px}}
 '''
 
 JS = r'''<script>(()=>{
@@ -118,12 +121,12 @@ def html(data=None, available_tickers=()):
             latest = []
             for n, observation in enumerate(t['latest']):
                 if n not in used_latest and observation['source'] == c['exposure']['source']:
-                    latest.append(claim(observation, full=True)); used_latest.add(n)
+                    latest.append(claim(observation)); used_latest.add(n)
             companies.append(f'<section class="tr-company" id="{E(cid)}"><h4>{name} · {E(c["ticker"])}</h4>'
-                             '<p class="tr-status">Dokumentert eksponering</p>' + claim(c['exposure'], full=True) +
+                             '<p class="tr-status">Dokumentert eksponering</p>' + claim(c['exposure']) +
                              ('<h4>Siste utvikling</h4>' + ''.join(latest) if latest else '') +
                              '<p class="tr-missing">Rapportert vekst fra denne utviklingen: Mangler data.</p>' +
-                             '<h4>Hva svekker bildet?</h4>' + claim(c['limits'], full=True) +
+                             '<h4>Hva svekker bildet?</h4>' + claim(c['limits']) +
                              '<p class="tr-missing">Verdsettelse og kursutvikling mot indeks: Mangler data.</p>'
                              '<p class="tr-missing">Inngangskurs er ikke registrert; avkastningsmåling er ikke startet.</p></section>')
         chains = []
@@ -131,10 +134,14 @@ def html(data=None, available_tickers=()):
             vals = [('Råvare / materiale', c['material']), ('Komponent', c['component']),
                     ('Industri', c['industry']), ('Sektor', c['sector'])]
             chains.append('<dl class="tr-chain">' + ''.join(f'<div data-label="{E(label)}"><dt>{E(label)}</dt><dd>{E(value)}</dd></div>' for label,value in vals) + '</dl>' +
-                          '<p class="tr-status">Avhengig av · Andel av råvarens sluttbruk: Andel ikke oppgitt.' + source(c['source'], c['published'], c['period']) + '</p>')
+                          '<p class="tr-status">Avhengig av · Andel av råvarens sluttbruk: Andel ikke oppgitt.' + f'<span class="tr-source-short"><a href="{E(c["source"])}">Kilde</a> · {E(c["published"])} · {E(c["period"])}</span>' + '</p>')
+        # Reference details move under disclosure; local claims and caveats remain visible.
+        refs = t['background'] + t['latest'] + t['chain'] + [q for c in t['companies'] for q in (c['exposure'], c['limits'])]
+        unique = {(q['source'], q['published'], q['period']): q for q in refs}
         documentation = ('<details class="tr-doc"><summary>Les dokumentasjonen</summary><h3>Bakgrunn</h3>' +
-                         ''.join(claim(c, full=True) for c in t['background']) + '</details>')
-        remaining = ''.join(claim(c, full=True) for n,c in enumerate(t['latest']) if n not in used_latest)
+                         ''.join(claim(c) for c in t['background']) + '<h3>Kilder og dataperioder</h3><ul>' +
+                         ''.join('<li>' + source(q['source'], q['published'], q['period']) + '</li>' for q in unique.values()) + '</ul></details>')
+        remaining = ''.join(claim(c) for n,c in enumerate(t['latest']) if n not in used_latest)
         follow = (('<h3>Siste utvikling</h3>' + remaining if remaining else '') +
                   ('<p class="tr-missing">Ferske observasjoner: Mangler data.</p>' if not t['latest'] else '') +
                   '<h3>Mangelstatus og virkning</h3><p class="tr-missing">Mangelstatus: Mangler data.</p>'
@@ -146,13 +153,13 @@ def html(data=None, available_tickers=()):
                      f'<p class="tr-meta">Først registrert {date} · {E(t["status"])}</p>'
                      '<p class="tr-status">Ikke testet for tidlighet</p></header>'
                      '<div class="tr-layout"><section class="tr-explanation"><h3>Dokumentert bruk</h3>' + ''.join(chains) +
-                     '<p class="tr-status">Råvareavhengighet dokumenterer ikke økt fortjeneste hos selskapet.</p></section>'
+                     '</section>'
                      '<section class="tr-companies"><h3>Eksponert for trenden (ikke testet for avkastning)</h3>' +
                      (''.join(companies) or '<p class="tr-missing">Dokumenterte selskapskoblinger: Mangler data.</p>') + '</section>' +
                      '<section class="tr-follow">' + follow + '</section></div></article>')
     reviewed = datetime.fromisoformat(data['reviewed_at']).strftime('%d.%m.%Y kl. %H:%M')
     return ('<style>' + CSS + '</style><div class="tr-page">'
-            '<header class="tr-head"><h1>Trender</h1><p>Materialer, komponenter og dokumenterte selskapskoblinger.</p></header>'
+            '<header class="tr-head"><h1>Trender</h1>' + INTRO.html('Trender') + '</header>'
             '<nav class="tr-tabs" aria-label="Trender på siden">' + nav + '</nav>' + ''.join(cards) +
             f'<p class="tr-meta">Innhold kontrollert {E(reviewed)} norsk tid. Begrenset første utvalg; '
             'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + JS)
