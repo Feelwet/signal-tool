@@ -32,7 +32,7 @@ body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-page .tr-doc{margin:16px 0 0}.tr-doc>summary{min-height:44px;cursor:pointer;color:#58a6ff;padding:8px 0;box-sizing:border-box}.tr-follow h3:not(:first-child){margin-top:24px}
 @container(min-width:1000px){.tr-layout{grid-template-columns:minmax(0,620fr) minmax(0,356fr);grid-template-areas:"chain companies" "follow companies";grid-template-rows:auto 1fr;gap:24px}}
 @media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:0}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
-.tr-page .tr-source a,.tr-page .tr-source-short a,.tr-company h4>a{display:inline-flex;align-items:center;min-height:44px;max-width:100%}.tr-doc li{margin:0 0 16px}.tr-card{margin-bottom:32px}
+.tr-page .tr-source a,.tr-page .tr-source-short a,.tr-company h4>a{display:inline-flex;align-items:center;min-width:44px;min-height:44px;max-width:100%}.tr-doc li{margin:0 0 16px}.tr-card{margin-bottom:32px}
 @media(max-width:600px){.tr-tabs{margin-bottom:24px}.tr-card{margin-bottom:24px}}
 '''
 

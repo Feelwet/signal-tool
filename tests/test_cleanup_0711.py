@@ -59,3 +59,12 @@ def test_no_nested_usage_frames_and_responsive_constraints_preserved():
     assert 'gap:24px' in trender.CSS and 'align-items:start' in trender.CSS
     assert 'min-height:44px' in trender.CSS and 'min-height:44px' in OV.CSS
     assert 'margin:0 0 32px' in OV.CSS and 'margin-bottom:24px' in OV.CSS
+
+
+def test_source_links_have_real_44_by_44_hit_area():
+    assert '.tr-page .tr-source a,.tr-page .tr-source-short a,.tr-company h4>a{display:inline-flex;align-items:center;min-width:44px;min-height:44px;' in trender.CSS
+    h=trender.html()
+    assert 'class="tr-source-short"' in h and '>Kilde</a>' in h
+    for t in trender.load()['trends']:
+        for c in t['chain']:
+            assert c['published'] in h and c['period'] in h
