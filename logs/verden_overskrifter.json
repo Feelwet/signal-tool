@@ -1,22 +1,23 @@
 {
- "hentet": "2026-11-07T11:38:45+0100",
+ "hentet": "2026-11-07T12:16:12+0100",
  "dato": "2026-11-07",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (4685) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1241) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "fra forrige henting"
+  "Oslo Børs Newsweb": "ok (6786 i 95d-uttrekket)",
+  "Norges Bank": "ok (5)"
  },
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 113
+   "antall": 110
   },
   {
    "tema": "conflict_defense",
-   "antall": 107
+   "antall": 100
   },
   {
    "tema": "elections_political",
@@ -24,11 +25,11 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 33
+   "antall": 31
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 22
+   "antall": 23
   },
   {
    "tema": "rare_earths_semis",
@@ -56,6 +57,113 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Missiles target Kyiv and injure 5 as Ukraine prepares for talks with Russia and the US",
+   "url": "http://www.sitkasentinel.com/stories/missiles-target-kyiv-and-injure-5-as-ukraine-prepares-for-talks-with-russia-and-the-us,184514",
+   "kilde": "GDELT",
+   "domene": "sitkasentinel.com",
+   "publisert": "2026-11-07T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "missile",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "NATO's \"Nordic model\" brings Arctic confrontation closer to Russia's nuclear bases « nuclear-news",
+   "url": "https://nuclear-news.net/2026/11/07/4-b1-natos-nordic-model-brings-arctic-confrontation-closer-to-russias-nuclear-bases/",
+   "kilde": "GDELT",
+   "domene": "nuclear-news.net",
+   "publisert": "2026-11-07T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Strait of Hormuz Crisis: How India's Power Bills and Gas Supply Are at Risk Amid Global LNG Shortage",
+   "url": "https://openthemagazine.com/india/strait-of-hormuz-crisis-how-global-lng-shortage-could-hit-indias-power-bills-and-gas-supply",
+   "kilde": "GDELT",
+   "domene": "openthemagazine.com",
+   "publisert": "2026-11-07T11:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Iran sends nuclear proposal to US with 7 conditions amid Trump's threat to 'destroy' Tehran; here's what they are",
+   "url": "https://www.ibtimes.co.in/iran-sends-nuclear-proposal-us-7-conditions-amid-trumps-threat-destroy-tehran-heres-what-908168",
+   "kilde": "GDELT",
+   "domene": "ibtimes.co.in",
+   "publisert": "2026-11-07T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Kyiv hit by missiles as Ukraine prepares for talks with Russia and the US",
+   "url": "https://www.northsomersettimes.co.uk/news/national/26708354.kyiv-hit-missiles-ukraine-prepares-talks-russia-us/",
+   "kilde": "GDELT",
+   "domene": "northsomersettimes.co.uk",
+   "publisert": "2026-11-07T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "missile",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "US Marines finish tests of Israeli 'Iron Dome' missile air defense",
+   "url": "https://www.c4isrnet.com:443/battlefield-tech/2022/10/21/us-marines-finish-tests-of-israeli-iron-dome-missile-air-defense/",
+   "kilde": "GDELT",
+   "domene": "c4isrnet.com",
+   "publisert": "2026-11-07T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Missiles target Kyiv and wound 5 as Ukraine prepares for talks with Russia and the US",
+   "url": "https://www.ksat.com/news/world/2026/11/07/missiles-target-kyiv-and-injure-5-as-ukraine-prepares-for-talks-with-russia-and-the-us/",
+   "kilde": "GDELT",
+   "domene": "ksat.com",
+   "publisert": "2026-11-07T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "missile",
+    "russia"
+   ]
+  },
   {
    "tittel": "A year after his release from Israeli prison, a Gaza nurse says he is still waiting to feel free",
    "url": "https://abcnews.com/International/year-after-release-israeli-prison-gaza-nurse-waiting/story?id=137908560",
@@ -101,22 +209,6 @@
    ]
   },
   {
-   "tittel": "Missiles target Kyiv and wound 5 as Ukraine prepares for talks with Russia and the US",
-   "url": "https://www.newsday.com/news/nation/russia-ukraine-war-kyiv-talks-abu-dhabi-u42674",
-   "kilde": "GDELT",
-   "domene": "newsday.com",
-   "publisert": "2026-11-07T10:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "missile",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Budget raises questions about defence spending targets after 2030",
    "url": "https://www.niagarafallsreview.ca/politics/federal/budget-raises-questions-about-defence-spending-targets-after-2030/article_601d1b94-7579-54f9-a313-573c6232c70d.html",
    "kilde": "GDELT",
@@ -128,22 +220,6 @@
    ],
    "matchede_ord": [
     "defence spending"
-   ]
-  },
-  {
-   "tittel": "Kyiv hit by missiles as Ukraine prepares for talks with Russia and the US",
-   "url": "https://www.surreycomet.co.uk/news/national/26708354.kyiv-hit-missiles-ukraine-prepares-talks-russia-us/",
-   "kilde": "GDELT",
-   "domene": "surreycomet.co.uk",
-   "publisert": "2026-11-07T10:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "missile",
-    "russia"
    ]
   },
   {
@@ -411,22 +487,6 @@
    ]
   },
   {
-   "tittel": "Missiles target Kyiv and injure 5 as Ukraine prepares for talks with Russia and the US",
-   "url": "https://www.ottumwacourier.com/news/national_news/missiles-target-kyiv-and-injure-5-as-ukraine-prepares-for-talks-with-russia-and-the/article_b42f1fdb-80e8-5cf3-8513-ef448d1f361f.html",
-   "kilde": "GDELT",
-   "domene": "ottumwacourier.com",
-   "publisert": "2026-11-07T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "missile",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Gold Rate Today November 7: Check latest Gold prices in Coimbatore, Nagpur, Visakhapatnam, Surat, Jaipur, Lucknow, Chandigarh & Other Cities",
    "url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-coimbatore-nagpur-visakhapatnam-surat-jaipur-lucknow-chandigarh-gold-rates-other-cities-november-7-2026/article71677633.ece",
    "kilde": "GDELT",
@@ -617,21 +677,6 @@
    ]
   },
   {
-   "tittel": "Russia claims strikes on Ukrainian military-industrial, energy facilities",
-   "url": "https://news.az/news/russia-claims-strikes-on-ukrainian-military-industrial-energy-facilities",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-07T09:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | KFYR 550 AM / 99.7 FM",
    "url": "https://kfyr.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
    "kilde": "GDELT",
@@ -643,22 +688,6 @@
    ],
    "matchede_ord": [
     "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Russian forces launch missile attack on Ukrainian capital Kyiv, mayor says",
-   "url": "https://ksevradio.com/russian-forces-launch-missile-attack-on-ukrainian-capital-kyiv-mayor-says/",
-   "kilde": "GDELT",
-   "domene": "ksevradio.com",
-   "publisert": "2026-11-07T03:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian",
-    "missile"
    ]
   },
   {
@@ -1089,20 +1118,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "WWE Crown Jewel 2026 Commentary Team To Call Event From US Instead of Saudi Arabia — Report",
-   "url": "https://www.wrestlezone.com/news/1670269-wwe-crown-jewel-2026-commentary-team-remote-stamford",
-   "kilde": "GDELT",
-   "domene": "wrestlezone.com",
-   "publisert": "2026-11-07T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {

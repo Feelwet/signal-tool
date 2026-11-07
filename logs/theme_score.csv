@@ -129,3 +129,13 @@ date,theme,score,mean_close_candidates,n_candidates,info_ticker,info_ticker_clos
 2026-11-06,tariffs_trade,0.589,425.8115,11,NUE,245.68
 2026-11-06,rare_earths_semis,0.535,328.0263,8,MP,33.74
 2026-11-06,food_agri,0.255,272.6433,6,CF,118.57
+2026-11-07,elections_political,2.732,160.3871,8,SPY,735.29
+2026-11-07,mideast_energy,1.532,135.3992,12,XLE,61.62
+2026-11-07,shipping_chokepoints,1.425,2115.876,10,ZIM,27.95
+2026-11-07,risk_off_haven,1.178,606.283,8,GLD,372.52
+2026-11-07,rare_earths_semis,0.99,342.185,8,MP,35.41
+2026-11-07,sanctions_energy,0.961,148.3856,10,LNG,277.95
+2026-11-07,tariffs_trade,0.941,430.1735,11,NUE,244.97
+2026-11-07,nordic_arctic,0.683,301.444,7,FTI,63.52
+2026-11-07,conflict_defense,0.588,513.5955,11,LMT,567.08
+2026-11-07,food_agri,0.123,274.4967,6,CF,119.39
