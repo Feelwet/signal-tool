@@ -68,3 +68,24 @@ def test_source_links_have_real_44_by_44_hit_area():
     for t in trender.load()['trends']:
         for c in t['chain']:
             assert c['published'] in h and c['period'] in h
+
+
+def test_deploy_check_accepts_new_overview_and_requires_themescore_on_themes(tmp_path, monkeypatch):
+    import json
+    from signaltool import sitecheck as C, theme_maps as TM
+    for filename, needles in C.REQUIRED.items():
+        (tmp_path/filename).write_text(' '.join(needles))
+    actual=site.page('Oversikt',site.overview_html(sample()),0,sample())
+    (tmp_path/'index.html').write_text(actual)
+    (tmp_path/'data.json').write_text(json.dumps({'date':'2026-11-07','themes':[{'key':'example'}]}))
+    (tmp_path/'tema').mkdir()
+    for m in TM.MAPS.values(): (tmp_path/'tema'/f"{m['file']}.html").write_text('example')
+    (tmp_path/'ticker').mkdir();(tmp_path/'ticker'/'EXAMPLE.html').write_text('example')
+    monkeypatch.setattr(C,'log_page_problems',lambda *a:[])
+    assert 'Temascore' not in actual
+    assert C.check(tmp_path)==[]
+    (tmp_path/'temaer.html').write_text('Temaer')
+    assert 'temaer.html: mangler «Temascore»' in C.check(tmp_path)
+    (tmp_path/'temaer.html').write_text('Temaer Temascore')
+    (tmp_path/'index.html').write_text(actual.replace('Marked og risiko',''))
+    assert 'index.html: mangler «Marked og risiko»' in C.check(tmp_path)
