@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-07T00:28:41+0100",
+ "hentet": "2026-11-07T04:10:04+0100",
  "dato": "2026-11-07",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (10093) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (6045) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,50 +12,715 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 114
+   "antall": 119
   },
   {
    "tema": "conflict_defense",
-   "antall": 107
+   "antall": 106
   },
   {
    "tema": "risk_off_haven",
-   "antall": 35
-  },
-  {
-   "tema": "shipping_chokepoints",
-   "antall": 21
+   "antall": 39
   },
   {
    "tema": "elections_political",
-   "antall": 16
+   "antall": 32
+  },
+  {
+   "tema": "shipping_chokepoints",
+   "antall": 23
   },
   {
    "tema": "tariffs_trade",
-   "antall": 14
-  },
-  {
-   "tema": "rare_earths_semis",
-   "antall": 12
+   "antall": 13
   },
   {
    "tema": "food_agri",
-   "antall": 10
+   "antall": 9
+  },
+  {
+   "tema": "rare_earths_semis",
+   "antall": 9
   },
   {
    "tema": "sentralbanker",
-   "antall": 6
-  },
-  {
-   "tema": "nordic_arctic",
-   "antall": 2
+   "antall": 5
   },
   {
    "tema": "sanctions_energy",
    "antall": 2
+  },
+  {
+   "tema": "nordic_arctic",
+   "antall": 1
   }
  ],
  "saker": [
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | KFYR 550 AM / 99.7 FM",
+   "url": "https://kfyr.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Russian forces launch missile attack on Ukrainian capital Kyiv, mayor says",
+   "url": "https://ksevradio.com/russian-forces-launch-missile-attack-on-ukrainian-capital-kyiv-mayor-says/",
+   "kilde": "GDELT",
+   "domene": "ksevradio.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | Sports Radio 800 KXIC",
+   "url": "https://kxic.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote",
+   "url": "https://wjno.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | NewsRadio 1370 AM & 92.9 FM WSPD",
+   "url": "https://wspd.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "US military carries out new targeted strikes on Iran as Tehran's leaders weigh mediator's proposals",
+   "url": "https://www.wdio.com/ap-top-news/us-military-carries-out-new-targeted-strikes-on-iran-as-tehrans-leaders-weigh-mediators-proposals/",
+   "kilde": "GDELT",
+   "domene": "wdio.com",
+   "publisert": "2026-11-07T03:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "South Korea Military Mission to Protect Commercial Shipping in the Strait of Hormuz (China and Japan Fiddle) – Modern Tokyo Times",
+   "url": "https://moderntokyotimes.com/south-korea-military-mission-to-protect-commercial-shipping-in-the-strait-of-hormuz-china-and-japan-fiddle/",
+   "kilde": "GDELT",
+   "domene": "moderntokyotimes.com",
+   "publisert": "2026-11-07T03:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 1450 WILM",
+   "url": "https://wilm.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T03:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Iran is reviewing proposals focusing on Tehran's nuclear program, officials say",
+   "url": "https://www.asiaone.com:443/world/iran-reviewing-proposals-focusing-tehrans-nuclear-program-officials-say",
+   "kilde": "GDELT",
+   "domene": "asiaone.com",
+   "publisert": "2026-11-07T03:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Cornell faculty passes vote of no-confidence in university administration",
+   "url": "https://www.wfdd.org/education/2026-11-06/cornell-faculty-passes-vote-of-no-confidence-in-university-administration",
+   "kilde": "GDELT",
+   "domene": "wfdd.org",
+   "publisert": "2026-11-07T03:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "US military carries out new targeted strike on Iran as Tehran's leaders weigh mediator's proposals",
+   "url": "https://economictimes.indiatimes.com/news/defence/us-military-carries-out-new-targeted-strike-on-iran-as-tehrans-leaders-weigh-mediators-proposals/articleshow/135624223.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Iran reviewing proposals on Tehran's nuclear programme, officials say",
+   "url": "https://economictimes.indiatimes.com/news/international/world-news/iran-reviewing-proposals-on-tehrans-nuclear-programme-officials-say/articleshow/135624016.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 920 AM & 104.7 FM",
+   "url": "https://newsradiori.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | NewsRadio WKCY",
+   "url": "https://newsradiowkcy.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | Newsradio WFLA Orlando",
+   "url": "https://wflaorlando.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Blue wave presages a defense-spending showdown",
+   "url": "https://www.defenseone.com/policy/2026/11/blue-wave-presages-defense-spending-showdown/417111/",
+   "kilde": "GDELT",
+   "domene": "defenseone.com",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "defense spending"
+   ]
+  },
+  {
+   "tittel": "Gov. Cox declares a state of emergency for flooding",
+   "url": "https://www.upr.org/utah-news/2026-11-06/southern-utah-flooding-state-of-emergency-san-juan-washington-counties",
+   "kilde": "GDELT",
+   "domene": "upr.org",
+   "publisert": "2026-11-07T02:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 1410 AM & 100.9 FM",
+   "url": "https://newsradio1410.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 103.1 and 810 WGY",
+   "url": "https://wgy.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 1400 WRAK",
+   "url": "https://wrak.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell faculty vote no-confidence in university leadership over alleged gang rape",
+   "url": "https://www.channelnewsasia.com/world/cornell-gang-rape-no-confidence-vote-6532296",
+   "kilde": "GDELT",
+   "domene": "channelnewsasia.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "'Everybody knows it's true...': Trump says Israel, Middle East would not exist if he had not stopped Iran's nuclear ambitions",
+   "url": "https://www.moneycontrol.com/world/everybody-knows-it-s-true-trump-says-israel-middle-east-would-not-exist-if-he-had-not-stopped-iran-s-nuclear-ambitions-article-14073989.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "'Operation Midas' concludes: How Ukraine's biggest corruption scandal shook Zelensky's inner circle",
+   "url": "https://www.sott.net/article/509330-Operation-Midas-concludes-How-Ukraines-biggest-corruption-scandal-shook-Zelenskys-inner-circle",
+   "kilde": "GDELT",
+   "domene": "sott.net",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "NATO's \"Nordic model\" brings Arctic confrontation closer to Russia's nuclear bases",
+   "url": "https://www.sott.net/article/509332-NATOs-Nordic-model-brings-Arctic-confrontation-closer-to-Russias-nuclear-bases",
+   "kilde": "GDELT",
+   "domene": "sott.net",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Iran reviewing proposals on Tehran's nuclear programme: Officials",
+   "url": "https://www.thehindu.com/news/international/iran-reviewing-proposals-on-tehrans-nuclear-programme-officials/article71677167.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-07T02:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | The Patriot KEIB AM 1150",
+   "url": "https://patriotla.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | PowerTalk 1460 AM & 101.1 FM",
+   "url": "https://powertalk1460.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | NewsTalk WMEQ",
+   "url": "https://wmeq.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T02:15:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Arab News | US military carries out new targeted strike on Iran as Tehran's leaders weigh mediator's proposals",
+   "url": "https://www.arabnews.com/middle-east/us-military-carries-out-new-targeted-strike-on-iran-as-tehrans-leaders-weigh-mediators-proposals-3010264",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-07T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Report: Russia in Talks to Supply Iran With Advanced Air Defense Systems",
+   "url": "https://www.haaretz.com/middle-east-news/iran/2026-11-07/ty-article/report-russia-in-talks-to-supply-iran-with-advanced-air-defense-systems/000001a1-b20a-d9f6-aba3-b61bed330000",
+   "kilde": "GDELT",
+   "domene": "haaretz.com",
+   "publisert": "2026-11-07T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Iranian air defence destroys MQ-9 drone over Qeshm Island, report says",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/iranian-air-defence-destroys-mq-9-drone-over-qeshm-island-report-says",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-07T02:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defence"
+   ]
+  },
+  {
+   "tittel": "Trump says 'there would be no Israel' if Iran was allowed nuclear weapon",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/trump-says-there-would-be-no-israel-if-iran-was-allowed-nuclear-weapon",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-07T02:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Talk 1090 WKBZ-AM",
+   "url": "https://newstalk1090.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T01:45:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Canada's foreign minister urges G7 to turn up heat on Putin after deadly Ukraine strike",
+   "url": "https://www.cinaradio.com/2026/11/06/canadas-foreign-minister-urges-g7-to-turn-up-heat-on-putin-after-deadly-ukraine-strike/",
+   "kilde": "GDELT",
+   "domene": "cinaradio.com",
+   "publisert": "2026-11-07T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Crisis deepens in Ukraine as Russian official's White House visit draws scrutiny",
+   "url": "https://www.kztv10.com/ukraines-stolen-orphans/crisis-deepens-in-ukraine-as-russian-officials-white-house-visit-draws-scrutiny",
+   "kilde": "GDELT",
+   "domene": "kztv10.com",
+   "publisert": "2026-11-07T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Gov. Cox declares state of emergency after floods hit San Juan, Washington counties",
+   "url": "https://www.sltrib.com/news/2026/11/06/gov-cox-declares-state-emergency/",
+   "kilde": "GDELT",
+   "domene": "sltrib.com",
+   "publisert": "2026-11-07T01:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Ukraine continues attacks on Russian oil refineries",
+   "url": "https://www.thecourier.com.au/story/9387416/ukraine-continues-attacks-on-russian-oil-refineries/",
+   "kilde": "GDELT",
+   "domene": "thecourier.com.au",
+   "publisert": "2026-11-07T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | News Radio 101.9 Big WAAX",
+   "url": "https://1019bigwaax.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Cornell Faculty Senate approves no-confidence resolution over university's handling of sexual assault crisis - LocalNews8.com",
+   "url": "https://localnews8.com/news/national-world/cnn-national/2026/11/06/cornell-faculty-senate-approves-no-confidence-resolution-over-universitys-handling-of-sexual-assault-crisis/",
+   "kilde": "GDELT",
+   "domene": "localnews8.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "The Fugitives bring First World War stories to Sidney stage",
+   "url": "https://vicnews.com/2026/11/06/the-fugitives-bring-first-world-war-stories-to-sidney-stage/",
+   "kilde": "GDELT",
+   "domene": "vicnews.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Arab News | Russian forces launch missile attack on Ukrainian capital Kyiv, mayor says",
+   "url": "https://www.arabnews.com/world/russian-forces-launch-missile-attack-on-ukrainian-capital-kyiv-mayor-says-3010268",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Cornell faculty pass no-confidence vote over leadership's handling of Jane Doe allegations",
+   "url": "https://www.bbc.com/news/articles/c933xxl8yv0go",
+   "kilde": "GDELT",
+   "domene": "bbc.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "no-confidence"
+   ]
+  },
+  {
+   "tittel": "Two projectiles hit Iran's Qeshm Island near Hormuz",
+   "url": "https://www.siasat.com/two-projectiles-hit-irans-qeshm-island-near-hormuz-3571062/",
+   "kilde": "GDELT",
+   "domene": "siasat.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Ukrainian President Zelenskyy presses Western allies for clear postwar security guarantees",
+   "url": "https://www.the-messenger.com/news/world/article_824b02b3-1814-558c-b1b9-e4f58f771e82.html",
+   "kilde": "GDELT",
+   "domene": "the-messenger.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "zelenskyy"
+   ]
+  },
+  {
+   "tittel": "At Least 25 seafarers killed in Strait of Hormuz amid US-Iran conflict",
+   "url": "https://www.trend.az/world/us/4243983.html",
+   "kilde": "GDELT",
+   "domene": "trend.az",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "WWE Crown Jewel 2026 Commentary Team To Call Event From US Instead of Saudi Arabia — Report",
+   "url": "https://www.wrestlezone.com/news/1670269-wwe-crown-jewel-2026-commentary-team-remote-stamford",
+   "kilde": "GDELT",
+   "domene": "wrestlezone.com",
+   "publisert": "2026-11-07T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
   {
    "tittel": "\"Israel, Middle East would not exist if I didn't stop Iran from having nuclear weapon\": Trump",
    "url": "http://www.russiaherald.com/news/279416619/israel-middle-east-would-not-exist-if-i-didnt-stop-iran-from-having-nuclear-weapon-trump",
@@ -85,63 +750,6 @@
    "matchede_ord": [
     "ukraine",
     "putin"
-   ]
-  },
-  {
-   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote",
-   "url": "https://hallelujah955.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "iheart.com",
-   "publisert": "2026-11-06T23:30:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Iran is reviewing proposals focusing on Tehran's nuclear program, officials say",
-   "url": "https://www.bostonherald.com/2026/11/06/iran-us-nuclear-program-proposals/",
-   "kilde": "GDELT",
-   "domene": "bostonherald.com",
-   "publisert": "2026-11-06T23:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Cornell faculty passes vote of no-confidence in university administration",
-   "url": "https://www.ksmu.org/2026-11-06/cornell-faculty-passes-vote-of-no-confidence-in-university-administration",
-   "kilde": "GDELT",
-   "domene": "ksmu.org",
-   "publisert": "2026-11-06T23:30:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Cornell faculty senate to release result of no-confidence vote",
-   "url": "https://www.wwaytv3.com/cornell-faculty-senate-to-release-result-of-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "wwaytv3.com",
-   "publisert": "2026-11-06T23:30:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
    ]
   },
   {
@@ -203,34 +811,6 @@
    ]
   },
   {
-   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | WJBO Newsradio 1150 AM & 98.7 FM",
-   "url": "https://wjbo.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "iheart.com",
-   "publisert": "2026-11-06T23:15:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | Talk Radio 98.3 WLAC",
-   "url": "https://wlac.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "iheart.com",
-   "publisert": "2026-11-06T23:15:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
    "tittel": "AIR DEFENSE TALKS: Russia Said To Be Discussing S-400 Deliveries To Iran",
    "url": "https://www.theyeshivaworld.com/news/israel-news/2620173/air-defense-talks-russia-said-to-be-discussing-s-400-deliveries-to-iran.html",
    "kilde": "GDELT",
@@ -243,51 +823,6 @@
    "matchede_ord": [
     "air defense",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Crisis deepens in Ukraine as Russian official's White House visit draws scrutiny",
-   "url": "https://www.wtxl.com/ukraines-stolen-orphans/crisis-deepens-in-ukraine-as-russian-officials-white-house-visit-draws-scrutiny",
-   "kilde": "GDELT",
-   "domene": "wtxl.com",
-   "publisert": "2026-11-06T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Ukraine continues attacks on Russian oil refineries",
-   "url": "https://www.theadvocate.com.au/story/9387416/ukraine-continues-attacks-on-russian-oil-refineries/",
-   "kilde": "GDELT",
-   "domene": "theadvocate.com.au",
-   "publisert": "2026-11-06T23:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Canada's foreign minister urges G7 to turn up heat on Putin after deadly Ukraine strike",
-   "url": "https://www.cbc.ca/news/politics/anand-ukraine-russia-war-civilian-deaths-9.7412923",
-   "kilde": "GDELT",
-   "domene": "cbc.ca",
-   "publisert": "2026-11-06T22:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
    ]
   },
   {
@@ -332,20 +867,6 @@
    ],
    "matchede_ord": [
     "trade war"
-   ]
-  },
-  {
-   "tittel": "Cornell Faculty Senate approves no-confidence resolution over university's handling of sexual assault crisis | Nation & World News",
-   "url": "https://www.komu.com/news/nationworld/cornell-faculty-senate-approves-no-confidence-resolution-over-university-s-handling-of-sexual-assault-crisis/article_61b86a95-213b-5751-985b-bef3015415f5.html",
-   "kilde": "GDELT",
-   "domene": "komu.com",
-   "publisert": "2026-11-06T22:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
    ]
   },
   {
@@ -422,34 +943,6 @@
    "matchede_ord": [
     "zelensky",
     "ukraine"
-   ]
-  },
-  {
-   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | NewsRadio 1450/1370 WKIP",
-   "url": "https://1450wkip.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "iheart.com",
-   "publisert": "2026-11-06T22:30:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Cornell Faculty Senate Passes No-Confidence Vote | NewsRadio 104.9 WBUV",
-   "url": "https://newsradio1049.iheart.com/content/2026-11-06-cornell-faculty-senate-passes-no-confidence-vote/",
-   "kilde": "GDELT",
-   "domene": "iheart.com",
-   "publisert": "2026-11-06T22:30:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
    ]
   },
   {
@@ -582,21 +1075,6 @@
    ]
   },
   {
-   "tittel": "Russian Federal State Statistics Service says it was hit by massive cyberattack — hackers steal 23TB of data, including Ukraine war casualty figures",
-   "url": "https://www.techradar.com/pro/security/russian-federal-state-statistics-service-says-it-was-hit-by-massive-cyberattack-hackers-steal-23tb-of-data-including-ukraine-war-casualty-figures",
-   "kilde": "GDELT",
-   "domene": "techradar.com",
-   "publisert": "2026-11-06T22:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "US urges China to meet rare-earths commitments ahead of Trump-Xi meetings",
    "url": "https://asia.nikkei.com/economy/trade-war/trump-tariffs/us-urges-china-to-meet-rare-earths-commitments-ahead-of-trump-xi-meetings",
    "kilde": "GDELT",
@@ -622,20 +1100,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Sajith accuses Government of blocking Speaker no-confidence motion",
-   "url": "https://www.ft.lk/news/Sajith-accuses-Government-of-blocking-Speaker-no-confidence-motion/56-799770",
-   "kilde": "GDELT",
-   "domene": "ft.lk",
-   "publisert": "2026-11-06T21:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
    ]
   },
   {
@@ -695,76 +1159,6 @@
    ]
   },
   {
-   "tittel": "Cornell faculty votes on no-confidence resolution over sexual assault allegations",
-   "url": "https://www.kasu.org/public-safety-social-justice/2026-11-06/cornell-faculty-votes-on-no-confidence-resolution-over-sexual-assault-allegations",
-   "kilde": "GDELT",
-   "domene": "kasu.org",
-   "publisert": "2026-11-06T20:00:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Syria Sends Military Advisers to Saudi Arabia Amid Houthi Attacks",
-   "url": "https://www.khaama.com/syria-military-advisers-trainers-saudi-arabia/",
-   "kilde": "GDELT",
-   "domene": "khaama.com",
-   "publisert": "2026-11-06T20:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia inks first defense 'cooperation' agreement with Syria's new leadership",
-   "url": "https://breakingdefense.com/2026/11/saudi-arabia-inks-first-defense-cooperation-agreement-with-syrias-new-leadership/",
-   "kilde": "GDELT",
-   "domene": "breakingdefense.com",
-   "publisert": "2026-11-06T19:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Lower Crude Oil Prices Ease Pressure at Texas Gas Pumps",
-   "url": "https://mykiss1031.com/ixp/195/p/texas-gas-prices-1106/",
-   "kilde": "GDELT",
-   "domene": "mykiss1031.com",
-   "publisert": "2026-11-06T19:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Arab News | Envoys welcome Saudi Arabia's new tourist e-Visa, visa on arrival expansion to 4 nations",
-   "url": "https://www.arabnews.com/saudi-arabia/envoys-welcome-saudi-arabias-new-tourist-e-visa-visa-on-arrival-expansion-to-4-nations-3010179",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-06T19:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Canada Updates Belize Travel Advice to Reflect State of Emergency",
    "url": "https://www.greaterbelize.com/canada-updates-belize-travel-advice-to-reflect-state-of-emergency/",
    "kilde": "GDELT",
@@ -776,21 +1170,6 @@
    ],
    "matchede_ord": [
     "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Trump: Israel would not exist if I hadn't stopped Iran",
-   "url": "https://www.israelnationalnews.com/news/435786",
-   "kilde": "GDELT",
-   "domene": "israelnationalnews.com",
-   "publisert": "2026-11-06T19:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
    ]
   },
   {
@@ -822,64 +1201,6 @@
    ]
   },
   {
-   "tittel": "Israeli attacks kill 3 Palestinians in Gaza, including child, medical student",
-   "url": "https://aa.com.tr/en/middle-east/israeli-attacks-kill-3-palestinians-in-gaza-including-child-medical-student/4113819",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-06T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Arab Parliament condemns Houthi targeting of Holy sites in Saudi Arabia",
-   "url": "https://sana.sy/en/middle-east/2356546/",
-   "kilde": "GDELT",
-   "domene": "sana.sy",
-   "publisert": "2026-11-06T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia Rejects Wall Street Journal Report On Houthi Demands, Says 'Pure Fabrication'",
-   "url": "https://www.eurasiareview.com/06112026-saudi-arabia-rejects-wall-street-journal-report-on-houthi-demands-says-pure-fabrication/",
-   "kilde": "GDELT",
-   "domene": "eurasiareview.com",
-   "publisert": "2026-11-06T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Seafarer killed in Gulf as Iran says ships ablaze in Hormuz",
-   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/seafarer-killed-gulf-iran-says-ships-ablaze-hormuz",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-06T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Canadian art market takes hit from trade war with US",
    "url": "https://www.theartnewspaper.com/2026/11/06/canadian-art-market-takes-hit-from-trade-war-with-us",
    "kilde": "GDELT",
@@ -894,37 +1215,6 @@
    ]
   },
   {
-   "tittel": "What the US Election Results Could Mean for Ukraine & Russia",
-   "url": "https://havanatimes.org/news/what-the-us-election-results-could-mean-for-ukraine-russia/",
-   "kilde": "GDELT",
-   "domene": "havanatimes.org",
-   "publisert": "2026-11-06T19:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Putin Discusses Upcoming Trilateral Talks on Ukraine With Russian Security Council",
-   "url": "https://sputnikglobe.com/20261106/putin-discusses-upcoming-trilateral-talks-on-ukraine-with-russian-security-council-1125026984.html",
-   "kilde": "GDELT",
-   "domene": "sputnikglobe.com",
-   "publisert": "2026-11-06T19:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Why gold prices are surprisingly low",
    "url": "https://www.wrvo.org/2026-11-06/why-gold-prices-are-surprisingly-low",
    "kilde": "GDELT",
@@ -936,21 +1226,6 @@
    ],
    "matchede_ord": [
     "gold price"
-   ]
-  },
-  {
-   "tittel": "Russia uses Starlink rival for military communications over Ukraine",
-   "url": "https://news.az/news/russia-uses-starlink-rival-for-military-communications-over-ukraine",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-06T19:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -1025,21 +1300,6 @@
    ]
   },
   {
-   "tittel": "Zelensky: Ukraine may receive increased U.S. assistance following 'new political infrastructure'",
-   "url": "https://article.wn.com/view/2026/11/06/Zelensky_Ukraine_may_receive_increased_US_assistance_followi/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-06T18:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine"
-   ]
-  },
-  {
    "tittel": "US presses China to honor Busan trade truce as rare earth shipments fall short.",
    "url": "https://investinglive.com/news/us-presses-china-to-honor-busan-trade-truce-as-rare-earth-shipments-fall-short/",
    "kilde": "GDELT",
@@ -1051,21 +1311,6 @@
    ],
    "matchede_ord": [
     "rare earth"
-   ]
-  },
-  {
-   "tittel": "Trump meets Putin envoy, says Ukraine peace deal could come very soon",
-   "url": "https://www.business-standard.com/world-news/trump-meets-putin-envoy-says-ukraine-peace-deal-could-come-very-soon-126110602047_1.html",
-   "kilde": "GDELT",
-   "domene": "business-standard.com",
-   "publisert": "2026-11-06T18:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
    ]
   },
   {
@@ -1094,36 +1339,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Budanov to lead Ukrainian Delegation in talks with USA, Russia in Abu Dhabi next week – media",
-   "url": "https://en.interfax.com.ua/news/general/1232635.html",
-   "kilde": "GDELT",
-   "domene": "interfax.com.ua",
-   "publisert": "2026-11-06T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Sybiha: Ukraine takes meeting in Abu Dhabi seriously, expects corresponding stance from Russia",
-   "url": "https://en.interfax.com.ua/news/general/1232641.html",
-   "kilde": "GDELT",
-   "domene": "interfax.com.ua",
-   "publisert": "2026-11-06T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -1194,21 +1409,6 @@
    ],
    "matchede_ord": [
     "gold price"
-   ]
-  },
-  {
-   "tittel": "Elections Alberta projects referendum cost at $84.3 million - DiscoverAirdrie.com - Local News, Weather, Sports, and Job Listings for Airdrie, Alberta, and the Rocky View County region.",
-   "url": "https://discoverairdrie.com/articles/elections-alberta-projects-referendum-cost-at-843-million",
-   "kilde": "GDELT",
-   "domene": "discoverairdrie.com",
-   "publisert": "2026-11-06T16:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "referendum",
-    "election"
    ]
   },
   {
@@ -1354,21 +1554,6 @@
    ]
   },
   {
-   "tittel": "Elections Alberta estimates referendum cost $84 million",
-   "url": "https://edmontonjournal.com/news/politics/elections-alberta-estimates-referendum-cost-84-million",
-   "kilde": "GDELT",
-   "domene": "edmontonjournal.com",
-   "publisert": "2026-11-06T15:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "referendum",
-    "election"
-   ]
-  },
-  {
    "tittel": "The Houthis are Reportedly Clearing Ships For Passage Through Red Sea Via Email, Cementing Their Control",
    "url": "https://www.ibtimes.com/houthis-red-sea-ship-passage-email-approval-3809498",
    "kilde": "GDELT",
@@ -1409,21 +1594,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Elections Alberta pegs cost of separation referendum at $84 million – Brandon Sun",
-   "url": "https://www.brandonsun.com/local/2026/11/05/cp-newsalert-elections-alberta-pegs-separation-referendum-cost-at-84-million",
-   "kilde": "GDELT",
-   "domene": "brandonsun.com",
-   "publisert": "2026-11-06T15:00:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "referendum",
-    "election"
    ]
   },
   {
@@ -1511,20 +1681,6 @@
    ]
   },
   {
-   "tittel": "Appeal to raise £150,000 for memorial to Second World War heroes",
-   "url": "https://www.eastlothiancourier.com/news/26704652.appeal-raise-150-000-memorial-world-war-ii-heroes/",
-   "kilde": "GDELT",
-   "domene": "eastlothiancourier.com",
-   "publisert": "2026-11-06T13:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
-   ]
-  },
-  {
    "tittel": "Article: Has Trump Quietly Surrendered Control of the Strait of Hormuz?",
    "url": "https://www.opednews.com/populum/page.php?f=Has-Trump-Quietly-Surrende-Balance_Iran_Limits_Military-261106-746.html",
    "kilde": "GDELT",
@@ -1609,20 +1765,6 @@
    ]
   },
   {
-   "tittel": "County declares State of Emergency for storm-damaged Ogilby and Picacho roads",
-   "url": "https://www.ivpressonline.com/news/county-declares-state-of-emergency-for-storm-damaged-ogilby-and-picacho-roads/article_ae6612df-dd91-4a05-b77e-bfe983e2296e.html",
-   "kilde": "GDELT",
-   "domene": "ivpressonline.com",
-   "publisert": "2026-11-06T12:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
    "tittel": "Tax loophole : consumers not benefiting from 15% vehicle import tax concession?",
    "url": "https://srilankamirror.com/2026/09/13/news/tax-loophole-consumers-not-benifiting-from-15-vehicle-import-tax-concession",
    "kilde": "GDELT",
@@ -1634,20 +1776,6 @@
    ],
    "matchede_ord": [
     "import tax"
-   ]
-  },
-  {
-   "tittel": "Gold Prices May Be Nearing Bottom After 25% Fall From Record High: World Gold Council",
-   "url": "https://www.businessworld.in/article/gold-prices-may-be-nearing-bottom-after-25-fall-from-record-high-world-gold-council-632455",
-   "kilde": "GDELT",
-   "domene": "businessworld.in",
-   "publisert": "2026-11-06T11:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
@@ -1817,122 +1945,6 @@
    ]
   },
   {
-   "tittel": "Vanuatu Parliament to debate no-confidence motion on Monday",
-   "url": "https://pina.com.fj/2026/11/06/vanuatu-parliament-to-debate-no-confidence-motion-on-monday/",
-   "kilde": "GDELT",
-   "domene": "pina.com.fj",
-   "publisert": "2026-11-06T03:15:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "no-confidence"
-   ]
-  },
-  {
-   "tittel": "Analysis-Lula's election win dashes US hopes of quick access to Brazil's rare earths",
-   "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/06/analysis-lula-s-election-win-dashes-us-hopes-of-quick-access-to-brazil-s-rare-earths",
-   "kilde": "GDELT",
-   "domene": "internazionale.it",
-   "publisert": "2026-11-06T03:00:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
-   ]
-  },
-  {
-   "tittel": "Year Deal to End China's Rare Earth Stranglehold",
-   "url": "https://www.chinatechnews.com/2026/11/06/132171-year-deal-to-end-chinas-rare-earth-stranglehold",
-   "kilde": "GDELT",
-   "domene": "chinatechnews.com",
-   "publisert": "2026-11-06T02:45:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
-   ]
-  },
-  {
-   "tittel": "China to extend anti-dumping, anti-subsidy tariffs on US NPA imports for five years",
-   "url": "http://en.people.cn/n3/2026/1106/c90000-20516294.html",
-   "kilde": "GDELT",
-   "domene": "en.people.cn",
-   "publisert": "2026-11-06T02:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "anti-dumping",
-    "tariff"
-   ]
-  },
-  {
-   "tittel": "Phoenix Tailings prepares to open rare earth separation facility at Eastman Business Park",
-   "url": "https://13wham.com/news/local/phoenix-tailings-prepares-to-open-rare-earth-separation-facility-at-eastman-business-park-kodak-greece-rochester-ny",
-   "kilde": "GDELT",
-   "domene": "13wham.com",
-   "publisert": "2026-11-06T02:15:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
-   ]
-  },
-  {
-   "tittel": "US election fallout: Will Democrats impeach Trump?",
-   "url": "https://punchng.com/us-election-fallout-democrats-may-impede-will-they-impeach/",
-   "kilde": "GDELT",
-   "domene": "punchng.com",
-   "publisert": "2026-11-06T02:15:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "election",
-    "impeach"
-   ]
-  },
-  {
-   "tittel": "Elections Alberta reveals October referendum cost $84M, receives additional funds from legislature committee",
-   "url": "https://www.cbc.ca/news/canada/edmonton/elections-alberta-referendum-cost-9.7411555",
-   "kilde": "GDELT",
-   "domene": "cbc.ca",
-   "publisert": "2026-11-06T02:00:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "referendum",
-    "election"
-   ]
-  },
-  {
-   "tittel": "Corn and Wheat Hit 3-Month Lows as Soy Slides | Grains Wrap, Nov 5",
-   "url": "https://www.riotimesonline.com/grains-soy-corn-latam-thursday-november-5-2026/",
-   "kilde": "GDELT",
-   "domene": "riotimesonline.com",
-   "publisert": "2026-11-06T02:00:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "grain",
-    "wheat"
-   ]
-  },
-  {
    "tittel": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
    "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
    "kilde": "Federal Reserve",
@@ -1967,16 +1979,6 @@
    "url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261105~6495a0df6f.en.html",
    "kilde": "ECB",
    "publisert": "2026-11-05T07:30:00Z",
-   "tema": "sentralbanker",
-   "temaer": [
-    "sentralbanker"
-   ]
-  },
-  {
-   "tittel": "ECB wage tracker suggests slightly higher wage growth in first three quarters of 2027 compared with the full year of 2026",
-   "url": "https://www.ecb.europa.eu//press/pr/date/2026/html/ecb.pr261104~caf181d7ac.en.html",
-   "kilde": "ECB",
-   "publisert": "2026-11-04T00:00:00Z",
    "tema": "sentralbanker",
    "temaer": [
     "sentralbanker"
