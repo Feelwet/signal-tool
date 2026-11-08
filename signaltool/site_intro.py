@@ -13,6 +13,9 @@ TEXTS = {
 THEME_CAUTION = "Nyheter kobles automatisk til temaer. Koblingene kan være feil; siste kvalitetskontroll besto ikke."
 CSS = ".page-intro{font-size:15px;line-height:23px;max-width:720px;margin:0 0 16px;color:#cbd5e1}.page-intro-caution{font-size:14px;line-height:22px;max-width:720px;margin:0 0 16px;color:#cbd5e1}"
 
+# UxBot 08.11: mobile introduction fix only; keep other pages and metadata unchanged.
+CSS += "@media(max-width:600px){.ov-page .page-intro,.tr-page .page-intro{font-size:16px;line-height:24px}}"
+
 def html(title):
     out = '<p class="page-intro">' + escape(TEXTS[title]) + '</p>'
     if title == "Temaer":
