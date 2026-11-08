@@ -1,31 +1,30 @@
 {
- "hentet": "2026-11-08T13:15:52+0100",
+ "hentet": "2026-11-08T14:49:55+0100",
  "dato": "2026-11-08",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (4105) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (4108) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "ok (6863 i 95d-uttrekket)",
-  "Norges Bank": "ok (5)"
+  "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 77
+   "antall": 93
   },
   {
    "tema": "conflict_defense",
-   "antall": 76
+   "antall": 83
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 19
+   "antall": 21
   },
   {
    "tema": "risk_off_haven",
-   "antall": 7
+   "antall": 11
   },
   {
    "tema": "rare_earths_semis",
@@ -46,15 +45,38 @@
   {
    "tema": "food_agri",
    "antall": 2
+  },
+  {
+   "tema": "nordic_arctic",
+   "antall": 1
+  },
+  {
+   "tema": "sanctions_energy",
+   "antall": 1
   }
  ],
  "saker": [
   {
-   "tittel": "Russia targets emergency crews at the site of a deadly strike in southern Ukraine",
-   "url": "http://www.cecildaily.com/ap/world/russia-targets-emergency-crews-at-the-site-of-a-deadly-strike-in-southern-ukraine/article_6c804830-5636-5950-a8f1-c51194a312e1.html",
+   "tittel": "Israeli defense minister warns Iran mission",
+   "url": "http://www.bignewsnetwork.com/news/279420337/israeli-defense-minister-warns-iran-mission-not-complete",
    "kilde": "GDELT",
-   "domene": "cecildaily.com",
-   "publisert": "2026-11-08T12:15:00Z",
+   "domene": "bignewsnetwork.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russia targets emergency crews at the site of a deadly strike in southern Ukraine",
+   "url": "http://www.rockymounttelegram.com/news/world/russia-targets-emergency-crews-at-the-site-of-a-deadly-strike-in-southern-ukraine/article_fd0f5c68-1600-5463-88d9-0aed052a04fa.html",
+   "kilde": "GDELT",
+   "domene": "rockymounttelegram.com",
+   "publisert": "2026-11-08T13:45:00Z",
    "tema": "conflict_defense",
    "temaer": [
     "conflict_defense"
@@ -62,6 +84,491 @@
    "matchede_ord": [
     "ukraine",
     "russia"
+   ]
+  },
+  {
+   "tittel": "Israeli Defence Minister reiterates Netanyahu's call for \"unity\" amid Iran war after President tasks Eisenkot to form next govt",
+   "url": "https://aninews.in/news/world/middle-east/israeli-defence-minister-reiterates-netanyahus-call-for-unity-amid-iran-war-after-president-tasks-eisenkot-to-form-next-govt20261108164101/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
+   "url": "https://dominicanrepublicpost.com/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity/",
+   "kilde": "GDELT",
+   "domene": "dominicanrepublicpost.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Alaska gains $45 million in revenue for each dollar oil prices rise",
+   "url": "https://econotimes.com/Alaska-gains-45-million-in-revenue-for-each-dollar-oil-prices-rise-1773205",
+   "kilde": "GDELT",
+   "domene": "econotimes.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Trump Confirms New Strikes on Iran as U.S. and Tehran Continue Diplomatic Talks",
+   "url": "https://www.980waav.com/2026/11/08/trump-confirms-new-strikes-on-iran-as-u-s-and-tehran-continue-diplomatic-talks/",
+   "kilde": "GDELT",
+   "domene": "980waav.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Arab News | Iran says 3 tankers caught fire in Hormuz",
+   "url": "https://www.arabnews.com/middle-east/iran-says-3-tankers-caught-fire-in-hormuz-3010518",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russia targets emergency crews at the site of a deadly strike in Ukraine",
+   "url": "https://www.kcra.com/article/russia-emergency-crews-deadly-strike-southern-ukraine/74367683",
+   "kilde": "GDELT",
+   "domene": "kcra.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "IRGC says three tankers ablaze in Strait of Hormuz",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/irgc-says-three-tankers-ablaze-strait-hormuz",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "'Spiritual darkness': US ambassador to Israel says critics of Iran war are blinded by Satan",
+   "url": "https://www.middleeasteye.net/news/spiritual-darkness-us-ambassador-israel-says-critics-iran-war-are-blinded-satan",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Israel Defence Minister says 'mission not complete' on Iran, warns Hezbollah against joining any attack",
+   "url": "https://www.moneycontrol.com/world/israel-defence-minister-says-mission-not-complete-on-iran-warns-hezbollah-against-joining-any-attack-article-14074980.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hezbollah",
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russian strikes leave 850,000 without power in Ukraine ahead of winter",
+   "url": "https://www.moneycontrol.com/world/russian-strikes-leave-850-000-without-power-in-ukraine-ahead-of-winter-article-14075007.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Strikes on al-Masirah TV crew clear sign of Saudi Arabia's repression of journalists: Houthi",
+   "url": "https://www.presstv.co.uk/Detail/2026/11/08/780251/houthi-strikes-on-al-masirah-tv-crew-proof-of-saudis-repression-of-journalists",
+   "kilde": "GDELT",
+   "domene": "presstv.co.uk",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "IRGC Navy: Three oil tankers engulfed in flames in Strait of Hormuz after maritime violations",
+   "url": "https://www.presstv.co.uk/Detail/2026/11/08/780252/irgc-navy-three-oil-tankers-engulfed-in-flames-in-strait-of-hormuz-after-maritime-violations",
+   "kilde": "GDELT",
+   "domene": "presstv.co.uk",
+   "publisert": "2026-11-08T13:45:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "$500-M subsea cable plan still under discussion — PLDT",
+   "url": "https://bworldonline.com/corporate/2026/11/08/792186/500-m-subsea-cable-plan-still-under-discussion-pldt/",
+   "kilde": "GDELT",
+   "domene": "bworldonline.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "nordic_arctic",
+   "temaer": [
+    "nordic_arctic"
+   ],
+   "matchede_ord": [
+    "subsea cable"
+   ]
+  },
+  {
+   "tittel": "ERC considering power-reserve trading price cap - BusinessWorld Online",
+   "url": "https://bworldonline.com/economy/2026/11/08/792135/erc-considering-power-reserve-trading-price-cap/",
+   "kilde": "GDELT",
+   "domene": "bworldonline.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity",
+   "url": "https://www.aljazeera.com/news/2026/11/8/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Israel says Iran mission 'not complete': 'They're trying to get nuclear weapons'",
+   "url": "https://www.hindustantimes.com/world-news/israel-says-iran-mission-not-complete-they-re-trying-to-get-nuclear-weapons-101794142030671.html",
+   "kilde": "GDELT",
+   "domene": "hindustantimes.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
+   "url": "https://www.khqa.com/news/nation-world/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/article_3cecadd1-7adb-578c-9afe-ebc34dcc1aba.html",
+   "kilde": "GDELT",
+   "domene": "khqa.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Second world war veterans outnumber former PMs for possible last time on Remembrance Sunday",
+   "url": "https://www.theguardian.com/uk-news/2026/nov/08/second-world-war-veterans-outnumber-former-pms-for-possible-last-time-on-remembrance-sunday",
+   "kilde": "GDELT",
+   "domene": "theguardian.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "IRAN WARNING: Defense Minister Katz Says Nuclear Threat Remains, Israel Prepared To Take Military Action",
+   "url": "https://www.theyeshivaworld.com/news/israel-news/2620360/iran-warning-defense-minister-katz-says-nuclear-threat-remains-israel-prepared-to-take-military-action.html",
+   "kilde": "GDELT",
+   "domene": "theyeshivaworld.com",
+   "publisert": "2026-11-08T13:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Trump tariffs: Snowbirds back in Florida amid U.S. trade war",
+   "url": "https://www.cp24.com/news/canada/2026/11/08/are-canadian-snowbirds-flocking-back-during-the-us-trade-war-heres-what-data-says/",
+   "kilde": "GDELT",
+   "domene": "cp24.com",
+   "publisert": "2026-11-08T13:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war",
+    "tariff"
+   ]
+  },
+  {
+   "tittel": "Mideast news: Saudi Arabia intercepts missiles",
+   "url": "https://www.cp24.com/news/world/2026/11/08/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/",
+   "kilde": "GDELT",
+   "domene": "cp24.com",
+   "publisert": "2026-11-08T13:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Ukrainian atomic plant 'has two weeks of power left to keep nuclear fuel cool' after being forced onto backup generators by power cut - as 600,000 people plunged into darkness by Russian strikes",
+   "url": "https://www.dailymail.com/news/article-16275949/Ukrainian-atomic-plant-two-weeks-power-nuclear-fuel-power.html",
+   "kilde": "GDELT",
+   "domene": "dailymail.com",
+   "publisert": "2026-11-08T13:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Milford Haven story of 14-year-old First World War soldier",
+   "url": "https://www.westerntelegraph.co.uk/news/26706559.milford-haven-story-14-year-old-first-world-war-soldier/",
+   "kilde": "GDELT",
+   "domene": "westerntelegraph.co.uk",
+   "publisert": "2026-11-08T13:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Israeli defense minister warns Iran mission \"not complete\"-Xinhua",
+   "url": "https://english.news.cn/20261108/65563d6a47bb4d87b64ad8c55ea1fc9b/c.html",
+   "kilde": "GDELT",
+   "domene": "english.news.cn",
+   "publisert": "2026-11-08T13:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Iran reports 3 tanker fires as Israel warns of unfinished mission",
+   "url": "https://www.dailysabah.com/world/mid-east/iran-reports-3-tanker-fires-as-israel-warns-of-unfinished-mission",
+   "kilde": "GDELT",
+   "domene": "dailysabah.com",
+   "publisert": "2026-11-08T13:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Multiple explosions heard in Riyadh, Saudi Arabia  - International",
+   "url": "https://www.dailymirror.lk/international/Multiple-explosions-heard-in-Riyadh-Saudi-Arabia/107-354435",
+   "kilde": "GDELT",
+   "domene": "dailymirror.lk",
+   "publisert": "2026-11-08T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "DM Katz Says Iran Renewing Pursuit Of Nuclear Weapons, Warns Mission 'not Yet Complete'",
+   "url": "https://www.i24news.tv/en/news/israel/defense/artc-dm-katz-says-iran-renewing-pursuit-of-nuclear-weapons-warns-mission-not-yet-complete",
+   "kilde": "GDELT",
+   "domene": "i24news.tv",
+   "publisert": "2026-11-08T12:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Russian strikes leave over 600,000 people without power in Ukraine's Dnipro region",
+   "url": "https://aa.com.tr/en/eurasia/zelenskyy-says-russian-strikes-leave-over-600-000-people-without-power-in-ukraines-dnipro-region/4115894",
+   "kilde": "GDELT",
+   "domene": "aa.com.tr",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "WTI oil price outlook: After a 17.5% slide, can buyers reclaim $92.53?",
+   "url": "https://investinglive.com/commodities/wti-oil-price-outlook-after-a-17-5-slide-can-buyers-reclaim-92-53/",
+   "kilde": "GDELT",
+   "domene": "investinglive.com",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Arab News | Financing Saudi Arabia's export ambitions",
+   "url": "https://www.arabnews.com/opinion/financing-saudi-arabias-export-ambitions-3010506",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Israel Says Mission Against Iran 'Not Complete', Warns Hezbollah",
+   "url": "https://www.deccanchronicle.com/west-asia/israel-says-mission-against-iran-not-complete-warns-hezbollah-2002768",
+   "kilde": "GDELT",
+   "domene": "deccanchronicle.com",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hezbollah",
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Putin Backs Russia's Lab Grown Diamond Restrictions",
+   "url": "https://www.idexonline.com/FullArticle?Id=51497",
+   "kilde": "GDELT",
+   "domene": "idexonline.com",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Israel defense minister says 'mission not complete' on Iran",
+   "url": "https://www.naharnet.com:443/stories/en/323625-israel-defense-minister-says-mission-not-complete-on-iran",
+   "kilde": "GDELT",
+   "domene": "naharnet.com",
+   "publisert": "2026-11-08T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
    ]
   },
   {
@@ -106,21 +613,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Israel defense minister says 'mission not complete' on Iran – The Frontier Post",
-   "url": "https://thefrontierpost.com/israel-defense-minister-says-mission-not-complete-on-iran/",
-   "kilde": "GDELT",
-   "domene": "thefrontierpost.com",
-   "publisert": "2026-11-08T12:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
    ]
   },
   {
@@ -183,20 +675,6 @@
    ]
   },
   {
-   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
-   "url": "https://www.wral.com/news/ap/090d9-saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/",
-   "kilde": "GDELT",
-   "domene": "wral.com",
-   "publisert": "2026-11-08T12:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Farage uncovers heartbreaking stories of Britain's youngest First World War soldiers - London Business News",
    "url": "https://londonlovesbusiness.com/farage-uncovers-heartbreaking-stories-of-britains-youngest-first-world-war-soldiers/",
    "kilde": "GDELT",
@@ -208,50 +686,6 @@
    ],
    "matchede_ord": [
     "world war"
-   ]
-  },
-  {
-   "tittel": "US in new targeted strikes on Iran as Tehran leaders weigh mediator's proposals",
-   "url": "https://mobile.naharnet.com/stories/en/323622-us-in-new-targeted-strikes-on-iran-as-tehran-leaders-weigh-mediator-s-proposals",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-08T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Israel defense minister says 'mission not complete' on Iran",
-   "url": "https://mobile.naharnet.com/stories/en/323625-israel-defense-minister-says-mission-not-complete-on-iran",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-08T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia Intercepts Missiles as Riyadh Aramco Building Is Targeted",
-   "url": "https://voiceofvienna.org/saudi-arabia-intercepts-missiles-as-riyadh-aramco-building-is-targeted/",
-   "kilde": "GDELT",
-   "domene": "voiceofvienna.org",
-   "publisert": "2026-11-08T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -282,21 +716,6 @@
    "matchede_ord": [
     "ukraine",
     "russian"
-   ]
-  },
-  {
-   "tittel": "Trump Confirms New Strikes on Iran as U.S. and Tehran Continue Diplomatic Talks",
-   "url": "https://www.wjcw.com/2026/11/08/trump-confirms-new-strikes-on-iran-as-u-s-and-tehran-continue-diplomatic-talks/",
-   "kilde": "GDELT",
-   "domene": "wjcw.com",
-   "publisert": "2026-11-08T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
    ]
   },
   {
@@ -345,21 +764,6 @@
    ]
   },
   {
-   "tittel": "Israeli city sues Iran for $65 million in war reparations",
-   "url": "https://www.clevelandjewishnews.com/jns/israeli-city-sues-iran-for-65-million-in-war-reparations/article_2fd8f2a4-7557-53e7-a24d-b74e1fbdddfd.html",
-   "kilde": "GDELT",
-   "domene": "clevelandjewishnews.com",
-   "publisert": "2026-11-08T11:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
    "tittel": "The Kremlin hopes the US election shake-up won't shift Trump's negotiations on Ukraine",
    "url": "https://www.dailygazette.com/leader_herald/ap/national/the-kremlin-hopes-the-us-election-shake-up-wont-shift-trumps-negotiations-on-ukraine/article_121c1333-fd9c-5315-a786-c4a5bb877d08.html",
    "kilde": "GDELT",
@@ -375,22 +779,6 @@
    ]
   },
   {
-   "tittel": "Oil Tanker Engulfed in Flames After Striking Naval Mine in Strait of Hormuz, Iran Says",
-   "url": "https://www.lankanewspapers.com/2026/11/08/oil-tanker-engulfed-in-flames-after-striking-naval-mine-in-strait-of-hormuz-iran-says",
-   "kilde": "GDELT",
-   "domene": "lankanewspapers.com",
-   "publisert": "2026-11-08T11:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Taiwan Semiconductor Manufacturing Company Ltd. $TSM Stock Bought by Kornitzer Capital Management Inc. KS",
    "url": "https://www.themarketsdaily.com/2026/11/08/taiwan-semiconductor-manufacturing-company-ltd-tsm-stock-bought-by-kornitzer-capital-management-inc-ks.html",
    "kilde": "GDELT",
@@ -403,34 +791,6 @@
    "matchede_ord": [
     "semiconductor",
     "taiwan"
-   ]
-  },
-  {
-   "tittel": "Posts claiming Cristiano Ronaldo offered to play for Saudi Arabia are unverified",
-   "url": "https://www.ummid.com/news/2026/11/8/posts-claiming-cristiano-ronaldo-offered-to-play-for-saudi-arabia-are-unverified.html",
-   "kilde": "GDELT",
-   "domene": "ummid.com",
-   "publisert": "2026-11-08T11:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Coalition says two ballistic, two cruise missiles intercepted in Saudi Arabia",
-   "url": "http://thepeninsulaqatar.com/article/08/11/2026/coalition-says-two-ballistic-two-cruise-missiles-intercepted-in-saudi-arabia",
-   "kilde": "GDELT",
-   "domene": "thepeninsulaqatar.com",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -463,112 +823,6 @@
    ]
   },
   {
-   "tittel": "Blind spot at Hormuz Strait: How Iran used advanced electronic warfare to seize US MQM-170 drones",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/01/779688/blind-spot-at-hormuz-inside-the-irgc-navys-electronic-ambush-of-americas-mqm-170-drones",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "AFC delays 2027 Asian Cup in Saudi Arabia until December over regional wars",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/03/779845/rs-afc-delays-2027-asian-cup-in-saudi-arabia-until-december-over-conflict-in-me",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Trump weakened, Israel rattled as US midterm results expose growing backlash against war on Iran",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/05/780015/trump-weakened-israel-rattled-as-us-midterm-results-expose-backlash-against-war-on-iran",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Two oil tankers violating Iran's maritime restrictions catch fire in Strait of Hormuz: IRGC",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/06/780083/two-oil-tankers-violating-irans-maritime-restrictions-catch-fire-in-strait-of-hormuz-irgc",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Trump's 'servility to Israel' turned war on Iran into 'major liability' for Republicans: Author",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/07/780143/trumps-servility-to-israel-turned-war-on-iran-into-major-liability-for-republicans-author",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Tanker catches fire after hitting sea mine east of Strait of Hormuz: Iran Navy",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/07/780165/tanker-catches-fire-after-hitting-sea-mine-east-of-strait-of-hormuz-iran-navy",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Fake X accounts posing as Iranians campaigned for Netanyahu during Israeli elections: Report",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/07/780181/x-users-claiming-to-be-iranians-campaigned-for-netanyahus-reelection-report",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "israeli"
-   ]
-  },
-  {
    "tittel": "Two offending oil tankers strike mines, engulfed in flames in Strait of Hormuz: IRGC Navy",
    "url": "https://www.presstv.co.uk/Detail/2026/11/07/780202/two-offending-oil-tankers-strike-mines-engulfed-in-flames-in-strait-of-hormuz-irgc-navy",
    "kilde": "GDELT",
@@ -580,36 +834,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Leaked documents expose Cisco's expanding ties with Israeli military intelligence during Gaza genocide",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/08/780220/leaked-documents-expose-ciscos-expanding-ties-with-israeli-military-intel-during-genocide-in-gaza",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iranian researchers at University of Tehran uncover new clues to Alzheimer's treatment",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/08/780231/iranian-researchers-at-university-of-tehran-uncover-new-clues-to-alzheimers-treatment",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "tehran"
    ]
   },
   {
@@ -625,126 +849,6 @@
    "matchede_ord": [
     "ukraine",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Russian attack on Ukraine's Odesa kills one, damages infrastructure",
-   "url": "https://news.az/news/russian-attack-on-ukraine-s-odesa-kills-one-damages-infrastructure",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-08T11:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Russian Strikes On Energy Targets Leave 600,000 Ukrainians Without Electricity",
-   "url": "https://www.rferl.org/a/russia-strikes-ukraine-energy/33893219.html",
-   "kilde": "GDELT",
-   "domene": "rferl.org",
-   "publisert": "2026-11-08T11:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Russia wants Trump to keep up negotiations on Ukraine despite US election outcome",
-   "url": "https://www.wsbradio.com/news/world/kremlin-hopes-us/WDG4XU76JMZLRPILHTIY5KOYDQ/",
-   "kilde": "GDELT",
-   "domene": "wsbradio.com",
-   "publisert": "2026-11-08T11:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "The bizarre Russian border city flooded with tourists but just 18 miles from NATO",
-   "url": "https://www.aol.co.uk/articles/bizarre-russian-border-city-flooded-101900000.html",
-   "kilde": "GDELT",
-   "domene": "aol.co.uk",
-   "publisert": "2026-11-08T10:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Trump tariffs: Snowbirds back in Florida amid U.S. trade war",
-   "url": "https://www.bnnbloomberg.ca/tariffs/2026/11/08/are-canadian-snowbirds-flocking-back-during-the-us-trade-war-heres-what-data-says/",
-   "kilde": "GDELT",
-   "domene": "bnnbloomberg.ca",
-   "publisert": "2026-11-08T10:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade war",
-    "tariff"
-   ]
-  },
-  {
-   "tittel": "Bizarre Russian border city flooded with tourists next to NATO country | World | News",
-   "url": "https://www.express.co.uk/news/world/2262437/russia-border-city-flooded-tourists-18-miles-nato",
-   "kilde": "GDELT",
-   "domene": "express.co.uk",
-   "publisert": "2026-11-08T10:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "As fresh peace talks loom, Putin is escalating his efforts to shatter Ukraine's economy - LocalNews8.com",
-   "url": "https://localnews8.com/news/national-world/cnn-world/2026/11/07/as-fresh-peace-talks-loom-putin-is-escalating-his-efforts-to-shatter-ukraines-economy/",
-   "kilde": "GDELT",
-   "domene": "localnews8.com",
-   "publisert": "2026-11-08T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "'Operation Midas' concludes: How Ukraine's biggest corruption scandal shook Zelensky's inner circle « nuclear-news",
-   "url": "https://nuclear-news.net/2026/11/08/4-b1-operation-midas-concludes-how-ukraines-biggest-corruption-scandal-shook-zelenskys-inner-circle/",
-   "kilde": "GDELT",
-   "domene": "nuclear-news.net",
-   "publisert": "2026-11-08T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine"
    ]
   },
   {

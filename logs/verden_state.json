@@ -1,11 +1,249 @@
 {
 "saker": [
 {
-"tittel": "Russia targets emergency crews at the site of a deadly strike in southern Ukraine",
-"url": "http://www.cecildaily.com/ap/world/russia-targets-emergency-crews-at-the-site-of-a-deadly-strike-in-southern-ukraine/article_6c804830-5636-5950-a8f1-c51194a312e1.html",
+"tittel": "Israeli defense minister warns Iran mission",
+"url": "http://www.bignewsnetwork.com/news/279420337/israeli-defense-minister-warns-iran-mission-not-complete",
 "kilde": "GDELT",
-"domene": "cecildaily.com",
-"publisert": "2026-11-08T12:15:00Z"
+"domene": "bignewsnetwork.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Russia targets emergency crews at the site of a deadly strike in southern Ukraine",
+"url": "http://www.rockymounttelegram.com/news/world/russia-targets-emergency-crews-at-the-site-of-a-deadly-strike-in-southern-ukraine/article_fd0f5c68-1600-5463-88d9-0aed052a04fa.html",
+"kilde": "GDELT",
+"domene": "rockymounttelegram.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Israeli Defence Minister reiterates Netanyahu's call for \"unity\" amid Iran war after President tasks Eisenkot to form next govt",
+"url": "https://aninews.in/news/world/middle-east/israeli-defence-minister-reiterates-netanyahus-call-for-unity-amid-iran-war-after-president-tasks-eisenkot-to-form-next-govt20261108164101/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
+"url": "https://dominicanrepublicpost.com/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity/",
+"kilde": "GDELT",
+"domene": "dominicanrepublicpost.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Alaska gains $45 million in revenue for each dollar oil prices rise",
+"url": "https://econotimes.com/Alaska-gains-45-million-in-revenue-for-each-dollar-oil-prices-rise-1773205",
+"kilde": "GDELT",
+"domene": "econotimes.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Trump Confirms New Strikes on Iran as U.S. and Tehran Continue Diplomatic Talks",
+"url": "https://www.980waav.com/2026/11/08/trump-confirms-new-strikes-on-iran-as-u-s-and-tehran-continue-diplomatic-talks/",
+"kilde": "GDELT",
+"domene": "980waav.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Arab News | Iran says 3 tankers caught fire in Hormuz",
+"url": "https://www.arabnews.com/middle-east/iran-says-3-tankers-caught-fire-in-hormuz-3010518",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Russia targets emergency crews at the site of a deadly strike in Ukraine",
+"url": "https://www.kcra.com/article/russia-emergency-crews-deadly-strike-southern-ukraine/74367683",
+"kilde": "GDELT",
+"domene": "kcra.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "IRGC says three tankers ablaze in Strait of Hormuz",
+"url": "https://www.middleeasteye.net/live-blog/live-blog-update/irgc-says-three-tankers-ablaze-strait-hormuz",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "'Spiritual darkness': US ambassador to Israel says critics of Iran war are blinded by Satan",
+"url": "https://www.middleeasteye.net/news/spiritual-darkness-us-ambassador-israel-says-critics-iran-war-are-blinded-satan",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Israel Defence Minister says 'mission not complete' on Iran, warns Hezbollah against joining any attack",
+"url": "https://www.moneycontrol.com/world/israel-defence-minister-says-mission-not-complete-on-iran-warns-hezbollah-against-joining-any-attack-article-14074980.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Russian strikes leave 850,000 without power in Ukraine ahead of winter",
+"url": "https://www.moneycontrol.com/world/russian-strikes-leave-850-000-without-power-in-ukraine-ahead-of-winter-article-14075007.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "Strikes on al-Masirah TV crew clear sign of Saudi Arabia's repression of journalists: Houthi",
+"url": "https://www.presstv.co.uk/Detail/2026/11/08/780251/houthi-strikes-on-al-masirah-tv-crew-proof-of-saudis-repression-of-journalists",
+"kilde": "GDELT",
+"domene": "presstv.co.uk",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "IRGC Navy: Three oil tankers engulfed in flames in Strait of Hormuz after maritime violations",
+"url": "https://www.presstv.co.uk/Detail/2026/11/08/780252/irgc-navy-three-oil-tankers-engulfed-in-flames-in-strait-of-hormuz-after-maritime-violations",
+"kilde": "GDELT",
+"domene": "presstv.co.uk",
+"publisert": "2026-11-08T13:45:00Z"
+},
+{
+"tittel": "$500-M subsea cable plan still under discussion — PLDT",
+"url": "https://bworldonline.com/corporate/2026/11/08/792186/500-m-subsea-cable-plan-still-under-discussion-pldt/",
+"kilde": "GDELT",
+"domene": "bworldonline.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "ERC considering power-reserve trading price cap - BusinessWorld Online",
+"url": "https://bworldonline.com/economy/2026/11/08/792135/erc-considering-power-reserve-trading-price-cap/",
+"kilde": "GDELT",
+"domene": "bworldonline.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity",
+"url": "https://www.aljazeera.com/news/2026/11/8/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity",
+"kilde": "GDELT",
+"domene": "aljazeera.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "Israel says Iran mission 'not complete': 'They're trying to get nuclear weapons'",
+"url": "https://www.hindustantimes.com/world-news/israel-says-iran-mission-not-complete-they-re-trying-to-get-nuclear-weapons-101794142030671.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
+"url": "https://www.khqa.com/news/nation-world/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/article_3cecadd1-7adb-578c-9afe-ebc34dcc1aba.html",
+"kilde": "GDELT",
+"domene": "khqa.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "Second world war veterans outnumber former PMs for possible last time on Remembrance Sunday",
+"url": "https://www.theguardian.com/uk-news/2026/nov/08/second-world-war-veterans-outnumber-former-pms-for-possible-last-time-on-remembrance-sunday",
+"kilde": "GDELT",
+"domene": "theguardian.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "IRAN WARNING: Defense Minister Katz Says Nuclear Threat Remains, Israel Prepared To Take Military Action",
+"url": "https://www.theyeshivaworld.com/news/israel-news/2620360/iran-warning-defense-minister-katz-says-nuclear-threat-remains-israel-prepared-to-take-military-action.html",
+"kilde": "GDELT",
+"domene": "theyeshivaworld.com",
+"publisert": "2026-11-08T13:30:00Z"
+},
+{
+"tittel": "Trump tariffs: Snowbirds back in Florida amid U.S. trade war",
+"url": "https://www.cp24.com/news/canada/2026/11/08/are-canadian-snowbirds-flocking-back-during-the-us-trade-war-heres-what-data-says/",
+"kilde": "GDELT",
+"domene": "cp24.com",
+"publisert": "2026-11-08T13:15:00Z"
+},
+{
+"tittel": "Mideast news: Saudi Arabia intercepts missiles",
+"url": "https://www.cp24.com/news/world/2026/11/08/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/",
+"kilde": "GDELT",
+"domene": "cp24.com",
+"publisert": "2026-11-08T13:15:00Z"
+},
+{
+"tittel": "Ukrainian atomic plant 'has two weeks of power left to keep nuclear fuel cool' after being forced onto backup generators by power cut - as 600,000 people plunged into darkness by Russian strikes",
+"url": "https://www.dailymail.com/news/article-16275949/Ukrainian-atomic-plant-two-weeks-power-nuclear-fuel-power.html",
+"kilde": "GDELT",
+"domene": "dailymail.com",
+"publisert": "2026-11-08T13:15:00Z"
+},
+{
+"tittel": "Milford Haven story of 14-year-old First World War soldier",
+"url": "https://www.westerntelegraph.co.uk/news/26706559.milford-haven-story-14-year-old-first-world-war-soldier/",
+"kilde": "GDELT",
+"domene": "westerntelegraph.co.uk",
+"publisert": "2026-11-08T13:15:00Z"
+},
+{
+"tittel": "Israeli defense minister warns Iran mission \"not complete\"-Xinhua",
+"url": "https://english.news.cn/20261108/65563d6a47bb4d87b64ad8c55ea1fc9b/c.html",
+"kilde": "GDELT",
+"domene": "english.news.cn",
+"publisert": "2026-11-08T13:00:00Z"
+},
+{
+"tittel": "Iran reports 3 tanker fires as Israel warns of unfinished mission",
+"url": "https://www.dailysabah.com/world/mid-east/iran-reports-3-tanker-fires-as-israel-warns-of-unfinished-mission",
+"kilde": "GDELT",
+"domene": "dailysabah.com",
+"publisert": "2026-11-08T13:00:00Z"
+},
+{
+"tittel": "Multiple explosions heard in Riyadh, Saudi Arabia  - International",
+"url": "https://www.dailymirror.lk/international/Multiple-explosions-heard-in-Riyadh-Saudi-Arabia/107-354435",
+"kilde": "GDELT",
+"domene": "dailymirror.lk",
+"publisert": "2026-11-08T12:45:00Z"
+},
+{
+"tittel": "DM Katz Says Iran Renewing Pursuit Of Nuclear Weapons, Warns Mission 'not Yet Complete'",
+"url": "https://www.i24news.tv/en/news/israel/defense/artc-dm-katz-says-iran-renewing-pursuit-of-nuclear-weapons-warns-mission-not-yet-complete",
+"kilde": "GDELT",
+"domene": "i24news.tv",
+"publisert": "2026-11-08T12:45:00Z"
+},
+{
+"tittel": "Zelenskyy says Russian strikes leave over 600,000 people without power in Ukraine's Dnipro region",
+"url": "https://aa.com.tr/en/eurasia/zelenskyy-says-russian-strikes-leave-over-600-000-people-without-power-in-ukraines-dnipro-region/4115894",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-08T12:30:00Z"
+},
+{
+"tittel": "WTI oil price outlook: After a 17.5% slide, can buyers reclaim $92.53?",
+"url": "https://investinglive.com/commodities/wti-oil-price-outlook-after-a-17-5-slide-can-buyers-reclaim-92-53/",
+"kilde": "GDELT",
+"domene": "investinglive.com",
+"publisert": "2026-11-08T12:30:00Z"
+},
+{
+"tittel": "Arab News | Financing Saudi Arabia's export ambitions",
+"url": "https://www.arabnews.com/opinion/financing-saudi-arabias-export-ambitions-3010506",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-08T12:30:00Z"
+},
+{
+"tittel": "Israel Says Mission Against Iran 'Not Complete', Warns Hezbollah",
+"url": "https://www.deccanchronicle.com/west-asia/israel-says-mission-against-iran-not-complete-warns-hezbollah-2002768",
+"kilde": "GDELT",
+"domene": "deccanchronicle.com",
+"publisert": "2026-11-08T12:30:00Z"
+},
+{
+"tittel": "Putin Backs Russia's Lab Grown Diamond Restrictions",
+"url": "https://www.idexonline.com/FullArticle?Id=51497",
+"kilde": "GDELT",
+"domene": "idexonline.com",
+"publisert": "2026-11-08T12:30:00Z"
+},
+{
+"tittel": "Israel defense minister says 'mission not complete' on Iran",
+"url": "https://www.naharnet.com:443/stories/en/323625-israel-defense-minister-says-mission-not-complete-on-iran",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-08T12:30:00Z"
 },
 {
 "tittel": "Russian Prez Putin meets Iran's Security Chief Mohsen Rezaei at Kremlin: Report",
@@ -64,13 +302,6 @@
 "publisert": "2026-11-08T12:15:00Z"
 },
 {
-"tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
-"url": "https://www.wral.com/news/ap/090d9-saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/",
-"kilde": "GDELT",
-"domene": "wral.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
 "tittel": "Farage uncovers heartbreaking stories of Britain's youngest First World War soldiers - London Business News",
 "url": "https://londonlovesbusiness.com/farage-uncovers-heartbreaking-stories-of-britains-youngest-first-world-war-soldiers/",
 "kilde": "GDELT",
@@ -80,13 +311,6 @@
 {
 "tittel": "US in new targeted strikes on Iran as Tehran leaders weigh mediator's proposals",
 "url": "https://mobile.naharnet.com/stories/en/323622-us-in-new-targeted-strikes-on-iran-as-tehran-leaders-weigh-mediator-s-proposals",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Israel defense minister says 'mission not complete' on Iran",
-"url": "https://mobile.naharnet.com/stories/en/323625-israel-defense-minister-says-mission-not-complete-on-iran",
 "kilde": "GDELT",
 "domene": "naharnet.com",
 "publisert": "2026-11-08T11:45:00Z"
@@ -110,13 +334,6 @@
 "url": "https://www.politico.eu/article/russian-strikes-leave-600000-in-the-dark-in-eastern-ukraine-dnipropetrovsk/",
 "kilde": "GDELT",
 "domene": "politico.eu",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Trump Confirms New Strikes on Iran as U.S. and Tehran Continue Diplomatic Talks",
-"url": "https://www.wjcw.com/2026/11/08/trump-confirms-new-strikes-on-iran-as-u-s-and-tehran-continue-diplomatic-talks/",
-"kilde": "GDELT",
-"domene": "wjcw.com",
 "publisert": "2026-11-08T11:45:00Z"
 },
 {
@@ -341,13 +558,6 @@
 "url": "https://www.arabnews.com/middle-east/israel-defense-minister-says-mission-not-complete-on-iran-3010486",
 "kilde": "GDELT",
 "domene": "arabnews.com",
-"publisert": "2026-11-08T10:45:00Z"
-},
-{
-"tittel": "Trump tariffs: Snowbirds back in Florida amid U.S. trade war",
-"url": "https://www.bnnbloomberg.ca/tariffs/2026/11/08/are-canadian-snowbirds-flocking-back-during-the-us-trade-war-heres-what-data-says/",
-"kilde": "GDELT",
-"domene": "bnnbloomberg.ca",
 "publisert": "2026-11-08T10:45:00Z"
 },
 {
@@ -1279,6 +1489,6 @@
 "publisert": "2026-11-05T16:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-08T12:15:00Z",
-"hentet": "2026-11-08T12:15:52Z"
+"gkg_siste_fil": "2026-11-08T14:00:00Z",
+"hentet": "2026-11-08T13:49:55Z"
 }
