@@ -1,6 +1,517 @@
 {
 "saker": [
 {
+"tittel": "Russia and Ukraine batter each other with long-range strikes a day before US-brokered talks",
+"url": "http://www.idahopress.com/news/world/russia-and-ukraine-batter-each-other-with-long-range-strikes-a-day-before-us-brokered/article_d105dfb4-5a75-5370-bfd8-10ab38a06721.html",
+"kilde": "GDELT",
+"domene": "idahopress.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Kenya: Food Crisis Hits Ethiopians Fleeing Violence Into Kenya's Moyale",
+"url": "https://allafrica.com/stories/202611090419.html",
+"kilde": "GDELT",
+"domene": "allafrica.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "China Extends Suspension of New Rare Earth Controls Until January",
+"url": "https://english.aawsat.com/business/5339200-china-extends-suspension-new-rare-earth-controls-until-january",
+"kilde": "GDELT",
+"domene": "aawsat.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Ukrainian Drone Attack Sets Russia's Major Kirishi Oil Refinery on Fire, Governor Says",
+"url": "https://english.aawsat.com/world/5339203-ukrainian-drone-attack-sets-russia%E2%80%99s-major-kirishi-oil-refinery-fire-governor-says",
+"kilde": "GDELT",
+"domene": "aawsat.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Arab News | Closing Bell: Saudi Arabia's Tadawul rises 0.9% to close at 10,107",
+"url": "https://www.arabnews.com/finance/closing-bell-saudi-arabias-tadawul-rises-09-to-close-at-10107-3010748",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Arab News | Saudi Arabia's first childhood hackathon puts young minds at heart of innovation",
+"url": "https://www.arabnews.com/saudi-arabia/saudi-arabias-first-childhood-hackathon-puts-young-minds-at-heart-of-innovation-3010702",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "IRGC Navy announces halt to oil smuggling via illegal Strait of Hormuz passage: Report",
+"url": "https://www.presstv.co.uk/Detail/2026/11/09/780314/irgc-navy-oil-smuggling-through-illegal-strait-of-hormuz-passage-halted",
+"kilde": "GDELT",
+"domene": "presstv.co.uk",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "'Poisoned chalice': Former NATO commander flags 'ominous' Trump remark about Ukraine",
+"url": "https://www.rawstory.com/trump-ukraine-russia-2678341804/",
+"kilde": "GDELT",
+"domene": "rawstory.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
+"url": "https://www.stcatharinesstandard.ca/news/world/europe/a-day-before-us-brokered-talks-russia-and-ukraine-batter-each-other-with-long-range-strikes/article_3e9cc575-9dc7-51db-a1e2-43dd62b00d45.html",
+"kilde": "GDELT",
+"domene": "stcatharinesstandard.ca",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Taiwan Semiconductor Manufacturing (NYSE:TSM) & STMicroelectronics (NYSE:STM) Head to Head Analysis",
+"url": "https://www.tickerreport.com/banking-finance/13656376/taiwan-semiconductor-manufacturing-nysetsm-stmicroelectronics-nysestm-head-to-head-analysis.html",
+"kilde": "GDELT",
+"domene": "tickerreport.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
+"url": "https://www.wbaltv.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
+"kilde": "GDELT",
+"domene": "wbaltv.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Russia strikes Ukraine power grid as Kyiv hits an oil refinery",
+"url": "https://www.wgauradio.com/news/world/day-before-us/TFTTHDGI6A66ZLMBCPZNKJPN3M/",
+"kilde": "GDELT",
+"domene": "wgauradio.com",
+"publisert": "2026-11-09T14:15:00Z"
+},
+{
+"tittel": "Red Sea ports handle 10,000 tons of general, miscellaneous cargo",
+"url": "https://www.egyptindependent.com/red-sea-ports-handle-10000-tons-of-general-miscellaneous-cargo/",
+"kilde": "GDELT",
+"domene": "egyptindependent.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Iran-US Talks: Tehran Keeps 2-Day Strait Of Hormuz Reopening Plan On Table Amid Rising Diplomatic Pressure",
+"url": "https://www.freepressjournal.in/world/iran-us-talks-tehran-keeps-2-day-strait-of-hormuz-reopening-plan-on-table-amid-rising-diplomatic-pressure",
+"kilde": "GDELT",
+"domene": "freepressjournal.in",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Iran Appears to Drop Demand to Control Hormuz Strait in Latest Proposal to the U.S.: Report",
+"url": "https://www.ibtimes.com/iran-offers-gulf-vessel-strike-pause-qatar-funds-3809544",
+"kilde": "GDELT",
+"domene": "ibtimes.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Trump Says More Iran Strikes Are 'Highly Unlikely,' Oil Prices Are Falling Further.",
+"url": "https://www.ibtimes.com/oil-prices-fall-trump-iran-attacks-unlikely-3809543",
+"kilde": "GDELT",
+"domene": "ibtimes.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Hamas urges mediators to pressure Israel to lift Gaza siege and allow humanitarian aid",
+"url": "https://www.middleeastmonitor.com/20261109-hamas-urges-mediators-to-pressure-israel-to-lift-gaza-siege-and-allow-humanitarian-aid/",
+"kilde": "GDELT",
+"domene": "middleeastmonitor.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Iranian army says oil tanker catches fire after hitting mine in Strait of Hormuz",
+"url": "https://www.middleeastmonitor.com/20261109-iranian-army-says-oil-tanker-catches-fire-after-hitting-mine-in-strait-of-hormuz/",
+"kilde": "GDELT",
+"domene": "middleeastmonitor.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Saudi-led coalition says it destroys Houthi missile launcher in Sanaa targeting eastern Saudi Arabia",
+"url": "https://www.middleeastmonitor.com/20261109-saudi-led-coalition-says-it-destroys-houthi-missile-launcher-in-sanaa-targeting-eastern-saudi-arabia/",
+"kilde": "GDELT",
+"domene": "middleeastmonitor.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "US military preparations underway near Gaza border for international force deployment: Israeli media",
+"url": "https://www.middleeastmonitor.com/20261109-us-military-preparations-underway-near-gaza-border-for-international-force-deployment-israeli-media/",
+"kilde": "GDELT",
+"domene": "middleeastmonitor.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "Iran says two-day plan to reopen Hormuz Strait still on table",
+"url": "https://www.prokerala.com/news/articles/a1834748.html",
+"kilde": "GDELT",
+"domene": "prokerala.com",
+"publisert": "2026-11-09T14:00:00Z"
+},
+{
+"tittel": "2-day plan shared with US clearest way to Hormuz security: Iran",
+"url": "https://article.wn.com/view/2026/11/09/2day_plan_shared_with_US_clearest_way_to_Hormuz_security_Ira/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Saudi Arabia recalls 2,371 Kia K8 cars over fuel leak, fire risk",
+"url": "https://article.wn.com/view/2026/11/09/Saudi_Arabia_recalls_2371_Kia_K8_cars_over_fuel_leak_fire_ri/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Saudi Arabia warns of aerial threat over Riyadh after Houthi attack",
+"url": "https://article.wn.com/view/2026/11/09/Saudi_Arabia_warns_of_aerial_threat_over_Riyadh_after_Houthi/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "At least one person killed as Russia and Ukraine trade strikes overnight  - Grenada Chronicle – Daily Grenada And Caribbean News",
+"url": "https://grenadachronicle.com/at-least-one-person-killed-as-russia-and-ukraine-trade-strikes-overnight/",
+"kilde": "GDELT",
+"domene": "grenadachronicle.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Finland signals possible peak in Russian naval presence in Baltic Sea",
+"url": "https://news.az/news/finland-signals-possible-peak-in-russian-naval-presence-in-baltic-sea",
+"kilde": "GDELT",
+"domene": "news.az",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Russia Supports US Approach on Talks in Abu-Dhabi on Ukraine Conflict",
+"url": "https://sputnikglobe.com/20261109/russia-supports-us-approach-on-talks-in-abu-dhabi-on-ukraine-conflict---lavrov-1125034324.html",
+"kilde": "GDELT",
+"domene": "sputnikglobe.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Spanish PM Sánchez Boasts Socialists Will Win Snap Elections 'Like in U.S. Midterms'",
+"url": "https://www.breitbart.com/europe/2026/11/09/spanish-pm-sanchez-socialists-will-win-snap-elections-like-in-u-s-midterms/",
+"kilde": "GDELT",
+"domene": "breitbart.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees for both sides",
+"url": "https://www.dailygazette.com/ap/national/us-led-peace-talks-for-russia-and-ukraine-will-look-at-security-guarantees-for-both/article_5eeb0771-63d6-5c19-ac6f-7f7e08ef4510.html",
+"kilde": "GDELT",
+"domene": "dailygazette.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Syrian deployment to Saudi Arabia marks major Middle East shift",
+"url": "https://www.jpost.com/middle-east/article-914337",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "Inside Iran's hidden oil network in China: Leaked letter details how Tehran bypasses US sanctions",
+"url": "https://www.moneycontrol.com/world/inside-iran-s-hidden-oil-network-in-china-leaked-letter-details-how-tehran-bypasses-us-sanctions-article-14075665.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "US troops entering Iran through Iraq? What Iraqi PM claims to have seen in Trump's war plan with 3 military scenarios",
+"url": "https://www.moneycontrol.com/world/us-troops-entering-iran-through-iraq-what-iraqi-pm-claims-to-have-seen-in-trump-s-war-plan-with-3-military-scenarios-article-14075692.html",
+"kilde": "GDELT",
+"domene": "moneycontrol.com",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "China extends suspension of rare earth export controls until January",
+"url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/11/09/china-extends-suspension-of-rare-earth-export-controls-until-january",
+"kilde": "GDELT",
+"domene": "thestar.com.my",
+"publisert": "2026-11-09T13:45:00Z"
+},
+{
+"tittel": "AsiaFIN's Insite MY Holdings and MENA Insite MY Sign Distributorship Agreement and Announce Second Bank Customer in Saudi Arabia",
+"url": "http://www.memphissun.com/news/279421660/asiafin-insite-my-holdings-and-mena-insite-my-sign-distributorship-agreement-and-announce-second-bank-customer-in-saudi-arabia",
+"kilde": "GDELT",
+"domene": "memphissun.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Oil Prices Fall as Trump Signals Restraint on Iran Strikes",
+"url": "https://arynews.tv/oil-falls-as-trump-signals-restraint-on-iran-despite-fresh-shipping-attacks",
+"kilde": "GDELT",
+"domene": "arynews.tv",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Kremlin comments on Trump's remarks about post-conflict Ukraine",
+"url": "https://en.apa.az/cis-countries/kremlin-comments-on-trumps-remarks-about-post-conflict-ukraine-535082",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Ukraine launches drone attacks on Russia's Leningrad region, killing one",
+"url": "https://en.apa.az/cis-countries/ukraine-launches-drone-attacks-on-russias-leningrad-region-killing-one-535071",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "CoTec Holdings Corp. Notes HyProMag USA Advances North Texas Rare Earth Magnet Facility With First Major Equipment Delivery",
+"url": "https://investingnews.com/cotec-holdings-corp-notes-hypromag-usa-advances-north-texas-rare-earth-magnet-facility-with-first-major-equipment-delivery/",
+"kilde": "GDELT",
+"domene": "investingnews.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Canada hits Russia with fresh sanctions targeting missile tech, cyber networks",
+"url": "https://timesofindia.indiatimes.com/world/rest-of-world/canada-hits-russia-with-fresh-sanctions-targeting-missile-tech-cyber-networks/articleshow/135682645.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "400,000 Russians have been killed in Ukraine, with the death rate accelerating, data hack reveals",
+"url": "https://www.dailymail.com/news/article-16277947/400-000-Russians-killed-Ukraine-death-rate-accelerating-data-hack-reveals.html",
+"kilde": "GDELT",
+"domene": "dailymail.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Kremlin Not Aware Of Request To Seize Coca-Cola HBC's Russian Assets, Spokesman Says",
+"url": "https://www.esmmagazine.com/supply-chain/kremlin-not-aware-of-request-to-seize-coca-cola-hbcs-russian-assets-spokesman-says-325670",
+"kilde": "GDELT",
+"domene": "esmmagazine.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Ottawa poised to seal trade deal with Philippines, source says",
+"url": "https://www.theglobeandmail.com/politics/article-ottawa-poised-to-seal-trade-deal-with-philippines-now-home-to-canadas/",
+"kilde": "GDELT",
+"domene": "theglobeandmail.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "South African police arrest 9 foreign nationals suspected of traveling to Russia to fight in Ukraine – Winnipeg Free Press",
+"url": "https://www.winnipegfreepress.com/world/2026/11/09/south-african-police-arrest-9-foreign-nationals-suspected-of-traveling-to-russia-to-fight-in-ukraine",
+"kilde": "GDELT",
+"domene": "winnipegfreepress.com",
+"publisert": "2026-11-09T13:30:00Z"
+},
+{
+"tittel": "Minister Anand announces additional sanctions to reduce Russia's missile capabilities and raise economic costs",
+"url": "http://www.bignewsnetwork.com/news/279421650/minister-anand-announces-additional-sanctions-to-reduce-russia-missile-capabilities-and-raise-economic-costs",
+"kilde": "GDELT",
+"domene": "bignewsnetwork.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "HyProMag USA Advances North Texas Rare Earth Magnet Facility With First Major Equipment Delivery",
+"url": "http://www.hawaiitelegraph.com/news/279421630/hypromag-usa-advances-north-texas-rare-earth-magnet-facility-with-first-major-equipment-delivery",
+"kilde": "GDELT",
+"domene": "hawaiitelegraph.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "South African police arrest 9 foreign nationals suspected of traveling to Russia to fight in Ukraine",
+"url": "http://www.rockymounttelegram.com/news/world/south-african-police-arrest-9-foreign-nationals-suspected-of-traveling-to-russia-to-fight-in/article_fc60cdd9-7e72-534e-83f6-7add2c95c5ef.html",
+"kilde": "GDELT",
+"domene": "rockymounttelegram.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "KSA: Saudi Arabia adds four countries to tourist e-visa list",
+"url": "https://www.gdnonline.com:443/Details/1412301",
+"kilde": "GDELT",
+"domene": "gdnonline.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "Russians should be banned from entering European countries, Ukrainian minister says",
+"url": "https://www.irishtimes.com/politics/2026/11/09/russians-should-be-banned-from-entering-european-countries-ukrainian-minister-says/",
+"kilde": "GDELT",
+"domene": "irishtimes.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "HyProMag USA Advances North Texas Rare Earth Magnet Facility With First ...",
+"url": "https://www.pr-inside.com/hypromag-usa-advances-north-texas-rare-earth-magnet-facility-with-first-r5242101.htm",
+"kilde": "GDELT",
+"domene": "pr-inside.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "Barrick's profit rises as higher gold prices offset lower output",
+"url": "https://www.theglobeandmail.com/business/article-barrick-mining-third-quarter-results-gold-prices-production/",
+"kilde": "GDELT",
+"domene": "theglobeandmail.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "Saudi Arabia and Egypt to join G7 talks",
+"url": "https://www.thenationalnews.com/news/europe/2026/11/09/saudi-arabia-and-egypt-to-join-g7-talks/",
+"kilde": "GDELT",
+"domene": "thenationalnews.com",
+"publisert": "2026-11-09T13:15:00Z"
+},
+{
+"tittel": "Israel issues new threat to Iran",
+"url": "http://www.middleeaststar.com/news/279421304/israel-issues-new-threat-to-iran",
+"kilde": "GDELT",
+"domene": "middleeaststar.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "EU, Russia differ over European participation in upcoming Ukraine talks-Xinhua",
+"url": "https://english.news.cn/20261109/6e8d11122ac541e98adcc81a93ff20fc/c.html",
+"kilde": "GDELT",
+"domene": "english.news.cn",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Iran says 2-day plan to reopen Hormuz Strait still on table-Xinhua",
+"url": "https://english.news.cn/20261109/7d5c4779df5843a0a8400e53bdf8bd10/c.html",
+"kilde": "GDELT",
+"domene": "english.news.cn",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Iran showcases engineering parameters of its civilian nuclear program in Tehran",
+"url": "https://english.pravda.ru/news/world/171989-iran-nuclear-infrastructure-exhibition/",
+"kilde": "GDELT",
+"domene": "english.pravda.ru",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Injuries reported following Israeli bombardment of various areas in Gaza",
+"url": "https://english.wafa.ps/Pages/Details/176780",
+"kilde": "GDELT",
+"domene": "english.wafa.ps",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Pakistan says Gaza children face hunger and cold as Israel restricts aid access",
+"url": "https://english.wafa.ps/Pages/Details/176787",
+"kilde": "GDELT",
+"domene": "english.wafa.ps",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Zelensky: EU to launch special emergency mechanism to provide rapid financial assistance to Ukraine",
+"url": "https://georgiatoday.ge/zelensky-eu-to-launch-special-emergency-mechanism-to-provide-rapid-financial-assistance-to-ukraine/",
+"kilde": "GDELT",
+"domene": "georgiatoday.ge",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Blackouts and no heating: Russia's winter strike campaign takes aim at Ukraine's energy network",
+"url": "https://timesofindia.indiatimes.com/defence/international/blackouts-and-no-heating-russias-winter-strike-campaign-takes-aim-at-ukraines-energy-network/articleshow/135681945.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "London's FTSE 100 climbs as miners gain on firmer gold prices",
+"url": "https://www.aol.com/articles/londons-ftse-100-climbs-miners-111747000.html",
+"kilde": "GDELT",
+"domene": "aol.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Black Sea Is Now World's Most Dangerous Waterway: NATO Pushes Militarization, Will Türkiye Relent?",
+"url": "https://www.nakedcapitalism.com/2026/11/black-sea-is-now-worlds-most-dangerous-waterway-nato-pushes-militarization-will-turkiye-relent.html",
+"kilde": "GDELT",
+"domene": "nakedcapitalism.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Iran War: Trump Signals No Big Attack in CBS Interview; Barmy CENTCOM \"Iron Gate\" Plan Proof of Weakness or Perhaps Cover for Iraq Ground Operation?",
+"url": "https://www.nakedcapitalism.com/2026/11/iran-war-trump-signals-no-big-attack-in-cbs-interview-barmy-centcom-iron-gate-plan-proof-of-weakness-or-perhaps-cover-for-iraq-ground-operation.html",
+"kilde": "GDELT",
+"domene": "nakedcapitalism.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "DAX Advances As Oil Prices Drop; Commerzbank, SAP Rise On Rating Upgrade",
+"url": "https://www.rttnews.com/story.aspx?Id=3711732",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "CAC 40 Climbs Higher On Corporate News, Weak Oil Prices",
+"url": "https://www.rttnews.com/story.aspx?Id=3711756",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-09T13:00:00Z"
+},
+{
+"tittel": "Palisa discusses stronger Ukrainian air defense with Turkish defense minister",
+"url": "https://en.interfax.com.ua/news/general/1233356.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "Saudi Arabia: 4,000 accommodation buildings across Mecca & Medina made available for Hajj 2027 - Shafaqna English",
+"url": "https://en.shafaqna.com/490297/saudi-arabia-4000-accommodation-buildings-across-mecca-and-medina-made-available-for-hajj-2027/",
+"kilde": "GDELT",
+"domene": "shafaqna.com",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "International Business: Pakistan, Saudi Arabia investors launch fund to boost trade, investment",
+"url": "https://www.gdnonline.com:443/Details/1412307",
+"kilde": "GDELT",
+"domene": "gdnonline.com",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "Oil prices today: Brent crude, WTI fall as Trump rules out fresh Iran strikes amid Strait of Hormuz concerns",
+"url": "https://www.hindustantimes.com/world-news/us-news/oil-prices-today-brent-crude-wti-fall-as-trump-rules-out-fresh-iran-strikes-amid-strait-of-hormuz-concerns-101794225386109.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "Gold Rate Today: Check Gold prices in Coimbatore, Jaipur, Lucknow & more",
+"url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-coimbatore-nagpur-visakhapatnam-surat-jaipur-lucknow-chandigarh-gold-rates-other-cities-november-9-2026/article71681862.ece",
+"kilde": "GDELT",
+"domene": "thehindubusinessline.com",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "Gold Rate Today: Check 22K, 24K Gold prices in Delhi, Mumbai & Chennai",
+"url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-delhi-mumbai-kolkata-chennai-bengaluru-hyderabad-pune-gold-rates-metro-cities-november-9-2026/article71681861.ece",
+"kilde": "GDELT",
+"domene": "thehindubusinessline.com",
+"publisert": "2026-11-09T12:45:00Z"
+},
+{
+"tittel": "Russia, Ukraine, US set for peace talks",
+"url": "https://www.hurriyetdailynews.com/russia-ukraine-us-set-for-peace-talks-229188",
+"kilde": "GDELT",
+"domene": "hurriyetdailynews.com",
+"publisert": "2026-11-09T12:30:00Z"
+},
+{
+"tittel": "Stock markets end higher amid easing crude oil prices, buying in banks",
+"url": "https://www.thehindu.com/business/markets/stock-markets-end-higher-amid-easing-crude-oil-prices-buying-in-banks/article71682332.ece",
+"kilde": "GDELT",
+"domene": "thehindu.com",
+"publisert": "2026-11-09T12:30:00Z"
+},
+{
+"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes – Winnipeg Free Press",
+"url": "https://www.winnipegfreepress.com/breakingnews/2026/11/09/a-day-before-us-brokered-talks-russia-and-ukraine-batter-each-other-with-long-range-strikes",
+"kilde": "GDELT",
+"domene": "winnipegfreepress.com",
+"publisert": "2026-11-09T12:30:00Z"
+},
+{
 "tittel": "Trump urges Netanyahu to advance Gaza plan after Israeli elections: Report",
 "url": "https://aa.com.tr/en/americas/trump-urges-netanyahu-to-advance-gaza-plan-after-israeli-elections-report/4116615",
 "kilde": "GDELT",
@@ -36,20 +547,6 @@
 "publisert": "2026-11-09T12:00:00Z"
 },
 {
-"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
-"url": "https://abcnews.com/International/wireStory/day-us-brokered-talks-russia-ukraine-batter-long-137968428",
-"kilde": "GDELT",
-"domene": "abcnews.com",
-"publisert": "2026-11-09T12:00:00Z"
-},
-{
-"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees for both sides",
-"url": "https://abcnews.com/International/wireStory/us-led-peace-talks-russia-ukraine-security-guarantees-137966016",
-"kilde": "GDELT",
-"domene": "abcnews.com",
-"publisert": "2026-11-09T12:00:00Z"
-},
-{
 "tittel": "Ukraine hits Russian refinery as Moscow strikes power grid",
 "url": "https://cyprus-mail.com/2026/11/09/ukraine-hits-major-russian-refinery-as-moscow-strikes-power-grid",
 "kilde": "GDELT",
@@ -71,24 +568,10 @@
 "publisert": "2026-11-09T12:00:00Z"
 },
 {
-"tittel": "2-day plan shared with US clearest way to Hormuz security: Iran",
-"url": "https://www.dailysabah.com/world/mid-east/2-day-plan-shared-with-us-clearest-way-to-hormuz-security-iran",
-"kilde": "GDELT",
-"domene": "dailysabah.com",
-"publisert": "2026-11-09T12:00:00Z"
-},
-{
 "tittel": "Saudi Arabia eyes Syrian military help against Houthis amid command critiques",
 "url": "https://www.jpost.com/middle-east/article-914331",
 "kilde": "GDELT",
 "domene": "jpost.com",
-"publisert": "2026-11-09T12:00:00Z"
-},
-{
-"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
-"url": "https://www.kmbc.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
-"kilde": "GDELT",
-"domene": "kmbc.com",
 "publisert": "2026-11-09T12:00:00Z"
 },
 {
@@ -155,13 +638,6 @@
 "publisert": "2026-11-09T11:45:00Z"
 },
 {
-"tittel": "China extends suspension of new rare earth controls until January",
-"url": "https://www.asiaone.com/china/china-extends-suspension-new-rare-earth-controls-until-january",
-"kilde": "GDELT",
-"domene": "asiaone.com",
-"publisert": "2026-11-09T11:45:00Z"
-},
-{
 "tittel": "Zelensky: Russian forces have killed 120 clergy, damaged 800 religious sites | News Headlines",
 "url": "https://www.catholicculture.org/news/headlines/index.cfm?storyid=71205",
 "kilde": "GDELT",
@@ -185,20 +661,6 @@
 {
 "tittel": "Oil Prices Edge Lower After Trump's Remarks On Iran War",
 "url": "https://www.rttnews.com/3711701/oil-prices-edge-lower-after-trump-s-remarks-on-iran-war.aspx",
-"kilde": "GDELT",
-"domene": "rttnews.com",
-"publisert": "2026-11-09T11:45:00Z"
-},
-{
-"tittel": "DAX Advances As Oil Prices Drop; Commerzbank, SAP Rise On Rating Upgrade",
-"url": "https://www.rttnews.com/3711732/dax-advances-as-oil-prices-drop-commerzbank-sap-rise-on-rating-upgrade.aspx",
-"kilde": "GDELT",
-"domene": "rttnews.com",
-"publisert": "2026-11-09T11:45:00Z"
-},
-{
-"tittel": "CAC 40 Climbs Higher On Corporate News, Weak Oil Prices",
-"url": "https://www.rttnews.com/3711756/cac-40-climbs-higher-on-corporate-news-weak-oil-prices.aspx",
 "kilde": "GDELT",
 "domene": "rttnews.com",
 "publisert": "2026-11-09T11:45:00Z"
@@ -650,6 +1112,12 @@
 "kilde": "GDELT",
 "domene": "radio.gov.pk",
 "publisert": "2026-11-09T09:45:00Z"
+},
+{
+"tittel": "Borregaard ASA: No US anti-dumping duties on speciality cellulose",
+"url": "https://newsweb.oslobors.no/message/686001",
+"kilde": "Oslo Børs Newsweb",
+"publisert": "2026-11-09T09:42:37Z"
 },
 {
 "tittel": "EU activates special emergency mechanism to fund Ukraine's critical power, water and heating needs after Russian strikes: Zelenskyy",
@@ -1646,257 +2114,12 @@
 "publisert": "2026-11-08T15:45:00Z"
 },
 {
-"tittel": "Israeli defense minister warns Iran mission",
-"url": "http://www.bignewsnetwork.com/news/279420337/israeli-defense-minister-warns-iran-mission-not-complete",
-"kilde": "GDELT",
-"domene": "bignewsnetwork.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Israeli Defence Minister reiterates Netanyahu's call for \"unity\" amid Iran war after President tasks Eisenkot to form next govt",
-"url": "https://aninews.in/news/world/middle-east/israeli-defence-minister-reiterates-netanyahus-call-for-unity-amid-iran-war-after-president-tasks-eisenkot-to-form-next-govt20261108164101/",
-"kilde": "GDELT",
-"domene": "aninews.in",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
-"url": "https://dominicanrepublicpost.com/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity/",
-"kilde": "GDELT",
-"domene": "dominicanrepublicpost.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Alaska gains $45 million in revenue for each dollar oil prices rise",
-"url": "https://econotimes.com/Alaska-gains-45-million-in-revenue-for-each-dollar-oil-prices-rise-1773205",
-"kilde": "GDELT",
-"domene": "econotimes.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Arab News | Iran says 3 tankers caught fire in Hormuz",
-"url": "https://www.arabnews.com/middle-east/iran-says-3-tankers-caught-fire-in-hormuz-3010518",
-"kilde": "GDELT",
-"domene": "arabnews.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "IRGC says three tankers ablaze in Strait of Hormuz",
-"url": "https://www.middleeasteye.net/live-blog/live-blog-update/irgc-says-three-tankers-ablaze-strait-hormuz",
-"kilde": "GDELT",
-"domene": "middleeasteye.net",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Israel Defence Minister says 'mission not complete' on Iran, warns Hezbollah against joining any attack",
-"url": "https://www.moneycontrol.com/world/israel-defence-minister-says-mission-not-complete-on-iran-warns-hezbollah-against-joining-any-attack-article-14074980.html",
-"kilde": "GDELT",
-"domene": "moneycontrol.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Russian strikes leave 850,000 without power in Ukraine ahead of winter",
-"url": "https://www.moneycontrol.com/world/russian-strikes-leave-850-000-without-power-in-ukraine-ahead-of-winter-article-14075007.html",
-"kilde": "GDELT",
-"domene": "moneycontrol.com",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "Strikes on al-Masirah TV crew clear sign of Saudi Arabia's repression of journalists: Houthi",
-"url": "https://www.presstv.co.uk/Detail/2026/11/08/780251/houthi-strikes-on-al-masirah-tv-crew-proof-of-saudis-repression-of-journalists",
-"kilde": "GDELT",
-"domene": "presstv.co.uk",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "IRGC Navy: Three oil tankers engulfed in flames in Strait of Hormuz after maritime violations",
-"url": "https://www.presstv.co.uk/Detail/2026/11/08/780252/irgc-navy-three-oil-tankers-engulfed-in-flames-in-strait-of-hormuz-after-maritime-violations",
-"kilde": "GDELT",
-"domene": "presstv.co.uk",
-"publisert": "2026-11-08T13:45:00Z"
-},
-{
-"tittel": "$500-M subsea cable plan still under discussion — PLDT",
-"url": "https://bworldonline.com/corporate/2026/11/08/792186/500-m-subsea-cable-plan-still-under-discussion-pldt/",
-"kilde": "GDELT",
-"domene": "bworldonline.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "ERC considering power-reserve trading price cap - BusinessWorld Online",
-"url": "https://bworldonline.com/economy/2026/11/08/792135/erc-considering-power-reserve-trading-price-cap/",
-"kilde": "GDELT",
-"domene": "bworldonline.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "Russian strikes on Ukraine leave hundreds of thousands without electricity",
-"url": "https://www.aljazeera.com/news/2026/11/8/russian-strikes-on-ukraine-leave-hundreds-of-thousands-without-electricity",
-"kilde": "GDELT",
-"domene": "aljazeera.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "Israel says Iran mission 'not complete': 'They're trying to get nuclear weapons'",
-"url": "https://www.hindustantimes.com/world-news/israel-says-iran-mission-not-complete-they-re-trying-to-get-nuclear-weapons-101794142030671.html",
-"kilde": "GDELT",
-"domene": "hindustantimes.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "Second world war veterans outnumber former PMs for possible last time on Remembrance Sunday",
-"url": "https://www.theguardian.com/uk-news/2026/nov/08/second-world-war-veterans-outnumber-former-pms-for-possible-last-time-on-remembrance-sunday",
-"kilde": "GDELT",
-"domene": "theguardian.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "IRAN WARNING: Defense Minister Katz Says Nuclear Threat Remains, Israel Prepared To Take Military Action",
-"url": "https://www.theyeshivaworld.com/news/israel-news/2620360/iran-warning-defense-minister-katz-says-nuclear-threat-remains-israel-prepared-to-take-military-action.html",
-"kilde": "GDELT",
-"domene": "theyeshivaworld.com",
-"publisert": "2026-11-08T13:30:00Z"
-},
-{
-"tittel": "Trump tariffs: Snowbirds back in Florida amid U.S. trade war",
-"url": "https://www.cp24.com/news/canada/2026/11/08/are-canadian-snowbirds-flocking-back-during-the-us-trade-war-heres-what-data-says/",
-"kilde": "GDELT",
-"domene": "cp24.com",
-"publisert": "2026-11-08T13:15:00Z"
-},
-{
-"tittel": "Mideast news: Saudi Arabia intercepts missiles",
-"url": "https://www.cp24.com/news/world/2026/11/08/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/",
-"kilde": "GDELT",
-"domene": "cp24.com",
-"publisert": "2026-11-08T13:15:00Z"
-},
-{
-"tittel": "Ukrainian atomic plant 'has two weeks of power left to keep nuclear fuel cool' after being forced onto backup generators by power cut - as 600,000 people plunged into darkness by Russian strikes",
-"url": "https://www.dailymail.com/news/article-16275949/Ukrainian-atomic-plant-two-weeks-power-nuclear-fuel-power.html",
-"kilde": "GDELT",
-"domene": "dailymail.com",
-"publisert": "2026-11-08T13:15:00Z"
-},
-{
-"tittel": "Israeli defense minister warns Iran mission \"not complete\"-Xinhua",
-"url": "https://english.news.cn/20261108/65563d6a47bb4d87b64ad8c55ea1fc9b/c.html",
-"kilde": "GDELT",
-"domene": "english.news.cn",
-"publisert": "2026-11-08T13:00:00Z"
-},
-{
-"tittel": "Multiple explosions heard in Riyadh, Saudi Arabia  - International",
-"url": "https://www.dailymirror.lk/international/Multiple-explosions-heard-in-Riyadh-Saudi-Arabia/107-354435",
-"kilde": "GDELT",
-"domene": "dailymirror.lk",
-"publisert": "2026-11-08T12:45:00Z"
-},
-{
-"tittel": "DM Katz Says Iran Renewing Pursuit Of Nuclear Weapons, Warns Mission 'not Yet Complete'",
-"url": "https://www.i24news.tv/en/news/israel/defense/artc-dm-katz-says-iran-renewing-pursuit-of-nuclear-weapons-warns-mission-not-yet-complete",
-"kilde": "GDELT",
-"domene": "i24news.tv",
-"publisert": "2026-11-08T12:45:00Z"
-},
-{
-"tittel": "Zelenskyy says Russian strikes leave over 600,000 people without power in Ukraine's Dnipro region",
-"url": "https://aa.com.tr/en/eurasia/zelenskyy-says-russian-strikes-leave-over-600-000-people-without-power-in-ukraines-dnipro-region/4115894",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-08T12:30:00Z"
-},
-{
-"tittel": "WTI oil price outlook: After a 17.5% slide, can buyers reclaim $92.53?",
-"url": "https://investinglive.com/commodities/wti-oil-price-outlook-after-a-17-5-slide-can-buyers-reclaim-92-53/",
-"kilde": "GDELT",
-"domene": "investinglive.com",
-"publisert": "2026-11-08T12:30:00Z"
-},
-{
-"tittel": "Arab News | Financing Saudi Arabia's export ambitions",
-"url": "https://www.arabnews.com/opinion/financing-saudi-arabias-export-ambitions-3010506",
-"kilde": "GDELT",
-"domene": "arabnews.com",
-"publisert": "2026-11-08T12:30:00Z"
-},
-{
-"tittel": "Israel Says Mission Against Iran 'Not Complete', Warns Hezbollah",
-"url": "https://www.deccanchronicle.com/west-asia/israel-says-mission-against-iran-not-complete-warns-hezbollah-2002768",
-"kilde": "GDELT",
-"domene": "deccanchronicle.com",
-"publisert": "2026-11-08T12:30:00Z"
-},
-{
-"tittel": "Putin Backs Russia's Lab Grown Diamond Restrictions",
-"url": "https://www.idexonline.com/FullArticle?Id=51497",
-"kilde": "GDELT",
-"domene": "idexonline.com",
-"publisert": "2026-11-08T12:30:00Z"
-},
-{
-"tittel": "Russian Prez Putin meets Iran's Security Chief Mohsen Rezaei at Kremlin: Report",
-"url": "http://www.heraldglobe.com/news/279419544/russian-prez-putin-meets-iran-security-chief-mohsen-rezaei-at-kremlin-report",
-"kilde": "GDELT",
-"domene": "heraldglobe.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "Houthis claim strikes on Saudi Arabia's oil facilities, Riyadh airport",
-"url": "http://www.heraldglobe.com/news/279419619/houthis-claim-strikes-on-saudi-arabia-oil-facilities-riyadh-airport",
-"kilde": "GDELT",
-"domene": "heraldglobe.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "Four Tankers Damaged by Naval Mines in Strait of Hormuz, Ira",
-"url": "https://athens-times.com/four-tankers-damaged-by-naval-mines-in-strait-of-hormuz-iran-claims/",
-"kilde": "GDELT",
-"domene": "athens-times.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "Israel defense minister says 'mission not complete' on Iran – The Frontier Post",
-"url": "https://thefrontierpost.com/israel-defense-minister-says-mission-not-complete-on-iran/",
-"kilde": "GDELT",
-"domene": "thefrontierpost.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "Russian strikes cut power to hundreds of thousands in Ukraine",
-"url": "https://thefrontierpost.com/russian-strikes-cut-power-to-hundreds-of-thousands-in-ukraine/",
-"kilde": "GDELT",
-"domene": "thefrontierpost.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "'Cynicism and brutality': Russia targets Ukrainian rescue workers at site of Zaporizhzhia bombing that killed 55",
-"url": "https://timesofindia.indiatimes.com/world/europe/cynicism-and-brutality-russia-targets-ukrainian-rescue-workers-at-site-of-zaporizhzhia-bombing-that-killed-55/articleshow/135657241.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "Russia targets emergency crews at the site of a deadly strike in southern Ukraine – WTOP News",
-"url": "https://wtop.com/world/2026/11/russia-targets-emergency-crews-at-the-site-of-a-deadly-strike-in-southern-ukraine/",
-"kilde": "GDELT",
-"domene": "wtop.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
-"tittel": "One woman's remarkable journey through the Second World War",
-"url": "https://www.thepeterboroughexaminer.com/life/one-woman-s-remarkable-journey-through-the-second-world-war/article_cd28a27d-a55f-54dc-a490-b028a5dd04e5.html",
-"kilde": "GDELT",
-"domene": "thepeterboroughexaminer.com",
-"publisert": "2026-11-08T12:15:00Z"
-},
-{
 "tittel": "Christine Lagarde: Interview with Yomiuri Shimbun",
 "url": "https://www.ecb.europa.eu//press/inter/date/2026/html/ecb.in261107~e7b86fc4ce.en.html",
 "kilde": "ECB",
 "publisert": "2026-11-07T14:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-09T12:00:00Z",
-"hentet": "2026-11-09T12:02:31Z"
+"gkg_siste_fil": "2026-11-09T14:15:00Z",
+"hentet": "2026-11-09T14:15:22Z"
 }

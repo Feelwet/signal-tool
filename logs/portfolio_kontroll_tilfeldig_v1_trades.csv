@@ -71,3 +71,11 @@ kontroll_tilfeldig_v1,fill,2026-11-06-0064,2026-11-07,2026-11-06,DHT,sell,rødt 
 kontroll_tilfeldig_v1,order,2026-11-07-0070,2026-11-07,2026-11-07,NAS.OL,buy,tilfeldig seed=2178150458,2026-11-06,,NOK,,,,,,,3.6,,Lav,2026-10-30,Industrials,watch,0.1691,OSEBX (OSEBX.OL),2053.360107421875,
 kontroll_tilfeldig_v1,order,2026-11-07-0071,2026-11-07,2026-11-07,NKR.OL,buy,tilfeldig seed=2178150458,2026-11-06,,NOK,,,,,,,3.09,ose_contract,Middels,2026-10-30,Industrials,watch,0.1307,OSEBX (OSEBX.OL),2053.360107421875,
 kontroll_tilfeldig_v1,order,2026-11-07-0072,2026-11-07,2026-11-07,SCANA.OL,buy,tilfeldig seed=2178150458,2026-11-06,,NOK,,,,,,,3.0,ose_contract,Middels,2026-10-30,Industrials,watch,0.0177,OSEBX (OSEBX.OL),2053.360107421875,
+kontroll_tilfeldig_v1,fill,2026-11-06-0065,2026-11-09,2026-11-06,BOUV.OL,buy,tilfeldig seed=3857156756,2026-11-09,48.95,NOK,1.0,981.549901,48046.87,96.09,,,4.16,ose_contract,Middels,2026-10-30,Technology,watch,0.0377,OSEBX (OSEBX.OL),2045.3599853515625,2076.1298828125
+kontroll_tilfeldig_v1,fill,2026-11-07-0070,2026-11-09,2026-11-07,NAS.OL,buy,tilfeldig seed=2178150458,2026-11-09,13.255,NOK,1.0,3624.448362,48042.06,96.08,,,3.6,,Lav,2026-10-30,Industrials,watch,0.1691,OSEBX (OSEBX.OL),2053.360107421875,2076.1298828125
+kontroll_tilfeldig_v1,fill,2026-11-07-0071,2026-11-09,2026-11-07,NKR.OL,buy,tilfeldig seed=2178150458,2026-11-09,18.5,NOK,1.0,2596.608605,48037.26,96.07,,,3.09,ose_contract,Middels,2026-10-30,Industrials,watch,0.1307,OSEBX (OSEBX.OL),2053.360107421875,2076.1298828125
+kontroll_tilfeldig_v1,fill,2026-11-07-0072,2026-11-09,2026-11-07,SCANA.OL,buy,tilfeldig seed=2178150458,2026-11-09,1.435,NOK,1.0,33472.09453,48032.46,96.06,,,3.0,ose_contract,Middels,2026-10-30,Industrials,watch,0.0177,OSEBX (OSEBX.OL),2053.360107421875,2076.1298828125
+kontroll_tilfeldig_v1,order,2026-11-09-0077,2026-11-09,2026-11-09,BOUV.OL,sell,rødt flagg,2026-11-09,,NOK,,,,,,,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-09-0078,2026-11-09,2026-11-09,NAS.OL,sell,rødt flagg,2026-11-09,,NOK,,,,,,,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-09-0079,2026-11-09,2026-11-09,NKR.OL,sell,rødt flagg,2026-11-09,,NOK,,,,,,,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-09-0080,2026-11-09,2026-11-09,SCANA.OL,sell,rødt flagg,2026-11-09,,NOK,,,,,,,,,,,,,,,,
