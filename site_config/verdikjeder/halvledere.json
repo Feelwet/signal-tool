@@ -1,0 +1,22 @@
+{
+  "id": "halvledere",
+  "name": "Halvledere",
+  "sentence": "Fra wafere, gasser og maskiner til brikkeprodusenter og selskapene som er navngitt i kildene.",
+  "checked": "2026-11-09",
+  "checked_by": "AnalBot kildesjekk 09.11.2026: alle 30 grunnlinjer kontrollert, rettelseslinje 31–34 holder",
+  "links_file": "halvledere_links.jsonl",
+  "bottleneck_line": 3,
+  "substages": {
+    "silicon_wafers": {"stage": 1, "label": "Silisiumwafere"},
+    "specialty_chem_gases": {"stage": 1, "label": "Kjemikalier og gasser"},
+    "photomasks": {"stage": 1, "label": "Fotomasker"},
+    "lithography_equipment": {"stage": 1, "label": "Litografi"},
+    "fab_equipment_other": {"stage": 1, "label": "Fab-utstyr"},
+    "eda": {"stage": 1, "label": "Designprogramvare (EDA)"},
+    "test_equipment": {"stage": 1, "label": "Testutstyr"},
+    "foundry": {"stage": 2, "label": "Foundry"},
+    "memory": {"stage": 2, "label": "Minne"},
+    "advanced_packaging_substrates": {"stage": 2, "label": "Packaging og substrater"},
+    "fabless_logic_soc": {"stage": 2, "label": "Brikkedesign og systemer"}
+  }
+}

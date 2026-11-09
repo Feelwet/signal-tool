@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 from urllib.parse import urlsplit
 from . import site_intro as INTRO
+from . import verdikjeder as VK
 
 DATA = Path(__file__).resolve().parent.parent / 'site_config' / 'trender.json'
 CSS = r'''
@@ -158,11 +159,13 @@ def html(data=None, available_tickers=()):
                      (''.join(companies) or '<p class="tr-missing">Dokumenterte selskapskoblinger: Mangler data.</p>') + '</section>' +
                      '<section class="tr-follow">' + follow + '</section></div></article>')
     reviewed = datetime.fromisoformat(data['reviewed_at']).strftime('%d.%m.%Y kl. %H:%M')
-    return ('<style>' + CSS + '</style><div class="tr-page">'
+    return ('<style>' + CSS + VK.CSS + '</style><div class="tr-page">'
             '<header class="tr-head"><h1>Trender</h1>' + INTRO.html('Trender') + '</header>'
+            # Låst spesifikasjon 09.11: verdikjeden er første blokk under innledningen; resten flyttes ned uendret.
+            + VK.html(available_tickers=available) +
             '<nav class="tr-tabs" aria-label="Trender på siden">' + nav + '</nav>' + ''.join(cards) +
             f'<p class="tr-meta">Innhold kontrollert {E(reviewed)} norsk tid. Begrenset første utvalg; '
-            'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + JS)
+            'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + JS + VK.JS)
 
 
 def teaser():
