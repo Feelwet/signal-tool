@@ -18,6 +18,7 @@ STAGES = [(1, 'raavare', 'Innsatsvarer og utstyr'), (2, 'produsenter', 'Produsen
           (5, 'selskaper', 'Børsnoterte selskaper')]
 STAGE5_HEAD = 'Børsnoterte selskaper i kjeden (ikke testet for avkastning)'
 STAGE5_LINE = 'En plass i kjeden dokumenterer verken økt fortjeneste eller kursoppgang.'
+TICKER_HEAD = 'Data fra ticker-siden, ikke en følge av plassen i kjeden'
 FORBIDDEN = ('Mulige aksjer', 'verdt å undersøke', 'tjener på', 'drar nytte', 'vinner', 'oppside',
              'flaskehalsvinner', 'nisje')
 EMPTY_SUPPLIER = 'Ingen dokumentert leverandør i kilden'
@@ -39,26 +40,28 @@ def valid_source(url):
 
 
 def resolve(lines):
-    """[(linjenr, dict)] -> gjeldende linjer i opprinnelig rekkefølge. Feiler lukket ved uklar retting."""
+    """[(linjenr, dict)] -> gjeldende linjer i opprinnelig rekkefølge. En rettelse kan rette en rettelse (37 -> 33 -> 10);
+    da gjelder den siste. Feiler lukket ved uklar retting (fremoverpeker, gaffel, manglende begrunnelse)."""
     by_no = dict(lines)
-    replaced = {}
+    root, latest = {}, {}
     for no, d in lines:
         t = d.get('corrects_line')
         if t is None:
             continue
-        if not isinstance(t, int) or t not in by_no or t >= no or 'corrects_line' in by_no[t]:
+        if not isinstance(t, int) or t not in by_no or t >= no:
             raise ValueError(f'Ugyldig rettelse i linje {no}')
-        if t in replaced:
-            raise ValueError(f'Linje {t} rettet to ganger')
         if not d.get('correction_reason'):
             raise ValueError(f'Rettelse i linje {no} mangler begrunnelse')
-        replaced[t] = no
+        r = root.get(t, t)
+        if latest.get(r, r) != t:
+            raise ValueError(f'Linje {t} rettet to ganger')
+        root[no], latest[r] = r, no
     out = []
     for no, d in lines:
         if 'corrects_line' in d:
             continue
-        if no in replaced:
-            c = replaced[no]
+        if no in latest:
+            c = latest[no]
             out.append({**by_no[c], 'line': c, 'replaces': no})
         else:
             out.append({**d, 'line': no})
@@ -140,20 +143,13 @@ def companies(links):
     return seen
 
 
-def stage5(links, available):
-    from .site import slug
-    rows = []
+def stock_rows(links):
+    """Børsnoterte selskaper i kjedens rekkefølge (ikke sortert på score/avkastning): (navn, ticker, symbol, ledd·orden, region)."""
+    out = []
     for (name, ticker), ls in companies(links).items():
-        r = region(ls[0]['exchange'])
         where = ', '.join(dict.fromkeys(f'{l["label"]} · {l["order"]}. orden' for l in ls))
-        src = ''.join(f'<a class="vk-src" href="{E(u)}" rel="noopener noreferrer" aria-label="Kilde {i}">↗</a>'
-                      for i, u in enumerate(dict.fromkeys(l['source_url'] for l in ls), 1))
-        sym = page_symbol(ls[0])
-        see = (f' <a class="vk-see" href="ticker/{E(slug(sym))}.html">Se ticker →</a>'
-               if sym and sym in available else '')
-        tk = E(ticker) if ticker else 'Ikke børsnotert'
-        rows.append(f'<tr data-region="{r}"><td><b>{tk}</b> {E(name)}{see}</td><td>{E(ls[0]["exchange"])}</td><td>{E(where)}</td><td>{src}</td></tr>')
-    return rows
+        out.append((name, ticker, page_symbol(ls[0]) if ticker else None, where, region(ls[0]['exchange'])))
+    return out
 
 
 def visible_stages(links):
@@ -161,7 +157,9 @@ def visible_stages(links):
     return [s for s in STAGES if s[0] == 5 or any(l['ui_stage'] == s[0] for l in links)]
 
 
-def html(chain='halvledere', data=None, available_tickers=()):
+def html(chain='halvledere', data=None, available_tickers=(), snap=None):
+    from . import stockrow as SR
+    snap = snap or {}
     d = load(chain) if data is None else data
     available = set(available_tickers)
     links, bn = d['links'], d['bottleneck_line']
@@ -180,23 +178,26 @@ def html(chain='halvledere', data=None, available_tickers=()):
             cnt_flow, cnt_mob = f'{len(a)} + {len(b)}', f'{len(a)} direkte · {len(b)} andre-orden'
         flow.append(f'<a href="#{aid}">{E(title)} · {cnt_flow}</a>')
         if n == 5:
-            inner = (f'<p class="vk-s5line">{STAGE5_LINE}</p>'
-                     '<div class="vk-filter" role="group" aria-label="Filtrer selskaper">'
+            # AnalBot 09.11: overskrift + forbehold rett over tabellen; kjedens rekkefølge, ingen sortering på score/avkastning
+            inner = ('<div class="vk-filter" role="group" aria-label="Filtrer selskaper">'
                      '<button type="button" data-f="alle" aria-pressed="true">Alle</button>'
                      '<button type="button" data-f="oslo" aria-pressed="false">Oslo</button>'
                      '<button type="button" data-f="usa" aria-pressed="false">USA</button></div>'
-                     '<table class="vk-table"><thead><tr><th>Ticker og navn</th><th>Børs</th><th>Ledd og orden</th><th>Kilde</th></tr></thead><tbody>' +
-                     ''.join(stage5(links, available)) + '</tbody></table>')
+                     f'<h4 class="vk-dh">{TICKER_HEAD}</h4><p class="vk-s5line">{STAGE5_LINE}</p>' +
+                     SR.table(stock_rows(links), snap, order_col=True))
             head = STAGE5_HEAD
         else:
             inner = '<div class="vk-tracks">' + track(a, '1', bn) + track(b, '2', bn) + '</div>'
             head = title
-        body.append(f'<details class="vk-stage" id="{aid}"{" open" if pos == 1 else ""}><summary>'
-                    f'<span class="vk-stage-title">{pos} · {E(head)}</span><span class="vk-count">{E(cnt_mob)}</span></summary>'
-                    f'<div class="vk-stage-body">{inner}</div></details>')
-    return ('<section class="vk" aria-labelledby="vk-title">'
-            '<nav class="vk-picker" aria-label="Verdikjeder"><a href="#vk-title" aria-current="true">Halvledere</a></nav>'
-            f'<h2 id="vk-title">{E(d["name"])}</h2><p class="vk-sentence">{E(d["sentence"])}</p>'
+        if n == 5:
+            body.append(f'<section class="vk-stage vk-s5" id="{aid}"><h3 class="vk-stage-title">{pos} · {E(head)}</h3>'
+                        f'<div class="vk-stage-body">{inner}</div></section>')
+        else:   # UxBot 09.11 (sektoroversikt): alle ledd lukket ved lasting
+            body.append(f'<details class="vk-stage" id="{aid}"><summary>'
+                        f'<span class="vk-stage-title">{pos} · {E(head)}</span><span class="vk-count">{E(cnt_mob)}</span></summary>'
+                        f'<div class="vk-stage-body">{inner}</div></details>')
+    # Sektorkortene i Trender er nå velgeren (UxBot 09.11); panelet bærer kjedenavnet som overskrift.
+    return (f'<section class="vk" aria-label="Verdikjede {E(d["name"])}"><p class="vk-sentence">{E(d["sentence"])}</p>'
             f'<p class="vk-meta">Offentlige kilder · sist kontrollert {checked}</p>' +
             (f'<p class="vk-meta vk-missing">{MISSING}</p>' if missing else '') +
             '<nav class="vk-flow" aria-label="Ledd i kjeden">' + '<span aria-hidden="true">→</span>'.join(flow) + '</nav>'
@@ -232,25 +233,19 @@ CSS = r"""
 .vk .vk-role,.vk .vk-share{font-size:14px;line-height:20px;color:var(--mut);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vk-tag{display:inline-block;font-size:13px;line-height:18px;border:1px solid var(--mut);border-radius:4px;padding:0 6px;color:var(--ink);margin:2px 0 0}
 .vk-src{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;color:var(--acc);text-decoration:none;flex:none}
-.vk .vk-s5line{margin:0 0 12px}
+.vk .vk-s5line{margin:0 0 8px}.vk .vk-dh{font-size:18px;line-height:24px;font-weight:600;margin:16px 0 4px}
 .vk-filter{display:flex;gap:8px;margin:0 0 12px}.vk-filter button{height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;background:transparent;color:var(--ink);font:inherit;font-size:15px;cursor:pointer}
 .vk-filter button[aria-pressed=true]{border-color:var(--acc);background:var(--card2)}
-.vk-table{width:100%;border-collapse:collapse;font-size:14px;line-height:20px}.vk-table th,.vk-table td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
-.vk-see{color:var(--acc);white-space:nowrap}
-.vk-table tr[hidden]{display:none}
-@media(min-width:601px){.vk-stage>summary,.vk-sub>summary{pointer-events:none}.vk-stage>summary .vk-count,.vk-sub-n{display:none}}
+@media(min-width:601px){.vk-sub>summary{pointer-events:none}.vk-sub-n{display:none}}
 @media(max-width:600px){.vk-flow{display:none}.vk-tracks{grid-template-columns:minmax(0,1fr);gap:12px}.vk-track.vk-empty{display:none}
 .vk-sub>summary{min-height:48px;margin:0}.vk-sub+.vk-sub{border-top:1px solid var(--line)}
-.vk-el{max-height:88px;overflow:hidden}
-.vk-table thead{display:none}.vk-table,.vk-table tbody,.vk-table tr,.vk-table td{display:block;width:100%}
-.vk-table tr{max-height:96px;overflow:hidden;border-bottom:1px solid var(--line);padding:6px 0;position:relative}.vk-table td{border:0;padding:0 48px 0 0}
-.vk-table td:last-child{position:absolute;right:0;top:4px;width:auto;padding:0}}
+.vk-el{max-height:88px;overflow:hidden}}
 """
 
 JS = r"""<script>(()=>{const r=document.querySelector('.vk');if(!r)return;
-const st=[...r.querySelectorAll('.vk-stage,.vk-sub')],wide=matchMedia('(min-width:601px)');
+const st=[...r.querySelectorAll('.vk-sub')],wide=matchMedia('(min-width:601px)');
 const sync=()=>{if(wide.matches)st.forEach(s=>s.open=true)};sync();wide.addEventListener('change',sync);
 r.querySelectorAll('.vk-flow a').forEach(a=>a.addEventListener('click',e=>{const t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;e.preventDefault();t.open=true;t.scrollIntoView({block:'start'})}));
-const bs=[...r.querySelectorAll('.vk-filter button')],rows=[...r.querySelectorAll('.vk-table tbody tr')];
+const bs=[...r.querySelectorAll('.vk-filter button')],rows=[...r.querySelectorAll('.sr-t tbody tr')];
 bs.forEach(b=>b.addEventListener('click',()=>{const f=b.dataset.f;bs.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
 rows.forEach(t=>t.hidden=f!=='alle'&&t.dataset.region!==f)}));})();</script>"""

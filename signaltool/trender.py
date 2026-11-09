@@ -104,10 +104,11 @@ def claim(c, full=False):
     return f'<p>{E(c["text"])}{src}</p>'
 
 
-def html(data=None, available_tickers=()):
+def html(data=None, available_tickers=(), snap=None):
+    from . import stockrow as SR
     data = load() if data is None else data
+    snap = snap or {}
     available = set(available_tickers)
-    nav = ''.join(f'<a href="#{E(t["id"])}" aria-controls="{E(t["id"])}" title="{E(t["title"])}">{E(t["id"].replace("-", " ").capitalize())}</a>' for t in data['trends'])
     cards = []
     for t in data['trends']:
         date = datetime.fromisoformat(t['first_seen']).strftime('%d.%m.%Y')
@@ -159,13 +160,79 @@ def html(data=None, available_tickers=()):
                      (''.join(companies) or '<p class="tr-missing">Dokumenterte selskapskoblinger: Mangler data.</p>') + '</section>' +
                      '<section class="tr-follow">' + follow + '</section></div></article>')
     reviewed = datetime.fromisoformat(data['reviewed_at']).strftime('%d.%m.%Y kl. %H:%M')
-    return ('<style>' + CSS + VK.CSS + '</style><div class="tr-page">'
+    # Sektoroversikt (bruker/UxBot 09.11): kort øverst, ett åpent panel om gangen, alt innhold og alle forbehold bak sektoren.
+    vk = VK.load()
+    sectors = [('halvledere', vk['name'], 'Verdikjede', VK.stock_rows(vk['links']), '',
+                VK.html(data=vk, available_tickers=available, snap=snap))]
+    for t, card in zip(data['trends'], cards):
+        rows = [trend_row(c) for c in t['companies']]
+        table = (('<section class="tr-stocks"><h3>Data fra ticker-siden</h3>' + SR.table(rows, snap) + '</section>') if rows else '')
+        sectors.append((t['id'], t['title'], None, rows, '', table + card))
+    grid = []
+    for sid, name, tag, rows, _x, content in sectors:
+        pid = f'sektor-{sid}'
+        tg = f'<span class="tr-tag">{E(tag)}</span>' if tag else ''
+        grid.append(f'<button type="button" class="tr-sec" id="kort-{E(sid)}" aria-expanded="false" aria-controls="{E(pid)}">'
+                    f'<span class="tr-sec-nm">{E(name)}</span>{tg}<span class="tr-sec-st">{E(SR.status(rows, snap))}</span></button>')
+    panels = []
+    for sid, name, tag, rows, _x, content in sectors:
+        pid = f'sektor-{sid}'
+        panels.append(f'<section class="tr-panel" id="{E(pid)}" aria-labelledby="kort-{E(sid)}" data-sektor="{E(sid)}">'
+                      f'<div class="tr-panel-bar"><h2 class="tr-panel-h">{E(name)}</h2>'
+                      f'<a class="tr-deep" href="#{E(pid)}">Lenke til sektoren</a>'
+                      '<button type="button" class="tr-close">Lukk</button></div>' + SR.date_line(rows, snap) + content + '</section>')
+    return ('<style>' + CSS + VK.CSS + SR.CSS + SECTOR_CSS + '</style><div class="tr-page">'
             '<header class="tr-head"><h1>Trender</h1>' + INTRO.html('Trender') + '</header>'
-            # Låst spesifikasjon 09.11: verdikjeden er første blokk under innledningen; resten flyttes ned uendret.
-            + VK.html(available_tickers=available) +
-            '<nav class="tr-tabs" aria-label="Trender på siden">' + nav + '</nav>' + ''.join(cards) +
+            '<div class="tr-secgrid" role="group" aria-label="Sektorer">' + ''.join(grid) + ''.join(panels) + '</div>'
             f'<p class="tr-meta">Innhold kontrollert {E(reviewed)} norsk tid. Begrenset første utvalg; '
-            'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + JS + VK.JS)
+            'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + SECTOR_JS + VK.JS)
+
+
+def trend_row(c):
+    """Trendselskap -> (navn, ticker, symbol i datasettet). «NYSE: MP» -> MP; Oslo -> «.OL»."""
+    exch, _, tk = c['ticker'].rpartition(':')
+    tk, exch = tk.strip(), exch.strip().upper()
+    if not tk:
+        return (c['name'], None, None, None)
+    sym = tk + '.OL' if exch in ('OSE', 'OSLO', 'OSLO BØRS') else (tk if exch in ('NYSE', 'NASDAQ', 'NYSE AMERICAN', '') else None)
+    return (c['name'], tk, sym, None)
+
+
+SECTOR_CSS = r"""
+.tr-secgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 32px}
+.tr-sec{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:80px;padding:12px;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;font:inherit;cursor:pointer;box-sizing:border-box;min-width:0}
+.tr-sec[aria-expanded=true]{border:2px solid var(--acc);padding:11px}
+.tr-sec:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.tr-sec-nm{font-size:16px;line-height:24px;font-weight:600}
+.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:36px;overflow:hidden}
+.tr-tag{font-size:12px;line-height:16px;padding:0 6px;border:1px solid var(--line);border-radius:999px;color:var(--mut)}
+.tr-panel{grid-column:1/-1;border-top:1px solid var(--line);padding:16px 0 0;min-width:0}
+.tr-secgrid.js .tr-panel[hidden]{display:none}
+.tr-panel-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 16px}
+.tr-panel .tr-panel-h{font-size:18px;line-height:24px;font-weight:600;margin:0;flex:1 1 auto}
+.tr-deep{display:inline-flex;align-items:center;min-height:44px;color:var(--acc);font-size:14px}
+.tr-close{min-height:44px;min-width:44px;padding:0 14px;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--ink);font:inherit;cursor:pointer}
+.tr-panel .tr-stocks,.tr-panel .vk-s5{border-top:1px solid var(--line);padding-top:16px;margin:0 0 32px}
+.tr-panel h3{font-size:18px;line-height:24px;font-weight:600}
+.tr-panel .tr-card{margin:0}
+/* UxBot 09.11: én kolonne ved 390 (statuslinjen får plass på maks to linjer), kort min 88 px */
+@media(max-width:600px){.tr-secgrid{grid-template-columns:minmax(0,1fr)}.tr-sec{min-height:88px}}
+"""
+
+SECTOR_JS = r"""<script>(()=>{const g=document.querySelector('.tr-secgrid');if(!g)return;
+const C=[...g.querySelectorAll('.tr-sec')],P=C.map(c=>document.getElementById(c.getAttribute('aria-controls')));
+g.classList.add('js');C.forEach((c,i)=>c.style.order=2*i);P.forEach(p=>p.hidden=true);let cur=-1;
+const place=i=>{const n=getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length||1;P[i].style.order=2*(Math.min(Math.ceil((i+1)/n)*n,C.length)-1)+1};
+const set=(i,url)=>{cur=i;C.forEach((c,j)=>{c.setAttribute('aria-expanded',j===i?'true':'false');P[j].hidden=j!==i});if(i>=0)place(i);
+if(url)history.replaceState(null,'',i>=0?'#'+P[i].id:location.pathname+location.search.replace(/([?&])sektor=[^&]*&?/,'$1').replace(/[?&]$/,''))};
+C.forEach((c,i)=>c.addEventListener('click',()=>set(cur===i?-1:i,true)));
+P.forEach((p,i)=>{const b=p.querySelector('.tr-close');if(b)b.addEventListener('click',()=>{set(-1,true);C[i].focus()})});
+addEventListener('resize',()=>{if(cur>=0)place(cur)});
+const deep=()=>{let id='';try{id=decodeURIComponent(location.hash.slice(1))}catch(_){}
+const q=new URLSearchParams(location.search).get('sektor');if(!id&&q)id='sektor-'+q;if(!id)return;
+const t=document.getElementById(id);if(!t)return;const i=P.findIndex(p=>p.contains(t));if(i<0)return;set(i,false);
+if(t.tagName==='DETAILS')t.open=true;requestAnimationFrame(()=>t.scrollIntoView({block:'start'}))};
+deep();addEventListener('hashchange',deep)})();</script>"""
 
 
 def teaser():

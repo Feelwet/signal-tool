@@ -15,7 +15,7 @@ class HiddenText(HTMLParser):
 
 def test_header_before_trend_jumps_and_companies():
     h=trender.html()
-    assert h.index('<h1>Trender</h1>')<h.index('aria-label="Trender på siden"')
+    assert h.index('<h1>Trender</h1>')<h.index('aria-label="Sektorer"')   # 09.11: sektorkort erstatter trendfanene
     assert h.index('class="tr-explanation"')<h.index('class="tr-company"')
     assert 'class="tr-index"' not in h and 'class="tr-company-jumps"' not in h
     assert 'min-height:44px' in trender.CSS
@@ -94,14 +94,15 @@ def test_compact_trends_do_not_duplicate_claims_or_company_cards():
 
 def test_compact_trends_have_progressive_choices_and_old_anchor_targets():
     h=trender.html()
-    assert h.count('aria-controls=')==3
+    # 09.11 (bruker/UxBot): sektorkort med aria-controls; gamle ankre (#magneter, #magneter-selskap-0) åpner riktig panel
+    assert h.count('aria-controls="sektor-')==len(trender.load()['trends'])+1
     for t in trender.load()['trends']:
-        assert f'href="#{t["id"]}"' in h
+        assert f'href="#sektor-{t["id"]}"' in h and h.count(f'<article class="tr-card" id="{t["id"]}">')==1
         for i,c in enumerate(t['companies']):
             assert h.count(f'id="{t["id"]}-selskap-{i}"')==1
-    assert 'p.hidden=p!==panel' in trender.JS
-    assert "addEventListener('popstate'" in trender.JS
-    assert 'localStorage' not in trender.JS and 'fetch(' not in trender.JS
+    js=trender.SECTOR_JS
+    assert 'P.findIndex(p=>p.contains(t))' in js and "addEventListener('hashchange'" in js
+    assert 'localStorage' not in js and 'fetch(' not in js
 
 
 def test_company_panel_aligns_with_explanation_panel():

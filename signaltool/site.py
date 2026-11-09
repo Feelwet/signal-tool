@@ -742,7 +742,7 @@ def overview_html(snap: dict, bad=()) -> str:
     b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + sec("Statuslinje", OV.status_line_html, snap) + L.INTRO.html("Oversikt")
          + '<div class="ov-hmeta">' + UX2.meta("GDELT", snap.get("gdelt_latest")) + '<a class="ov-about" href="om.html">Hva er dette? →</a></div></header>',
          f'<style>{OV.CSS}{MS.CSS}</style>',
-         '<section class="ov-entry" aria-label="Snarveier">' + OV.go_html() + '</section>',
+         '<section class="ov-entry" aria-label="Snarveier">' + OV.go_html(snap) + '</section>',
          '<section aria-label="Aksjekandidater">' + sec("Kandidater", OV.candidates_table_html, snap) + MINE.tile() + '</section>',
          '<section class="ov-market" aria-labelledby="marked-risiko"><h2 id="marked-risiko">Marked og risiko</h2>',
          MS.html(snap),
@@ -806,7 +806,7 @@ def build(snap: dict) -> Path:
         (SITE / "data").mkdir(exist_ok=True)
         (SITE / "data" / "verden_overskrifter.json").write_text(json.dumps(snap["verden"], ensure_ascii=False, indent=1))
 
-    (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}), 0, snap))
+    (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}, snap=snap), 0, snap))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))

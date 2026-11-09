@@ -19,14 +19,22 @@ def visible(h):
 
 def test_corrections_replace_and_superseded_text_never_shown():
     d = V.load()
-    assert len(RAW) == 34 and len(d['links']) == 30
+    assert len(RAW) == 37 and len(d['links']) == 30
     corr = {n: r['corrects_line'] for n, r in RAW.items() if 'corrects_line' in r}
-    assert corr == {31: 15, 32: 27, 33: 10, 34: 25}
+    assert corr == {31: 15, 32: 27, 33: 10, 34: 25, 35: 4, 36: 22, 37: 33}
     h = block()
-    for new, old in corr.items():
-        assert RAW[old]['claim'] not in h
-        assert RAW[new]['claim'] in h
-        assert RAW[old]['revenue_share'] not in h.replace(RAW[new]['revenue_share'], '')
+    final = {n for n in corr if n not in corr.values()}       # 37 retter 33 som retter 10: bare 37 gjelder
+    assert final == {31, 32, 34, 35, 36, 37}
+    for old in corr.values():                                  # 4, 10, 15, 22, 25, 27, 33: aldri vist
+        live = [RAW[n]['claim'] for n in final]
+        assert RAW[old]['claim'] in live or RAW[old]['claim'] not in h, old   # L35 beholder L4-påstanden, bare andelen rettes
+    for new in final:
+        assert RAW[new]['claim'] in h, new
+    for n in (4, 22):                                          # AnalBot 09.11: kildens egen prosent, ikke utregnet
+        assert RAW[n]['revenue_share'] not in h
+    assert '73,3' not in h and '75,3' not in h and '$3,241 mrd' not in h
+    assert 'Andel av omsetning 73 % ifølge kilden (FY2024)' in h and 'Andel av omsetning 75 % ifølge kilden (2024)' in h
+    assert 'av netto salg 3 241 mill. dollar 2024 (før internsalg)' in h
     assert '86,9' not in h
     assert 'Fabless' not in [l for l in d['links'] if l['ticker'] == 'NVDA'][0]['claim']
     nv = re.search(r'<li class="vk-el" data-line="34">.*?</li>', h, re.S).group(0)
@@ -78,7 +86,7 @@ def test_five_stages_fixed_order_and_two_tracks():
     assert pos == sorted(pos)
     # UxBot 09.11: tomme ledd vises ikke – verken i flytlinjen eller trappen
     assert 'Bruksområde' not in h.replace(V.MISSING, '') and 'Berørte industrier og produkter' not in h
-    assert block().count('class="vk-stage"') == 3 and block().count('<span aria-hidden="true">→</span>') == 2
+    assert block().count('class="vk-stage"') == 2 and block().count('class="vk-stage vk-s5"') == 1 and block().count('<span aria-hidden="true">→</span>') == 2
     assert 'Direkte (1. orden)' in h and 'Leverandører (2. orden)' in h
     assert 'Offentlige kilder · sist kontrollert 09.11.2026' in h
     assert '16 direkte · 1 andre-orden' in h and '8 direkte · 5 andre-orden' in h
@@ -86,31 +94,33 @@ def test_five_stages_fixed_order_and_two_tracks():
     assert 'kommer snart' not in h.lower()
 
 
-def test_stage5_wording_and_no_price_score_or_colour():
+def test_stage5_is_stock_table_in_chain_order():
     raw = block()
     s5 = raw[raw.index('id="vk-halvledere-selskaper"'):]
     assert V.STAGE5_HEAD in s5 and V.STAGE5_LINE in s5
-    assert s5.index(V.STAGE5_HEAD) < s5.index(V.STAGE5_LINE)
-    for bad in ('score', 'kurs:', 'avkastning:', 'class="up"', 'class="down"', 'class="hot', 'class="warm', 'class="score', 'Kjøp', 'kandidat', ' %'):
-        assert bad not in visible(s5.split('</table>')[0].split('<table')[1]) and 'class="' + bad not in s5, bad
+    # AnalBot 09.11: overskrift og forbehold rett over tabellen
+    assert s5.index(V.STAGE5_HEAD) < s5.index(V.TICKER_HEAD) < s5.index(V.STAGE5_LINE) < s5.index('<table class="sr-t sr-ord">')
+    assert V.TICKER_HEAD == 'Data fra ticker-siden, ikke en følge av plassen i kjeden'
+    assert re.search(re.escape(V.STAGE5_LINE) + r'</p><table class="sr-t sr-ord">', s5)
+    heads = re.findall(r'<th scope="col">(.*?)</th>', s5)
+    assert heads == ['Ticker', 'Orden', 'Hovedsignal', '5d / 20d', 'Risiko', 'Flagg', 'Score (rangering, ikke testet)']
     assert '>Alle<' in s5 and '>Oslo<' in s5 and '>USA<' in s5
-    oslo = re.findall(r'<tr data-region="oslo"><td><b>(\w+)</b>', s5)
+    oslo = re.findall(r'<tr data-region="oslo"><td class="sr-tk"><b>(?:<a [^>]*>)?(\w+)', s5)
     assert sorted(oslo) == ['NOD', 'REC']
-    # Air Liquide (Euronext Paris, «AI») skal ikke lenke til en annen ticker med samme symbol
-    ai = re.search(r'<tr data-region="annen"><td><b>AI</b>.*?</tr>', s5).group(0)
-    assert 'Se ticker' not in ai
+    # AnalBot 09.11: rekkefølgen følger kjeden (første forekomst), ikke score eller avkastning
+    order = re.findall(r'<td class="sr-tk"><b>(?:<a [^>]*>)?([\w]+)', s5)
+    assert order == [t for (_n, t, *_r) in V.stock_rows(V.load()['links'])]
+    assert order[:3] == ['4063', '6488', 'ASML']
+    # Air Liquide (Euronext Paris, «AI») lenker aldri til en annen ticker med samme symbol
+    ai = re.search(r'<tr data-region="annen"><td class="sr-tk"><b>AI</b>.*?</tr>', s5).group(0)
+    assert 'href=' not in ai and 'Ingen data' in ai
 
 
-def test_chain_is_first_block_under_intro_and_existing_content_unchanged(monkeypatch):
+def test_chain_lives_in_its_sector_panel():
     h = T.html()
-    assert h.index('</header>') < h.index('class="vk"') < h.index('class="tr-tabs"')
-    monkeypatch.setattr(T.VK, 'html', lambda **k: '')
-    monkeypatch.setattr(T.VK, 'CSS', '')
-    monkeypatch.setattr(T.VK, 'JS', '')
-    without = T.html()
-    # alt etter verdikjedeblokken er byte-likt med siden uten blokken
-    rest = h.split('<p class="vk-meta">Til egen undersøkelse.</p></section>', 1)[1]
-    assert rest.split('<script>')[0] == without.split('</header>', 1)[1].split('<script>')[0]
+    p = h[h.index('id="sektor-halvledere"'):]
+    p = p[:p.index('<section class="tr-panel"', 10)] if '<section class="tr-panel"' in p[10:] else p
+    assert 'class="vk"' in p and V.STAGE5_HEAD in p
     for t in T.load()['trends']:
         assert t['title'] in h
 
@@ -128,9 +138,9 @@ def test_mobile_and_desktop_rules_in_css():
     assert 'min-width:44px;min-height:44px' in c
     m = c[c.index('@media(max-width:600px)'):]
     assert '.vk-flow{display:none}' in m and '.vk-track.vk-empty{display:none}' in m
-    assert 'max-height:88px' in m and 'max-height:96px' in m and '.vk-sub>summary{min-height:48px' in m
+    assert 'max-height:88px' in m and '.vk-sub>summary{min-height:48px' in m
     assert '.vk .vk-none{font-size:14px;line-height:20px;color:var(--mut);margin:0;max-height:40px' in c
-    assert block().count(' open>') == 1
+    assert block().count(' open>') == 0   # UxBot 09.11: alle ledd lukket ved lasting
 
 
 def test_chains_never_touch_score_candidates_or_signal_book():
@@ -198,18 +208,19 @@ def test_share_texts_have_denominator_year_and_checked_figure():
         assert sh.startswith('Andel av omsetning') or sh.startswith('Andel: '), sh
         if sh.startswith('Andel: '):
             assert ' av ' in sh                                      # nevner oppgitt
-        figs = re.findall(r'\d+,\d', sh)
+        figs = re.findall(r'\d+(?:,\d)? %', sh)
         src = l['claim'] + ' ' + RAW[l['line']]['revenue_share']
         for f in figs:
-            assert f in src or (l['line'] == 3 and f == '38,2'), (l['line'], f)
+            assert f in src or (l['line'] == 3 and f == '38,2 %'), (l['line'], f)
     shares = {l['line']: l['share'] for l in d['links']}
     assert shares[3] == 'Andel: EUV 38,2 % av netto systemsalg 2024'
-    assert 'før internsalg' in shares[33]
+    assert shares[37] == 'Andel: Materials 43,2 %; APS 57,1 % av netto salg 3 241 mill. dollar 2024 (før internsalg)'
+    assert shares[35] == 'Andel av omsetning 73 % ifølge kilden (FY2024)' and shares[36] == 'Andel av omsetning 75 % ifølge kilden (2024)'
     assert '38 %' not in block()
     for l in d['links']:   # «Andel av omsetning» bare der nevneren er omsetning i kilden
         if l['share'].startswith('Andel av omsetning'):
             # L33 Entegris: nevneren $3,241 mrd er net sales FY2024 (AnalBot: 1 400 + 1 850 − 9 = 3 241)
-            assert l['line'] == 33 or re.search(r'revenue|net sales|sales|omsetning', l['claim']), l['line']
+            assert re.search(r'revenue|net sales|sales|omsetning', l['claim']), l['line']
 
 
 def _rgb(h):

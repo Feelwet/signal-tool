@@ -22,7 +22,7 @@ def test_intro_style():
 
 def test_trender_intro_before_choices_and_no_new_certainty():
     h=trender.html()
-    assert h.index('</h1>') < h.index(I.html("Trender")) < h.index('class="tr-tabs"')
+    assert h.index('</h1>') < h.index(I.html("Trender")) < h.index('class="tr-secgrid"')   # 09.11: sektorkort erstatter fanene
     assert 'Tilknytning betyr ikke at selskapet vil tjene mer eller aksjen stige.' in h
     assert 'Eksponert for trenden (ikke testet for avkastning)' in h
 
