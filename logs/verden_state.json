@@ -1,6 +1,223 @@
 {
 "saker": [
 {
+"tittel": "Trump urges Netanyahu to advance Gaza plan after Israeli elections: Report",
+"url": "https://aa.com.tr/en/americas/trump-urges-netanyahu-to-advance-gaza-plan-after-israeli-elections-report/4116615",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Precious metals start week with gains as crude oil prices decline",
+"url": "https://aa.com.tr/en/economy/precious-metals-start-week-with-gains-as-crude-oil-prices-decline/4116565",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "EU stresses freedom of navigation in Black Sea must be restored, preserved",
+"url": "https://aa.com.tr/en/europe/eu-stresses-freedom-of-navigation-in-black-sea-must-be-restored-preserved/4116820",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Iran says 2-day proposal to US offers roadmap for restoring security in Strait of Hormuz",
+"url": "https://aa.com.tr/en/middle-east/iran-says-2-day-proposal-to-us-offers-roadmap-for-restoring-security-in-strait-of-hormuz/4116631",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Saudi Arabia briefly activates warning alert in Riyadh over potential danger",
+"url": "https://aa.com.tr/en/middle-east/saudi-arabia-briefly-activates-warning-alert-in-riyadh-over-potential-danger/4116485",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
+"url": "https://abcnews.com/International/wireStory/day-us-brokered-talks-russia-ukraine-batter-long-137968428",
+"kilde": "GDELT",
+"domene": "abcnews.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees for both sides",
+"url": "https://abcnews.com/International/wireStory/us-led-peace-talks-russia-ukraine-security-guarantees-137966016",
+"kilde": "GDELT",
+"domene": "abcnews.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Ukraine hits Russian refinery as Moscow strikes power grid",
+"url": "https://cyprus-mail.com/2026/11/09/ukraine-hits-major-russian-refinery-as-moscow-strikes-power-grid",
+"kilde": "GDELT",
+"domene": "cyprus-mail.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Iran Defends Two-Day Hormuz Reopening Plan, Urges US to Make 'Genuine Decision'",
+"url": "https://pakobserver.net/iran-defends-two-day-hormuz-reopening-plan-urges-us-to-make-genuine-decision/",
+"kilde": "GDELT",
+"domene": "pakobserver.net",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Russia's Bridge Strikes Aim to Paralyze Logistics Sustaining Ukraine's Military",
+"url": "https://sputnikglobe.com/20261109/russias-bridge-strikes-aim-to-paralyze-logistics-sustaining-ukraines-military---expert-1125034140.html",
+"kilde": "GDELT",
+"domene": "sputnikglobe.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "2-day plan shared with US clearest way to Hormuz security: Iran",
+"url": "https://www.dailysabah.com/world/mid-east/2-day-plan-shared-with-us-clearest-way-to-hormuz-security-iran",
+"kilde": "GDELT",
+"domene": "dailysabah.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Saudi Arabia eyes Syrian military help against Houthis amid command critiques",
+"url": "https://www.jpost.com/middle-east/article-914331",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
+"url": "https://www.kmbc.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
+"kilde": "GDELT",
+"domene": "kmbc.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Remembrance Day origins go back to end of the First World War : My Timmins Now",
+"url": "https://www.mytimminsnow.com/86953/news/local-history/remembrance-day-origins-go-back-to-end-of-the-first-world-war/",
+"kilde": "GDELT",
+"domene": "mytimminsnow.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Saudi Arabia turns to Syria for help as fighting with Houthis escalates",
+"url": "https://www.naharnet.com:443/stories/en/323629-saudi-arabia-turns-to-syria-for-help-as-fighting-with-houthis-escalates",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Tens of thousands march in Amsterdam, pressing govt on Gaza and Israel",
+"url": "https://www.naharnet.com:443/stories/en/323636-tens-of-thousands-march-in-amsterdam-pressing-govt-on-gaza-and-israel",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Oil prices fall as Trump signals no immediate strikes on Iran",
+"url": "https://www.offshore-technology.com/news/oil-prices-fall-trump-no-strikes-iran/",
+"kilde": "GDELT",
+"domene": "offshore-technology.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "DGTR recommends anti-dumping duty on rubber glove imports from Thailand, Malaysia",
+"url": "https://www.thehindubusinessline.com/economy/dgtr-recommends-anti-dumping-duty-on-rubber-glove-imports-from-thailand-malaysia/article71681950.ece",
+"kilde": "GDELT",
+"domene": "thehindubusinessline.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Stock Market Today Highlights, Nov 9: Stock markets end higher amid easing crude oil prices, buying in banks",
+"url": "https://www.thehindubusinessline.com/markets/sensex-nifty50-today-stock-market-highlights-9-november-2026/article71681002.ece",
+"kilde": "GDELT",
+"domene": "thehindubusinessline.com",
+"publisert": "2026-11-09T12:00:00Z"
+},
+{
+"tittel": "Ukraine War, Day 1,719: Kyiv Attacks Russia's 2nd-Largest Refinery",
+"url": "https://eaworldview.com/2026/11/ukraine-war-kyiv-attacks-russia-2nd-largest-refinery/",
+"kilde": "GDELT",
+"domene": "eaworldview.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "$2 billion Mabounie Niobium and Rare Earths Project in Gabon Aims for 2027 Construction",
+"url": "https://kenya-today.com/report-2-billion-mabounie-niobium-and-rare-earths-project-in-gabon-aims-for-2027-construction-24010/",
+"kilde": "GDELT",
+"domene": "kenya-today.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "Iran wants Putin's S-400 shield, but Russia has a war of its own to fight",
+"url": "https://timesofindia.indiatimes.com/defence/international/iran-wants-putins-s-400-shield-but-russia-has-a-war-of-its-own-to-fight/articleshow/135679854.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "China extends suspension of new rare earth controls until January",
+"url": "https://www.asiaone.com/china/china-extends-suspension-new-rare-earth-controls-until-january",
+"kilde": "GDELT",
+"domene": "asiaone.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "Zelensky: Russian forces have killed 120 clergy, damaged 800 religious sites | News Headlines",
+"url": "https://www.catholicculture.org/news/headlines/index.cfm?storyid=71205",
+"kilde": "GDELT",
+"domene": "catholicculture.org",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "Why Russia and Ukraine Keep Resisting Trump's Art of the Deal",
+"url": "https://www.newyorker.com/news/the-lede/why-russia-and-ukraine-keep-resisting-trumps-art-of-the-deal",
+"kilde": "GDELT",
+"domene": "newyorker.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "Ukrainian Drone Strike Sets Russia's Second-Largest Oil Refinery Ablaze",
+"url": "https://www.rferl.org/a/rusian-refinery-hit-by-ukraine-drones/33893740.html",
+"kilde": "GDELT",
+"domene": "rferl.org",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "Oil Prices Edge Lower After Trump's Remarks On Iran War",
+"url": "https://www.rttnews.com/3711701/oil-prices-edge-lower-after-trump-s-remarks-on-iran-war.aspx",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "DAX Advances As Oil Prices Drop; Commerzbank, SAP Rise On Rating Upgrade",
+"url": "https://www.rttnews.com/3711732/dax-advances-as-oil-prices-drop-commerzbank-sap-rise-on-rating-upgrade.aspx",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "CAC 40 Climbs Higher On Corporate News, Weak Oil Prices",
+"url": "https://www.rttnews.com/3711756/cac-40-climbs-higher-on-corporate-news-weak-oil-prices.aspx",
+"kilde": "GDELT",
+"domene": "rttnews.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "MILITARY PLANS: U.S. And Israel Prepare Two Major Attack Options Against Iran As Trump Weighs Next Move",
+"url": "https://www.theyeshivaworld.com/news/israel-news/2620744/military-plans-u-s-and-israel-prepare-two-major-attack-options-against-iran-as-trump-weighs-next-move.html",
+"kilde": "GDELT",
+"domene": "theyeshivaworld.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
+"tittel": "DIPLOMATIC DEADLOCK: Rubio Warns Iran Deal May Be Impossible, Calls Tehran's Demands \"Ridiculous\" – The Yeshiva World",
+"url": "https://www.theyeshivaworld.com/news/israel-news/2620754/diplomatic-deadlock-rubio-warns-iran-deal-may-be-impossible-calls-tehrans-demands-ridiculous.html",
+"kilde": "GDELT",
+"domene": "theyeshivaworld.com",
+"publisert": "2026-11-09T11:45:00Z"
+},
+{
 "tittel": "Eurozone bond yields edge lower as oil prices ease, investors await US inflation data",
 "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/eurozone-bond-yields-edge-lower-as-oil-prices-ease-investors-await-us-inflation-data/articleshow/135677869.cms",
 "kilde": "GDELT",
@@ -15,32 +232,11 @@
 "publisert": "2026-11-09T11:30:00Z"
 },
 {
-"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
-"url": "https://www.clickondetroit.com/news/world/2026/11/09/a-day-before-us-brokered-talks-russia-and-ukraine-batter-each-other-with-long-range-strikes/",
-"kilde": "GDELT",
-"domene": "clickondetroit.com",
-"publisert": "2026-11-09T11:30:00Z"
-},
-{
 "tittel": "Oil prices pare losses as Hormuz, Houthi tensions persist | Hellenic Shipping News Worldwide",
 "url": "https://www.hellenicshippingnews.com/oil-prices-pare-losses-as-hormuz-houthi-tensions-persist/",
 "kilde": "GDELT",
 "domene": "hellenicshippingnews.com",
 "publisert": "2026-11-09T11:30:00Z"
-},
-{
-"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
-"url": "https://www.koco.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
-"kilde": "GDELT",
-"domene": "koco.com",
-"publisert": "2026-11-09T11:30:00Z"
-},
-{
-"tittel": "China extends suspension of new rare earth controls until January",
-"url": "https://lufkindailynews.com/news_reuters/top_news/china-extends-suspension-of-new-rare-earth-controls-until-january/article_3f25be8b-e73f-5c34-934c-d1ecf8807e95.html",
-"kilde": "GDELT",
-"domene": "lufkindailynews.com",
-"publisert": "2026-11-09T11:15:00Z"
 },
 {
 "tittel": "President Trump Blames Midterm Losses on Iran War, 'Great Dislike' of Israel; Rubio Calls Iran Demands 'Ridiculous'",
@@ -148,20 +344,6 @@
 "publisert": "2026-11-09T11:00:00Z"
 },
 {
-"tittel": "Precious metals start week with gains as crude oil prices decline",
-"url": "https://www.hurriyetdailynews.com/precious-metals-start-week-with-gains-as-crude-oil-prices-decline-229180",
-"kilde": "GDELT",
-"domene": "hurriyetdailynews.com",
-"publisert": "2026-11-09T11:00:00Z"
-},
-{
-"tittel": "Oil Prices Edge Lower After Trump's Remarks On Iran War",
-"url": "https://www.rttnews.com/story.aspx?Id=3711701",
-"kilde": "GDELT",
-"domene": "rttnews.com",
-"publisert": "2026-11-09T11:00:00Z"
-},
-{
 "tittel": "China extends suspension of export controls on 16 U.S. entities for two months",
 "url": "http://www.bignewsnetwork.com/news/279421401/china-extends-suspension-of-export-controls-on-16-us-entities-for-two-months",
 "kilde": "GDELT",
@@ -185,20 +367,6 @@
 {
 "tittel": "Israel defense minister says 'mission not complete' on Iran",
 "url": "https://www.naharnet.com/stories/en/323625-israel-defense-minister-says-mission-not-complete-on-iran",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-09T10:45:00Z"
-},
-{
-"tittel": "Saudi Arabia turns to Syria for help as fighting with Houthis escalates",
-"url": "https://www.naharnet.com/stories/en/323629-saudi-arabia-turns-to-syria-for-help-as-fighting-with-houthis-escalates",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-09T10:45:00Z"
-},
-{
-"tittel": "Tens of thousands march in Amsterdam, pressing govt on Gaza and Israel",
-"url": "https://www.naharnet.com/stories/en/323636-tens-of-thousands-march-in-amsterdam-pressing-govt-on-gaza-and-israel",
 "kilde": "GDELT",
 "domene": "naharnet.com",
 "publisert": "2026-11-09T10:45:00Z"
@@ -1723,96 +1891,12 @@
 "publisert": "2026-11-08T12:15:00Z"
 },
 {
-"tittel": "Farage uncovers heartbreaking stories of Britain's youngest First World War soldiers - London Business News",
-"url": "https://londonlovesbusiness.com/farage-uncovers-heartbreaking-stories-of-britains-youngest-first-world-war-soldiers/",
-"kilde": "GDELT",
-"domene": "londonlovesbusiness.com",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "US in new targeted strikes on Iran as Tehran leaders weigh mediator's proposals",
-"url": "https://mobile.naharnet.com/stories/en/323622-us-in-new-targeted-strikes-on-iran-as-tehran-leaders-weigh-mediator-s-proposals",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Saudi Arabia Intercepts Missiles as Riyadh Aramco Building Is Targeted",
-"url": "https://voiceofvienna.org/saudi-arabia-intercepts-missiles-as-riyadh-aramco-building-is-targeted/",
-"kilde": "GDELT",
-"domene": "voiceofvienna.org",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Hundreds of thousands left without power in Ukraine after Russian strikes, authorities say",
-"url": "https://www.cbsnews.com/news/ukraine-russia-war-strike-power/",
-"kilde": "GDELT",
-"domene": "cbsnews.com",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Russian strikes leave 600,000 in the dark in eastern Ukraine",
-"url": "https://www.politico.eu/article/russian-strikes-leave-600000-in-the-dark-in-eastern-ukraine-dnipropetrovsk/",
-"kilde": "GDELT",
-"domene": "politico.eu",
-"publisert": "2026-11-08T11:45:00Z"
-},
-{
-"tittel": "Russia, US and China Discuss Agenda for Possible Leaders' Meeting Ahead of APEC Summit – Kremlin",
-"url": "https://sputnikglobe.com/20261108/russia-us-and-china-discuss-agenda-for-possible-leaders-meeting-ahead-of-apec-summit--kremlin-1125031083.html",
-"kilde": "GDELT",
-"domene": "sputnikglobe.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Democrats' congressional win could strengthen Ukraine's hand against Russia | News",
-"url": "https://www.aljazeera.com/news/2026/11/8/democrats-congressional-win-could-strengthen-ukraines-hand-against-russia",
-"kilde": "GDELT",
-"domene": "aljazeera.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Drone, missile strikes in Ukraine wound 9 | The Arkansas Democrat-Gazette",
-"url": "https://www.arkansasonline.com/news/2026/nov/08/drone-missile-strikes-in-ukraine-wound-9/",
-"kilde": "GDELT",
-"domene": "arkansasonline.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Israeli city sues Iran for $65 million in war reparations",
-"url": "https://www.clevelandjewishnews.com/jns/israeli-city-sues-iran-for-65-million-in-war-reparations/article_2fd8f2a4-7557-53e7-a24d-b74e1fbdddfd.html",
-"kilde": "GDELT",
-"domene": "clevelandjewishnews.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Oil Tanker Engulfed in Flames After Striking Naval Mine in Strait of Hormuz, Iran Says",
-"url": "https://www.lankanewspapers.com/2026/11/08/oil-tanker-engulfed-in-flames-after-striking-naval-mine-in-strait-of-hormuz-iran-says",
-"kilde": "GDELT",
-"domene": "lankanewspapers.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Taiwan Semiconductor Manufacturing Company Ltd. $TSM Stock Bought by Kornitzer Capital Management Inc. KS",
-"url": "https://www.themarketsdaily.com/2026/11/08/taiwan-semiconductor-manufacturing-company-ltd-tsm-stock-bought-by-kornitzer-capital-management-inc-ks.html",
-"kilde": "GDELT",
-"domene": "themarketsdaily.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
-"tittel": "Posts claiming Cristiano Ronaldo offered to play for Saudi Arabia are unverified",
-"url": "https://www.ummid.com/news/2026/11/8/posts-claiming-cristiano-ronaldo-offered-to-play-for-saudi-arabia-are-unverified.html",
-"kilde": "GDELT",
-"domene": "ummid.com",
-"publisert": "2026-11-08T11:30:00Z"
-},
-{
 "tittel": "Christine Lagarde: Interview with Yomiuri Shimbun",
 "url": "https://www.ecb.europa.eu//press/inter/date/2026/html/ecb.in261107~e7b86fc4ce.en.html",
 "kilde": "ECB",
 "publisert": "2026-11-07T14:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-09T11:30:00Z",
-"hentet": "2026-11-09T11:29:06Z"
+"gkg_siste_fil": "2026-11-09T12:00:00Z",
+"hentet": "2026-11-09T12:02:31Z"
 }
