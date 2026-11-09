@@ -68,19 +68,21 @@ def test_flaskehals_only_on_asml_euv():
     h = block()
     assert h.count('Flaskehals') == 1
     asml = re.search(r'<li class="vk-el" data-line="3">.*?</li>', h, re.S).group(0)
-    assert 'Flaskehals · EUV 38 %' in asml and '2024' in asml
+    assert 'Flaskehals · EUV 38,2 % av netto systemsalg 2024' in asml
 
 
 def test_five_stages_fixed_order_and_two_tracks():
     h = visible(block())
-    pos = [h.index(f'{n} · {t}') for n, t in [(1, 'Råvare og komponent'), (2, 'Produsenter'), (3, 'Bruksområde'),
-                                             (4, 'Berørte industrier og produkter'),
-                                             (5, 'Børsnoterte selskaper i kjeden (ikke testet for avkastning)')]]
+    pos = [h.index(f'{n} · {t}') for n, t in [(1, 'Innsatsvarer og utstyr'), (2, 'Produsenter'),
+                                             (3, 'Børsnoterte selskaper i kjeden (ikke testet for avkastning)')]]
     assert pos == sorted(pos)
+    # UxBot 09.11: tomme ledd vises ikke – verken i flytlinjen eller trappen
+    assert 'Bruksområde' not in h.replace(V.MISSING, '') and 'Berørte industrier og produkter' not in h
+    assert block().count('class="vk-stage"') == 3 and block().count('<span aria-hidden="true">→</span>') == 2
     assert 'Direkte (1. orden)' in h and 'Leverandører (2. orden)' in h
     assert 'Offentlige kilder · sist kontrollert 09.11.2026' in h
     assert '16 direkte · 1 andre-orden' in h and '8 direkte · 5 andre-orden' in h
-    assert 'Råvare og komponent · 16 + 1' in h and 'Produsenter · 8 + 5' in h
+    assert 'Innsatsvarer og utstyr · 16 + 1' in h and 'Produsenter · 8 + 5' in h
     assert 'kommer snart' not in h.lower()
 
 
@@ -118,15 +120,16 @@ def test_mobile_and_desktop_rules_in_css():
     assert 'height:44px' in c and 'height:56px' in c and 'min-height:56px' in c
     assert 'grid-template-columns:1fr 1fr;gap:24px' in c
     assert 'border-left:4px solid' in c and 'border-left:4px dashed' in c
-    assert 'background:#fff' in c and 'background:#f1f3f5' in c
-    assert 'font-size:13px;line-height:18px;color:#9ca3af' in c
+    assert 'background:var(--card)' in c and 'background:' + V.T2_BG in c
+    assert 'font-size:13px;line-height:18px;color:var(--mut)' in c
+    assert '.vk-sub-name,.vk-sub-n{font-size:14px;line-height:20px;font-weight:600;color:var(--mut)}' in c
     assert '.vk .vk-name{font-size:16px;line-height:24px' in c
-    assert 'font-size:14px;line-height:20px;color:#4b5563' in c
+    assert 'font-size:14px;line-height:20px;color:var(--mut)' in c
     assert 'min-width:44px;min-height:44px' in c
     m = c[c.index('@media(max-width:600px)'):]
     assert '.vk-flow{display:none}' in m and '.vk-track.vk-empty{display:none}' in m
-    assert 'max-height:88px' in m and 'max-height:96px' in m
-    assert '.vk .vk-none{font-size:14px;line-height:20px;color:#4b5563;margin:0;max-height:40px' in c
+    assert 'max-height:88px' in m and 'max-height:96px' in m and '.vk-sub>summary{min-height:48px' in m
+    assert '.vk .vk-none{font-size:14px;line-height:20px;color:var(--mut);margin:0;max-height:40px' in c
     assert block().count(' open>') == 1
 
 
@@ -150,3 +153,99 @@ def test_no_private_paths_in_public_copy():
     txt = LOG.read_text() + Path('site_config/verdikjeder/halvledere.json').read_text()
     for bad in ('/workspace', '/home/', '/cursor/', 'file:'):
         assert bad not in txt
+
+
+# ---- AnalBot 09.11: godkjente tekster
+def test_approved_texts():
+    h = visible(block())
+    assert V.EXPLAIN == ('1. orden: selskapet gjør leddet selv, ifølge kilden. '
+                         '2. orden: kilden navngir selskapet som leverandør til et selskap i 1. orden.')
+    assert h.count(V.EXPLAIN) == 1
+    assert V.MISSING == 'Bruksområder og berørte industrier er ikke med ennå, fordi vi mangler kildebelagte koblinger.'
+    raw = block()
+    assert raw.index('sist kontrollert 09.11.2026</p><p class="vk-meta vk-missing">' + V.MISSING) > 0
+    assert V.EMPTY_DIRECT == 'Ingen dokumentert kobling i kilden'
+    assert V.EMPTY_SUPPLIER == 'Ingen dokumentert leverandør i kilden'
+    assert 'Fra wafere, gasser og maskiner til brikkeprodusenter og selskapene som er navngitt i kildene.' in h
+
+
+def test_empty_tracks_use_approved_texts():
+    d = V.load()
+    links = [l for l in d['links'] if not (l['ui_stage'] == 1 and l['order'] == '2')]
+    h = V.html(data={**d, 'links': links})
+    assert V.EMPTY_SUPPLIER in h
+    only2 = [l for l in d['links'] if not (l['ui_stage'] == 2 and l['order'] == '1')]
+    assert V.EMPTY_DIRECT in V.html(data={**d, 'links': only2})
+
+
+def test_hidden_stages_return_when_log_has_lines():
+    d = V.load()
+    e3 = {**d['links'][0], 'ui_stage': 3, 'line': 98}
+    h = visible(V.html(data={**d, 'links': d['links'] + [e3]}))
+    assert '3 · Bruksområde' in h and '4 · Børsnoterte' in h and V.MISSING in h   # ledd 4 mangler fortsatt
+    e4 = {**d['links'][0], 'ui_stage': 4, 'line': 99}
+    h = visible(V.html(data={**d, 'links': d['links'] + [e3, e4]}))
+    assert '4 · Berørte industrier og produkter' in h and '5 · Børsnoterte' in h and V.MISSING not in h
+
+
+def test_share_texts_have_denominator_year_and_checked_figure():
+    d = V.load()
+    for l in d['links']:
+        sh = l['share']
+        if sh == V.NO_SHARE:
+            continue
+        assert re.search(r'(FY)?20\d\d', sh), sh                     # år
+        assert sh.startswith('Andel av omsetning') or sh.startswith('Andel: '), sh
+        if sh.startswith('Andel: '):
+            assert ' av ' in sh                                      # nevner oppgitt
+        figs = re.findall(r'\d+,\d', sh)
+        src = l['claim'] + ' ' + RAW[l['line']]['revenue_share']
+        for f in figs:
+            assert f in src or (l['line'] == 3 and f == '38,2'), (l['line'], f)
+    shares = {l['line']: l['share'] for l in d['links']}
+    assert shares[3] == 'Andel: EUV 38,2 % av netto systemsalg 2024'
+    assert 'før internsalg' in shares[33]
+    assert '38 %' not in block()
+    for l in d['links']:   # «Andel av omsetning» bare der nevneren er omsetning i kilden
+        if l['share'].startswith('Andel av omsetning'):
+            # L33 Entegris: nevneren $3,241 mrd er net sales FY2024 (AnalBot: 1 400 + 1 850 − 9 = 3 241)
+            assert l['line'] == 33 or re.search(r'revenue|net sales|sales|omsetning', l['claim']), l['line']
+
+
+def _rgb(h):
+    h = h.lstrip('#'); return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
+def _lum(c):
+    c = [x / 255 for x in c]
+    c = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def _ratio(a, b):
+    la, lb = sorted((_lum(a), _lum(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def css_vars():
+    from signaltool import site
+    root = re.search(r':root\{color-scheme:dark;([^}]*)\}', site.CSS).group(1)
+    return {k: _rgb(v) for k, v in re.findall(r'--([\w-]+):(#[0-9a-fA-F]{6})', root)}
+
+
+def contrast_table():
+    v = css_vars()
+    t2 = [round(0.95 * a + 0.05 * b) for a, b in zip(v['card'], v['ink'])]
+    surfaces = {'bg': v['bg'], 'card (1. orden)': v['card'], 'card+ink 5 % (2. orden)': t2, 'card2 (valgt chip)': v['card2']}
+    return {(f, s): _ratio(v[f], c) for s, c in surfaces.items() for f in ('ink', 'mut', 'acc')}, v, t2
+
+
+def test_contrast_at_least_4_5_and_no_new_hex():
+    table, v, t2 = contrast_table()
+    for k, r in table.items():
+        assert r >= 4.5, (k, round(r, 2))
+    # +4 % lyshet (HSL) for 2. orden
+    def L(c): return (max(c) + min(c)) / 2 / 255 * 100
+    assert 3.5 <= L(t2) - L(v['card']) <= 4.5
+    assert not re.findall(r'#[0-9a-fA-F]{3,8}\b', V.CSS)
+    assert not re.search(r'(?<![\w-])(white|black|rgb\(|rgba\(|hsl\()(?![\w-])', V.CSS)

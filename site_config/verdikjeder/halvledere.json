@@ -7,16 +7,66 @@
   "links_file": "halvledere_links.jsonl",
   "bottleneck_line": 3,
   "substages": {
-    "silicon_wafers": {"stage": 1, "label": "Silisiumwafere"},
-    "specialty_chem_gases": {"stage": 1, "label": "Kjemikalier og gasser"},
-    "photomasks": {"stage": 1, "label": "Fotomasker"},
-    "lithography_equipment": {"stage": 1, "label": "Litografi"},
-    "fab_equipment_other": {"stage": 1, "label": "Fab-utstyr"},
-    "eda": {"stage": 1, "label": "Designprogramvare (EDA)"},
-    "test_equipment": {"stage": 1, "label": "Testutstyr"},
-    "foundry": {"stage": 2, "label": "Foundry"},
-    "memory": {"stage": 2, "label": "Minne"},
-    "advanced_packaging_substrates": {"stage": 2, "label": "Packaging og substrater"},
-    "fabless_logic_soc": {"stage": 2, "label": "Brikkedesign og systemer"}
-  }
+    "silicon_wafers": {
+      "stage": 1,
+      "label": "Silisiumwafere"
+    },
+    "specialty_chem_gases": {
+      "stage": 1,
+      "label": "Kjemikalier og gasser"
+    },
+    "photomasks": {
+      "stage": 1,
+      "label": "Fotomasker"
+    },
+    "lithography_equipment": {
+      "stage": 1,
+      "label": "Litografi"
+    },
+    "fab_equipment_other": {
+      "stage": 1,
+      "label": "Fab-utstyr"
+    },
+    "eda": {
+      "stage": 1,
+      "label": "Designprogramvare (EDA)"
+    },
+    "test_equipment": {
+      "stage": 1,
+      "label": "Testutstyr"
+    },
+    "foundry": {
+      "stage": 2,
+      "label": "Foundry"
+    },
+    "memory": {
+      "stage": 2,
+      "label": "Minne"
+    },
+    "advanced_packaging_substrates": {
+      "stage": 2,
+      "label": "Packaging og substrater"
+    },
+    "fabless_logic_soc": {
+      "stage": 2,
+      "label": "Brikkedesign og systemer"
+    }
+  },
+  "stage_names": {
+    "1": "Innsatsvarer og utstyr"
+  },
+  "share_display": {
+    "3": "Andel: EUV 38,2 % av netto systemsalg 2024",
+    "4": "Andel av omsetning 73,3 % FY2024",
+    "7": "Andel av omsetning 66,4 % FY2024",
+    "16": "Andel av omsetning 90,3 % 2024",
+    "18": "Andel av omsetning: DRAM 70,1 %, NAND 28,8 % FY2024",
+    "20": "Andel av omsetning 81,9 % 2024",
+    "21": "Andel av omsetning 51,5 % FY2024",
+    "22": "Andel av omsetning 75,3 % 2024",
+    "23": "Andel av omsetning ca. 12,5 % 2024 (Samsung-drevet)",
+    "33": "Andel av omsetning: Materials 43,2 %, APS 57,1 % FY2024 (før internsalg)",
+    "34": "Andel av omsetning 88,3 % FY2025"
+  },
+  "share_display_note": "AnalBot 09.11: «Andel: …» bare med nevner, år og kontrollert tall; «Andel av omsetning» bare der nevneren er omsetning (net revenue/net sales/sales). ASML 38,2 % = (7 856,4 + 465,0) / 21 768,7 mill. euro systemsalg (AnalBots kildesjekk)."
 }
