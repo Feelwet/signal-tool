@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-09T10:18:18+0100",
+ "hentet": "2026-11-09T10:27:22+0100",
  "dato": "2026-11-09",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (4664) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (796) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,15 +12,15 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 119
+   "antall": 125
   },
   {
    "tema": "conflict_defense",
-   "antall": 62
+   "antall": 65
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 21
+   "antall": 23
   },
   {
    "tema": "risk_off_haven",
@@ -52,6 +52,157 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "EU activates special emergency mechanism to fund Ukraine's critical power, water and heating needs after Russian strikes: Zelenskyy",
+   "url": "https://aninews.in/news/world/europe/eu-activates-special-emergency-mechanism-to-fund-ukraine8217s-critical-power-water-and-heating-needs-after-russian-strikes-zelenskyy20261109140020/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Kiren Rijiju appreciates Saudi Arabia's support for Haj pilgrims, reaffirms India-Saudi cooperation for Haj 2027",
+   "url": "https://aninews.in/news/world/middle-east/kiren-rijiju-appreciates-saudi-arabia8217s-support-for-haj-pilgrims-reaffirms-india-saudi-cooperation-for-haj-202720261109132808/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Report: Trump Urges Netanyahu to Advance Gaza Plan After Israeli Vote",
+   "url": "https://econotimes.com/Report-Trump-Urges-Netanyahu-to-Advance-Gaza-Plan-After-Israeli-Vote-1773609",
+   "kilde": "GDELT",
+   "domene": "econotimes.com",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Iran's Baghaei : Our plan will pave the way for restoring security in Strait of Hormuz",
+   "url": "https://en.apa.az/asia/irans-baghaei-our-plan-will-pave-the-way-for-restoring-security-in-strait-of-hormuz-535064",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Brent crude oil price declines",
+   "url": "https://en.apa.az/bourse/brent-crude-oil-price-declines-535029",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "brent crude",
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "430 Ukrainian drones shot down over Russia overnight",
+   "url": "https://en.apa.az/cis-countries/430-ukrainian-drones-shot-down-over-russia-overnight-535034",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Kiren Rijiju appreciates Saudi Arabias support for Haj pilgrims, reaffirms India-Saudi cooperation for Haj 2027",
+   "url": "https://news.webindia123.com/news/Articles/World/20261109/4517618.html",
+   "kilde": "GDELT",
+   "domene": "webindia123.com",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "EU activates special emergency mechanism to fund Ukraines critical power, water and heating needs after Russian strikes: Zelenskyy",
+   "url": "https://news.webindia123.com/news/Articles/World/20261109/4517628.html",
+   "kilde": "GDELT",
+   "domene": "webindia123.com",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Gold, silver extend gains as softer oil prices ease inflation concerns",
+   "url": "https://www.business-standard.com/markets/commodities/gold-silver-extend-gains-as-softer-oil-prices-ease-inflation-concerns-126110900378_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Iran says Strait of Hormuz security depends on US meeting its demands",
+   "url": "https://www.trend.az/iran/4244645.html",
+   "kilde": "GDELT",
+   "domene": "trend.az",
+   "publisert": "2026-11-09T09:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
   {
    "tittel": "Oil prices fall, Brent at $97.67 per barrel",
    "url": "http://www.austinglobe.com/news/279421059/oil-prices-fall-brent-at-9767-per-barrel",
@@ -333,20 +484,6 @@
    ]
   },
   {
-   "tittel": "Kiren Rijiju appreciates Saudi Arabia's support for Haj pilgrims, reaffirms India-Saudi cooperation for Haj 2027",
-   "url": "https://ianslive.in/kiren-rijiju-appreciates-saudi-arabias-support-for-haj-pilgrims-reaffirms-india-saudi-cooperation-for-haj-2027--20261109112332",
-   "kilde": "GDELT",
-   "domene": "ianslive.in",
-   "publisert": "2026-11-09T07:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Iran says no unauthorized vessels transited Strait of Hormuz overnight after navigation aids destroyed",
    "url": "https://thefrontierpost.com/iran-says-no-unauthorized-vessels-transited-strait-of-hormuz-overnight-after-navigation-aids-destroyed/",
    "kilde": "GDELT",
@@ -508,93 +645,6 @@
    "matchede_ord": [
     "ukraine",
     "kremlin"
-   ]
-  },
-  {
-   "tittel": "Riyadh on alert again as Saudi Arabia warns of potential danger",
-   "url": "https://www.siasat.com/riyadh-on-alert-again-as-saudi-arabia-warns-of-potential-danger-3572145/",
-   "kilde": "GDELT",
-   "domene": "siasat.com",
-   "publisert": "2026-11-09T07:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Wars Update: Can Saudi Arabia Defend Itself?",
-   "url": "http://www.strategypage.com/%5Cqnd%5Cwars%5Carticles%5C20261104100527.aspx",
-   "kilde": "GDELT",
-   "domene": "strategypage.com",
-   "publisert": "2026-11-09T07:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "India Could Gain From Softer Oil Prices and Global Yields After US Midterm Elections",
-   "url": "https://www.siliconindia.com/news/general/india-could-gain-from-softer-oil-prices-and-global-yields-after-us-midterm-elections-nid-243019-cid-1.html",
-   "kilde": "GDELT",
-   "domene": "siliconindia.com",
-   "publisert": "2026-11-09T07:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
-   "url": "https://isp.netscape.com:443/news/world/story/0001/20261109/090d96e25872f5c63e105b9dd3e5dc60",
-   "kilde": "GDELT",
-   "domene": "netscape.com",
-   "publisert": "2026-11-09T03:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Iran's Revolutionary Guards Say Two Oil Tankers Hit Mines, Catch Fire Near Strait of Hormuz",
-   "url": "https://peakoil.com/publicpolicy/irans-revolutionary-guards-say-two-oil-tankers-hit-mines-catch-fire-near-strait-of-hormuz",
-   "kilde": "GDELT",
-   "domene": "peakoil.com",
-   "publisert": "2026-11-09T03:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Conservatives call for SNP minister to correct comments about Israel and Gaza",
-   "url": "https://www.newburytoday.co.uk/national/conservatives-call-for-snp-minister-to-correct-comments-about-israel-and-gaza-174029/",
-   "kilde": "GDELT",
-   "domene": "newburytoday.co.uk",
-   "publisert": "2026-11-09T03:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
    ]
   },
   {
@@ -800,36 +850,6 @@
    ]
   },
   {
-   "tittel": "The Kremlin hopes the US election shake-up won't shift Trump's negotiations on Ukraine – Daily Bulletin",
-   "url": "https://www.dailybulletin.com/2026/11/08/the-kremlin-hopes-the-us-election-shake-up-wont-shift-trumps-negotiations-on-ukraine/",
-   "kilde": "GDELT",
-   "domene": "dailybulletin.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
-   ]
-  },
-  {
-   "tittel": "The Kremlin hopes the US election shake-up won't shift Trump's negotiations on Ukraine – Pasadena Star News",
-   "url": "https://www.pasadenastarnews.com/2026/11/08/the-kremlin-hopes-the-us-election-shake-up-wont-shift-trumps-negotiations-on-ukraine/",
-   "kilde": "GDELT",
-   "domene": "pasadenastarnews.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
-   ]
-  },
-  {
    "tittel": "IRGC Targets Three Oil Tankers in the Strait of Hormuz",
    "url": "https://townhall.com/news/josephchalfant/2026/11/08/irgc-targets-three-oil-tankers-in-the-strait-of-hormuz-n2686101",
    "kilde": "GDELT",
@@ -841,21 +861,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "The Kremlin hopes the US election shake-up won't shift Trump's negotiations on Ukraine – Daily Breeze",
-   "url": "https://www.dailybreeze.com/2026/11/08/the-kremlin-hopes-the-us-election-shake-up-wont-shift-trumps-negotiations-on-ukraine/",
-   "kilde": "GDELT",
-   "domene": "dailybreeze.com",
-   "publisert": "2026-11-08T22:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
    ]
   },
   {
