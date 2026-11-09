@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-09T12:12:59+0100",
+ "hentet": "2026-11-09T12:15:26+0100",
  "dato": "2026-11-09",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (1806) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,19 +12,19 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 146
+   "antall": 134
   },
   {
    "tema": "conflict_defense",
-   "antall": 74
+   "antall": 72
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 26
+   "antall": 23
   },
   {
    "tema": "risk_off_haven",
-   "antall": 20
+   "antall": 19
   },
   {
    "tema": "tariffs_trade",
@@ -1325,34 +1325,6 @@
    "matchede_ord": [
     "semiconductor",
     "taiwan"
-   ]
-  },
-  {
-   "tittel": "Gold prices crash 24% globally but fall only 20% in India: Why domestic buyers aren't seeing the full price correction",
-   "url": "https://www.livemint.com/money/personal-finance/gold-prices-crash-24-globally-but-fall-only-20-in-india-why-domestic-buyers-arent-seeing-the-full-price-correction-11794125564701.html",
-   "kilde": "GDELT",
-   "domene": "livemint.com",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
-   ]
-  },
-  {
-   "tittel": "Two offending oil tankers strike mines, engulfed in flames in Strait of Hormuz: IRGC Navy",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/07/780202/two-offending-oil-tankers-strike-mines-engulfed-in-flames-in-strait-of-hormuz-irgc-navy",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T11:15:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
    ]
   },
   {
