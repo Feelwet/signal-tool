@@ -149,8 +149,11 @@ def html(data=None, available_tickers=(), snap=None, disp=None):
                 VK.html(data=vk, available_tickers=available, snap=snap, disp=disp))]
     for t, card in zip(data['trends'], cards):
         rows = [trend_row(c) for c in t['companies']]
-        table = ((f'<section class="tr-stocks"><h3>{E(VK.TICKER_HEAD)}</h3>' + SR.table(rows, snap, disp=disp) + '</section>') if rows else '')
-        sectors.append((t['id'], t['title'], None, rows, '', table + card))
+        table = ((f'<section class="tr-stocks"><h3>{E(VK.TICKER_HEAD)}</h3>' + SR.cov_line(rows, snap, disp) + SR.table(rows, snap, disp=disp) + '</section>') if rows else '')
+        # UxBot 09.11: kontrolltidspunktet gjelder trendene, ikke halvlederkjeden (den har egen «sist kontrollert»)
+        meta = (f'<p class="tr-pmeta">Innhold kontrollert {E(reviewed)} norsk tid. Begrenset første utvalg; '
+                'teksten oppdateres ikke automatisk av timesjobben.</p>')
+        sectors.append((t['id'], t['title'], None, rows, meta, table + card))
     grid = []
     for sid, name, tag, rows, _x, content in sectors:
         pid = f'sektor-{sid}'
@@ -158,17 +161,16 @@ def html(data=None, available_tickers=(), snap=None, disp=None):
         grid.append(f'<button type="button" class="tr-sec" id="kort-{E(sid)}" aria-expanded="false" aria-controls="{E(pid)}">'
                     f'<span class="tr-sec-nm">{E(name)}</span>{tg}<span class="tr-sec-st">{E(SR.status(rows, snap, disp))}</span></button>')
     panels = []
-    for sid, name, tag, rows, _x, content in sectors:
+    for sid, name, tag, rows, meta, content in sectors:
         pid = f'sektor-{sid}'
         panels.append(f'<section class="tr-panel" id="{E(pid)}" aria-labelledby="kort-{E(sid)}" data-sektor="{E(sid)}">'
                       f'<div class="tr-panel-bar"><h2 class="tr-panel-h">{E(name)}</h2>'
                       f'<a class="tr-deep" href="#{E(pid)}">Lenke til sektoren</a>'
-                      '<button type="button" class="tr-close">Lukk</button></div>' + SR.date_line(rows, snap, disp) + content + '</section>')
+                      '<button type="button" class="tr-close">Lukk</button></div>' + meta + SR.date_line(rows, snap, disp) + content + '</section>')
     return ('<style>' + CSS + VK.CSS + SR.CSS + SECTOR_CSS + '</style><div class="tr-page">'
             '<header class="tr-head"><h1>Trender</h1>' + INTRO.html('Trender') + '</header>'
             '<div class="tr-secgrid" role="group" aria-label="Sektorer">' + ''.join(grid) + ''.join(panels) + '</div>'
-            f'<p class="tr-meta">Innhold kontrollert {E(reviewed)} norsk tid. Begrenset første utvalg; '
-            'teksten oppdateres ikke automatisk av timesjobben.</p></div>' + SECTOR_JS + VK.JS)
+            '</div>' + SECTOR_JS + VK.JS)
 
 
 def trend_row(c):
@@ -185,13 +187,14 @@ def trend_row(c):
 
 
 SECTOR_CSS = r"""
-.tr-secgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 32px}
-.tr-sec{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:80px;padding:12px;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;font:inherit;cursor:pointer;box-sizing:border-box;min-width:0}
+.tr-secgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 32px;align-items:stretch}
+.tr-sec{display:flex;flex-direction:column;align-items:flex-start;gap:4px;height:100%;min-height:80px;padding:12px;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;font:inherit;cursor:pointer;box-sizing:border-box;min-width:0}
 .tr-sec[aria-expanded=true]{border:2px solid var(--acc);padding:11px}
 .tr-sec:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .tr-sec-nm{font-size:16px;line-height:24px;font-weight:600}
-/* runde 2: lengre statuslinje (kursdata + Oslo) – inntil 3 linjer ved 1280 i stedet for å klippe tall; UxBot måler */
-.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:54px;overflow:hidden}
+/* UxBot 09.11: tall klippes aldri – ingen max-height/overflow; inntil 3 linjer ved 1280, kortene i raden like høye */
+.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut)}
+.tr-page p.tr-pmeta{font-size:13px;line-height:18px;color:var(--mut);margin:0 0 12px}.tr-page p.sr-cov{margin:0 0 8px}
 .tr-tag{font-size:12px;line-height:16px;padding:0 6px;border:1px solid var(--line);border-radius:999px;color:var(--mut)}
 .tr-panel{grid-column:1/-1;border-top:1px solid var(--line);padding:16px 0 0;min-width:0}
 .tr-secgrid.js .tr-panel[hidden]{display:none}

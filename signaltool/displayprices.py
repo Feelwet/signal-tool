@@ -59,7 +59,40 @@ def stats(close) -> dict | None:
     return {"last_date": str(c.index[-1].date()), "ret_5d": round(r5, 4), "ret_20d": round(r20, 4)}
 
 
-def fetch(symbols: list[str]) -> dict[str, dict]:
+# AnalBot 09.11: bare sluttkurs. Børsens lokale stengetid (+30 min slingring); dagens bar droppes før det.
+CLOSE = {".T": ("Asia/Tokyo", 15, 30), ".TWO": ("Asia/Taipei", 13, 30), ".TW": ("Asia/Taipei", 13, 30),
+         ".KS": ("Asia/Seoul", 15, 30), ".PA": ("Europe/Paris", 17, 35), ".OL": ("Europe/Oslo", 16, 25),
+         "": ("America/New_York", 16, 0)}
+BUFFER_MIN = 30
+
+
+def exchange_close(sym: str):
+    """(tidssone, time, minutt) for symbolets børs; None når børsen er ukjent (da droppes dagens bar alltid)."""
+    if "." not in sym:
+        return CLOSE[""]
+    return CLOSE.get("." + sym.rsplit(".", 1)[1])
+
+
+def completed(df, sym: str, now: datetime | None = None):
+    """Fjerner baren for en handelsdag som ikke er avsluttet ennå (børsens lokale tid). Dato = siste avsluttede handelsdag."""
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+    if df is None or not len(df):
+        return df
+    now = now or datetime.now(timezone.utc)
+    ex = exchange_close(sym)
+    tz = ZoneInfo(ex[0] if ex else "UTC")
+    loc = now.astimezone(tz)
+    last = df.index[-1].date()
+    if last < loc.date():
+        return df
+    if ex is None:                       # ukjent børs: usikker -> dagens bar droppes
+        return df.iloc[:-1]
+    close = loc.replace(hour=ex[1], minute=ex[2], second=0, microsecond=0) + timedelta(minutes=BUFFER_MIN)
+    return df if loc >= close else df.iloc[:-1]
+
+
+def fetch(symbols: list[str], now: datetime | None = None) -> dict[str, dict]:
     from . import http as _http
     from .data_quality import clean_universe
     if not symbols:
@@ -71,6 +104,7 @@ def fetch(symbols: list[str]) -> dict[str, dict]:
             df = d[s].dropna(subset=["Close"])
         except KeyError:
             continue
+        df = completed(df, s, now)
         if len(df):
             frames[s] = df
     frames, _ = clean_universe(frames)   # samme spike-reparasjon som tickersidene, uten å skrive i kvalitetsrapporten

@@ -103,7 +103,18 @@ def region(exchange):
     return 'annen'
 
 
+def delisted_text(l):
+    """AnalBot 09.11: strøkne selskaper (rettelseslinje med listed=false) – grå tekst, ingen kurs, telles ikke som Oslo."""
+    if l.get('listed') is not False:
+        return None
+    d = l.get('delisted')
+    where = 'Oslo Børs' if 'Oslo' in l.get('exchange', '') else l.get('exchange', '')
+    return f'Ikke børsnotert (strøket fra {where} {date.fromisoformat(d).strftime("%d.%m.%Y")})' if d else 'Ikke børsnotert'
+
+
 def page_symbol(l):
+    if l.get('listed') is False:
+        return None
     r = region(l['exchange'])
     return l['ticker'] + '.OL' if r == 'oslo' else (l['ticker'] if r == 'usa' else None)
 
@@ -150,6 +161,10 @@ def stock_rows(links):
     out = []
     for (name, ticker), ls in companies(links).items():
         where = ', '.join(dict.fromkeys(f'{l["label"]} · {l["order"]}. orden' for l in ls))
+        gone = delisted_text(ls[0])
+        if gone:   # strøket: ingen ticker, symbol eller kurssymbol; kjedens plass beholdes
+            out.append((name, None, None, where, 'strøket', None, gone))
+            continue
         out.append((name, ticker, page_symbol(ls[0]) if ticker else None, where, region(ls[0]['exchange']),
                     yahoo_symbol(ticker, ls[0]['exchange'])))
     return out
@@ -186,7 +201,8 @@ def html(chain='halvledere', data=None, available_tickers=(), snap=None, disp=No
                      '<button type="button" data-f="alle" aria-pressed="true">Alle</button>'
                      '<button type="button" data-f="oslo" aria-pressed="false">Oslo</button>'
                      '<button type="button" data-f="usa" aria-pressed="false">USA</button></div>'
-                     f'<h4 class="vk-dh">{TICKER_HEAD}</h4><p class="vk-s5line">{STAGE5_LINE}</p>' +
+                     f'<h4 class="vk-dh">{TICKER_HEAD}</h4>' + SR.cov_line(stock_rows(links), snap, disp) +
+                     f'<p class="vk-s5line">{STAGE5_LINE}</p>' +
                      SR.table(stock_rows(links), snap, order_col=True, disp=disp))
             head = STAGE5_HEAD
         else:

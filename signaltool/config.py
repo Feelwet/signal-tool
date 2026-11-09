@@ -49,3 +49,12 @@ PEAD_TT_EXP_NOTE = "Bestod testen med minst mulig margin."
 # PEAD topp/topp (topp 20 % på både EPS-overraskelse og kursreaksjon): AnalBots tall, reports/natt/pead_spread.md + pead_stretch.md
 PEAD_TT_BADGE = "⚑ Sterk rapport + reaksjon · snitt +2,4 % vs S&P 500 over 60 d (median ca. +1 %)"
 PEAD_TT_CAVEAT = "Bygger på ett signal. Testet på dagens S&P 500-medlemmer 2006–26, så snittet kan være for høyt."
+
+# AnalBot 09.11: kurs bare for visning (Trender) holdes tilbake til den er kontrollert. 5d/20d vises som «–» med grå
+# tekst «kurs under kontroll». Ikke kontrollert mot en annen kilde ennå; fjern symbolet herfra når kursen er bekreftet.
+PRICE_HOLD = {
+    "6488.TWO": "GlobalWafers: uvanlig stort fall (20d ca. −50 %) – kontrolleres før visning",
+    "4062.T": "Ibiden: uvanlig stort fall (20d ca. −50 %) – kontrolleres før visning",
+    "INTC": "Intel: uvanlig stort fall (20d ca. −46 %) – kontrolleres før visning",
+    "TER": "Teradyne: uvanlig stort fall (20d ca. −46 %) – kontrolleres før visning",
+}
