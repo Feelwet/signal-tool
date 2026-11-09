@@ -42,14 +42,26 @@ def test_portfolio_intro_not_matched_control_claim(tmp_path, monkeypatch):
     assert 'For få handler (n=0)' in h
 
 
-def test_mobile_intro_fix_is_scoped_to_overview_and_trends_only():
-    from signaltool import overview as OV
-    rule = "@media(max-width:600px){.ov-page .page-intro,.tr-page .page-intro{font-size:16px;line-height:24px}}"
-    assert rule in I.CSS
-    # Shared default and uncertainty captions remain unchanged on other pages.
+def test_overview_and_trends_text_16_24_at_all_widths_scoped_to_two_pages():
+    # UxBot 09.11: brødtekst og innledning 16/24 på alle bredder, bare Oversikt (pg-index) og Trender (pg-trender)
+    from signaltool import overview as OV, ux2
+    assert "body.pg-index,body.pg-trender{font-size:16px;line-height:24px}" in I.CSS
+    assert "body.pg-index .page-intro,body.pg-trender .page-intro{font-size:16px;line-height:24px}" in I.CSS
+    assert "@media(max-width:600px){.ov-page .page-intro" not in I.CSS   # ikke lenger bare mobil
+    assert I.OV_TR_CSS in I.CSS and "@media" not in I.OV_TR_CSS
+    assert ux2.body_class("index.html") == "pg-index" and ux2.body_class("trender.html") == "pg-trender"
+    # Felles standard og metadata/usikkerhetstekster er uendret på andre sider.
     assert ".page-intro{font-size:15px;line-height:23px;max-width:720px" in I.CSS
     assert ".page-intro-caution{font-size:14px;line-height:22px" in I.CSS
+    assert ".pmeta{margin:0 0 8px;font-size:12px;line-height:16px" in ux2.CSS
     assert ".ov-page{font-size:16px;line-height:24px}" in OV.CSS
     assert ".tr-page{font-size:17px;line-height:26px;" in trender.CSS
     assert ".tr-meta{color:#cbd5e1;font-size:13px;line-height:20px}" in trender.CSS
     assert ".tr-source,.tr-source-short{display:block;font-size:13px;line-height:20px;" in trender.CSS
+
+
+def test_two_page_rule_wins_over_shared_mobile_body_rule():
+    from signaltool import site
+    import inspect
+    # Den felles mobilregelen body{font-size:15px} har lavere spesifisitet (0,0,1) enn body.pg-index (0,1,1); andre sider beholder 15 px.
+    assert "@media (max-width:600px){body{font-size:15px}" in inspect.getsource(site)

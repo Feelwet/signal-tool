@@ -104,11 +104,11 @@ def strip_html(snap: dict, include_calendar: bool = True) -> str:
     from . import site_risk as RK
     RC = (("Høy", "hoy", "#FEE2E2"), ("Middels", "middels", "#FEF3C7"), ("Lav", "lav", "#DCFCE7"))
     cnt = {k: sum(1 for e in tk if (e.get("_risk") or {}).get("level") == k) for k, _, _ in RC}
-    tot = sum(cnt.values()) or 1
-    seg = "".join(f'<i style="width:{cnt[k] / tot * 100:.1f}%;background:{c}"></i>' for k, _, c in RC if cnt[k])
     t2 = (f'<div class="ov-tile tap"><div class="lbl">Risikonivå<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["Høy"]} Høy</div>'
-          f'<div class="ov-stack" role="img" aria-label="Høy {cnt["Høy"]}, Middels {cnt["Middels"]}, Lav {cnt["Lav"]}">{seg}</div>'
-          f'<div class="sub">' + " · ".join(f'<a class="in" href="tickere.html?filter={f}">{k} {cnt[k]}</a>' for k, f, _ in RC) + '</div>'
+          # UxBot 09.11: tre trinn Lav/Middels/Høy med tallet ved siden av; aktivt trinn = nivået i overskriften (Høy)
+          f'<div class="ov-steps" role="group" aria-label="Høy {cnt["Høy"]}, Middels {cnt["Middels"]}, Lav {cnt["Lav"]}">'
+          + "".join(f'<a class="in{" on" if k == "Høy" else ""}" href="tickere.html?filter={f}"{" aria-current=\"true\"" if k == "Høy" else ""}>{k} <b>{cnt[k]}</b></a>'
+                    for k, f, _ in reversed(RC)) + '</div>'
           f'<div class="sub2 rkl">{E(UX2.RISK_LINE)}{UX2.i(RK.STATUS, "Om risikonivået")}</div>'   # AnalBot 01.11
           '</div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
@@ -235,3 +235,142 @@ def entries_html() -> str:
     return ('<nav class="ov-entries" aria-label="Undersøk videre">'
             '<a href="temaer.html"><b>Temaer</b><span>Nyhetsoppmerksomhet og temakart</span></a>'
             '<a href="trender.html"><b>Trender</b><span>Dokumentert bruk og selskapskoblinger</span></a></nav>')
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
+# UxBot 09.11 (låst, med AnalBots krav): statuslinje, tre innganger, kompakt kandidattabell og risikotrinn.
+# Bare oppsett: tall, signaltekster, merker, sortering og kategoriregler er uendret og leses fra snapshotet (aldri oppdiktet).
+SCORE_HEAD = "Score (rangering, ikke testet)"   # AnalBot 09.11: én gang i kolonneoverskriften på PC
+TOP_N = 6
+NO_FLAG_NOTE = "Bare Oslo-aksjer er sjekket for røde flagg."   # ordrett fra Tickere › Røde flagg
+
+CSS += """
+.ov-status{margin:0 0 8px;font-size:14px;line-height:20px;color:#94a3b8}
+.ov-hmeta{display:flex;flex-wrap:wrap;align-items:center;column-gap:16px}.ov-page .ov-hmeta .pmeta{margin:0}
+.ov-page>header .page-intro{margin:0 0 4px}
+.ov-go{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ov-go>a,.ov-go>button{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;height:56px;min-height:44px;margin:0;padding:6px 12px;background:#111821;border:1px solid #3b4757;border-radius:6px;color:inherit;font:inherit;font-size:16px;line-height:22px;font-weight:600;text-align:left;text-decoration:none;cursor:pointer}
+.ov-go>a:hover,.ov-go>button:hover{border-color:var(--acc,#6cb6ff)}.ov-go>button[aria-pressed=true]{border-color:var(--acc,#6cb6ff)}
+.ov-go .gsub{display:block;font-size:13px;line-height:18px;font-weight:400;color:#94a3b8}
+.ov-fbar{display:flex;flex-wrap:wrap;align-items:center;column-gap:8px;margin:0 0 8px;font-size:14px;line-height:20px}.ov-fbar[hidden]{display:none}
+.ov-fbar button{min-height:44px;padding:0 4px;background:none;border:0;color:var(--acc,#6cb6ff);font:inherit;cursor:pointer}.ov-fbar .mut{flex-basis:100%;font-size:13px;line-height:18px}
+.ov-page .ov-cand{padding:12px 16px;margin:0 0 16px}.ov-page .ov-cand>h2{margin:0 0 8px}
+.ov-page table.ov-ct{display:table;overflow:visible;width:100%;border-collapse:collapse;margin:0}
+.ov-ct thead th{position:sticky;top:0;z-index:2;background:var(--bg,#0d1117);font-size:12px;line-height:16px;font-weight:600;color:#94a3b8;text-align:left;padding:8px;white-space:nowrap}
+.ov-ct td{padding:8px;vertical-align:middle;border-top:1px solid #21262d}
+.ov-ct tr[hidden]{display:none}
+.ov-ct .tn{display:block;line-height:20px}.ov-ct .tn .nm{display:block;font-size:15px;line-height:20px;font-weight:600;white-space:normal;overflow:visible;text-overflow:clip}.ov-ct .tn .tk{display:block;font-size:12px;line-height:16px;color:#94a3b8}
+.ov-ct .fl{white-space:nowrap;font-size:13px;line-height:18px}.ov-ct .fl.n0{color:#94a3b8}
+.ov-ct .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid #333b47;background:var(--pill,#1c2430);font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-ct .sc{white-space:nowrap;font-variant-numeric:tabular-nums;color:#94a3b8}.ov-ct .sc .sl,.ov-ct .sc .snt{display:none}
+.ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
+.ov-more{min-height:44px;margin:4px 0 0;padding:0;background:none;border:0;color:var(--acc,#6cb6ff);font:inherit;cursor:pointer}.ov-more[hidden]{display:none}
+.ov-steps{display:flex;gap:2px;margin:4px 0}.ov-steps a{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:4px;min-height:44px;border-radius:4px;background:#1c2430;color:#cbd5e1;font-size:12px;line-height:16px;text-decoration:none}
+.ov-steps a{position:relative;z-index:1}.ov-steps a b{font-weight:600}.ov-steps a.on{background:#334155;color:#fff;box-shadow:inset 0 -2px 0 var(--acc,#6cb6ff)}
+@media(max-width:699px){
+.ov-go{grid-template-columns:minmax(0,1fr)}
+.ov-page>header,.ov-page>section.ov-entry{margin-bottom:16px}.ov-page .ov-cand{padding:12px}
+.ov-page table.ov-ct,.ov-ct tbody{display:block;width:100%}.ov-ct thead{display:none}
+.ov-ct tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"nm nm nm nm" "rk fl sg sg" "sc sc sc rt";gap:4px 8px;align-items:center;padding:8px 0;border-top:1px solid #21262d}
+.ov-ct tr[hidden]{display:none}
+.ov-ct td{display:block;padding:0;border:0;min-width:0}
+.ov-ct td.nmc{grid-area:nm}.ov-ct td.rkc{grid-area:rk}.ov-ct td.fl{grid-area:fl}.ov-ct td.sgt{grid-area:sg}.ov-ct td.sc{grid-area:sc}.ov-ct td.rt{grid-area:rt;justify-self:end}
+.ov-ct .tn .nm{display:inline;font-size:15px;line-height:20px}.ov-ct .tn .tk{display:inline;margin-left:6px}
+.ov-ct .sc{font-size:13px;line-height:18px}.ov-ct .sc .sl,.ov-ct .sc .snt{display:inline}
+}
+"""
+
+
+def _flag_state(snap: dict) -> tuple[set, dict]:
+    """(sjekkede Oslo-tickere, {ticker: flaggrad}) fra samme snapshot som kandidattabellen."""
+    return {r.get("ticker") for r in snap.get("oslo_universe_flags") or []}, {r["ticker"]: r for r in EV.red_rows(snap)}
+
+
+def candidates(snap: dict) -> list:
+    """Kandidattabellens rader: samme utvalg og sortering som før (har score, høyest først)."""
+    return sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])
+
+
+def status_line_html(snap: dict) -> str:
+    """«{n} kandidater · {m} med 2+ flagg · Oppdatert {dato kl}» – n, m og tidspunkt fra samme snapshot som tabellen (AnalBot 09.11)."""
+    tk = candidates(snap)
+    _, fm = _flag_state(snap)
+    m = sum(1 for e in tk if e["ticker"] in fm and EV.ntest(fm[e["ticker"]]) >= 2)
+    parts = [f"{len(tk)} kandidat{"" if len(tk) == 1 else "er"}", f"{m} med 2+ flagg"]
+    from .site import gen_short
+    if snap.get("generated"):
+        parts.append(f'Oppdatert {gen_short(snap["generated"]).replace(" ", " kl. ", 1)}')
+    return f'<p class="ov-status">{E(" · ".join(parts))}</p>'
+
+
+def go_html() -> str:
+    """Tre like innganger (UxBot 09.11). «Kandidater uten røde flagg» er bare et filter – samme utseende, ingen farge eller ikon."""
+    return ('<nav class="ov-go" aria-label="Snarveier">'
+            '<button type="button" class="go-nf" aria-pressed="false" aria-controls="kandidater">Kandidater uten røde flagg</button>'
+            f'<a href="temaer.html">Høyest temascore<span class="gsub">{E(SCORE_TIP_TEXT)}</span></a>'
+            '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a></nav>')
+
+
+SCORE_TIP_TEXT = "Rangering, ikke testet"
+
+
+def _ret(label: str, x) -> str:
+    if x is None:
+        return f'<span class="ov-ret">{label} –</span>'
+    return f'<span class="ov-ret {"tup" if x > 0 else "tdn" if x < 0 else ""}">{label} {x*100:+.1f}%</span>'   # samme format og farger som 5d/20d i Tickere
+
+
+def _main_signal(e: dict) -> str:
+    from .site import POINT_NO
+    from . import evidens_status as ES
+    pts = [(k, v) for k, v in (e.get("points") or {}).items() if v and v > 0]
+    if e.get("unranked") or not pts:
+        return '<span class="mut">–</span>'
+    k = max(pts, key=lambda kv: kv[1])[0]
+    d, lab = ES.dot(k)
+    nm = POINT_NO.get(k, k)
+    return f'<span class="sgc" title="{E(nm + (". " + lab if lab else ""))}">{d}{E(nm)}</span>'
+
+
+def _flag_cell(t: str, checked: set, fm: dict) -> tuple[str, bool]:
+    if t in fm:
+        return f'<td class="fl">⚑ {E(EV.nlabel(fm[t]))}</td>', False
+    if t in checked:
+        return '<td class="fl n0">0 flagg</td>', True
+    return '<td class="fl n0">ikke sjekket</td>', False
+
+
+def candidates_table_html(snap: dict) -> str:
+    from . import site_risk as RK
+    tk = candidates(snap)
+    checked, fm = _flag_state(snap)
+    rows = []
+    for i, e in enumerate(tk):
+        t = e["ticker"]
+        fl, nf = _flag_cell(t, checked, fm)
+        st = e.get("stats") or {}
+        rt = "–" if e.get("unranked") else _ret("5d", st.get("ret_5d")) + " " + _ret("20d", st.get("ret_20d"))
+        rows.append(f'<tr data-nf="{1 if nf else 0}"{" class=\"more\" hidden" if i >= TOP_N else ""}>'
+                    f'<td class="nmc">{NM.cell(t, "ticker/" + _slug(t) + ".html", e.get("name"))}</td>'
+                    f'<td class="rkc">{RK.chip(e.get("_risk"), small=True)}</td>{fl}<td class="sgt">{_main_signal(e)}</td>'
+                    f'<td class="sc"><span class="sl">Score </span><span class="sv">{_nb(e["score"], 1)}</span><span class="snt"> · ikke testet</span></td>'
+                    f'<td class="rt">{rt}</td></tr>')
+    more = (f'<button type="button" class="ov-more" aria-expanded="false">Vis alle ({len(tk)})</button>' if len(tk) > TOP_N else "")
+    head = (f'<thead><tr><th scope="col">Aksje</th><th scope="col">Risiko</th><th scope="col">Røde flagg</th><th scope="col">Hovedsignal</th>'
+            f'<th scope="col">{E(SCORE_HEAD)}</th><th scope="col">5d / 20d</th></tr></thead>')
+    fbar = (f'<p class="ov-fbar" hidden>Filter: 0 røde flagg · <button type="button" class="ov-clear">Vis alle</button>'
+            f'<span class="mut">{E(NO_FLAG_NOTE)}</span></p>')
+    empty = '<p class="ov-none mut" hidden>Ingen kandidater uten røde flagg nå.</p>'
+    body = (f'<table class="ov-ct">{head}<tbody>{"".join(rows)}</tbody></table>' if rows else '<p class="mut">Ingen.</p>')
+    return (f'<div class="card ov-candidates ov-cand" id="kandidater"><h2>Kandidater</h2>{fbar}{empty}{body}{more}'
+            f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>{CAND_JS}')
+
+
+CAND_JS = """<script>(()=>{const c=document.getElementById('kandidater');if(!c)return;const R=[...c.querySelectorAll('.ov-ct tbody tr')],
+M=c.querySelector('.ov-more'),F=c.querySelector('.ov-fbar'),N=c.querySelector('.ov-none'),G=document.querySelector('.ov-go .go-nf');let all=false,nf=false;
+function draw(){let n=0;R.forEach((r,i)=>{const on=nf?r.dataset.nf==='1':(all||i<""" + str(TOP_N) + """);r.hidden=!on;if(on)n++});
+if(F)F.hidden=!nf;if(N)N.hidden=!(nf&&n===0);if(M){M.hidden=nf;M.setAttribute('aria-expanded',all?'true':'false');M.textContent=all?'Vis færre':'Vis alle ('+R.length+')'}
+if(G)G.setAttribute('aria-pressed',nf?'true':'false')}
+if(M)M.addEventListener('click',()=>{all=!all;draw()});
+const clr=c.querySelector('.ov-clear');if(clr)clr.addEventListener('click',()=>{nf=false;draw()});
+if(G)G.addEventListener('click',()=>{nf=!nf;draw();if(nf)c.scrollIntoView({block:'start'})});draw()})()</script>"""

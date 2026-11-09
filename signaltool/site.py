@@ -735,14 +735,17 @@ def _factor_fix(snap):
 def overview_html(snap: dict, bad=()) -> str:
     """One overview composition, shared by production and offline layout tests."""
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
-    b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + L.INTRO.html("Oversikt") + UX2.meta("GDELT", snap.get("gdelt_latest"))
-         + '<a class="ov-about" href="om.html">Hva er dette? →</a></header>',
+    # UxBot 09.11 (låst): statuslinje under tittelen, tre innganger under innledningen, kandidattabell før Marked og risiko
+    # (intro + kandidat 1 over bretten på 390 px).
+    b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + sec("Statuslinje", OV.status_line_html, snap) + L.INTRO.html("Oversikt")
+         + '<div class="ov-hmeta">' + UX2.meta("GDELT", snap.get("gdelt_latest")) + '<a class="ov-about" href="om.html">Hva er dette? →</a></div></header>',
          f'<style>{OV.CSS}{MS.CSS}</style>',
+         '<section class="ov-entry" aria-label="Snarveier">' + OV.go_html() + '</section>',
+         '<section aria-label="Aksjekandidater">' + sec("Kandidater", OV.candidates_table_html, snap) + MINE.tile() + '</section>',
          '<section class="ov-market" aria-labelledby="marked-risiko"><h2 id="marked-risiko">Marked og risiko</h2>',
          MS.html(snap),
          (f'<p class="warnline">⚠ Kilde feilet i siste kjøring: {E(", ".join(bad))}. <a href="metode.html#kilder">Kildestatus</a></p>' if bad else ""),
          sec("Status", OV.strip_html, snap, False), '</section>',
-         '<section aria-label="Aksjekandidater">' + sec("Kandidater", OV.candidates_html, snap).replace('<div class="card">', '<div class="card ov-candidates">', 1) + MINE.tile() + '</section>',
          '<section aria-label="Temaer og Trender">' + OV.entries_html() + '</section>',
          '<section aria-label="Nyheter">' + sec("Verden nå", VN.html, snap) + '</section>',
          '<div class="ov-low2">' + sec("Endringer og varsler", OV.changes_alerts_html, snap, X.link) + sec("Kalender", OV.calendar_html, snap) + '</div></div>']

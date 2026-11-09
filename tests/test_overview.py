@@ -25,9 +25,9 @@ def test_hit_line_uses_real_n_and_flags():
     assert "ikke skilt fra tilfeldig" in weak and "FLAG" not in weak and "95 %: 40–70 %" in weak
 
 
-def test_strip_has_four_tiles_and_stacked_bar():
-    h = OV.strip_html(_snap())
-    assert h.count('class="ov-tile') == 4 and 'href="tickere.html?filter=hoy"' in h and 'href="tickere.html?filter=lav"' in h and "ov-stack" in h and "I morgen" in h and "NUE" in h
+def test_strip_has_four_tiles_and_risk_steps():
+    h = OV.strip_html(_snap())   # UxBot 09.11: tre risikotrinn erstatter den stablede stolpen
+    assert h.count('class="ov-tile') == 4 and 'href="tickere.html?filter=hoy"' in h and 'href="tickere.html?filter=lav"' in h and "ov-steps" in h and "I morgen" in h and "NUE" in h
     assert 'class="ov-dot up"></span>OSEBX' in h and 'class="ov-dot dn"></span>S&amp;P' in h
 
 

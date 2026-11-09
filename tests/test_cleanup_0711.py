@@ -21,7 +21,9 @@ def sample():
 
 def test_overview_has_one_flag_summary_and_preserved_count_date_and_link():
     h=site.overview_html(sample())
-    assert h.count('Røde flagg Oslo')==1
+    # UxBot 09.11: «Røde flagg Oslo» er nå også en inngang (lenke); fortsatt bare ett flaggsammendrag
+    assert h.count('Røde flagg Oslo')==2 and h.count('med 2+ flagg (')==1
+    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a>' in h
     assert '<div class="big">1</div>' in h and 'med 2+ flagg (2 totalt)' in h
     assert 'data per 2026-11-06' in h and 'href="tickere.html?filter=flagg"' in h
     assert 'A.OL' not in h and 'B.OL' not in h
@@ -29,7 +31,8 @@ def test_overview_has_one_flag_summary_and_preserved_count_date_and_link():
 
 def test_overview_order_compact_entries_and_untested_score():
     h=site.overview_html(sample())
-    assert h.index(I.TEXTS['Oversikt']) < h.index('id="marked-risiko"') < h.index('class="card ov-candidates"') < h.index('class="ov-entries"') < h.index('aria-label="Nyheter"') < h.index('class="ov-low2"')
+    # UxBot 09.11: kandidattabellen før Marked og risiko (intro + kandidat 1 over bretten på 390)
+    assert h.index('<h1>Oversikt</h1>') < h.index('class="ov-status"') < h.index(I.TEXTS['Oversikt']) < h.index('class="ov-go"') < h.index('class="card ov-candidates') < h.index('id="marked-risiko"') < h.index('class="ov-entries"') < h.index('aria-label="Nyheter"') < h.index('class="ov-low2"')
     assert 'Rangering, ikke testet' in h
     assert 'id="temascore"' not in h and 'class="ov-bar"' not in h
     assert 'href="temaer.html"' in h and 'href="trender.html"' in h
