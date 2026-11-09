@@ -54,10 +54,67 @@ def asof(e: dict | None):
     return (e.get('stats') or {}).get('last_date') or e.get('_px_date')
 
 
-def panel_date(rows: list[tuple], snap: dict):
+DISPLAY_SIGNAL = 'Ikke i signalutvalget'   # AnalBot 09.11 (erstatter «Bare kurs»)
+DISPLAY_TIP = 'Kursdata bare for visning. Selskapet er ikke i signalutvalget: ingen signal, risiko eller score.'
+DISPLAY_NOTE = ('Ikke i signalutvalget: 5d/20d fra samme kilde som tickersidene (Yahoo Finance), bare sluttkurs; '
+                'ingen signal, risiko eller score, og kursen påvirker ikke kandidater eller Signal-boka.')
+HOLD_TEXT = 'kurs under kontroll'   # AnalBot 09.11: config.PRICE_HOLD
+
+
+def held(row: tuple) -> bool:
+    from .config import PRICE_HOLD
+    return bool(row[1]) and any(x in PRICE_HOLD for x in (dsym(row), row[2]) if x)
+
+
+def unlisted(row: tuple) -> str | None:
+    """Tekst for selskap uten notering: strøket (verdikjeder.delisted_text) eller «Ikke børsnotert»."""
+    if row[1]:
+        return None
+    return (row[6] if len(row) > 6 and row[6] else UNLISTED)
+
+
+def shown(row: tuple, snap: dict, disp: dict | None = None) -> bool:
+    """Raden viser faktisk 5d/20d (har kurs og er ikke holdt tilbake)."""
+    return not held(row) and has_price(row, snap, disp)
+
+
+def cov_line(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
+    """UxBot/AnalBot 09.11: «Kursdata vises for 19 av 24 · 4 under kontroll · 1 ikke børsnotert»; nulldeler utelates."""
+    if not rows:
+        return ''
+    k = sum(1 for r in rows if shown(r, snap, disp))
+    h = sum(1 for r in rows if held(r))
+    u = sum(1 for r in rows if unlisted(r))
+    parts = [f'Kursdata vises for {k} av {len(rows)}'] + ([f'{h} under kontroll'] if h else []) + ([f'{u} ikke børsnotert'] if u else [])
+    return f'<p class="sr-cov">{E(" · ".join(parts))}</p>'
+
+
+def dsym(row: tuple) -> str | None:
+    """Kurssymbol i kilden (bare visning); faller tilbake på symbolet i datasettet."""
+    return (row[5] if len(row) > 5 else None) or row[2]
+
+
+def display_entry(row: tuple, snap: dict, disp: dict | None) -> dict | None:
+    """Kurs bare for visning (displayprices.py), kun når selskapet ikke finnes i snapshotet."""
+    if not disp or (row[2] and row[2] in entry_map(snap)):
+        return None
+    d = disp.get(dsym(row) or '')
+    return d if d and d.get('last_date') else None
+
+
+def has_price(row: tuple, snap: dict, disp: dict | None = None) -> bool:
+    e = entry_map(snap).get(row[2]) if row[2] else None
+    if e:
+        st = e.get('stats') or {}
+        return not e.get('unranked') and asof(e) is not None and (st.get('ret_5d') is not None or st.get('ret_20d') is not None)
+    return display_entry(row, snap, disp) is not None
+
+
+def panel_date(rows: list[tuple], snap: dict, disp: dict | None = None):
     """Nyeste kursdato blant radene med kursdata (eller None). Eldre rader får egen dato ved verdien."""
     em = entry_map(snap)
-    ds = [asof(em.get(r[2])) for r in rows if r[2] in em and not em[r[2]].get('unranked')]
+    ds = [asof(em.get(r[2])) for r in rows if r[2] in em and not em[r[2]].get('unranked') and not held(r)]
+    ds += [(display_entry(r, snap, disp) or {}).get('last_date') for r in rows if not held(r)]
     ds = [str(d)[:10] for d in ds if d]
     return max(ds) if ds else None
 
@@ -85,9 +142,26 @@ def entry_map(snap: dict) -> dict:
     return {e['ticker']: e for e in snap.get('tickers') or []}
 
 
-def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdate=None) -> str:
+HOLD_RT = (f'<span class="sr-ret r0">5d –</span> <span class="sr-ret r0">20d –</span> '
+           f'<span class="sr-hold">{HOLD_TEXT}</span>')
+
+
+def display_cells(d: dict, sym: str | None, snap: dict, pdate=None, hold: bool = False) -> str:
+    """Bare kurs (displayprices.py): 5d/20d med dato, ellers «–»; flagg som for alle andre rader."""
+    dd = d.get('last_date')
+    own = dd is not None and str(dd)[:10] != pdate
+    rt = HOLD_RT if hold else ret('5d', d.get('ret_5d'), dd, own) + ' ' + ret('20d', d.get('ret_20d'), dd, own)
+    return (f'<td class="sr-sg"><span class="sr-na sr-dp" title="{E(DISPLAY_TIP)}">{DISPLAY_SIGNAL}</span></td>'
+            f'<td class="sr-rt">{rt}</td><td class="sr-rk"><span class="sr-na">–</span></td>'
+            f'<td class="sr-flc">{flag_badge(sym, snap)}</td><td class="sr-sc"><span class="sr-na">–</span></td>')
+
+
+def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdate=None, dp: dict | None = None,
+          hold: bool = False) -> str:
     """Hovedsignal · 5d / 20d · Risiko · Flagg · Score (UxBot 09.11). Uten data: «Ingen data» over hele raden."""
     from . import overview as OV, site_risk as RK
+    if not e and (dp or hold):
+        return display_cells(dp or {}, sym, snap, pdate, hold)
     if not e:
         miss = NOT_IN_DATA if listed else UNLISTED
         st, _ = flag_state(sym, snap)
@@ -97,8 +171,8 @@ def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdat
     d = asof(e)
     own = d is not None and str(d)[:10] != pdate
     unr = e.get('unranked')
-    rt = ('<span class="sr-ret r0">5d –</span> <span class="sr-ret r0">20d –</span>' if unr else
-          ret('5d', st.get('ret_5d'), d, own) + ' ' + ret('20d', st.get('ret_20d'), d, own))
+    rt = HOLD_RT if hold else ('<span class="sr-ret r0">5d –</span> <span class="sr-ret r0">20d –</span>' if unr else
+                               ret('5d', st.get('ret_5d'), d, own) + ' ' + ret('20d', st.get('ret_20d'), d, own))
     sc = (f'<span class="sr-na">Score {OV._nb(e["score"], 1)} · ikke testet</span>' if e.get('score') is not None
           else '<span class="sr-na">–</span>')
     return (f'<td class="sr-sg">{OV._main_signal(e)}</td><td class="sr-rt">{rt}</td>'
@@ -114,43 +188,63 @@ def name_cell(name: str, ticker: str | None, sym: str | None, have: set) -> str:
     return f'<td class="sr-tk"><b>{tk}</b> <span class="sr-nm">{E(name)}</span></td>'
 
 
-def date_line(rows: list[tuple], snap: dict) -> str:
+def date_line(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
     """390: én grå linje øverst i panelet «Kurs per 08.11» (UxBot 09.11)."""
-    d = dm(panel_date(rows, snap))
+    d = dm(panel_date(rows, snap, disp))
     return f'<p class="sr-kurs">Kurs per {d}</p>' if d else ''
 
 
-def table(rows: list[tuple], snap: dict, order_col: bool = False) -> str:
+def table(rows: list[tuple], snap: dict, order_col: bool = False, disp: dict | None = None) -> str:
     """rows: (navn, ticker|None, symbol i datasettet|None, orden-tekst|None[, region]). Rekkefølgen beholdes."""
     from .ux2 import RISK_LINE
     em = entry_map(snap)
     have = set(em)
-    pdate = panel_date(rows, snap)
+    pdate = panel_date(rows, snap, disp)
     rt_head = '5d / 20d' + (f' (per {dm(pdate)})' if pdate else '')
     head = ('<thead><tr><th scope="col">Ticker</th>' + ('<th scope="col">Orden</th>' if order_col else '') +
             f'<th scope="col">Hovedsignal</th><th scope="col">{rt_head}</th><th scope="col">Risiko</th>'
             f'<th scope="col">Flagg</th><th scope="col">{SCORE_HEAD}</th></tr></thead>')
-    body = []
+    body, any_dp = [], False
+    ncol = 6 + bool(order_col)
     for row in rows:
         name, ticker, sym, order = row[:4]
-        rg = f' data-region="{E(row[4])}"' if len(row) > 4 else ''
+        rg = f' data-region="{E(row[4])}"' if len(row) > 4 and row[4] else ''
+        dp = display_entry(row, snap, disp)
+        hold = held(row)
+        e = em.get(sym) if sym else None
+        gone = unlisted(row)
+        if gone or (not e and not dp and not hold):
+            # UxBot 09.11: kompakt 32px-rad, navn + grå tekst i én celle over alle kolonner; kjedens plass beholdes
+            st, _ = flag_state(sym, snap)
+            extra = f' · {flag_badge(sym, snap)}' if (not gone and st != 'na') else ''   # sjekket Oslo-flagg er ekte data
+            tk = f'<b>{E(ticker)}</b> ' if ticker else ''
+            body.append(f'<tr class="sr-0"{rg}><td class="sr-miss" colspan="{ncol}">{tk}<span class="sr-nm">{E(name)}</span> · '
+                        f'<span class="sr-na">{E(gone or NOT_IN_DATA)}</span>{extra}</td></tr>')
+            continue
+        any_dp |= dp is not None and not e
         oc = f'<td class="sr-or">{E(order)}</td>' if order_col else ''
         body.append(f'<tr{rg}>{name_cell(name, ticker, sym, have)}{oc}'
-                    f'{cells(em.get(sym) if sym else None, sym, snap, listed=bool(ticker), pdate=pdate)}</tr>')
+                    f'{cells(e, sym, snap, listed=bool(ticker), pdate=pdate, dp=dp, hold=hold)}</tr>')
     return (f'<table class="sr-t{" sr-ord" if order_col else ""}">{head}<tbody>{"".join(body)}</tbody></table>'
-            f'<p class="sr-rkline">{E(RISK_LINE)}</p><p class="sr-note">Flagg: bare Oslo-aksjer er sjekket.</p>')
+            f'<p class="sr-rkline">{E(RISK_LINE)}</p>' + (f'<p class="sr-note sr-dpnote">{E(DISPLAY_NOTE)}</p>' if any_dp else '') +
+            '<p class="sr-note">Flagg: bare Oslo-aksjer er sjekket.</p>')
 
 
-def status(rows: list[tuple], snap: dict) -> str:
-    """AnalBot 09.11: «8 aksjer · 3 Oslo sjekket · 1 med røde flagg»; ingen sjekket: «8 aksjer · ingen sjekket for røde flagg».
-    «Aksjer» = børsnoterte selskaper i sektoren; flagg telles bare blant sjekkede Oslo-aksjer (≥ 1 flagg)."""
-    n = sum(1 for r in rows if r[1])
-    head = f'{n} aksje{"" if n == 1 else "r"}'
-    checked = [r[2] for r in rows if r[1] and flag_state(r[2], snap)[0] != 'na']
-    if not checked:
+def status(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
+    """AnalBot 09.11 (runde 2): «N selskaper · K med kursdata · O Oslo, S sjekket for røde flagg · R med røde flagg».
+    Uten Oslo-selskaper: «N selskaper · K med kursdata · ingen sjekket for røde flagg». Oslo, men ingen sjekket:
+    «… · O Oslo, ingen sjekket for røde flagg». Flagg telles bare blant sjekkede Oslo-aksjer (≥ 1 flagg)."""
+    n = len(rows)
+    k = sum(1 for r in rows if shown(r, snap, disp))   # = tallet i «Kursdata vises for» (AnalBot 09.11, ingen motsigelse)
+    head = f'{n} selskap{"" if n == 1 else "er"} · {k} med kursdata'
+    oslo = [r[2] for r in rows if r[1] and r[2] and r[2].endswith('.OL')]
+    if not oslo:
         return f'{head} · ingen sjekket for røde flagg'
+    checked = [s for s in oslo if flag_state(s, snap)[0] != 'na']
+    if not checked:
+        return f'{head} · {len(oslo)} Oslo, ingen sjekket for røde flagg'
     red = sum(1 for s in checked if flag_state(s, snap)[0] == 'red')
-    return f'{head} · {len(checked)} Oslo sjekket · {red} med røde flagg'
+    return f'{head} · {len(oslo)} Oslo, {len(checked)} sjekket for røde flagg · {red} med røde flagg'
 
 
 CSS = r"""
@@ -164,6 +258,9 @@ CSS = r"""
 .fl-red{color:var(--down);border:1px solid var(--down);font-weight:700}.fl-ok,.fl-na{color:var(--mut)}
 .sr-na{color:var(--mut)}.sr-sc{white-space:nowrap;font-variant-numeric:tabular-nums}
 .sr-sg .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--pill);font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-hold{font-size:13px;line-height:18px;color:var(--mut);white-space:nowrap}
+.sr-cov{font-size:13px;line-height:18px;color:var(--mut);margin:0 0 8px}
+.sr-t tr.sr-0 td{height:32px;box-sizing:border-box;padding:6px 8px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0;width:100%}
 .sr-note,.sr-rkline,.sr-kurs{font-size:13px;line-height:18px;color:var(--mut);margin:0 0 8px}.sr-note{margin-bottom:16px}.sr-kurs{display:none}
 @media(max-width:600px){.sr-kurs{display:block}.sr-per{display:inline}.sr-t thead{display:none}.sr-t,.sr-t tbody{display:block;width:100%}
 .sr-t tr{display:grid;grid-template-columns:repeat(4,minmax(0,auto));grid-template-areas:"tk tk tk tk" "rt rt rt rt" "sg rk fl sc";justify-content:start;gap:2px 8px;align-items:center;max-height:88px;overflow:hidden;padding:6px 0;border-top:1px solid var(--line)}
@@ -171,5 +268,6 @@ CSS = r"""
 .sr-t td{display:block;padding:0;border:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:20px}
 .sr-t td.sr-tk{grid-area:tk}.sr-t td.sr-or{grid-area:or;justify-self:end;color:var(--mut)}.sr-t td.sr-sg{grid-area:sg}.sr-t td.sr-rt{grid-area:rt}
 .sr-t td.sr-rk{grid-area:rk}.sr-t td.sr-flc{grid-area:fl}.sr-t td.sr-sc{grid-area:sc}.sr-t td.sr-miss{grid-row:2;grid-column:1/-1}
+.sr-t tr.sr-0{display:block;max-height:32px;padding:0}.sr-t tr.sr-0 td{display:block;max-width:none;padding:6px 0;height:32px;line-height:20px}
 .sr-t .rk-s{height:20px}}
 """

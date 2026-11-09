@@ -11,6 +11,7 @@ from . import theme_maps as TM
 from . import mstrip as MS
 from . import verden as VN
 from . import trender as TR
+from . import displayprices as DP   # bare visning på Trender (09.11); aldri i snapshot/score
 from . import usability as US
 from . import pwa as PWA
 from . import ux2 as UX2
@@ -96,7 +97,8 @@ a.pill{color:var(--acc)}
 .rel.lo{color:var(--down);background:rgba(255,128,120,.12);border-color:rgba(255,128,120,.4)}
 .cat{display:inline-block;font-size:.8rem;font-weight:700;padding:1px 9px;border-radius:6px;border:1px solid;white-space:nowrap}
 .cat small{font-weight:400;font-size:.72rem;margin-left:3px;opacity:.9}
-.cat.kjop{color:#56d364;background:rgba(86,211,100,.13);border-color:rgba(86,211,100,.5)}
+/* AnalBot 09.11: Kjøp-merket er nøytralt (samme pille som kandidatene på Oversikt); grønt bare på positive historiske kursendringer */
+.cat.kjop{color:var(--ink);background:var(--pill);border-color:var(--line)}
 .cat.hold{color:var(--acc);background:var(--acc-bg);border-color:rgba(108,182,255,.5)}
 .cat.watch{color:var(--warn);background:rgba(227,179,65,.12);border-color:rgba(227,179,65,.45)}
 .why{font-size:.82rem;color:var(--mut);margin-top:3px;min-width:18em;max-width:34em}
@@ -806,7 +808,7 @@ def build(snap: dict) -> Path:
         (SITE / "data").mkdir(exist_ok=True)
         (SITE / "data" / "verden_overskrifter.json").write_text(json.dumps(snap["verden"], ensure_ascii=False, indent=1))
 
-    (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}, snap=snap), 0, snap))
+    (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}, snap=snap, disp=DP.load()), 0, snap))
 
     # ---------- themes list + pages ----------
     rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))

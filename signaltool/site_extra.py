@@ -7,7 +7,7 @@ from . import briefing as BR
 from . import evidens as EV
 
 E = lambda x: html.escape("" if x is None else str(x))
-
+KIND_WORD = {"kjøp": "Innsidekjøp", "salg": "Innsidesalg"}   # AnalBot 09.11: retningen i ordet, nøytral farge
 
 
 def source_state(v) -> str:
@@ -95,8 +95,9 @@ a.kpi.warn .val{color:var(--warn)}a.kpi.hot .val{color:#ff9a92}a.kpi.ok .val{col
 .donut-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.donut-leg{font-size:.88rem}.donut-leg a{display:flex;align-items:center;gap:6px;text-decoration:none;color:inherit;margin:4px 0}
 .donut-leg a:hover{color:var(--acc)}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 
-.kind{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:6px;border:1px solid}.kind.kjøp{color:var(--up);border-color:rgba(74,194,107,.5)}
-.kind.salg{color:var(--down);border-color:rgba(255,128,120,.5)}.kind.tegning{color:var(--acc);border-color:rgba(108,182,255,.5)}.kind.annet,.kind.ukjent,.kind.ikke{color:var(--mut);border-color:var(--line)}
+/* AnalBot 09.11: innsidehandler i nøytral grå – retningen står bare i ordet (Innsidekjøp/Innsidesalg) */
+.kind{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--mut)}
+
 """
 
 
@@ -321,7 +322,7 @@ def oslo_insider_html(snap: dict) -> str:
     cnt = {}
     for r in rows:
         cnt[r["kind"]] = cnt.get(r["kind"], 0) + 1
-    tr = "".join(f'<tr><td class="nw">{E(str(r["published"])[:10])}</td><td><b>{E(r.get("issuer"))}</b></td><td><span class="kind {E(str(r["kind"]).split()[0])}">{E(r["kind"])}</span></td>'
+    tr = "".join(f'<tr><td class="nw">{E(str(r["published"])[:10])}</td><td><b>{E(r.get("issuer"))}</b></td><td><span class="kind {E(str(r["kind"]).split()[0])}">{E(KIND_WORD.get(str(r["kind"]), r["kind"]))}</span></td>'
                  f'<td>{"–" if not _fl(r.get("value_nok")) else num(_fl(r["value_nok"])/1e6, 2) + " mill."}</td><td><a href="{E(r["url"])}">{E(r["title"])}</a></td></tr>' for r in rows[:60])
     return (f'<div class="card tw" id="innside"><h2 style="margin-top:0">Innsidehandler med retning (Newsweb, 21 dager)</h2>'
             f'<p class="mut">Retningen er lest automatisk fra meldingsteksten: kjøp / salg / tegning (emisjon) / annet (opsjoner, aksjeprogram, lån) / ukjent (bare vedlegg). '
@@ -566,7 +567,7 @@ def dashboard_html(snap: dict) -> str:
     total = max(1, sum(cats.values()))
     # If no categories, show all tickers count
     n_tk = len(tickers)
-    colors = {"kjop": "#56d364", "hold": "#6cb6ff", "watch": "#e3b341"}
+    colors = {"kjop": "#8b949e", "hold": "#58a6ff", "watch": "#c9d1d9"}   # UxBot 09.11: gråtoner + én aksent, ingen kategori ser «god» ut
     # build conic via stroke-dasharray circle
     r, c, stroke = 42, 50, 14
     circ = 2 * 3.14159265 * r

@@ -64,12 +64,16 @@ def test_existing_trend_content_and_caveats_kept_behind_sector():
 def test_sector_status_states_population_and_vetoed_form_absent():
     h = page()
     st = re.findall(r'<span class="tr-sec-st">(.*?)</span>', h)
-    pat = r'^\d+ aksjer? · (\d+ Oslo sjekket · \d+ med røde flagg|ingen sjekket for røde flagg)$'
+    # AnalBot 09.11 runde 2: «N selskaper · K med kursdata · O Oslo, S sjekket for røde flagg · R med røde flagg»
+    pat = (r'^\d+ selskap(er)? · \d+ med kursdata · (\d+ Oslo, (\d+ sjekket for røde flagg · \d+ med røde flagg|'
+           r'ingen sjekket for røde flagg)|ingen sjekket for røde flagg)$')
     assert all(re.match(pat, x) for x in st), st
-    # AnalBot 09.11: flagg telles bare blant sjekkede Oslo-aksjer (NOD 0, REC 2 -> 1 med røde flagg)
-    assert st[0] == '24 aksjer · 2 Oslo sjekket · 1 med røde flagg'
-    assert st[1] == '1 aksje · ingen sjekket for røde flagg' and st[3] == '0 aksjer · ingen sjekket for røde flagg'
-    assert 'med rødt flagg' not in h and 'børsnotert med data' not in h   # vetoet / erstattet form (AnalBot 09.11)
+    # flagg telles bare blant sjekkede Oslo-aksjer (NOD 0, REC 2 -> 1); kursdata: TSM og MU (NVDA mangler kursdato)
+    # REC strøket 25.06.2026 (AnalBot 09.11): ikke Oslo, ikke sjekket -> bare NOD
+    assert st[0] == '24 selskaper · 2 med kursdata · 1 Oslo, 1 sjekket for røde flagg · 0 med røde flagg'
+    assert st[1] == '1 selskap · 0 med kursdata · ingen sjekket for røde flagg'
+    assert st[3] == '0 selskaper · 0 med kursdata · ingen sjekket for røde flagg'
+    assert 'med rødt flagg' not in h and 'børsnotert med data' not in h and ' aksjer · ' not in h   # vetoet / erstattet form
 
 
 def rows_by_ticker(h):
@@ -91,10 +95,11 @@ def test_stock_row_values_from_snapshot_only():
     assert '<span class="sr-ret r0">5d 0,0 %</span>' in mu and '<span class="sr-ret r0">20d –</span>' in mu   # 0 grå, mangler «–», aldri 0
     nv = rows['NVDA']
     assert '<span class="sr-ret r0">5d –</span>' in nv           # uten kursdato vises ikke tall
-    # «Ingen data» grå over hele raden; sjekket Oslo-flagg vises likevel (ekte data)
-    assert '<td class="sr-miss" colspan="5"><span class="sr-na">Ingen data</span> · <span class="sr-fl fl-ok">✔ 0</span></td>' in rows['NOD']
-    assert '<span class="sr-fl fl-red">⚑ 2</span>' in rows['REC']
-    assert '<td class="sr-miss" colspan="5"><span class="sr-na">Ingen data</span></td>' in rows['AI'] and 'ikke sjekket' not in rows['AI']
+    # UxBot 09.11: «Ingen data» = kompakt rad, navn + grå tekst i én celle over alle kolonner; sjekket Oslo-flagg vises (ekte data)
+    miss = dict(re.findall(r'<tr class="sr-0" data-region="\w+"><td class="sr-miss" colspan="7">(?:<b>(\w+)</b> )?(.*?)</td></tr>', h))
+    assert miss['NOD'] == '<span class="sr-nm">Nordic Semiconductor</span> · <span class="sr-na">Ingen data</span> · <span class="sr-fl fl-ok">✔ 0</span>'
+    assert miss['AI'] == '<span class="sr-nm">Air Liquide</span> · <span class="sr-na">Ingen data</span>'
+    assert miss[''] == '<span class="sr-nm">REC Silicon</span> · <span class="sr-na">Ikke børsnotert (strøket fra Oslo Børs 25.06.2026)</span>'
     for r in rows.values():
         assert '<td></td>' not in r and '<td class="sr-sc"></td>' not in r   # aldri tomme felt
     assert 'Ikke i datasettet' not in h
@@ -120,7 +125,11 @@ def test_sector_cards_layout_rules():
     c = T.SECTOR_CSS
     assert 'min-height:80px' in c and '.tr-sec{min-height:88px}' in c
     assert '.tr-secgrid{grid-template-columns:minmax(0,1fr)}' in c     # 390: én kolonne
-    assert '.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:36px' in c   # maks 2 linjer
+    # UxBot 09.11: tall klippes aldri – ingen max-height/overflow på status; like høye kort i raden
+    assert '.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut)}' in c
+    st_rule = re.search(r'\.tr-sec-st\{[^}]*\}', c).group(0)
+    assert 'max-height' not in st_rule and 'overflow' not in st_rule and 'clamp' not in c
+    assert 'align-items:stretch' in c and re.search(r'\.tr-sec\{[^}]*height:100%', c)
 
 
 def test_rows_not_sorted_by_score_or_return():
@@ -135,9 +144,10 @@ def test_unlisted_and_format_helpers():
     assert SR.ret('5d', None, '2026-11-08') == '<span class="sr-ret r0">5d –</span>'
     t = SR.table([('Unotert AS', None, None, None)], {})
     assert 'Ikke børsnotert' in t and 'href' not in t
-    assert T.trend_row({'name': 'MP Materials', 'ticker': 'NYSE: MP'}) == ('MP Materials', 'MP', 'MP', None)
+    # 09.11 runde 2: sjette felt = kurssymbol i kilden (bare visning, displayprices.py)
+    assert T.trend_row({'name': 'MP Materials', 'ticker': 'NYSE: MP'}) == ('MP Materials', 'MP', 'MP', None, None, 'MP')
     assert T.trend_row({'name': 'X', 'ticker': 'OSE: NHY'})[2] == 'NHY.OL'
-    assert T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[2] is None
+    assert T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[2] is None and T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[5] == '4063.T'
     assert 'Testet for kurssvingninger, ikke avkastning' in t   # risikolinjen beholdes (AnalBot)
 
 

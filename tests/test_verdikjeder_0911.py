@@ -19,12 +19,12 @@ def visible(h):
 
 def test_corrections_replace_and_superseded_text_never_shown():
     d = V.load()
-    assert len(RAW) == 37 and len(d['links']) == 30
+    assert len(RAW) == 38 and len(d['links']) == 30
     corr = {n: r['corrects_line'] for n, r in RAW.items() if 'corrects_line' in r}
-    assert corr == {31: 15, 32: 27, 33: 10, 34: 25, 35: 4, 36: 22, 37: 33}
+    assert corr == {31: 15, 32: 27, 33: 10, 34: 25, 35: 4, 36: 22, 37: 33, 38: 9}   # 38: REC strøket (AnalBot 09.11)
     h = block()
     final = {n for n in corr if n not in corr.values()}       # 37 retter 33 som retter 10: bare 37 gjelder
-    assert final == {31, 32, 34, 35, 36, 37}
+    assert final == {31, 32, 34, 35, 36, 37, 38}
     for old in corr.values():                                  # 4, 10, 15, 22, 25, 27, 33: aldri vist
         live = [RAW[n]['claim'] for n in final]
         assert RAW[old]['claim'] in live or RAW[old]['claim'] not in h, old   # L35 beholder L4-påstanden, bare andelen rettes
@@ -105,14 +105,15 @@ def test_stage5_is_stock_table_in_chain_order():
     heads = re.findall(r'<th scope="col">(.*?)</th>', s5)
     assert heads == ['Ticker', 'Orden', 'Hovedsignal', '5d / 20d', 'Risiko', 'Flagg', 'Score (rangering, ikke testet)']
     assert '>Alle<' in s5 and '>Oslo<' in s5 and '>USA<' in s5
-    oslo = re.findall(r'<tr data-region="oslo"><td class="sr-tk"><b>(?:<a [^>]*>)?(\w+)', s5)
-    assert sorted(oslo) == ['NOD', 'REC']
+    oslo = re.findall(r'<tr(?: class="sr-0")? data-region="oslo"><td class="sr-(?:tk|miss)"[^>]*><b>(?:<a [^>]*>)?(\w+)', s5)
+    assert oslo == ['NOD']                                     # REC strøket 25.06.2026: ikke i Oslo-filteret (AnalBot 09.11)
+    assert 'data-region="strøket"' in s5
     # AnalBot 09.11: rekkefølgen følger kjeden (første forekomst), ikke score eller avkastning
-    order = re.findall(r'<td class="sr-tk"><b>(?:<a [^>]*>)?([\w]+)', s5)
-    assert order == [t for (_n, t, *_r) in V.stock_rows(V.load()['links'])]
+    order = re.findall(r'<tr[^>]*><td class="sr-(?:tk|miss)"[^>]*>(?:<b>(?:<a [^>]*>)?([\w]+))?', s5)
+    assert order == [t or '' for (_n, t, *_r) in V.stock_rows(V.load()['links'])]   # strøket/uten data beholder plassen
     assert order[:3] == ['4063', '6488', 'ASML']
     # Air Liquide (Euronext Paris, «AI») lenker aldri til en annen ticker med samme symbol
-    ai = re.search(r'<tr data-region="annen"><td class="sr-tk"><b>AI</b>.*?</tr>', s5).group(0)
+    ai = re.search(r'<tr class="sr-0" data-region="annen"><td class="sr-miss" colspan="7"><b>AI</b>.*?</tr>', s5).group(0)
     assert 'href=' not in ai and 'Ingen data' in ai
 
 
@@ -147,10 +148,13 @@ def test_chains_never_touch_score_candidates_or_signal_book():
     # Bare trender.py (og modulen selv) kjenner verdikjedene; scoring, kategorier, portefølje og Signal-boka gjør ikke.
     users = [p.name for p in Path('signaltool').rglob('*.py')
              if re.search(r'\bVK\b|import verdikjeder|verdikjeder as', p.read_text(errors='ignore')) and p.name != 'verdikjeder.py']
-    assert users == ['trender.py']
+    # 09.11 runde 2: displayprices.py (kurs bare for visning) leser kjedens symboler; den brukes bare av byggingen/hentingen
+    assert sorted(users) == ['displayprices.py', 'trender.py']
     trender_users = {p.name for p in Path('signaltool').rglob('*.py')
                      if re.search(r'import trender|trender as|from \.trender|from \. import .*\btrender\b', p.read_text(errors='ignore'))}
-    assert trender_users <= {'site.py'}
+    assert trender_users <= {'site.py', 'displayprices.py'}
+    dp_users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'displayprices', p.read_text(errors='ignore'))} - {'displayprices.py'}
+    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py'}   # stockrow: bare docstring
     logs = {p: p.stat().st_mtime_ns for p in Path('logs').glob('*') if p.is_file()}
     block(); T.html()
     assert logs == {p: p.stat().st_mtime_ns for p in logs}

@@ -38,7 +38,8 @@ def main(argv=None):
         p = report.write(snap)
         print(f"report: {p}")
         if not a.no_site:
-            from . import site
+            from . import site, displayprices as DP   # 09.11: kurs bare for visning (Trender), etter at snapshotet er skrevet
+            print(f"kurs bare for visning: {DP.refresh()}")
             print(f"site: {site.build(snap)}")
             from .site_quality import FAILED_SECTIONS
             if FAILED_SECTIONS:
