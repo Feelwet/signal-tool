@@ -1,5 +1,6 @@
 """UxBot 09.11 (låst med AnalBots krav): Oversikt med statuslinje, tre innganger, kompakt kandidattabell og risikotrinn."""
 import re
+from pathlib import Path
 from html.parser import HTMLParser
 from signaltool import site, overview as OV, site_intro as I
 
@@ -23,7 +24,7 @@ def test_status_line_counts_from_same_dataset_as_table():
     s = snap()
     h = OV.status_line_html(s)
     # n = rader i tabellen (har score); m = av disse med 2+ testede flagg (A.OL, E.OL – ikke ZZ.OL som ikke er kandidat)
-    assert h == '<p class="ov-status">8 kandidater · 2 med 2+ flagg · <span class="ov-when">Oppdatert 09.11 kl. 06:03 Oslo-tid</span></p>'
+    assert h == '<p class="ov-status">8 kandidater · 2 kandidater med 2+ flagg · <span class="ov-when">Oppdatert 09.11 kl. 06:03 Oslo-tid</span></p>'
     assert ".ov-status .ov-when{white-space:nowrap}" in OV.CSS   # kan bryte på 390, men aldri inne i tidspunkt/«Oslo-tid»
     t = OV.candidates_table_html(s)
     assert t.count("<tr data-nf=") == 8
@@ -147,3 +148,32 @@ def test_rejected_items_not_added():
     for bad in ("Styrken er å unngå svake aksjer", "Watchlist", ">Kjøp<", ">Hold<", "▲", "▼"):
         assert bad not in h
     assert "data-theme" not in h and "theme-filter" not in h
+
+
+def test_status_line_singular_plural_and_tile_names_population():
+    # AnalBot 09.11: hver tekst nevner utvalget sitt; entall/flertall av «kandidat»
+    s = snap()
+    keep = [e for e in s["tickers"] if e["ticker"] == "A.OL"] + [e for e in s["tickers"] if e["ticker"] != "A.OL" and e["ticker"] != "E.OL"]
+    one = OV.status_line_html({**s, "tickers": keep})
+    assert " · 1 kandidat med 2+ flagg · " in one
+    assert " kandidater med 2+ flagg · " in OV.status_line_html(s)
+    assert '<div class="sub">av {n} Oslo-aksjer med 2+ flagg</div>' in Path(OV.__file__).read_text().replace("{len(rows)}", "{n}")
+
+
+def test_top_bar_updated_hidden_only_on_overview():
+    from signaltool import site as S
+    snapd = {"generated": "2026-11-09 06:03", "date": "2026-11-09"}
+    ov, tr = S.page("Oversikt", "<p>x</p>", 0, snapd), S.page("Trender", "<p>x</p>", 0, snapd)
+    assert '<p class="gen gen-line"' in ov and ' data-ov>Oppdatert 09.11 kl. 06:03</p>' in ov
+    assert ' data-ov' not in tr and '>Oppdatert 09.11 kl. 06:03</p>' in tr
+    assert "html:not([data-offline]) p.gen-line[data-ov]{display:none}" in S.CSS
+
+
+def test_market_status_dot_never_green():
+    # UxBot 09.11: status er aldri grønn – nøytral grå (eksisterende variabel), samme tekst
+    css = OV.CSS
+    assert ".ov-dot.up{background:var(--mut)}" in css
+    for green in ("#56d364", "#4ac26b", "var(--up)", "#3fb950", "green"):
+        assert green not in re.sub(r"\s", "", "".join(re.findall(r"\.ov-dot[^{]*\{[^}]*\}", css))), green
+    h = OV.strip_html({"regime": {"OSEBX.OL": {"below": False}, "^GSPC": {"below": False}}, "tickers": []})
+    assert "Normalt" in h and 'class="ov-dot up"' in h

@@ -72,6 +72,8 @@ header.top .brand{font-weight:700;font-size:16px;line-height:20px;color:#fff;tex
 header.top .gen{color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap;flex:0 0 auto}
 /* UxBot 28.10: «Oppdatert DD.MM kl. HH:MM» (kjøretidspunkt) 12 px under toppbaren */
 .gen-line{margin:6px 0 0;padding:0 16px;color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap}
+/* UxBot 09.11: på Oversikt bærer statuslinjen tidspunktet; topplinjens «Oppdatert» skjules (frakoblet-varselet vises fortsatt) */
+html:not([data-offline]) p.gen-line[data-ov]{display:none}
 .side .brand,.side .gen{display:none!important}
 @media (min-width:901px){body.nav-open .side{display:none}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
@@ -530,7 +532,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 </aside>
 <div class="content">
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
-<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line"{gattr}>{gen}</p>' if gen else ""}
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line"{gattr}{" data-ov" if title == "Oversikt" else ""}>{gen}</p>' if gen else ""}
 <main>{body}{PWA.install_html() if title == "Oversikt" else ""}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>

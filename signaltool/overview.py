@@ -24,7 +24,7 @@ CSS = """
 .ov-tile{display:block;background:var(--card,#161b22);border:1px solid #30363d;border-radius:10px;padding:10px 12px;color:inherit;text-decoration:none;min-width:0}
 .ov-tile .lbl{font-size:.8em;color:var(--mut)}.ov-tile{position:relative}.ov-tile .stretch{float:right;font-size:1em;text-decoration:none;color:var(--acc,#6cb6ff)}.ov-tile .stretch::after{content:"";position:absolute;inset:0}.ov-tile .sub a.in{position:relative;z-index:1;color:inherit;text-decoration:none;display:inline-block;padding:4px 0}.ov-tile.tap:hover{border-color:var(--acc,#6cb6ff)}.ov-tile .lbl a{color:var(--mut);text-decoration:none}.ov-tile .lbl a:hover{color:var(--acc)}.ov-tile .big{font-size:1.5em;font-weight:700;line-height:1.25;margin:2px 0}
 .ov-tile .sub{font-size:.85em;color:var(--mut)}.ov-tile .sub2{font-size:.78em;color:var(--mut);margin-top:3px}
-.ov-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 6px;vertical-align:middle}.ov-dot.up{background:#56d364}.ov-dot.dn{background:#f85149}
+.ov-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 6px;vertical-align:middle}.ov-dot.up{background:var(--mut)}.ov-dot.dn{background:#f85149}
 .ov-stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#262d38;margin:6px 0 4px}.ov-stack i{display:block;height:100%}
 .ov-th{margin:0 0 8px}.ov-th h2{margin:0 0 6px}.ov-bar{display:grid;grid-template-columns:minmax(0,15em) 1fr 3.2em 4em;gap:8px;align-items:center;padding:3px 0;color:inherit;text-decoration:none}
 .ov-bar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ov-bar .tr{background:#262d38;height:10px;border-radius:5px;overflow:hidden}.ov-bar .tr i{display:block;height:100%;background:var(--acc,#6cb6ff)}
@@ -116,7 +116,7 @@ def strip_html(snap: dict, include_calendar: bool = True) -> str:
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
     t3 = (f'<div class="ov-tile tap"><div class="lbl">Røde flagg Oslo<a class="stretch" href="tickere.html?filter=flagg">Vis alle →</a></div><div class="big">{m}</div>'
-          f'<div class="sub">med 2+ flagg ({len(rows)} totalt)</div><div class="sub2">data per {E(c["asof"] or "–")}</div></div>') if c["n"] else \
+          f'<div class="sub">av {len(rows)} Oslo-aksjer med 2+ flagg</div><div class="sub2">data per {E(c["asof"] or "–")}</div></div>') if c["n"] else \
          '<div class="ov-tile"><div class="lbl"><a href="tickere.html?filter=flagg">Røde flagg Oslo →</a></div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
     nx = upcoming(snap, 1)
     if nx:
@@ -294,11 +294,11 @@ def candidates(snap: dict) -> list:
 
 
 def status_line_html(snap: dict) -> str:
-    """«{n} kandidater · {m} med 2+ flagg · Oppdatert {dato kl}» – n, m og tidspunkt fra samme snapshot som tabellen (AnalBot 09.11)."""
+    """«{n} kandidater · {m} kandidat(er) med 2+ flagg · Oppdatert {dato kl}» – n, m og tidspunkt fra samme snapshot som tabellen (AnalBot 09.11)."""
     tk = candidates(snap)
     _, fm = _flag_state(snap)
     m = sum(1 for e in tk if e["ticker"] in fm and EV.ntest(fm[e["ticker"]]) >= 2)
-    parts = [E(f"{len(tk)} kandidat{'' if len(tk) == 1 else 'er'}"), E(f"{m} med 2+ flagg")]
+    parts = [E(f"{len(tk)} kandidat{'' if len(tk) == 1 else 'er'}"), E(f"{m} kandidat{'' if m == 1 else 'er'} med 2+ flagg")]
     from .site import gen_short
     if snap.get("generated"):   # snap["generated"] er lokal Oslo-tid; tidspunkt + sone brytes aldri (UxBot 09.11)
         parts.append(f'<span class="ov-when">Oppdatert {E(gen_short(snap["generated"]).replace(" ", " kl. ", 1))} Oslo-tid</span>')
