@@ -60,6 +60,13 @@ def stats(close) -> dict | None:
 
 
 # AnalBot 09.11: bare sluttkurs. Børsens lokale stengetid (+30 min slingring); dagens bar droppes før det.
+# Offisielle handelstider (sjekket med curl 09.11.2026, HTTP 200 etter eventuell videresending):
+#   TSE (Tokyo, .T):              https://www.jpx.co.jp/english/equities/trading/domestic/01.html
+#   TWSE (Taiwan, .TW):           https://www.twse.com.tw/en/products/system/trading.html
+#   TPEx (Taipei Exchange, .TWO): https://www.tpex.org.tw/en-us/mainboard/trading/rules/system.html
+#   KRX (Seoul, .KS):             https://global.krx.co.kr/contents/GLB/01/0109/0109000000/guide_to_trading_in_the_korean_stock_market.pdf
+#   Euronext Paris (.PA) og Euronext Oslo/Oslo Børs (.OL): https://www.euronext.com/en/trading/trading-hours-holidays
+#   NYSE (USA, uten suffiks; Nasdaq har samme stengetid 16:00 ET): https://www.nyse.com/trade/hours-calendars
 CLOSE = {".T": ("Asia/Tokyo", 15, 30), ".TWO": ("Asia/Taipei", 13, 30), ".TW": ("Asia/Taipei", 13, 30),
          ".KS": ("Asia/Seoul", 15, 30), ".PA": ("Europe/Paris", 17, 35), ".OL": ("Europe/Oslo", 16, 25),
          "": ("America/New_York", 16, 0)}
@@ -92,6 +99,38 @@ def completed(df, sym: str, now: datetime | None = None):
     return df if loc >= close else df.iloc[:-1]
 
 
+RETRIES, BACKOFF_S = 2, (2.0, 5.0)
+
+
+def _frame(d, s: str):
+    """Én tickers sluttkurser fra en yfinance-ramme (gruppert eller enkel); None ved manglende data."""
+    try:
+        df = d[s] if s in getattr(d.columns, 'levels', [[]])[0] else d
+        df = df.dropna(subset=["Close"])
+    except Exception:
+        return None
+    return df if len(df) else None
+
+
+def retry_one(s: str, sleep=None):
+    """Henter ett symbol på nytt inntil RETRIES ganger med kort pause. None når kilden fortsatt er tom."""
+    import time
+    import yfinance as yf
+    sleep = sleep or time.sleep
+    for i in range(RETRIES):
+        sleep(BACKOFF_S[min(i, len(BACKOFF_S) - 1)])
+        try:
+            d = yf.download(s, period="3mo", progress=False, auto_adjust=True, group_by="ticker", threads=False)
+        except Exception as ex:
+            log.info("display prices retry %s: %s", s, ex)
+            continue
+        if d is not None and len(d):
+            df = _frame(d, s)
+            if df is not None:
+                return df
+    return None
+
+
 def fetch(symbols: list[str], now: datetime | None = None) -> dict[str, dict]:
     from . import http as _http
     from .data_quality import clean_universe
@@ -100,9 +139,10 @@ def fetch(symbols: list[str], now: datetime | None = None) -> dict[str, dict]:
     d = _http.yf_download(symbols, period="3mo", progress=False, auto_adjust=True, group_by="ticker", threads=True)
     frames = {}
     for s in symbols:
-        try:
-            df = d[s].dropna(subset=["Close"])
-        except KeyError:
+        df = _frame(d, s)
+        if df is None or not len(df):
+            df = retry_one(s)          # bruker 09.11: tom serie -> nytt forsøk per symbol (maks 2), ellers ærlig «Ingen data»
+        if df is None:
             continue
         df = completed(df, s, now)
         if len(df):

@@ -189,7 +189,7 @@ def test_compact_rows_for_no_data_and_delisted():
     comp = re.findall(r'<tr class="sr-0"[^>]*>(.*?)</tr>', h)
     assert len(comp) == 1 and 'colspan="7"' in comp[0] and comp[0].count('<td') == 1
     assert 'REC Silicon' in comp[0] and 'Ikke børsnotert (strøket fra Oslo Børs 25.06.2026)' in comp[0]
-    assert re.search(r'\.sr-t tr\.sr-0 td\{height:32px', SR.CSS) and 'tr.sr-0{display:block;max-height:32px' in SR.CSS
+    assert re.search(r'\.sr-t tr\.sr-0 td\{height:32px', SR.CSS) and 'tr.sr-0{display:block;padding:0}' in SR.CSS   # UxBot 09.11: brytes, inntil 52 px
     order = re.findall(r'<td class="sr-(?:tk|miss)"[^>]*>(?:<b>(?:<a [^>]*>)?(\w+)(?:</a>)?</b>)?(?: ?<span class="sr-nm">([^<]*))?',
                        h[h.index('id="vk-halvledere-selskaper"'):h.index('id="sektor-magneter"')])
     assert [n for _t, n in order] == [r[0] for r in V.stock_rows(V.load()['links'])]   # kjedens rekkefølge beholdt
@@ -225,7 +225,7 @@ def test_status_fits_two_lines_at_390():
     worst = '24 selskaper · 24 med kursdata · 12 Oslo, 12 sjekket for røde flagg · 12 med røde flagg'
     st = re.findall(r'tr-sec-st">(.*?)</span>', page(disp=FULL))
     assert all(len(x) <= 2 * per_line for x in st + [worst]), [len(x) for x in st]
-    assert '.tr-secgrid{grid-template-columns:minmax(0,1fr)}' in T.SECTOR_CSS
+    assert '.tr-secgrid{grid-template-columns:minmax(0,1fr);gap:8px}' in T.SECTOR_CSS
 
 
 def test_trend_meta_line_moved_into_trend_panels():

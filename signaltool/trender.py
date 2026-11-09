@@ -206,7 +206,7 @@ SECTOR_CSS = r"""
 .tr-panel h3{font-size:18px;line-height:24px;font-weight:600}
 .tr-panel .tr-card{margin:0}
 /* UxBot 09.11: én kolonne ved 390 (statuslinjen får plass på maks to linjer), kort min 88 px */
-@media(max-width:600px){.tr-secgrid{grid-template-columns:minmax(0,1fr)}.tr-sec{min-height:88px}}
+@media(max-width:600px){.tr-secgrid{grid-template-columns:minmax(0,1fr);gap:8px}.tr-sec{min-height:88px}}   /* UxBot 09.11: 8 px under 600 */
 """
 
 SECTOR_JS = r"""<script>(()=>{const g=document.querySelector('.tr-secgrid');if(!g)return;

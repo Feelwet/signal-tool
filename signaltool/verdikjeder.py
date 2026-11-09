@@ -121,8 +121,11 @@ def page_symbol(l):
 
 def element(l, bottleneck):
     tag = f'<span class="vk-tag">Flaskehals · {E(l["share"].removeprefix("Andel: "))}</span>' if l['line'] == bottleneck else ''
-    ticker = f' · {E(l["ticker"])}' if l.get('ticker') else ''
-    return (f'<li class="vk-el" data-line="{l["line"]}"><div class="vk-el-txt"><p class="vk-name">{E(l["company"])}{ticker}</p>'
+    gone = delisted_text(l)
+    ticker = f' · {E(l["ticker"])}' if l.get('ticker') and not gone else ''
+    # AnalBot/UxBot 09.11: strøket selskap – grå note på egen linje under navnet, ingen ticker eller tickerlenke
+    note = f'<p class="vk-gone">{E(gone)}</p>' if gone else ''
+    return (f'<li class="vk-el" data-line="{l["line"]}"><div class="vk-el-txt"><p class="vk-name">{E(l["company"])}{ticker}</p>{note}'
             f'<p class="vk-role" title="{E(l["claim"])}">{E(l["claim"])}</p>'
             f'<p class="vk-share">{E(l["share"])} · Kilde {E(l["source_year"])}</p>{tag}</div>'
             f'<a class="vk-src" href="{E(l["source_url"])}" rel="noopener noreferrer" aria-label="Kilde for {E(l["company"])} ({E(l["source_year"])})">↗</a></li>')
@@ -249,6 +252,7 @@ CSS = r"""
 .vk-el{display:flex;justify-content:space-between;gap:8px;padding:6px 0}.vk-el+.vk-el{border-top:1px solid var(--line)}
 .vk-el-txt{min-width:0;flex:1}
 .vk .vk-name{font-size:16px;line-height:24px;margin:0;color:var(--ink);font-weight:600}
+.vk .vk-gone{font-size:13px;line-height:18px;margin:0;color:var(--mut);white-space:normal}
 .vk .vk-role,.vk .vk-share{font-size:14px;line-height:20px;color:var(--mut);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vk-tag{display:inline-block;font-size:13px;line-height:18px;border:1px solid var(--mut);border-radius:4px;padding:0 6px;color:var(--ink);margin:2px 0 0}
 .vk-src{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;color:var(--acc);text-decoration:none;flex:none}

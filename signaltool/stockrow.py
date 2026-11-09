@@ -78,14 +78,20 @@ def shown(row: tuple, snap: dict, disp: dict | None = None) -> bool:
     return not held(row) and has_price(row, snap, disp)
 
 
+def counts(rows: list[tuple], snap: dict, disp: dict | None = None) -> dict:
+    """ÉN felles telling for kortets status og linjen over tabellen (bruker 09.11): n selskaper, k med kurs som vises,
+    h under kontroll, u ikke børsnotert."""
+    return {'n': len(rows), 'k': sum(1 for r in rows if shown(r, snap, disp)),
+            'h': sum(1 for r in rows if held(r)), 'u': sum(1 for r in rows if unlisted(r))}
+
+
 def cov_line(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
     """UxBot/AnalBot 09.11: «Kursdata vises for 19 av 24 · 4 under kontroll · 1 ikke børsnotert»; nulldeler utelates."""
     if not rows:
         return ''
-    k = sum(1 for r in rows if shown(r, snap, disp))
-    h = sum(1 for r in rows if held(r))
-    u = sum(1 for r in rows if unlisted(r))
-    parts = [f'Kursdata vises for {k} av {len(rows)}'] + ([f'{h} under kontroll'] if h else []) + ([f'{u} ikke børsnotert'] if u else [])
+    c = counts(rows, snap, disp)
+    k, h, u = c['k'], c['h'], c['u']
+    parts = [f'Kursdata vises for {k} av {c["n"]}'] + ([f'{h} under kontroll'] if h else []) + ([f'{u} ikke børsnotert'] if u else [])
     return f'<p class="sr-cov">{E(" · ".join(parts))}</p>'
 
 
@@ -234,8 +240,8 @@ def status(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
     """AnalBot 09.11 (runde 2): «N selskaper · K med kursdata · O Oslo, S sjekket for røde flagg · R med røde flagg».
     Uten Oslo-selskaper: «N selskaper · K med kursdata · ingen sjekket for røde flagg». Oslo, men ingen sjekket:
     «… · O Oslo, ingen sjekket for røde flagg». Flagg telles bare blant sjekkede Oslo-aksjer (≥ 1 flagg)."""
-    n = len(rows)
-    k = sum(1 for r in rows if shown(r, snap, disp))   # = tallet i «Kursdata vises for» (AnalBot 09.11, ingen motsigelse)
+    c = counts(rows, snap, disp)   # samme telling som «Kursdata vises for» (ingen motsigelse)
+    n, k = c['n'], c['k']
     head = f'{n} selskap{"" if n == 1 else "er"} · {k} med kursdata'
     oslo = [r[2] for r in rows if r[1] and r[2] and r[2].endswith('.OL')]
     if not oslo:
@@ -250,24 +256,27 @@ def status(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
 CSS = r"""
 .sr-t{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;margin:0 0 8px}
 .sr-t th{font-size:12px;line-height:16px;font-weight:600;color:var(--mut);text-align:left;padding:8px;white-space:nowrap;border-bottom:1px solid var(--line)}
-.sr-t tr[hidden]{display:none}.sr-t td{padding:8px;border-top:1px solid var(--line);vertical-align:middle}
+.sr-t tr[hidden]{display:none!important}.sr-t td{padding:8px;border-top:1px solid var(--line);vertical-align:middle}
 .sr-tk b a{color:var(--acc)}.sr-nm{color:var(--mut);font-size:13px}
 .sr-rt{white-space:nowrap}.sr-ret{white-space:nowrap;font-variant-numeric:tabular-nums}.sr-per{color:var(--mut);font-size:12px}
 .rup{color:var(--up)}.rdn{color:var(--down)}.r0{color:var(--mut)}
 .sr-fl{display:inline-block;white-space:nowrap;font-size:13px;line-height:18px;padding:1px 8px;border-radius:999px}
 .fl-red{color:var(--down);border:1px solid var(--down);font-weight:700}.fl-ok,.fl-na{color:var(--mut)}
 .sr-na{color:var(--mut)}.sr-sc{white-space:nowrap;font-variant-numeric:tabular-nums}
-.sr-sg .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--pill);font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-sg .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--pill);font-size:12px;line-height:16px;white-space:nowrap}
 .sr-hold{font-size:13px;line-height:18px;color:var(--mut);white-space:nowrap}
 .sr-cov{font-size:13px;line-height:18px;color:var(--mut);margin:0 0 8px}
-.sr-t tr.sr-0 td{height:32px;box-sizing:border-box;padding:6px 8px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0;width:100%}
+.sr-t tr.sr-0 td{height:32px;box-sizing:border-box;padding:6px 8px;line-height:20px;white-space:normal}
 .sr-note,.sr-rkline,.sr-kurs{font-size:13px;line-height:18px;color:var(--mut);margin:0 0 8px}.sr-note{margin-bottom:16px}.sr-kurs{display:none}
 @media(max-width:600px){.sr-kurs{display:block}.sr-per{display:inline}.sr-t thead{display:none}.sr-t,.sr-t tbody{display:block;width:100%}
-.sr-t tr{display:grid;grid-template-columns:repeat(4,minmax(0,auto));grid-template-areas:"tk tk tk tk" "rt rt rt rt" "sg rk fl sc";justify-content:start;gap:2px 8px;align-items:center;max-height:88px;overflow:hidden;padding:6px 0;border-top:1px solid var(--line)}
-.sr-t.sr-ord tr{grid-template-areas:"tk tk tk or" "rt rt rt rt" "sg rk fl sc"}
-.sr-t td{display:block;padding:0;border:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:20px}
-.sr-t td.sr-tk{grid-area:tk}.sr-t td.sr-or{grid-area:or;justify-self:end;color:var(--mut)}.sr-t td.sr-sg{grid-area:sg}.sr-t td.sr-rt{grid-area:rt}
-.sr-t td.sr-rk{grid-area:rk}.sr-t td.sr-flc{grid-area:fl}.sr-t td.sr-sc{grid-area:sc}.sr-t td.sr-miss{grid-row:2;grid-column:1/-1}
-.sr-t tr.sr-0{display:block;max-height:32px;padding:0}.sr-t tr.sr-0 td{display:block;max-width:none;padding:6px 0;height:32px;line-height:20px}
-.sr-t .rk-s{height:20px}}
+.sr-t tr{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0;padding:8px 0;border-top:1px solid var(--line)}
+.sr-t td{display:block;padding:0;border:0;min-width:0;white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.sr-t td.sr-tk{order:1;flex:0 0 100%;font-size:16px;line-height:24px;font-weight:600}.sr-t td.sr-tk .sr-nm{font-size:16px;line-height:24px;color:var(--ink)}
+.sr-t td.sr-or{order:2;flex:0 0 100%;font-size:13px;line-height:18px;color:var(--mut)}
+.sr-t td.sr-rt{order:3;flex:0 0 100%;font-size:14px;line-height:20px;white-space:normal}.sr-t td.sr-rt .sr-hold{font-size:14px;line-height:20px}
+.sr-t td.sr-sg,.sr-t td.sr-rk,.sr-t td.sr-flc,.sr-t td.sr-sc{order:4;flex:0 0 auto;font-size:13px;line-height:18px}
+.sr-t td.sr-rk::before,.sr-t td.sr-flc::before,.sr-t td.sr-sc::before{content:" · ";color:var(--mut);white-space:pre}
+.sr-t td.sr-sg .sgc{white-space:normal;border:0;background:none;padding:0;font-size:13px;line-height:18px}.sr-t .sr-fl{padding:0 4px;line-height:16px}
+.sr-t tr.sr-0{display:block;padding:0}.sr-t tr.sr-0 td{display:block;padding:6px 0;height:auto;min-height:32px;line-height:20px;white-space:normal}
+.sr-t .rk-s{height:18px}}
 """

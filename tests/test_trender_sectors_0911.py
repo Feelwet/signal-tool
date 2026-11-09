@@ -124,7 +124,7 @@ def test_older_price_date_shown_next_to_value():
 def test_sector_cards_layout_rules():
     c = T.SECTOR_CSS
     assert 'min-height:80px' in c and '.tr-sec{min-height:88px}' in c
-    assert '.tr-secgrid{grid-template-columns:minmax(0,1fr)}' in c     # 390: én kolonne
+    assert '.tr-secgrid{grid-template-columns:minmax(0,1fr);gap:8px}' in c     # 390: én kolonne, 8 px (UxBot 09.11)
     # UxBot 09.11: tall klippes aldri – ingen max-height/overflow på status; like høye kort i raden
     assert '.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut)}' in c
     st_rule = re.search(r'\.tr-sec-st\{[^}]*\}', c).group(0)

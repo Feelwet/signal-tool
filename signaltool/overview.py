@@ -267,6 +267,8 @@ CSS += """
 .ov-ct .sc{white-space:nowrap;font-variant-numeric:tabular-nums;color:#94a3b8}.ov-ct .sc .sl,.ov-ct .sc .snt{display:none}
 .ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
 /* bruker 09.11: 5d/20d grønn ved positiv, rød ved negativ (historisk kursendring); 0/mangler grå. Grønn aldri på status/score/kandidat */
+/* UxBot 09.11: ↗ går til TradingView (annen URL enn navnet) -> 44x44 trykkflate, negativ marg holder raden lav */
+.ov-page a.tv,.ov-ct a.tv{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin:-14px -12px -14px -10px;box-sizing:border-box}
 .ov-ct .ov-ret{color:var(--mut)}.ov-ct .ov-ret.tup{color:var(--up)}.ov-ct .ov-ret.tdn{color:var(--down)}
 .sr-fl{display:inline-block;white-space:nowrap;font-size:13px;line-height:18px;padding:1px 8px;border-radius:999px}.fl-red{color:var(--down);border:1px solid var(--down);font-weight:700}
 .ov-more{min-height:44px;margin:4px 0 0;padding:0;background:none;border:0;color:var(--acc,#6cb6ff);font:inherit;cursor:pointer}.ov-more[hidden]{display:none}
