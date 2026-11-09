@@ -266,6 +266,9 @@ CSS += """
 .ov-ct .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid #333b47;background:var(--pill,#1c2430);font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ov-ct .sc{white-space:nowrap;font-variant-numeric:tabular-nums;color:#94a3b8}.ov-ct .sc .sl,.ov-ct .sc .snt{display:none}
 .ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
+/* bruker 09.11: 5d/20d grønn ved positiv, rød ved negativ (historisk kursendring); 0/mangler grå. Grønn aldri på status/score/kandidat */
+.ov-ct .ov-ret{color:var(--mut)}.ov-ct .ov-ret.tup{color:var(--up)}.ov-ct .ov-ret.tdn{color:var(--down)}
+.sr-fl{display:inline-block;white-space:nowrap;font-size:13px;line-height:18px;padding:1px 8px;border-radius:999px}.fl-red{color:var(--down);border:1px solid var(--down);font-weight:700}
 .ov-more{min-height:44px;margin:4px 0 0;padding:0;background:none;border:0;color:var(--acc,#6cb6ff);font:inherit;cursor:pointer}.ov-more[hidden]{display:none}
 .ov-steps{display:flex;gap:2px;margin:4px 0}.ov-steps a{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:4px;min-height:44px;border-radius:4px;background:#1c2430;color:#cbd5e1;font-size:12px;line-height:16px;text-decoration:none}
 .ov-steps a{position:relative;z-index:1}body.pg-index .ov-tile .sub2.ov-r0,.ov-tile .sub2.ov-r0{display:block;margin:2px 0 0;font-size:13px;line-height:18px;color:#94a3b8}.ov-steps a b{font-weight:600}
@@ -305,12 +308,23 @@ def status_line_html(snap: dict) -> str:
     return f'<p class="ov-status">{" · ".join(parts)}</p>'
 
 
-def go_html() -> str:
-    """Tre like innganger (UxBot 09.11). «Kandidater uten røde flagg» er bare et filter – samme utseende, ingen farge eller ikon."""
+def go_html(snap: dict | None = None) -> str:
+    """Tre like innganger (UxBot 09.11). «Kandidater uten røde flagg» er bare et filter – samme utseende, ingen farge eller ikon.
+    Hver inngang har undertekst på alle bredder, som «Høyest temascore» (UxBot-funn 09.11, 390 px)."""
+    rf = ''
+    if snap is not None:
+        rows, c = EV.red_rows(snap), EV.coverage(snap)
+        if c["n"]:
+            m = sum(1 for r in rows if EV.ntest(r) >= 2)
+            rf = f'<span class="gsub">{m} av {len(rows)} Oslo-aksjer med 2+ flagg</span>'
     return ('<nav class="ov-go" aria-label="Snarveier">'
-            '<button type="button" class="go-nf" aria-pressed="false" aria-controls="kandidater">Kandidater uten røde flagg</button>'
+            '<button type="button" class="go-nf" aria-pressed="false" aria-controls="kandidater">Kandidater uten røde flagg'
+            f'<span class="gsub">{E(GO_NF_SUB)}</span></button>'
             f'<a href="temaer.html">Høyest temascore<span class="gsub">{E(THEME_SUB)}</span></a>'
-            '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a></nav>')
+            f'<a href="tickere.html?filter=flagg">Røde flagg Oslo{rf}</a></nav>')
+
+
+GO_NF_SUB = "Filter: 0 røde flagg (bare Oslo) · Vis alle"
 
 
 SCORE_TIP_TEXT = "Rangering, ikke testet"
@@ -320,7 +334,10 @@ THEME_SUB = "Temaets score · " + SCORE_TIP_TEXT   # UxBot 09.11: temaets score,
 def _ret(label: str, x) -> str:
     if x is None:
         return f'<span class="ov-ret">{label} –</span>'
-    return f'<span class="ov-ret {"tup" if x > 0 else "tdn" if x < 0 else ""}">{label} {x*100:+.1f}%</span>'   # samme format og farger som 5d/20d i Tickere
+    v = round(x * 100, 1)   # farge etter vist verdi: «+0.0%» er grå, ikke grønn
+    if v == 0:
+        return f'<span class="ov-ret">{label} 0.0%</span>'
+    return f'<span class="ov-ret {"tup" if v > 0 else "tdn"}">{label} {v:+.1f}%</span>'   # samme format og farger som 5d/20d i Tickere
 
 
 def _main_signal(e: dict) -> str:
@@ -336,10 +353,14 @@ def _main_signal(e: dict) -> str:
 
 
 def _flag_cell(t: str, checked: set, fm: dict) -> tuple[str, bool]:
+    """Bruker/UxBot/AnalBot 09.11: rødt merke «⚑ 2» ved flagg; sjekket uten flagg grå «✔ 0 flagg»; ikke-Oslo grå «ikke sjekket» (aldri ✔)."""
     if t in fm:
-        return f'<td class="fl">⚑ {E(EV.nlabel(fm[t]))}</td>', False
+        r = fm[t]
+        n, eb = EV.ntest(r), "neg_ebit" in r.get("flags", {})
+        txt = (f"⚑ {n}" + (" + EBIT" if eb else "")) if n else "⚑ bare EBIT"
+        return f'<td class="fl"><span class="sr-fl fl-red">{E(txt)}</span></td>', False
     if t in checked:
-        return '<td class="fl n0">0 flagg</td>', True
+        return '<td class="fl n0">✔ 0</td>', True
     return '<td class="fl n0">ikke sjekket</td>', False
 
 

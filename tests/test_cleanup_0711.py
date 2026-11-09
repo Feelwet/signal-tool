@@ -22,8 +22,8 @@ def sample():
 def test_overview_has_one_flag_summary_and_preserved_count_date_and_link():
     h=site.overview_html(sample())
     # UxBot 09.11: «Røde flagg Oslo» er nå også en inngang (lenke); fortsatt bare ett flaggsammendrag
-    assert h.count('Røde flagg Oslo')==2 and h.count('Oslo-aksjer med 2+ flagg')==1   # AnalBot 09.11: flisen nevner utvalget
-    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a>' in h
+    assert h.count('Røde flagg Oslo')==2 and h.count('Oslo-aksjer med 2+ flagg')==2   # flis + inngangens undertekst (UxBot 09.11), samme tall
+    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo<span class="gsub">' in h   # UxBot 09.11: undertekst også på mobil
     assert '<div class="big">1</div>' in h and '<div class="sub">av 2 Oslo-aksjer med 2+ flagg</div>' in h
     assert 'data per 2026-11-06' in h and 'href="tickere.html?filter=flagg"' in h
     assert 'A.OL' not in h and 'B.OL' not in h

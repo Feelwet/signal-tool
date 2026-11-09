@@ -41,10 +41,11 @@ def test_status_line_directly_under_title_and_entries_under_intro():
 def test_three_entries_equal_and_neutral():
     g = OV.go_html()
     assert g.count("<a ") == 2 and g.count("<button") == 1
-    assert ">Kandidater uten røde flagg</button>" in g   # ingen ikon, ingen egen klasse for farge
+    # UxBot-funn 09.11 (390): begge innganger har undertekst som «Høyest temascore»; fortsatt ingen ikon eller fargeklasse
+    assert '>Kandidater uten røde flagg<span class="gsub">Filter: 0 røde flagg (bare Oslo) · Vis alle</span></button>' in g
     # UxBot 09.11: undertekst gjør klart at det er temaets score; AnalBots «Rangering, ikke testet» står ordrett
     assert 'Høyest temascore<span class="gsub">Temaets score · Rangering, ikke testet</span>' in g and 'href="temaer.html"' in g
-    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a>' in g
+    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a>' in g   # uten snapshot: ingen tall diktes opp
     css = OV.CSS
     assert ".ov-go>a,.ov-go>button{box-sizing:border-box;" in css and "height:56px;min-height:44px" in css
     assert ".ov-go .gsub{display:block;font-size:13px;line-height:18px;font-weight:400;color:#94a3b8}" in css
@@ -69,9 +70,10 @@ def test_compact_table_columns_top6_and_vis_alle():
     assert t.count('class="more" hidden') == 2 and 'Vis alle (8)' in t
     a = re.search(r'<tr data-nf="0">(.*?)</tr>', t).group(1)
     assert 'title="Alfa ASA"' in a and ">A.OL" in a and 'rk rk-hoy rk-s">Risiko: Høy' in a
-    assert '<td class="fl">⚑ 2 flagg</td>' in a and 'Uvanlig kursbevegelse</span>' in a and 'class="sgc"' in a
+    # bruker/AnalBot 09.11: rødt merke «⚑ 2» (var «⚑ 2 flagg» som ren tekst)
+    assert '<td class="fl"><span class="sr-fl fl-red">⚑ 2</span></td>' in a and 'Uvanlig kursbevegelse</span>' in a and 'class="sgc"' in a
     assert '<span class="ov-ret tup">5d +13.6%</span>' in a and '<span class="ov-ret tdn">20d -5.0%</span>' in a
-    assert '<td class="fl n0">ikke sjekket</td>' in t and '<td class="fl n0">0 flagg</td>' in t and "⚑ bare EBIT" in t
+    assert '<td class="fl n0">ikke sjekket</td>' in t and '<td class="fl n0">✔ 0</td>' in t and "⚑ bare EBIT" in t
     assert '<span class="ov-ret">5d –</span>' in t   # manglende tall vises som –
     assert ".ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}" in OV.CSS and ".ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}" in OV.CSS
     assert ".ov-ct .tn .nm{display:block;font-size:15px;line-height:20px;font-weight:600;white-space:normal" in OV.CSS
@@ -177,3 +179,11 @@ def test_market_status_dot_never_green():
         assert green not in re.sub(r"\s", "", "".join(re.findall(r"\.ov-dot[^{]*\{[^}]*\}", css))), green
     h = OV.strip_html({"regime": {"OSEBX.OL": {"below": False}, "^GSPC": {"below": False}}, "tickers": []})
     assert "Normalt" in h and 'class="ov-dot up"' in h
+
+
+def test_red_flag_entry_subtext_from_snapshot():
+    s = {"oslo_universe_flags": [{"ticker": "A.OL", "flags": {"weak_px": "x", "high_vol": "y"}}, {"ticker": "B.OL", "flags": {"weak_px": "x"}},
+                                 {"ticker": "C.OL", "flags": {}}], "oslo_flags_meta": {}}
+    g = OV.go_html(s)
+    assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo<span class="gsub">1 av 2 Oslo-aksjer med 2+ flagg</span></a>' in g
+    assert g.count('class="gsub"') == 3
