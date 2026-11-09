@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-09T00:06:10+0100",
+ "hentet": "2026-11-09T03:56:13+0100",
  "dato": "2026-11-09",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (3687) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (4455) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,22 +12,26 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 114
+   "antall": 121
   },
   {
    "tema": "conflict_defense",
-   "antall": 59
+   "antall": 62
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 20
+   "antall": 21
   },
   {
    "tema": "risk_off_haven",
-   "antall": 13
+   "antall": 15
   },
   {
    "tema": "rare_earths_semis",
+   "antall": 5
+  },
+  {
+   "tema": "tariffs_trade",
    "antall": 4
   },
   {
@@ -45,19 +49,74 @@
   {
    "tema": "sanctions_energy",
    "antall": 1
-  },
-  {
-   "tema": "tariffs_trade",
-   "antall": 1
   }
  ],
  "saker": [
   {
-   "tittel": "Iraq has reached understandings with US to allow oil exports through Hormuz, minister says",
-   "url": "https://www.grandforksherald.com/news/national/iraq-has-reached-understandings-with-us-to-allow-oil-exports-through-hormuz-minister-says",
+   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
+   "url": "https://isp.netscape.com:443/news/world/story/0001/20261109/090d96e25872f5c63e105b9dd3e5dc60",
    "kilde": "GDELT",
-   "domene": "grandforksherald.com",
-   "publisert": "2026-11-08T23:15:00Z",
+   "domene": "netscape.com",
+   "publisert": "2026-11-09T03:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Iran's Revolutionary Guards Say Two Oil Tankers Hit Mines, Catch Fire Near Strait of Hormuz",
+   "url": "https://peakoil.com/publicpolicy/irans-revolutionary-guards-say-two-oil-tankers-hit-mines-catch-fire-near-strait-of-hormuz",
+   "kilde": "GDELT",
+   "domene": "peakoil.com",
+   "publisert": "2026-11-09T03:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Conservatives call for SNP minister to correct comments about Israel and Gaza",
+   "url": "https://www.newburytoday.co.uk/national/conservatives-call-for-snp-minister-to-correct-comments-about-israel-and-gaza-174029/",
+   "kilde": "GDELT",
+   "domene": "newburytoday.co.uk",
+   "publisert": "2026-11-09T03:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "American Rare Earths starts Halleck Creek pilot work targeting NdPr oxide and metal",
+   "url": "https://www.proactiveinvestors.com/companies/news/1101394/american-rare-earths-starts-halleck-creek-pilot-work-targeting-ndpr-oxide-and-metal-1101394.html",
+   "kilde": "GDELT",
+   "domene": "proactiveinvestors.com",
+   "publisert": "2026-11-09T03:00:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Iraq has reached understandings with US to allow oil exports through Hormuz, minister says",
+   "url": "https://www.sidneyherald.com/news/national/iraq-has-reached-understandings-with-us-to-allow-oil-exports-through-hormuz-minister-says",
+   "kilde": "GDELT",
+   "domene": "sidneyherald.com",
+   "publisert": "2026-11-09T03:00:00Z",
    "tema": "mideast_energy",
    "temaer": [
     "mideast_energy"
@@ -65,6 +124,401 @@
    "matchede_ord": [
     "hormuz",
     "iraq"
+   ]
+  },
+  {
+   "tittel": "Israel 'fully responsible' for Gaza landslide deaths: Hamas",
+   "url": "https://aa.com.tr/en/middle-east/israel-fully-responsible-for-gaza-landslide-deaths-hamas/4116394",
+   "kilde": "GDELT",
+   "domene": "aa.com.tr",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Trump cites 'great dislike' for Israel, Iran war among reasons for Republican midterm losses",
+   "url": "https://aa.com.tr/en/middle-east/trump-cites-great-dislike-for-israel-iran-war-among-reasons-for-republican-midterm-losses/4116402",
+   "kilde": "GDELT",
+   "domene": "aa.com.tr",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia turns to Syria for help as fighting with Houthis escalates – WTOP News",
+   "url": "https://wtop.com/world/2026/11/saudi-arabia-turns-to-syria-for-help-as-fighting-with-houthis-escalates/",
+   "kilde": "GDELT",
+   "domene": "wtop.com",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Russia Fires 36 Missiles at Kyiv Before Peace Talks — Only 4 Stopped",
+   "url": "https://www.latintimes.com/russian-strikes-kyiv-energy-infrastructure-dnipro-bridge-601033",
+   "kilde": "GDELT",
+   "domene": "latintimes.com",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "missile",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Watch: Flooding brings Gaza's Civil Defence to declare maximum state of emergency",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/watch-flooding-brings-gazas-civil-defence-declare-maximum-state",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Iran says 3 tankers caught fire in Hormuz",
+   "url": "https://www.surinametimes.com/artikel/iran-says-3-tankers-caught-fire-in-hormuz",
+   "kilde": "GDELT",
+   "domene": "surinametimes.com",
+   "publisert": "2026-11-09T02:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russia hopes U.S. midterm results won't shift Trump's Ukraine negotiations - National",
+   "url": "https://globalnews.ca/news/12142141/russia-kremlin-us-midterm-reaction/",
+   "kilde": "GDELT",
+   "domene": "globalnews.ca",
+   "publisert": "2026-11-09T02:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "WTO says US anti-dumping duties on Chinese products wrong",
+   "url": "https://spacewar.com/wto-says-us-anti-dumping-duties-on-chinese-products-wrong-999/",
+   "kilde": "GDELT",
+   "domene": "spacewar.com",
+   "publisert": "2026-11-09T02:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "anti-dumping"
+   ]
+  },
+  {
+   "tittel": "Brent crude falls over $1 as Trump signals fresh US strikes on Iran are unlikely",
+   "url": "https://timesofindia.indiatimes.com/business/international-business/brent-crude-falls-over-1-as-trump-signals-fresh-us-strikes-on-iran-are-unlikely/articleshow/135667845.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "brent crude",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged",
+   "url": "https://www.chicagotribune.com/2026/11/08/saudi-arabia-intercepts-missiles-as-aramco-building-riyadh-damaged/",
+   "kilde": "GDELT",
+   "domene": "chicagotribune.com",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Conjoined twins recovering well after successful separation in Saudi Arabia",
+   "url": "https://www.fijivillage.com/news/conjoined-twins-recovering-well-after-successful-separation-in-saudi-arabia-ad3e2a/",
+   "kilde": "GDELT",
+   "domene": "fijivillage.com",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Europe to join U.S.-brokered Ukraine talks in Abu Dhabi, defying Kremlin objections",
+   "url": "https://www.ideastream.org/2026-11-08/europe-to-join-u-s-brokered-ukraine-talks-in-abu-dhabi-defying-kremlin-objections",
+   "kilde": "GDELT",
+   "domene": "ideastream.org",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Standing up to Putin! Russian comic in exile plays Islington gig",
+   "url": "https://www.islingtontribune.co.uk/article/standing-up-to-putin-russian-comic-in-exile-plays-islington-gig",
+   "kilde": "GDELT",
+   "domene": "islingtontribune.co.uk",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Ukraine war briefing: post war 'security guarantees' a key focus in upcoming Abu Dhabi talks, says Rubio  | Russia",
+   "url": "https://www.theguardian.com/world/2026/nov/09/ukraine-war-briefing-post-war-security-guarantees-a-key-focus-in-upcoming-abu-dhabi-talks-says-rubio",
+   "kilde": "GDELT",
+   "domene": "theguardian.com",
+   "publisert": "2026-11-09T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Canada's unlikely trade war influencer fighting for the little guys",
+   "url": "https://www.cbc.ca/player/play/video/9.7412893",
+   "kilde": "GDELT",
+   "domene": "cbc.ca",
+   "publisert": "2026-11-09T02:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "Sri Lanka's Economic Recovery Tied to Strait of Hormuz as US-Israel Tensions Reshape Global Trade",
+   "url": "https://www.lankanewspapers.com/2026/11/08/sri-lanka-s-economic-recovery-tied-to-strait-of-hormuz-as-us-israel-tensions-reshape-global-trade",
+   "kilde": "GDELT",
+   "domene": "lankanewspapers.com",
+   "publisert": "2026-11-09T02:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "US asks Iraq to shut most border crossings with Iran: Iraqi FM",
+   "url": "http://www.bignewsnetwork.com/news/279420827/us-asks-iraq-to-shut-most-border-crossings-with-iran-iraqi-fm",
+   "kilde": "GDELT",
+   "domene": "bignewsnetwork.com",
+   "publisert": "2026-11-09T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "Iraq's Khor Mor gas field hit after reportedly referenced by Kataib Hezbollah",
+   "url": "http://www.jpost.com/middle-east/article-914274",
+   "kilde": "GDELT",
+   "domene": "jpost.com",
+   "publisert": "2026-11-09T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hezbollah",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "Iraq reaches US understanding to resume oil exports through Strait of Hormuz, says foreign minister",
+   "url": "https://economictimes.indiatimes.com/industry/energy/oil-gas/iraq-reaches-us-understanding-to-resume-oil-exports-through-strait-of-hormuz-says-foreign-minister/articleshow/135667673.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-09T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "Iran war live: Trump says 'Iron Gate' in effect; drone hits Iraq gasfield | News",
+   "url": "https://www.aljazeera.com/news/liveblog/2026/11/9/iran-war-live-trump-says-land-blockade-in-effect-drone-cuts-power-in-iraq",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-09T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "The Kremlin Hopes The US Election Shake-Up Won't Shift Trump's Negotiations On Ukraine – 710am KURV",
+   "url": "https://www.kurv.com/the-kremlin-hopes-the-us-election-shake-up-wont-shift-trumps-negotiations-on-ukraine/",
+   "kilde": "GDELT",
+   "domene": "kurv.com",
+   "publisert": "2026-11-09T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Will fuel follow oil prices? - ABC listen",
+   "url": "https://www.abc.net.au/listen/programs/am/will-fuel-follow-oil-prices-/107362118",
+   "kilde": "GDELT",
+   "domene": "abc.net.au",
+   "publisert": "2026-11-09T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Russia Targets Emergency Workers at Site of Deadly Strike, Ukraine Claims",
+   "url": "https://www.breitbart.com/national-security/2026/11/08/russia-targets-emergency-workers-at-site-of-deadly-strike-ukraine-claims/",
+   "kilde": "GDELT",
+   "domene": "breitbart.com",
+   "publisert": "2026-11-09T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "WWE talent got home safe from Saudi Arabia",
+   "url": "https://www.cagesideseats.com/wwe/485683/wwe-talent-got-home-safe-from-saudi-arabia",
+   "kilde": "GDELT",
+   "domene": "cagesideseats.com",
+   "publisert": "2026-11-09T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "JAKE WALLIS SIMONS: A war hero whose son was killed in Gaza, he would be a victory for democracy - but he's as hawkish as Bibi on Iran",
+   "url": "https://www.dailymail.com/debate/article-16276671/JAKE-WALLIS-SIMONS-war-hero-Gaza-Iran.html",
+   "kilde": "GDELT",
+   "domene": "dailymail.com",
+   "publisert": "2026-11-09T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Abiodun commends DSS, Police for rescuing kidnap victims, vows Ogun won't be criminals' safe haven",
+   "url": "https://www.premiumtimesng.com/promoted/923792-abiodun-commends-dss-police-for-rescuing-kidnap-victims-vows-ogun-wont-be-criminals-safe-haven.html",
+   "kilde": "GDELT",
+   "domene": "premiumtimesng.com",
+   "publisert": "2026-11-09T01:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "safe haven"
+   ]
+  },
+  {
+   "tittel": "Salvadoran Business Backs Peru Trade Deal",
+   "url": "https://www.riotimesonline.com/el-salvador-business-groups-back-peru-trade-deal/",
+   "kilde": "GDELT",
+   "domene": "riotimesonline.com",
+   "publisert": "2026-11-09T01:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
    ]
   },
   {
@@ -83,21 +537,6 @@
    ]
   },
   {
-   "tittel": "Europe to join U.S.-brokered Ukraine talks in Abu Dhabi, defying Kremlin objections",
-   "url": "https://www.ualrpublicradio.org/npr-news/2026-11-08/europe-to-join-u-s-brokered-ukraine-talks-in-abu-dhabi-defying-kremlin-objections",
-   "kilde": "GDELT",
-   "domene": "ualrpublicradio.org",
-   "publisert": "2026-11-08T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
-   ]
-  },
-  {
    "tittel": "Gold price prediction: Gold rate to undergo volatile mode, claim experts, cite a few factors that will impact bullion movement",
    "url": "https://economictimes.indiatimes.com/news/international/us/gold-price-prediction-gold-rate-to-undergo-volatile-mode-claim-experts-cite-a-few-factors-that-will-impact-bullion-movement/articleshow/135665960.cms",
    "kilde": "GDELT",
@@ -112,21 +551,6 @@
    ]
   },
   {
-   "tittel": "US asks Iraq to shut most border crossings with Iran: Iraqi FM",
-   "url": "https://news.webindia123.com/news/Articles/World/20261109/4517478.html",
-   "kilde": "GDELT",
-   "domene": "webindia123.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iran",
-    "iraq"
-   ]
-  },
-  {
    "tittel": "US asks Iraq to shut most Iran border crossings, Iraqi foreign minister says",
    "url": "https://www.al-monitor.com/originals/2026/11/us-asks-iraq-shut-most-iran-border-crossings-iraqi-foreign-minister-says",
    "kilde": "GDELT",
@@ -138,21 +562,6 @@
    ],
    "matchede_ord": [
     "iran",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Arab News | Iraq has reached understandings with US to allow oil exports through Hormuz, minister says",
-   "url": "https://www.arabnews.com/middle-east/iraq-has-reached-understandings-with-us-to-allow-oil-exports-through-hormuz-minister-says-3010576",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
     "iraq"
    ]
   },
@@ -184,109 +593,6 @@
    "matchede_ord": [
     "ukraine",
     "kremlin"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia turns to Syria for help as fighting with Houthis escalates",
-   "url": "https://www.thehindu.com/news/international/saudi-arabia-turns-to-syria-for-help-as-fighting-with-houthis-escalates/article71681228.ece",
-   "kilde": "GDELT",
-   "domene": "thehindu.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "EXECUTION WAVE: Iran Hangs Three Protesters Accused of U.S. and Israel Links",
-   "url": "https://www.theyeshivaworld.com/news/israel-news/2620399/execution-wave-iran-hangs-three-protesters-accused-of-u-s-and-israel-links.html",
-   "kilde": "GDELT",
-   "domene": "theyeshivaworld.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "AID RECORD: Israeli Officials Say 91,000 New Tents Entered Gaza Ahead of Winter",
-   "url": "https://www.theyeshivaworld.com/news/israel-news/2620402/aid-record-israeli-officials-say-91000-new-tents-entered-gaza-ahead-of-winter.html",
-   "kilde": "GDELT",
-   "domene": "theyeshivaworld.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "MUST WATCH: Israeli Ambassador Confronts NY Times Editorial Board Over Gaza \"Genocide\" Claims – Reveals Stunning Exchange At Kinus Hashluchim – The Yeshiva World",
-   "url": "https://www.theyeshivaworld.com/news/israel-news/2620637/must-watch-israeli-ambassador-confronts-ny-times-editorial-board-over-gaza-genocide-claims-reveals-stunning-exchange-at-kinus-hashluchim.html",
-   "kilde": "GDELT",
-   "domene": "theyeshivaworld.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia intercepts missiles as Aramco building in Riyadh is damaged, and other Mideast news",
-   "url": "https://www.yakimaherald.com/news/nation_and_world/nation/saudi-arabia-intercepts-missiles-as-aramco-building-in-riyadh-is-damaged-and-other-mideast-news/article_8fb9de8b-c78d-5508-8a08-8fd97665e09d.html",
-   "kilde": "GDELT",
-   "domene": "yakimaherald.com",
-   "publisert": "2026-11-08T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "US asks Iraq to close all but 2 border crossings with Iran: Iraqi foreign minister",
-   "url": "https://aa.com.tr/en/americas/us-asks-iraq-to-close-all-but-2-border-crossings-with-iran-iraqi-foreign-minister/4116349",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-08T22:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iran",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Iran says 3 tankers caught fire in Hormuz",
-   "url": "https://kashmirreader.com/2026/11/09/iran-says-3-tankers-caught-fire-in-hormuz/",
-   "kilde": "GDELT",
-   "domene": "kashmirreader.com",
-   "publisert": "2026-11-08T22:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
    ]
   },
   {
@@ -333,36 +639,6 @@
    ]
   },
   {
-   "tittel": "Suspected Iranian drone strike halts Iraq gas field, cuts two thirds of Kurdistan power",
-   "url": "https://investinglive.com/commodities/suspected-iranian-drone-strike-halts-iraq-gas-field-cuts-two-thirds-of-kurdistan-power/",
-   "kilde": "GDELT",
-   "domene": "investinglive.com",
-   "publisert": "2026-11-08T22:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Massive Amsterdam march challenges Dutch government's response to Israel's war in Gaza",
-   "url": "https://timesofindia.indiatimes.com/world/europe/massive-amsterdam-march-challenges-dutch-governments-response-to-israels-war-in-gaza/articleshow/135665602.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-08T22:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "Elon Musk Believes SpaceX's ~100,000 V4 Starlink Satellites Are Enough To \"Outcompete Undersea Cables,\" As Iran-Linked Ships Seen Lingering Over Such Cables In The Gulf Of Oman",
    "url": "https://wccftech.com/elon-musk-believes-spacexs-100000-v4-starlink-satellites-are-enough-to-outcompete-undersea-cables-as-iran-linked-ships-seen-lingering-over-such-cables-in-the-gulf-of-oman/",
    "kilde": "GDELT",
@@ -404,36 +680,6 @@
    "matchede_ord": [
     "ukraine",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Iraq FM: Iran war cost $60b in lost oil exports, reaches understanding with US",
-   "url": "http://www.jpost.com/middle-east/article-914263",
-   "kilde": "GDELT",
-   "domene": "jpost.com",
-   "publisert": "2026-11-08T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iran",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Israel prepared for US strike on Iran, but Donald Trump held off",
-   "url": "http://www.jpost.com/middle-east/iran-news/article-914268",
-   "kilde": "GDELT",
-   "domene": "jpost.com",
-   "publisert": "2026-11-08T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
    ]
   },
   {
@@ -482,21 +728,6 @@
    ]
   },
   {
-   "tittel": "Israel threatens Iran yet again",
-   "url": "http://www.israelherald.com/news/279420574/israel-threatens-iran-yet-again",
-   "kilde": "GDELT",
-   "domene": "israelherald.com",
-   "publisert": "2026-11-08T21:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Tanker Burns After Strike in Strait of Hormuz",
    "url": "https://maritime-executive.com/article/tanker-burns-after-strike-in-strait-of-hormuz",
    "kilde": "GDELT",
@@ -508,20 +739,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Houthi Attack Damages Aramco Headquarters in Saudi Arabia's Riyadh",
-   "url": "https://www.moroccoworldnews.com/2026/11/345506/houthi-attack-damages-aramco-headquarters-in-saudi-arabias-riyadh/",
-   "kilde": "GDELT",
-   "domene": "moroccoworldnews.com",
-   "publisert": "2026-11-08T21:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -537,34 +754,6 @@
    "matchede_ord": [
     "ukraine",
     "russian"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia introduces training program to prepare Hajj mission leaders for 2027 season - Shafaqna English",
-   "url": "https://en.shafaqna.com/490028/saudi-arabia-introduces-training-program-to-prepare-hajj-mission-leaders-for-2027-season/",
-   "kilde": "GDELT",
-   "domene": "shafaqna.com",
-   "publisert": "2026-11-08T18:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Arab News | Saudi Arabia expresses condolences after fatal train collision in Egypt",
-   "url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-expresses-condolences-after-fatal-train-collision-in-egypt-3010549",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-08T18:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -685,67 +874,6 @@
    ]
   },
   {
-   "tittel": "Russia targets emergency crews at the site of a deadly strike in Ukraine",
-   "url": "https://www.wmtw.com/article/russia-emergency-crews-deadly-strike-southern-ukraine/74367683",
-   "kilde": "GDELT",
-   "domene": "wmtw.com",
-   "publisert": "2026-11-08T17:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russia, Putin, 2016 election interference | Homeland Security Newswire",
-   "url": "https://www.homelandsecuritynewswire.com/dr20261102-the-unhidden-hand",
-   "kilde": "GDELT",
-   "domene": "homelandsecuritynewswire.com",
-   "publisert": "2026-11-08T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russia",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Putin's war catastrophe laid bare: Leaked data suggests '450,000 Russians died' fighting in Ukraine - London Business News",
-   "url": "https://londonlovesbusiness.com/putins-war-catastrophe-laid-bare-leaked-data-suggests-450000-russians-died-fighting-in-ukraine/",
-   "kilde": "GDELT",
-   "domene": "londonlovesbusiness.com",
-   "publisert": "2026-11-08T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Russian Drone Strikes Emergency Workers In Southern Ukraine",
-   "url": "https://www.deccanchronicle.com/world/russian-drone-strikes-emergency-workers-in-southern-ukraine-2002797",
-   "kilde": "GDELT",
-   "domene": "deccanchronicle.com",
-   "publisert": "2026-11-08T16:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "Milford Haven story of 14-year-old First World War soldier",
    "url": "https://www.milfordmercury.co.uk/news/26706559.milford-haven-story-14-year-old-first-world-war-soldier/",
    "kilde": "GDELT",
@@ -771,35 +899,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Russian strikes on Ukraine leave 850,000 without power",
-   "url": "https://www.euronews.com/2026/11/08/russian-strikes-on-ukraine-leave-850000-without-power-as-zelenskyy-reports-drone-attack-on",
-   "kilde": "GDELT",
-   "domene": "euronews.com",
-   "publisert": "2026-11-08T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Iranian air defense destroys US MQ-9 Reaper drone over Qeshm Island",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/07/780126/iranian-air-defense-destroys-us-mq-9-reaper-drone-over-qeshm-island",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-08T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense"
    ]
   },
   {
