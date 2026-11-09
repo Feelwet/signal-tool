@@ -1,6 +1,41 @@
 {
 "saker": [
 {
+"tittel": "Eurozone bond yields edge lower as oil prices ease, investors await US inflation data",
+"url": "https://economictimes.indiatimes.com/markets/us-stocks/news/eurozone-bond-yields-edge-lower-as-oil-prices-ease-investors-await-us-inflation-data/articleshow/135677869.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-09T11:30:00Z"
+},
+{
+"tittel": "Gov't to Decide within November How Much to Compensate Oil Refiners Hit by Price Caps l KBS WORLD",
+"url": "https://world.kbs.co.kr/service/news_view.htm?lang=e&Seq_Code=205457",
+"kilde": "GDELT",
+"domene": "kbs.co.kr",
+"publisert": "2026-11-09T11:30:00Z"
+},
+{
+"tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
+"url": "https://www.clickondetroit.com/news/world/2026/11/09/a-day-before-us-brokered-talks-russia-and-ukraine-batter-each-other-with-long-range-strikes/",
+"kilde": "GDELT",
+"domene": "clickondetroit.com",
+"publisert": "2026-11-09T11:30:00Z"
+},
+{
+"tittel": "Oil prices pare losses as Hormuz, Houthi tensions persist | Hellenic Shipping News Worldwide",
+"url": "https://www.hellenicshippingnews.com/oil-prices-pare-losses-as-hormuz-houthi-tensions-persist/",
+"kilde": "GDELT",
+"domene": "hellenicshippingnews.com",
+"publisert": "2026-11-09T11:30:00Z"
+},
+{
+"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
+"url": "https://www.koco.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
+"kilde": "GDELT",
+"domene": "koco.com",
+"publisert": "2026-11-09T11:30:00Z"
+},
+{
 "tittel": "China extends suspension of new rare earth controls until January",
 "url": "https://lufkindailynews.com/news_reuters/top_news/china-extends-suspension-of-new-rare-earth-controls-until-january/article_3f25be8b-e73f-5c34-934c-d1ecf8807e95.html",
 "kilde": "GDELT",
@@ -40,13 +75,6 @@
 "url": "https://www.middle-east-online.com/en/middle-east-oil-price-war-heralds-post-conflict-glut",
 "kilde": "GDELT",
 "domene": "middle-east-online.com",
-"publisert": "2026-11-09T11:15:00Z"
-},
-{
-"tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
-"url": "https://www.wisn.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
-"kilde": "GDELT",
-"domene": "wisn.com",
 "publisert": "2026-11-09T11:15:00Z"
 },
 {
@@ -1785,6 +1813,6 @@
 "publisert": "2026-11-07T14:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-09T11:15:00Z",
-"hentet": "2026-11-09T11:15:26Z"
+"gkg_siste_fil": "2026-11-09T11:30:00Z",
+"hentet": "2026-11-09T11:29:06Z"
 }

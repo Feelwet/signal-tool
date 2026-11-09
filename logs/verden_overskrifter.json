@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-09T12:15:26+0100",
+ "hentet": "2026-11-09T12:29:06+0100",
  "dato": "2026-11-09",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (933) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,11 +12,11 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 134
+   "antall": 136
   },
   {
    "tema": "conflict_defense",
-   "antall": 72
+   "antall": 73
   },
   {
    "tema": "shipping_chokepoints",
@@ -44,7 +44,7 @@
   },
   {
    "tema": "sanctions_energy",
-   "antall": 1
+   "antall": 2
   },
   {
    "tema": "sentralbanker",
@@ -52,6 +52,79 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Eurozone bond yields edge lower as oil prices ease, investors await US inflation data",
+   "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/eurozone-bond-yields-edge-lower-as-oil-prices-ease-investors-await-us-inflation-data/articleshow/135677869.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-09T11:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Gov't to Decide within November How Much to Compensate Oil Refiners Hit by Price Caps l KBS WORLD",
+   "url": "https://world.kbs.co.kr/service/news_view.htm?lang=e&Seq_Code=205457",
+   "kilde": "GDELT",
+   "domene": "kbs.co.kr",
+   "publisert": "2026-11-09T11:30:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "A day before US-brokered talks, Russia and Ukraine batter each other with long-range strikes",
+   "url": "https://www.clickondetroit.com/news/world/2026/11/09/a-day-before-us-brokered-talks-russia-and-ukraine-batter-each-other-with-long-range-strikes/",
+   "kilde": "GDELT",
+   "domene": "clickondetroit.com",
+   "publisert": "2026-11-09T11:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Oil prices pare losses as Hormuz, Houthi tensions persist | Hellenic Shipping News Worldwide",
+   "url": "https://www.hellenicshippingnews.com/oil-prices-pare-losses-as-hormuz-houthi-tensions-persist/",
+   "kilde": "GDELT",
+   "domene": "hellenicshippingnews.com",
+   "publisert": "2026-11-09T11:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price",
+    "hormuz"
+   ]
+  },
+  {
+   "tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
+   "url": "https://www.koco.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
+   "kilde": "GDELT",
+   "domene": "koco.com",
+   "publisert": "2026-11-09T11:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
   {
    "tittel": "China extends suspension of new rare earth controls until January",
    "url": "https://lufkindailynews.com/news_reuters/top_news/china-extends-suspension-of-new-rare-earth-controls-until-january/article_3f25be8b-e73f-5c34-934c-d1ecf8807e95.html",
@@ -138,21 +211,6 @@
    ],
    "matchede_ord": [
     "oil price"
-   ]
-  },
-  {
-   "tittel": "US-led peace talks for Russia and Ukraine will look at security guarantees",
-   "url": "https://www.wisn.com/article/us-led-peace-talks-russia-ukraine-security-guarantees/74373247",
-   "kilde": "GDELT",
-   "domene": "wisn.com",
-   "publisert": "2026-11-09T11:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -598,36 +656,6 @@
    ]
   },
   {
-   "tittel": "Iraq Strikes U.S. Deal to Boost Oil Exports Through Hormuz",
-   "url": "https://oilprice.com/Latest-Energy-News/World-News/Iraq-Strikes-US-Deal-to-Boost-Oil-Exports-Through-Hormuz.html",
-   "kilde": "GDELT",
-   "domene": "oilprice.com",
-   "publisert": "2026-11-09T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Oil Prices Fall as Trump Signals No New Attacks on Iran",
-   "url": "https://oilprice.com/Latest-Energy-News/World-News/Oil-Prices-Fall-as-Trump-Signals-No-New-Attacks-on-Iran.html",
-   "kilde": "GDELT",
-   "domene": "oilprice.com",
-   "publisert": "2026-11-09T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Borregaard ASA: No US anti-dumping duties on speciality cellulose",
    "url": "https://www.manilatimes.net/2026/11/09/tmt-newswire/globenewswire/borregaard-asa-no-us-anti-dumping-duties-on-speciality-cellulose/2465007",
    "kilde": "GDELT",
@@ -789,22 +817,6 @@
    "matchede_ord": [
     "air defense",
     "missile"
-   ]
-  },
-  {
-   "tittel": "EU activates special emergency mechanism to fund Ukraine's critical power, water and heating needs after Russian strikes: Zelenskyy",
-   "url": "https://aninews.in/news/world/europe/eu-activates-special-emergency-mechanism-to-fund-ukraine8217s-critical-power-water-and-heating-needs-after-russian-strikes-zelenskyy20261109140020/",
-   "kilde": "GDELT",
-   "domene": "aninews.in",
-   "publisert": "2026-11-09T09:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "russian"
    ]
   },
   {
