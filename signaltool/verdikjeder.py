@@ -144,11 +144,14 @@ def companies(links):
 
 
 def stock_rows(links):
-    """Børsnoterte selskaper i kjedens rekkefølge (ikke sortert på score/avkastning): (navn, ticker, symbol, ledd·orden, region)."""
+    """Børsnoterte selskaper i kjedens rekkefølge (ikke sortert på score/avkastning):
+    (navn, ticker, symbol, ledd·orden, region, kurssymbol i kilden (bare visning, displayprices.py))."""
+    from .displayprices import yahoo_symbol
     out = []
     for (name, ticker), ls in companies(links).items():
         where = ', '.join(dict.fromkeys(f'{l["label"]} · {l["order"]}. orden' for l in ls))
-        out.append((name, ticker, page_symbol(ls[0]) if ticker else None, where, region(ls[0]['exchange'])))
+        out.append((name, ticker, page_symbol(ls[0]) if ticker else None, where, region(ls[0]['exchange']),
+                    yahoo_symbol(ticker, ls[0]['exchange'])))
     return out
 
 
@@ -157,7 +160,7 @@ def visible_stages(links):
     return [s for s in STAGES if s[0] == 5 or any(l['ui_stage'] == s[0] for l in links)]
 
 
-def html(chain='halvledere', data=None, available_tickers=(), snap=None):
+def html(chain='halvledere', data=None, available_tickers=(), snap=None, disp=None):
     from . import stockrow as SR
     snap = snap or {}
     d = load(chain) if data is None else data
@@ -184,7 +187,7 @@ def html(chain='halvledere', data=None, available_tickers=(), snap=None):
                      '<button type="button" data-f="oslo" aria-pressed="false">Oslo</button>'
                      '<button type="button" data-f="usa" aria-pressed="false">USA</button></div>'
                      f'<h4 class="vk-dh">{TICKER_HEAD}</h4><p class="vk-s5line">{STAGE5_LINE}</p>' +
-                     SR.table(stock_rows(links), snap, order_col=True))
+                     SR.table(stock_rows(links), snap, order_col=True, disp=disp))
             head = STAGE5_HEAD
         else:
             inner = '<div class="vk-tracks">' + track(a, '1', bn) + track(b, '2', bn) + '</div>'

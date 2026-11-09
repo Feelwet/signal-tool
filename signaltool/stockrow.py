@@ -54,10 +54,38 @@ def asof(e: dict | None):
     return (e.get('stats') or {}).get('last_date') or e.get('_px_date')
 
 
-def panel_date(rows: list[tuple], snap: dict):
+DISPLAY_SIGNAL = 'Bare kurs'
+DISPLAY_TIP = 'Kursdata bare for visning. Selskapet er ikke i signalutvalget: ingen signal, risiko eller score.'
+DISPLAY_NOTE = ('Bare kurs: 5d/20d fra samme kilde som tickersidene (Yahoo Finance). Ikke i signalutvalget: '
+                'ingen signal, risiko eller score, og kursen påvirker ikke kandidater eller Signal-boka.')
+
+
+def dsym(row: tuple) -> str | None:
+    """Kurssymbol i kilden (bare visning); faller tilbake på symbolet i datasettet."""
+    return (row[5] if len(row) > 5 else None) or row[2]
+
+
+def display_entry(row: tuple, snap: dict, disp: dict | None) -> dict | None:
+    """Kurs bare for visning (displayprices.py), kun når selskapet ikke finnes i snapshotet."""
+    if not disp or (row[2] and row[2] in entry_map(snap)):
+        return None
+    d = disp.get(dsym(row) or '')
+    return d if d and d.get('last_date') else None
+
+
+def has_price(row: tuple, snap: dict, disp: dict | None = None) -> bool:
+    e = entry_map(snap).get(row[2]) if row[2] else None
+    if e:
+        st = e.get('stats') or {}
+        return not e.get('unranked') and asof(e) is not None and (st.get('ret_5d') is not None or st.get('ret_20d') is not None)
+    return display_entry(row, snap, disp) is not None
+
+
+def panel_date(rows: list[tuple], snap: dict, disp: dict | None = None):
     """Nyeste kursdato blant radene med kursdata (eller None). Eldre rader får egen dato ved verdien."""
     em = entry_map(snap)
     ds = [asof(em.get(r[2])) for r in rows if r[2] in em and not em[r[2]].get('unranked')]
+    ds += [(display_entry(r, snap, disp) or {}).get('last_date') for r in rows]
     ds = [str(d)[:10] for d in ds if d]
     return max(ds) if ds else None
 
@@ -85,9 +113,21 @@ def entry_map(snap: dict) -> dict:
     return {e['ticker']: e for e in snap.get('tickers') or []}
 
 
-def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdate=None) -> str:
+def display_cells(d: dict, sym: str | None, snap: dict, pdate=None) -> str:
+    """Bare kurs (displayprices.py): 5d/20d med dato, ellers «–»; flagg som for alle andre rader."""
+    dd = d.get('last_date')
+    own = dd is not None and str(dd)[:10] != pdate
+    rt = ret('5d', d.get('ret_5d'), dd, own) + ' ' + ret('20d', d.get('ret_20d'), dd, own)
+    return (f'<td class="sr-sg"><span class="sr-na sr-dp" title="{E(DISPLAY_TIP)}">{DISPLAY_SIGNAL}</span></td>'
+            f'<td class="sr-rt">{rt}</td><td class="sr-rk"><span class="sr-na">–</span></td>'
+            f'<td class="sr-flc">{flag_badge(sym, snap)}</td><td class="sr-sc"><span class="sr-na">–</span></td>')
+
+
+def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdate=None, dp: dict | None = None) -> str:
     """Hovedsignal · 5d / 20d · Risiko · Flagg · Score (UxBot 09.11). Uten data: «Ingen data» over hele raden."""
     from . import overview as OV, site_risk as RK
+    if not e and dp:
+        return display_cells(dp, sym, snap, pdate)
     if not e:
         miss = NOT_IN_DATA if listed else UNLISTED
         st, _ = flag_state(sym, snap)
@@ -114,43 +154,51 @@ def name_cell(name: str, ticker: str | None, sym: str | None, have: set) -> str:
     return f'<td class="sr-tk"><b>{tk}</b> <span class="sr-nm">{E(name)}</span></td>'
 
 
-def date_line(rows: list[tuple], snap: dict) -> str:
+def date_line(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
     """390: én grå linje øverst i panelet «Kurs per 08.11» (UxBot 09.11)."""
-    d = dm(panel_date(rows, snap))
+    d = dm(panel_date(rows, snap, disp))
     return f'<p class="sr-kurs">Kurs per {d}</p>' if d else ''
 
 
-def table(rows: list[tuple], snap: dict, order_col: bool = False) -> str:
+def table(rows: list[tuple], snap: dict, order_col: bool = False, disp: dict | None = None) -> str:
     """rows: (navn, ticker|None, symbol i datasettet|None, orden-tekst|None[, region]). Rekkefølgen beholdes."""
     from .ux2 import RISK_LINE
     em = entry_map(snap)
     have = set(em)
-    pdate = panel_date(rows, snap)
+    pdate = panel_date(rows, snap, disp)
     rt_head = '5d / 20d' + (f' (per {dm(pdate)})' if pdate else '')
     head = ('<thead><tr><th scope="col">Ticker</th>' + ('<th scope="col">Orden</th>' if order_col else '') +
             f'<th scope="col">Hovedsignal</th><th scope="col">{rt_head}</th><th scope="col">Risiko</th>'
             f'<th scope="col">Flagg</th><th scope="col">{SCORE_HEAD}</th></tr></thead>')
-    body = []
+    body, any_dp = [], False
     for row in rows:
         name, ticker, sym, order = row[:4]
-        rg = f' data-region="{E(row[4])}"' if len(row) > 4 else ''
+        rg = f' data-region="{E(row[4])}"' if len(row) > 4 and row[4] else ''
+        dp = display_entry(row, snap, disp)
+        any_dp |= dp is not None
         oc = f'<td class="sr-or">{E(order)}</td>' if order_col else ''
         body.append(f'<tr{rg}>{name_cell(name, ticker, sym, have)}{oc}'
-                    f'{cells(em.get(sym) if sym else None, sym, snap, listed=bool(ticker), pdate=pdate)}</tr>')
+                    f'{cells(em.get(sym) if sym else None, sym, snap, listed=bool(ticker), pdate=pdate, dp=dp)}</tr>')
     return (f'<table class="sr-t{" sr-ord" if order_col else ""}">{head}<tbody>{"".join(body)}</tbody></table>'
-            f'<p class="sr-rkline">{E(RISK_LINE)}</p><p class="sr-note">Flagg: bare Oslo-aksjer er sjekket.</p>')
+            f'<p class="sr-rkline">{E(RISK_LINE)}</p>' + (f'<p class="sr-note sr-dpnote">{E(DISPLAY_NOTE)}</p>' if any_dp else '') +
+            '<p class="sr-note">Flagg: bare Oslo-aksjer er sjekket.</p>')
 
 
-def status(rows: list[tuple], snap: dict) -> str:
-    """AnalBot 09.11: «8 aksjer · 3 Oslo sjekket · 1 med røde flagg»; ingen sjekket: «8 aksjer · ingen sjekket for røde flagg».
-    «Aksjer» = børsnoterte selskaper i sektoren; flagg telles bare blant sjekkede Oslo-aksjer (≥ 1 flagg)."""
-    n = sum(1 for r in rows if r[1])
-    head = f'{n} aksje{"" if n == 1 else "r"}'
-    checked = [r[2] for r in rows if r[1] and flag_state(r[2], snap)[0] != 'na']
-    if not checked:
+def status(rows: list[tuple], snap: dict, disp: dict | None = None) -> str:
+    """AnalBot 09.11 (runde 2): «N selskaper · K med kursdata · O Oslo, S sjekket for røde flagg · R med røde flagg».
+    Uten Oslo-selskaper: «N selskaper · K med kursdata · ingen sjekket for røde flagg». Oslo, men ingen sjekket:
+    «… · O Oslo, ingen sjekket for røde flagg». Flagg telles bare blant sjekkede Oslo-aksjer (≥ 1 flagg)."""
+    n = len(rows)
+    k = sum(1 for r in rows if r[1] and has_price(r, snap, disp))
+    head = f'{n} selskap{"" if n == 1 else "er"} · {k} med kursdata'
+    oslo = [r[2] for r in rows if r[1] and r[2] and r[2].endswith('.OL')]
+    if not oslo:
         return f'{head} · ingen sjekket for røde flagg'
+    checked = [s for s in oslo if flag_state(s, snap)[0] != 'na']
+    if not checked:
+        return f'{head} · {len(oslo)} Oslo, ingen sjekket for røde flagg'
     red = sum(1 for s in checked if flag_state(s, snap)[0] == 'red')
-    return f'{head} · {len(checked)} Oslo sjekket · {red} med røde flagg'
+    return f'{head} · {len(oslo)} Oslo, {len(checked)} sjekket for røde flagg · {red} med røde flagg'
 
 
 CSS = r"""

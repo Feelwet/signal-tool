@@ -64,12 +64,15 @@ def test_existing_trend_content_and_caveats_kept_behind_sector():
 def test_sector_status_states_population_and_vetoed_form_absent():
     h = page()
     st = re.findall(r'<span class="tr-sec-st">(.*?)</span>', h)
-    pat = r'^\d+ aksjer? · (\d+ Oslo sjekket · \d+ med røde flagg|ingen sjekket for røde flagg)$'
+    # AnalBot 09.11 runde 2: «N selskaper · K med kursdata · O Oslo, S sjekket for røde flagg · R med røde flagg»
+    pat = (r'^\d+ selskap(er)? · \d+ med kursdata · (\d+ Oslo, (\d+ sjekket for røde flagg · \d+ med røde flagg|'
+           r'ingen sjekket for røde flagg)|ingen sjekket for røde flagg)$')
     assert all(re.match(pat, x) for x in st), st
-    # AnalBot 09.11: flagg telles bare blant sjekkede Oslo-aksjer (NOD 0, REC 2 -> 1 med røde flagg)
-    assert st[0] == '24 aksjer · 2 Oslo sjekket · 1 med røde flagg'
-    assert st[1] == '1 aksje · ingen sjekket for røde flagg' and st[3] == '0 aksjer · ingen sjekket for røde flagg'
-    assert 'med rødt flagg' not in h and 'børsnotert med data' not in h   # vetoet / erstattet form (AnalBot 09.11)
+    # flagg telles bare blant sjekkede Oslo-aksjer (NOD 0, REC 2 -> 1); kursdata: TSM og MU (NVDA mangler kursdato)
+    assert st[0] == '24 selskaper · 2 med kursdata · 2 Oslo, 2 sjekket for røde flagg · 1 med røde flagg'
+    assert st[1] == '1 selskap · 0 med kursdata · ingen sjekket for røde flagg'
+    assert st[3] == '0 selskaper · 0 med kursdata · ingen sjekket for røde flagg'
+    assert 'med rødt flagg' not in h and 'børsnotert med data' not in h and ' aksjer · ' not in h   # vetoet / erstattet form
 
 
 def rows_by_ticker(h):
@@ -120,7 +123,7 @@ def test_sector_cards_layout_rules():
     c = T.SECTOR_CSS
     assert 'min-height:80px' in c and '.tr-sec{min-height:88px}' in c
     assert '.tr-secgrid{grid-template-columns:minmax(0,1fr)}' in c     # 390: én kolonne
-    assert '.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:36px' in c   # maks 2 linjer
+    assert '.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:54px' in c   # runde 2: inntil 3 linjer (lengre status), UxBot måler
 
 
 def test_rows_not_sorted_by_score_or_return():
@@ -135,9 +138,10 @@ def test_unlisted_and_format_helpers():
     assert SR.ret('5d', None, '2026-11-08') == '<span class="sr-ret r0">5d –</span>'
     t = SR.table([('Unotert AS', None, None, None)], {})
     assert 'Ikke børsnotert' in t and 'href' not in t
-    assert T.trend_row({'name': 'MP Materials', 'ticker': 'NYSE: MP'}) == ('MP Materials', 'MP', 'MP', None)
+    # 09.11 runde 2: sjette felt = kurssymbol i kilden (bare visning, displayprices.py)
+    assert T.trend_row({'name': 'MP Materials', 'ticker': 'NYSE: MP'}) == ('MP Materials', 'MP', 'MP', None, None, 'MP')
     assert T.trend_row({'name': 'X', 'ticker': 'OSE: NHY'})[2] == 'NHY.OL'
-    assert T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[2] is None
+    assert T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[2] is None and T.trend_row({'name': 'Y', 'ticker': 'TSE: 4063'})[5] == '4063.T'
     assert 'Testet for kurssvingninger, ikke avkastning' in t   # risikolinjen beholdes (AnalBot)
 
 

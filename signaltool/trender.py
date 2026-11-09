@@ -15,9 +15,6 @@ CSS = r'''
 body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-page{font-size:17px;line-height:26px;overflow-wrap:anywhere;max-width:1000px;margin:0 auto;container-type:inline-size}
 .tr-head h1{font-size:26px;line-height:32px;margin:0}.tr-head>p{margin:6px 0 16px}
-.tr-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 32px}
-.tr-tabs a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid #3b4757;border-radius:8px;color:#cbd5e1;font-size:15px;line-height:22px;text-decoration:none;box-sizing:border-box;white-space:normal}
-.tr-tabs a[aria-current=true]{background:#1c2430;color:#fff;border-color:#58a6ff}.tr-tabs a:focus-visible{outline:2px solid #58a6ff;outline-offset:3px}
 .tr-card{margin:0 0 24px;scroll-margin-top:16px}.tr-card[hidden]{display:none}
 .tr-trend-head{margin:0 0 16px}.tr-page h2{font-size:22px;line-height:29px;margin:0 0 8px}.tr-page h3{font-size:18px;line-height:26px;margin:0 0 12px}.tr-page h4{font-size:17px;line-height:24px;margin:20px 0 8px}
 .tr-page p{margin:8px 0 16px}.tr-meta{color:#cbd5e1;font-size:13px;line-height:20px}.tr-trend-head .tr-meta,.tr-trend-head .tr-status{margin:4px 0}
@@ -32,24 +29,10 @@ body:has(.tr-page) main{padding:16px;max-width:1032px}
 .tr-chain dt{font-size:13px;line-height:20px;color:#cbd5e1}.tr-chain dd{margin:4px 0 0;font-size:17px;line-height:26px}
 .tr-page .tr-doc{margin:16px 0 0}.tr-doc>summary{min-height:44px;cursor:pointer;color:#58a6ff;padding:8px 0;box-sizing:border-box}.tr-follow h3:not(:first-child){margin-top:24px}
 @container(min-width:1000px){.tr-layout{grid-template-columns:minmax(0,620fr) minmax(0,356fr);grid-template-areas:"chain companies" "follow companies";grid-template-rows:auto 1fr;gap:24px}}
-@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-tabs{gap:6px}.tr-tabs a{padding:8px 10px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:0}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
+@media(max-width:600px){.tr-page h2{font-size:21px}.tr-explanation,.tr-companies,.tr-follow{padding:16px 12px}.tr-chain{grid-template-columns:minmax(0,1fr)}.tr-chain>div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;padding:0}.tr-chain dd{margin:0;font-size:17px;line-height:26px}}
 .tr-page .tr-source a,.tr-page .tr-source-short a,.tr-company h4>a{display:inline-flex;align-items:center;min-width:44px;min-height:44px;max-width:100%}.tr-doc li{margin:0 0 16px}.tr-card{margin-bottom:32px}
-@media(max-width:600px){.tr-tabs{margin-bottom:24px}.tr-card{margin-bottom:24px}}
+@media(max-width:600px){.tr-card{margin-bottom:24px}}
 '''
-
-JS = r'''<script>(()=>{
-const root=document.querySelector('.tr-page');if(!root)return;
-const panels=[...root.querySelectorAll('article.tr-card')],links=[...root.querySelectorAll('.tr-tabs a')];
-if(!panels.length)return;
-const show=id=>{let target=document.getElementById(id),panel=target&&target.closest('article.tr-card');
-if(!panel||!panels.includes(panel))panel=panels[0];
-panels.forEach(p=>p.hidden=p!==panel);links.forEach(a=>{if(a.getAttribute('href')==='#'+panel.id)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});return target};
-const fromHash=()=>{let id='';try{id=decodeURIComponent(location.hash.slice(1))}catch(_){}return show(id)};
-links.forEach(a=>a.addEventListener('click',e=>{if(e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();history.pushState(null,'',a.getAttribute('href'));show(a.getAttribute('href').slice(1))}));
-addEventListener('hashchange',fromHash);addEventListener('popstate',fromHash);
-const target=fromHash();if(target&&target.classList.contains('tr-company'))requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
-})();</script>'''
-
 
 
 def E(value):
@@ -104,7 +87,7 @@ def claim(c, full=False):
     return f'<p>{E(c["text"])}{src}</p>'
 
 
-def html(data=None, available_tickers=(), snap=None):
+def html(data=None, available_tickers=(), snap=None, disp=None):
     from . import stockrow as SR
     data = load() if data is None else data
     snap = snap or {}
@@ -163,24 +146,24 @@ def html(data=None, available_tickers=(), snap=None):
     # Sektoroversikt (bruker/UxBot 09.11): kort øverst, ett åpent panel om gangen, alt innhold og alle forbehold bak sektoren.
     vk = VK.load()
     sectors = [('halvledere', vk['name'], 'Verdikjede', VK.stock_rows(vk['links']), '',
-                VK.html(data=vk, available_tickers=available, snap=snap))]
+                VK.html(data=vk, available_tickers=available, snap=snap, disp=disp))]
     for t, card in zip(data['trends'], cards):
         rows = [trend_row(c) for c in t['companies']]
-        table = (('<section class="tr-stocks"><h3>Data fra ticker-siden</h3>' + SR.table(rows, snap) + '</section>') if rows else '')
+        table = ((f'<section class="tr-stocks"><h3>{E(VK.TICKER_HEAD)}</h3>' + SR.table(rows, snap, disp=disp) + '</section>') if rows else '')
         sectors.append((t['id'], t['title'], None, rows, '', table + card))
     grid = []
     for sid, name, tag, rows, _x, content in sectors:
         pid = f'sektor-{sid}'
         tg = f'<span class="tr-tag">{E(tag)}</span>' if tag else ''
         grid.append(f'<button type="button" class="tr-sec" id="kort-{E(sid)}" aria-expanded="false" aria-controls="{E(pid)}">'
-                    f'<span class="tr-sec-nm">{E(name)}</span>{tg}<span class="tr-sec-st">{E(SR.status(rows, snap))}</span></button>')
+                    f'<span class="tr-sec-nm">{E(name)}</span>{tg}<span class="tr-sec-st">{E(SR.status(rows, snap, disp))}</span></button>')
     panels = []
     for sid, name, tag, rows, _x, content in sectors:
         pid = f'sektor-{sid}'
         panels.append(f'<section class="tr-panel" id="{E(pid)}" aria-labelledby="kort-{E(sid)}" data-sektor="{E(sid)}">'
                       f'<div class="tr-panel-bar"><h2 class="tr-panel-h">{E(name)}</h2>'
                       f'<a class="tr-deep" href="#{E(pid)}">Lenke til sektoren</a>'
-                      '<button type="button" class="tr-close">Lukk</button></div>' + SR.date_line(rows, snap) + content + '</section>')
+                      '<button type="button" class="tr-close">Lukk</button></div>' + SR.date_line(rows, snap, disp) + content + '</section>')
     return ('<style>' + CSS + VK.CSS + SR.CSS + SECTOR_CSS + '</style><div class="tr-page">'
             '<header class="tr-head"><h1>Trender</h1>' + INTRO.html('Trender') + '</header>'
             '<div class="tr-secgrid" role="group" aria-label="Sektorer">' + ''.join(grid) + ''.join(panels) + '</div>'
@@ -189,13 +172,16 @@ def html(data=None, available_tickers=(), snap=None):
 
 
 def trend_row(c):
-    """Trendselskap -> (navn, ticker, symbol i datasettet). «NYSE: MP» -> MP; Oslo -> «.OL»."""
+    """Trendselskap -> (navn, ticker, symbol i datasettet, orden, region, kurssymbol i kilden). «NYSE: MP» -> MP; Oslo -> «.OL»."""
+    from .displayprices import yahoo_symbol
     exch, _, tk = c['ticker'].rpartition(':')
     tk, exch = tk.strip(), exch.strip().upper()
     if not tk:
-        return (c['name'], None, None, None)
-    sym = tk + '.OL' if exch in ('OSE', 'OSLO', 'OSLO BØRS') else (tk if exch in ('NYSE', 'NASDAQ', 'NYSE AMERICAN', '') else None)
-    return (c['name'], tk, sym, None)
+        return (c['name'], None, None, None, None, None)
+    oslo = exch in ('OSE', 'OSLO', 'OSLO BØRS')
+    sym = tk + '.OL' if oslo else (tk if exch in ('NYSE', 'NASDAQ', 'NYSE AMERICAN', '') else None)
+    ysym = sym if (oslo or sym) else yahoo_symbol(tk, exch)
+    return (c['name'], tk, sym, None, None, ysym)
 
 
 SECTOR_CSS = r"""
@@ -204,7 +190,8 @@ SECTOR_CSS = r"""
 .tr-sec[aria-expanded=true]{border:2px solid var(--acc);padding:11px}
 .tr-sec:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .tr-sec-nm{font-size:16px;line-height:24px;font-weight:600}
-.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:36px;overflow:hidden}
+/* runde 2: lengre statuslinje (kursdata + Oslo) – inntil 3 linjer ved 1280 i stedet for å klippe tall; UxBot måler */
+.tr-sec-st{font-size:13px;line-height:18px;color:var(--mut);max-height:54px;overflow:hidden}
 .tr-tag{font-size:12px;line-height:16px;padding:0 6px;border:1px solid var(--line);border-radius:999px;color:var(--mut)}
 .tr-panel{grid-column:1/-1;border-top:1px solid var(--line);padding:16px 0 0;min-width:0}
 .tr-secgrid.js .tr-panel[hidden]{display:none}

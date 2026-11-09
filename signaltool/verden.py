@@ -640,6 +640,8 @@ def hourly() -> int:
         print("verden nå (time): ingen snapshot – siden bygges ikke"); return 1
     snap = json.loads(snap_p.read_text())
     snap["verden"] = data
+    from . import displayprices as DP   # 09.11: kurs bare for visning på Trender, egen fil, aldri i snapshot
+    print(f"kurs bare for visning: {DP.refresh()}")
     from . import site
     print(site.build(snap))
     return 0

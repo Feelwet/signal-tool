@@ -147,10 +147,13 @@ def test_chains_never_touch_score_candidates_or_signal_book():
     # Bare trender.py (og modulen selv) kjenner verdikjedene; scoring, kategorier, portefølje og Signal-boka gjør ikke.
     users = [p.name for p in Path('signaltool').rglob('*.py')
              if re.search(r'\bVK\b|import verdikjeder|verdikjeder as', p.read_text(errors='ignore')) and p.name != 'verdikjeder.py']
-    assert users == ['trender.py']
+    # 09.11 runde 2: displayprices.py (kurs bare for visning) leser kjedens symboler; den brukes bare av byggingen/hentingen
+    assert sorted(users) == ['displayprices.py', 'trender.py']
     trender_users = {p.name for p in Path('signaltool').rglob('*.py')
                      if re.search(r'import trender|trender as|from \.trender|from \. import .*\btrender\b', p.read_text(errors='ignore'))}
-    assert trender_users <= {'site.py'}
+    assert trender_users <= {'site.py', 'displayprices.py'}
+    dp_users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'displayprices', p.read_text(errors='ignore'))} - {'displayprices.py'}
+    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py'}   # stockrow: bare docstring
     logs = {p: p.stat().st_mtime_ns for p in Path('logs').glob('*') if p.is_file()}
     block(); T.html()
     assert logs == {p: p.stat().st_mtime_ns for p in logs}
