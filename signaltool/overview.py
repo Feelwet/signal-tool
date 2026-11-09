@@ -100,16 +100,18 @@ def strip_html(snap: dict, include_calendar: bool = True) -> str:
     t1 = (f'<div class="ov-tile"><div class="lbl"><a href="{MARKET_HREF}">Marked →</a></div><div class="big">{"Halver nye" if risk else "Normalt"}</div>'
           f'<div class="sub">{dots or "regime ukjent"} <span class="mut">mot 10-mnd snitt</span></div></div>') if reg else \
          '<div class="ov-tile"><div class="lbl">Marked</div><div class="big">–</div><div class="sub">ikke beregnet</div></div>'
-    tk = snap.get("tickers") or []
+    tk = candidates(snap)   # UxBot 09.11: populasjonen er kandidatene (samme utvalg som tabellen)
     from . import site_risk as RK
-    RC = (("Høy", "hoy", "#FEE2E2"), ("Middels", "middels", "#FEF3C7"), ("Lav", "lav", "#DCFCE7"))
-    cnt = {k: sum(1 for e in tk if (e.get("_risk") or {}).get("level") == k) for k, _, _ in RC}
-    t2 = (f'<div class="ov-tile tap"><div class="lbl">Risikonivå<a class="stretch" href="tickere.html">Vis alle →</a></div><div class="big">{cnt["Høy"]} Høy</div>'
-          # UxBot 09.11: tre trinn Lav/Middels/Høy med tallet ved siden av; aktivt trinn = nivået i overskriften (Høy)
-          f'<div class="ov-steps" role="group" aria-label="Høy {cnt["Høy"]}, Middels {cnt["Middels"]}, Lav {cnt["Lav"]}">'
-          + "".join(f'<a class="in{" on" if k == "Høy" else ""}" href="tickere.html?filter={f}"{" aria-current=\"true\"" if k == "Høy" else ""}>{k} <b>{cnt[k]}</b></a>'
-                    for k, f, _ in reversed(RC)) + '</div>'
-          f'<div class="sub2 rkl">{E(UX2.RISK_LINE)}{UX2.i(RK.STATUS, "Om risikonivået")}</div>'   # AnalBot 01.11
+    RC = (("Lav", "lav"), ("Middels", "middels"), ("Høy", "hoy"))
+    cnt = {k: sum(1 for e in tk if (e.get("_risk") or {}).get("level") == k) for k, _ in RC}
+    k0 = len(tk) - sum(cnt.values())
+    # Tre like, nøytrale segmenter med antall. Ingen aktivt trinn: dataene har ikke ett samlet risikonivå (UxBot 09.11);
+    # trinnet utledes aldri fra største gruppe.
+    t2 = (f'<div class="ov-tile tap"><div class="lbl">Kandidater etter risiko<a class="stretch" href="tickere.html">Vis alle →</a></div>'
+          f'<div class="ov-steps" role="group" aria-label="Lav {cnt["Lav"]}, Middels {cnt["Middels"]}, Høy {cnt["Høy"]}">'
+          + "".join(f'<a class="in" href="tickere.html?filter={f}">{k} <b>{cnt[k]}</b></a>' for k, f in RC) + '</div>'
+          + (f'<div class="sub2 ov-r0">{k0} uten risikonivå</div>' if k0 else "")   # egen grå linje, ikke et fjerde segment
+          + f'<div class="sub2 rkl">{E(UX2.RISK_LINE)}{UX2.i(RK.STATUS, "Om risikonivået")}</div>'   # AnalBot 01.11
           '</div>')
     rows, c = EV.red_rows(snap), EV.coverage(snap)
     m = sum(1 for r in rows if EV.ntest(r) >= 2)
@@ -245,7 +247,7 @@ TOP_N = 6
 NO_FLAG_NOTE = "Bare Oslo-aksjer er sjekket for røde flagg."   # ordrett fra Tickere › Røde flagg
 
 CSS += """
-.ov-status{margin:0 0 8px;font-size:14px;line-height:20px;color:#94a3b8}
+.ov-status{margin:0 0 8px;font-size:14px;line-height:20px;color:#94a3b8}.ov-status .ov-when{white-space:nowrap}
 .ov-hmeta{display:flex;flex-wrap:wrap;align-items:center;column-gap:16px}.ov-page .ov-hmeta .pmeta{margin:0}
 .ov-page>header .page-intro{margin:0 0 4px}
 .ov-go{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -266,7 +268,7 @@ CSS += """
 .ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
 .ov-more{min-height:44px;margin:4px 0 0;padding:0;background:none;border:0;color:var(--acc,#6cb6ff);font:inherit;cursor:pointer}.ov-more[hidden]{display:none}
 .ov-steps{display:flex;gap:2px;margin:4px 0}.ov-steps a{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:4px;min-height:44px;border-radius:4px;background:#1c2430;color:#cbd5e1;font-size:12px;line-height:16px;text-decoration:none}
-.ov-steps a{position:relative;z-index:1}.ov-steps a b{font-weight:600}.ov-steps a.on{background:#334155;color:#fff;box-shadow:inset 0 -2px 0 var(--acc,#6cb6ff)}
+.ov-steps a{position:relative;z-index:1}body.pg-index .ov-tile .sub2.ov-r0,.ov-tile .sub2.ov-r0{display:block;margin:2px 0 0;font-size:13px;line-height:18px;color:#94a3b8}.ov-steps a b{font-weight:600}
 @media(max-width:699px){
 .ov-go{grid-template-columns:minmax(0,1fr)}
 .ov-page>header,.ov-page>section.ov-entry{margin-bottom:16px}.ov-page .ov-cand{padding:12px}
@@ -296,22 +298,23 @@ def status_line_html(snap: dict) -> str:
     tk = candidates(snap)
     _, fm = _flag_state(snap)
     m = sum(1 for e in tk if e["ticker"] in fm and EV.ntest(fm[e["ticker"]]) >= 2)
-    parts = [f"{len(tk)} kandidat{"" if len(tk) == 1 else "er"}", f"{m} med 2+ flagg"]
+    parts = [E(f"{len(tk)} kandidat{'' if len(tk) == 1 else 'er'}"), E(f"{m} med 2+ flagg")]
     from .site import gen_short
-    if snap.get("generated"):
-        parts.append(f'Oppdatert {gen_short(snap["generated"]).replace(" ", " kl. ", 1)}')
-    return f'<p class="ov-status">{E(" · ".join(parts))}</p>'
+    if snap.get("generated"):   # snap["generated"] er lokal Oslo-tid; tidspunkt + sone brytes aldri (UxBot 09.11)
+        parts.append(f'<span class="ov-when">Oppdatert {E(gen_short(snap["generated"]).replace(" ", " kl. ", 1))} Oslo-tid</span>')
+    return f'<p class="ov-status">{" · ".join(parts)}</p>'
 
 
 def go_html() -> str:
     """Tre like innganger (UxBot 09.11). «Kandidater uten røde flagg» er bare et filter – samme utseende, ingen farge eller ikon."""
     return ('<nav class="ov-go" aria-label="Snarveier">'
             '<button type="button" class="go-nf" aria-pressed="false" aria-controls="kandidater">Kandidater uten røde flagg</button>'
-            f'<a href="temaer.html">Høyest temascore<span class="gsub">{E(SCORE_TIP_TEXT)}</span></a>'
+            f'<a href="temaer.html">Høyest temascore<span class="gsub">{E(THEME_SUB)}</span></a>'
             '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a></nav>')
 
 
 SCORE_TIP_TEXT = "Rangering, ikke testet"
+THEME_SUB = "Temaets score · " + SCORE_TIP_TEXT   # UxBot 09.11: temaets score, ikke kandidatens; AnalBots ordlyd intakt
 
 
 def _ret(label: str, x) -> str:

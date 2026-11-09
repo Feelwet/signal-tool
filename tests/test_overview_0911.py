@@ -23,7 +23,8 @@ def test_status_line_counts_from_same_dataset_as_table():
     s = snap()
     h = OV.status_line_html(s)
     # n = rader i tabellen (har score); m = av disse med 2+ testede flagg (A.OL, E.OL – ikke ZZ.OL som ikke er kandidat)
-    assert h == '<p class="ov-status">8 kandidater · 2 med 2+ flagg · Oppdatert 09.11 kl. 06:03</p>'
+    assert h == '<p class="ov-status">8 kandidater · 2 med 2+ flagg · <span class="ov-when">Oppdatert 09.11 kl. 06:03 Oslo-tid</span></p>'
+    assert ".ov-status .ov-when{white-space:nowrap}" in OV.CSS   # kan bryte på 390, men aldri inne i tidspunkt/«Oslo-tid»
     t = OV.candidates_table_html(s)
     assert t.count("<tr data-nf=") == 8
     assert "Oppdatert" not in OV.status_line_html({**s, "generated": None})   # dikter aldri opp tidspunkt
@@ -40,7 +41,8 @@ def test_three_entries_equal_and_neutral():
     g = OV.go_html()
     assert g.count("<a ") == 2 and g.count("<button") == 1
     assert ">Kandidater uten røde flagg</button>" in g   # ingen ikon, ingen egen klasse for farge
-    assert 'Høyest temascore<span class="gsub">Rangering, ikke testet</span>' in g and 'href="temaer.html"' in g
+    # UxBot 09.11: undertekst gjør klart at det er temaets score; AnalBots «Rangering, ikke testet» står ordrett
+    assert 'Høyest temascore<span class="gsub">Temaets score · Rangering, ikke testet</span>' in g and 'href="temaer.html"' in g
     assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo</a>' in g
     css = OV.CSS
     assert ".ov-go>a,.ov-go>button{box-sizing:border-box;" in css and "height:56px;min-height:44px" in css
@@ -105,14 +107,24 @@ def test_fold_budget_390():
     assert ".ov-page>header,.ov-page>section.ov-entry{margin-bottom:16px}" in OV.CSS and ".ov-page>header .page-intro{margin:0 0 4px}" in OV.CSS
 
 
-def test_risk_three_steps_active_marked_and_caveat_visible():
+def test_risk_three_neutral_steps_over_candidates_without_active_step():
     s = snap()
-    s["tickers"] = [{"ticker": "X", "_risk": {"level": "Høy"}}, {"ticker": "Y", "_risk": {"level": "Lav"}}, {"ticker": "Z", "_risk": {"level": "Høy"}}]
+    s["tickers"] = [{"ticker": "X", "score": 3, "_risk": {"level": "Høy"}}, {"ticker": "Y", "score": 2, "_risk": {"level": "Lav"}},
+                    {"ticker": "Z", "score": 1, "_risk": {"level": "Høy"}}, {"ticker": "W", "score": 1},
+                    {"ticker": "NOSCORE", "score": None, "_risk": {"level": "Høy"}}]   # ikke kandidat: telles ikke
     h = OV.strip_html(s, False)
+    assert '<div class="lbl">Kandidater etter risiko<' in h and "Risikonivå<" not in h
     st = h.split('class="ov-steps"', 1)[1].split("</div>", 1)[0]
     assert st.index(">Lav <b>1</b>") < st.index(">Middels <b>0</b>") < st.index(">Høy <b>2</b>")
-    assert st.count('aria-current="true"') == 1 and 'class="in on" href="tickere.html?filter=hoy" aria-current="true"' in st
+    assert "aria-current" not in st and " on" not in st and st.count('<a class="in" ') == 3   # ingen aktivt trinn, aldri fra største gruppe
+    assert '<div class="sub2 ov-r0">1 uten risikonivå</div>' in h and st.count("uten risikonivå") == 0   # egen linje, ikke 4. segment
+    assert "body.pg-index .ov-tile .sub2.ov-r0,.ov-tile .sub2.ov-r0{display:block;margin:2px 0 0;font-size:13px;line-height:18px;color:#94a3b8}" in OV.CSS
+    assert '<div class="big">2 Høy</div>' not in h
     assert "Testet for kurssvingninger, ikke avkastning" in h and "ov-stack" not in h
+    steps_css = " ".join(r for r in re.findall(r"[^{}]*\{[^}]*\}", OV.CSS) if ".ov-steps" in r.split("{")[0])
+    assert ".on" not in steps_css and "background:#1c2430" in steps_css   # like, nøytrale segmenter
+    s["tickers"] = [e for e in s["tickers"] if e["ticker"] != "W"]
+    assert "uten risikonivå" not in OV.strip_html(s, False)
 
 
 def test_only_verbatim_duplicate_caveats_removed():
