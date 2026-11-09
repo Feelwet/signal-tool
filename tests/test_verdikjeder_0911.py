@@ -154,7 +154,7 @@ def test_chains_never_touch_score_candidates_or_signal_book():
                      if re.search(r'import trender|trender as|from \.trender|from \. import .*\btrender\b', p.read_text(errors='ignore'))}
     assert trender_users <= {'site.py', 'displayprices.py'}
     dp_users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'displayprices', p.read_text(errors='ignore'))} - {'displayprices.py'}
-    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py'}   # stockrow: bare docstring
+    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py', 'laering_fwd.py'}   # stockrow: bare docstring; laering_fwd: bare stengetidstabellen til læringsrapporten
     logs = {p: p.stat().st_mtime_ns for p in Path('logs').glob('*') if p.is_file()}
     block(); T.html()
     assert logs == {p: p.stat().st_mtime_ns for p in logs}
@@ -264,3 +264,9 @@ def test_contrast_at_least_4_5_and_no_new_hex():
     assert 3.5 <= L(t2) - L(v['card']) <= 4.5
     assert not re.findall(r'#[0-9a-fA-F]{3,8}\b', V.CSS)
     assert not re.search(r'(?<![\w-])(white|black|rgb\(|rgba\(|hsl\()(?![\w-])', V.CSS)
+
+
+def test_laering_fwd_not_used_by_scoring():
+    # 09.11: læringsrapportens hjelper (stengetider) skal ikke inn i scoring/kategorier/Signal-boka
+    users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'laering_fwd', p.read_text(errors='ignore'))} - {'laering_fwd.py'}
+    assert users == set()
