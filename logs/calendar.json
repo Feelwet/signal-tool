@@ -395,13 +395,6 @@
 "date": "2026-11-12",
 "time": "07:00",
 "source": "ONS",
-"title": "Index of Production, UK: September 2026",
-"kind": "makro"
-},
-{
-"date": "2026-11-12",
-"time": "07:00",
-"source": "ONS",
 "title": "UK trade: September 2026 time series",
 "kind": "makro"
 },
@@ -409,7 +402,7 @@
 "date": "2026-11-12",
 "time": "07:00",
 "source": "ONS",
-"title": "GDP first quarterly estimate, UK: July to September 2026 time series",
+"title": "Index of Production, UK: September 2026",
 "kind": "makro"
 },
 {
@@ -430,6 +423,13 @@
 "date": "2026-11-12",
 "time": "07:00",
 "source": "ONS",
+"title": "GDP first quarterly estimate, UK: July to September 2026 time series",
+"kind": "makro"
+},
+{
+"date": "2026-11-12",
+"time": "07:00",
+"source": "ONS",
 "title": "Construction output in Great Britain: September 2026, new orders and Construction Output Price Indices, July to September 2026",
 "kind": "makro"
 },
@@ -444,14 +444,14 @@
 "date": "2026-11-12",
 "time": "07:00",
 "source": "ONS",
-"title": "GDP monthly estimate, UK: September 2026 time series",
+"title": "Index of Production, UK: September 2026 time series",
 "kind": "makro"
 },
 {
 "date": "2026-11-12",
 "time": "07:00",
 "source": "ONS",
-"title": "Index of Production, UK: September 2026 time series",
+"title": "GDP monthly estimate, UK: September 2026 time series",
 "kind": "makro"
 },
 {
@@ -521,14 +521,14 @@
 "date": "2026-11-18",
 "time": "07:00",
 "source": "ONS",
-"title": "Consumer price inflation, UK: October 2026",
+"title": "Producer price inflation, UK: October 2026",
 "kind": "makro"
 },
 {
 "date": "2026-11-18",
 "time": "07:00",
 "source": "ONS",
-"title": "Producer price inflation, UK: October 2026",
+"title": "Consumer price inflation, UK: October 2026",
 "kind": "makro"
 },
 {
@@ -628,6 +628,13 @@
 "source": "Yahoo",
 "title": "Kvartalsrapport BWLPG.OL",
 "kind": "resultat"
+},
+{
+"date": "2026-11-24",
+"time": "09:30",
+"source": "ONS",
+"title": "UK trade in services by industry, country and service type, 2016 to 2024 ",
+"kind": "makro"
 },
 {
 "date": "2026-11-25",
