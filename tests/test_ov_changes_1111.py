@@ -279,7 +279,7 @@ def test_ticker_period_lines(tmp_path):
     assert '<li><span class="lp-a">Inn 09.11 · Ut 12.11:</span> <span class="lp-r">Score under grensen (3,1 → 1,8)</span></li>' in h
     assert '<li><span class="lp-a">Inn 14.11 · på lista nå</span></li>' in h
     assert ".lp-note,.lp-list{font-size:13px;line-height:18px;color:#94a3b8}" in C.CSS
-    assert "@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}" in C.CSS and "ellipsis" not in C.CSS.split(".lp-note")[1]
+    assert "@media(max-width:599px){.lp-list li{max-height:58px}.lp-list .lp-r{display:block}" in C.CSS and "ellipsis" not in C.CSS.split(".lp-note")[1]
     assert C.ticker_periods("NEVER", p2, ex) == []
 
 
@@ -476,3 +476,45 @@ def test_gap_band_continuous_dashed_edge_and_texts(tmp_path):
     assert ".tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line" in PC.CSS
     li = C.periods_html(ps)
     assert '<span class="lp-g"> · data mangler 03.11–04.11</span></li>' in li
+
+
+
+# ---------------------------------------------------------------- AnalBot 11.11: innkurspunkt for gjeldende periode
+def _dot_case(tmp_path, rows):
+    p = _write(tmp_path, rows)
+    return lambda t: C.ticker_periods(t, p, tmp_path / "x.csv", None)
+
+
+def test_entry_dot_grey_without_text_for_ticker_on_list(tmp_path):
+    ps = _dot_case(tmp_path, [("2026-11-01", "A"), ("2026-11-03", "B"), ("2026-11-05", "A"), ("2026-11-06", "A"), ("2026-11-06", "B")])("A")
+    assert ps[-1]["inn"] == "2026-11-05" and ps[-1]["ut"] is None
+    ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11)]
+    # since.price_date 04.11 ligger før Inn 05.11 -> første sluttkurs på/etter Inn brukes
+    assert PC.entry_point(ser, ps, "2026-11-04") == "2026-11-05"
+    assert PC.entry_point(ser, ps, "2026-11-06") == "2026-11-06"     # samsvarende innkursdato i perioden brukes
+    h = PC.html("A", ser, "2026-11-04", "2026-11-10", ps)
+    dots = re.findall(r'<span class="pcdot"[^>]*></span>', h)
+    assert dots and all('aria-hidden="true"' in d and "title=" not in d for d in dots)   # uten tekst/etikett
+    dot = next(r for r in re.findall(r"[^{}]*\{[^}]*\}", PC.CSS) if r.strip().startswith(".pcdot{") or ".pcdot{" in r)
+    assert "#94a3b8" in dot.split(".pcdot{", 1)[1] and "#58a6ff" not in dot.split(".pcdot{", 1)[1].split("}")[0]
+    assert "pcin" not in h and "pcin" not in PC.CSS and "Registrert" not in h
+
+
+def test_entry_dot_date_inside_current_period(tmp_path):
+    f = _dot_case(tmp_path, [("2026-11-01", "A"), ("2026-11-02", "A"), ("2026-11-03", "B"), ("2026-11-07", "A"), ("2026-11-08", "A")])
+    ps = f("A")
+    ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11) if d not in (7, 8)]   # 07.–08.11 helg uten sluttkurs
+    d = PC.entry_point(ser, ps, "2026-11-01")          # innkurs fra forrige periode: brukes ikke
+    assert d == "2026-11-09" and d >= ps[-1]["inn"]
+    first = _dot_case(tmp_path, [("2026-11-01", "Z"), ("2026-11-02", "Z")])("Z")   # perioden starter ved loggstart
+    assert PC.entry_point(ser, first, None) == "2026-11-01"
+
+
+def test_entry_dot_missing_when_not_on_list(tmp_path):
+    ps = _dot_case(tmp_path, [("2026-11-01", "A"), ("2026-11-03", "A"), ("2026-11-03", "B"), ("2026-11-05", "B")])("A")
+    assert ps[-1]["ut"] == "2026-11-05"
+    ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11)]
+    assert PC.entry_point(ser, ps, "2026-11-03") is None
+    assert "pcdot" not in PC.html("A", ser, "2026-11-03", "2026-11-10", ps)
+    assert "pcdot" not in PC.html("A", ser, "2026-11-03", "2026-11-10", None)   # uten listeperioder: heller ikke punkt
+    assert "pcdot" not in PC.html("A", ser, "2026-11-03", "2026-11-10", [])
