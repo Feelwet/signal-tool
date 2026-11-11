@@ -436,7 +436,7 @@ def test_chart_markers_for_all_events_in_window(tmp_path):
     assert [k for k, _, _ in six].count("Inn") == 4 and [k for k, _, _ in six].count("Ut") == 4   # 6M: alle inn/ut, ikke bare «inn 09.11»
     assert ">Inn 13.10<" in panes["6M"] and ">Ut 12.10<" in panes["6M"]   # UxBot 11.11: én linje i 16 px-raden
     assert 'class="pcin' not in h                               # gammel blå «inn dd.mm» erstattet av Inn/Ut-markørene
-    assert "function pcLay(" in h and ">=28" in h                # kollisjonsregel på begge bredder
+    assert "function pcLay(" in h and "const G=28" in h and ">=G" in h                # kollisjonsregel på begge bredder
 
 
 def test_tooltips_hover_and_focus_with_reason(tmp_path):
@@ -473,7 +473,7 @@ def test_gap_band_continuous_dashed_edge_and_texts(tmp_path):
     assert pane.count('<rect class="pcband"') == 1 and 'class="pcmk' not in pane              # ett bånd, ingen Ut/Inn i hullet
     assert pane.count('<line class="pcgap"') == 1 and 'stroke-dasharray="3 2"' in pane and 'stroke-width="1"' in pane
     assert 'fill="#8b949e" fill-opacity=".14"' in pane                                       # fyll uendret
-    assert ".tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line" in PC.CSS
+    assert ".tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:240px;white-space:pre-line" in PC.CSS
     li = C.periods_html(ps)
     assert '<span class="lp-g"> · data mangler 03.11–04.11</span></li>' in li
 

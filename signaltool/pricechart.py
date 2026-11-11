@@ -192,21 +192,33 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=No
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
             'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p);lab()}));'
             # UxBot 11.11: etikettrad 16 px øverst; fra nyeste til eldste, vis bare med ≥ 28 px til forrige viste og uten overlapp
-            + LAY_JS +
+            + LAY_JS + MEASURE_JS + TIP_JS +
             'function lab(){c.querySelectorAll(".pcp:not([hidden])").forEach(p=>{const W=p.getBoundingClientRect().width||c.clientWidth,'
             'k=[...p.querySelectorAll(".pcmk")],ls=k.map(x=>x.querySelector(".pcml"));ls.forEach(l=>{if(l)l.hidden=false});'
-            'const o=pcLay(k.map((x,i)=>({x:parseFloat(x.style.left)*W/100,w:ls[i]?ls[i].getBoundingClientRect().width:0})),W);'
+            'const o=pcLay(k.map((x,i)=>({x:parseFloat(x.style.left)*W/100,w:pcW(ls[i])})),W);'
             'k.forEach((x,i)=>{if(ls[i])ls[i].hidden=!o[i].show;x.classList.toggle("r",!!o[i].rt)})})}'
+            'c.querySelectorAll(".pcmk,.pcbd").forEach(x=>{x.addEventListener("pointerenter",pcTip);x.addEventListener("focus",pcTip)});'
             'lab();addEventListener("resize",lab,{passive:true})})()</script></div>')
 
 
 
-# Etikettoppsett (samme funksjon brukes i testen via node): ms = [{x, w}] i px fra venstre, W = grafbredde.
+# Etikettoppsett (samme funksjon brukes i testen via node): ms = [{x, w}] i px fra venstre, W = grafbredde, w = MÅLT
+# etikettbredde (nettleseren: getBoundingClientRect, ellers canvas measureText; node-testen: 6,6 px/tegn + 20 %).
 # Nyeste (størst x) først; etiketten står til høyre for streken (3 px), eller til venstre når den ellers går utenfor grafen.
-# Vises bare når avstanden til forrige viste markør er ≥ 28 px og boksen ikke overlapper en vist etikett (4 px luft).
-LAY_JS = ('function pcLay(ms,W){const o=ms.map(()=>({show:false})),ix=ms.map((m,i)=>i).sort((a,b)=>ms[b].x-ms[a].x);let px=null;const bx=[];'
-          'for(const i of ix){const m=ms[i];let l=m.x+3,r=l+m.w,rt=false;if(r>W){r=m.x-2;l=r-m.w;rt=true}if(l<0){l=0;r=m.w}'
-          'const ok=(px===null||px-m.x>=28)&&bx.every(b=>r+4<=b[0]||l>=b[1]+4);o[i]={show:ok,l:l,r:r,rt:rt};if(ok){px=m.x;bx.push([l,r])}}return o}')
+# UxBot 11.11: vises bare når avstanden til forrige viste markør er ≥ 28 px OG det er ≥ 28 px luft mellom etikettboksene.
+LAY_GAP = 28
+LAY_JS = ('function pcLay(ms,W){const G=28,o=ms.map(()=>({show:false})),ix=ms.map((m,i)=>i).sort((a,b)=>ms[b].x-ms[a].x);let px=null;const bx=[];'
+          'for(const i of ix){const m=ms[i];let l=m.x+3,r=l+m.w,rt=false;if(r>W){r=m.x-3;l=r-m.w;rt=true}if(l<0){l=0;r=m.w}'
+          'const ok=(px===null||px-m.x>=G)&&bx.every(b=>r+G<=b[0]||l>=b[1]+G);o[i]={show:ok,l:l,r:r,rt:rt};if(ok){px=m.x;bx.push([l,r])}}return o}')
+# Målt bredde: synlig etikett -> getBoundingClientRect; ellers (0 px, f.eks. skjult rute) canvas measureText med etikettens font.
+MEASURE_JS = ('function pcW(l){if(!l)return 0;const r=l.getBoundingClientRect().width;if(r>0)return r;const cs=getComputedStyle(l),'
+              'cv=pcW.c||(pcW.c=document.createElement("canvas")).getContext("2d");cv.font=cs.font||"11px sans-serif";return cv.measureText(l.textContent).width}')
+# UxBot 11.11: verktøytips maks 240 px med bryting; går det forbi grafens høyrekant legges det til venstre for markøren;
+# alltid klemt innenfor grafboksen [0, W].
+TIP_JS = ('function pcTip(e){const el=e.currentTarget,t=el.querySelector(".tip"),p=el.closest(".pcp");if(!t||!p)return;'
+          'const W=p.getBoundingClientRect().width,a=el.getBoundingClientRect(),P=p.getBoundingClientRect();t.style.maxWidth=Math.min(240,W)+"px";'
+          't.style.left="0px";t.style.right="auto";const tw=Math.min(t.getBoundingClientRect().width||240,W),x0=a.left-P.left,'
+          'cx=el.classList.contains("pcmk")?x0+a.width/2:x0;let L=cx;if(L+tw>W)L=cx-tw;L=Math.max(0,Math.min(L,W-tw));t.style.left=(L-x0)+"px"}')
 LABEL_ROW = 16
 
 
@@ -216,12 +228,12 @@ def _periods_html(periods) -> str:
 
 
 CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margin-bottom:6px}.pcb{height:32px;min-width:44px;padding:0 10px;border:1px solid #30363d;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
-.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative;padding-top:16px}.pcl{position:absolute;left:0;right:0;top:16px;bottom:0}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;z-index:3;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 1.5px #0d1117;pointer-events:none}
-.pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
+.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative;padding-top:16px;overflow-x:clip}.pcl{position:absolute;left:0;right:0;top:16px;bottom:0}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;z-index:3;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 1.5px #0d1117;pointer-events:none}
+.pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:2px}.pcl .lo{bottom:0}
 .pcs{font-size:11px;margin:4px 0 0;text-align:right}.pct{display:none}
-.pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:-16px;bottom:0;z-index:2;width:13px;margin-left:-6px;outline-offset:-2px}
-.pcmk::before{content:"";position:absolute;left:6px;top:16px;bottom:0;border-left:1px solid #8b949e}.pcml{position:absolute;top:0;left:9px;height:16px;font-size:11px;line-height:16px;color:#94a3b8;white-space:nowrap}.pcmk.r .pcml{left:auto;right:9px;text-align:right}.pcml[hidden]{display:none}
-.pcbd .tip,.pcmk .tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line;font-size:13px;line-height:18px;color:#cbd5e1;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:6px 8px}.pcmk.r .tip{left:auto;right:0}
+.pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:-16px;bottom:0;z-index:4;width:12px;margin-left:-6px;outline-offset:-2px;pointer-events:auto;cursor:default}
+.pcmk::before{content:"";position:absolute;left:6px;top:16px;bottom:0;border-left:1px solid #8b949e;pointer-events:none}.pcml{position:absolute;top:0;left:9px;height:16px;font-size:11px;line-height:16px;color:#94a3b8;white-space:nowrap}.pcmk.r .pcml{left:auto;right:9px;text-align:right}.pcml[hidden]{display:none}
+.pcbd .tip,.pcmk .tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:240px;white-space:pre-line;overflow-wrap:anywhere;box-sizing:border-box;font-size:13px;line-height:18px;color:#cbd5e1;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:6px 8px}.pcmk.r .tip{left:auto;right:0}
 .pcbd:hover .tip,.pcbd:focus .tip,.pcmk:hover .tip,.pcmk:focus .tip{display:block}
 @media(max-width:599px){.card.pc{padding:3px 10px;margin:0 0 12px}
 .pch{display:flex;align-items:center;justify-content:space-between;height:28px;margin-bottom:2px}.pct{display:block;font-size:14px;margin:0}
