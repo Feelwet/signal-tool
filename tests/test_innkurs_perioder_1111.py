@@ -193,7 +193,7 @@ def test_price_hold_tech_ol_shows_dash_kurs_under_kontroll():
     SN.price_hold(s, "TECH.OL")
     assert s["price"] is None and s["entry_state"] == SN.HOLD and SN.dot_date(s) is None
     c = SN.ret_cell(None, s)
-    assert 'data-v=""' in c and '<span class="rv rna">–</span><span class="rex rhold">kurs under kontroll</span>' in c
+    assert 'data-v=""' in c and '<span class="rtx">– kurs under kontroll</span><span class="rex">–</span>' in c   # UxBot 11.11: grå 13/18 som Venter
     assert SN.NO_ENTRY not in c and SN.NEW_T not in c and "%" not in c
     ln = SN.line_rk(s, "", None)
     assert "&nbsp;·&nbsp;–&nbsp;kurs under kontroll" in ln and "inn " not in ln and SN.NO_ENTRY not in ln

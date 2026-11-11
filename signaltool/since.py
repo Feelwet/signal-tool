@@ -130,8 +130,11 @@ def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = Non
             "illiquid": "illiquid" in ((rs.get(last) or {}).get("flags") or "").split("|"), "period": True, "src": "yahoo"}
 
 
-def dot_date(s: dict | None):
-    """Innkurspunktet i grafen: bare når innkursen faktisk finnes (ingen punkt ved «Ingen innkurs ennå»/«Venter …»)."""
+def dot_date(s: dict | None, ret: dict | None = None):
+    """Innkurspunktet i grafen: bare når innkursen faktisk finnes (ingen punkt ved «Ingen innkurs ennå»/«Venter …»/«kurs under kontroll»).
+    UxBot 11.11: heller ikke ved «Venter på første sluttkurs» med kjent innkurs (ret.new) – inn-etiketten og datoen står."""
+    if (ret or {}).get("new") or (s or {}).get("entry_state") == HOLD:
+        return None
     return (s or {}).get("price_date") if (s or {}).get("price") not in (None, 0) else None
 
 
@@ -414,7 +417,7 @@ def rtx(text: str) -> str:
 
 def ret_inner(r: dict | None, s: dict | None = None) -> str:
     if not r and (s or {}).get("entry_state") == HOLD:
-        return f'<span class="rv rna">–</span><span class="rex rhold">{HOLD_T}</span>'
+        return rtx(f"– {HOLD_T}")   # UxBot 11.11: grå 13/18 som «Venter …», grå «–» i mot indeks
     tip = ret_tip(r, s)
     nt = no_entry_text(r, s)
     if nt and (not r or r.get("new")) and (s is None or not s.get("uncertain")) and (not r or not r.get("stale")):
