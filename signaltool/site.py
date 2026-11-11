@@ -15,6 +15,7 @@ from . import displayprices as DP   # bare visning på Trender (09.11); aldri i 
 from . import usability as US
 from . import pwa as PWA
 from . import ux2 as UX2
+from . import ux390 as U390
 from . import tabbar as TB
 from . import sectors as SEC
 from . import calendar_view as CV
@@ -609,7 +610,13 @@ def ticker_row(e, pre=""):
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
     return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
-            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c">{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+
+
+def _dm(pts: str) -> str:
+    """UxBot 11.11: «+n» på mobil (én signalbrikke synlig, resten telt). n = alle brikker minus den første."""
+    n = pts.count('class="pill"')   # synlige brikker + kopiene av resten i «+N»-popoveren = alle brikker
+    return f' data-m="{n - 1}"' if n > 1 else ""
 
 
 def tint(x):
@@ -812,7 +819,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS   # U390 sist (UxBot 11.11, bare ≤ 599 px)
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -985,7 +992,7 @@ def ticker_page(e, tmap):
 {KJ.jump_html(e['ticker'])}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn() + ES.for_key("risk", short=True), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RF.line(e)}{RK.status()}
 {X.pead_exp_html(e)}
-{PC.html(e["ticker"], e.get("_px"), SN.dot_date(e.get("_since")), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
+{PC.html(e["ticker"], e.get("_px"), SN.dot_date(e.get("_since"), e.get("_ret")), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
 {KJ.section_html(e['ticker'])}
 {NK.html(e["_nk"])}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
