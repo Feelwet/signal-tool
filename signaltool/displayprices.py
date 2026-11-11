@@ -67,8 +67,11 @@ def stats(close) -> dict | None:
 #   KRX (Seoul, .KS):             https://global.krx.co.kr/contents/GLB/01/0109/0109000000/guide_to_trading_in_the_korean_stock_market.pdf
 #   Euronext Paris (.PA) og Euronext Oslo/Oslo Børs (.OL): https://www.euronext.com/en/trading/trading-hours-holidays
 #   NYSE (USA, uten suffiks; Nasdaq har samme stengetid 16:00 ET): https://www.nyse.com/trade/hours-calendars
+#   Nasdaq København (.CO, aksjer 09:00–17:00 CET; sjekket med curl 11.11.2026): https://www.nasdaqomxnordic.com/tradinghours
+#   Xetra (.DE, «from 9 until 17:30 CET»; sjekket med curl 11.11.2026): https://www.cashmarket.deutsche-boerse.com/cash-en/trading/trading-calendar-and-trading-hours
 CLOSE = {".T": ("Asia/Tokyo", 15, 30), ".TWO": ("Asia/Taipei", 13, 30), ".TW": ("Asia/Taipei", 13, 30),
          ".KS": ("Asia/Seoul", 15, 30), ".PA": ("Europe/Paris", 17, 35), ".OL": ("Europe/Oslo", 16, 25),
+         ".CO": ("Europe/Copenhagen", 17, 0), ".DE": ("Europe/Berlin", 17, 30),
          "": ("America/New_York", 16, 0)}
 BUFFER_MIN = 30
 

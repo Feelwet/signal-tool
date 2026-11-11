@@ -166,11 +166,12 @@ def test_ny_i_dag_replaces_whole_cell_and_sorts_empty():
     r = S.ret(s, 10.0, "2026-10-28", {"OSEBX.OL": {"2026-10-28": 1.0}}, "DNB.OL", "2026-10-28")
     c = S.ret_cell(r, s)
     assert r["new"] and 'data-v=""' in c and 'data-new="1"' in c
-    assert '<span class="rnew">Venter på første sluttkurs</span>' in c and "Avkastning vises etter første sluttkurs etter inntak (28.10)." in c and 'class="ri ri-c"' in c
-    assert "+0,0" not in c and "rex" not in c and "vs " not in c and "pp" not in c
+    # UxBot 11.11: samme visning som «Ingen innkurs ennå»: grå 13/18-tekst + grå «–» for «mot indeks», ingen tall
+    assert '<span class="rtx">Venter på første sluttkurs</span><span class="rex">–</span>' in c
+    assert "+0,0" not in c and "vs " not in c and "pp" not in c
     assert "Venter på første sluttkurs" in S.line(s, "", r) and "+0,0" not in S.line(s, "", r)
     assert "Venter på første sluttkurs" in S.line_rk(s, "", r) and "inntak (28.10)." in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
-    assert ".rnew{font-size:12px;color:#94a3b8" in S.CSS and "#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px" in S.CSS
+    assert ".rnew{font-size:12px;color:#94a3b8" in S.CSS and ".rtx{font-size:13px;line-height:18px" in S.CSS
     old = S.ret(S0, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28")       # innkurs 30.09: vanlig tall, også +0,0 %
     assert not old["new"] and "+0,0 %" in S.ret_cell(old, S0) and "Venter på første sluttkurs" not in S.ret_cell(old, S0)
 
@@ -220,7 +221,7 @@ def test_popover_trigger_wraps_text_and_name_clamp():
     from signaltool import names as NM
     s = dict(S0, price_date="2026-10-28")
     c = S.ret_cell(S.ret(s, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28"), s)
-    assert '<span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="Avkastning vises etter første sluttkurs etter inntak (28.10)."><span class="rnew">Venter på første sluttkurs</span>ⓘ' in c
+    assert '<span class="rtx">Venter på første sluttkurs</span><span class="rex">–</span>' in c   # UxBot 11.11: tekst i cellen
     st = S.ret_cell(S.ret(S0, 11.0, "2026-10-23", {}, "DNB.OL", "2026-10-28"), S0)
     assert 'aria-label="Kurs mangler etter 23.10"><span class="rv rst">–</span>ⓘ' in st
     assert "max-width:260px;font-size:13px" in S.CSS and "width:max(100%,32px);height:max(100%,32px)" in S.CSS and "riPos" in S.JS

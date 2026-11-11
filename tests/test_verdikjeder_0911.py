@@ -154,7 +154,7 @@ def test_chains_never_touch_score_candidates_or_signal_book():
                      if re.search(r'import trender|trender as|from \.trender|from \. import .*\btrender\b', p.read_text(errors='ignore'))}
     assert trender_users <= {'site.py', 'displayprices.py'}
     dp_users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'displayprices', p.read_text(errors='ignore'))} - {'displayprices.py'}
-    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py', 'laering_fwd.py', 'close_valid.py'}   # stockrow: bare docstring; laering_fwd: bare stengetidstabellen til læringsrapporten; close_valid (11.11): samme stengetidsregel for innkurs-valget i Siden-raden
+    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py', 'laering_fwd.py', 'close_valid.py', 'since.py'}   # since (11.11): stengetidstabellen for Yahoo-innkursen (bare i yahoo_entry); stockrow: bare docstring; laering_fwd: bare stengetidstabellen til læringsrapporten; close_valid (11.11): samme stengetidsregel for innkurs-valget i Siden-raden
     logs = {p: p.stat().st_mtime_ns for p in Path('logs').glob('*') if p.is_file()}
     block(); T.html()
     assert logs == {p: p.stat().st_mtime_ns for p in logs}
@@ -269,7 +269,10 @@ def test_contrast_at_least_4_5_and_no_new_hex():
 def test_laering_fwd_not_used_by_scoring():
     # 09.11: læringsrapportens hjelper (stengetider) skal ikke inn i scoring/kategorier/Signal-boka
     users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'laering_fwd', p.read_text(errors='ignore'))} - {'laering_fwd.py'}
-    assert users <= {'close_valid.py'}   # 11.11: innkurs-valget (Siden-raden/punktet) bruker day_closed
+    assert users <= {'close_valid.py', 'since.py'}   # 11.11: revisjonsloggen og Yahoo-innkursen (Siden-raden/punktet) bruker day_closed
+    sn = Path('signaltool/since.py').read_text()
+    body = sn.split('def yahoo_entry', 1)[1].split('\ndef ', 1)[0]
+    assert sn.count('laering_fwd') == body.count('laering_fwd') and sn.count('displayprices') == body.count('displayprices')
     # close_valid brukes bare av since.from_period (bygging) og loggkroken i pipeline – aldri av scoring/kategorier/bøker
     cv = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'close_valid', p.read_text(errors='ignore'))} - {'close_valid.py'}
     assert cv <= {'since.py', 'pipeline.py'}

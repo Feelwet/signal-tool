@@ -507,8 +507,8 @@ def test_entry_dot_date_is_entry_price_date_of_current_period(tmp_path):
     ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11) if d not in (7, 8)]   # 07.–08.11 helg uten sluttkurs
     rows = [{"date": "2026-11-07", "ticker": "A", "category": "watch", "price": "16", "price_date": "2026-11-06", "flags": ""}]
     from signaltool import since as SN
-    from signaltool import close_valid as CV
-    e = SN.from_period(rows, "A", ps[-1]["inn"], "2026-11-08", times=CV.from_rows(rows))
+    import datetime as _dt
+    e = SN.yahoo_entry(SN.from_period(rows, "A", ps[-1]["inn"], "2026-11-08"), "A", ser, _dt.datetime(2026, 11, 9, tzinfo=_dt.timezone.utc))
     assert e["price_date"] == "2026-11-06" and PC.entry_point(ser, ps, e["price_date"]) == "2026-11-06"   # Inn 07.11 (lørdag) -> fredag
 
 

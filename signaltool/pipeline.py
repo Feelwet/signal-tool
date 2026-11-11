@@ -640,9 +640,9 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:
         log.exception("list members/exits failed")
         status["Kandidatlista inn/ut"] = f"FAILED: {ex}"
-    try:   # AnalBot 11.11: når hver kurs ble logget (kjøringens start, Oslo) -> logs/price_log_times.csv; innkurs = bare sluttkurser
-        from . import close_valid as CV
-        status["Kurs-loggtid"] = f"ok ({CV.append_run(snap)} nye rader)"
+    try:   # AnalBot 11.11: når hver kurs ble logget (kjøringens start, Oslo) -> logs/price_log_times.csv. Bare revisjon: styrer IKKE innkursen
+        from . import close_valid as PLT
+        status["Kurs-loggtid"] = f"ok ({PLT.append_run(snap)} nye rader)"
     except Exception as ex:
         log.exception("price log times failed")
         status["Kurs-loggtid"] = f"FAILED: {ex}"

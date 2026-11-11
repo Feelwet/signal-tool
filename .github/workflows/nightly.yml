@@ -5,6 +5,8 @@ name: Nightly update + deploy to GitHub Pages
 on:
   schedule:
     - cron: "17 5 * * *"      # 05:17 UTC every day (07:17 Oslo summer time / 06:17 winter time)
+    - cron: "15 17 * * *"     # AnalBot 11.11: ekstra kjøring 17:15 UTC (18:15 Oslo vinter / 19:15 sommer), etter Oslo/København/Xetra-stenging + 30 min.
+                              # Samme jobb og samme concurrency-gruppe (køes, avbrytes aldri). Innkursregelen (stengetid + 30) gjelder uansett.
   workflow_dispatch:
     inputs:
       fast:

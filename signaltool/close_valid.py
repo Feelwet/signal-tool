@@ -1,15 +1,13 @@
-"""AnalBot 11.11: en kurs logget før børsens stengetid + 30 min (børsens egen tidssone, ZoneInfo – samme logikk som
-displayprices.exchange_close / laering_fwd.day_closed) er IKKE en sluttkurs. Gjelder innkurs-valget i Siden-raden og punktet.
+"""Revisjonslogg (AnalBot 11.11): når hver logget kurs (categories.csv og innkurs-sideloggen) ble logget, og om den var
+en sluttkurs (logget etter børsens stengetid + 30 min, børsens egen tidssone – samme regel som displayprices / laering_fwd.day_closed).
 
-logs/price_log_times.csv (date, ticker, price_date, price, logged_at, basis): når hver logget verdi (categories.csv og
-innkurs-sideloggen) ble logget.
+STYRER IKKE INNKURSEN. Innkursen i Siden-raden/punktet hentes fra Yahoos dagshistorikk (since.yahoo_entry). Loggen beholdes for å
+kunne si hvilke loggede verdier (læringsløkka, framovertestene, papirbøkene) som var intradag.
+
+logs/price_log_times.csv (date, ticker, price_date, price, logged_at, basis):
 - basis=run_start: starttidspunktet for kjøringen som logget raden. Fra 11.11 skriver pipeline dette selv (snap["generated"],
-  Oslo-tid, før kursene hentes). Historikk: GitHub-kjøringen (nightly.yml) som laget loggcommiten, createdAt. Starttid er en
-  nedre grense for når kursen ble hentet, så «etter stengetid» er aldri overvurdert.
-- basis=commit: ingen kjøring funnet rundt commiten; commit-tid (øvre grense) – rapporteres som usikker.
-Valg: for (ticker, price_date) vinner den SISTE verdien logget etter stengetid + 30 min. Ingen slik verdi -> datoen brukes
-ikke; fallback = neste gyldige sluttkurs (minste senere price_date med en gyldig verdi, siste gyldige verdi for den datoen).
-Ukjent børs (ikke i CLOSE-tabellen): aldri gyldig (samme regel som day_closed)."""
+  Oslo-tid, før kursene hentes). Historikk: GitHub-kjøringen (nightly.yml) som laget loggcommiten, createdAt (nedre grense).
+- basis=commit: ingen kjøring funnet rundt commiten; commit-tid (øvre grense)."""
 from __future__ import annotations
 
 import csv
@@ -60,36 +58,9 @@ def load(path: Path | None = None) -> dict:
     return out
 
 
-def close_for(times: dict, ticker: str, price_date: str):
-    """Siste verdi for (ticker, price_date) logget etter stengetid + 30 min, ellers None."""
-    ok = [v for d, v, at, _ in times.get(ticker, []) if d == price_date and is_close(ticker, d, at)]
-    return ok[-1] if ok else None
-
-
-def entry(times: dict, ticker: str, price_date: str | None):
-    """(price_date, innkurs) for innkurs-valget, eller (None, None). Fallback: neste gyldige sluttkurs."""
-    if not price_date:
-        return None, None
-    v = close_for(times, ticker, price_date)
-    if v is not None:
-        return price_date, v
-    later = sorted({d for d, _, _, _ in times.get(ticker, []) if d > price_date})
-    for d in later:
-        v = close_for(times, ticker, d)
-        if v is not None:
-            return d, v
-    return None, None
-
-
-def from_rows(rows: list[dict], logged_at: str = "2099-01-01T00:00:00+00:00") -> dict:
-    """Tidsstempel-oppslag for gitte rader (tester/syntetiske logger): alle regnes som logget på `logged_at`."""
-    out: dict = {}
-    for r in rows:
-        try:
-            out.setdefault(r["ticker"], []).append(((r.get("price_date") or "")[:10], float(r["price"]), logged_at, r["date"]))
-        except (KeyError, TypeError, ValueError):
-            continue
-    return out
+def intraday(times: dict, ticker: str) -> list[tuple]:
+    """Loggede verdier for tickeren som IKKE var sluttkurs da de ble logget: [(date, price_date, price, logged_at)]."""
+    return [(dd, d, v, at) for d, v, at, dd in times.get(ticker, []) if not is_close(ticker, d, at)]
 
 
 # ------------------------------------------------------------------------------------------------ logging
