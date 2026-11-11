@@ -1,0 +1,513 @@
+{
+  "ticker": "KOG.OL",
+  "name": "Kongsberg Gruppen",
+  "products": [
+    "NASAMS",
+    "NSM",
+    "JSM",
+    "PROTECTOR",
+    "NOMADS",
+    "HUGIN"
+  ],
+  "developed_with": [
+    {
+      "name": "Raytheon",
+      "text": "Utviklet med Raytheon",
+      "url": "https://www.kongsberg.com/globalassets/kongsberg/5.-investor-relations/4.-reports-and-presentations/annual-report/annual-report-2025/annual-report-english-2025-v2.pdf",
+      "dokumentdato": "2026-03-27",
+      "source_label": "Årsrapport 2025",
+      "sitat": "s. 26: «The air defence system NASAMS (National Surface-to-Air-Missile-System) is one of KONGSBERG's signature products, developed in collaboration with Raytheon of the US and Norwegian authorities. 14 nations are currently users of the system.»"
+    }
+  ],
+  "counterparties": [
+    {
+      "id": "danmark",
+      "name": "Danmark",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 27.11.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/denmark-acquires-nasams-air-defence-from-kongsberg/",
+          "dokumentdato": "2025-11-27",
+          "source_label": "KONGSBERG",
+          "sitat": "«Kongsberg Defence & Aerospace (‘KONGSBERG’) has signed a contract with the government of Denmark for the delivery of National Advanced Surface-to-Air Missile System (NASAMS) air defence. The EUR 500 million contract…»",
+          "via": "Danmarks regjering",
+          "product": "NASAMS",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 17.12.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/denmark-acquires-coastal-defence-system-from-kongsberg/",
+          "dokumentdato": "2025-12-17",
+          "source_label": "KONGSBERG",
+          "sitat": "«Kongsberg Defence & Aerospace (‘KONGSBERG’) has signed a contract with the Danish government for the supply of the Naval Strike Missile Coastal Defence System (NSM CDS). … The contract, which has a value of more than EUR 100 million…»",
+          "via": "Danmarks regjering",
+          "product": "NSM Coastal Defence System (NSM CDS)",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 06.03.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/denmark-acquires-kongsbergs-naval-strike-missile/",
+          "dokumentdato": "2025-03-06",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract to deliver the Naval Strike Missile (NSM) and associated installed equipment to Denmark in a transaction valued at NOK 2.1 billion. … KONGSBERG signed a contract with FMA.»",
+          "via": "FMA/DALO",
+          "product": "Naval Strike Missile (NSM) og tilhørende utstyr til Iver Huitfeldt-klassen",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 19.10.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/danmark-acquires-more-naval-strike-missiles/",
+          "dokumentdato": "2026-10-19",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract to deliver more Naval Strike Missiles (NSM) to Denmark… The contract is worth about NOK 400 million… The sale is structured as a government-to-government sale between the procurement agencies of Norway and Denmark, FMA and DALO.»",
+          "via": "FMA/DALO",
+          "product": "Naval Strike Missile (NSM) til kystforsvar",
+          "year_only": false
+        }
+      ],
+      "role": "via Danmarks regjering og FMA/DALO"
+    },
+    {
+      "id": "tyskland",
+      "name": "Tyskland",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 30.06.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/germany-buys-kongsbergs-joint-strike-missiles/",
+          "dokumentdato": "2025-06-30",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract worth about NOK 6.5 billion for the delivery of the Joint Strike Missile to Germany. … The acquisition is structured as a government-to-government sale between Norway and Germany, with Norway’s Defence Material Agency (NDMA) acting as contract partner.»",
+          "via": "Forsvarsmateriell (NDMA)",
+          "product": "Joint Strike Missile (JSM) til Tysklands F-35",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 18.05.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/germany-orders-more-jsm-missiles-from-kongsberg/",
+          "dokumentdato": "2026-05-18",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract worth about NOK 3.5 billion for the delivery of Joint Strike Missiles to Germany. … The contract is structured as a government sale between Norway and Germany, with Norway’s Defence Material Agency (NDMA) acting as contract partner.»",
+          "via": "Forsvarsmateriell (NDMA)",
+          "product": "Joint Strike Missile (JSM) til Tyskland, ytterligere leveranser",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 17.12.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/kongsberg-to-deliver-combat-system-to-germany-and-norways-212cd-submarines/",
+          "dokumentdato": "2025-12-17",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract for the delivery of ORCCA® combat system elements to four 212CD submarines for the German Navy and two for Norway. The contract has a total value of NOK 3.5 billion. … KONGSBERG signed the contract with kta naval systems…»",
+          "via": "kta naval systems",
+          "product": "ORCCA kampystem-elementer til 212CD-ubåter (fire båter)",
+          "year_only": false
+        }
+      ],
+      "role": "via Forsvarsmateriell (NDMA) og kta naval systems"
+    },
+    {
+      "id": "japan",
+      "name": "Japan",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 19.12.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/japan-orders-more-joint-strike-missiles-from-kongsberg/",
+          "dokumentdato": "2025-12-19",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has entered a fifth follow-on contract with Japan to deliver the Joint Strike Missile (JSM) for its fleet of F-35A fighter aircraft. The contract is valued at more than NOK 800 million. … another order from Japan’s Ministry of Defense…»",
+          "via": "Japans forsvarsdepartement",
+          "product": "Joint Strike Missile (JSM) til F-35A",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 01.11.2024 (2024)",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2024/kongsberg-secures-new-jsm-contract-from-japan/",
+          "dokumentdato": "2024-11-01",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has entered a fourth follow-on contract with Japan to supply the Joint Strike Missile (JSM) for the country’s fleet of F-35A fighter aircraft. The contract is valued at NOK 1.9 billion.»",
+          "via": "Japans forsvarsdepartement",
+          "product": "Joint Strike Missile (JSM) til F-35A",
+          "year_only": false
+        }
+      ],
+      "role": "via Japans forsvarsdepartement"
+    },
+    {
+      "id": "usa",
+      "name": "USA",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 05.08.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/kongsberg-awarded-full-rate-production-contract-for-acv-30-turrets/",
+          "dokumentdato": "2025-08-05",
+          "source_label": "KONGSBERG",
+          "sitat": "«The United States Marine Corps has awarded a full-rate production contract to Kongsberg Defence & Aerospace (‘KONGSBERG’) valued at up to $330 million for the 30mm remote turret for the Amphibious Combat Vehicle 30mm program (ACV-30).»",
+          "via": "US Marine Corps",
+          "product": "30 mm fjernstyrt tårn til ACV-30 (MCT-30 / PROTECTOR)",
+          "year_only": false
+        },
+        {
+          "kildetype": "rammeavtale 07.11.2024 (2024)",
+          "style": "solid",
+          "url": "https://www.kongsberg.com/news/news-archive/2024/us-marine-corps-initiates-full-rate-production-for-acv-30/",
+          "dokumentdato": "2024-11-07",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has received a contract from the US Marine Corps for long lead items… The items included in the USD 51 million contract are subcomponents specific to the 30mm remote turret… The contract is part of a framework agreement (“undefinitized contract action”) worth up to USD 329 million.»",
+          "via": "US Marine Corps",
+          "product": "lang lead-artikler til 30 mm ACV-30-tårn, del av rammeavtale (UCA)",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 27.01.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/kongsberg-to-deliver-joint-strike-missiles-jsm-to-us-air-force/",
+          "dokumentdato": "2025-01-27",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has been awarded a $70m firm-fixed-price modification to a previously awarded contract for the Joint Strike Missile, according to a statement by the US Department of Defense. The modification brings the total cumulative face value of the contract to $208m.»",
+          "via": "US Air Force",
+          "product": "Joint Strike Missile (JSM)",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 15.12.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/kongsberg-to-deliver-joint-strike-missiles-jsm-to-us-air-force2/",
+          "dokumentdato": "2025-12-15",
+          "source_label": "KONGSBERG",
+          "sitat": "«The US Government has announced that Kongsberg Defence & Aerospace (‘KONGSBERG’) has been awarded a $240 million firm-fixed-price contract for the Joint Strike Missile for the US Air Force, according to an official statement.»",
+          "via": "US Air Force",
+          "product": "Joint Strike Missile (JSM)",
+          "year_only": false
+        },
+        {
+          "kildetype": "enkeltkontrakt 08.06.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/kongsberg-to-deliver-more-jsm-missiles-to-us-air-force/",
+          "dokumentdato": "2026-06-08",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract for the delivery of further Joint Strike Missiles to the US Air Force. The contract has a value of about NOK 2.7 billion.»",
+          "via": "US Air Force",
+          "product": "Joint Strike Missile (JSM)",
+          "year_only": false
+        }
+      ],
+      "role": "via US Marine Corps og US Air Force"
+    },
+    {
+      "id": "polen",
+      "name": "Polen",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 30.01.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/kongsberg-wins-nok-16-billion-contract-to-deliver-counter-uas-solutions-in-poland/",
+          "dokumentdato": "2026-01-30",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG and consortium partner Polska Grupa Zbrojeniowa (PGZ) have signed a contract with the Polish Armaments Agency for the delivery of Counter-Unmanned Aerial Systems (CUAS)… The contract is worth about NOK 16 billion to KONGSBERG.»",
+          "via": "Polish Armaments Agency",
+          "product": "Counter-UAS (SAN CUAS), 18 batterier",
+          "year_only": false
+        }
+      ],
+      "role": "via Polish Armaments Agency"
+    },
+    {
+      "id": "norge",
+      "name": "Norge",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 17.12.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2025/kongsberg-to-deliver-combat-system-to-germany-and-norways-212cd-submarines/",
+          "dokumentdato": "2025-12-17",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract for the delivery of ORCCA® combat system elements to four 212CD submarines for the German Navy and two for Norway. The contract has a total value of NOK 3.5 billion. … KONGSBERG signed the contract with kta naval systems…»",
+          "via": "kta naval systems",
+          "product": "ORCCA kampystem-elementer til 212CD-ubåter (to båter)",
+          "year_only": false
+        }
+      ],
+      "role": "via kta naval systems"
+    },
+    {
+      "id": "kuwait",
+      "name": "Kuwait",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 30.06.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/kongsberg-to-deliver-nasams-to-kuwait-via-us-foreign-military-sales-programme/",
+          "dokumentdato": "2026-06-30",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed a contract with Raytheon for deliveries of the NASAMS air defence system to Kuwait through the US Foreign Military Sales programme. The programme has a value for KONGSBERG of about USD 400 million.»",
+          "via": "Raytheon (US FMS)",
+          "product": "NASAMS",
+          "year_only": false
+        }
+      ],
+      "role": "via Raytheon (US FMS)"
+    },
+    {
+      "id": "lockheed-martin",
+      "name": "Lockheed Martin",
+      "side": "customer",
+      "ticker": "LMT",
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 18.03.2026",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/news/news-archive/2026/kongsberg-secures-nok-2-billion-order-for-deliveries-to-f-35-joint-strike-fighters/",
+          "dokumentdato": "2026-03-18",
+          "source_label": "KONGSBERG",
+          "sitat": "«KONGSBERG has signed an agreement with Lockheed Martin with an expected total value of NOK 2 billion for deliveries of components to the F-35 fighter aircraft. … The deliveries to production lots 20–22 … include rudders, vertical leading edges and main landing gear closeout panels…»",
+          "via": "",
+          "product": "komponenter til F-35 (ror, vertikale framkanter, hovedlandingsstell-paneler), lots 20–22",
+          "year_only": false
+        },
+        {
+          "kildetype": "fast forhold oppgitt i rapport",
+          "style": "solid",
+          "url": "https://kongsbergams.com/wp-content/uploads/2025/07/2025-06-25-Redegjorelse-etter-apenhetsloven-2025-signert-versjon.pdf",
+          "dokumentdato": "2025-06-25",
+          "source_label": "KOG (via KAMS)",
+          "sitat": "s. 3: «Produksjonsvirksomheten domineres av én kunde, Lockheed Martin, som selv levere det alt vesentlige av innsatsfaktorer i produksjonsprosessen.» Også: «Produksjon av deler til skrog til kampflyet F-35».",
+          "via": "KAMS",
+          "product": "produksjon av deler til skrog til F-35",
+          "year_only": false
+        }
+      ],
+      "role": "F-35-komponenter og skrogdeler"
+    },
+    {
+      "id": "olympic",
+      "name": "Olympic",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/globalassets/kongsberg/5.-investor-relations/4.-reports-and-presentations/annual-report/annual-report-2025/annual-report-english-2025-v2.pdf",
+          "dokumentdato": "2026-03-27",
+          "source_label": "Årsrapport 2025",
+          "sitat": "s. 21: «In addition, we have signed a contract for design and equipment packages for two construction vessels for the Norwegian shipowner Olympic. The vessels will be methanol-ready and equipped with hybrid battery technology…»",
+          "via": "",
+          "product": "design- og utstyrspakker til to konstruksjonsfartøy (metanolklare, hybridbatteri)",
+          "year_only": true
+        }
+      ],
+      "role": "design- og utstyrspakker til to konstruksjonsfartøy (metanolklare, hybridbatteri)"
+    },
+    {
+      "id": "bibby-marine",
+      "name": "Bibby Marine",
+      "side": "customer",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/globalassets/kongsberg/5.-investor-relations/4.-reports-and-presentations/annual-report/annual-report-2025/annual-report-english-2025-v2.pdf",
+          "dokumentdato": "2026-03-27",
+          "source_label": "Årsrapport 2025",
+          "sitat": "s. 21: «We will also deliver a comprehensive equipment package to Bibby Marine’s new eCSOV – the world’s first electric offshore service vessel.»",
+          "via": "",
+          "product": "utstyrspakke til eCSOV",
+          "year_only": true
+        }
+      ],
+      "role": "utstyrspakke til eCSOV"
+    },
+    {
+      "id": "ikke-offentlig",
+      "name": "ikke offentlig",
+      "side": "supplier",
+      "ticker": null,
+      "ikke_offentlig": true,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "fast forhold oppgitt i rapport",
+          "style": "solid",
+          "url": "https://www.kongsberg.com/globalassets/kongsberg/5.-investor-relations/4.-reports-and-presentations/annual-report/annual-report-2025/annual-report-english-2025-v2.pdf",
+          "dokumentdato": "2026-03-27",
+          "source_label": "Årsrapport 2025",
+          "sitat": "s. 33: «As an actor in the defence sector, we are subject to the Norwegian Security Act. As such, it is important that we do not provide information that could help identify supplier or production locations.» s. 38: «We collaborate with over 13,800 global suppliers, including more than 5,000 based in Norway.» s. 27: «Last year, we spent about NOK 17 billion on our subcontractors and suppliers, including NOK 6 billion in Norway alone.» s. 58: «We have therefore identified critical components and suppliers in order to establish alternative procurement strategies…» (navn er ikke oppgitt).",
+          "via": "",
+          "product": "innkjøp av varer og tjenester (leverandører ikke navngitt)",
+          "year_only": false
+        }
+      ],
+      "role": "innkjøp av varer og tjenester (leverandører ikke navngitt)"
+    },
+    {
+      "id": "lockheed-martin",
+      "name": "Lockheed Martin",
+      "side": "supplier",
+      "ticker": "LMT",
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "fast forhold oppgitt i rapport",
+          "style": "solid",
+          "url": "https://kongsbergams.com/wp-content/uploads/2025/07/2025-06-25-Redegjorelse-etter-apenhetsloven-2025-signert-versjon.pdf",
+          "dokumentdato": "2025-06-25",
+          "source_label": "KOG (via KAMS)",
+          "sitat": "s. 3: «Produksjonsvirksomheten domineres av én kunde, Lockheed Martin, som selv levere det alt vesentlige av innsatsfaktorer i produksjonsprosessen.»",
+          "via": "",
+          "product": "innsatsfaktorer til F-35-skrogproduksjon (ikke spesifisert per komponent)",
+          "year_only": false
+        }
+      ],
+      "role": "innsatsfaktorer til F-35-skrogproduksjon (via KAMS)"
+    },
+    {
+      "id": "aerobond-defence",
+      "name": "Aerobond Defence",
+      "side": "supplier",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 14.08.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/about-us/australia/australia-news-archive/2025/kongsberg-defence-australia-secures-export-order-for--australian-made-naval-strike-missile-launchers/",
+          "dokumentdato": "2025-08-14",
+          "source_label": "KONGSBERG",
+          "sitat": "«The launcher canisters will be supplied by advanced composite manufacturing company, Aerobond Defence and complex precision machined components for the launcher will be manufactured by QPE Advanced Machining, both based in Adelaide.»",
+          "via": "",
+          "product": "kanistre til NSM-launchere",
+          "year_only": false
+        }
+      ],
+      "role": "kanistre til NSM-launchere"
+    },
+    {
+      "id": "qpe-advanced-machining",
+      "name": "QPE Advanced Machining",
+      "side": "supplier",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 14.08.2025",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/about-us/australia/australia-news-archive/2025/kongsberg-defence-australia-secures-export-order-for--australian-made-naval-strike-missile-launchers/",
+          "dokumentdato": "2025-08-14",
+          "source_label": "KONGSBERG",
+          "sitat": "«The launcher canisters will be supplied by advanced composite manufacturing company, Aerobond Defence and complex precision machined components for the launcher will be manufactured by QPE Advanced Machining, both based in Adelaide.»",
+          "via": "",
+          "product": "presisjonsmaskinerte komponenter til NSM-launchere",
+          "year_only": false
+        }
+      ],
+      "role": "presisjonsmaskinerte komponenter til NSM-launchere"
+    },
+    {
+      "id": "marand-precision-engineering",
+      "name": "Marand Precision Engineering",
+      "side": "supplier",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 10.12.2024",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/about-us/australia/australia-news-archive/2024/kongsberg-successfully-fires-blast-test-vehicle-from-first--australian-made-nsm-launcher/",
+          "dokumentdato": "2024-12-10",
+          "source_label": "KONGSBERG",
+          "sitat": "«The launcher canister has been produced by Aerobond Defence… whilst the frame and rail were manufactured by Marand Precision Engineering in Melbourne. Complex precision machined components for the launcher were manufactured by Australian Precision Technologies (APT) in Melbourne and QPE Advanced Machining in Adelaide.»",
+          "via": "",
+          "product": "ramme og skinne til NSM-launcher",
+          "year_only": false
+        }
+      ],
+      "role": "ramme og skinne til NSM-launcher"
+    },
+    {
+      "id": "australian-precision-technologies-apt",
+      "name": "Australian Precision Technologies (APT)",
+      "side": "supplier",
+      "ticker": null,
+      "ikke_offentlig": false,
+      "via_kams": false,
+      "children": [],
+      "contracts": [
+        {
+          "kildetype": "enkeltkontrakt 10.12.2024",
+          "style": "dashed",
+          "url": "https://www.kongsberg.com/about-us/australia/australia-news-archive/2024/kongsberg-successfully-fires-blast-test-vehicle-from-first--australian-made-nsm-launcher/",
+          "dokumentdato": "2024-12-10",
+          "source_label": "KONGSBERG",
+          "sitat": "«Complex precision machined components for the launcher were manufactured by Australian Precision Technologies (APT) in Melbourne and QPE Advanced Machining in Adelaide.»",
+          "via": "",
+          "product": "presisjonsmaskinerte komponenter til NSM-launcher",
+          "year_only": false
+        }
+      ],
+      "role": "presisjonsmaskinerte komponenter til NSM-launcher"
+    }
+  ]
+}
