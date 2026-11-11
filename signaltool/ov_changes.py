@@ -500,5 +500,6 @@ CSS = """
 @media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end;align-self:start;font-size:13px;line-height:18px;color:#94a3b8;padding-top:1px}.ov-ct td.dg .dg-ny{margin-left:4px}
 .ov-ct td.sgt .sgc{white-space:normal;overflow:visible;text-overflow:clip;max-width:100%}.ov-ct td.nmc{min-width:0}}
 .lp-note,.lp-list{font-size:13px;line-height:18px;color:#94a3b8}.lp-note{margin:6px 0 2px}.lp-list{list-style:none;margin:0;padding:0}.lp-list li{margin:0;padding:0;white-space:normal;overflow:visible;text-overflow:clip}
-@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}.lp-list .lp-r+.lp-g{display:inline}}
+@media(max-width:599px){.lp-list li{max-height:58px}.lp-list .lp-r{display:block}.lp-list .lp-r+.lp-g{display:inline}}
+/* UxBot 11.11: periodelinje 13/18 på 390 – to linjer 36 px (maks 40), tre linjer 54 px (maks 58); brytes, kuttes aldri */
 """

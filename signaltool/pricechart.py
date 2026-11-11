@@ -1,5 +1,5 @@
-"""Kursgraf på tickersiden: daglige sluttkurser (Yahoo, ekte historikk) + stiplet 50-dagers snitt, markør på innkursdagen
-(price_date). Ingen prognoser eller trendlinjer; hull i dataene blir hull i linja. Én farge (#58a6ff)."""
+"""Kursgraf på tickersiden: daglige sluttkurser (Yahoo, ekte historikk) + stiplet 50-dagers snitt, grått innkurspunkt for
+gjeldende listeperiode (entry_point), grå Inn/Ut-markører og bånd for listeperiodene. Ingen prognoser eller trendlinjer; hull i dataene blir hull i linja. Én farge (#58a6ff)."""
 from __future__ import annotations
 import json, math
 from datetime import date
@@ -78,15 +78,10 @@ def svg(series, n, mark_date=None, W=600, H=240, bands=None):
     p1 = _path(xs, [v for _, v in s], fx, fy)
     p2 = _path(xs, m, fx, fy)
     mk, ov = "", ""
-    if mark_date:
+    if mark_date and bands:   # AnalBot 11.11: grått innkurspunkt uten tekst, bare for gjeldende periode (velges i entry_point)
         for i, (dd, v) in enumerate(s):
             if dd == mark_date and v is not None:
-                x = fx(i)
-                xp, yp = x / W * 100, fy(v) / H * 100
-                ov = f'<span class="pcdot" style="left:{xp:.2f}%;top:{yp:.2f}%" title="Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}"></span>'
-                if not bands:   # uten listeperioder: gammel blå innkursmarkør; med perioder tar Inn/Ut-markørene over
-                    mk = f'<line x1="{x:.1f}" x2="{x:.1f}" y1="0" y2="{H}" stroke="{COL}" stroke-width="1" stroke-dasharray="3 3" opacity=".8" vector-effect="non-scaling-stroke"/>'
-                    ov += f'<span class="pcin{" r" if xp > 80 else ""}" style="left:{xp:.2f}%">inn {dd[8:10]}.{dd[5:7]}</span>'
+                ov = f'<span class="pcdot" aria-hidden="true" style="left:{fx(i) / W * 100:.2f}%;top:{fy(v) / H * 100:.2f}%"></span>'
     bd, gp, ov2 = _bands(s, bands, fx, W, H)
     ov += ov2
     fmt = lambda v: f"{v:,.2f}".replace(",", " ").replace(".", ",")
@@ -158,9 +153,25 @@ def _bands(s, bands, fx, W, H):
     return bd, gp, ov
 
 
+def entry_point(series, periods, entry_date=None):
+    """AnalBot 11.11: innkurspunktet hører til den GJELDENDE perioden (siste periode uten ut-dato).
+    - Ikke på lista nå (eller ingen listeperioder): None (ingen punkt).
+    - Dato: eksisterende innkursdato (since.price_date) hvis den ligger i gjeldende periode (≥ periodens Inn-dato) og finnes
+      som sluttkurs i serien; ellers første sluttkurs i serien på eller etter periodens Inn-dato (ved loggstart: første loggdato).
+      price_date før Inn-datoen (f.eks. kjøring lørdag med fredagens sluttkurs) ligger utenfor perioden og brukes ikke."""
+    if not periods or periods[-1].get("ut") is not None or not series:
+        return None
+    inn = periods[-1]["inn"]
+    have = {d for d, v in series if v is not None}
+    if entry_date and str(entry_date)[:10] >= inn and str(entry_date)[:10] in have:
+        return str(entry_date)[:10]
+    return next((d for d, v in series if d >= inn and v is not None), None)
+
+
 def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=None) -> str:
     if not series:
         return ""
+    mark_date = entry_point(series, periods, mark_date)
     panes, btns = [], []
     for lab, n in PERIODS:
         g = svg(series, n, mark_date, bands=periods)
@@ -194,8 +205,7 @@ def _periods_html(periods) -> str:
 
 
 CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margin-bottom:6px}.pcb{height:32px;min-width:44px;padding:0 10px;border:1px solid #30363d;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
-.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#58a6ff;box-shadow:0 0 0 1.5px #0d1117}
-.pcin{position:absolute;top:14px;margin-left:4px;font-size:11px;color:#58a6ff;white-space:nowrap}.pcin.r{transform:translateX(-100%);margin-left:-4px}
+.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;z-index:3;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 1.5px #0d1117;pointer-events:none}
 .pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
 .pcs{font-size:11px;margin:4px 0 0;text-align:right}.pct{display:none}
 .pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:0;bottom:0;z-index:2;width:13px;margin-left:-6px;outline-offset:-2px}
