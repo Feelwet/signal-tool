@@ -13,6 +13,7 @@ from . import site_layout as L
 from . import names as NM
 from . import briefing as BR
 from . import ux2 as UX2
+from . import ov_changes as CHG
 
 THEME_LOG = Path(__file__).resolve().parent.parent / "logs" / "theme_score.csv"
 CATS = (("kjop", "Kjøp", "#56d364"), ("hold", "Hold", "#6cb6ff"), ("watch", "Følg", "#e3b341"))
@@ -278,7 +279,7 @@ CSS += """
 .ov-go{grid-template-columns:minmax(0,1fr)}
 .ov-page>header,.ov-page>section.ov-entry{margin-bottom:16px}.ov-page .ov-cand{padding:12px}
 .ov-page table.ov-ct,.ov-ct tbody{display:block;width:100%}.ov-ct thead{display:none}
-.ov-ct tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"nm nm nm nm" "rk fl sg sg" "sc sc sc rt";gap:4px 8px;align-items:center;padding:8px 0;border-top:1px solid #21262d}
+.ov-ct tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"nm nm nm nm" "rk fl sg dg" "sc sc sc rt";gap:4px 8px;align-items:center;padding:8px 0;border-top:1px solid #21262d}
 .ov-ct tr[hidden]{display:none}
 .ov-ct td{display:block;padding:0;border:0;min-width:0}
 .ov-ct td.nmc{grid-area:nm}.ov-ct td.rkc{grid-area:rk}.ov-ct td.fl{grid-area:fl}.ov-ct td.sgt{grid-area:sg}.ov-ct td.sc{grid-area:sc}.ov-ct td.rt{grid-area:rt;justify-self:end}
@@ -370,6 +371,7 @@ def candidates_table_html(snap: dict) -> str:
     from . import site_risk as RK
     tk = candidates(snap)
     checked, fm = _flag_state(snap)
+    dmap, first, nrun = CHG.days_ctx()   # UxBot 11.11: «N dager på rad» fra logs/categories.csv
     rows = []
     for i, e in enumerate(tk):
         t = e["ticker"]
@@ -380,10 +382,10 @@ def candidates_table_html(snap: dict) -> str:
                     f'<td class="nmc">{NM.cell(t, "ticker/" + _slug(t) + ".html", e.get("name"))}</td>'
                     f'<td class="rkc">{RK.chip(e.get("_risk"), small=True)}</td>{fl}<td class="sgt">{_main_signal(e)}</td>'
                     f'<td class="sc"><span class="sl">Score </span><span class="sv">{_nb(e["score"], 1)}</span><span class="snt"> · ikke testet</span></td>'
-                    f'<td class="rt">{rt}</td></tr>')
+                    f'<td class="rt">{rt}</td>{CHG.days_cell(t, dmap, first, nrun)}</tr>')
     more = (f'<button type="button" class="ov-more" aria-expanded="false">Vis alle ({len(tk)})</button>' if len(tk) > TOP_N else "")
     head = (f'<thead><tr><th scope="col">Aksje</th><th scope="col">Risiko</th><th scope="col">Røde flagg</th><th scope="col">Hovedsignal</th>'
-            f'<th scope="col">{E(SCORE_HEAD)}</th><th scope="col">5d / 20d</th></tr></thead>')
+            f'<th scope="col">{E(SCORE_HEAD)}</th><th scope="col">5d / 20d</th><th scope="col" class="dg-h">{E(CHG.DAYS_HEAD)}</th></tr></thead>')
     fbar = (f'<p class="ov-fbar" hidden>Filter: 0 røde flagg · <button type="button" class="ov-clear">Vis alle</button>'
             f'<span class="mut">{E(NO_FLAG_NOTE)}</span></p>')
     empty = '<p class="ov-none mut" hidden>Ingen kandidater uten røde flagg nå.</p>'

@@ -61,7 +61,7 @@ def _path(xs, ys, fx, fy):
     return "".join(d)
 
 
-def svg(series, n, mark_date=None, W=600, H=240):
+def svg(series, n, mark_date=None, W=600, H=240, bands=None):
     full = series
     sm = _sma([v for _, v in full])
     s, m = full[-n:], sm[-n:]
@@ -86,21 +86,33 @@ def svg(series, n, mark_date=None, W=600, H=240):
                 xp, yp = x / W * 100, fy(v) / H * 100
                 ov = (f'<span class="pcdot" style="left:{xp:.2f}%;top:{yp:.2f}%" title="Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}"></span>'
                       f'<span class="pcin{" r" if xp > 80 else ""}" style="left:{xp:.2f}%">inn {dd[8:10]}.{dd[5:7]}</span>')
+    # UxBot/AnalBot 11.11: grått felt = periode på kandidatlista (inn til dagen før ut); hover (1280) = periodens tekst
+    bd = ""
+    for b in bands or ():
+        ix = [i for i, (dd, _) in enumerate(s) if dd >= b["inn"] and (b["ut"] is None or dd < b["ut"])]
+        if not ix:
+            continue
+        x0, x1 = fx(ix[0]), fx(ix[-1])
+        if x1 - x0 < 2:
+            x0, x1 = x0 - 1, x1 + 1
+        bd += (f'<rect class="pcband" x="{x0:.1f}" y="0" width="{x1 - x0:.1f}" height="{H}" fill="#8b949e" fill-opacity=".14">'
+               f'<title>{E(b["title"])}</title></rect>')
     fmt = lambda v: f"{v:,.2f}".replace(",", " ").replace(".", ",")
     okv = [v for _, v in s if v is not None]
     lab = f'<span class="hi">{fmt(max(okv))}</span><span class="lo">{fmt(min(okv))}</span>{ov}'
     return (f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-label="Sluttkurs siste {n} handelsdager">'
+            f'{bd}'
             f'<path d="{p2}" fill="none" stroke="{COL}" stroke-width="1.2" stroke-dasharray="4 3" opacity=".7" vector-effect="non-scaling-stroke"/>'
             f'<path d="{p1}" fill="none" stroke="{COL}" stroke-width="1.8" vector-effect="non-scaling-stroke"/>{mk}</svg>'
             f'<div class="pcl">{lab}</div>')
 
 
-def html(ticker: str, series, mark_date=None, upd: str | None = None) -> str:
+def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=None) -> str:
     if not series:
         return ""
     panes, btns = [], []
     for lab, n in PERIODS:
-        g = svg(series, n, mark_date)
+        g = svg(series, n, mark_date, bands=periods)
         if not g:
             continue
         on = lab == DEFAULT
@@ -113,10 +125,16 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None) -> str:
     u = f" · {upd[8:10]}.{upd[5:7]}" if upd else ""
     full = f"Kilde: Yahoo Finance, daglige sluttkurser{' · oppdatert ' + upd[8:10] + '.' + upd[5:7] if upd else ''}"
     return (f'<div class="card pc nofold" id="kursgraf"><div class="pch"><h2 class="pct">Kurs</h2><div class="pcbs" role="group" aria-label="Periode">{"".join(btns)}</div></div>{"".join(panes)}'
-            f'<p class="mut pcs">Yahoo{u} <span class="ri" tabindex="0" aria-expanded="false" aria-label="{full}">ⓘ<span class="tip">{full}</span></span></p>'
+            f'{_periods_html(periods)}<p class="mut pcs">Yahoo{u} <span class="ri" tabindex="0" aria-expanded="false" aria-label="{full}">ⓘ<span class="tip">{full}</span></span></p>'
             '<script>(()=>{const c=document.getElementById("kursgraf");c.querySelectorAll(".pcb").forEach(b=>b.addEventListener("click",()=>{'
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
             'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p)}))})()</script></div>')
+
+
+
+def _periods_html(periods) -> str:
+    from .ov_changes import periods_html
+    return periods_html(periods or [])
 
 
 CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margin-bottom:6px}.pcb{height:32px;min-width:44px;padding:0 10px;border:1px solid #30363d;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}

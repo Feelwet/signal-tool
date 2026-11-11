@@ -23,6 +23,7 @@ from . import site_layout as L
 from . import site_quality as Q
 from . import evidens as EV
 from . import overview as OV
+from . import ov_changes as CHG
 from . import tickerlist as TL
 from . import names as NM
 from . import mine as MINE
@@ -741,9 +742,9 @@ def overview_html(snap: dict, bad=()) -> str:
     sec = lambda name, fn, *a: Q.section(name, fn, *a, snap=snap)
     # UxBot 09.11 (låst): statuslinje under tittelen, tre innganger under innledningen, kandidattabell før Marked og risiko
     # (intro + kandidat 1 over bretten på 390 px).
-    b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + sec("Statuslinje", OV.status_line_html, snap) + L.INTRO.html("Oversikt")
+    b = ['<div class="ov-page"><header><h1>Oversikt</h1>' + sec("Statuslinje", OV.status_line_html, snap) + sec("Endringsstripe", CHG.strip_html, snap) + L.INTRO.html("Oversikt")
          + '<div class="ov-hmeta">' + UX2.meta("GDELT", snap.get("gdelt_latest")) + '<a class="ov-about" href="om.html">Hva er dette? →</a></div></header>',
-         f'<style>{OV.CSS}{MS.CSS}</style>',
+         f'<style>{OV.CSS}{MS.CSS}{CHG.CSS}</style>',
          '<section class="ov-entry" aria-label="Snarveier">' + OV.go_html(snap) + '</section>',
          '<section aria-label="Aksjekandidater">' + sec("Kandidater", OV.candidates_table_html, snap) + MINE.tile() + '</section>',
          '<section class="ov-market" aria-labelledby="marked-risiko"><h2 id="marked-risiko">Marked og risiko</h2>',
@@ -767,7 +768,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -922,7 +923,7 @@ def tema_ticker_page(e):
     line = SN.line(s, '<span class="cat">Tema</span>') if s else ""
     return (f"""{TKP_CSS}{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
 {line}
-{PC.html(e["ticker"], e.get("_px"), (s or {}).get("price_date"), e.get("_px_date"))}
+{PC.html(e["ticker"], e.get("_px"), (s or {}).get("price_date"), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
 {NK.html(e["_nk"])}
 <div class="card"><p class="mut" style="margin:0">Med i et temakart, ikke på kandidatlista. Ingen kategori (Kjøp/Hold/Følg) i dag. Se <a href="../temaer.html">temaene</a>.</p></div>""")
 
@@ -937,7 +938,7 @@ def ticker_page(e, tmap):
     return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info())}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn() + ES.for_key("risk", short=True), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RF.line(e)}{RK.status()}
 {X.pead_exp_html(e)}
-{PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"))}
+{PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
 {NK.html(e["_nk"])}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}
