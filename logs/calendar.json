@@ -521,14 +521,14 @@
 "date": "2026-11-18",
 "time": "07:00",
 "source": "ONS",
-"title": "Producer price inflation, UK: October 2026",
+"title": "Consumer price inflation, UK: October 2026",
 "kind": "makro"
 },
 {
 "date": "2026-11-18",
 "time": "07:00",
 "source": "ONS",
-"title": "Consumer price inflation, UK: October 2026",
+"title": "Producer price inflation, UK: October 2026",
 "kind": "makro"
 },
 {
@@ -631,6 +631,13 @@
 },
 {
 "date": "2026-11-24",
+"time": "",
+"source": "Yahoo",
+"title": "Kvartalsrapport BWLPG.OL",
+"kind": "resultat"
+},
+{
+"date": "2026-11-24",
 "time": "09:30",
 "source": "ONS",
 "title": "UK trade in services by industry, country and service type, 2016 to 2024 ",
@@ -642,6 +649,27 @@
 "source": "Yahoo",
 "title": "Kvartalsrapport MPCC.OL",
 "kind": "resultat"
+},
+{
+"date": "2026-11-25",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-11-25",
+"time": "14:30",
+"source": "BEA",
+"title": "GDP (Second Estimate) and Corporate Profits, 3rd Quarter 2026",
+"kind": "makro"
+},
+{
+"date": "2026-11-25",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
 },
 {
 "date": "2026-12-09",
