@@ -82,29 +82,80 @@ def svg(series, n, mark_date=None, W=600, H=240, bands=None):
         for i, (dd, v) in enumerate(s):
             if dd == mark_date and v is not None:
                 x = fx(i)
-                mk = f'<line x1="{x:.1f}" x2="{x:.1f}" y1="0" y2="{H}" stroke="{COL}" stroke-width="1" stroke-dasharray="3 3" opacity=".8" vector-effect="non-scaling-stroke"/>'
                 xp, yp = x / W * 100, fy(v) / H * 100
-                ov = (f'<span class="pcdot" style="left:{xp:.2f}%;top:{yp:.2f}%" title="Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}"></span>'
-                      f'<span class="pcin{" r" if xp > 80 else ""}" style="left:{xp:.2f}%">inn {dd[8:10]}.{dd[5:7]}</span>')
-    # UxBot/AnalBot 11.11: grått felt = periode på kandidatlista (inn til dagen før ut); hover (1280) = periodens tekst
-    bd = ""
-    for b in bands or ():
-        ix = [i for i, (dd, _) in enumerate(s) if dd >= b["inn"] and (b["ut"] is None or dd < b["ut"])]
-        if not ix:
-            continue
-        x0, x1 = fx(ix[0]), fx(ix[-1])
-        if x1 - x0 < 2:
-            x0, x1 = x0 - 1, x1 + 1
-        bd += (f'<rect class="pcband" x="{x0:.1f}" y="0" width="{x1 - x0:.1f}" height="{H}" fill="#8b949e" fill-opacity=".14">'
-               f'<title>{E(b["title"])}</title></rect>')
+                ov = f'<span class="pcdot" style="left:{xp:.2f}%;top:{yp:.2f}%" title="Registrert, sluttkurs {dd[8:10]}.{dd[5:7]}"></span>'
+                if not bands:   # uten listeperioder: gammel blå innkursmarkør; med perioder tar Inn/Ut-markørene over
+                    mk = f'<line x1="{x:.1f}" x2="{x:.1f}" y1="0" y2="{H}" stroke="{COL}" stroke-width="1" stroke-dasharray="3 3" opacity=".8" vector-effect="non-scaling-stroke"/>'
+                    ov += f'<span class="pcin{" r" if xp > 80 else ""}" style="left:{xp:.2f}%">inn {dd[8:10]}.{dd[5:7]}</span>'
+    bd, gp, ov2 = _bands(s, bands, fx, W, H)
+    ov += ov2
     fmt = lambda v: f"{v:,.2f}".replace(",", " ").replace(".", ",")
     okv = [v for _, v in s if v is not None]
     lab = f'<span class="hi">{fmt(max(okv))}</span><span class="lo">{fmt(min(okv))}</span>{ov}'
     return (f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-label="Sluttkurs siste {n} handelsdager">'
-            f'{bd}'
+            f'{bd}{gp}'
             f'<path d="{p2}" fill="none" stroke="{COL}" stroke-width="1.2" stroke-dasharray="4 3" opacity=".7" vector-effect="non-scaling-stroke"/>'
             f'<path d="{p1}" fill="none" stroke="{COL}" stroke-width="1.8" vector-effect="non-scaling-stroke"/>{mk}</svg>'
             f'<div class="pcl">{lab}</div>')
+
+
+def _idx_ge(s, d):
+    return next((i for i, (dd, _) in enumerate(s) if dd >= d), None)
+
+
+def _pct(x, W):
+    return f"{x / W * 100:.2f}"
+
+
+def events(s, bands) -> list[tuple]:
+    """(type, dato, periode) for Inn/Ut innenfor vinduet s. «på lista fra før» (loggstart) er ingen Inn-hendelse."""
+    if not s:
+        return []
+    lo, hi = s[0][0], s[-1][0]
+    out = []
+    for b in bands or ():
+        if not b.get("first") and lo <= b["inn"] <= hi:
+            out.append(("Inn", b["inn"], b))
+        if b.get("ut") and lo <= b["ut"] <= hi:
+            out.append(("Ut", b["ut"], b))
+    return sorted(out, key=lambda e: e[1])
+
+
+def _bands(s, bands, fx, W, H):
+    """UxBot/AnalBot 11.11: grått bånd per periode (gjennom datahull), grå strek + «Inn»/«Ut» med dato under for hver hendelse
+    i vinduet, stiplet 1 px grå kant over båndet på hulldagene. Verktøytips på hover og fokus (tabindex)."""
+    bd, gp, ov = "", "", ""
+    for b in bands or ():
+        ix = [i for i, (dd, _) in enumerate(s) if dd >= b["inn"] and (b["ut"] is None or dd < b["ut"])]
+        tip = E(b.get("tip") or b.get("title") or "")
+        if ix:
+            x0, x1 = fx(ix[0]), fx(ix[-1])
+            if x1 - x0 < 2:
+                x0, x1 = x0 - 1, x1 + 1
+            bd += f'<rect class="pcband" x="{x0:.1f}" y="0" width="{x1 - x0:.1f}" height="{H}" fill="#8b949e" fill-opacity=".14"/>'
+            ov += (f'<span class="pcbd" tabindex="0" aria-label="{tip}" style="left:{_pct(x0, W)}%;width:{_pct(x1 - x0, W)}%">'
+                   f'<span class="tip">{tip}</span></span>')
+        for g0, g1 in b.get("gap_ranges") or ():
+            gi = [i for i, (dd, _) in enumerate(s) if g0 <= dd <= g1]
+            if gi:
+                x0, x1 = fx(gi[0]) - 2, fx(gi[-1]) + 2
+            else:   # hull bare på dager uten handel: kort stykke ved overgangen
+                j = _idx_ge(s, g0)
+                if j is None or j == 0 or not (s[0][0] <= g0 <= s[-1][0]):
+                    continue
+                xm = (fx(j - 1) + fx(j)) / 2
+                x0, x1 = xm - 3, xm + 3
+            gp += (f'<line class="pcgap" x1="{x0:.1f}" x2="{x1:.1f}" y1="0.5" y2="0.5" stroke="#8b949e" stroke-width="1" '
+                   f'stroke-dasharray="3 2" vector-effect="non-scaling-stroke"/>')
+    for kind, d, b in events(s, bands):
+        j = _idx_ge(s, d)
+        if j is None:
+            continue
+        x = fx(j)
+        tip = E(b.get("tip") or b.get("title") or "")
+        ov += (f'<span class="pcmk{" r" if x / W > .85 else ""}" data-k="{kind}" tabindex="0" aria-label="{E(kind)} {d[8:10]}.{d[5:7]}. {tip}" '
+               f'style="left:{_pct(x, W)}%"><span class="pcml">{kind}<br>{d[8:10]}.{d[5:7]}</span><span class="tip">{tip}</span></span>')
+    return bd, gp, ov
 
 
 def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=None) -> str:
@@ -128,7 +179,12 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=No
             f'{_periods_html(periods)}<p class="mut pcs">Yahoo{u} <span class="ri" tabindex="0" aria-expanded="false" aria-label="{full}">ⓘ<span class="tip">{full}</span></span></p>'
             '<script>(()=>{const c=document.getElementById("kursgraf");c.querySelectorAll(".pcb").forEach(b=>b.addEventListener("click",()=>{'
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
-            'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p)}))})()</script></div>')
+            'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p);lab()}));'
+            # 390: Inn/Ut-etikett bare når det er minst 28 px til neste markør; ≥ 600 px: alle etiketter
+            'function lab(){c.querySelectorAll(".pcp:not([hidden])").forEach(p=>{const w=p.getBoundingClientRect().width||c.clientWidth,'
+            'm=[...p.querySelectorAll(".pcmk")].sort((a,b)=>parseFloat(a.style.left)-parseFloat(b.style.left));'
+            'm.forEach((k,i)=>{const n=m[i+1],l=k.querySelector(".pcml");if(l)l.hidden=innerWidth<600&&!!n&&(parseFloat(n.style.left)-parseFloat(k.style.left))*w/100<28})})}'
+            'lab();addEventListener("resize",lab,{passive:true})})()</script></div>')
 
 
 
@@ -142,6 +198,10 @@ CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margi
 .pcin{position:absolute;top:14px;margin-left:4px;font-size:11px;color:#58a6ff;white-space:nowrap}.pcin.r{transform:translateX(-100%);margin-left:-4px}
 .pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
 .pcs{font-size:11px;margin:4px 0 0;text-align:right}.pct{display:none}
+.pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:0;bottom:0;z-index:2;width:13px;margin-left:-6px;outline-offset:-2px}
+.pcmk::before{content:"";position:absolute;left:6px;top:0;bottom:0;border-left:1px solid #8b949e}.pcml{position:absolute;top:2px;left:9px;font-size:11px;line-height:13px;color:#94a3b8;white-space:nowrap}.pcmk.r .pcml{left:auto;right:9px;text-align:right}.pcml[hidden]{display:none}
+.pcbd .tip,.pcmk .tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line;font-size:13px;line-height:18px;color:#cbd5e1;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:6px 8px}.pcmk.r .tip{left:auto;right:0}
+.pcbd:hover .tip,.pcbd:focus .tip,.pcmk:hover .tip,.pcmk:focus .tip{display:block}
 @media(max-width:599px){.card.pc{padding:3px 10px;margin:0 0 12px}
 .pch{display:flex;align-items:center;justify-content:space-between;height:28px;margin-bottom:2px}.pct{display:block;font-size:14px;margin:0}
 .pcbs{margin:0;gap:4px}.pcb{height:28px;min-width:40px;padding:0 8px;font-size:13px}.pcp svg{height:150px}.pcs{font-size:11px;margin:4px 0 0;line-height:1.2}}"""

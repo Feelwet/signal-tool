@@ -557,14 +557,6 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:
         log.exception("learnloop failed")
         status["Læringsløkke (rådata)"] = f"FAILED: {ex}"
-    try:   # UxBot/AnalBot 11.11: ut-grunner (logs/list_exits.csv) + inn/ut-perioder (data/list_periods.json); bare lesing av snap
-        from . import ov_changes as CHG
-        n_ex = CHG.record_exits(snap, ranked)
-        n_p = CHG.write_periods()
-        status["Kandidatlista inn/ut"] = f"ok ({n_ex} ut, {n_p} tickere med perioder)"
-    except Exception as ex:
-        log.exception("list exits failed")
-        status["Kandidatlista inn/ut"] = f"FAILED: {ex}"
     try:
         from . import risk
         rk = risk.refresh([e["ticker"] for e in snap["tickers"]])
@@ -638,6 +630,16 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:
         log.warning("data quality summary failed: %s", ex)
         status["Datakvalitet (kurs)"] = f"FAILED: {_err(ex)}"
+    try:   # AnalBot 11.11: hele kandidatlista (= kandidattabellen, også uten sluttkurs) -> logs/list_members.csv, deretter
+        # ut-grunner (logs/list_exits.csv) og inn/ut-perioder (data/list_periods.json). Rett før snapshotet lagres; bare lesing av snap.
+        from . import ov_changes as CHG
+        n_m = CHG.write_members(snap)
+        n_ex = CHG.record_exits(snap, ranked)
+        n_p = CHG.write_periods()
+        status["Kandidatlista inn/ut"] = f"ok ({n_m} på lista, {n_ex} ut, {n_p} tickere med perioder)"
+    except Exception as ex:
+        log.exception("list members/exits failed")
+        status["Kandidatlista inn/ut"] = f"FAILED: {ex}"
     snap["source_last_ok"] = mark_stale(status, snap["date"])
     snap["status"] = status
     try:
