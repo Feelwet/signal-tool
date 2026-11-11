@@ -658,6 +658,13 @@ def _prep(snap: dict) -> dict:
             # periode fra _hist, f.eks. EWZ 27.09 −6,8 % selv om ingen logg viste at den sto på lista 28.09–27.10)
             u = SN.uncertain(_rows, e["ticker"], _today, _seen.get(e["ticker"])) if _today else None
             sin[e["ticker"]] = {"uncertain": u} if u else _hist[e["ticker"]]
+    # AnalBot 11.11: tickere på lista nå følger listeperiodene (samme som grafen): innkurs ved Inn i gjeldende periode.
+    # Bare hull merket «data mangler» holder perioden sammen; ulogget hull før list_members.csv = Ut + Inn.
+    _per = CHG.periods(CHG.by_date())
+    for e in snap.get("tickers", []):
+        inn = SN.current_inn(_per, e["ticker"])
+        if inn:
+            sin[e["ticker"]] = SN.from_period(_rows, e["ticker"], inn, _today or None)
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])

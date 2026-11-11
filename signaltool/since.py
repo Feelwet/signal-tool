@@ -109,6 +109,36 @@ def compute(rows: list[dict], today: str | None = None) -> dict:
     return out
 
 
+def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = None) -> dict:
+    """AnalBot 11.11: «Siden»-raden følger listeperiodene (ov_changes): start = Inn-kjøringen i GJELDENDE periode, innkurs =
+    price_date/price i Inn-kjøringens rad (sluttkursen kjent da tickeren kom inn; ingen look-ahead). Periode fra loggstart:
+    første loggdato. «Start» for innkursen = Inn-kjøringens price_date (kan være siste sluttkurs før Inn-datoen, f.eks.
+    lørdag 07.11 -> fredag 06.11). Kategoridager telles innenfor perioden. Mangler raden ved Inn: ingen innkurs (aldri lånt)."""
+    rs = {r["date"]: r for r in rows if r["ticker"] == ticker and r["date"] >= inn}
+    first = rs.get(inn) or {}
+    last = max(rs) if rs else inn
+    cat = (rs.get(last) or {}).get("category") or ""
+    cstart = last
+    for d in sorted((d for d in rs if d <= last), reverse=True):
+        if rs[d].get("category") != cat:
+            break
+        cstart = d
+    ref = date.fromisoformat(today or last)
+    try:
+        price = float(first.get("price") or "")
+    except ValueError:
+        price = None
+    return {"since": inn, "price": price, "price_date": (first.get("price_date") or "")[:10] or None, "category": cat,
+            "days": (ref - date.fromisoformat(cstart)).days, "list_days": (ref - date.fromisoformat(inn)).days,
+            "illiquid": "illiquid" in ((rs.get(last) or {}).get("flags") or "").split("|"), "period": True}
+
+
+def current_inn(periods: dict, ticker: str) -> str | None:
+    """Inn-dato for gjeldende periode (siste periode uten ut-dato), ellers None (ikke på lista nå)."""
+    ps = periods.get(ticker) or []
+    return ps[-1][0] if ps and ps[-1][1] is None else None
+
+
 def _price(p: float) -> str:
     return f"{p:,.2f}".replace(",", " ").replace(".", ",")
 
