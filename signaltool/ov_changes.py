@@ -85,23 +85,115 @@ def _rows(path=None, entry_path=_DEF) -> list[dict]:
     return [r for r in out if not (r["ticker"] in side and r["src"] == "cat" and r["date"] < SIDE_START)]
 
 
-def by_date(path: Path | None = None, entry_path=_DEF) -> dict[str, set]:
-    """{dato: {tickere på kandidatlista}}. Mangler filene: tom dict."""
+MEMBERS = LOGS / "list_members.csv"   # AnalBot 11.11: hele kandidatlista per kjøring, rett fra snapshotet (= kandidattabellen)
+MEMBER_COLS = ["date", "ticker"]
+
+
+def _members_default(path):
+    return MEMBERS if path is None or Path(path) == LOG else None
+
+
+def members(path=None) -> dict[str, set]:
     out: dict[str, set] = {}
-    for r in _rows(path, entry_path):
-        out.setdefault(r["date"], set()).add(r["ticker"])
+    for r in _read(path or MEMBERS):
+        d, t = (r.get("date") or "").strip(), (r.get("ticker") or "").strip()
+        if d and t:
+            out.setdefault(d, set()).add(t)
     return out
 
 
-def src_first(path: Path | None = None, entry_path=_DEF) -> dict[str, str]:
-    """{ticker: første dato i tickerens kilde} (categories.csv eller sideloggen), for «fra før DD.MM»/«fra DD.MM»."""
+def write_members(snap: dict, path: Path | None = None) -> int:
+    """Skriver dagens kandidatliste (samme utvalg som kandidattabellen på Oversikt: tickere med score, også uten sluttkurs;
+    tema-rader bare hvis de står i tabellen) til logs/list_members.csv. En ny kjøring samme dag erstatter dagens rader."""
+    from .overview import candidates
+    p, day = Path(path or MEMBERS), str(snap.get("date") or "")
+    if not day:
+        return 0
+    rows = [{"date": day, "ticker": t} for t in sorted({e["ticker"] for e in candidates(snap)})]
+    old = [r for r in _read(p) if r.get("date") != day]
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=MEMBER_COLS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(old + rows)
+    return len(rows)
+
+
+def _model(path=None, entry_path=_DEF, members_path=_DEF) -> tuple[dict, dict, dict]:
+    """(by_date, gaps, src_first).
+    - Fra første dato i logs/list_members.csv brukes BARE den loggen (= kandidattabellen den dagen).
+    - Før det: categories.csv (uten tema) + sideloggen, som før.
+    - Historiske hull i sideloggen (tickeren mangler én eller flere kjøringer, men står der før og etter): ikke Ut/Inn;
+      hullet fylles (perioden er sammenhengende) og datoene returneres i gaps for teksten «data mangler dd.mm»."""
     rows = _rows(path, entry_path)
+    mp = _members_default(path) if members_path is _DEF else members_path
+    mem = members(mp) if mp is not None else {}
+    m0 = min(mem) if mem else None
+    old: dict[str, set] = {}
+    for r in rows:
+        if m0 is None or r["date"] < m0:
+            old.setdefault(r["date"], set()).add(r["ticker"])
+    by = {d: set(v) for d, v in old.items()}
+    by.update({d: set(v) for d, v in mem.items()})
+    ds = sorted(by)
+    side = {r["ticker"] for r in rows if r["src"] == "side"}
+    gaps: dict[str, list] = {}
+    for t in side:
+        idx = [i for i, d in enumerate(ds) if t in by[d]]
+        old_idx = [i for i in idx if ds[i] in old and t in old[ds[i]]]
+        for a, b in zip(idx, idx[1:]):
+            if b - a > 1 and a in old_idx:
+                hole = [ds[i] for i in range(a + 1, b) if ds[i] in old]   # bare hull i den gamle sideloggen
+                if len(hole) == b - a - 1:
+                    for d in hole:
+                        by[d].add(t)
+                    gaps.setdefault(t, []).extend(hole)
     first = {}
     for r in rows:
         first[r["src"]] = min(first.get(r["src"], r["date"]), r["date"])
-    out = {}
-    side = {r["ticker"] for r in rows if r["src"] == "side"}
-    return {r["ticker"]: first["side" if r["ticker"] in side else "cat"] for r in rows}
+    sf = {r["ticker"]: first["side" if r["ticker"] in side else "cat"] for r in rows}
+    return by, {t: sorted(v) for t, v in gaps.items()}, sf
+
+
+def by_date(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> dict[str, set]:
+    """{dato: {tickere på kandidatlista}}. Mangler filene: tom dict."""
+    return _model(path, entry_path, members_path)[0]
+
+
+def gaps(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> dict[str, list]:
+    return _model(path, entry_path, members_path)[1]
+
+
+def src_first(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> dict[str, str]:
+    """{ticker: første dato i tickerens kilde} (categories.csv eller sideloggen), for «fra før DD.MM»/«fra DD.MM»."""
+    return _model(path, entry_path, members_path)[2]
+
+
+def _ranges(dates: list[str], runs: list[str]) -> list[tuple]:
+    pos = {d: i for i, d in enumerate(runs)}
+    out = []
+    for d in dates:
+        if out and pos.get(d, -9) == pos.get(out[-1][1], -99) + 1:
+            out[-1] = (out[-1][0], d)
+        else:
+            out.append((d, d))
+    return out
+
+
+def gap_text(dates: list[str], runs: list[str]) -> str:
+    """«data mangler 08.11», «data mangler 08.11, 10.11» eller «data mangler 31.10–04.11» (sammenhengende kjøringer)."""
+    if not dates:
+        return ""
+    pos = {d: i for i, d in enumerate(runs)}
+    grp, cur = [], [dates[0]]
+    for d in dates[1:]:
+        if pos.get(d, -9) == pos.get(cur[-1], -99) + 1:
+            cur.append(d)
+        else:
+            grp.append(cur)
+            cur = [d]
+    grp.append(cur)
+    return "data mangler " + ", ".join(_dm(g[0]) if len(g) == 1 else f"{_dm(g[0])}–{_dm(g[-1])}" for g in grp)
 
 
 def scores(path: Path | None = None) -> dict[tuple, str]:
@@ -161,9 +253,11 @@ def periods(by: dict[str, set]) -> dict[str, list]:
 
 def write_periods(path: Path | None = None, log_path: Path | None = None) -> int:
     p = Path(path or PERIODS_JSON)
-    ps = periods(by_date(log_path))
+    by, gp, _ = _model(log_path)
+    ps = periods(by)
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps({"source": "logs/categories.csv", "first": min(by_date(log_path), default=None), "periods": ps},
+    p.write_text(json.dumps({"source": "logs/list_members.csv (før: categories.csv + entry_prices.csv)", "first": min(by, default=None),
+                             "periods": ps, "data_gaps": gp},
                             ensure_ascii=False, separators=(",", ":"), sort_keys=True))
     return len(ps)
 
@@ -222,7 +316,8 @@ def _delisted(today: str) -> set:
 TOP_CAP = 60   # pipeline.run: snap["tickers"] = [score > 0][:60]; _coverage_cut: kept (rangerbare) [:60] + «Ikke rangert»
 
 
-def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, today: str | None = None, entry_path=_DEF) -> list[dict]:
+def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, today: str | None = None, entry_path=_DEF,
+              members_path=_DEF) -> list[dict]:
     """Tickere på kandidatlista i forrige kjøring som mangler i dag. Nøyaktig én kode, eller tom (= «grunn ikke logget»):
     - delisted: strøket (verdikjede-rettelse med listed=false, strykedato ≤ i dag).
     - moved_to_theme: står i dagens logg med kategori «tema» (temakartet, utenfor kandidatlista).
@@ -236,7 +331,7 @@ def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, toda
     Ikke kandidat i dag (ingen score), fryst liste (kildefeil) eller står i snapshotet (f.eks. ikke loggbar): ingen kode.
     «Rødt flagg» er aldri en kode."""
     today = today or str(snap.get("date") or "")
-    by = by_date(log_path, entry_path)
+    by = by_date(log_path, entry_path, members_path)   # hull i den gamle sideloggen er fylt: aldri en utgang
     if today not in by:
         return []
     prevs = [d for d in by if d < today]
@@ -269,10 +364,10 @@ def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, toda
     return out
 
 
-def record_exits(snap: dict, ranked: list[dict], path: Path | None = None, log_path: Path | None = None) -> int:
+def record_exits(snap: dict, ranked: list[dict], path: Path | None = None, log_path: Path | None = None, members_path=_DEF) -> int:
     """Skriver dagens utfall til logs/list_exits.csv (en ny kjøring samme dag erstatter dagens rader). Leser bare snap/ranked."""
     p = Path(path or EXITS)
-    rows = exit_rows(snap, ranked, log_path)
+    rows = exit_rows(snap, ranked, log_path, members_path=members_path)
     today = str(snap.get("date") or "")
     old = [r for r in _read(p) if r.get("date") != today]
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -292,9 +387,9 @@ def _chip(t: str, sign: str, pages: set | None, sub: str = "") -> str:
     return f'<span class="chg-c chg-np">{lab}</span>'   # ingen tickerside i denne byggingen: ingen død lenke
 
 
-def strip_html(snap: dict | None = None, path: Path | None = None, exits_path: Path | None = None) -> str:
+def strip_html(snap: dict | None = None, path: Path | None = None, exits_path: Path | None = None, members_path=_DEF) -> str:
     """«Siden DD.MM: N inn · N ut · N står fortsatt» som <details>; trykk åpner gruppene Inn, Ut og ev. «Ute pga. manglende kurs»."""
-    dd = diff(by_date(path))
+    dd = diff(by_date(path, members_path=members_path))
     if not dd:
         return ""
     pages = {e["ticker"] for e in (snap or {}).get("tickers") or [] if e.get("ticker")} if snap is not None else None
@@ -316,6 +411,25 @@ def strip_html(snap: dict | None = None, path: Path | None = None, exits_path: P
             f'<div class="chg-p">{g}</div></details>')
 
 
+STRIP_RE = re.compile(r'<details class="ov-chg" data-last="(\d{4}-\d\d-\d\d)" data-prev="(\d{4}-\d\d-\d\d)"><summary><span class="chg-l">'
+                      r'Siden (\d\d\.\d\d): (\d+) inn · (\d+) ut · (\d+) står fortsatt</span></summary>(.*?)</details>', re.S)
+
+
+def strip_check(html: str) -> dict:
+    """Verifisering (AnalBot 11.11): slår bare ut når stripen og kandidattabellen regnes fra hver sin kilde
+    (inn + står fortsatt ≠ tabellens rader) eller Ut-brikkene ikke stemmer med «n ut». Manglende kurs er aldri en feil."""
+    m = STRIP_RE.search(html)
+    if not m:
+        return {"ok": False, "why": "endringsstripe mangler"}
+    inn, ut, stay, body = int(m.group(4)), int(m.group(5)), int(m.group(6)), m.group(7)
+    rows = html.count("<tr data-nf=")
+    chips_ut = len(re.findall(r'<span class="chg-why">Ut ', body))
+    chips_in = body.count('<span class="chg-g" aria-hidden="true">+</span>')
+    ok = inn + stay == rows and chips_ut == ut and chips_in == inn and m.group(3) == f"{m.group(2)[8:10]}.{m.group(2)[5:7]}"
+    return {"ok": ok, "why": "" if ok else f"stripe {inn}+{stay} mot tabell {rows}, ut-brikker {chips_ut}/{ut}, inn-brikker {chips_in}/{inn}",
+            "text": f"Siden {m.group(3)}: {inn} inn · {ut} ut · {stay} står fortsatt", "rows": rows, "last": m.group(1), "prev": m.group(2)}
+
+
 def days_cell(t: str, dmap: dict[str, int], full: set | None = None) -> str:
     """«N dager på rad», «fra DD.MM» (sammenhengende siden første dato i kilden), «–» (ikke på lista). Grå, ingen sortering."""
     n = dmap.get(t)
@@ -327,41 +441,48 @@ def days_cell(t: str, dmap: dict[str, int], full: set | None = None) -> str:
     return f'<td class="dg"><span class="dgv">{n} {"dag" if n == 1 else "dager"} på rad</span>{ny}</td>'
 
 
-def days_ctx(path: Path | None = None, entry_path=_DEF) -> tuple[dict, dict]:
-    """(dager, {ticker: første dato} for tickere som har stått i hver kjøring siden første dato i sin kilde)."""
-    by = by_date(path, entry_path)
-    dmap, sf, ds = days(by), src_first(path, entry_path), sorted(by)
+def days_ctx(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> tuple[dict, dict]:
+    """(dager, {ticker: første dato} for tickere som har stått i hver kjøring siden første dato i sin kilde). Hull er ikke brudd."""
+    by, _, sf = _model(path, entry_path, members_path)
+    dmap, ds = days(by), sorted(by)
     full = {t: sf[t] for t, n in dmap.items() if t in sf and n >= len([d for d in ds if d >= sf[t]])}
     return dmap, full
 
 
 # ---------------------------------------------------------------------------------------------------------- tickergraf
-def ticker_periods(t: str, path: Path | None = None, exits_path: Path | None = None) -> list[dict]:
+def ticker_periods(t: str, path: Path | None = None, exits_path: Path | None = None, members_path=_DEF) -> list[dict]:
     """[{inn, ut, first, text, lead, why, title}] for tickersiden; tom liste når tickeren aldri har stått på lista."""
-    by = by_date(path)
+    by, gp, sf = _model(path, members_path=members_path)
     ps = periods(by).get(t) or []
     if not ps:
         return []
-    first = src_first(path).get(t) or min(by)
+    first = sf.get(t) or min(by)
+    runs = sorted(by)
     ex, nr = exits(exits_path), no_reason(exits_path)
     out = []
     for inn, ut in ps:
         a = f"på lista fra før {_dm(first)}" if inn == first else f"Inn {_dm(inn)}"
+        gd = [d for d in gp.get(t, []) if d >= inn and (ut is None or d < ut)]
+        g = gap_text(gd, runs)
         if ut is None:
             lead, why = f"{a} · på lista nå", ""
             title = lead[0].upper() + lead[1:]
         else:
             lead, why = f"{a} · Ut {_dm(ut)}:", ut_text(ut, t, ex, nr)
             title = f"Ut {_dm(ut)}: {why}"
-        out.append({"inn": inn, "ut": ut, "first": inn == first, "lead": lead, "why": why, "title": title,
-                    "text": lead + (" " + why if why else "")})
+        main = lead + (" " + why if why else "")
+        main = main[0].upper() + main[1:]
+        out.append({"inn": inn, "ut": ut, "first": inn == first, "lead": lead, "why": why, "title": title, "gap": g,
+                    "gap_ranges": _ranges(gd, runs), "tip": main + (f"\n{g}" if g else ""),   # 1280: hullet på egen linje
+                    "text": lead + (" " + why if why else "") + (f" · {g}" if g else "")})
     return out
 
 
 def periods_html(ps: list[dict]) -> str:
     if not ps:
         return ""
-    li = "".join(f'<li><span class="lp-a">{E(p["lead"])}</span>' + (f' <span class="lp-r">{E(p["why"])}</span>' if p["why"] else "") + "</li>" for p in ps)
+    li = "".join(f'<li><span class="lp-a">{E(p["lead"])}</span>' + (f' <span class="lp-r">{E(p["why"])}</span>' if p["why"] else "")
+                 + (f'<span class="lp-g"> · {E(p["gap"])}</span>' if p.get("gap") else "") + "</li>" for p in ps)
     return f'<p class="lp-note">{E(CHART_NOTE)}</p><ul class="lp-list">{li}</ul>'
 
 
@@ -376,7 +497,8 @@ CSS = """
 .ov-chg .chg-g{color:#94a3b8;font-weight:600}.ov-chg .chg-why{flex-basis:100%;text-align:center;font-size:13px;line-height:18px;color:#94a3b8}
 .ov-ct th.dg-h,.ov-ct td.dg{text-align:right;white-space:nowrap}.ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8;font-variant-numeric:tabular-nums}
 .ov-ct .dg-ny{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid #3b4757;border-radius:999px;font-size:12px;line-height:16px;color:#94a3b8;vertical-align:1px}
-@media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end}.ov-ct .sgc{white-space:normal;overflow:visible;text-overflow:clip}}
+@media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end;align-self:start;font-size:13px;line-height:18px;color:#94a3b8;padding-top:1px}.ov-ct td.dg .dg-ny{margin-left:4px}
+.ov-ct td.sgt .sgc{white-space:normal;overflow:visible;text-overflow:clip;max-width:100%}.ov-ct td.nmc{min-width:0}}
 .lp-note,.lp-list{font-size:13px;line-height:18px;color:#94a3b8}.lp-note{margin:6px 0 2px}.lp-list{list-style:none;margin:0;padding:0}.lp-list li{margin:0;padding:0;white-space:normal;overflow:visible;text-overflow:clip}
-@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}}
+@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}.lp-list .lp-r+.lp-g{display:inline}}
 """

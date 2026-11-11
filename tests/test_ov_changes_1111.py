@@ -158,7 +158,7 @@ def test_candidate_table_has_days_column(tmp_path, monkeypatch):
     assert '<span class="dgv">1 dag på rad</span><span class="dg-ny">Ny</span></td></tr>' in rows[1]
     assert "sortable" not in t and "aria-sort" not in t
     assert ".ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8" in C.CSS and ".ov-ct th.dg-h,.ov-ct td.dg{text-align:right" in C.CSS
-    assert '"rk fl sg dg"' in OV.CSS and ".ov-ct td.dg{grid-area:dg;justify-self:end}" in C.CSS   # 390: linje 2 i raden
+    assert '"nm nm nm dg" "rk fl sg sg"' in OV.CSS and ".ov-ct td.dg{grid-area:dg;justify-self:end;" in C.CSS   # < 600: navnelinja
 
 
 # ---------------------------------------------------------------- logging av ut-grunner
@@ -243,8 +243,10 @@ def test_logging_does_not_touch_snapshot_or_candidates(tmp_path):
 
 def test_pipeline_hook_after_categories_and_nightly_commits_log():
     src = Path("signaltool/pipeline.py").read_text()
-    assert src.index("categories.apply(snap)") < src.index("CHG.record_exits(snap, ranked)") < src.index("from . import risk")
-    assert "logs/list_exits.csv" in Path(".github/workflows/nightly.yml").read_text()
+    i = src.index("CHG.write_members(snap)")
+    assert src.index("categories.apply(snap)") < i < src.index("CHG.record_exits(snap, ranked)") < src.index('(SNAP_DIR / "latest.json").write_text')
+    wf = Path(".github/workflows/nightly.yml").read_text()
+    assert "logs/list_exits.csv" in wf and "logs/list_members.csv" in wf
 
 
 # ---------------------------------------------------------------- perioder + graf
@@ -277,7 +279,7 @@ def test_ticker_period_lines(tmp_path):
     assert '<li><span class="lp-a">Inn 09.11 · Ut 12.11:</span> <span class="lp-r">Score under grensen (3,1 → 1,8)</span></li>' in h
     assert '<li><span class="lp-a">Inn 14.11 · på lista nå</span></li>' in h
     assert ".lp-note,.lp-list{font-size:13px;line-height:18px;color:#94a3b8}" in C.CSS
-    assert "@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}}" in C.CSS and "ellipsis" not in C.CSS.split(".lp-note")[1]
+    assert "@media(max-width:599px){.lp-list li{max-height:40px}.lp-list .lp-r{display:block}" in C.CSS and "ellipsis" not in C.CSS.split(".lp-note")[1]
     assert C.ticker_periods("NEVER", p2, ex) == []
 
 
@@ -287,7 +289,7 @@ def test_chart_bands_with_hover(tmp_path):
           {"inn": "2026-11-15", "ut": None, "title": "Inn 15.11 · på lista nå", "lead": "Inn 15.11 · på lista nå", "why": ""}]
     h = PC.html("A", ser, None, "2026-11-20", ps)
     assert h.count('<rect class="pcband"') == len([l for l, n in PC.PERIODS if len(ser[-n:]) >= 2]) * 2
-    assert "<title>Ut 06.11: Mangler kurs</title>" in h and 'fill="#8b949e"' in h
+    assert '<span class="tip">Ut 06.11: Mangler kurs</span>' in h and 'fill="#8b949e"' in h and "<title>" not in h
     assert '<p class="lp-note">' in h and h.index('class="lp-list"') < h.index('class="mut pcs"')
     assert "pcband" not in PC.html("A", ser, None, "2026-11-20") and "lp-note" not in PC.html("A", ser)
 
@@ -301,3 +303,176 @@ def test_empty_groups_hidden_but_zero_in_strip(tmp_path):
     h2 = C.strip_html(None, path=p2, exits_path=tmp_path / "none.csv")
     assert "Siden 09.11: 1 inn · 0 ut · 1 står fortsatt" in h2 and "<h3>Ut" not in h2 and "<h3>Inn (1)</h3>" in h2
     assert h2.count('class="chg-grp"') == 1
+
+
+
+# ---------------------------------------------------------------- AnalBot 11.11: list_members.csv, hull, verifisering
+def test_a_row_without_close_is_logged_and_counted(tmp_path, monkeypatch):
+    mp = tmp_path / "list_members.csv"
+    snap = {"date": "2026-11-11", "tickers": [{"ticker": "A.OL", "score": 5.0, "stats": {"close": 10.0}},
+                                              {"ticker": "NOPX", "score": 2.0, "stats": {}},            # ingen sluttkurs
+                                              {"ticker": "NOSCORE", "score": None}]}
+    assert C.write_members(snap, mp) == 2
+    assert C.write_members(snap, mp) == 2   # ny kjøring samme dag erstatter
+    assert list(csv.DictReader(mp.open())) == [{"date": "2026-11-11", "ticker": "A.OL"}, {"date": "2026-11-11", "ticker": "NOPX"}]
+    p = _write(tmp_path, [("2026-11-10", "A.OL"), ("2026-11-11", "A.OL")])   # NOPX mangler i categories.csv (ingen kurs)
+    by = C.by_date(p, None, mp)
+    assert by["2026-11-11"] == {"A.OL", "NOPX"}
+    assert "Siden 10.11: 1 inn · 0 ut · 1 står fortsatt" in C.strip_html(None, p, tmp_path / "x.csv", mp)
+
+
+def test_b_gap_in_side_log_is_one_period_with_data_missing(tmp_path):
+    p = _write(tmp_path, [("2026-10-29", "A"), ("2026-10-30", "A"), ("2026-10-31", "A"), ("2026-11-01", "A"), ("2026-11-02", "A"),
+                          ("2026-11-03", "A")])
+    ep = tmp_path / "entry.csv"
+    ep.write_text("date,ticker,category,price,price_date\n" + "".join(f"{d},ETF,watch,1,{d}\n" for d in
+                  ("2026-10-29", "2026-10-31", "2026-11-03")))   # mangler 30.10 og 01.–02.11
+    by = C.by_date(p, ep, None)
+    assert all("ETF" in by[d] for d in by)
+    assert C.periods(by)["ETF"] == [["2026-10-29", None]]
+    assert C.gaps(p, ep, None) == {"ETF": ["2026-10-30", "2026-11-01", "2026-11-02"]}
+    assert C.gap_text(C.gaps(p, ep, None)["ETF"], sorted(by)) == "data mangler 30.10, 01.11–02.11"
+    dmap, full = C.days_ctx(p, ep, None)
+    assert dmap["ETF"] == 6 and full["ETF"] == "2026-10-29"       # hullet er ikke brudd
+    snap = {"date": "2026-11-03", "tickers": [{"ticker": "A", "score": 1.0}, {"ticker": "ETF", "score": 1.0}]}
+    assert C.exit_rows(snap, snap["tickers"], p, entry_path=ep, members_path=None) == []   # ingen utgang for hullet
+    assert "ETF" not in C.strip_html(None, p, tmp_path / "x.csv", None)   # ingen Ut/Inn for hullet i stripen
+    # tickerside: én periode med tilleggstekst
+    import signaltool.since as SN
+    old = SN.ENTRY_LOG
+    try:
+        SN.ENTRY_LOG = ep
+        C_LOG = C.LOG
+        C.LOG = p
+        texts = [x["text"] for x in C.ticker_periods("ETF", None, tmp_path / "x.csv", None)]
+    finally:
+        SN.ENTRY_LOG, C.LOG = old, C_LOG
+    assert texts == ["på lista fra før 29.10 · på lista nå · data mangler 30.10, 01.11–02.11"]   # hullet sist på raden
+    # hull uten «etter» er en ekte utgang
+    ep.write_text("date,ticker,category,price,price_date\n2026-10-29,ETF,watch,1,2026-10-29\n")
+    assert C.periods(C.by_date(p, ep, None))["ETF"] == [["2026-10-29", "2026-10-30"]] and C.gaps(p, ep, None) == {}
+
+
+def test_c_strip_uses_members_log_when_present(tmp_path):
+    p = _write(tmp_path, [("2026-11-09", "A"), ("2026-11-10", "A"), ("2026-11-10", "B"), ("2026-11-11", "A")])
+    mp = tmp_path / "list_members.csv"
+    mp.write_text("date,ticker\n2026-11-11,A\n2026-11-11,C\n2026-11-11,NOPX\n")
+    h = C.strip_html(None, p, tmp_path / "x.csv", mp)
+    assert "Siden 10.11: 2 inn · 1 ut · 1 står fortsatt" in h      # 11.11 fra list_members (ikke categories: bare A)
+    assert set(re.findall(r'class="chg-t">([^<]+)<', h)) == {"C", "NOPX", "B"}
+    assert C.days_ctx(p, None, mp)[0] == {"A": 3, "C": 1, "NOPX": 1}
+
+
+def test_d_verifier_green_when_price_missing_but_strip_matches_table(tmp_path, monkeypatch):
+    p = _write(tmp_path, [("2026-11-10", "A.OL"), ("2026-11-10", "B.OL")])
+    mp = tmp_path / "list_members.csv"
+    monkeypatch.setattr(C, "LOG", p)
+    monkeypatch.setattr(C, "MEMBERS", mp)
+    import signaltool.since as SN
+    monkeypatch.setattr(SN, "ENTRY_LOG", tmp_path / "none.csv")
+    from tests.test_overview_0911 import snap as base
+    s = {**base(), "date": "2026-11-11", "tickers": [{"ticker": "A.OL", "score": 5.0, "stats": {"close": 1.0}},
+                                                      {"ticker": "NOPX", "score": 3.0, "stats": {}}]}   # NOPX uten kurs
+    C.write_members(s, mp)
+    h = site.overview_html(s)
+    r = C.strip_check(h)
+    assert r["ok"], r
+    assert r["text"] == "Siden 10.11: 1 inn · 1 ut · 1 står fortsatt" and r["rows"] == 2
+    bad = h.replace("1 inn · 1 ut · 1 står fortsatt", "1 inn · 1 ut · 2 står fortsatt")   # stripe fra annen kilde enn tabellen
+    assert not C.strip_check(bad)["ok"]
+    vf = Path("/workspace/page-explanations/verify-live-final.py")
+    if vf.exists():
+        src = vf.read_text()
+        assert "CHG.strip_check(" in src and "kurs" not in src.split("CHG.strip_check(", 1)[1].split("\n", 1)[0]
+
+
+
+# ---------------------------------------------------------------- UxBot 11.11: mobilrad, grafmarkører, verktøytips, hull i grafen
+def _mobile_rule(css, sel):
+    m = re.search(r"@media\(max-width:699px\)\{(.*)", css, re.S)
+    return m.group(1)
+
+
+def test_mobile_days_on_name_line_not_signal_row():
+    areas = re.search(r'\.ov-ct tr\{display:grid;grid-template-columns:([^;]+);grid-template-areas:((?:"[^"]+" ?)+);', OV.CSS)
+    rows = re.findall(r'"([^"]+)"', areas.group(2))
+    assert rows[0].split() == ["nm", "nm", "nm", "dg"]            # «n dager på rad»/«Ny» på navnelinja, høyre
+    assert "dg" not in rows[1].split() and rows[1].split()[-2:] == ["sg", "sg"]   # linje 2: risiko · flagg · signal, full bredde
+    assert "minmax(0,1fr)" in areas.group(1)                       # navnet tar resten og brytes
+    m = C.CSS.split("@media(max-width:699px){", 1)[1]
+    assert ".ov-ct td.dg{grid-area:dg;justify-self:end;align-self:start;font-size:13px;line-height:18px;color:#94a3b8" in m
+    assert ".ov-ct td.sgt .sgc{white-space:normal;overflow:visible;text-overflow:clip" in m
+    t = OV.candidates_table_html({"tickers": [{"ticker": "NVDA", "score": 5.0, "points": {"price_move": 1.0}}], "oslo_universe_flags": []})
+    row = re.search(r"<tr data-nf=.*?</tr>", t).group(0)
+    assert re.search(r'<td class="sgt">.*?</td>', row) and 'class="dgv"' not in re.search(r'<td class="sgt">.*?</td>', row).group(0)
+
+
+def _nvda_like():
+    ser = []
+    import datetime as dt
+    d = dt.date(2026, 5, 1)
+    while d <= dt.date(2026, 11, 10):
+        if d.weekday() < 5:
+            ser.append((d.isoformat(), 100.0 + d.toordinal() % 7))
+        d += dt.timedelta(days=1)
+    return ser
+
+
+def test_chart_markers_for_all_events_in_window(tmp_path):
+    p = _write(tmp_path, [(d, "NV") for d in ("2026-09-27", "2026-09-28", "2026-10-13", "2026-10-27", "2026-11-06", "2026-11-10")]
+               + [(d, "X") for d in ("2026-09-27", "2026-09-28", "2026-10-12", "2026-10-13", "2026-10-18", "2026-10-27", "2026-10-29",
+                                    "2026-11-06", "2026-11-07", "2026-11-10")])
+    ps = C.ticker_periods("NV", p, tmp_path / "x.csv", None)
+    assert len(ps) == 5
+    ser = _nvda_like()
+    h = PC.html("NV", ser, "2026-11-10", "2026-11-10", ps)
+    panes = dict(re.findall(r'<div class="pcp" data-p="(\w+)"[^>]*>(.*?)</div></div>', h, re.S))
+    for lab, n in PC.PERIODS:
+        if lab not in panes:
+            continue
+        ev = PC.events(ser[-n:], ps)
+        assert panes[lab].count('class="pcmk') == len(ev), lab
+    six = PC.events(ser[-126:], ps)
+    assert [k for k, _, _ in six].count("Inn") == 4 and [k for k, _, _ in six].count("Ut") == 4   # 6M: alle inn/ut, ikke bare «inn 09.11»
+    assert ">Inn<br>13.10<" in panes["6M"] and ">Ut<br>12.10<" in panes["6M"]
+    assert 'class="pcin' not in h                               # gammel blå «inn dd.mm» erstattet av Inn/Ut-markørene
+    assert "innerWidth<600" in h and "<28" in h                 # 390: etikett bare med ≥ 28 px til neste markør
+
+
+def test_tooltips_hover_and_focus_with_reason(tmp_path):
+    p = _write(tmp_path, [("2026-11-01", "Q"), ("2026-11-03", "Q"), ("2026-11-03", "A"), ("2026-11-05", "A"), ("2026-11-06", "Q")])
+    ex = _exits(tmp_path, [{"date": "2026-11-05", "ticker": "Q", "code": "no_price"}])
+    ps = C.ticker_periods("Q", p, ex, None)
+    ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11)]
+    h = PC.html("Q", ser, None, "2026-11-10", ps)
+    assert re.search(r'<span class="pcmk[^"]*" data-k="Ut" tabindex="0"', h) and re.search(r'<span class="pcbd" tabindex="0"', h)
+    assert '<span class="tip">På lista fra før 01.11 · Ut 05.11: Mangler kurs</span>' in h
+    assert '<span class="tip">Inn 06.11 · på lista nå</span>' in h
+    assert ".pcbd:hover .tip,.pcbd:focus .tip,.pcmk:hover .tip,.pcmk:focus .tip{display:block}" in PC.CSS
+
+
+def test_gap_band_continuous_dashed_edge_and_texts(tmp_path):
+    from signaltool.since import SIDE_START
+    p = _write(tmp_path, [("2026-11-02", "A"), ("2026-11-03", "A"), ("2026-11-04", "A"), ("2026-11-05", "A")])
+    ep = tmp_path / "entry.csv"
+    ep.write_text("date,ticker,category,price,price_date\n2026-11-02,ETF,watch,1,2026-11-02\n2026-11-05,ETF,watch,1,2026-11-05\n")
+    import signaltool.since as SN
+    old, old_log = SN.ENTRY_LOG, C.LOG
+    try:
+        SN.ENTRY_LOG, C.LOG = ep, p
+        ps = C.ticker_periods("ETF", None, tmp_path / "x.csv", None)
+        h = C.strip_html(None, None, tmp_path / "x.csv", None)
+    finally:
+        SN.ENTRY_LOG, C.LOG = old, old_log
+    assert len(ps) == 1 and ps[0]["text"].endswith("på lista nå · data mangler 03.11–04.11")
+    assert ps[0]["tip"] == "På lista fra før 02.11 · på lista nå\ndata mangler 03.11–04.11"   # egen linje i verktøytipset
+    assert "data mangler" not in h                                                           # stripen viser ikke hullet
+    ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11)]
+    g = PC.html("ETF", ser, None, "2026-11-10", ps)
+    pane = re.search(r'<div class="pcp" data-p="1M"[^>]*>(.*?)</div></div>', g, re.S).group(1)
+    assert pane.count('<rect class="pcband"') == 1 and 'class="pcmk' not in pane              # ett bånd, ingen Ut/Inn i hullet
+    assert pane.count('<line class="pcgap"') == 1 and 'stroke-dasharray="3 2"' in pane and 'stroke-width="1"' in pane
+    assert 'fill="#8b949e" fill-opacity=".14"' in pane                                       # fyll uendret
+    assert ".tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line" in PC.CSS
+    li = C.periods_html(ps)
+    assert '<span class="lp-g"> · data mangler 03.11–04.11</span></li>' in li

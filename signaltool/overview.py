@@ -279,7 +279,7 @@ CSS += """
 .ov-go{grid-template-columns:minmax(0,1fr)}
 .ov-page>header,.ov-page>section.ov-entry{margin-bottom:16px}.ov-page .ov-cand{padding:12px}
 .ov-page table.ov-ct,.ov-ct tbody{display:block;width:100%}.ov-ct thead{display:none}
-.ov-ct tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"nm nm nm nm" "rk fl sg dg" "sc sc sc rt";gap:4px 8px;align-items:center;padding:8px 0;border-top:1px solid #21262d}
+.ov-ct tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"nm nm nm dg" "rk fl sg sg" "sc sc sc rt";gap:4px 8px;align-items:center;padding:8px 0;border-top:1px solid #21262d}
 .ov-ct tr[hidden]{display:none}
 .ov-ct td{display:block;padding:0;border:0;min-width:0}
 .ov-ct td.nmc{grid-area:nm}.ov-ct td.rkc{grid-area:rk}.ov-ct td.fl{grid-area:fl}.ov-ct td.sgt{grid-area:sg}.ov-ct td.sc{grid-area:sc}.ov-ct td.rt{grid-area:rt;justify-self:end}
