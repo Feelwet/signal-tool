@@ -658,6 +658,25 @@ def _prep(snap: dict) -> dict:
             # periode fra _hist, f.eks. EWZ 27.09 −6,8 % selv om ingen logg viste at den sto på lista 28.09–27.10)
             u = SN.uncertain(_rows, e["ticker"], _today, _seen.get(e["ticker"])) if _today else None
             sin[e["ticker"]] = {"uncertain": u} if u else _hist[e["ticker"]]
+    # AnalBot 11.11: tickere på lista nå følger listeperiodene (samme som grafen): innkurs ved Inn i gjeldende periode.
+    # Bare hull merket «data mangler» holder perioden sammen; ulogget hull før list_members.csv = Ut + Inn.
+    _per = CHG.periods(CHG.by_date())
+    for e in snap.get("tickers", []):
+        inn = SN.current_inn(_per, e["ticker"])
+        if inn:
+            sin[e["ticker"]] = SN.from_period(_rows, e["ticker"], inn, _today or None)
+    # AnalBot 11.11 (bindende): innkurs = Yahoos sluttkurs for price_date (dagshistorikken, samme serie som grafen), bare når
+    # stengetid + 30 min har passert i børsens tidssone. Aldri loggede/intradag-verdier.
+    _ys = [t for t, x in sin.items() if (x or {}).get("src") == "yahoo"]
+    if _ys:
+        try:
+            _px = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+        except Exception as ex:
+            print(f"yahoo entry: {ex}"); _px = {}
+        for t in _ys:
+            SN.yahoo_entry(sin[t], t, _px.get(t))
+    for t in list(sin):
+        SN.price_hold(sin[t], t)
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
@@ -695,7 +714,8 @@ def _cur(e: dict) -> str:
 def _entry_check(snap):
     """AnalBot 28.10: logget innkurs (s['price'], samme tall som avkastningen) mot Yahoos sluttkurs samme price_date.
     Avvik lagres i s['dev']/s['yclose']; siden viser ⚠ når |avvik| > 0,5 %. Loggen endres ikke."""
-    tk = [e for e in snap.get("tickers", []) if (e.get("_since") or {}).get("price") and (e.get("_since") or {}).get("price_date")]
+    tk = [e for e in snap.get("tickers", []) if (e.get("_since") or {}).get("price") and (e.get("_since") or {}).get("price_date")
+          and (e.get("_since") or {}).get("src") != "yahoo"]   # Yahoo-innkurs er selve sluttkursen: ingenting å sammenligne
     if not tk:
         return
     try:
@@ -713,7 +733,7 @@ def _factor_fix(snap):
     """Yahoo har justert historikken bakover med konstant faktor (f.eks. TECH.OL): juster innkursen med samme faktor og logg det
     (logs/dq_flags.jsonl). Rålogger endres ikke."""
     from . import learnloop as LL
-    tk = [e for e in snap.get("tickers", []) if e.get("_since") and e["_since"].get("price")]
+    tk = [e for e in snap.get("tickers", []) if e.get("_since") and e["_since"].get("price") and e["_since"].get("src") != "yahoo"]
     if not tk:
         return
     pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
@@ -923,7 +943,7 @@ def tema_ticker_page(e):
     line = SN.line(s, '<span class="cat">Tema</span>') if s else ""
     return (f"""{TKP_CSS}{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
 {line}
-{PC.html(e["ticker"], e.get("_px"), (s or {}).get("price_date"), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
+{PC.html(e["ticker"], e.get("_px"), SN.dot_date(s), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
 {NK.html(e["_nk"])}
 <div class="card"><p class="mut" style="margin:0">Med i et temakart, ikke på kandidatlista. Ingen kategori (Kjøp/Hold/Følg) i dag. Se <a href="../temaer.html">temaene</a>.</p></div>""")
 
@@ -938,7 +958,7 @@ def ticker_page(e, tmap):
     return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info())}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn() + ES.for_key("risk", short=True), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RF.line(e)}{RK.status()}
 {X.pead_exp_html(e)}
-{PC.html(e["ticker"], e.get("_px"), (e.get("_since") or {}).get("price_date"), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
+{PC.html(e["ticker"], e.get("_px"), SN.dot_date(e.get("_since")), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
 {NK.html(e["_nk"])}
 {AN.line_html(e.get("_analyst"), st.get("close"))}
 {X.thesis_html(e, tmap)}

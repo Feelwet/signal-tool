@@ -489,9 +489,10 @@ def test_entry_dot_grey_without_text_for_ticker_on_list(tmp_path):
     ps = _dot_case(tmp_path, [("2026-11-01", "A"), ("2026-11-03", "B"), ("2026-11-05", "A"), ("2026-11-06", "A"), ("2026-11-06", "B")])("A")
     assert ps[-1]["inn"] == "2026-11-05" and ps[-1]["ut"] is None
     ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11)]
-    # since.price_date 04.11 ligger før Inn 05.11 -> første sluttkurs på/etter Inn brukes
-    assert PC.entry_point(ser, ps, "2026-11-04") == "2026-11-05"
-    assert PC.entry_point(ser, ps, "2026-11-06") == "2026-11-06"     # samsvarende innkursdato i perioden brukes
+    # AnalBot 11.11 (runde 2): punktet står på innkursens price_date (sluttkursen kjent ved Inn, kan være før Inn-datoen)
+    assert PC.entry_point(ser, ps, "2026-11-04") == "2026-11-04"
+    assert PC.entry_point(ser, ps, "2026-11-06") == "2026-11-06"
+    assert PC.entry_point(ser, ps, "2026-11-30") is None                # uten sluttkurs i serien: ikke flyttet
     h = PC.html("A", ser, "2026-11-04", "2026-11-10", ps)
     dots = re.findall(r'<span class="pcdot"[^>]*></span>', h)
     assert dots and all('aria-hidden="true"' in d and "title=" not in d for d in dots)   # uten tekst/etikett
@@ -500,14 +501,15 @@ def test_entry_dot_grey_without_text_for_ticker_on_list(tmp_path):
     assert "pcin" not in h and "pcin" not in PC.CSS and "Registrert" not in h
 
 
-def test_entry_dot_date_inside_current_period(tmp_path):
+def test_entry_dot_date_is_entry_price_date_of_current_period(tmp_path):
     f = _dot_case(tmp_path, [("2026-11-01", "A"), ("2026-11-02", "A"), ("2026-11-03", "B"), ("2026-11-07", "A"), ("2026-11-08", "A")])
     ps = f("A")
     ser = [(f"2026-11-{d:02d}", 10.0 + d) for d in range(1, 11) if d not in (7, 8)]   # 07.–08.11 helg uten sluttkurs
-    d = PC.entry_point(ser, ps, "2026-11-01")          # innkurs fra forrige periode: brukes ikke
-    assert d == "2026-11-09" and d >= ps[-1]["inn"]
-    first = _dot_case(tmp_path, [("2026-11-01", "Z"), ("2026-11-02", "Z")])("Z")   # perioden starter ved loggstart
-    assert PC.entry_point(ser, first, None) == "2026-11-01"
+    rows = [{"date": "2026-11-07", "ticker": "A", "category": "watch", "price": "16", "price_date": "2026-11-06", "flags": ""}]
+    from signaltool import since as SN
+    import datetime as _dt
+    e = SN.yahoo_entry(SN.from_period(rows, "A", ps[-1]["inn"], "2026-11-08"), "A", ser, _dt.datetime(2026, 11, 9, tzinfo=_dt.timezone.utc))
+    assert e["price_date"] == "2026-11-06" and PC.entry_point(ser, ps, e["price_date"]) == "2026-11-06"   # Inn 07.11 (lørdag) -> fredag
 
 
 def test_entry_dot_missing_when_not_on_list(tmp_path):

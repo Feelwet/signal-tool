@@ -109,6 +109,70 @@ def compute(rows: list[dict], today: str | None = None) -> dict:
     return out
 
 
+def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = None) -> dict:
+    """AnalBot 11.11: «Siden»-raden følger listeperiodene (ov_changes): start = Inn-kjøringen i GJELDENDE periode. Periode fra
+    loggstart: første loggdato. «Start» for innkursen = Inn-kjøringens price_date (kan være siste sluttkurs før Inn-datoen, f.eks.
+    lørdag 07.11 -> fredag 06.11). Kategoridager telles innenfor perioden.
+    AnalBot 11.11 (bindende, erstatter loggede verdier): innkursen hentes IKKE fra loggen. Her settes bare price_date; selve
+    kursen fylles inn av yahoo_entry() fra kildens dagshistorikk (Yahoo daily) når stengetid + 30 min har passert."""
+    rs = {r["date"]: r for r in rows if r["ticker"] == ticker and r["date"] >= inn}
+    first = rs.get(inn) or {}
+    last = max(rs) if rs else inn
+    cat = (rs.get(last) or {}).get("category") or ""
+    cstart = last
+    for d in sorted((d for d in rs if d <= last), reverse=True):
+        if rs[d].get("category") != cat:
+            break
+        cstart = d
+    ref = date.fromisoformat(today or last)
+    return {"since": inn, "price": None, "price_date": (first.get("price_date") or "")[:10] or None, "category": cat,
+            "days": (ref - date.fromisoformat(cstart)).days, "list_days": (ref - date.fromisoformat(inn)).days,
+            "illiquid": "illiquid" in ((rs.get(last) or {}).get("flags") or "").split("|"), "period": True, "src": "yahoo"}
+
+
+def dot_date(s: dict | None):
+    """Innkurspunktet i grafen: bare når innkursen faktisk finnes (ingen punkt ved «Ingen innkurs ennå»/«Venter …»)."""
+    return (s or {}).get("price_date") if (s or {}).get("price") not in (None, 0) else None
+
+
+WAIT = "wait"     # price_date er i dag og børsen er ikke stengt + 30 min: «Venter på første sluttkurs»
+MISSING = "missing"   # historikken mangler datoen (eller ukjent børs): «Ingen innkurs ennå»
+HOLD = "hold"         # config.PRICE_HOLD: «–» med «kurs under kontroll» (innkurs og siste kurs ikke bekreftet av annen kilde)
+HOLD_T = "kurs under kontroll"
+
+
+def price_hold(s: dict | None, ticker: str) -> dict | None:
+    """AnalBot 11.11: ticker i config.PRICE_HOLD -> ingen innkurs/avkastning vises før kursen er bekreftet."""
+    from .config import PRICE_HOLD
+    if s and not s.get("uncertain") and ticker in PRICE_HOLD:
+        s["price"], s["entry_state"] = None, HOLD
+    return s
+
+
+def yahoo_entry(s: dict, ticker: str, series, now=None) -> dict:
+    """AnalBot 11.11: innkurs = sluttkursen for price_date i Yahoos dagshistorikk (samme serie som kursgrafen), og bare når
+    stengetid + 30 min har passert for datoen i børsens tidssone (displayprices.CLOSE, laering_fwd.day_closed). Intradag-verdier
+    brukes aldri. Ukjent børs: aldri gyldig. s['entry_state'] = None (innkurs satt) | WAIT | MISSING."""
+    from .displayprices import exchange_close
+    from .laering_fwd import day_closed
+    pd_ = s.get("price_date")
+    s["price"] = None
+    if not pd_ or exchange_close(ticker) is None:
+        s["entry_state"] = MISSING
+    elif not day_closed(pd_, ticker, now):
+        s["entry_state"] = WAIT
+    else:
+        v = dict((d, x) for d, x in (series or []) if x is not None).get(pd_)
+        s["entry_state"], s["price"] = (None, float(v)) if v else (MISSING, None)
+    return s
+
+
+def current_inn(periods: dict, ticker: str) -> str | None:
+    """Inn-dato for gjeldende periode (siste periode uten ut-dato), ellers None (ikke på lista nå)."""
+    ps = periods.get(ticker) or []
+    return ps[-1][0] if ps and ps[-1][1] is None else None
+
+
 def _price(p: float) -> str:
     return f"{p:,.2f}".replace(",", " ").replace(".", ",")
 
@@ -206,8 +270,8 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
         if s.get("price") is not None:
             parts.append(inn_text(s))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
-    if ret and ret.get("new"):
-        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(new_tip(s))}'
+    if ret and ret.get("new"):   # UxBot 11.11: uten ⓘ (som tabellen)
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>'
     elif ret and ret.get("r") is not None and ret.get("short"):
         from .results import SHORT_TIP
         t += f'<span class="sl-r">&nbsp;·&nbsp;<span class="rn {_cls(ret["r"])}">{E(pct(ret["r"]))}</span></span>{ri(SHORT_TIP)}<span class="sl-r rsh-t">{SHORT_T}</span>'
@@ -216,6 +280,12 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
     elif ret and ret.get("stale"):
         t += f'<span class="sl-r rst">&nbsp;·&nbsp;–</span>{ri(ret_tip(ret))}'
+    elif not ret and (s or {}).get("entry_state") == HOLD:
+        t += f'<span class="sl-r rhold">&nbsp;·&nbsp;–&nbsp;{HOLD_T}</span>'
+    elif not ret and no_entry_text(ret, s) == NEW_T:
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>'
+    elif not ret and no_entry_text(ret, s) == NO_ENTRY:   # UxBot 11.11: bare teksten, ingen ekstra forklaring
+        t += f'<span class="sl-r rnone">&nbsp;·&nbsp;{NO_ENTRY}</span>'
     return f'<p class="since mut rk-line">{lead}{t}</p>'
 
 
@@ -327,13 +397,31 @@ def ret_tip(r: dict | None, s: dict | None = None) -> str:
 SHORT_T = "kort periode"
 
 
+def no_entry_text(r: dict | None, s: dict | None) -> str:
+    """UxBot 11.11: tekst i stedet for prosent – «Venter på første sluttkurs» (innkursdato i dag, børsen ikke stengt + 30 min,
+    eller ingen sluttkurs etter innkursdatoen ennå) eller «Ingen innkurs ennå» (historikken mangler datoen). '' ellers."""
+    if r and r.get("new"):
+        return NEW_T
+    if r or not s or s.get("uncertain") or s.get("price") not in (None, 0) or s.get("entry_state") == HOLD:
+        return ""
+    return NEW_T if s.get("entry_state") == WAIT else NO_ENTRY
+
+
+def rtx(text: str) -> str:
+    """Tabellcellen: grå 13/18-tekst + grå «–» på «mot indeks»-linja (samme radhøyde som et tall)."""
+    return f'<span class="rtx">{E(text)}</span><span class="rex">–</span>'
+
+
 def ret_inner(r: dict | None, s: dict | None = None) -> str:
+    if not r and (s or {}).get("entry_state") == HOLD:
+        return f'<span class="rv rna">–</span><span class="rex rhold">{HOLD_T}</span>'
     tip = ret_tip(r, s)
+    nt = no_entry_text(r, s)
+    if nt and (not r or r.get("new")) and (s is None or not s.get("uncertain")) and (not r or not r.get("stale")):
+        return rtx(nt)
     if not r or r.get("r") is None:
         cls = "rv rst" if r and r.get("stale") else "rv rna"
         return ri(tip, f'<span class="{cls}">–</span>') if tip else f'<span class="{cls}">–</span>'
-    if r.get("new"):
-        return ri(new_tip(s), f'<span class="rnew">{NEW_T}</span>')
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     sh = r.get("short")
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
@@ -347,7 +435,7 @@ def ret_cell(r: dict | None, s: dict | None = None) -> str:
     v = f"{r['r']:.6f}" if r and r.get("r") is not None and not r.get("new") else ""
     st = ' data-stale="1"' if r and r.get("stale") else ""
     lt = f' data-last="{E(r["last"])}"' if r and r.get("last") else ""
-    lt += ' data-new="1"' if r and r.get("new") else ""
+    lt += ' data-new="1"' if (r and r.get("new")) or (not r and (s or {}).get("entry_state") == WAIT) else ""
     sh = ' rsh-c' if r and r.get("short") and r.get("r") is not None and not r.get("new") else ""
     return f'<td class="ret-c{sh}" data-v="{v}"{st}{lt}>{ret_inner(r, s)}</td>'
 
@@ -370,7 +458,7 @@ def mobile(s: dict | None, r: dict | None = None, cur: str = "") -> str:
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}main .rv.rup,main .rn.rup{color:#22c55e}main .rv.rdn,main .rn.rdn{color:#ef4444}main .rv.r0,main .rn.r0{color:#94a3b8}.rsh-t{font-size:11px;font-weight:400;color:#94a3b8;margin-left:4px;white-space:nowrap}td.ret-c .rsh-t{display:block;margin:0;line-height:12px}#tf-table td.ret-c.rsh-c{padding-top:2px;padding-bottom:2px}#tf-table td.ret-c.rsh-c .rv{line-height:17px}#tf-table td.ret-c.rsh-c .rex{line-height:14px}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}main .rv.rup,main .rn.rup{color:#22c55e}main .rv.rdn,main .rn.rdn{color:#ef4444}main .rv.r0,main .rn.r0{color:#94a3b8}.rsh-t{font-size:11px;font-weight:400;color:#94a3b8;margin-left:4px;white-space:nowrap}td.ret-c .rsh-t{display:block;margin:0;line-height:12px}#tf-table td.ret-c.rsh-c{padding-top:2px;padding-bottom:2px}#tf-table td.ret-c.rsh-c .rv{line-height:17px}#tf-table td.ret-c.rsh-c .rex{line-height:14px}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}.rtx{font-size:13px;line-height:18px;font-weight:400;color:#94a3b8;white-space:nowrap}td.ret-c .rtx{display:block}td.ret-c .rtx+.rex{color:#94a3b8}.sl-r.rnone,.sl-r.rhold,.rex.rhold{color:#94a3b8}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}
@@ -379,7 +467,7 @@ th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-
 #tf-table .since-m,#tf-table .since-m .inn-p,#tf-table .since-m .ri.ri-c>.inn-p,#tf-table .since-m .inn-w,#tf-table .since-m .ri.ri-c>.inn-w{font-size:11px;line-height:14px}
 #tf-table .tn .tk{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;font-size:11px;line-height:14px}#tf-table .tk .dci{order:1}#tf-table .tk .fchip,#tf-table .tk .nokurs,#tf-table .tk .fb-dot{order:2}
 #tf-table .tk .dchip{font-size:11px;line-height:14px;margin:0;padding:0;border:0;background:none}#tf-table .tk .dchip::before{content:"· "}
-#tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:12px;white-space:normal;line-height:1.25}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
+#tf-table .ret-m{display:none!important}#tf-table td.ret-c,#tf-table th.ret-h{font-size:12px;padding-left:4px;padding-right:4px;white-space:normal}#tf-table td.ret-c,#tf-table th.ret-h{overflow-wrap:normal;word-break:normal;width:auto;min-width:0}#tf-table td.ret-c .rv{white-space:nowrap}#tf-table td.ret-c .rex{display:block;font-size:12px;white-space:normal;line-height:1.25}#tf-table td.ret-c .rtx{white-space:normal;display:block;max-width:96px;margin-left:auto;text-align:right;font-size:13px;line-height:18px}#tf-table tr.rowlink td{max-height:96px}#tf-table td.mcol{padding-left:2px;padding-right:2px}#tf-table th.ret-h .ri .tip{right:-8px}table:has(tr[data-cat]) tr>:nth-child(5),table:has(tr[data-cat]) tr>:nth-child(6){display:none}}
 """
 
 JS = r"""<script>(()=>{const score=r=>{const t=(r.children[2]&&r.children[2].querySelector('.score'));const n=t?parseFloat(t.textContent):NaN;return Number.isFinite(n)?n:-Infinity};

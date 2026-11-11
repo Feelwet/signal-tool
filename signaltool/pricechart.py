@@ -154,18 +154,12 @@ def _bands(s, bands, fx, W, H):
 
 
 def entry_point(series, periods, entry_date=None):
-    """AnalBot 11.11: innkurspunktet hører til den GJELDENDE perioden (siste periode uten ut-dato).
-    - Ikke på lista nå (eller ingen listeperioder): None (ingen punkt).
-    - Dato: eksisterende innkursdato (since.price_date) hvis den ligger i gjeldende periode (≥ periodens Inn-dato) og finnes
-      som sluttkurs i serien; ellers første sluttkurs i serien på eller etter periodens Inn-dato (ved loggstart: første loggdato).
-      price_date før Inn-datoen (f.eks. kjøring lørdag med fredagens sluttkurs) ligger utenfor perioden og brukes ikke."""
-    if not periods or periods[-1].get("ut") is not None or not series:
+    """AnalBot 11.11: innkurspunktet = innkursens price_date i GJELDENDE listeperiode (samme som avkastningen i Siden-raden,
+    since.from_period). Ikke på lista nå / ingen perioder / price_date uten sluttkurs i serien: None (ingen punkt, aldri flyttet)."""
+    if not periods or periods[-1].get("ut") is not None or not series or not entry_date:
         return None
-    inn = periods[-1]["inn"]
-    have = {d for d, v in series if v is not None}
-    if entry_date and str(entry_date)[:10] >= inn and str(entry_date)[:10] in have:
-        return str(entry_date)[:10]
-    return next((d for d, v in series if d >= inn and v is not None), None)
+    d = str(entry_date)[:10]
+    return d if d in {x for x, v in series if v is not None} else None
 
 
 def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=None) -> str:

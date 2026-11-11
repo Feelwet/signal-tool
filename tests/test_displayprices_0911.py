@@ -159,7 +159,7 @@ FULL = {s: {"last_date": "2026-11-06", "ret_5d": -0.01, "ret_20d": -0.02} for s 
 
 def test_price_hold_list_in_config_with_reason():
     from signaltool.config import PRICE_HOLD
-    assert set(PRICE_HOLD) == {'6488.TWO', '4062.T', 'INTC', 'TER'}
+    assert set(PRICE_HOLD) == {'6488.TWO', '4062.T', 'INTC', 'TER', 'TECH.OL'}   # TECH.OL: AnalBot 11.11 (Siden-avkastning)
     assert all(isinstance(v, str) and len(v) > 10 for v in PRICE_HOLD.values())
     h = page(disp=FULL)
     r = rows(h)
