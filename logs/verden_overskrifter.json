@@ -1,12 +1,13 @@
 {
- "hentet": "2026-11-11T11:07:53+0100",
+ "hentet": "2026-11-11T11:23:59+0100",
  "dato": "2026-11-11",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (920) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "hoppet over denne gangen: GDELT DOC etter 6 forsøk: HTTP 429: Please limit requests to one every 5 seconds or contact kale",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
+  "GDELT 429": "5",
   "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
