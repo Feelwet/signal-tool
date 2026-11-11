@@ -41,6 +41,10 @@ def _real_sets():
         for r in csv.DictReader(f):
             if r["category"] != "tema":
                 by.setdefault(r["date"], set()).add(r["ticker"])
+    with Path("logs/entry_prices.csv").open(newline="") as f:   # ikke-loggbare kandidater (ETF-er o.l.) fra sideloggen
+        for r in csv.DictReader(f):
+            if r["date"] in by:
+                by[r["date"]].add(r["ticker"])
     ds = sorted(by)
     return ds[-2], ds[-1], by[ds[-2]], by[ds[-1]]
 
@@ -124,12 +128,23 @@ def test_days_counter_known_example(tmp_path):
     rows = [("2026-11-05", "A"), ("2026-11-06", "A"), ("2026-11-07", "A"), ("2026-11-08", "A"), ("2026-11-09", "A"), ("2026-11-10", "A"),
             ("2026-11-06", "B"), ("2026-11-07", "B"), ("2026-11-09", "B"), ("2026-11-10", "B"),   # mangler 08.11 -> rekken brytes
             ("2026-11-10", "N"), ("2026-11-09", "OUT"), ("2026-11-05", "Z")]
-    dmap, first, n = C.days_ctx(_write(tmp_path, rows))
-    assert dmap == {"A": 6, "B": 2, "N": 1} and first == "2026-11-05" and n == 6
-    assert C.days_cell("A", dmap, first, n) == '<td class="dg"><span class="dgv">fra 05.11</span></td>'   # sammenhengende siden første loggdato
-    assert C.days_cell("B", dmap, first, n) == '<td class="dg"><span class="dgv">2 dager på rad</span></td>'
-    assert C.days_cell("N", dmap, first, n) == '<td class="dg"><span class="dgv">1 dag på rad</span><span class="dg-ny">Ny</span></td>'
-    assert C.days_cell("OUT", dmap, first, n) == '<td class="dg"><span class="dgv">–</span></td>'
+    dmap, full = C.days_ctx(_write(tmp_path, rows))
+    assert dmap == {"A": 6, "B": 2, "N": 1} and full == {"A": "2026-11-05"}
+    assert C.days_cell("A", dmap, full) == '<td class="dg"><span class="dgv">fra 05.11</span></td>'   # sammenhengende siden første loggdato
+    assert C.days_cell("B", dmap, full) == '<td class="dg"><span class="dgv">2 dager på rad</span></td>'
+    assert C.days_cell("N", dmap, full) == '<td class="dg"><span class="dgv">1 dag på rad</span><span class="dg-ny">Ny</span></td>'
+    assert C.days_cell("OUT", dmap, full) == '<td class="dg"><span class="dgv">–</span></td>'
+
+
+def test_side_log_tickers_are_on_list_from_side_start(tmp_path):
+    from signaltool.since import SIDE_START
+    p = _write(tmp_path, [("2026-09-27", "SPY"), ("2026-09-27", "A"), (SIDE_START, "A"), ("2026-11-10", "A")])
+    ep = tmp_path / "entry.csv"
+    ep.write_text("date,ticker,category,price,price_date\n2026-09-27,SPY,watch,1,2026-09-27\n"
+                  f"{SIDE_START},SPY,watch,1,{SIDE_START}\n2026-11-10,SPY,watch,1,2026-11-10\n")
+    by = C.by_date(p, ep)
+    assert by["2026-11-10"] == {"A", "SPY"} and "SPY" not in by["2026-09-27"]   # hull før sideloggen er ikke «ut»
+    assert C.periods(by)["SPY"] == [[SIDE_START, None]] and C.src_first(p, ep)["SPY"] == SIDE_START
 
 
 def test_candidate_table_has_days_column(tmp_path, monkeypatch):
@@ -147,32 +162,77 @@ def test_candidate_table_has_days_column(tmp_path, monkeypatch):
 
 
 # ---------------------------------------------------------------- logging av ut-grunner
-def _snap_rank():
-    snap = {"date": "2026-11-10", "tickers": [{"ticker": "KEEP", "score": 4.0, "points": {"x": 4.0}}]}
-    ranked = [{"ticker": "KEEP", "score": 4.0}, {"ticker": "CUT", "score": 2.44}, {"ticker": "LOW", "score": 0.0}]
+def _snap_rank(n_kept=60):
+    tk = [{"ticker": "KEEP", "score": 4.0, "points": {"x": 4.0}}] + [{"ticker": f"K{i}", "score": 3.0} for i in range(n_kept - 1)]
+    snap = {"date": "2026-11-10", "tickers": tk + [{"ticker": "UNR", "score": 1.0, "unranked": True}]}
+    ranked = tk + [{"ticker": "CUT", "score": 2.44}, {"ticker": "LOW", "score": 0.0}, {"ticker": "THM", "score": 1.5}, {"ticker": "UNR", "score": 1.0}]
     return snap, ranked
 
 
-def test_exit_codes_only_when_run_decides(tmp_path, monkeypatch):
-    p = _write(tmp_path, [("2026-11-09", "KEEP", "watch", "4.0"), ("2026-11-09", "CUT", "watch", "2.6"), ("2026-11-09", "LOW", "watch", "3.1"),
-                          ("2026-11-09", "GONE", "watch", "1.2"), ("2026-11-09", "REC.OL", "watch", "1.0"), ("2026-11-10", "KEEP", "watch", "4.0")])
+def _exit_log(tmp_path):
+    return _write(tmp_path, [("2026-11-09", "KEEP", "watch", "4.0"), ("2026-11-09", "CUT", "watch", "2.6"), ("2026-11-09", "LOW", "watch", "2.1"),
+                             ("2026-11-09", "GONE", "watch", "1.2"), ("2026-11-09", "REC.OL", "watch", "1.0"), ("2026-11-09", "THM", "watch", "1.9"),
+                             ("2026-11-10", "KEEP", "watch", "4.0"), ("2026-11-10", "THM", "tema", "")])
+
+
+def test_exit_codes_only_when_run_decides(tmp_path):
+    p = _exit_log(tmp_path)
     snap, ranked = _snap_rank()
     rows = {r["ticker"]: r for r in C.exit_rows(snap, ranked, p)}
-    assert rows["CUT"]["code"] == "out_of_top60" and rows["CUT"]["new_score"] == 2.44
-    assert rows["LOW"]["code"] == "below_threshold" and rows["LOW"]["old_score"] == "3.1"
+    assert rows["CUT"]["code"] == "out_of_top60" and rows["CUT"]["new_score"] == 2.44      # taket biter: 60 rangerbare
+    assert rows["LOW"]["code"] == "below_threshold" and rows["LOW"]["old_score"] == "2.1"
+    assert C.reason_text(rows["LOW"]) == "Score under grensen (2,1 → 0,0)"
+    assert rows["THM"]["code"] == "moved_to_theme" and C.reason_text(rows["THM"]) == "Flyttet til temakartet"
     assert rows["GONE"]["code"] == ""              # ikke kandidat i dag: kan ikke avgjøres -> ingen kode
     assert rows["REC.OL"]["code"] == "delisted"    # verdikjede-rettelse listed=false, strøket 25.06.2026
-    assert set(rows) == {"CUT", "LOW", "GONE", "REC.OL"} and all(r["code"] in C.CODES + ("",) for r in rows.values())
+    assert set(rows) == {"CUT", "LOW", "GONE", "REC.OL", "THM"} and all(r["code"] in C.CODES + ("",) for r in rows.values())
     fr = copy.deepcopy(snap); fr["frozen_from"] = "2026-11-08"
     assert {r["ticker"]: r["code"] for r in C.exit_rows(fr, ranked, p)}["CUT"] == ""   # fryst liste: ingen kode
     out = tmp_path / "list_exits.csv"
-    assert C.record_exits(snap, ranked, out, p) == 4 and C.record_exits(snap, ranked, out, p) == 4   # ny kjøring samme dag erstatter
+    assert C.record_exits(snap, ranked, out, p) == 5 and C.record_exits(snap, ranked, out, p) == 5   # ny kjøring samme dag erstatter
     got = list(csv.DictReader(out.open()))
-    assert len(got) == 4 and list(got[0]) == C.EXIT_COLS
+    assert len(got) == 5 and list(got[0]) == C.EXIT_COLS
+
+
+def test_top60_code_never_when_cap_does_not_bite(tmp_path):
+    p = _exit_log(tmp_path)
+    snap, ranked = _snap_rank(n_kept=59)             # 59 rangerbare (+1 «Ikke rangert»): taket biter ikke
+    assert {r["ticker"]: r["code"] for r in C.exit_rows(snap, ranked, p)}["CUT"] == ""
+    assert C.TOP_CAP == 60 and "[:60]" in Path("signaltool/pipeline.py").read_text()
+
+
+def test_every_exit_one_chip_and_chip_count_equals_strip(tmp_path):
+    p = _exit_log(tmp_path)
+    snap, ranked = _snap_rank()
+    ex = tmp_path / "list_exits.csv"
+    C.record_exits(snap, ranked, ex, p)
+    h = C.strip_html(None, path=p, exits_path=ex)
+    n_ut = int(re.search(r"(\d+) ut ·", h).group(1))
+    why = re.findall(r'<span class="chg-why">Ut 10\.11: ([^<]+)</span>', h)
+    assert len(why) == n_ut == 5
+    allowed = {"grunn ikke logget", "Ikke børsnotert", "Flyttet til temakartet", "Mangler kurs"}
+    assert all(w in allowed or w.startswith(("Score under grensen (", "Ikke lenger blant de 60 høyeste (score ")) for w in why)
+
+
+def test_built_overview_strip_matches_candidate_table(tmp_path, monkeypatch):
+    """inn + står fortsatt == antall kandidater i kandidattabellen samme dag, i bygget Oversikt-HTML."""
+    p = _write(tmp_path, [("2026-11-09", "A.OL"), ("2026-11-09", "B.OL"), ("2026-11-10", "A.OL"), ("2026-11-10", "C.OL"),
+                          ("2026-11-10", "T.OL", "tema", "")])
+    ep = tmp_path / "entry.csv"
+    ep.write_text("date,ticker,category,price,price_date\n2026-11-09,SPY,watch,1,2026-11-09\n2026-11-10,SPY,watch,1,2026-11-10\n")
+    monkeypatch.setattr(C, "LOG", p)
+    import signaltool.since as SN
+    monkeypatch.setattr(SN, "ENTRY_LOG", ep)
+    from tests.test_overview_0911 import snap as base
+    s = {**base(), "date": "2026-11-10",
+         "tickers": [{"ticker": t, "score": 5.0 - i} for i, t in enumerate(["A.OL", "C.OL", "SPY"])]}
+    h = site.overview_html(s)
+    m = re.search(r"Siden 09\.11: (\d+) inn · (\d+) ut · (\d+) står fortsatt", h)
+    assert m and int(m.group(1)) + int(m.group(3)) == h.count("<tr data-nf=") == 3
 
 
 def test_logging_does_not_touch_snapshot_or_candidates(tmp_path):
-    p = _write(tmp_path, [("2026-11-09", "KEEP"), ("2026-11-09", "CUT", "watch", "2.6"), ("2026-11-10", "KEEP")])
+    p = _exit_log(tmp_path)
     snap, ranked = _snap_rank()
     a, b = json.dumps(snap, sort_keys=True), json.dumps(ranked, sort_keys=True)
     C.record_exits(snap, ranked, tmp_path / "e.csv", p)
@@ -230,3 +290,14 @@ def test_chart_bands_with_hover(tmp_path):
     assert "<title>Ut 06.11: Mangler kurs</title>" in h and 'fill="#8b949e"' in h
     assert '<p class="lp-note">' in h and h.index('class="lp-list"') < h.index('class="mut pcs"')
     assert "pcband" not in PC.html("A", ser, None, "2026-11-20") and "lp-note" not in PC.html("A", ser)
+
+
+def test_empty_groups_hidden_but_zero_in_strip(tmp_path):
+    p = _write(tmp_path, [("2026-11-09", "A"), ("2026-11-09", "B"), ("2026-11-10", "A")])
+    h = C.strip_html(None, path=p, exits_path=tmp_path / "none.csv")
+    assert "Siden 09.11: 0 inn · 1 ut · 1 står fortsatt" in h
+    assert "<h3>Inn" not in h and "Ute pga. manglende kurs" not in h and "Ingen" not in h and "<h3>Ut (1)</h3>" in h
+    p2 = _write(tmp_path, [("2026-11-09", "A"), ("2026-11-10", "A"), ("2026-11-10", "N")], "c2.csv")
+    h2 = C.strip_html(None, path=p2, exits_path=tmp_path / "none.csv")
+    assert "Siden 09.11: 1 inn · 0 ut · 1 står fortsatt" in h2 and "<h3>Ut" not in h2 and "<h3>Inn (1)</h3>" in h2
+    assert h2.count('class="chg-grp"') == 1

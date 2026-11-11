@@ -2,12 +2,12 @@
 ut-grunner (logs/list_exits.csv), inn/ut-perioder (data/list_periods.json) og periodelinjene under kursgrafen.
 
 Kilde: logs/categories.csv. «Lista» = kandidatlista = loggens rader uten kategori «tema» (temakart-tickere står utenfor
-kandidatlista, jf. tickersiden). «Kjøring» = en dato i loggen (helger med); stripen sammenligner siste mot forrige kjøring.
+kandidatlista, jf. tickersiden) + innkurs-sideloggen for ikke-loggbare kandidater (ETF-er o.l.), som i since.py. «Kjøring» = en dato i loggen (helger med); stripen sammenligner siste mot forrige kjøring.
 - Stripe: inn = siste − forrige, ut = forrige − siste, står fortsatt = siste ∩ forrige (inn + står fortsatt = dagens antall).
 - Dager: sammenhengende kjøringer bakover t.o.m. siste kjøring. Har tickeren stått på lista i hver kjøring siden første
   loggdato: «fra DD.MM» (første loggdato, lest fra loggen). Ikke på lista i siste kjøring: «–».
 - Perioder: [inn, ut|None]; ut = første kjøring tickeren manglet (hver manglende kjøring bryter perioden).
-- Ut-grunner logges fra 11.11 (record_exits) med kode below_threshold / out_of_top60 / no_price / delisted. Historiske
+- Ut-grunner logges fra 11.11 (record_exits) med kode below_threshold / out_of_top60 / no_price / delisted / moved_to_theme. Historiske
   utfall har ingen kode og vises som «grunn ikke logget». Ingen kode -> aldri en grunn; «rødt flagg» er aldri en grunn.
 Bare lesing: ingenting her endrer kandidatutvalg, score eller kategorier."""
 from __future__ import annotations
@@ -24,7 +24,7 @@ LOG = LOGS / "categories.csv"
 EXITS = LOGS / "list_exits.csv"
 PERIODS_JSON = DATA / "list_periods.json"
 EXIT_COLS = ["date", "ticker", "code", "old_score", "new_score"]
-CODES = ("below_threshold", "out_of_top60", "no_price", "delisted")
+CODES = ("below_threshold", "out_of_top60", "no_price", "delisted", "moved_to_theme")
 NO_REASON = "grunn ikke logget"
 # Kan slås på som " (før {dm})"; {dm} = første dato i logs/list_exits.csv (aldri hardkodet). Tom = av.
 NO_REASON_SUFFIX = ""
@@ -54,18 +54,63 @@ def _read(path) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------------------------------------- lista
-def by_date(path: Path | None = None) -> dict[str, set]:
-    """{dato: {tickere på kandidatlista}} fra loggen (tema-rader utenfor). Mangler filen: tom dict."""
-    out: dict[str, set] = {}
+_DEF = object()
+
+
+def _entry_default(path):
+    from .since import ENTRY_LOG
+    return ENTRY_LOG if path is None or Path(path) == LOG else None
+
+
+def _rows(path=None, entry_path=_DEF) -> list[dict]:
+    """Kandidatlista per kjøring = categories.csv uten tema-rader + innkurs-sideloggen (logs/entry_prices.csv, rader fra
+    since.SIDE_START) for kandidater som ikke logges i categories.csv (ETF-er, BA.L o.l.) – samme kilde som «Siden DD.MM».
+    Hver rad får «src» (cat/side) slik at «fra før DD.MM» bruker første dato i tickerens egen kilde."""
+    from .since import SIDE_START
+    out, have = [], set()
     for r in _read(path or LOG):
         d, t = (r.get("date") or "").strip(), (r.get("ticker") or "").strip()
         if d and t and (r.get("category") or "") != "tema":
-            out.setdefault(d, set()).add(t)
+            out.append({**r, "date": d, "ticker": t, "src": "cat"})
+            have.add((d, t))
+    ep = _entry_default(path) if entry_path is _DEF else entry_path
+    if ep is not None:
+        for r in _read(ep):
+            d, t = (r.get("date") or "").strip(), (r.get("ticker") or "").strip()
+            if d and t and d >= SIDE_START and (d, t) not in have:
+                out.append({**r, "date": d, "ticker": t, "score": "", "src": "side"})
+    # Tickere i sideloggen (f.eks. SPY, logget i categories.csv bare 27.09): hullet før SIDE_START er ikke bevis for at de
+    # falt av lista (AnalBot 28.10) -> categories-rader før SIDE_START brukes ikke for dem; perioden starter i sideloggen.
+    side = {r["ticker"] for r in out if r["src"] == "side"}
+    return [r for r in out if not (r["ticker"] in side and r["src"] == "cat" and r["date"] < SIDE_START)]
+
+
+def by_date(path: Path | None = None, entry_path=_DEF) -> dict[str, set]:
+    """{dato: {tickere på kandidatlista}}. Mangler filene: tom dict."""
+    out: dict[str, set] = {}
+    for r in _rows(path, entry_path):
+        out.setdefault(r["date"], set()).add(r["ticker"])
     return out
+
+
+def src_first(path: Path | None = None, entry_path=_DEF) -> dict[str, str]:
+    """{ticker: første dato i tickerens kilde} (categories.csv eller sideloggen), for «fra før DD.MM»/«fra DD.MM»."""
+    rows = _rows(path, entry_path)
+    first = {}
+    for r in rows:
+        first[r["src"]] = min(first.get(r["src"], r["date"]), r["date"])
+    out = {}
+    side = {r["ticker"] for r in rows if r["src"] == "side"}
+    return {r["ticker"]: first["side" if r["ticker"] in side else "cat"] for r in rows}
 
 
 def scores(path: Path | None = None) -> dict[tuple, str]:
     return {(r["date"], r["ticker"]): r.get("score") or "" for r in _read(path or LOG) if (r.get("category") or "") != "tema"}
+
+
+def theme_rows(path: Path | None = None) -> set:
+    """{(dato, ticker)} med kategori «tema» (temakart, utenfor kandidatlista)."""
+    return {(r["date"], r["ticker"]) for r in _read(path or LOG) if (r.get("category") or "") == "tema"}
 
 
 def diff(by: dict[str, set]) -> dict | None:
@@ -130,10 +175,11 @@ def exits(path: Path | None = None) -> dict[tuple, dict]:
 
 
 def reason_text(row: dict | None) -> str:
-    """En av de fire godkjente tekstene, eller "" når koden mangler / tallene mangler."""
+    """En av de fem godkjente tekstene, eller "" når koden mangler / tallene mangler. Bare faktiske tall vises."""
     if not row:
         return ""
-    c, o, n = row.get("code") or "", row.get("old_score") or "", row.get("new_score") or ""
+    v = lambda k: "" if row.get(k) is None else str(row.get(k)).strip()   # 0.0 er et faktisk tall, ikke «mangler»
+    c, o, n = v("code"), v("old_score"), v("new_score")
     try:
         if c == "below_threshold" and o and n:
             return f"Score under grensen ({_nb(o)} → {_nb(n)})"
@@ -141,7 +187,7 @@ def reason_text(row: dict | None) -> str:
             return f"Ikke lenger blant de 60 høyeste (score {_nb(n)})"
     except ValueError:
         return ""
-    return {"no_price": "Mangler kurs", "delisted": "Ikke børsnotert"}.get(c, "")
+    return {"no_price": "Mangler kurs", "delisted": "Ikke børsnotert", "moved_to_theme": "Flyttet til temakartet"}.get(c, "")
 
 
 def no_reason(path: Path | None = None) -> str:
@@ -173,38 +219,51 @@ def _delisted(today: str) -> set:
     return out
 
 
-def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, today: str | None = None) -> list[dict]:
-    """Tickere på lista i forrige kjøring som mangler i dag, med kode bare når kjøringen beviselig avgjør den:
-    - delisted: strøket (verdikjede-rettelse med listed=false, dato ≤ i dag).
-    - below_threshold: fortsatt kandidat, men score ≤ 0 (grensen i pipeline.run: score > 0), begge score kjent.
-    - out_of_top60: fortsatt kandidat med score > 0, men ikke blant de 60 (pipeline/_coverage_cut).
+TOP_CAP = 60   # pipeline.run: snap["tickers"] = [score > 0][:60]; _coverage_cut: kept (rangerbare) [:60] + «Ikke rangert»
+
+
+def exit_rows(snap: dict, ranked: list[dict], log_path: Path | None = None, today: str | None = None, entry_path=_DEF) -> list[dict]:
+    """Tickere på kandidatlista i forrige kjøring som mangler i dag. Nøyaktig én kode, eller tom (= «grunn ikke logget»):
+    - delisted: strøket (verdikjede-rettelse med listed=false, strykedato ≤ i dag).
+    - moved_to_theme: står i dagens logg med kategori «tema» (temakartet, utenfor kandidatlista).
+    - below_threshold: fortsatt kandidat, men score ≤ 0. Grensen er score > 0 (pipeline.run), f.eks. «Score under grensen
+      (2,1 → 0,0)»; skrives bare når begge score er kjent.
+    - out_of_top60: 60-taket telles på de RANGERBARE kandidatene i snapshotet (pipeline.run [:60] og _coverage_cut kept[:60]);
+      tema-rader (theme_maps.log_rows, tickere utenfor snapshotet) og «Ikke rangert» (low) telles IKKE. Koden skrives bare når
+      taket faktisk biter: tickeren er fortsatt kandidat med score > 0, står ikke i snapshotet, og snapshotet har nøyaktig
+      60 rangerbare kandidater. Biter ikke taket: aldri.
     - no_price: kjøringen fjerner aldri en ticker for manglende kurs (den blir «Ikke rangert» og står på lista) -> skrives ikke.
-    Ikke kandidat i dag (ingen score) eller fryst liste (kildefeil): ingen kode."""
+    Ikke kandidat i dag (ingen score), fryst liste (kildefeil) eller står i snapshotet (f.eks. ikke loggbar): ingen kode.
+    «Rødt flagg» er aldri en kode."""
     today = today or str(snap.get("date") or "")
-    by = by_date(log_path)
+    by = by_date(log_path, entry_path)
     if today not in by:
         return []
     prevs = [d for d in by if d < today]
     if not prevs:
         return []
     prev = max(prevs)
-    sc = scores(log_path)
+    sc, tema = scores(log_path), theme_rows(log_path)
     gone = sorted(by[prev] - by[today])
     cand = {e["ticker"]: e.get("score") for e in ranked}
     dl = _delisted(today)
-    in_snap = {e["ticker"] for e in snap.get("tickers") or []}
-    frozen = bool(snap.get("frozen_from")) or any(e.get("frozen") for e in snap.get("tickers") or [])
+    tk = snap.get("tickers") or []
+    in_snap = {e["ticker"] for e in tk}
+    n_kept = sum(1 for e in tk if not e.get("unranked"))
+    frozen = bool(snap.get("frozen_from")) or any(e.get("frozen") for e in tk)
     out = []
     for t in gone:
         old, new = sc.get((prev, t), ""), cand.get(t)
         code = ""
         if t in dl:
             code = "delisted"
-        elif frozen or new is None or t in in_snap:   # står i snapshotet (f.eks. ikke loggbar): ikke kuttet
+        elif (today, t) in tema:
+            code = "moved_to_theme"
+        elif frozen or new is None or t in in_snap:
             code = ""
         elif new <= 0 and old not in ("", None):
             code = "below_threshold"
-        elif new > 0:
+        elif new > 0 and n_kept == TOP_CAP:
             code = "out_of_top60"
         out.append({"date": today, "ticker": t, "code": code, "old_score": old, "new_score": "" if new is None else new})
     return out
@@ -245,9 +304,10 @@ def strip_html(snap: dict | None = None, path: Path | None = None, exits_path: P
     ut = [t for t in dd["ut"] if t not in np_]
     sub = lambda t: f'Ut {_dm(dd["last"])}: {ut_text(dd["last"], t, ex, nr)}'
 
-    def grp(name, chips, n):
-        body = "".join(chips) if chips else '<span class="chg-0">Ingen</span>'
-        return f'<div class="chg-grp"><h3>{E(name)} ({n})</h3><div class="chg-cs">{body}</div></div>'
+    def grp(name, chips, n):   # UxBot 11.11: tom gruppe skjules helt (ingen overskrift, ingen plassholder); tallet i stripen står
+        if not chips:
+            return ""
+        return f'<div class="chg-grp"><h3>{E(name)} ({n})</h3><div class="chg-cs">{"".join(chips)}</div></div>'
 
     g = grp("Inn", [_chip(t, "+", pages) for t in dd["inn"]], len(dd["inn"])) + grp("Ut", [_chip(t, "−", pages, sub(t)) for t in ut], len(ut))
     if np_:
@@ -256,19 +316,23 @@ def strip_html(snap: dict | None = None, path: Path | None = None, exits_path: P
             f'<div class="chg-p">{g}</div></details>')
 
 
-def days_cell(t: str, dmap: dict[str, int], first: str | None = None, n_runs: int | None = None) -> str:
+def days_cell(t: str, dmap: dict[str, int], full: set | None = None) -> str:
+    """«N dager på rad», «fra DD.MM» (sammenhengende siden første dato i kilden), «–» (ikke på lista). Grå, ingen sortering."""
     n = dmap.get(t)
     if n is None:
         return '<td class="dg"><span class="dgv">–</span></td>'
-    if first and n_runs and n >= n_runs:
-        return f'<td class="dg"><span class="dgv">fra {_dm(first)}</span></td>'
+    if full and t in full:
+        return f'<td class="dg"><span class="dgv">fra {_dm(full[t])}</span></td>'
     ny = '<span class="dg-ny">Ny</span>' if n == 1 else ""
     return f'<td class="dg"><span class="dgv">{n} {"dag" if n == 1 else "dager"} på rad</span>{ny}</td>'
 
 
-def days_ctx(path: Path | None = None) -> tuple[dict, str | None, int]:
-    by = by_date(path)
-    return days(by), (min(by) if by else None), len(by)
+def days_ctx(path: Path | None = None, entry_path=_DEF) -> tuple[dict, dict]:
+    """(dager, {ticker: første dato} for tickere som har stått i hver kjøring siden første dato i sin kilde)."""
+    by = by_date(path, entry_path)
+    dmap, sf, ds = days(by), src_first(path, entry_path), sorted(by)
+    full = {t: sf[t] for t, n in dmap.items() if t in sf and n >= len([d for d in ds if d >= sf[t]])}
+    return dmap, full
 
 
 # ---------------------------------------------------------------------------------------------------------- tickergraf
@@ -278,7 +342,7 @@ def ticker_periods(t: str, path: Path | None = None, exits_path: Path | None = N
     ps = periods(by).get(t) or []
     if not ps:
         return []
-    first = min(by)
+    first = src_first(path).get(t) or min(by)
     ex, nr = exits(exits_path), no_reason(exits_path)
     out = []
     for inn, ut in ps:
@@ -309,7 +373,7 @@ CSS = """
 .ov-chg .chg-cs{display:flex;flex-wrap:wrap;gap:6px}
 .ov-chg .chg-c{box-sizing:border-box;display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:4px;min-width:44px;min-height:44px;padding:4px 10px;border:1px solid #3b4757;border-radius:6px;background:#1c2430;color:#cbd5e1;font-size:14px;line-height:20px;text-decoration:none}
 .ov-chg a.chg-c:hover,.ov-chg a.chg-c:focus-visible{border-color:#94a3b8}
-.ov-chg .chg-g{color:#94a3b8;font-weight:600}.ov-chg .chg-why{flex-basis:100%;text-align:center;font-size:13px;line-height:18px;color:#94a3b8}.ov-chg .chg-0{font-size:13px;line-height:18px;color:#94a3b8}
+.ov-chg .chg-g{color:#94a3b8;font-weight:600}.ov-chg .chg-why{flex-basis:100%;text-align:center;font-size:13px;line-height:18px;color:#94a3b8}
 .ov-ct th.dg-h,.ov-ct td.dg{text-align:right;white-space:nowrap}.ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8;font-variant-numeric:tabular-nums}
 .ov-ct .dg-ny{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid #3b4757;border-radius:999px;font-size:12px;line-height:16px;color:#94a3b8;vertical-align:1px}
 @media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end}.ov-ct .sgc{white-space:normal;overflow:visible;text-overflow:clip}}
