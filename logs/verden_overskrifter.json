@@ -1,12 +1,13 @@
 {
- "hentet": "2026-11-11T12:48:08+0100",
+ "hentet": "2026-11-11T13:11:28+0100",
  "dato": "2026-11-11",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (6022) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "hoppet over denne gangen: GDELT DOC etter 6 forsøk: HTTP 200: Your query was too short or too long.",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
+  "GDELT 429": "3",
   "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
@@ -16,7 +17,7 @@
   },
   {
    "tema": "conflict_defense",
-   "antall": 97
+   "antall": 94
   },
   {
    "tema": "risk_off_haven",
@@ -36,11 +37,11 @@
   },
   {
    "tema": "tariffs_trade",
-   "antall": 10
+   "antall": 9
   },
   {
    "tema": "sanctions_energy",
-   "antall": 7
+   "antall": 6
   },
   {
    "tema": "sentralbanker",
@@ -1726,34 +1727,6 @@
    ],
    "matchede_ord": [
     "export ban"
-   ]
-  },
-  {
-   "tittel": "Truckers Challenge Kast's $20 Fuel Price Cap and Continue Nationwide Strike",
-   "url": "https://www.elciudadano.com/en/truckers-challenge-kasts-20-fuel-price-cap-and-continue-nationwide-strike/11/10/",
-   "kilde": "GDELT",
-   "domene": "elciudadano.com",
-   "publisert": "2026-11-10T12:00:00Z",
-   "tema": "sanctions_energy",
-   "temaer": [
-    "sanctions_energy"
-   ],
-   "matchede_ord": [
-    "price cap"
-   ]
-  },
-  {
-   "tittel": "KSA Business: KSA launches anti-dumping probe into imports from China, Turkiye",
-   "url": "https://www.gdnonline.com:443/Details/1412393/KSA-launches-anti-dumping-probe-into-imports-from-China,-Turkiye",
-   "kilde": "GDELT",
-   "domene": "gdnonline.com",
-   "publisert": "2026-11-10T12:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "anti-dumping"
    ]
   },
   {
