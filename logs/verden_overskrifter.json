@@ -1,34 +1,37 @@
 {
- "hentet": "2026-11-11T11:23:59+0100",
+ "hentet": "2026-11-11T12:48:08+0100",
  "dato": "2026-11-11",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "hoppet over denne gangen: GDELT DOC etter 6 forsøk: HTTP 429: Please limit requests to one every 5 seconds or contact kale",
+  "GDELT": "ok (6022) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "GDELT 429": "5",
   "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 130
+   "antall": 135
   },
   {
    "tema": "conflict_defense",
-   "antall": 93
+   "antall": 97
   },
   {
    "tema": "risk_off_haven",
-   "antall": 27
+   "antall": 30
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 22
+   "antall": 23
   },
   {
    "tema": "food_agri",
+   "antall": 11
+  },
+  {
+   "tema": "rare_earths_semis",
    "antall": 11
   },
   {
@@ -36,12 +39,8 @@
    "antall": 10
   },
   {
-   "tema": "rare_earths_semis",
-   "antall": 8
-  },
-  {
    "tema": "sanctions_energy",
-   "antall": 4
+   "antall": 7
   },
   {
    "tema": "sentralbanker",
@@ -57,6 +56,825 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Xinhua Headlines: Russia, Ukraine resume talks after long hiatus, but breakthrough remains elusive",
+   "url": "http://www.bignewsnetwork.com/news/279426057/xinhua-headlines-russia-ukraine-resume-talks-after-long-hiatus-but-breakthrough-remains-elusive",
+   "kilde": "GDELT",
+   "domene": "bignewsnetwork.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Senior Japanese official calls for allowing nuclear weapons into Japan in emergencies",
+   "url": "http://www.japanherald.com/news/279425723/senior-japanese-official-calls-for-allowing-nuclear-weapons-into-japan-in-emergencies",
+   "kilde": "GDELT",
+   "domene": "japanherald.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Tehran informs Moscow of decision to keep enriched uranium in Iran",
+   "url": "https://en.apa.az/asia/tehran-informs-moscow-of-decision-to-keep-enriched-uranium-in-iran-535433",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Kremlin: No contacts between Russian and EU representatives in Abu Dhabi",
+   "url": "https://en.apa.az/cis-countries/kremlin-no-contacts-between-russian-and-eu-representatives-in-abu-dhabi-535440",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Russian Defense Ministry: More than 1,000 Ukrainian drones shot down over past 24 hours",
+   "url": "https://en.apa.az/cis-countries/russian-defense-ministry-more-than-1000-ukrainian-drones-shot-down-over-past-24-hours-535424",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Gold Prices in Pakistan tumble for 2nd Straight Day, hitting Rs4.27 Per Tola",
+   "url": "https://pakobserver.net/gold-prices-in-pakistan-tumble-for-2nd-straight-day-hitting-rs4-27-per-tola/",
+   "kilde": "GDELT",
+   "domene": "pakobserver.net",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "The Godfather Of Taiwan's DRAM Industry Says CXMT Will Flood The Market With Memory Products \"In Two Years,\" As Another Expert Doubles Down On TSMC's BEOL Memory",
+   "url": "https://wccftech.com/the-godfather-of-taiwans-dram-industry-says-cxmt-will-flood-the-market-with-memory-products-in-two-years-as-another-expert-doubles-down-on-tsmcs-beol-memory/",
+   "kilde": "GDELT",
+   "domene": "wccftech.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "taiwan",
+    "tsmc"
+   ]
+  },
+  {
+   "tittel": "Touching plans to honour remarkable Second World War unit in the Midlands",
+   "url": "https://www.birminghammail.co.uk/news/midlands-news/touching-plans-honour-remarkable-second-34894055",
+   "kilde": "GDELT",
+   "domene": "birminghammail.co.uk",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Govt sets aside RM15mil a month to maintain bottled cooking oil prices",
+   "url": "https://www.freemalaysiatoday.com/category/nation/2026/11/11/govt-sets-aside-rm15mil-a-month-to-maintain-bottled-cooking-oil-prices",
+   "kilde": "GDELT",
+   "domene": "freemalaysiatoday.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Strait of Hormuz Shipping Risks Push Oil Prices Up From Two-Month Lows",
+   "url": "https://www.kaok.com/2026/11/11/strait-of-hormuz-shipping-risks-push-oil-prices-up-from-two-month-lows/",
+   "kilde": "GDELT",
+   "domene": "kaok.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "oil price",
+    "hormuz"
+   ]
+  },
+  {
+   "tittel": "Kremlin denies links to senior US Army soldier arrested in UK over suspected spying for Russia",
+   "url": "https://www.lbc.co.uk/article/kremlin-denies-links-us-army-soldier-5HjdmFT_2/",
+   "kilde": "GDELT",
+   "domene": "lbc.co.uk",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "kremlin",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Sensex climbs 773 points, Nifty tops 25,250 as lower oil prices boost sentiment",
+   "url": "https://www.prokerala.com/news/articles/a1835480.html",
+   "kilde": "GDELT",
+   "domene": "prokerala.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Oil Prices Rebound From Two-month Low",
+   "url": "https://www.rttnews.com/3713061/oil-prices-rebound-from-two-month-low.aspx",
+   "kilde": "GDELT",
+   "domene": "rttnews.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Indian Shares Hit Eight-month High Amid Sharp Fall In Oil Prices",
+   "url": "https://www.rttnews.com/story.aspx?Id=3713093",
+   "kilde": "GDELT",
+   "domene": "rttnews.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "BORDER REOPENS: Iraq Reopens Key Crossing With Iran After Three Weeks As Washington Presses Baghdad To Seal Most Borders",
+   "url": "https://www.theyeshivaworld.com/news/general/2621468/border-reopens-iraq-reopens-key-crossing-with-iran-after-three-weeks-as-washington-presses-baghdad-to-seal-most-borders.html",
+   "kilde": "GDELT",
+   "domene": "theyeshivaworld.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "IRAN MISSILE THREAT: Despite U.S. And Israeli Strikes, Iran Retains Half Its Ballistic Missile Production Capacity",
+   "url": "https://www.theyeshivaworld.com/news/israel-news/2621769/iran-missile-threat-despite-u-s-and-israeli-strikes-iran-retains-half-its-ballistic-missile-production-capacity.html",
+   "kilde": "GDELT",
+   "domene": "theyeshivaworld.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Netanyahu says Israel is not to blame for the flood crisis in Gaza, and other Mideast news – Winnipeg Free Press",
+   "url": "https://www.winnipegfreepress.com/world/2026/11/11/netanyahu-says-israel-is-not-to-blame-for-the-flood-crisis-in-gaza-and-other-mideast-news",
+   "kilde": "GDELT",
+   "domene": "winnipegfreepress.com",
+   "publisert": "2026-11-11T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "India may get a better trade deal: Samir Saran on renegotiating with the US",
+   "url": "http://www.calcuttanews.net/news/279425845/india-may-get-a-better-trade-deal-samir-saran-on-renegotiating-with-the-us",
+   "kilde": "GDELT",
+   "domene": "calcuttanews.net",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "Endless wars must give way to end of war: MEA emphasises PM Modi's message on India's engagement with Russia, Ukraine",
+   "url": "http://www.calcuttanews.net/news/279425854/endless-wars-must-give-way-to-end-of-war-mea-emphasises-pm-modi-message-on-india-engagement-with-russia-ukraine",
+   "kilde": "GDELT",
+   "domene": "calcuttanews.net",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russia and Ukraine hold a second day of US-brokered talks in Abu Dhabi",
+   "url": "http://www.leadertelegram.com/news/world/russia-and-ukraine-hold-a-second-day-of-us-brokered-talks-in-abu-dhabi/article_6c0723e7-30c1-5284-a043-74c2e8a7cbde.html",
+   "kilde": "GDELT",
+   "domene": "leadertelegram.com",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Iran denies talks with US, says Hormuz will stay shut until demands are met  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
+   "url": "https://dominicanrepublicpost.com/iran-denies-talks-with-us-says-hormuz-will-stay-shut-until-demands-are-met/",
+   "kilde": "GDELT",
+   "domene": "dominicanrepublicpost.com",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "US, Russia and Ukraine start second day of Abu Dhabi peace talks",
+   "url": "https://www.al-monitor.com/originals/2026/11/us-russia-and-ukraine-start-second-day-abu-dhabi-peace-talks",
+   "kilde": "GDELT",
+   "domene": "al-monitor.com",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Canada can better commemorate its dead from the First World War",
+   "url": "https://www.theglobeandmail.com/opinion/article-canada-can-better-commemorate-first-world-war-dead/",
+   "kilde": "GDELT",
+   "domene": "theglobeandmail.com",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Edible oil prices remain steady during festive season: Experts",
+   "url": "https://www.thehitavada.com/Encyc/2026/11/11/edible-oil-prices-remain-steady-during-festive-season-experts.html",
+   "kilde": "GDELT",
+   "domene": "thehitavada.com",
+   "publisert": "2026-11-11T11:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Russia says it has no contact with European representatives during Ukraine talks in Abu Dhabi",
+   "url": "https://cphpost.dk/2026-11-11/global/russia-says-it-has-no-contact-with-european-representatives-during-ukraine-talks-in-abu-dhabi/",
+   "kilde": "GDELT",
+   "domene": "cphpost.dk",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Iranian President Pezeshkian Arrives in Türkiye for COP31, Says He Will Raise Environmental Damage Caused by US and Israeli Actions",
+   "url": "https://dailythepatriot.com/iranian-president-pezeshkian-arrives-in-turkiye-for-cop31-says-he-will-raise-environmental-damage-caused-by-us-and-israeli-actions/",
+   "kilde": "GDELT",
+   "domene": "dailythepatriot.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "israeli"
+   ]
+  },
+  {
+   "tittel": "Ukraine War, Day 1,721: Zelensky - \"Happy\" with US Change in Russia Talks",
+   "url": "https://eaworldview.com/2026/11/ukraine-war-zelensky-happy-with-us-change-in-russia-talks/",
+   "kilde": "GDELT",
+   "domene": "eaworldview.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russia's oil game runs dry as Ukrainian drones knock out 30% of refining capacity",
+   "url": "https://timesofindia.indiatimes.com/business/international-business/russias-oil-game-runs-dry-as-ukrainian-drones-knock-out-30-of-refining-capacity/articleshow/135731724.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "2 killed in Ukrainian drone attack on Russia's Smolensk region, Leningrad region hit by largest attack this year",
+   "url": "https://tribune.com.pk/story/2639762/two-killed-in-ukrainian-drone-attack-on-russias-smolensk-leningrad-hit-by-years-largest-attack",
+   "kilde": "GDELT",
+   "domene": "tribune.com.pk",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Govt raises price cap for officers' electronic devices to ₹1.8 lakh",
+   "url": "https://www.business-standard.com/industry/news/govt-raises-price-cap-for-officers-electronic-devices-to-1-8-lakh-126111100734_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "Govt raises laptop price cap to Rs 1.8 lakh for officers; allows personal use after four years",
+   "url": "https://www.businesstoday.in/india/story/govt-raises-laptop-price-cap-to-rs-1-8-lakh-for-officers-allows-personal-use-after-four-years-566872-2026-11-11",
+   "kilde": "GDELT",
+   "domene": "businesstoday.in",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "Myanmar lobbies US to invest in its rare earths sector, dominated by China",
+   "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/11/myanmar-lobbies-us-to-invest-in-its-rare-earths-sector-dominated-by-china",
+   "kilde": "GDELT",
+   "domene": "internazionale.it",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Russia, Ukraine hold second day of U.S.-brokered talks in Abu Dhabi",
+   "url": "https://www.thehindu.com/news/international/russia-ukraine-hold-second-day-of-us-brokered-talks-in-abu-dhabi/article71689267.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Trump signals retreat, Israel in dilemma, Iran stands firm | Global Faultlines podcast",
+   "url": "https://www.thehindu.com/podcast/trump-signals-retreat-israel-in-dilemma-iran-stands-firm-global-faultlines-podcast/article71689247.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Sinopec eyes new platform for South China Sea field",
+   "url": "https://www.upstreamonline.com/field-development/sinopec-eyes-new-platform-for-south-china-sea-field/2-1-2072421",
+   "kilde": "GDELT",
+   "domene": "upstreamonline.com",
+   "publisert": "2026-11-11T11:15:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "Israeli fire kills seven, including a father and son, in Gaza, medics say",
+   "url": "https://arynews.tv/israeli-fire-kills-seven-including-a-father-and-son-in-gaza-medics-say",
+   "kilde": "GDELT",
+   "domene": "arynews.tv",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy: Abu Dhabi talks to focus on energy and Black Sea ceasefires, prisoner exchange",
+   "url": "https://en.interfax.com.ua/news/general/1234654.html",
+   "kilde": "GDELT",
+   "domene": "interfax.com.ua",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy discusses security cooperation, rehabilitation of wounded Ukrainian troops with Danish king",
+   "url": "https://en.interfax.com.ua/news/general/1234655.html",
+   "kilde": "GDELT",
+   "domene": "interfax.com.ua",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "zelenskyy"
+   ]
+  },
+  {
+   "tittel": "Safe Haven's New Shreveport Home For Homeless Veterans",
+   "url": "https://mykisscountry937.com/ixp/180/p/shreveport-safe-haven-veterans-home/",
+   "kilde": "GDELT",
+   "domene": "mykisscountry937.com",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "safe haven"
+   ]
+  },
+  {
+   "tittel": "Netanyahu lookalike in Tehran goes viral as Iranian shopkeeper faces boycott calls",
+   "url": "https://www.azernews.az/region/267215.html",
+   "kilde": "GDELT",
+   "domene": "azernews.az",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "Vladimir Putin 'doesn't have brains' to win war mocks top Russian general | World | News",
+   "url": "https://www.express.co.uk/news/world/2265236/vladimir-putin-mocked-top-russian-general",
+   "kilde": "GDELT",
+   "domene": "express.co.uk",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "From Nuclear Weapons to Artificial Intelligence, a New Test of Humanity's Restraint",
+   "url": "https://www.ipsnews.net/2026/11/from-nuclear-weapons-to-artificial-intelligence-a-new-test-of-humanitys-restraint/",
+   "kilde": "GDELT",
+   "domene": "ipsnews.net",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Iranian army says oil tanker ablaze in Hormuz Strait after hitting mine",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/iranian-army-says-oil-tanker-ablaze-hormuz-strait-after-hitting-mine",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "hormuz"
+   ]
+  },
+  {
+   "tittel": "Putin's Soldiers Are Becoming Russia's Next Deep State",
+   "url": "https://www.newsweek.com/putin-soldiers-are-becoming-russia-next-deep-state-12696258",
+   "kilde": "GDELT",
+   "domene": "newsweek.com",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Russia and Ukraine Wrap Up Final Day of Abu Dhabi Peace Talks",
+   "url": "https://www.themoscowtimes.com/2026/11/11/russia-and-ukraine-wrap-up-final-day-of-abu-dhabi-peace-talks-a94227",
+   "kilde": "GDELT",
+   "domene": "themoscowtimes.com",
+   "publisert": "2026-11-11T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "\"Any future arrangements must respect sovereignty\": US, Ukraine, European partners meet ahead of talks with Russia",
+   "url": "http://www.theuknews.com/news/279425840/any-future-arrangements-must-respect-sovereignty-us-ukraine-european-partners-meet-ahead-of-talks-with-russia",
+   "kilde": "GDELT",
+   "domene": "theuknews.com",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "China's rare earth export value surges 46.4 pc to USD 584.3 million in Jan-Oct 2026 despite decline in volumes",
+   "url": "https://aninews.in/news/business/chinas-rare-earth-export-value-surges-464-pc-to-usd-5843-million-in-jan-oct-2026-despite-decline-in-volumes20261111150544/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Study Finds U.S. Treasuries' Safe-Haven Performance Slipped Since Pandemic",
+   "url": "https://econotimes.com/Study-Finds-U-S-Treasuries-Safe-Haven-Performance-Slipped-Since-Pandemic-1775138",
+   "kilde": "GDELT",
+   "domene": "econotimes.com",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "safe haven"
+   ]
+  },
+  {
+   "tittel": "Israel Rejects BoP's Gaza Aid Criticism, Says Hamas Refusal To Disarm Blocks Reconstruction",
+   "url": "https://themedialine.org/headlines/israel-rejects-trumps-gaza-aid-criticism-says-hamas-refusal-to-disarm-blocks-reconstruction/",
+   "kilde": "GDELT",
+   "domene": "themedialine.org",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "'What Can 250 People Do?' Gaza's Proposed Int'l Force Faces Questions as US Pressure on Israel Grows",
+   "url": "https://themedialine.org/top-stories/what-can-250-people-do-gazas-proposed-intl-force-faces-questions-as-us-pressure-on-israel-grows/",
+   "kilde": "GDELT",
+   "domene": "themedialine.org",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Martin Lewis shares 21 ways to cut energy bills before January price cap rise",
+   "url": "https://www.dailyrecord.co.uk/lifestyle/money/martin-lewis-energy-bill-savings-37864577",
+   "kilde": "GDELT",
+   "domene": "dailyrecord.co.uk",
+   "publisert": "2026-11-11T10:45:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "East Africa: The Race for the Red Sea",
+   "url": "https://allafrica.com/stories/202611110363.html",
+   "kilde": "GDELT",
+   "domene": "allafrica.com",
+   "publisert": "2026-11-11T10:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "red sea"
+   ]
+  },
+  {
+   "tittel": "Ukraine urges US to speed up interceptor deliveries as Russia targets power grid",
+   "url": "https://www.asiaone.com/world/ukraine-urges-us-speed-interceptor-deliveries-russia-targets-power-grid",
+   "kilde": "GDELT",
+   "domene": "asiaone.com",
+   "publisert": "2026-11-11T10:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Sisters retrace their uncle's footsteps through Europe during the Second World War",
+   "url": "https://www.cbc.ca/news/canada/prince-edward-island/pei-sisters-retrace-footsteps-uncle-second-world-war-9.7417231",
+   "kilde": "GDELT",
+   "domene": "cbc.ca",
+   "publisert": "2026-11-11T10:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Türkiye, Saudi Arabia sign deal to build 3,000 MW of wind power capacity",
+   "url": "https://www.dailysabah.com/business/economy/turkiye-saudi-arabia-sign-deal-to-build-3000-mw-of-wind-power-capacity",
+   "kilde": "GDELT",
+   "domene": "dailysabah.com",
+   "publisert": "2026-11-11T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "US, Russia and Ukraine start day two of Abu Dhabi talks",
+   "url": "https://www.dw.com/en/us-russia-and-ukraine-start-second-day-of-abu-dhabi-talks/live-79906232",
+   "kilde": "GDELT",
+   "domene": "dw.com",
+   "publisert": "2026-11-11T10:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
   {
    "tittel": "After pressure from Kremlin, Russian newspaper Novaya Gazeta shuts",
    "url": "http://www.azerbaijannews.net/news/279422391/after-pressure-from-kremlin-russian-newspaper-novaya-gazeta-shuts",
@@ -102,177 +920,6 @@
    ]
   },
   {
-   "tittel": "Crude Oil Prices Surge After Iran Attack Ships In Strait of Hormuz - Trak.in - Indian Business of Tech, Mobile & Startups",
-   "url": "https://trak.in/stories/crude-oil-prices-surge-after-iran-attack-ships-in-strait-of-hormuz/",
-   "kilde": "GDELT",
-   "domene": "trak.in",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "oil price",
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Strait of Hormuz Shipping Risks Push Oil Prices Up From Two-Month Lows",
-   "url": "https://www.1290wlby.com/2026/11/11/strait-of-hormuz-shipping-risks-push-oil-prices-up-from-two-month-lows/",
-   "kilde": "GDELT",
-   "domene": "1290wlby.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "oil price",
-    "hormuz"
-   ]
-  },
-  {
-   "tittel": "Arab News | Iran says oil tanker hit mine and caught fire in Strait of Hormuz",
-   "url": "https://www.arabnews.com/middle-east/iran-says-oil-tanker-hit-mine-and-caught-fire-in-strait-of-hormuz-3011095",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Arab News | Russia, Ukraine start second day of US-led talks",
-   "url": "https://www.arabnews.com/world/russia-ukraine-start-second-day-of-us-led-talks-3011162",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine peace talks which 'could be first step toward complete ceasefire' continue, with Zelensky saying he's 'very happy' with US approach",
-   "url": "https://www.dailymail.com/news/article-16283607/Ukraine-peace-talks-step-complete-ceasefire-continue-Zelensky-saying-hes-happy-US-approach.html",
-   "kilde": "GDELT",
-   "domene": "dailymail.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine"
-   ]
-  },
-  {
-   "tittel": "France fears Germany could spark nuclear war fears with plan for long-range missile use against Russia",
-   "url": "https://www.dailymail.com/news/article-16283693/France-Germany-nuclear-war-missile-Russia.html",
-   "kilde": "GDELT",
-   "domene": "dailymail.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "missile",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Baltic nations briefly issue drone alerts as Russia, Ukraine exchange strikes",
-   "url": "https://www.dailymaverick.co.za/article/2026-11-11-baltic-nations-briefly-issue-drone-alerts-as-russia-ukraine-exchange-strikes/",
-   "kilde": "GDELT",
-   "domene": "dailymaverick.co.za",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine, US and Russia Discuss Major Prisoner Swap in Abu Dhabi - Novinite.com",
-   "url": "https://www.novinite.com/articles/241542/Ukraine,+US+and+Russia+Discuss+Major+Prisoner+Swap+in+Abu+Dhabi",
-   "kilde": "GDELT",
-   "domene": "novinite.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Iran Says 3 Tankers Burn in Strait of Hormuz",
-   "url": "https://www.riotimesonline.com/iran-says-three-tankers-burn-hormuz/",
-   "kilde": "GDELT",
-   "domene": "riotimesonline.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Russia and Ukraine hold a second day of US-brokered talks in Abu Dhabi – Winnipeg Free Press",
-   "url": "https://www.winnipegfreepress.com/world/2026/11/11/russia-and-ukraine-hold-a-second-day-of-us-brokered-talks-in-abu-dhabi",
-   "kilde": "GDELT",
-   "domene": "winnipegfreepress.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russia and Ukraine hold a second day of US-brokered talks in Abu Dhabi",
-   "url": "https://www.wsls.com/news/world/2026/11/11/russia-and-ukraine-hold-a-second-day-of-us-brokered-talks-in-abu-dhabi/",
-   "kilde": "GDELT",
-   "domene": "wsls.com",
-   "publisert": "2026-11-11T10:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Govt raises price cap for electronic devices to Rs 1.8 lakh for officers; personal retention rights after 4 yrs",
    "url": "https://economictimes.indiatimes.com/news/india/govt-raises-price-cap-for-electronic-devices-to-rs-1-8-lakh-for-officers-personal-retention-rights-after-4-yrs/articleshow/135732347.cms",
    "kilde": "GDELT",
@@ -287,65 +934,6 @@
    ]
   },
   {
-   "tittel": "IndiGo extends suspension of Saudi Arabia flights - News Today",
-   "url": "https://newstodaynet.com/2026/11/11/indigo-extends-suspension-of-saudi-arabia-flights/",
-   "kilde": "GDELT",
-   "domene": "newstodaynet.com",
-   "publisert": "2026-11-11T10:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Iran denies talks with US, says Hormuz will stay shut until demands are met",
-   "url": "https://www.aljazeera.com/news/2026/11/11/iran-denies-talks-with-us-says-hormuz-will-stay-shut-until-demands-are-met",
-   "kilde": "GDELT",
-   "domene": "aljazeera.com",
-   "publisert": "2026-11-11T10:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Marco Rubio says US remains open to peace deal with Iran, calls Tehran's conditions 'absurd'",
-   "url": "https://www.hindustantimes.com/world-news/marco-rubio-says-us-remains-open-to-peace-deal-with-iran-calls-tehrans-conditions-absurd-101794386316058.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-11T10:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Russia, Ukraine start second day of US-led talks",
-   "url": "https://www.naharnet.com:443/stories/en/323694-russia-ukraine-start-second-day-of-us-led-talks",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-11T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Swindon talk to explore town's First World War involvement",
    "url": "https://www.swindonadvertiser.co.uk/news/26718305.swindon-talk-explore-towns-first-world-war-involvement/",
    "kilde": "GDELT",
@@ -357,64 +945,6 @@
    ],
    "matchede_ord": [
     "world war"
-   ]
-  },
-  {
-   "tittel": "Senior Japanese official calls for allowing nuclear weapons into Japan in emergencies",
-   "url": "http://en.people.cn/n3/2026/1111/c90000-20518003.html",
-   "kilde": "GDELT",
-   "domene": "en.people.cn",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "nuclear weapon"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia and Turkey Sign Major 3 GW Wind Power Deal",
-   "url": "https://oilprice.com/Latest-Energy-News/World-News/Saudi-Arabia-and-Turkey-Sign-Major-3-GW-Wind-Power-Deal.html",
-   "kilde": "GDELT",
-   "domene": "oilprice.com",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Low expectations in Abu Dhabi, EU sabotages, Russia sees a trap, Ukraine wants 10 years of war",
-   "url": "https://www.bankingnews.gr/diethni/articles/910385/low-expectations-in-abu-dhabi-eu-sabotages-russia-sees-a-trap-ukraine-wants-10-years-of-war",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Civil war in the US over the Persian Gulf, Bessent evacuated: Russia's line on Iran,",
-   "url": "https://www.bankingnews.gr/diethni/articles/910390/civil-war-in-the-us-over-the-persian-gulf-bessent-evacuated-russia-s-line-on-iran-hardliners-want-a-nuclear-bomb",
-   "kilde": "GDELT",
-   "domene": "bankingnews.gr",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "persian gulf",
-    "iran"
    ]
   },
   {
@@ -460,52 +990,6 @@
    ]
   },
   {
-   "tittel": "Kenyan Domestic Worker Sentenced To 100 Lashes In Saudi Arabia For Birth Outside Marriage",
-   "url": "https://www.ghafla.co.ke/kenyan-domestic-worker-sentenced-to-100-lashes-in-saudi-arabia-for-birth-outside-marriage/",
-   "kilde": "GDELT",
-   "domene": "ghafla.co.ke",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Putin humiliated as Russian port burns after huge Ukrainian attack during peace talks",
-   "url": "https://www.mirror.co.uk/news/world-news/ukraine-russia-peace-talks-fire-37864568",
-   "kilde": "GDELT",
-   "domene": "mirror.co.uk",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Ukraine, Russia resume US-led peace talks in Abu Dhabi; Black Sea, energy ceasefires on agenda",
-   "url": "https://www.moneycontrol.com/world/ukraine-russia-resume-us-led-peace-talks-in-abu-dhabi-black-sea-energy-ceasefires-on-agenda-article-14077195.html",
-   "kilde": "GDELT",
-   "domene": "moneycontrol.com",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Gold Rate Today November 11: Check latest Gold prices in Coimbatore, Nagpur, Visakhapatnam, Surat, Jaipur, Lucknow, Chandigarh & Other Cities",
    "url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-coimbatore-nagpur-visakhapatnam-surat-jaipur-lucknow-chandigarh-gold-rates-other-cities-november-11-2026/article71688838.ece",
    "kilde": "GDELT",
@@ -534,109 +1018,6 @@
    ]
   },
   {
-   "tittel": "Israel Demands Hamas Disarm Before Gaza Reconstruction Can Begin",
-   "url": "https://www.worthynews.com/118890-israel-demands-hamas-disarm-before-gaza-reconstruction-can-begin",
-   "kilde": "GDELT",
-   "domene": "worthynews.com",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "U.S., Russia And Ukraine Conclude First Day Of Productive Peace Talks In Abu Dhabi",
-   "url": "https://www.worthynews.com/118913-u-s-russia-and-ukraine-conclude-first-day-of-productive-peace-talks-in-abu-dhabi",
-   "kilde": "GDELT",
-   "domene": "worthynews.com",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "\"Any future arrangements must respect sovereignty\": US, Ukraine, European partners meet ahead of talks with Russia",
-   "url": "http://www.kenyastar.com/news/279425840/any-future-arrangements-must-respect-sovereignty-us-ukraine-european-partners-meet-ahead-of-talks-with-russia",
-   "kilde": "GDELT",
-   "domene": "kenyastar.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Five-year-old Palestinian boy fights for life after Israeli shooting in Gaza",
-   "url": "https://article.wn.com/view/2026/11/11/Fiveyearold_Palestinian_boy_fights_for_life_after_Israeli_sh/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iran says third tanker explodes after hitting mine in Hormuz",
-   "url": "https://article.wn.com/view/2026/11/11/Iran_says_third_tanker_explodes_after_hitting_mine_in_Hormuz/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia imposes SR5,000 fine for selling tobacco products to minors",
-   "url": "https://article.wn.com/view/2026/11/11/Saudi_Arabia_imposes_SR5000_fine_for_selling_tobacco_product/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Japan's Idemitsu quadruples FY27 profit forecast to $1.86 billion on stronger oil prices",
-   "url": "https://economictimes.indiatimes.com/news/international/business/japans-idemitsu-quadruples-fy27-profit-forecast-to-1-86-billion-on-stronger-oil-prices/articleshow/135731757.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
    "tittel": "Hungary Positions as Central European Gas Hub via Romanian Black Sea Extraction",
    "url": "https://english.pravda.ru/news/business/172328-hungary-romania-gas-hub-strategy/",
    "kilde": "GDELT",
@@ -648,34 +1029,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Occidental shares rise as debt milestone sharpens focus on oil-price risk",
-   "url": "https://finchannel.com/occidental-shares-rise-as-debt-milestone-sharpens-focus-on-oil-price-risk/141053/american-business-trends/stock-prices/2026/11/",
-   "kilde": "GDELT",
-   "domene": "finchannel.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Wael Abdallah, Group Chief Executive Officer, Cambridge Health Group: Economic Viewpoint - Saudi Arabia 2026",
-   "url": "https://oxfordbusinessgroup.com/articles-interviews/wael-abdallah-group-ceo-cambridge-health-group-abu-dhabi-and-saudi-arabia-health-care-transformation-research-analysis-economic-viewpoint/",
-   "kilde": "GDELT",
-   "domene": "oxfordbusinessgroup.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -693,36 +1046,6 @@
    ]
   },
   {
-   "tittel": "Israeli fire kills seven, including a father and son, in Gaza, medics say",
-   "url": "https://www.al-monitor.com/originals/2026/11/israeli-fire-kills-seven-including-father-and-son-gaza-medics-say",
-   "kilde": "GDELT",
-   "domene": "al-monitor.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iran says tanker struck mine, caught fire in Hormuz",
-   "url": "https://www.hurriyetdailynews.com/iran-says-tanker-struck-mine-caught-fire-in-hormuz-229264",
-   "kilde": "GDELT",
-   "domene": "hurriyetdailynews.com",
-   "publisert": "2026-11-11T09:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "The race for the Red Sea",
    "url": "https://www.independent.co.ug/the-race-for-the-red-sea/",
    "kilde": "GDELT",
@@ -734,36 +1057,6 @@
    ],
    "matchede_ord": [
     "red sea"
-   ]
-  },
-  {
-   "tittel": "2 killed in Ukrainian drone attack on Russia's Smolensk region, Leningrad region hit by largest attack this year",
-   "url": "https://aa.com.tr/en/russia-ukraine-war/2-killed-in-ukrainian-drone-attack-on-russia-s-smolensk-region-leningrad-region-hit-by-largest-attack-this-year/4119878",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-11T09:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy: Abu Dhabi talks discussed 1,000-for-1,000 or 1,500-for-1,500 exchange, Russians raised territorial issue",
-   "url": "https://en.interfax.com.ua/news/general/1234514.html",
-   "kilde": "GDELT",
-   "domene": "interfax.com.ua",
-   "publisert": "2026-11-11T09:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "russian"
    ]
   },
   {
@@ -795,52 +1088,6 @@
    ]
   },
   {
-   "tittel": "Ukraine's Zelensky Welcomes 'Changes' in US Approach During Talks with Russia",
-   "url": "https://english.aawsat.com/world/5339975-ukraine%E2%80%99s-zelensky-welcomes-%E2%80%98changes%E2%80%99-us-approach-during-talks-russia",
-   "kilde": "GDELT",
-   "domene": "aawsat.com",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Abu Dhabi peace talks: Can Russia and Ukraine move closer to ending the war?",
-   "url": "https://news.az/news/abu-dhabi-peace-talks-can-russia-and-ukraine-move-closer-to-ending-the-war",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "LIVE:  Deadly strikes reported as Russia, Ukraine hold US-mediated talks in Abu Dhabi",
-   "url": "https://news.az/news/live-deadly-strikes-reported-as-russia-ukraine-hold-us-mediated-talks-in-abu-dhabi",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "How a veteran pivoted to create safe haven in his classroom",
    "url": "https://www.havasunews.com/free_access/how-a-veteran-pivoted-to-create-safe-haven-in-his-classroom/article_abefee6b-c2a4-43d6-b7d8-e8aaa752a92b.html",
    "kilde": "GDELT",
@@ -852,22 +1099,6 @@
    ],
    "matchede_ord": [
     "safe haven"
-   ]
-  },
-  {
-   "tittel": "Ukraine's Zelenskyy 'happy' with US envoys' approach as Russia talks enter second day – Europe live | Ukraine",
-   "url": "https://www.theguardian.com/world/live/2026/nov/11/europe-ukraine-russia-us-talks-abu-dhabi-zelenskyy-latest-news-updates",
-   "kilde": "GDELT",
-   "domene": "theguardian.com",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -1238,20 +1469,6 @@
    ]
   },
   {
-   "tittel": "Nanaimo Military Camp big part of city in Second World War",
-   "url": "https://cowichanvalleycitizen.com/2026/11/10/nanaimo-military-camp-big-part-of-city-in-second-world-war/",
-   "kilde": "GDELT",
-   "domene": "cowichanvalleycitizen.com",
-   "publisert": "2026-11-11T00:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
-   ]
-  },
-  {
    "tittel": "Tankers continue to burn in Strait of Hormuz despite hopes for de-escalation",
    "url": "https://japantoday.com/category/world/tankers-continue-to-burn-in-the-middle-east-despite-hopes-for-de-escalation",
    "kilde": "GDELT",
@@ -1263,20 +1480,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Tourism minister says Belize remains safe despite state of emergency",
-   "url": "https://www.belizehub.com/tourism-minister-says-belize-remains-safe-despite-state-of-emergency/",
-   "kilde": "GDELT",
-   "domene": "belizehub.com",
-   "publisert": "2026-11-10T23:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
    ]
   },
   {
@@ -1305,20 +1508,6 @@
    ],
    "matchede_ord": [
     "red sea"
-   ]
-  },
-  {
-   "tittel": "Ryan Bridge: Remembering the first World War, 108 years on",
-   "url": "https://www.newstalkzb.co.nz/on-air/early-edition-with-ryan-bridge/opinion/ryan-bridge-remembering-the-first-world-war-108-years-on/",
-   "kilde": "GDELT",
-   "domene": "newstalkzb.co.nz",
-   "publisert": "2026-11-10T20:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
    ]
   },
   {
@@ -1361,20 +1550,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "World Wars and India's sacrifice",
-   "url": "https://www.thehindu.com/opinion/op-ed/world-wars-and-indias-sacrifice/article71687275.ece",
-   "kilde": "GDELT",
-   "domene": "thehindu.com",
-   "publisert": "2026-11-10T20:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
    ]
   },
   {
@@ -1434,34 +1609,6 @@
    ]
   },
   {
-   "tittel": "Ocean Shores declares citywide state of emergency",
-   "url": "https://www.thedailyworld.com/2026/11/10/ocean-shores-declares-citywide-state-of-emergency/",
-   "kilde": "GDELT",
-   "domene": "thedailyworld.com",
-   "publisert": "2026-11-10T19:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Ottawa says 4,306 Canadian veterans of Second World War, Korea still alive today – Brandon Sun",
-   "url": "https://www.brandonsun.com/local/2026/11/10/ottawa-says-4306-canadian-veterans-of-second-world-war-korea-still-alive-today",
-   "kilde": "GDELT",
-   "domene": "brandonsun.com",
-   "publisert": "2026-11-10T19:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
-   ]
-  },
-  {
    "tittel": "ERC proposes gas auction price cap at P7/kWh",
    "url": "https://www.philstar.com/business/2026/11/11/2569249/erc-proposes-gas-auction-price-cap-p7kwh",
    "kilde": "GDELT",
@@ -1473,20 +1620,6 @@
    ],
    "matchede_ord": [
     "price cap"
-   ]
-  },
-  {
-   "tittel": "Gold prices hold firm following recent BAJUS adjustment",
-   "url": "https://banglamirrornews.com/2026/11/10/214416/",
-   "kilde": "GDELT",
-   "domene": "banglamirrornews.com",
-   "publisert": "2026-11-10T19:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
@@ -1550,20 +1683,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "India may get a better trade deal: Samir Saran on renegotiating with the US",
-   "url": "https://news.webindia123.com/news/Articles/World/20261110/4518070.html",
-   "kilde": "GDELT",
-   "domene": "webindia123.com",
-   "publisert": "2026-11-10T13:15:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {
@@ -1635,34 +1754,6 @@
    ],
    "matchede_ord": [
     "anti-dumping"
-   ]
-  },
-  {
-   "tittel": "Myanmar lobbies US to invest in its rare earths sector, dominated by China",
-   "url": "https://www.dailymaverick.co.za/article/2026-11-10-myanmar-lobbies-us-to-invest-in-its-rare-earths-sector-dominated-by-china/",
-   "kilde": "GDELT",
-   "domene": "dailymaverick.co.za",
-   "publisert": "2026-11-10T11:30:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
-   ]
-  },
-  {
-   "tittel": "EU Puts Funding Into New Maritime Security Center for the Western Black Sea",
-   "url": "https://maritime-executive.com/article/eu-puts-funding-into-new-maritime-security-center-for-the-western-black-sea",
-   "kilde": "GDELT",
-   "domene": "maritime-executive.com",
-   "publisert": "2026-11-10T11:15:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
    ]
   },
   {
