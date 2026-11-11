@@ -104,3 +104,82 @@ def _hist(tickers: list[str]) -> dict:
         s = d[t].dropna()
         out[str(t)] = {str(k)[:10]: float(v) for k, v in s.items()}
     return out
+
+
+# AnalBot 11.11: linje i bokrapporten + forberedt «med/uten intradag-fills» (vises først fra 30 lukkede handler per bok).
+FILTER_FROM = "11.11"          # sluttkursfilteret gjelder fra denne datoen; fills i loggen er alle fra før
+
+
+def _pct1(x: float) -> str:
+    return f"{x * 100:.1f}".replace(".", ",") + " %"
+
+
+def stats(path: Path = OUT) -> dict:
+    """{book: {"n", "n_close", "mean_abs_pct"}} + "samlet". Leses fra loggen; ingenting hardkodet."""
+    from .portfolio import _f
+    with Path(path).open(newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    out = {}
+    for key, rs in [(b, [r for r in rows if r["book"] == b]) for b in dict.fromkeys(r["book"] for r in rows)] + [("samlet", rows)]:
+        d = [abs(_f(r["diff_pct"])) for r in rs if _f(r.get("diff_pct")) is not None]
+        out[key] = {"n": len(rs), "n_close": len(d), "mean_abs_pct": sum(d) / len(d) if d else None}
+    return out
+
+
+def line(st: dict) -> str:
+    a = "–" if st["mean_abs_pct"] is None else _pct1(st["mean_abs_pct"])
+    return f"{st['n']} fills før {FILTER_FROM} på intradag-kurs, snitt absolutt avvik {a}"
+
+
+def report_lines(path: Path = OUT) -> list[str]:
+    """Én linje per bok med intradag-fills, pluss samlet."""
+    st = stats(path)
+    from .testbooks_page import BOOK_TITLES
+    return [f"{BOOK_TITLES.get(k, k) if k != 'samlet' else 'Samlet'}: {line(v)}" for k, v in st.items()]
+
+
+def _drop_intraday(trades: list[dict], ids: set) -> list[dict]:
+    """Handlene uten posisjonene som har en intradag-fill (kjøp eller salg): hele rundturen tas ut, som om den ikke fantes."""
+    drop, open_ = set(), {}
+    for i, r in enumerate(trades):
+        if r["event"] != "fill":
+            continue
+        if r["side"] == "buy":
+            open_[r["ticker"]] = [i]
+            if r["order_id"] in ids:
+                open_[r["ticker"]].append("x")
+        else:
+            rt = open_.pop(r["ticker"], [])
+            if "x" in rt or r["order_id"] in ids:
+                drop.update(j for j in rt if j != "x")
+                drop.add(i)
+    for rt in open_.values():
+        if "x" in rt:
+            drop.update(j for j in rt if j != "x")
+    oids = {trades[i]["order_id"] for i in drop}
+    return [r for i, r in enumerate(trades) if i not in drop and r["order_id"] not in oids]
+
+
+def with_without(book: str, logs: Path = LOGS, path: Path = OUT, usdnok=None, fx=None) -> dict | None:
+    """Avkastning med og uten intradag-fillene. None (skjult) til boka har min_closed_for_returns lukkede handler."""
+    from . import portfolio as P, portfolio_books as PB
+    rules = P.RULES if book == "rules_v1" else PB.BOOKS[book]
+    tp = logs / P.TRADES.name if book == "rules_v1" else PB.paths(book, logs)[0]
+    trades = P._read(tp)
+    corr, last = P.load_corrections(logs / P.CORR.name), P.last_closes(logs / P.CLOSES.name)
+    if len(P.state(trades, corr)["closed"]) < rules["min_closed_for_returns"]:
+        return None
+    with Path(path).open(newline="") as fh:
+        ids = {r["order_id"] for r in csv.DictReader(fh) if r["book"] == book}
+    out = {}
+    for k, tr in (("med", trades), ("uten", _drop_intraday(trades, ids))):
+        s = P.state(tr, corr)
+        val = sum(p["shares"] * (last.get(t, (0.0, None))[0] or 0.0) * (P._rate(p["currency"], usdnok, fx) or 0.0) for t, p in s["open"].items())
+        nav = s["cash"] + val
+        out[k] = {"closed": len(s["closed"]), "nav_est": round(nav, 2), "total_pct": nav / rules["start_nok"] - 1}
+    out["line"] = f"Avkastning med intradag-fills {_pct1(out['med']['total_pct'])}, uten {_pct1(out['uten']['total_pct'])}"
+    return out
+
+
+if __name__ == "__main__":
+    print("\n".join(report_lines()))
