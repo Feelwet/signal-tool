@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-11T10:41:27+0100",
+ "hentet": "2026-11-11T10:57:17+0100",
  "dato": "2026-11-11",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (5399) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (886) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,7 +12,7 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 123
+   "antall": 126
   },
   {
    "tema": "conflict_defense",
@@ -20,7 +20,7 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 25
+   "antall": 26
   },
   {
    "tema": "shipping_chokepoints",
@@ -40,7 +40,7 @@
   },
   {
    "tema": "sanctions_energy",
-   "antall": 3
+   "antall": 4
   },
   {
    "tema": "sentralbanker",
@@ -56,6 +56,93 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Govt raises price cap for electronic devices to Rs 1.8 lakh for officers; personal retention rights after 4 yrs",
+   "url": "https://economictimes.indiatimes.com/news/india/govt-raises-price-cap-for-electronic-devices-to-rs-1-8-lakh-for-officers-personal-retention-rights-after-4-yrs/articleshow/135732347.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "sanctions_energy",
+   "temaer": [
+    "sanctions_energy"
+   ],
+   "matchede_ord": [
+    "price cap"
+   ]
+  },
+  {
+   "tittel": "IndiGo extends suspension of Saudi Arabia flights - News Today",
+   "url": "https://newstodaynet.com/2026/11/11/indigo-extends-suspension-of-saudi-arabia-flights/",
+   "kilde": "GDELT",
+   "domene": "newstodaynet.com",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Iran denies talks with US, says Hormuz will stay shut until demands are met",
+   "url": "https://www.aljazeera.com/news/2026/11/11/iran-denies-talks-with-us-says-hormuz-will-stay-shut-until-demands-are-met",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Marco Rubio says US remains open to peace deal with Iran, calls Tehran's conditions 'absurd'",
+   "url": "https://www.hindustantimes.com/world-news/marco-rubio-says-us-remains-open-to-peace-deal-with-iran-calls-tehrans-conditions-absurd-101794386316058.html",
+   "kilde": "GDELT",
+   "domene": "hindustantimes.com",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Russia, Ukraine start second day of US-led talks",
+   "url": "https://www.naharnet.com:443/stories/en/323694-russia-ukraine-start-second-day-of-us-led-talks",
+   "kilde": "GDELT",
+   "domene": "naharnet.com",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Swindon talk to explore town's First World War involvement",
+   "url": "https://www.swindonadvertiser.co.uk/news/26718305.swindon-talk-explore-towns-first-world-war-involvement/",
+   "kilde": "GDELT",
+   "domene": "swindonadvertiser.co.uk",
+   "publisert": "2026-11-11T10:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
   {
    "tittel": "Senior Japanese official calls for allowing nuclear weapons into Japan in emergencies",
    "url": "http://en.people.cn/n3/2026/1111/c90000-20518003.html",
@@ -83,21 +170,6 @@
    "matchede_ord": [
     "russian",
     "kremlin"
-   ]
-  },
-  {
-   "tittel": "Russia, Ukraine start second day of US-led talks",
-   "url": "https://naharnet.com/stories/en/323694-russia-ukraine-start-second-day-of-us-led-talks",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-11T09:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -597,21 +669,6 @@
    ]
   },
   {
-   "tittel": "Oil Rebounds as Hormuz Shipping Attacks Blunt Hopes for Iran Truce",
-   "url": "https://english.aawsat.com/business/5339976-oil-rebounds-hormuz-shipping-attacks-blunt-hopes-iran-truce",
-   "kilde": "GDELT",
-   "domene": "aawsat.com",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Ukraine's Zelensky Welcomes 'Changes' in US Approach During Talks with Russia",
    "url": "https://english.aawsat.com/world/5339975-ukraine%E2%80%99s-zelensky-welcomes-%E2%80%98changes%E2%80%99-us-approach-during-talks-russia",
    "kilde": "GDELT",
@@ -658,20 +715,6 @@
    ]
   },
   {
-   "tittel": "Oil prices fall on hopes of de-escalation: What does it mean for Azerbaijan? –  EXPERT OPINION",
-   "url": "https://news.az/news/oil-prices-fall-on-hopes-of-de-escalation-what-does-it-mean-for-azerbaijan-expert-opinion",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
    "tittel": "How a veteran pivoted to create safe haven in his classroom",
    "url": "https://www.havasunews.com/free_access/how-a-veteran-pivoted-to-create-safe-haven-in-his-classroom/article_abefee6b-c2a4-43d6-b7d8-e8aaa752a92b.html",
    "kilde": "GDELT",
@@ -683,21 +726,6 @@
    ],
    "matchede_ord": [
     "safe haven"
-   ]
-  },
-  {
-   "tittel": "MEED | Saudi Arabia approves revival of Iraq oil pipeline",
-   "url": "https://www.meed.com:443/saudi-arabia-approves-revival-of-iraq-oil-pipeline",
-   "kilde": "GDELT",
-   "domene": "meed.com",
-   "publisert": "2026-11-11T09:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia",
-    "iraq"
    ]
   },
   {
@@ -1516,20 +1544,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "Prince Albert Legion no longer has Second World War veterans among its members",
-   "url": "https://panow.com/2026/11/10/prince-albert-legion-no-longer-has-second-world-war-veterans-among-its-members/",
-   "kilde": "GDELT",
-   "domene": "panow.com",
-   "publisert": "2026-11-10T13:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "world war"
    ]
   },
   {
