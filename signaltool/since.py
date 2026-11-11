@@ -109,11 +109,14 @@ def compute(rows: list[dict], today: str | None = None) -> dict:
     return out
 
 
-def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = None) -> dict:
+def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = None, times: dict | None = None) -> dict:
     """AnalBot 11.11: «Siden»-raden følger listeperiodene (ov_changes): start = Inn-kjøringen i GJELDENDE periode, innkurs =
     price_date/price i Inn-kjøringens rad (sluttkursen kjent da tickeren kom inn; ingen look-ahead). Periode fra loggstart:
     første loggdato. «Start» for innkursen = Inn-kjøringens price_date (kan være siste sluttkurs før Inn-datoen, f.eks.
-    lørdag 07.11 -> fredag 06.11). Kategoridager telles innenfor perioden. Mangler raden ved Inn: ingen innkurs (aldri lånt)."""
+    lørdag 07.11 -> fredag 06.11). Kategoridager telles innenfor perioden. Mangler raden ved Inn: ingen innkurs (aldri lånt).
+    AnalBot 11.11 (close_valid): bare en kurs logget etter børsens stengetid + 30 min er en sluttkurs; flere verdier for samme
+    price_date -> siste gyldige vinner; ingen gyldig verdi -> neste gyldige sluttkurs (senere price_date). `times` =
+    close_valid.load() (logs/price_log_times.csv); ticker uten tidsstempel gir ingen innkurs."""
     rs = {r["date"]: r for r in rows if r["ticker"] == ticker and r["date"] >= inn}
     first = rs.get(inn) or {}
     last = max(rs) if rs else inn
@@ -124,11 +127,9 @@ def from_period(rows: list[dict], ticker: str, inn: str, today: str | None = Non
             break
         cstart = d
     ref = date.fromisoformat(today or last)
-    try:
-        price = float(first.get("price") or "")
-    except ValueError:
-        price = None
-    return {"since": inn, "price": price, "price_date": (first.get("price_date") or "")[:10] or None, "category": cat,
+    from . import close_valid as CV
+    pdate, price = CV.entry(CV.load() if times is None else times, ticker, (first.get("price_date") or "")[:10] or None)
+    return {"since": inn, "price": price, "price_date": pdate, "category": cat,
             "days": (ref - date.fromisoformat(cstart)).days, "list_days": (ref - date.fromisoformat(inn)).days,
             "illiquid": "illiquid" in ((rs.get(last) or {}).get("flags") or "").split("|"), "period": True}
 
