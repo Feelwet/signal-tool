@@ -91,7 +91,8 @@ def _log_cands(path: Path, row: dict) -> None:
     P._append(path, C_COLS, [row])
 
 
-def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict | None = None, fx: dict | None = None) -> dict:
+def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict | None = None, fx: dict | None = None,
+        closed: dict | None = None) -> dict:
     day = str(snap.get("date"))
     univ = universe(snap)
     hoy = hoy_candidates(univ)
@@ -102,7 +103,7 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
         tp, npth = paths(book, logs)
         ran = any(r["date"] == day for r in P._read(npth))
         s = P.step(snap, usd, bench, tp, npth, rules=BOOKS[book], picks=picks, why_buy=why,
-                   cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs, fx=fx)
+                   cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs, fx=fx, closed=closed)   # samme lukkede barer som bok 1
         if not ran:   # 02.11: kandidatraden skrives først etter at steget har gått (morgenkjøringen 02.11 krasjet etter å ha logget)
             _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
                                            "tickers": "|".join(e["ticker"] for e in picks)})

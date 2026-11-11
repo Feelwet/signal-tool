@@ -680,13 +680,15 @@ def _prep(snap: dict) -> dict:
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
+    _gen = _gen_time(snap)
     for e in snap.get("tickers", []):
         e["_analyst"] = recs.get(e["ticker"])
         e["_flag"] = fm.get(e["ticker"])
         e["_since"] = sin.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
-        e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], st.get("close"), st.get("last_date"), idx, e["ticker"], str(snap.get("date") or "") or None)
+        _lc, _ld = _last_closed(e, _px if _ys else None, _gen)   # AnalBot 11.11: siste LUKKEDE bar (stengetid + 30), aldri intradag
+        e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], _lc, _ld, idx, e["ticker"], str(snap.get("date") or "") or None)
         if e.get("unranked") and e["_since"] and not e["_since"].get("uncertain"):
             e["_since"] = {"since": e["_since"]["since"]}   # «Ikke rangert»: bare datoen, ingen tall
     try:
@@ -704,6 +706,27 @@ def _prep(snap: dict) -> dict:
         if e.get("_ret"):
             e["_ret"]["note"] = SN.note_for(e.get("_since"))
     return snap
+
+
+def _gen_time(snap: dict):
+    from .closedbars import gen_time
+    return gen_time(snap)
+
+
+def _last_closed(e: dict, px: dict | None = None, gen=None):
+    """(kurs, dato) for siste lukkede bar til Siden-avkastningen: snapshotets bar bare hvis stengetid + 30 min hadde passert DA
+    snapshotet hentet kursen (`gen`), ellers siste lukkede bar i Yahoo-dagshistorikken (samme serie som grafen, hentet nå).
+    Ingen lukket bar: (None, None) – ingen avkastning."""
+    from . import closedbars as CB
+    st = e.get("stats") or {}
+    if st.get("close") and gen is not None and CB.ok(e["ticker"], st.get("last_date"), gen):
+        return st.get("close"), st.get("last_date")
+    if px is None:
+        try:
+            px = PC.download([e["ticker"]])
+        except Exception:
+            px = {}
+    return CB.last((px or {}).get(e["ticker"]) or [], e["ticker"])
 
 
 def _cur(e: dict) -> str:

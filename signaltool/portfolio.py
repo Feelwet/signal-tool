@@ -171,7 +171,7 @@ def _value(s: dict, by: dict, usdnok: float, last: dict | None = None, fx: dict 
 def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV,
          rules: dict = RULES, picks: list[dict] | None = None, extra: list[dict] | None = None, why_buy: str = "Kjøp",
          cols: list[str] = T_COLS, annotate=None, px_extra: dict | None = None, logs: Path | None = None,
-         fx: dict | None = None) -> dict:
+         fx: dict | None = None, closed: dict | None = None) -> dict:
     """Én kjøring: fyll ventende ordre (sluttkurs dagen etter signalet), legg nye ordre, skriv NAV-rad.
     Standardverdiene = bok 1 (rules_v1, kjøp kun Kjøp). Andre bøker (portfolio_books.py) sender egne regler, ferdig valgte
     kandidater (`picks`, i rekkefølge), `extra` (tema-rader utenfor snapshot, for kurs og røde flagg), egne kolonner (`cols`) og
@@ -185,6 +185,16 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     by = {e["ticker"]: e for e in snap.get("tickers", [])}
     for e in extra or []:
         by.setdefault(e["ticker"], e)
+    wait = set()
+    if closed is not None:   # AnalBot 11.11: bare lukkede barer (stengetid + 30) til fill, salg og NAV – se closed_view()
+        from . import closedbars as CB
+        for t, e in list(by.items()):
+            st0 = e.get("stats") or {}
+            own = (None, None, True)   # utenfor closed_view (f.eks. tema-rader): ingen kurs i dag, venter
+            c, d, w = closed.get(t, own)
+            by[t] = {**e, "stats": {**((e.get("stats") or {})), "close": c, "last_date": d}}
+            if w:
+                wait.add(t)
     s = state(trades, corr)
     logs = logs or Path(nav_path).parent
     cpath, mpath = logs / CLOSES.name, logs / MISSING.name
@@ -226,6 +236,8 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
                      "pnl_nok": round(nok - cost - p["nok_cost"], 2)}
             new.append(r)
             s = state(trades + new, corr)
+        elif o["side"] == "buy" and o["ticker"] in wait:
+            pass                                                      # AnalBot 11.11: venter på sluttkurs (stengetid + 30) – VENTENDE
         elif o["side"] == "buy":                                      # salg kanselleres aldri (AnalBot 02.11): venter på første kurs
             n_runs = len([d for d in runs if d > o["run_date"]]) + 1
             if n_runs >= RULES["order_expiry_runs"]:
@@ -352,22 +364,61 @@ def fx_history(cur: str, day: str) -> tuple[float | None, str | None]:
         return None, None
 
 
-def fetch_closes(tickers: list[str]) -> dict:
-    """Siste sluttkurs (Yahoo, 1 mnd) for tickere utenfor dagens liste: {ticker: (close, 'YYYY-MM-DD')}. Mangler = utelatt."""
+def _hist(tickers: list[str]) -> dict:
+    """{ticker: {dato: sluttkurs}} (Yahoo daglig, 1 mnd, auto_adjust=False)."""
+    out = {}
+    if not tickers:
+        return out
+    import yfinance as yf
+    d = yf.download(sorted(set(tickers)), period="1mo", progress=False, auto_adjust=False)["Close"]
+    if not hasattr(d, "columns"):
+        d = d.to_frame(sorted(tickers)[0])
+    for t in d.columns:
+        ser = d[t].dropna()
+        out[str(t)] = {str(k)[:10]: float(v) for k, v in ser.items()}
+    return out
+
+
+def fetch_closes(tickers: list[str], now=None, hist=None) -> dict:
+    """Siste LUKKEDE sluttkurs (Yahoo, 1 mnd; stengetid + 30 passert, AnalBot 11.11) for tickere utenfor dagens liste:
+    {ticker: (close, 'YYYY-MM-DD')}. Mangler = utelatt."""
+    from . import closedbars as CB
     out = {}
     if not tickers:
         return out
     try:
-        import yfinance as yf
-        d = yf.download(sorted(tickers), period="1mo", progress=False, auto_adjust=False)["Close"]
-        if not hasattr(d, "columns"):
-            d = d.to_frame(sorted(tickers)[0])
-        for t in d.columns:
-            ser = d[t].dropna()
-            if len(ser):
-                out[str(t)] = (float(ser.iloc[-1]), str(ser.index[-1])[:10])
+        h = (hist or _hist)(tickers)
+        for t, ser in h.items():
+            c, d = CB.last(ser, t, now)
+            if c:
+                out[t] = (c, d)
     except Exception as ex:
         log.warning("portfolio closes: %s", ex)
+    return out
+
+
+def closed_view(snap: dict, now=None, hist=None) -> dict:
+    """AnalBot 11.11: {ticker: (kurs, dato, venter)} med siste LUKKEDE bar for hver ticker i snapshotet. Er snapshotets bar
+    (stats.last_date) ikke lukket (stengetid + 30 min i børsens tidssone), brukes forrige lukkede bar fra Yahoo-historikken og
+    venter=True: ventende kjøp kanselleres ikke og fylles aldri til intradagkurs. Ukjent børs: aldri gyldig (None, None, True)."""
+    from . import closedbars as CB
+    gen = CB.gen_time(snap)   # snapshotets kurs gjelder bare hvis baren var lukket DA den ble hentet
+    out, need = {}, []
+    for e in snap.get("tickers", []):
+        st = e.get("stats") or {}
+        c, d = _f(st.get("close")), st.get("last_date")
+        if c and gen is not None and CB.ok(e["ticker"], d, min(gen, now) if now else gen):
+            out[e["ticker"]] = (c, d, False)
+        else:
+            need.append(e["ticker"])
+    try:
+        h = (hist or _hist)(need) if need else {}
+    except Exception as ex:
+        log.warning("portfolio closed view: %s", ex)
+        h = {}
+    for t in need:
+        c, d = CB.last(h.get(t) or {}, t, now)
+        out[t] = (c, d, True)
     return out
 
 
@@ -432,6 +483,12 @@ def run(snap: dict, status: dict) -> None:
         px_extra = fetch_closes(held_off_list(snap, [TRADES] + [PB.paths(b)[0] for b in PB.BOOKS]))
     except Exception as ex:
         log.warning("portfolio off-list closes: %s", ex)
+    closed = None
+    try:
+        closed = closed_view(snap)
+    except Exception as ex:
+        log.warning("portfolio closed view: %s", ex)
+        closed = {}   # aldri intradag: uten oversikt fylles ingenting i dag
     try:
         usd, bench = fetch_market()
         fx = fetch_fx()
@@ -440,14 +497,14 @@ def run(snap: dict, status: dict) -> None:
             PB.ensure_corrections(fx_hist=fx_history)
         except Exception as ex:
             log.warning("portfolio corrections: %s", ex)
-        s = step(snap, usd, bench, px_extra=px_extra, fx=fx)
+        s = step(snap, usd, bench, px_extra=px_extra, fx=fx, closed=closed)
         status["Signal-boka (papirkonto)"] = f"ok ({len(s['open'])} åpne, {len(s['pending'])} ventende, {len(s['closed'])} lukket)"
     except Exception as ex:
         log.exception("portfolio failed")
         status["Signal-boka (papirkonto)"] = f"FAILED: {ex}"
     try:   # bok 2 (høy risiko, eksperimentell) + bok 3 (tilfeldig kontroll) – egne logger, påvirker aldri bok 1
         from . import portfolio_books
-        portfolio_books.run(snap, status, usd, bench, px_extra=px_extra, fx=fx)
+        portfolio_books.run(snap, status, usd, bench, px_extra=px_extra, fx=fx, closed=closed)
     except Exception as ex:
         log.exception("portfolio books failed")
         status["Papirbøker 2/3"] = f"FAILED: {ex}"
