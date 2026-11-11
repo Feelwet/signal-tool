@@ -168,6 +168,10 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
     except Exception as ex:
         log.warning("learnloop prices: %s", ex)
         px = {}
+    # AnalBot 11.11: close, close_date og r5/r20/r60 bare fra LUKKEDE barer (dagens bar droppes før stengetid + 30 min i
+    # børsens tidssone, closedbars). Historiske rader (før 11.11) er ikke rettet bakover: de kan ha intradag-bar som siste kurs.
+    from . import closedbars as CB
+    px = {t: CB.series(v, t) for t, v in px.items()}
     # 1) rådata
     raw = []
     for i, e in enumerate(snap.get("tickers", []), 1):

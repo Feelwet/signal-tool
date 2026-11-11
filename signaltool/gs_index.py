@@ -114,6 +114,26 @@ def logged_prices(rows: list[dict]) -> dict[str, dict[str, tuple]]:
     return p
 
 
+def closed_logged(rows: list[dict], times: dict | None = None) -> list[dict]:
+    """Radene med kurs bare når kursen var en sluttkurs da den ble logget (close_valid: logget etter stengetid + 30).
+    Korrigerte kurser (categories_corrections) beholdes. Ukjent loggtid: kursen tas bort (Yahoo brukes)."""
+    from . import close_valid as CV
+    t = CV.load() if times is None else times
+    at = {}
+    for tk, lst in t.items():
+        for pd_, v, when, dd in lst:
+            at.setdefault((dd, tk, pd_, round(v, 6)), []).append(when)
+    out = []
+    for r in rows:
+        v, d = _f(r.get("price")), (r.get("price_date") or "")[:10]
+        if v and d and not r.get("_corrected"):
+            ws = at.get((r["date"], r["ticker"], d, round(v, 6))) or []
+            if not any(CV.is_close(r["ticker"], d, w) for w in ws):
+                r = {**r, "price": "", "_intraday": True}
+        out.append(r)
+    return out
+
+
 def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp: dict, exch: dict, idx: dict,
             exclude: frozenset = frozenset(), known: set | None = None, splits: frozenset = SPLITS,
             invalid_log: list | None = None) -> list[dict]:
@@ -268,8 +288,12 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     rows = load_rows(cat_path, corr_path)
     lists = lists_by_date(rows)
     tks = sorted({t for v in lists.values() for t in v})
-    idx = _yf(list(IDX.values()), "2026-09-20")
-    yfp = _yf(tks, "2026-09-20")
+    # AnalBot 11.11: bare LUKKEDE barer (stengetid + 30 min, børsens tidssone): dagens Yahoo-bar før det droppes, og loggførte
+    # kurser som ble logget før stengetid + 30 (intradag, logs/price_log_times.csv) brukes ikke – da tas Yahoo-paret.
+    from . import closedbars as CB
+    idx = {k: CB.series(v, k) for k, v in _yf(list(IDX.values()), "2026-09-20").items()}
+    yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20").items()}
+    rows = closed_logged(rows)
     exch = _exch(tks, DATA / "cache" / "gs_exchange.json")
     today = date.today().isoformat()
     days = sorted({d for s in idx.values() for d in s if d < today or d == max(s)})
