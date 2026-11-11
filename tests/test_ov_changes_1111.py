@@ -434,9 +434,9 @@ def test_chart_markers_for_all_events_in_window(tmp_path):
         assert panes[lab].count('class="pcmk') == len(ev), lab
     six = PC.events(ser[-126:], ps)
     assert [k for k, _, _ in six].count("Inn") == 4 and [k for k, _, _ in six].count("Ut") == 4   # 6M: alle inn/ut, ikke bare «inn 09.11»
-    assert ">Inn<br>13.10<" in panes["6M"] and ">Ut<br>12.10<" in panes["6M"]
+    assert ">Inn 13.10<" in panes["6M"] and ">Ut 12.10<" in panes["6M"]   # UxBot 11.11: én linje i 16 px-raden
     assert 'class="pcin' not in h                               # gammel blå «inn dd.mm» erstattet av Inn/Ut-markørene
-    assert "innerWidth<600" in h and "<28" in h                 # 390: etikett bare med ≥ 28 px til neste markør
+    assert "function pcLay(" in h and ">=28" in h                # kollisjonsregel på begge bredder
 
 
 def test_tooltips_hover_and_focus_with_reason(tmp_path):

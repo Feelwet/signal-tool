@@ -149,7 +149,7 @@ def _bands(s, bands, fx, W, H):
         x = fx(j)
         tip = E(b.get("tip") or b.get("title") or "")
         ov += (f'<span class="pcmk{" r" if x / W > .85 else ""}" data-k="{kind}" tabindex="0" aria-label="{E(kind)} {d[8:10]}.{d[5:7]}. {tip}" '
-               f'style="left:{_pct(x, W)}%"><span class="pcml">{kind}<br>{d[8:10]}.{d[5:7]}</span><span class="tip">{tip}</span></span>')
+               f'style="left:{_pct(x, W)}%"><span class="pcml">{kind} {d[8:10]}.{d[5:7]}</span><span class="tip">{tip}</span></span>')
     return bd, gp, ov
 
 
@@ -191,12 +191,23 @@ def html(ticker: str, series, mark_date=None, upd: str | None = None, periods=No
             '<script>(()=>{const c=document.getElementById("kursgraf");c.querySelectorAll(".pcb").forEach(b=>b.addEventListener("click",()=>{'
             'c.querySelectorAll(".pcb").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));'
             'c.querySelectorAll(".pcp").forEach(p=>p.hidden=p.dataset.p!==b.dataset.p);lab()}));'
-            # 390: Inn/Ut-etikett bare når det er minst 28 px til neste markør; ≥ 600 px: alle etiketter
-            'function lab(){c.querySelectorAll(".pcp:not([hidden])").forEach(p=>{const w=p.getBoundingClientRect().width||c.clientWidth,'
-            'm=[...p.querySelectorAll(".pcmk")].sort((a,b)=>parseFloat(a.style.left)-parseFloat(b.style.left));'
-            'm.forEach((k,i)=>{const n=m[i+1],l=k.querySelector(".pcml");if(l)l.hidden=innerWidth<600&&!!n&&(parseFloat(n.style.left)-parseFloat(k.style.left))*w/100<28})})}'
+            # UxBot 11.11: etikettrad 16 px øverst; fra nyeste til eldste, vis bare med ≥ 28 px til forrige viste og uten overlapp
+            + LAY_JS +
+            'function lab(){c.querySelectorAll(".pcp:not([hidden])").forEach(p=>{const W=p.getBoundingClientRect().width||c.clientWidth,'
+            'k=[...p.querySelectorAll(".pcmk")],ls=k.map(x=>x.querySelector(".pcml"));ls.forEach(l=>{if(l)l.hidden=false});'
+            'const o=pcLay(k.map((x,i)=>({x:parseFloat(x.style.left)*W/100,w:ls[i]?ls[i].getBoundingClientRect().width:0})),W);'
+            'k.forEach((x,i)=>{if(ls[i])ls[i].hidden=!o[i].show;x.classList.toggle("r",!!o[i].rt)})})}'
             'lab();addEventListener("resize",lab,{passive:true})})()</script></div>')
 
+
+
+# Etikettoppsett (samme funksjon brukes i testen via node): ms = [{x, w}] i px fra venstre, W = grafbredde.
+# Nyeste (størst x) først; etiketten står til høyre for streken (3 px), eller til venstre når den ellers går utenfor grafen.
+# Vises bare når avstanden til forrige viste markør er ≥ 28 px og boksen ikke overlapper en vist etikett (4 px luft).
+LAY_JS = ('function pcLay(ms,W){const o=ms.map(()=>({show:false})),ix=ms.map((m,i)=>i).sort((a,b)=>ms[b].x-ms[a].x);let px=null;const bx=[];'
+          'for(const i of ix){const m=ms[i];let l=m.x+3,r=l+m.w,rt=false;if(r>W){r=m.x-2;l=r-m.w;rt=true}if(l<0){l=0;r=m.w}'
+          'const ok=(px===null||px-m.x>=28)&&bx.every(b=>r+4<=b[0]||l>=b[1]+4);o[i]={show:ok,l:l,r:r,rt:rt};if(ok){px=m.x;bx.push([l,r])}}return o}')
+LABEL_ROW = 16
 
 
 def _periods_html(periods) -> str:
@@ -205,11 +216,11 @@ def _periods_html(periods) -> str:
 
 
 CSS = """.pc{padding-top:8px;padding-bottom:8px}.pcbs{display:flex;gap:6px;margin-bottom:6px}.pcb{height:32px;min-width:44px;padding:0 10px;border:1px solid #30363d;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
-.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;z-index:3;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 1.5px #0d1117;pointer-events:none}
+.pcb[aria-pressed=true]{border-color:#58a6ff;color:#58a6ff}.pcp{position:relative;padding-top:16px}.pcl{position:absolute;left:0;right:0;top:16px;bottom:0}.pcp svg{display:block;width:100%;height:240px}.pcdot{position:absolute;z-index:3;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 1.5px #0d1117;pointer-events:none}
 .pcl .hi,.pcl .lo{position:absolute;right:4px;font-size:11px;color:#8b949e;font-variant-numeric:tabular-nums}.pcl .hi{top:0}.pcl .lo{bottom:0}
 .pcs{font-size:11px;margin:4px 0 0;text-align:right}.pct{display:none}
-.pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:0;bottom:0;z-index:2;width:13px;margin-left:-6px;outline-offset:-2px}
-.pcmk::before{content:"";position:absolute;left:6px;top:0;bottom:0;border-left:1px solid #8b949e}.pcml{position:absolute;top:2px;left:9px;font-size:11px;line-height:13px;color:#94a3b8;white-space:nowrap}.pcmk.r .pcml{left:auto;right:9px;text-align:right}.pcml[hidden]{display:none}
+.pcbd{position:absolute;top:0;bottom:0;z-index:1;outline-offset:-2px}.pcmk{position:absolute;top:-16px;bottom:0;z-index:2;width:13px;margin-left:-6px;outline-offset:-2px}
+.pcmk::before{content:"";position:absolute;left:6px;top:16px;bottom:0;border-left:1px solid #8b949e}.pcml{position:absolute;top:0;left:9px;height:16px;font-size:11px;line-height:16px;color:#94a3b8;white-space:nowrap}.pcmk.r .pcml{left:auto;right:9px;text-align:right}.pcml[hidden]{display:none}
 .pcbd .tip,.pcmk .tip{display:none;position:absolute;top:32px;left:0;z-index:6;width:max-content;max-width:260px;white-space:pre-line;font-size:13px;line-height:18px;color:#cbd5e1;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:6px 8px}.pcmk.r .tip{left:auto;right:0}
 .pcbd:hover .tip,.pcbd:focus .tip,.pcmk:hover .tip,.pcmk:focus .tip{display:block}
 @media(max-width:599px){.card.pc{padding:3px 10px;margin:0 0 12px}
