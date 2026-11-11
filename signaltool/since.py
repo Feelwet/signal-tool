@@ -137,6 +137,16 @@ def dot_date(s: dict | None):
 
 WAIT = "wait"     # price_date er i dag og børsen er ikke stengt + 30 min: «Venter på første sluttkurs»
 MISSING = "missing"   # historikken mangler datoen (eller ukjent børs): «Ingen innkurs ennå»
+HOLD = "hold"         # config.PRICE_HOLD: «–» med «kurs under kontroll» (innkurs og siste kurs ikke bekreftet av annen kilde)
+HOLD_T = "kurs under kontroll"
+
+
+def price_hold(s: dict | None, ticker: str) -> dict | None:
+    """AnalBot 11.11: ticker i config.PRICE_HOLD -> ingen innkurs/avkastning vises før kursen er bekreftet."""
+    from .config import PRICE_HOLD
+    if s and not s.get("uncertain") and ticker in PRICE_HOLD:
+        s["price"], s["entry_state"] = None, HOLD
+    return s
 
 
 def yahoo_entry(s: dict, ticker: str, series, now=None) -> dict:
@@ -260,8 +270,8 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
         if s.get("price") is not None:
             parts.append(inn_text(s))
     t = f'<span class="sl-t">{E(" · ".join(parts))}</span>' if parts else ""
-    if ret and ret.get("new"):
-        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(new_tip(s))}'
+    if ret and ret.get("new"):   # UxBot 11.11: uten ⓘ (som tabellen)
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>'
     elif ret and ret.get("r") is not None and ret.get("short"):
         from .results import SHORT_TIP
         t += f'<span class="sl-r">&nbsp;·&nbsp;<span class="rn {_cls(ret["r"])}">{E(pct(ret["r"]))}</span></span>{ri(SHORT_TIP)}<span class="sl-r rsh-t">{SHORT_T}</span>'
@@ -270,8 +280,10 @@ def line_rk(s: dict | None, lead: str, ret: dict | None = None) -> str:
               f'aria-controls="rt-tip" aria-label="Om avkastning">ⓘ</button>')
     elif ret and ret.get("stale"):
         t += f'<span class="sl-r rst">&nbsp;·&nbsp;–</span>{ri(ret_tip(ret))}'
+    elif not ret and (s or {}).get("entry_state") == HOLD:
+        t += f'<span class="sl-r rhold">&nbsp;·&nbsp;–&nbsp;{HOLD_T}</span>'
     elif not ret and no_entry_text(ret, s) == NEW_T:
-        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>{ri(new_tip(s))}'
+        t += f'<span class="sl-r rnew">&nbsp;·&nbsp;{NEW_T}</span>'
     elif not ret and no_entry_text(ret, s) == NO_ENTRY:   # UxBot 11.11: bare teksten, ingen ekstra forklaring
         t += f'<span class="sl-r rnone">&nbsp;·&nbsp;{NO_ENTRY}</span>'
     return f'<p class="since mut rk-line">{lead}{t}</p>'
@@ -390,7 +402,7 @@ def no_entry_text(r: dict | None, s: dict | None) -> str:
     eller ingen sluttkurs etter innkursdatoen ennå) eller «Ingen innkurs ennå» (historikken mangler datoen). '' ellers."""
     if r and r.get("new"):
         return NEW_T
-    if r or not s or s.get("uncertain") or s.get("price") not in (None, 0):
+    if r or not s or s.get("uncertain") or s.get("price") not in (None, 0) or s.get("entry_state") == HOLD:
         return ""
     return NEW_T if s.get("entry_state") == WAIT else NO_ENTRY
 
@@ -401,6 +413,8 @@ def rtx(text: str) -> str:
 
 
 def ret_inner(r: dict | None, s: dict | None = None) -> str:
+    if not r and (s or {}).get("entry_state") == HOLD:
+        return f'<span class="rv rna">–</span><span class="rex rhold">{HOLD_T}</span>'
     tip = ret_tip(r, s)
     nt = no_entry_text(r, s)
     if nt and (not r or r.get("new")) and (s is None or not s.get("uncertain")) and (not r or not r.get("stale")):
@@ -444,7 +458,7 @@ def mobile(s: dict | None, r: dict | None = None, cur: str = "") -> str:
 
 
 CSS = """.since{margin:-2px 0 8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.since .cat{margin-right:2px}@media(max-width:599px){.thead h1.nm1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}p.since{margin:-8px 0 8px;line-height:20px}p.since .cat{padding-top:0;padding-bottom:0}}.since-m{display:none}
-td.ret-c,th.ret-h{text-align:right;white-space:nowrap}main .rv.rup,main .rn.rup{color:#22c55e}main .rv.rdn,main .rn.rdn{color:#ef4444}main .rv.r0,main .rn.r0{color:#94a3b8}.rsh-t{font-size:11px;font-weight:400;color:#94a3b8;margin-left:4px;white-space:nowrap}td.ret-c .rsh-t{display:block;margin:0;line-height:12px}#tf-table td.ret-c.rsh-c{padding-top:2px;padding-bottom:2px}#tf-table td.ret-c.rsh-c .rv{line-height:17px}#tf-table td.ret-c.rsh-c .rex{line-height:14px}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}.rtx{font-size:13px;line-height:18px;font-weight:400;color:#94a3b8;white-space:nowrap}td.ret-c .rtx{display:block}td.ret-c .rtx+.rex{color:#94a3b8}.sl-r.rnone{color:#94a3b8}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
+td.ret-c,th.ret-h{text-align:right;white-space:nowrap}main .rv.rup,main .rn.rup{color:#22c55e}main .rv.rdn,main .rn.rdn{color:#ef4444}main .rv.r0,main .rn.r0{color:#94a3b8}.rsh-t{font-size:11px;font-weight:400;color:#94a3b8;margin-left:4px;white-space:nowrap}td.ret-c .rsh-t{display:block;margin:0;line-height:12px}#tf-table td.ret-c.rsh-c{padding-top:2px;padding-bottom:2px}#tf-table td.ret-c.rsh-c .rv{line-height:17px}#tf-table td.ret-c.rsh-c .rex{line-height:14px}.rv.rst,.sl-r.rst{color:#64748b}.rnew{font-size:12px;color:#94a3b8;white-space:nowrap}.rtx{font-size:13px;line-height:18px;font-weight:400;color:#94a3b8;white-space:nowrap}td.ret-c .rtx{display:block}td.ret-c .rtx+.rex{color:#94a3b8}.sl-r.rnone,.sl-r.rhold,.rex.rhold{color:#94a3b8}#tf-table td.ret-c .rnew{white-space:normal;display:inline-block;max-width:84px;text-align:right;line-height:14px;vertical-align:middle}td.since-c,th.since-h{text-align:right}td.since-c{white-space:nowrap;color:#94a3b8;font-size:12px}.inn-p{font-variant-numeric:tabular-nums;color:#94a3b8;font-size:12px}.ri.ri-c>.inn-p{font-size:12px}.inn-w,.ri.ri-c>.inn-w{color:#f59e0b;font-size:12px;margin-left:3px}.inn-m{display:block;white-space:normal}.inn-m .ri-c{white-space:normal}.inn-p .nw{white-space:nowrap}.ri.ri-c{min-width:0;min-height:0;margin:0;padding:0 0 0 2px;font-size:.8em;vertical-align:baseline;display:inline;position:relative}.ri.ri-c>.rv,.ri.ri-c>.rnew{font-size:1.25em}.ri.ri-c .rnew{font-size:12px}.ri.ri-c::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,32px);height:max(100%,32px);transform:translate(-50%,-50%)}.ri.ri-c .tip{width:max-content;max-width:260px;font-size:13px;line-height:1.35}.ri.ri-c .tip.pop{position:fixed;right:auto}.rex{display:block;color:#94a3b8;font-size:12px}td.ret-c .rv,td.ret-c .ri.ri-c>.rv{font-size:15px;font-weight:600}.ill{font-size:.8em}
 .ri{position:relative;display:inline-block;cursor:pointer;border:0;background:none;color:var(--mut);font:inherit;padding:0 2px}.ri .tip{display:none;position:absolute;right:0;top:1.4em;z-index:5;width:240px;white-space:normal;text-align:left;font-weight:400;font-size:12px;background:var(--card,#fff);border:1px solid var(--line,#ccc);border-radius:6px;padding:6px}.ri[aria-expanded=true] .tip{display:block}.ri{min-width:44px;min-height:44px;margin:-14px -8px -14px -10px;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 .retnote{font-size:12px}tr.rowlink{cursor:pointer}tr.rowlink:hover td,tr.rowlink:focus-visible td{background:#161b22}tr.rowlink td{height:44px}tr.rowlink:focus-visible{outline:2px solid var(--mut)}
 th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable[aria-sort]::after{font-size:12px}th.sortable[aria-sort=ascending]::after{content:" ▲"}th.sortable[aria-sort=descending]::after{content:" ▼"}

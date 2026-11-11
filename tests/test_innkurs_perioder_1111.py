@@ -184,3 +184,24 @@ def test_nightly_extra_run_after_european_close():
     d = yaml.safe_load(Path(".github/workflows/nightly.yml").read_text())
     crons = [c["cron"] for c in d[True]["schedule"]]
     assert crons == ["17 5 * * *", "15 17 * * *"] and d["concurrency"]["cancel-in-progress"] is False
+
+
+def test_price_hold_tech_ol_shows_dash_kurs_under_kontroll():
+    s = SN.yahoo_entry({"since": "2026-11-09", "price_date": "2026-11-09", "src": "yahoo"}, "TECH.OL",
+                       [("2026-11-09", 1.57)], _at(2026, 11, 11, 12, 0))
+    assert s["price"] == 1.57
+    SN.price_hold(s, "TECH.OL")
+    assert s["price"] is None and s["entry_state"] == SN.HOLD and SN.dot_date(s) is None
+    c = SN.ret_cell(None, s)
+    assert 'data-v=""' in c and '<span class="rv rna">–</span><span class="rex rhold">kurs under kontroll</span>' in c
+    assert SN.NO_ENTRY not in c and SN.NEW_T not in c and "%" not in c
+    ln = SN.line_rk(s, "", None)
+    assert "&nbsp;·&nbsp;–&nbsp;kurs under kontroll" in ln and "inn " not in ln and SN.NO_ENTRY not in ln
+    assert SN.price_hold({"since": "x", "price": 5.0}, "VRT")["price"] == 5.0                      # andre urørt
+    assert "SN.price_hold(sin[t], t)" in Path("signaltool/site.py").read_text()
+
+
+def test_wait_has_no_info_button_on_ticker_page():
+    wait = {"since": "2026-11-11", "price": None, "price_date": "2026-11-11", "entry_state": SN.WAIT, "src": "yahoo"}
+    ln = SN.line_rk(wait, "", None)
+    assert SN.NEW_T in ln and "ⓘ" not in ln and 'class="ri' not in ln

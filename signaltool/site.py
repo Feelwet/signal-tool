@@ -675,6 +675,8 @@ def _prep(snap: dict) -> dict:
             print(f"yahoo entry: {ex}"); _px = {}
         for t in _ys:
             SN.yahoo_entry(sin[t], t, _px.get(t))
+    for t in list(sin):
+        SN.price_hold(sin[t], t)
     snap["_sin"] = sin
     idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])

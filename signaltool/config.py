@@ -57,4 +57,7 @@ PRICE_HOLD = {
     "4062.T": "Ibiden: uvanlig stort fall (20d ca. −50 %) – kontrolleres før visning",
     "INTC": "Intel: uvanlig stort fall (20d ca. −46 %) – kontrolleres før visning",
     "TER": "Teradyne: uvanlig stort fall (20d ca. −46 %) – kontrolleres før visning",
+    # AnalBot 11.11: kandidat. Yahoo har justert historikken (innkurs 1,67 logget -> 1,57 i dagens historikk). Avkastningen i
+    # Siden-raden/tabellen vises som «–» med «kurs under kontroll» til annen kilde bekrefter innkurs og siste kurs.
+    "TECH.OL": "Techstep: Yahoo-historikken er justert (innkurs 1,67 -> 1,57) – kontrolleres før visning",
 }

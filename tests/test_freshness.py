@@ -170,7 +170,8 @@ def test_ny_i_dag_replaces_whole_cell_and_sorts_empty():
     assert '<span class="rtx">Venter på første sluttkurs</span><span class="rex">–</span>' in c
     assert "+0,0" not in c and "vs " not in c and "pp" not in c
     assert "Venter på første sluttkurs" in S.line(s, "", r) and "+0,0" not in S.line(s, "", r)
-    assert "Venter på første sluttkurs" in S.line_rk(s, "", r) and "inntak (28.10)." in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
+    assert "Venter på første sluttkurs" in S.line_rk(s, "", r) and "inntak (28.10)." not in S.line_rk(s, "", r) and "+0,0" not in S.line_rk(s, "", r)
+    assert "ⓘ" not in S.line_rk(s, "", r)                                    # UxBot 11.11: uten ⓘ på tickersiden, som tabellen
     assert ".rnew{font-size:12px;color:#94a3b8" in S.CSS and ".rtx{font-size:13px;line-height:18px" in S.CSS
     old = S.ret(S0, 10.0, "2026-10-28", {}, "DNB.OL", "2026-10-28")       # innkurs 30.09: vanlig tall, også +0,0 %
     assert not old["new"] and "+0,0 %" in S.ret_cell(old, S0) and "Venter på første sluttkurs" not in S.ret_cell(old, S0)
