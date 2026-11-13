@@ -1,6 +1,384 @@
 {
 "saker": [
 {
+"tittel": "South China Sea Code of Conduct must comply with UNCLOS: MEA says",
+"url": "http://www.vietnamtribune.com/news/279429765/south-china-sea-code-of-conduct-must-comply-with-unclos-mea-says-position-on-this-is-very-clear",
+"kilde": "GDELT",
+"domene": "vietnamtribune.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Saudi Arabia leads OPEC+ production recovery toward pre-war levels | Hellenic Shipping News Worldwide",
+"url": "https://www.hellenicshippingnews.com/saudi-arabia-leads-opec-production-recovery-toward-pre-war-levels/",
+"kilde": "GDELT",
+"domene": "hellenicshippingnews.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Jared Kushner: US working with Russia, Ukraine for prisoner exchange",
+"url": "https://www.jpost.com/international/article-914791",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Israeli air strike on Gaza hospital kills six, including surgeon",
+"url": "https://www.krcu.org/2026-11-12/israeli-air-strike-on-gaza-hospital-kills-six-including-surgeon",
+"kilde": "GDELT",
+"domene": "krcu.org",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Zelensky hails 'real result' as prisoner exchange with Russia secured",
+"url": "https://www.stroudnewsandjournal.co.uk/news/national/26725607.zelensky-hails-real-result-prisoner-exchange-russia-secured/",
+"kilde": "GDELT",
+"domene": "stroudnewsandjournal.co.uk",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south | World",
+"url": "https://www.the-messenger.com/news/world/article_0f774e8b-fb99-5173-97f6-469af35329f6.html",
+"kilde": "GDELT",
+"domene": "the-messenger.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Four tankers struck by explosions in Strait of Hormuz, Iran says",
+"url": "https://www.yahoo.com/news/articles/four-tankers-struck-explosions-strait-162708977.html",
+"kilde": "GDELT",
+"domene": "yahoo.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Iran's nuclear program and regime change: Will the US back Israel?",
+"url": "https://www.ynetnews.com/article/sybgac70mg",
+"kilde": "GDELT",
+"domene": "ynetnews.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Democratic Senator Says 'Beauty' Of Ukraine War Is Paying Ukrainians To Kill Russians",
+"url": "https://www.zerohedge.com/geopolitical/democratic-senator-says-beauty-ukraine-war-paying-ukrainians-kill-russians",
+"kilde": "GDELT",
+"domene": "zerohedge.com",
+"publisert": "2026-11-13T02:15:00Z"
+},
+{
+"tittel": "Wall Street shakes with swings for Nvidia and oil prices but recovers most of its early losses – KTBB News, Weather, Talk",
+"url": "https://ktbb.com/post/?p=1560879",
+"kilde": "GDELT",
+"domene": "ktbb.com",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "U.S. envoys meet with Putin in the Kremlin after Ukraine talks in Abu Dhabi",
+"url": "https://www.ijpr.org/npr-news/2026-11-12/u-s-envoys-meet-with-putin-in-the-kremlin-after-ukraine-talks-in-abu-dhabi",
+"kilde": "GDELT",
+"domene": "ijpr.org",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "Gold Price Drops by Rs10,900 Per Tola in Pakistan as Global Rates Fall",
+"url": "https://www.pakistantimes.com/gold-price-drops-by-rs10900-per-tola-in-pakistan-as-global-rates-fall-16503/",
+"kilde": "GDELT",
+"domene": "pakistantimes.com",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "Israeli strike on hospital highlights devastation to Gaza's healthcare",
+"url": "https://www.reporterherald.com/2026/11/12/israel-hamas-war-hospital-strike-explained/",
+"kilde": "GDELT",
+"domene": "reporterherald.com",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "Wheat Fund Falls 2.8% to a Six-Month Low | Grains Wrap, Nov 12",
+"url": "https://www.riotimesonline.com/grains-soy-corn-latam-thursday-november-12-2026/",
+"kilde": "GDELT",
+"domene": "riotimesonline.com",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "US envoys meet with Putin in Moscow on Ukraine talks, then see Zelenskyy in Dublin",
+"url": "https://www.union-bulletin.com/news/world/us-envoys-meet-with-putin-in-moscow-on-ukraine-talks-then-see-zelenskyy-in-dublin/article_f9268be1-7df9-5725-81b6-23f3d4432d16.html",
+"kilde": "GDELT",
+"domene": "union-bulletin.com",
+"publisert": "2026-11-13T02:00:00Z"
+},
+{
+"tittel": "US Envoys Meet Zelenskyy In Dublin After Putin Talks",
+"url": "http://www.irishsun.com/news/279429439/us-envoys-meet-zelenskyy-in-dublin-after-putin-talks",
+"kilde": "GDELT",
+"domene": "irishsun.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Zelenskyy meets Witkoff, Kushner in Ireland; announces major prisoner exchange, greater European role in Ukraine peace talks",
+"url": "https://aninews.in/news/world/europe/zelenskyy-meets-witkoff-kushner-in-ireland-announces-major-prisoner-exchange-greater-european-role-in-ukraine-peace-talks20261113065859/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Gaza: Six killed, 27 injured in Israeli strike on Nasser Hospital; IDF says Hamas commanders targeted",
+"url": "https://aninews.in/news/world/middle-east/gaza-six-killed-27-injured-in-israeli-strike-on-nasser-hospital-idf-says-hamas-commanders-targeted20261113062408/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Would not hesitate to strike Iran if things go other way: Trump says \"they will not exist\" if Tehran kills US officials",
+"url": "https://aninews.in/news/world/us/would-not-hesitate-to-strike-iran-if-things-go-other-way-trump-says-8220they-will-not-exist-if-tehran-kills-us-officials20261113051335/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Oil Prices Squeezed Between Peace Hopes and Iran Escalation Risk",
+"url": "https://oilprice.com/Energy/Crude-Oil/Oil-Prices-Squeezed-Between-Peace-Hopes-and-Iran-Escalation-Risk.html",
+"kilde": "GDELT",
+"domene": "oilprice.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Rare Earth Wars: U.S. General Sounds Alarm Over China's Military Leverage",
+"url": "https://oilprice.com/Energy/Energy-General/Rare-Earth-Wars-US-General-Sounds-Alarm-Over-Chinas-Military-Leverage.html",
+"kilde": "GDELT",
+"domene": "oilprice.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "US, Ukraine say Europe to join Russia talks as Putin sticks to hardline stance",
+"url": "https://www.manilatimes.net/2026/11/13/world/americas-emea/us-ukraine-say-europe-to-join-russia-talks-as-putin-sticks-to-hardline-stance/2469216",
+"kilde": "GDELT",
+"domene": "manilatimes.net",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Oil settles $3 higher on attacks on Saudi energy sites, Strait of Hormuz disruptions",
+"url": "https://www.spokesman.com/stories/2026/nov/11/oil-settles-3-higher-on-attacks-on-saudi-energy-si/",
+"kilde": "GDELT",
+"domene": "spokesman.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "'Reconsidering their approach to business continuity': Ukrainian drone strikes on Russian data centers force major cloud migration to Kazakhstan",
+"url": "https://www.techradar.com/pro/ukrainian-drone-strikes-hit-russian-data-centers-across-six-regions-forcing-companies-into-kazakhstan-as-putin-orders-emergency-capacity-seizure",
+"kilde": "GDELT",
+"domene": "techradar.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south :: WRAL.com",
+"url": "https://www.wral.com/news/ap/9463f-canada-threatens-to-sue-stellantis-over-auto-plant-sale-as-trump-s-trade-war-shifts-production-south/",
+"kilde": "GDELT",
+"domene": "wral.com",
+"publisert": "2026-11-13T01:45:00Z"
+},
+{
+"tittel": "Witkoff, Kushner head to meet Zelenskyy after talks with Putin in Moscow on Ukraine peace deal",
+"url": "http://www.russiaherald.com/news/279429471/witkoff-kushner-head-to-meet-zelenskyy-after-talks-with-putin-in-moscow-on-ukraine-peace-deal",
+"kilde": "GDELT",
+"domene": "russiaherald.com",
+"publisert": "2026-11-13T01:30:00Z"
+},
+{
+"tittel": "EU Sets Late-November Target for Russia Sanctions and Ukraine Funding Plan",
+"url": "https://econotimes.com/EU-Sets-Late-November-Target-for-Russia-Sanctions-and-Ukraine-Funding-Plan-1776102",
+"kilde": "GDELT",
+"domene": "econotimes.com",
+"publisert": "2026-11-13T01:30:00Z"
+},
+{
+"tittel": "Israel hits Gaza hospital and France turns away a settler leader, and other Mideast news",
+"url": "https://www.dailygazette.com/leader_herald/ap/national/israel-hits-gaza-hospital-and-france-turns-away-a-settler-leader-and-other-mideast-news/article_abb3a354-42d5-56f0-9ed8-f6a66f7365d8.html",
+"kilde": "GDELT",
+"domene": "dailygazette.com",
+"publisert": "2026-11-13T01:30:00Z"
+},
+{
+"tittel": "World News: Israeli strike on Gaza hospital kills six",
+"url": "https://www.gdnonline.com:443/Details/1412722",
+"kilde": "GDELT",
+"domene": "gdnonline.com",
+"publisert": "2026-11-13T01:30:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south | World News",
+"url": "http://www.thegazette.com/news/world/canada-threatens-to-sue-stellantis-over-auto-plant-sale-as-trump-s-trade-war-shifts/article_9753f7ed-9b35-5041-afe4-ab0a887ac481.html",
+"kilde": "GDELT",
+"domene": "thegazette.com",
+"publisert": "2026-11-13T01:15:00Z"
+},
+{
+"tittel": "Deploy British and French Armies to Ukraine, Warships to Black Sea, to End Ukraine War Says Former NATO Boss",
+"url": "https://freerepublic.com/focus/f-bloggers/4402851/posts",
+"kilde": "GDELT",
+"domene": "freerepublic.com",
+"publisert": "2026-11-13T01:15:00Z"
+},
+{
+"tittel": "Arab News | Kushner says US working toward 'largest prisoner exchange' of Russia's war in Ukraine",
+"url": "https://www.arabnews.com/world/kushner-says-us-working-toward-largest-prisoner-exchange-of-russias-war-in-ukraine-3011561",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-13T01:15:00Z"
+},
+{
+"tittel": "Zelensky hails 'real result' as prisoner exchange with Russia secured | Burnham and Highbridge Weekly News",
+"url": "https://www.burnhamandhighbridgeweeklynews.co.uk/news/national/26725607.zelensky-hails-real-result-prisoner-exchange-russia-secured/",
+"kilde": "GDELT",
+"domene": "burnhamandhighbridgeweeklynews.co.uk",
+"publisert": "2026-11-13T01:15:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south | International",
+"url": "https://www.winknews.com/news/international/canada-threatens-to-sue-stellantis-over-auto-plant-sale-as-trump-s-trade-war-shifts/article_df946f04-9e44-57e4-8cd5-4900c5650ba9.html",
+"kilde": "GDELT",
+"domene": "winknews.com",
+"publisert": "2026-11-13T01:15:00Z"
+},
+{
+"tittel": "US names officer at NATO headquarters arrested on suspicion of spying for Russia",
+"url": "http://www.jpost.com/international/article-914783",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south | Nation & World",
+"url": "http://www.leadertelegram.com/news/nation-world/canada-threatens-to-sue-stellantis-over-auto-plant-sale-as-trump-s-trade-war-shifts/article_1a8f31a4-6523-54a2-a105-36fa9bad62a9.html",
+"kilde": "GDELT",
+"domene": "leadertelegram.com",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "Saudi Arabia Puts Pressure on EU to Label Yemen's Houthis a Terrorist Group",
+"url": "https://www.algemeiner.com/2026/11/12/saudi-arabia-puts-pressure-eu-label-yemens-houthis-terrorist-group/",
+"kilde": "GDELT",
+"domene": "algemeiner.com",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "Putin lets Europe join Ukraine peace talks, Zelenskiy welcomes prospect of European participation",
+"url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/13/putin-lets-europe-join-ukraine-peace-talks-zelenskiy-welcomes-prospect-of-european-participation",
+"kilde": "GDELT",
+"domene": "internazionale.it",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "AI deepfake campaign stole influencers' faces to push trade war, Alberta referendum claims: study",
+"url": "https://www.theglobeandmail.com/business/article-ai-deepfake-campaign-stole-influencers-faces-trade-war-alberta/",
+"kilde": "GDELT",
+"domene": "theglobeandmail.com",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "US envoys meet with Putin, Zelenskyy",
+"url": "https://www.wmtw.com/article/trump-envoys-putin-moscow-ukraine-peace-talks/74408946",
+"kilde": "GDELT",
+"domene": "wmtw.com",
+"publisert": "2026-11-13T01:00:00Z"
+},
+{
+"tittel": "Canada threatens to sue Stellantis over auto plant sale as Trump's trade war shifts production south",
+"url": "http://www.sitkasentinel.com/stories/canada-threatens-to-sue-stellantis-over-auto-plant-sale-as-trumps-trade-war-shifts-production,185849",
+"kilde": "GDELT",
+"domene": "sitkasentinel.com",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "CENTCOM calls Israeli media report of possible Iran war resumption 'pure speculation'",
+"url": "https://aa.com.tr/en/us-israel-iran-war/centcom-calls-israeli-media-report-of-possible-iran-war-resumption-pure-speculation-/4123553",
+"kilde": "GDELT",
+"domene": "aa.com.tr",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Ogarkov to the Baltics: Russian Military Thought Evolved From Zapad-77 to Ukraine and Beyond",
+"url": "https://jamestown.org/ogarkov-to-the-baltics-russian-military-thought-evolved-from-zapad-77-to-ukraine-and-beyond/",
+"kilde": "GDELT",
+"domene": "jamestown.org",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "US envoys meet Putin, head to Dublin for Zelenskyy talks in peace push",
+"url": "https://siouxlandnews.com/news/nation-world/us-envoys-jared-kushner-steve-witkoff-meet-putin-kremlin-head-to-dublin-for-zelenskyy-talks-in-peace-push-russia-ukraine-war-invasion-prisoner-of-war-exchange-security-european-support",
+"kilde": "GDELT",
+"domene": "siouxlandnews.com",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Russia takes aim at Black Sea waters",
+"url": "https://www.abc.net.au/listen/programs/am/russia-takes-aim-at-black-sea-waters/107381220",
+"kilde": "GDELT",
+"domene": "abc.net.au",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Second world war 'brain' bunker in cliffs of Dover opens to public",
+"url": "https://www.aol.co.uk/articles/second-world-war-brain-bunker-000103000.html",
+"kilde": "GDELT",
+"domene": "aol.co.uk",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Arab News | Saudi Arabia expresses condolences to UAE, Turkiye over deadly crashes",
+"url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-expresses-condolences-to-uae-turkiye-over-deadly-crashes-3011540",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Second world war 'brain' bunker in cliffs of Dover opens to public  | Second world war",
+"url": "https://www.theguardian.com/world/2026/nov/13/fan-bay-plotting-room-national-trust-white-cliffs-dover",
+"kilde": "GDELT",
+"domene": "theguardian.com",
+"publisert": "2026-11-13T00:45:00Z"
+},
+{
+"tittel": "Israel Defense Industry Chief Predicts Another Iran War Despite Staggering US Costs",
+"url": "https://dailycaller.com/2026/11/12/israel-defense-industry-chief-boaz-levy-predicts-another-iran-war-despite-staggering-us-costs/",
+"kilde": "GDELT",
+"domene": "dailycaller.com",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
+"tittel": "Russian Pranksters Dupe OpenAI Officials Into Video Chat About 'Offensive' AI For Ukraine",
+"url": "https://dailycaller.com/2026/11/12/russian-pransksters-openai-offensive-ukraine-vovan-lexus/",
+"kilde": "GDELT",
+"domene": "dailycaller.com",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
+"tittel": "Israeli strike on Gaza hospital kills at least 6, including doctor and child, Palestinian officials say",
+"url": "https://krdo.com/news/national-world/cnn-world/2026/11/12/israeli-strike-on-gaza-hospital-kills-at-least-6-including-doctor-and-child-palestinian-officials-say/",
+"kilde": "GDELT",
+"domene": "krdo.com",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
+"tittel": "Zelensky hails 'real result' as prisoner exchange with Russia secured | The Wiltshire Gazette and Herald",
+"url": "https://www.gazetteandherald.co.uk/news/national/26725607.zelensky-hails-real-result-prisoner-exchange-russia-secured/",
+"kilde": "GDELT",
+"domene": "gazetteandherald.co.uk",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
+"tittel": "Zelensky hails 'real result' as prisoner exchange with Russia secured | Harwich and Manningtree Standard",
+"url": "https://www.harwichandmanningtreestandard.co.uk/news/national/26725607.zelensky-hails-real-result-prisoner-exchange-russia-secured/",
+"kilde": "GDELT",
+"domene": "harwichandmanningtreestandard.co.uk",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
+"tittel": "Saudi Arabia urges EU to designate Houthis as terrorists amid renewed attacks",
+"url": "https://www.israelnationalnews.com/news/436118",
+"kilde": "GDELT",
+"domene": "israelnationalnews.com",
+"publisert": "2026-11-13T00:30:00Z"
+},
+{
 "tittel": "Takaichi looks to meet with Trump to head off defense spending demands",
 "url": "https://asia.nikkei.com/politics/international-relations/takaichi-looks-to-meet-with-trump-to-head-off-defense-spending-demands",
 "kilde": "GDELT",
@@ -54,13 +432,6 @@
 "url": "https://www.ijpr.org/npr-news/2026-11-12/an-israeli-strike-on-a-gaza-hospital-kills-6-people-including-a-doctor-and-a-child",
 "kilde": "GDELT",
 "domene": "ijpr.org",
-"publisert": "2026-11-12T21:00:00Z"
-},
-{
-"tittel": "Israeli strike on Gaza hospital kills at least 6, including doctor and child, Palestinian officials say",
-"url": "https://www.ksl.com:443/article/51645397/israeli-strike-on-gaza-hospital-kills-at-least-6-including-doctor-and-child-palestinian-officials-say",
-"kilde": "GDELT",
-"domene": "ksl.com",
 "publisert": "2026-11-12T21:00:00Z"
 },
 {
@@ -274,13 +645,6 @@
 "publisert": "2026-11-12T20:15:00Z"
 },
 {
-"tittel": "U.S. envoys meet with Putin in the Kremlin after Ukraine talks in Abu Dhabi",
-"url": "https://www.kawc.org/npr-news/2026-11-12/u-s-envoys-meet-with-putin-in-the-kremlin-after-ukraine-talks-in-abu-dhabi",
-"kilde": "GDELT",
-"domene": "kawc.org",
-"publisert": "2026-11-12T20:15:00Z"
-},
-{
 "tittel": "South east London areas ranked on World War Three survival",
 "url": "https://www.newsshopper.co.uk/news/26717529.south-east-london-areas-ranked-world-war-three-survival/",
 "kilde": "GDELT",
@@ -477,13 +841,6 @@
 "publisert": "2026-11-12T19:45:00Z"
 },
 {
-"tittel": "US envoys meet with Putin, Zelenskyy",
-"url": "https://www.wyff4.com/article/trump-envoys-putin-moscow-ukraine-peace-talks/74408946",
-"kilde": "GDELT",
-"domene": "wyff4.com",
-"publisert": "2026-11-12T19:45:00Z"
-},
-{
 "tittel": "Putin rejects European inclusion in Ukraine talks, sets new territorial red lines",
 "url": "https://english.pravda.ru/world/172715-putin-europe-ukraine-talks-rejection-territorial-redlines/",
 "kilde": "GDELT",
@@ -565,13 +922,6 @@
 "url": "https://timesofindia.indiatimes.com/defence/news/bay-of-bengal-to-red-sea-how-navy-is-building-partnerships-across-three-seas/articleshow/135769465.cms",
 "kilde": "GDELT",
 "domene": "indiatimes.com",
-"publisert": "2026-11-12T19:15:00Z"
-},
-{
-"tittel": "Saudi Arabia puts pressure on EU to label Yemen's Houthis a terrorist group",
-"url": "https://www.al-monitor.com/originals/2026/11/saudi-arabia-puts-pressure-eu-label-yemens-houthis-terrorist-group",
-"kilde": "GDELT",
-"domene": "al-monitor.com",
 "publisert": "2026-11-12T19:15:00Z"
 },
 {
@@ -709,13 +1059,6 @@
 "url": "https://www.cranestodaymagazine.com/news/sarens-heavy-lifting-fadhili-gas/",
 "kilde": "GDELT",
 "domene": "cranestodaymagazine.com",
-"publisert": "2026-11-12T13:15:00Z"
-},
-{
-"tittel": "Israel hits Gaza hospital and France turns away a settler leader, and other Mideast news",
-"url": "https://www.nvdaily.com/associated_press_national/israel-hits-gaza-hospital-and-france-turns-away-a-settler-leader-and-other-mideast-news/article_5117b624-e8c5-5e26-bb2e-d633fa90b448.html",
-"kilde": "GDELT",
-"domene": "nvdaily.com",
 "publisert": "2026-11-12T13:15:00Z"
 },
 {
@@ -1776,307 +2119,6 @@
 "publisert": "2026-11-12T02:30:00Z"
 },
 {
-"tittel": "First World War changed Red Deer | Red Deer Advocate",
-"url": "https://reddeeradvocate.com/2026/11/11/first-world-war-changed-red-deer/",
-"kilde": "GDELT",
-"domene": "reddeeradvocate.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Outrage Erupts Over Israeli Ambassador's Remarks on Palestinian Child Deaths in Gaza",
-"url": "https://www.elciudadano.com/en/outrage-erupts-over-israeli-ambassadors-remarks-on-palestinian-child-deaths-in-gaza/11/11/",
-"kilde": "GDELT",
-"domene": "elciudadano.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "U.S. Export Controls for Semiconductors: Where Things Stand · EMSNow",
-"url": "https://www.emsnow.com/u-s-export-controls-for-semiconductors-where-things-stand/",
-"kilde": "GDELT",
-"domene": "emsnow.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Russia and Ukraine agree to a prisoner exchange as talks end with no big breakthrough",
-"url": "https://www.kedm.org/npr-news/2026-11-11/russia-and-ukraine-agree-to-a-prisoner-exchange-as-talks-end-with-no-big-breakthrough",
-"kilde": "GDELT",
-"domene": "kedm.org",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Netanyahu denies Israel is to blame for conditions in Gaza camps",
-"url": "https://www.ksl.com:443/article/51645163/netanyahu-denies-israel-is-to-blame-for-conditions-in-gaza-camps-and-other-mideast-news",
-"kilde": "GDELT",
-"domene": "ksl.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Can Netanyahu take Israel to war with Iran despite US opposition?",
-"url": "https://www.ynetnews.com/article/hyh3wlz0zl",
-"kilde": "GDELT",
-"domene": "ynetnews.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Saudi Arabia orders 100 lashes for maid who had baby out of wedlock, sparking outrage",
-"url": "https://www.ynetnews.com/article/s17gaemaml",
-"kilde": "GDELT",
-"domene": "ynetnews.com",
-"publisert": "2026-11-11T22:15:00Z"
-},
-{
-"tittel": "Iran demands climate reparations for US, Israeli strikes",
-"url": "http://www.jpost.com/middle-east/iran-news/article-914620",
-"kilde": "GDELT",
-"domene": "jpost.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Iran strikes Omani island navigation systems near Strait of Hormuz",
-"url": "http://www.jpost.com/middle-east/iran-news/article-914624",
-"kilde": "GDELT",
-"domene": "jpost.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Gold prices fall below $4,000 as analysts warn of further losses toward $3,900",
-"url": "http://www.kitco.com/news/article/2026-11-11/gold-prices-fall-below-4000-analysts-warn-further-losses-toward-3900",
-"kilde": "GDELT",
-"domene": "kitco.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "EU accuses Russia of systematic deportation, indoctrination of Ukrainian children",
-"url": "https://aa.com.tr/en/asia-pacific/eu-accuses-russia-of-systematic-deportation-indoctrination-of-ukrainian-children/4121351",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Zelenskyy says he expects Trump's envoys to convey Russia's response to truce proposals",
-"url": "https://aa.com.tr/en/eurasia/zelenskyy-says-he-expects-trump-s-envoys-to-convey-russia-s-response-to-truce-proposals/4121488",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Israeli security cabinet orders military to prepare for possible attack on Iran: Report",
-"url": "https://aa.com.tr/en/middle-east/israeli-security-cabinet-orders-military-to-prepare-for-possible-attack-on-iran-report/4121434",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "UN says over 150,000 tents waiting outside Gaza pending Israeli permission",
-"url": "https://aa.com.tr/en/world/un-says-over-150-000-tents-waiting-outside-gaza-pending-israeli-permission/4121343",
-"kilde": "GDELT",
-"domene": "aa.com.tr",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Italy may reduce missile supplies to Ukraine for SAMP/T air defense systems due to limited stock",
-"url": "https://en.interfax.com.ua/news/general/1235079.html",
-"kilde": "GDELT",
-"domene": "interfax.com.ua",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Ukraine awaits Russian response on prisoner exchange, possibility of trilateral leaders' meeting – Zelenskyy",
-"url": "https://en.interfax.com.ua/news/general/1235081.html",
-"kilde": "GDELT",
-"domene": "interfax.com.ua",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Kallas: Evidence of Russia's targeted deportation of Ukrainian children points to crime against humanity",
-"url": "https://en.interfax.com.ua/news/general/1235086.html",
-"kilde": "GDELT",
-"domene": "interfax.com.ua",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Ecuador extends state of emergency for 30 days in 8 violence-hit provinces-Xinhua",
-"url": "https://english.news.cn/20261112/6313c4df3d554b8fa029f3b35a2b4a7b/c.html",
-"kilde": "GDELT",
-"domene": "english.news.cn",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Talks Between Ukraine and Russia Yield a Prisoner Swap",
-"url": "https://hotair.com/john-s-2/2026/11/11/talks-between-ukraine-and-russia-yield-a-prisoner-swap-n3820889",
-"kilde": "GDELT",
-"domene": "hotair.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Ukraine's Zelenskiy says progress in peace talks hinges on US approach to Russia",
-"url": "https://whbl.com/2026/11/11/ukraines-zelenskiy-says-progress-in-peace-talks-hinges-on-us-approach-to-russia/",
-"kilde": "GDELT",
-"domene": "whbl.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Rezaei: Tehran will target US bases in Europe if used for airstrikes on Iran",
-"url": "https://www.middle-east-online.com/en/rezaei-tehran-will-target-us-bases-europe-if-used-airstrikes-iran",
-"kilde": "GDELT",
-"domene": "middle-east-online.com",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Ukrainians look to U.S. midterm results as Russia intensifies attacks",
-"url": "https://www.publicradiotulsa.org/npr-national-news/2026-11-11/ukrainians-look-to-u-s-midterm-results-as-russia-intensifies-attacks",
-"kilde": "GDELT",
-"domene": "publicradiotulsa.org",
-"publisert": "2026-11-11T22:00:00Z"
-},
-{
-"tittel": "Ecuador extends state of emergency for 30 days in 8 violence-hit provinces",
-"url": "http://www.caribbeanherald.com/news/279426932/ecuador-extends-state-of-emergency-for-30-days-in-8-violence-hit-provinces",
-"kilde": "GDELT",
-"domene": "caribbeanherald.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Oil Prices Settle Higher as Iran Reiterates Its Nuclear Material Position",
-"url": "https://econotimes.com/Oil-Prices-Settle-Higher-as-Iran-Reiterates-Its-Nuclear-Material-Position-1775440",
-"kilde": "GDELT",
-"domene": "econotimes.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Russia, Ukraine to exchange prisoners but talks end with no big breakthrough - National",
-"url": "https://globalnews.ca/news/12146830/russia-ukraine-prisoner-exchange-war-talks/",
-"kilde": "GDELT",
-"domene": "globalnews.ca",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "KAUST unveils landmark coral facility on Red Sea",
-"url": "https://tradearabia.com:443/News/489616/KAUST-unveils-landmark-coral-facility-on-Red-Sea/CONS",
-"kilde": "GDELT",
-"domene": "tradearabia.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Safe Haven Hope Center Executive Director says first six months have been \"really good\" | 101 WIXX",
-"url": "https://wixx.com/2026/11/11/safe-haven-hope-center-executive-director-says-first-six-months-have-been-really-good/",
-"kilde": "GDELT",
-"domene": "wixx.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "F1 champion Lewis Hamilton calls on Israel to open Gaza's Rafah border | Israel-Palestine conflict News",
-"url": "https://www.aljazeera.com/news/2026/11/11/f1-champion-lewis-hamilton-calls-on-israel-to-open-rafah-border",
-"kilde": "GDELT",
-"domene": "aljazeera.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Hormuz Strait will 'never return' to pre-war status, Iran's Ghalibaf says | US-Israel war on Iran News",
-"url": "https://www.aljazeera.com/news/2026/11/11/strait-of-hormuz-will-never-return-to-pre-war-status-ghalibaf",
-"kilde": "GDELT",
-"domene": "aljazeera.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Map shows how Ukraine war shifted since Putin said it's \"coming to an end\"",
-"url": "https://www.newsweek.com/map-shows-how-ukraine-war-shifted-since-putin-said-its-coming-to-an-end-12700169",
-"kilde": "GDELT",
-"domene": "newsweek.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Qatar calls for global action to protect development gains from Strait of Hormuz disruptions",
-"url": "https://www.qatar-tribune.com/article/263842/latest-news/qatar-calls-for-global-action-to-protect-development-gains-from-strait-of-hormuz-disruptions",
-"kilde": "GDELT",
-"domene": "qatar-tribune.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Peace deal elusive; Russia, Ukraine to swap prisoners",
-"url": "https://www.tribuneindia.com/news/india/peace-deal-elusive-russia-ukraine-to-swap-prisoners/",
-"kilde": "GDELT",
-"domene": "tribuneindia.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Saudi Arabia, Turkey sign deal to build 3,000 MW of wind power capacity",
-"url": "https://www.zawya.com/en/business/utilities/saudi-arabia-turkey-sign-deal-to-build-3000-mw-of-wind-power-capacity-2194677",
-"kilde": "GDELT",
-"domene": "zawya.com",
-"publisert": "2026-11-11T21:45:00Z"
-},
-{
-"tittel": "Russian drone strikes hit industrial facilities in Ukraine's Kyiv region, killing one",
-"url": "https://en.apa.az/europe/russian-drone-strikes-hit-industrial-facilities-in-ukraines-kyiv-region-killing-one-535536",
-"kilde": "GDELT",
-"domene": "en.apa.az",
-"publisert": "2026-11-11T21:30:00Z"
-},
-{
-"tittel": "Zelenskyy: Agreement with Russia possible by end of year",
-"url": "https://en.apa.az/europe/zelenskyy-agreement-with-russia-possible-by-end-of-year-535553",
-"kilde": "GDELT",
-"domene": "en.apa.az",
-"publisert": "2026-11-11T21:30:00Z"
-},
-{
-"tittel": "Zelenskyy explains why Ukraine and Russia failed to reach ceasefire agreement",
-"url": "https://en.apa.az/europe/zelenskyy-explains-why-ukraine-and-russia-failed-to-reach-ceasefire-agreement-535551",
-"kilde": "GDELT",
-"domene": "en.apa.az",
-"publisert": "2026-11-11T21:30:00Z"
-},
-{
-"tittel": "Iran sets 7 conditions for reopening Strait of Hormuz, resuming talks with US",
-"url": "https://www.hindustantimes.com/world-news/us-news/iran-sets-7-conditions-for-reopening-strait-of-hormuz-resuming-talks-with-us-101794424536128.html",
-"kilde": "GDELT",
-"domene": "hindustantimes.com",
-"publisert": "2026-11-11T21:30:00Z"
-},
-{
-"tittel": "Saudi Arabia intercepts Houthi missiles, drones; group denies targeting Mecca",
-"url": "https://www.hindustantimes.com/world-news/us-news/saudi-arabia-intercepts-houthi-missiles-drones-group-denies-targeting-mecca-101794426812479.html",
-"kilde": "GDELT",
-"domene": "hindustantimes.com",
-"publisert": "2026-11-11T21:30:00Z"
-},
-{
-"tittel": "Iran security chief warns Tehran will target distant US bases, including in Europe",
-"url": "http://www.iraqsun.com/news/279426947/iran-security-chief-warns-tehran-will-target-distant-us-bases-including-in-europe",
-"kilde": "GDELT",
-"domene": "iraqsun.com",
-"publisert": "2026-11-11T21:15:00Z"
-},
-{
-"tittel": "Ireland fears undersea cables face growing threat from 'malign actors'  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
-"url": "https://dominicanrepublicpost.com/ireland-fears-undersea-cables-face-growing-threat-from-malign-actors/",
-"kilde": "GDELT",
-"domene": "dominicanrepublicpost.com",
-"publisert": "2026-11-11T21:15:00Z"
-},
-{
-"tittel": "KAUST Unveils Landmark Coral Facility on Red Sea, Advancing Saudi Scientific Expertise and Marine Conservation",
-"url": "https://english.aawsat.com/varieties/5340244-kaust-unveils-landmark-coral-facility-red-sea-advancing-saudi-scientific",
-"kilde": "GDELT",
-"domene": "aawsat.com",
-"publisert": "2026-11-11T21:15:00Z"
-},
-{
-"tittel": "NEXT STOP MOSCOW: Ukraine Talks Wrap Up Without Breakthrough As Kushner And Witkoff Head To Putin",
-"url": "https://www.theyeshivaworld.com/news/general/2621927/next-stop-moscow-ukraine-talks-wrap-up-without-breakthrough-as-kushner-and-witkoff-head-to-putin.html",
-"kilde": "GDELT",
-"domene": "theyeshivaworld.com",
-"publisert": "2026-11-11T21:15:00Z"
-},
-{
-"tittel": "GLOATING IN BEIRUT: Hezbollah Chief Claims Iran And Terror Axis Toppled President Trump And Prime Minister Netanyahu",
-"url": "https://www.theyeshivaworld.com/news/israel-news/2622071/gloating-in-beirut-hezbollah-chief-claims-iran-and-terror-axis-toppled-president-trump-and-prime-minister-netanyahu.html",
-"kilde": "GDELT",
-"domene": "theyeshivaworld.com",
-"publisert": "2026-11-11T21:15:00Z"
-},
-{
 "tittel": "Increased risk of serious events that could weaken financial stability",
 "url": "https://www.norges-bank.no/en/news-events/news/Press-releases/2026/2026-11-11-fsr2/",
 "kilde": "Norges Bank",
@@ -2095,6 +2137,6 @@
 "publisert": "2026-11-10T14:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-12T21:00:00Z",
-"hentet": "2026-11-12T21:04:01Z"
+"gkg_siste_fil": "2026-11-13T02:15:00Z",
+"hentet": "2026-11-13T02:06:02Z"
 }
