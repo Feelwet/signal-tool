@@ -1,6 +1,517 @@
 {
 "saker": [
 {
+"tittel": "Gold Prices in Pakistan slip below Rs411,000 Per Tola after Nov. 14 dip",
+"url": "https://en.dailypakistan.com.pk/14-Nov-2026/gold-prices-in-pakistan-slip-below-rs411000-per-tola-after-nov-14-dip",
+"kilde": "GDELT",
+"domene": "dailypakistan.com.pk",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Rutte says Britain will double defence spending in a decade as UK catches up with Germany - London Business News",
+"url": "https://londonlovesbusiness.com/rutte-says-britain-will-double-defence-spending-in-a-decade-as-uk-catches-up-with-germany/",
+"kilde": "GDELT",
+"domene": "londonlovesbusiness.com",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Putin's grandson registered with mother's surname as father's name resembles Ukraine President Zelenskyy's: Report | World News",
+"url": "https://timesofindia.indiatimes.com/world/europe/putins-grandson-registered-with-mothers-surname-as-fathers-name-resembles-ukraine-president-zelenskyys-report/articleshow/135832890.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Zelenskyy: U.S. floated Ukraine ceding Donbas for NATO membership",
+"url": "https://www.cnbc.com/2026/11/14/zelenskyy-us-ukraine-donbas-nato-membership.html",
+"kilde": "GDELT",
+"domene": "cnbc.com",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "India-US Trade Deal Nears Final Breakthrough As EAM S Jaishankar Says Bulk Of Issues Resolved",
+"url": "https://www.freepressjournal.in/india/india-us-trade-deal-nears-final-breakthrough-as-eam-s-jaishankar-says-bulk-of-issues-resolved",
+"kilde": "GDELT",
+"domene": "freepressjournal.in",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Putin's latest demands to Europe on Ukraine – bend the knee for peace",
+"url": "https://www.independent.co.uk/independentpremium/voices/russia-putin-trump-ukraine-peace-talks-europe-nato-b3084708.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Zelenskyy says a new European security framework floated by US could benefit Putin",
+"url": "https://www.independent.co.uk/news/world/europe/ukraine-nato-russia-kyiv-moscow-b3084955.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-14T14:30:00Z"
+},
+{
+"tittel": "Carney says Canada-U.S. trade deal closer, but hurdles remain",
+"url": "https://cedarnews.net/newstasks/1146712/carney-canada-u-s-says-trade-deal/",
+"kilde": "GDELT",
+"domene": "cedarnews.net",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "US floats NATO membership for Ukraine, Zelenskyy says",
+"url": "https://cedarnews.net/newstasks/1146731/us-floats-nato-membership-ukraine-zelenskyy-says/",
+"kilde": "GDELT",
+"domene": "cedarnews.net",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "During negotiations on Ukraine, Russia reiterates its 2021 demands on NATO but expanded them – NYT",
+"url": "https://en.interfax.com.ua/news/general/1236601.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Democrats want to kill some of Trump's tariffs — but that might not end the trade war",
+"url": "https://medicinehatnews.com/news/national-news/2026/11/14/democrats-want-to-kill-some-of-trumps-tariffs-but-that-might-not-end-the-trade-war/",
+"kilde": "GDELT",
+"domene": "medicinehatnews.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "US has raised idea of NATO membership for Ukraine, Volodymyr Zelenskyy says",
+"url": "https://www.abc.net.au/news/2026-11-15/us-idea-of-ukraine-ceding-donbas-to-join-nato-zelenskyy/107386558",
+"kilde": "GDELT",
+"domene": "abc.net.au",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Russian Missile Ship Suffers Crew Casualties in Baltic Drone Strike",
+"url": "https://www.kyivpost.com/post/90110",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "US Asked if Ukraine Would Exit Donbas for NATO, Zelensky Says",
+"url": "https://www.kyivpost.com/post/90115",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Denmark Pledges €665M in Aid, UK Sanctions Russian Oil After Zelensky Tour",
+"url": "https://www.kyivpost.com/post/90117",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Putin Rejects Energy Truce, Zelensky Warns Over Starshield Caps",
+"url": "https://www.kyivpost.com/post/90119",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Ukraine, Russia Agree to Swap Up to 1,300 POWs, Europe to Join Talks",
+"url": "https://www.kyivpost.com/post/90125",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Ukraine's FREYJA Anti-Ballistic Missile Ready as Denmark Completes Radar",
+"url": "https://www.kyivpost.com/post/90129",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Russia revives demand that NATO retrench to secure Ukraine deal",
+"url": "https://www.westhawaiitoday.com/2026/11/14/nation-world-news/russia-revives-demand-that-nato-retrench-to-secure-ukraine-deal/",
+"kilde": "GDELT",
+"domene": "westhawaiitoday.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "Israeli drone strike kills 2 Palestinians in Gaza, and other Mideast news",
+"url": "https://www.wsls.com/news/2026/11/14/israeli-drone-strike-kills-2-palestinians-in-gaza-and-other-mideast-news/",
+"kilde": "GDELT",
+"domene": "wsls.com",
+"publisert": "2026-11-14T14:15:00Z"
+},
+{
+"tittel": "1st LD Writethru: Zelensky says U.S. proposes Ukraine to withdraw from Donbas in exchange for NATO membership",
+"url": "http://www.bignewsnetwork.com/news/279432571/1st-ld-writethru-zelensky-says-us-proposes-ukraine-to-withdraw-from-donbas-in-exchange-for-nato-membership",
+"kilde": "GDELT",
+"domene": "bignewsnetwork.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Zelenskyy: US Floated Trading Donbas For NATO Membership",
+"url": "http://www.bignewsnetwork.com/news/279432609/zelenskyy-us-floated-trading-donbas-for-nato-membership",
+"kilde": "GDELT",
+"domene": "bignewsnetwork.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Iran claims 17th US MQ-1 drone \"destroyed\"; 2 tankers \"catch fire\" in Strait of Hormuz",
+"url": "https://aninews.in/news/world/middle-east/iran-claims-17th-us-mq-1-drone-destroyed-2-tankers-catch-fire-in-strait-of-hormuz20261114191143/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "US floated idea of Ukraine swapping land for NATO membership, Zelensky says",
+"url": "https://cyprusnews.eu/cnn-kosmos/us-floated-idea-of-ukraine-swapping-land-for-nato-membership-zelensky-says/",
+"kilde": "GDELT",
+"domene": "cyprusnews.eu",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Another oil tanker hits mine and catches fire in Strait of Hormuz",
+"url": "https://en.apa.az/asia/another-oil-tanker-hits-mine-and-catches-fire-in-strait-of-hormuz-536104",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Kremlin says Russia will not impose conditions on European negotiating team",
+"url": "https://en.apa.az/cis-countries/kremlin-says-russia-will-not-impose-conditions-on-european-negotiating-team-536114",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Iran's Army says 2 \"violating\" oil tankers caught fire after hitting mines east of Hormuz Strait-Xinhua",
+"url": "https://english.news.cn/20261114/31bbf74e3cbb407c8f5b3fd1b5430a43/c.html",
+"kilde": "GDELT",
+"domene": "english.news.cn",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Philippines, Canada conclude free trade deal talks, eye 2027 signing",
+"url": "https://qa.philstar.com/headlines/2026/11/14/2570105/philippines-canada-conclude-free-trade-deal-talks-eye-2027-signing",
+"kilde": "GDELT",
+"domene": "philstar.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Syria's support for Yemen and Saudi Arabia – The Frontier Post",
+"url": "https://thefrontierpost.com/syrias-support-for-yemen-and-saudi-arabia/",
+"kilde": "GDELT",
+"domene": "thefrontierpost.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Carney says Canada will only sign a U.S. trade deal that includes viable auto sector",
+"url": "https://www.chroniclejournal.com/news/national/carney-says-canada-will-only-sign-a-u-s-trade-deal-that-includes-viable-auto/article_bef6e443-02b8-591f-96b7-c814e9494d6a.html",
+"kilde": "GDELT",
+"domene": "chroniclejournal.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "US floated idea of Ukraine ceding Donbas for NATO membership, Zelenskiy says",
+"url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/14/us-floated-idea-of-ukraine-ceding-donbas-for-nato-membership-zelenskiy-says",
+"kilde": "GDELT",
+"domene": "internazionale.it",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "The US cannot rebuild Gaza without Israel",
+"url": "https://www.pressherald.com/2026/11/14/the-us-cannot-rebuild-gaza-without-israel-letter/",
+"kilde": "GDELT",
+"domene": "pressherald.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Iran's navy says oil tanker on fire after hitting mine in Hormuz – The Times Of Earth",
+"url": "https://www.timesofearth.com/2026/11/14/irans-navy-says-oil-tanker-on-fire-after-hitting-mine-in-hormuz/",
+"kilde": "GDELT",
+"domene": "timesofearth.com",
+"publisert": "2026-11-14T14:00:00Z"
+},
+{
+"tittel": "Sixty years ago this week, Jim Lovell and Buzz Aldrin photographed the Red Sea and the Nile from Gemini XII, and photos like theirs helped make the case for the satellites that became Landsat",
+"url": "https://www.ecoticias.com/en/sixty-years-ago-this-week-jim-lovell-and-buzz-aldrin-photographed-the-red-sea-and-the-nile-from-gemini-xii-and-photos-like-theirs-helped-make-the-case-for-the-satellites-that-became-landsat/54228/",
+"kilde": "GDELT",
+"domene": "ecoticias.com",
+"publisert": "2026-11-14T13:45:00Z"
+},
+{
+"tittel": "Major Russian oil hub burns as Ukraine launches blitz on 'heart of Putin's petrol network'",
+"url": "https://www.mirror.co.uk/news/world-news/major-russian-oil-hub-burns-37877328",
+"kilde": "GDELT",
+"domene": "mirror.co.uk",
+"publisert": "2026-11-14T13:45:00Z"
+},
+{
+"tittel": "Harshal Patel likely to move to GT from SRH via trade deal ahead of IPL 2027 retention deadline",
+"url": "https://www.prokerala.com/news/articles/a1836734.html",
+"kilde": "GDELT",
+"domene": "prokerala.com",
+"publisert": "2026-11-14T13:45:00Z"
+},
+{
+"tittel": "Ukraine Naval Drones That Hit Russian Ships Now Take the Fight to Land",
+"url": "https://www.businessinsider.com/ukraine-naval-drones-hit-russian-ships-taking-the-fight-land-2026-11",
+"kilde": "GDELT",
+"domene": "businessinsider.com",
+"publisert": "2026-11-14T13:30:00Z"
+},
+{
+"tittel": "US proposes Ukraine cede territory in exchange for joining Nato, says Zelensky",
+"url": "https://www.freemalaysiatoday.com/category/world/2026/11/14/us-proposes-ukraine-cede-territory-in-exchange-for-joining-nato-says-zelensky",
+"kilde": "GDELT",
+"domene": "freemalaysiatoday.com",
+"publisert": "2026-11-14T13:30:00Z"
+},
+{
+"tittel": "Carney Draws Red Line On Trump Trade Deal Over Auto Jobs",
+"url": "https://www.newsweek.com/carney-draws-red-line-us-trump-trade-deal-auto-jobs-12715092",
+"kilde": "GDELT",
+"domene": "newsweek.com",
+"publisert": "2026-11-14T13:30:00Z"
+},
+{
+"tittel": "Oil prices suffer a second straight weekly drop on signs of a growing supply surplus",
+"url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/11/14/oil-prices-suffer-a-second-straight-weekly-drop-on-signs-of-a-growing-supply-surplus",
+"kilde": "GDELT",
+"domene": "thestar.com.my",
+"publisert": "2026-11-14T13:30:00Z"
+},
+{
+"tittel": "South China Sea COC negotiations nearly 90% complete, says Tok Mat",
+"url": "https://www.thestar.com.my/news/nation/2026/11/14/south-china-sea-coc-negotiations-nearly-90-complete-says-tok-mat",
+"kilde": "GDELT",
+"domene": "thestar.com.my",
+"publisert": "2026-11-14T13:30:00Z"
+},
+{
+"tittel": "US Proposes Ukraine Cede Territory for NATO Membership: Zelensky",
+"url": "https://arynews.tv/us-proposes-ukraine-cede-territory-exchange-joining-nato-zelensky",
+"kilde": "GDELT",
+"domene": "arynews.tv",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Ukraine, Russia race to build military satellite networks as war rages on  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
+"url": "https://dominicanrepublicpost.com/ukraine-russia-race-to-build-military-satellite-networks-as-war-rages-on/",
+"kilde": "GDELT",
+"domene": "dominicanrepublicpost.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Three killed in Russia as Ukraine claims US floated NATO membership option",
+"url": "https://www.aljazeera.com/news/2026/11/14/three-killed-in-russia-as-ukraine-claims-us-floated-nato-membership-option",
+"kilde": "GDELT",
+"domene": "aljazeera.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Ukraine, Russia race to build military satellite networks as war rages on",
+"url": "https://www.aljazeera.com/news/2026/11/14/ukraine-russia-race-to-build-military-satellite-networks-as-war-rages-on",
+"kilde": "GDELT",
+"domene": "aljazeera.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Iran war live: Fifth tanker reported hit around Hormuz in past 24 hours | News",
+"url": "https://www.aljazeera.com/news/liveblog/2026/11/14/iran-war-live-fighting-grips-yemen-as-qatar-turkiye-sign-defence-deal?update=5151838",
+"kilde": "GDELT",
+"domene": "aljazeera.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "US proposes Ukraine cede territory in exchange for joining NATO: Zelenskyy",
+"url": "https://www.channelnewsasia.com/world/us-proposes-ukraine-cede-territory-in-exchange-joining-nato-zelenskyy-6551616",
+"kilde": "GDELT",
+"domene": "channelnewsasia.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "US said Ukraine could give Donbas to Russia in exchange for joining Nato, Zelensky claims as peace talks end with no breakthrough",
+"url": "https://www.dailymail.com/news/article-16292401/Ukraine-Donbas-Russia-exchange-joining-Nato-Zelensky.html",
+"kilde": "GDELT",
+"domene": "dailymail.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Finland rejects reported Russian demand to leave NATO as part of peace talks",
+"url": "https://www.politico.eu/article/finland-rejects-reported-russian-demand-to-leave-nato-as-part-of-peace-talks/",
+"kilde": "GDELT",
+"domene": "politico.eu",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "US suggested Ukraine could give up Donbas for NATO membership, Zelenskyy says",
+"url": "https://www.politico.eu/article/us-suggested-ukraine-could-give-up-donbas-for-nato-membership-zelenskyy-says/",
+"kilde": "GDELT",
+"domene": "politico.eu",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Kerala Man Arrested For Dowry-Related Assault In Saudi Arabia",
+"url": "https://www.rediff.com/news/report/man-held-at-thiruvananthapuram-airport-for-dowry-assault/20261114.htm",
+"kilde": "GDELT",
+"domene": "rediff.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "U.S. proposes Ukraine cede territory in exchange for joining NATO: Zelensky",
+"url": "https://www.thehindu.com/news/international/us-proposes-ukraine-cede-territory-in-exchange-for-joining-nato-zelensky/article71701653.ece",
+"kilde": "GDELT",
+"domene": "thehindu.com",
+"publisert": "2026-11-14T13:15:00Z"
+},
+{
+"tittel": "Iran Reports Three Oil Tankers Hit Mines in Hormuz",
+"url": "https://article.wn.com/view/2026/11/14/Iran_Reports_Three_Oil_Tankers_Hit_Mines_in_Hormuz/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Protesters in London urge UK to sanction Israel over Gaza genocide",
+"url": "https://article.wn.com/view/2026/11/14/Protesters_in_London_urge_UK_to_sanction_Israel_over_Gaza_ge/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "UN reports 25 seafarer deaths in Strait of Hormuz region",
+"url": "https://news.az/news/un-reports-25-seafarer-deaths-in-strait-of-hormuz-region",
+"kilde": "GDELT",
+"domene": "news.az",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Iran's IRGC claims it shot down US MQ-1 Predator drone over Qeshm Island in Strait of Hormuz",
+"url": "https://www.hindustantimes.com/world-news/irans-irgc-claims-it-shot-down-us-mq-1-predator-drone-over-qeshm-island-101794659260137.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Zelenskyy: \"NATO in exchange for Donbas?\" — The US question and his referendum condition - Zelenskyy: \"NATO in exchange for Donbas?\" — The US question and his referendum condition",
+"url": "https://www.inewsgr.com/330/Zelenskyy-NATO-in-exchange-for-Donbas--The-US-question-and-his-referendum-condition.htm",
+"kilde": "GDELT",
+"domene": "inewsgr.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Putin's Russia revives Soviet antisemitism while weaponizing Holocaust history",
+"url": "https://www.jpost.com/diaspora/antisemitism/article-914855",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Ukraine's Starshield Access Is Being Restricted Again, Zelensky Says",
+"url": "https://www.nytimes.com/2026/11/14/world/europe/ukraine-starshield-zelensky.html",
+"kilde": "GDELT",
+"domene": "nytimes.com",
+"publisert": "2026-11-14T13:00:00Z"
+},
+{
+"tittel": "Ukraine fires nearly 1,200 drones at Russia as US-led talks consider wider European security",
+"url": "https://cdn.naharnet.com/stories/en/323756-ukraine-fires-nearly-1-200-drones-at-russia-as-us-led-talks-consider-wider-european-security",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Bombings in Russia kill military officer and injure adviser to Ukraine's former PM",
+"url": "https://cdn.naharnet.com/stories/en/323764-bombings-in-russia-kill-military-officer-and-injure-adviser-to-ukraine-s-former-pm",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Iran reports three incidents of oil tankers hit by mines in Hormuz",
+"url": "https://cdn.naharnet.com/stories/en/323777-iran-reports-three-incidents-of-oil-tankers-hit-by-mines-in-hormuz",
+"kilde": "GDELT",
+"domene": "naharnet.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Zelenskyy: Ukrainian missile, Danish radar ready for Freyja",
+"url": "https://en.interfax.com.ua/news/general/1236564.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Zelenskyy calls on Rada to support defense bills, decisions necessary to fund Ukraine",
+"url": "https://en.interfax.com.ua/news/general/1236565.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Ukraine needs 2.5 times more F-16s in air at any given time – Zelenskyy",
+"url": "https://en.interfax.com.ua/news/general/1236566.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Putin personally does not support ceasefire – Zelenskyy",
+"url": "https://en.interfax.com.ua/news/general/1236572.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Strong US sanctions, weapons package could push Russia towards concrete steps in negotiations – Zelenskyy",
+"url": "https://en.interfax.com.ua/news/general/1236575.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Ukraine will not agree to enact neutral status in Сonstitution – Zelenskyy",
+"url": "https://en.interfax.com.ua/news/general/1236577.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Russia proposing humanitarian corridor from Kostiantynivka to force Ukrainian troops to withdraw from there – Zelenskyy",
+"url": "https://en.interfax.com.ua/news/general/1236590.html",
+"kilde": "GDELT",
+"domene": "interfax.com.ua",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Needed: A World War Against Globalism",
+"url": "https://www.americanthinker.com/articles/2026/11/needed-a-world-war-against-globalism/",
+"kilde": "GDELT",
+"domene": "americanthinker.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "In Iraq, the US is backing one faction of Iran's network to contain another",
+"url": "https://www.jpost.com/middle-east/iran-news/article-914729",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "Iran says oil tanker on fire after naval mine strike in eastern Strait of Hormuz",
+"url": "https://www.jpost.com/middle-east/iran-news/article-914859",
+"kilde": "GDELT",
+"domene": "jpost.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
+"tittel": "US floated idea of Ukraine ceding Donbas for NATO membership, Zelenskyy says",
+"url": "https://www.tribuneindia.com/news/world/us-floated-idea-of-ukraine-ceding-donbas-for-nato-membership-zelenskyy-says/",
+"kilde": "GDELT",
+"domene": "tribuneindia.com",
+"publisert": "2026-11-14T12:45:00Z"
+},
+{
 "tittel": "Oil prices, sales and use tax collections up in latest Wyoming Insight",
 "url": "http://www.wyomingnews.com/news/local_news/oil-prices-sales-and-use-tax-collections-up-in-latest-wyoming-insight/article_fdec1b7f-1fd3-42ce-95dd-b340e6c98e5a.html",
 "kilde": "GDELT",
@@ -33,13 +544,6 @@
 "url": "https://www.dailymail.com/news/article-16291913/Trump-Putin-Xi-meeting-Nvidia-Jensen-Huang.html",
 "kilde": "GDELT",
 "domene": "dailymail.com",
-"publisert": "2026-11-14T07:00:00Z"
-},
-{
-"tittel": "Iran reports three incidents of oil tankers hit by mines in Hormuz",
-"url": "https://www.jacarandafm.com/news/news/iran-reports-incidents-of-tankers-hit-mines-in-hormuz/",
-"kilde": "GDELT",
-"domene": "jacarandafm.com",
 "publisert": "2026-11-14T07:00:00Z"
 },
 {
@@ -96,13 +600,6 @@
 "url": "https://www.livemint.com/market/germany-has-an-edge-in-a-lower-oil-price-world-taking-stock-11794636529660.html",
 "kilde": "GDELT",
 "domene": "livemint.com",
-"publisert": "2026-11-14T06:30:00Z"
-},
-{
-"tittel": "Philippines, Canada conclude free trade deal talks, eye 2027 signing",
-"url": "https://www.philstar.com/headlines/2026/11/14/2570105/philippines-canada-conclude-free-trade-deal-talks-eye-2027-signing",
-"kilde": "GDELT",
-"domene": "philstar.com",
 "publisert": "2026-11-14T06:30:00Z"
 },
 {
@@ -272,20 +769,6 @@
 "kilde": "GDELT",
 "domene": "arabnews.com",
 "publisert": "2026-11-14T05:15:00Z"
-},
-{
-"tittel": "Ukraine fires nearly 1,200 drones at Russia as US-led talks consider wider European security",
-"url": "https://prod.naharnet.com/stories/en/323756-ukraine-fires-nearly-1-200-drones-at-russia-as-us-led-talks-consider-wider-european-security",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-14T00:00:00Z"
-},
-{
-"tittel": "Bombings in Russia kill military officer and injure adviser to Ukraine's former PM",
-"url": "https://prod.naharnet.com/stories/en/323764-bombings-in-russia-kill-military-officer-and-injure-adviser-to-ukraine-s-former-pm",
-"kilde": "GDELT",
-"domene": "naharnet.com",
-"publisert": "2026-11-14T00:00:00Z"
 },
 {
 "tittel": "Trump nips JD Vance's Iran appeasement gambit in the bud - Israel & Jewish News",
@@ -1078,265 +1561,6 @@
 "publisert": "2026-11-13T16:15:00Z"
 },
 {
-"tittel": "Ukraine War, Day 1,723: No Advance in Talks with Russia But Europe to Join Next Round",
-"url": "https://eaworldview.com/2026/11/ukraine-war-no-advance-but-europe-to-join-talks-with-russia/",
-"kilde": "GDELT",
-"domene": "eaworldview.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Iran's IRGC says LPG carrier explodes after hitting naval mine in Hormuz",
-"url": "https://news.az/news/iran-s-irgc-says-lpg-carrier-explodes-after-hitting-naval-mine-in-hormuz",
-"kilde": "GDELT",
-"domene": "news.az",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Oil prices head for second weekly decline as US maintains Iran blockade",
-"url": "https://news.az/news/oil-prices-head-for-second-weekly-decline-as-us-maintains-iran-blockade",
-"kilde": "GDELT",
-"domene": "news.az",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Putin Allows Europe Into Ukraine Peace Talks, Zelensky Welcomes Participation",
-"url": "https://www.chronicle.lu/category/international/64610-putin-allows-europe-into-ukraine-peace-talks-zelensky-welcomes-participation",
-"kilde": "GDELT",
-"domene": "chronicle.lu",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Israeli companies linked to Gaza genocide to head to India for tech summits",
-"url": "https://www.middleeasteye.net/news/israel-companies-linked-gaza-to-head-india-tech-summit",
-"kilde": "GDELT",
-"domene": "middleeasteye.net",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "China warns against new export controls on US chips after Nvidia scandal",
-"url": "https://www.moneycontrol.com/world/china-warns-against-new-export-controls-on-us-chips-after-nvidia-scandal-article-14079401.html",
-"kilde": "GDELT",
-"domene": "moneycontrol.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Iran says another ship hit mine in Strait of Hormuz",
-"url": "https://www.moneycontrol.com/world/iran-says-another-ship-hit-mine-in-strait-of-hormuz-article-14079335.html",
-"kilde": "GDELT",
-"domene": "moneycontrol.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Putin agrees to include Europe in next round of Ukraine peace talks, warns of fresh war",
-"url": "https://www.moneycontrol.com/world/putin-agrees-to-include-europe-in-next-round-of-ukraine-peace-talks-warns-of-fresh-war-article-14079346.html",
-"kilde": "GDELT",
-"domene": "moneycontrol.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "State secures 293,600 job opportunities for Kenyans in Saudi Arabia",
-"url": "https://www.the-star.co.ke/news/2026-11-13-state-secures-293600-jobs-for-kenyans-in-saudi-arabia",
-"kilde": "GDELT",
-"domene": "the-star.co.ke",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Kushner Says U.S. Working Toward 'Largest Prisoner Exchange' of Russia's War in Ukraine",
-"url": "https://www.themoscowtimes.com/2026/11/13/kushner-says-us-working-toward-largest-prisoner-exchange-of-russias-war-in-ukraine-a94249",
-"kilde": "GDELT",
-"domene": "themoscowtimes.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Putin Agrees for Europe to Join Ukraine Peace Talks, Witkoff Says",
-"url": "https://www.themoscowtimes.com/2026/11/13/putin-agrees-for-europe-to-join-ukraine-peace-talks-witkoff-says-a94236",
-"kilde": "GDELT",
-"domene": "themoscowtimes.com",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Russia and Ukraine peace talks set to secure largest-ever prisoner exchange in conflict history",
-"url": "https://www.thenews.com.pk/latest/1423462-russia-and-ukraine-peace-talks-set-to-secure-largest-ever-prisoner-exchange-in-conflict-history",
-"kilde": "GDELT",
-"domene": "thenews.com.pk",
-"publisert": "2026-11-13T09:00:00Z"
-},
-{
-"tittel": "Israel Committed Genocide in Gaza: Nobel Laureate Navi Pillay",
-"url": "https://countercurrents.org/2026/11/israel-committed-genocide-in-gaza-nobel-laureate-navi-pillay/",
-"kilde": "GDELT",
-"domene": "countercurrents.org",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Ukraine Sends Russian Commander's Oleshky Torture Case to Court",
-"url": "https://econotimes.com/Ukraine-Sends-Russian-Commander-s-Oleshky-Torture-Case-to-Court-1776219",
-"kilde": "GDELT",
-"domene": "econotimes.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Ukraine…Russia War.… Day Number 1,724….Europe invited to talks…Putin Holds Tight….",
-"url": "https://politicaldog101.com/2026/11/ukrainerussia-war-day-number-1724-europe-invited-to-talks-putin-holds-tight/",
-"kilde": "GDELT",
-"domene": "politicaldog101.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Cease fire talks Russia/Ukraine/Eurioe/US",
-"url": "https://politicaldog101.com/tag/cease-fire-talks-russia-ukraine-eurioe-us/",
-"kilde": "GDELT",
-"domene": "politicaldog101.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Ukraine…Russia War.… Day Number 1724",
-"url": "https://politicaldog101.com/tag/ukrainerussia-war-day-number-1724/",
-"kilde": "GDELT",
-"domene": "politicaldog101.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "India plans its largest strategic oil reserve in Odisha at Rs 8,571 crore cost, adding 4 million tonnes of storage as Strait of Hormuz disruptions expose supply risks",
-"url": "https://timesofindia.indiatimes.com/business/india-business/india-plans-its-largest-strategic-oil-reserve-in-odisha-at-rs-8571-crore-cost-adding-4-million-tonnes-of-storage-as-strait-of-hormuz-disruptions-expose-supply-risks/articleshow/135793378.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Türkiye condemns Israeli strike on Gaza hospital",
-"url": "https://www.hurriyetdailynews.com/turkiye-condemns-israeli-strike-on-gaza-hospital-229350",
-"kilde": "GDELT",
-"domene": "hurriyetdailynews.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "NATO State Lays 'Dragon's Teeth' on 600-Mile Defense Line to Stop Russia",
-"url": "https://www.newsweek.com/nato-state-lays-dragons-teeth-on-600-mile-defense-line-to-stop-russia-12706484",
-"kilde": "GDELT",
-"domene": "newsweek.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Russia says four killed in major Ukraine drone barrage",
-"url": "https://www.thehindu.com/news/international/russia-says-four-killed-in-major-ukraine-drone-barrage/article71697111.ece",
-"kilde": "GDELT",
-"domene": "thehindu.com",
-"publisert": "2026-11-13T08:45:00Z"
-},
-{
-"tittel": "Turkiye Calls Israeli Strike on Hospital in Gaza Violation of International Law",
-"url": "https://sputnikglobe.com/20261113/turkiye-calls-israeli-strike-on-hospital-in-gaza-violation-of-international-law-1125066496.html",
-"kilde": "GDELT",
-"domene": "sputnikglobe.com",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "Israel hits Gaza hospital and France turns away a settler leader, and other Mideast news",
-"url": "https://www.asiaone.com/asia/israel-hits-gaza-hospital-and-france-turns-away-settler-leader-and-other-mideast-news",
-"kilde": "GDELT",
-"domene": "asiaone.com",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "Gold Prices Today: 24k Gold At Rs 1.36 Lakh Per 10 Grams In Delhi, Mumbai On 13 Nov",
-"url": "https://www.businessworld.in/article/gold-prices-today-24k-gold-at-rs-1-36-lakh-per-10-grams-in-delhi-mumbai-on-13-nov-633386",
-"kilde": "GDELT",
-"domene": "businessworld.in",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "USA Rare Earth (NASDAQ: USAR) starts Serra Verde shipments as cash burn jumps",
-"url": "https://www.tickerreport.com/banking-finance/13662051/usa-rare-earth-nasdaq-usar-starts-serra-verde-shipments-as-cash-burn-jumps.html",
-"kilde": "GDELT",
-"domene": "tickerreport.com",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "Ireland faces pressure to stop sending Russia an ingredient vital to its war on Ukraine",
-"url": "https://www.timesfreepress.com/news/2026/nov/12/ireland-faces-pressure-to-stop-sending-russia-an-ingredient-vital-to-its-war-on-ukraine/",
-"kilde": "GDELT",
-"domene": "timesfreepress.com",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "Wall Street shakes with swings for Nvidia and oil prices but recovers most of its early losses",
-"url": "https://www.timesfreepress.com/news/2026/nov/12/wall-street-shakes-with-swings-for-nvidia-and-oil-prices-but-recovers-most-of-its-early-losses/",
-"kilde": "GDELT",
-"domene": "timesfreepress.com",
-"publisert": "2026-11-13T08:30:00Z"
-},
-{
-"tittel": "US-Israel military action may have strengthened Iran's resolve to pursue nuclear weapons: former diplomat Anil Trigunayat",
-"url": "http://www.bignewsnetwork.com/news/279430270/us-israel-military-action-may-have-strengthened-iran-resolve-to-pursue-nuclear-weapons-former-diplomat-anil-trigunayat",
-"kilde": "GDELT",
-"domene": "bignewsnetwork.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "Crude oil prices may fall to $70/barrel in 2027 as external conditions improve: SBI Report",
-"url": "http://www.bignewsnetwork.com/news/279430307/crude-oil-prices-may-fall-to-70barrel-in-2027-as-external-conditions-improve-sbi-report",
-"kilde": "GDELT",
-"domene": "bignewsnetwork.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "Israel bars French presidential hopeful over Gaza flotilla pledge",
-"url": "http://www.middleeaststar.com/news/279429808/israel-bars-french-presidential-hopeful-over-gaza-flotilla-pledge",
-"kilde": "GDELT",
-"domene": "middleeaststar.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "South China Sea Code of Conduct negotiations reach 70% completion, DFA says - Philippine Canadian Inquirer Nationwide Filipino Newspaper",
-"url": "https://canadianinquirer.net/2026/11/13/south-china-sea-code-of-conduct-negotiations-reach-70-completion-dfa-says/",
-"kilde": "GDELT",
-"domene": "canadianinquirer.net",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "Hyundai i30 and Elantra Cars Recalled in Saudi Arabia Due to Airbag Safety Risk",
-"url": "https://gulfnews.com/business/44305-hyundai-cars-told-to-stay-parked-over-airbag-defect-in-saudi-1.500745918",
-"kilde": "GDELT",
-"domene": "gulfnews.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "US-Israel-Iran Conflict Escalates: Strike Hits Iran's Sirik Amid Trump Warning to Tehran",
-"url": "https://gulfnews.com/world/mena/us-israel-iran-war-enemy-strike-hits-irans-sirik-as-trump-warns-tehran-over-threats-to-us-officials-houthis-claim-attack-on-saudi-pipeline-1.500745854",
-"kilde": "GDELT",
-"domene": "gulfnews.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "NPPA Enforces Price Cap Monitoring on 137 Anti-Cancer Drugs",
-"url": "https://pragativadi.com/nppa-enforces-price-cap-monitoring-on-137-anti-cancer-drugs/",
-"kilde": "GDELT",
-"domene": "pragativadi.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "​Suspected Chinese Spy Alice Huang Tied to Jensen Huang Affair Barred From Singapore Over Export Control Probe",
-"url": "https://pragativadi.com/suspected-chinese-spy-alice-huang-tied-to-jensen-huang-affair-barred-from-singapore-over-export-control-probe/",
-"kilde": "GDELT",
-"domene": "pragativadi.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "Russia Hits Cargo Ship With Military Equipment for Ukraine Troops in Black Sea",
-"url": "https://sputnikglobe.com/20261113/russia-hits-cargo-ship-with-military-equipment-for-ukraine-troops-in-black-sea---mod-1125065341.html",
-"kilde": "GDELT",
-"domene": "sputnikglobe.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
-"tittel": "Tanker carrying LNG hit mine, suffered explosion in Hormuz: Iran",
-"url": "https://www.thehindu.com/news/international/tanker-carrying-lng-hit-mine-suffered-explosion-in-hormuz-iran/article71696996.ece",
-"kilde": "GDELT",
-"domene": "thehindu.com",
-"publisert": "2026-11-13T08:15:00Z"
-},
-{
 "tittel": "Isabel Schnabel: Made in Europe",
 "url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261113~3883f1f187.en.html",
 "kilde": "ECB",
@@ -1359,14 +1583,8 @@
 "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
 "kilde": "Federal Reserve",
 "publisert": "2026-11-12T16:00:00Z"
-},
-{
-"tittel": "Increased risk of serious events that could weaken financial stability",
-"url": "https://www.norges-bank.no/en/news-events/news/Press-releases/2026/2026-11-11-fsr2/",
-"kilde": "Norges Bank",
-"publisert": "2026-11-11T07:30:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-14T07:00:00Z",
-"hentet": "2026-11-14T06:57:41Z"
+"gkg_siste_fil": "2026-11-14T14:30:00Z",
+"hentet": "2026-11-14T14:27:38Z"
 }
