@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-15T04:00:47+0100",
+ "hentet": "2026-11-15T12:26:28+0100",
  "dato": "2026-11-15",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (2405) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (3341) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,42 +12,840 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 95
+   "antall": 100
   },
   {
    "tema": "mideast_energy",
-   "antall": 75
+   "antall": 79
   },
   {
    "tema": "tariffs_trade",
-   "antall": 19
+   "antall": 20
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 9
+   "antall": 12
+  },
+  {
+   "tema": "rare_earths_semis",
+   "antall": 6
   },
   {
    "tema": "risk_off_haven",
-   "antall": 5
+   "antall": 6
   },
   {
    "tema": "sentralbanker",
    "antall": 5
   },
   {
-   "tema": "rare_earths_semis",
+   "tema": "food_agri",
    "antall": 2
   },
   {
    "tema": "elections_political",
    "antall": 1
-  },
-  {
-   "tema": "food_agri",
-   "antall": 1
   }
  ],
  "saker": [
+  {
+   "tittel": "Bahrain says its air defenses intercepted several Iranian attacks",
+   "url": "https://aa.com.tr/en/middle-east/bahrain-says-its-air-defenses-intercepted-several-iranian-attacks/4125551",
+   "kilde": "GDELT",
+   "domene": "aa.com.tr",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense"
+   ]
+  },
+  {
+   "tittel": "Senior Hamas Commander Killed in Israeli Airstrike on Gaza - Jowhar News Leader",
+   "url": "https://jowhar.com/senior-hamas-commander-killed-in-israeli-airstrike-on-gaza/",
+   "kilde": "GDELT",
+   "domene": "jowhar.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Arab News | Saudi Arabia's annual inflation eases to 1.7% in October",
+   "url": "https://www.arabnews.com/business/saudi-arabias-annual-inflation-eases-to-17-in-october-3012019",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Arab News | Saudi Arabia condemns Iranian attacks on Bahrain",
+   "url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-condemns-iranian-attacks-on-bahrain-3012030",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia",
+    "iranian"
+   ]
+  },
+  {
+   "tittel": "Gold prices rise while silver declines on COMEX",
+   "url": "https://www.azernews.az/business/267451.html",
+   "kilde": "GDELT",
+   "domene": "azernews.az",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Tanker carrying Azerbaijani crew hit by drone near Romania's Black Sea coast [VIDEO]",
+   "url": "https://www.azernews.az/nation/267456.html",
+   "kilde": "GDELT",
+   "domene": "azernews.az",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Israel kills senior Hamas military commander in Gaza",
+   "url": "https://www.canberratimes.com.au/story/9391666/israel-kills-senior-hamas-military-commander-in-gaza/",
+   "kilde": "GDELT",
+   "domene": "canberratimes.com.au",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Bahrain intercepts Iranian aerial attacks as Tehran says it attacked US base",
+   "url": "https://www.cnbc.com/2026/11/15/bahrain-iran-drone-attacks-tehran-us-base.html",
+   "kilde": "GDELT",
+   "domene": "cnbc.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "Putin's secret grandson revealed: His father shares Zelenskyy's surname",
+   "url": "https://www.israelnationalnews.com/flashes/697454",
+   "kilde": "GDELT",
+   "domene": "israelnationalnews.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Ukraine fires nearly 1,200 drones at Russia as US-led talks consider wider European security",
+   "url": "https://www.naharnet.com/stories/en/323756-ukraine-fires-nearly-1-200-drones-at-russia-as-us-led-talks-consider-wider-european-security",
+   "kilde": "GDELT",
+   "domene": "naharnet.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Bombings in Russia kill military officer and injure adviser to Ukraine's former PM",
+   "url": "https://www.naharnet.com/stories/en/323764-bombings-in-russia-kill-military-officer-and-injure-adviser-to-ukraine-s-former-pm",
+   "kilde": "GDELT",
+   "domene": "naharnet.com",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Government forces withdraw from area near Bab el-Mandeb Strait, Ansar Allah in control",
+   "url": "https://www.omanobserver.om/article/1199699/world/region/government-forces-withdraw-from-area-near-bab-el-mandeb-strait-ansar-allah-in-control",
+   "kilde": "GDELT",
+   "domene": "omanobserver.om",
+   "publisert": "2026-11-15T11:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb"
+   ]
+  },
+  {
+   "tittel": "Yemen government forces withdraw from area near Bab el-Mandeb Strait, Houthis in control",
+   "url": "https://ksevradio.com/yemen-government-forces-withdraw-from-area-near-bab-el-mandeb-strait-houthis-in-control/",
+   "kilde": "GDELT",
+   "domene": "ksevradio.com",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb",
+    "houthi"
+   ]
+  },
+  {
+   "tittel": "Israel PM Netanyahu urges Eisenkot for unity govt amid Iran threat",
+   "url": "https://organiser.org/2026/11/15/426469/international/israel-pm-netanyahu-urges-eisenkot-to-form-unity-govt-amid-national-anthem-row-warns-of-renewed-iranian-nuclear-threat/",
+   "kilde": "GDELT",
+   "domene": "organiser.org",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Philippines-China tensions: Key events that have deepened South China Sea rift",
+   "url": "https://timesofindia.indiatimes.com/world/rest-of-world/philippines-china-tensions-key-events-that-have-deepened-south-china-sea-rift/articleshow/135852950.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "Aryna Sabalenka denies claims she directed Russian insult at Ukrainian opponent Elina Svitolina",
+   "url": "https://www.aol.co.uk/articles/aryna-sabalenka-denies-claims-she-102554000.html",
+   "kilde": "GDELT",
+   "domene": "aol.co.uk",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Israel kills Hamas commander in strike on Gaza camp, officials say",
+   "url": "https://www.bbc.com/news/articles/cqrkg4r6mg7xo",
+   "kilde": "GDELT",
+   "domene": "bbc.com",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Canada-U.S. trade deal: Survey notes tariff-related opposition",
+   "url": "https://www.bnnbloomberg.ca/business/politics/2026/11/15/most-canadians-would-reject-a-trade-deal-that-includes-tariffs-nanos-survey-suggests/",
+   "kilde": "GDELT",
+   "domene": "bnnbloomberg.ca",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "World News: Senior Hamas commander killed in Israeli strike in Gaza",
+   "url": "https://www.gdnonline.com:443/Details/1412886",
+   "kilde": "GDELT",
+   "domene": "gdnonline.com",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Ukraine's Starshield access is being restricted again, Zelenskyy says",
+   "url": "https://www.hawaiitribune-herald.com/2026/11/15/nation-world-news/ukraines-starshield-access-is-being-restricted-again-zelenskyy-says/",
+   "kilde": "GDELT",
+   "domene": "hawaiitribune-herald.com",
+   "publisert": "2026-11-15T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "Iran's Guards say 2 oil tankers hit mines, caught fire south of Hormuz",
+   "url": "https://article.wn.com/view/2026/11/15/Irans_Guards_say_2_oil_tankers_hit_mines_caught_fire_south_o/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Israeli drone strike kills Palestinian, wounds 2 in southern Gaza",
+   "url": "https://article.wn.com/view/2026/11/15/Israeli_drone_strike_kills_Palestinian_wounds_2_in_southern__t/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Trade war in focus at ASEAN summit ahead of Trump arrival",
+   "url": "https://article.wn.com/view/2026/11/15/Trade_war_in_focus_at_ASEAN_summit_ahead_of_Trump_arrival/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "US warns Americans in Saudi Arabia of Houthi attack threat",
+   "url": "https://article.wn.com/view/2026/11/15/US_warns_Americans_in_Saudi_Arabia_of_Houthi_attack_threat/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Trade war in focus at ASEAN summit ahead of Trump's arrival",
+   "url": "https://punchng.com/trade-war-in-focus-at-asean-summit-ahead-of-trumps-arrival/",
+   "kilde": "GDELT",
+   "domene": "punchng.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "Israeli Air Strike Kills Senior Hamas Commander Samir Abu Younis in Gaza",
+   "url": "https://udaipurkiran.com/israeli-air-strike-kills-senior-hamas-commander-samir-abu-younis-in-gaza/",
+   "kilde": "GDELT",
+   "domene": "udaipurkiran.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Russia's Security Council decides Zelensky must be eliminated as US consents",
+   "url": "https://www.bankingnews.gr/diethni/articles/911129/russia-s-security-council-decides-zelensky-must-be-eliminated-as-us-consents",
+   "kilde": "GDELT",
+   "domene": "bankingnews.gr",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Israel Kills Top Hamas Commander In Gaza; Iran Claims Bahrain Strike",
+   "url": "https://www.deccanchronicle.com/west-asia/israel-kills-top-hamas-commander-in-gaza-iran-claims-bahrain-strike-2004615",
+   "kilde": "GDELT",
+   "domene": "deccanchronicle.com",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Northern Israel Resident Charged With Spying For Iran",
+   "url": "https://www.i24news.tv/en/news/israel/defense/artc-northern-israel-resident-charged-with-spying-for-iran",
+   "kilde": "GDELT",
+   "domene": "i24news.tv",
+   "publisert": "2026-11-15T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Iran's IRGC says drones hit U.S. air defense radar station in Bahrain-Xinhua",
+   "url": "https://english.news.cn/20261115/157139c6779c4d72bbb826a2648566de/c.html",
+   "kilde": "GDELT",
+   "domene": "english.news.cn",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense"
+   ]
+  },
+  {
+   "tittel": "'Addressing existing threats': Yemeni forces withdraw from Bab el-Mandeb as Houthis cement foothold",
+   "url": "https://timesofindia.indiatimes.com/world/middle-east/addressing-existing-threats-yemeni-forces-withdraw-from-bab-el-mandeb-as-houthis-cement-foothold/articleshow/135852506.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb",
+    "houthi"
+   ]
+  },
+  {
+   "tittel": "Ukraine Reacts To Putin's Absurd New Proposals To End War",
+   "url": "https://www.huffingtonpost.co.uk/entry/ukraine-putin-europe-trump-envoys_uk_6af96ec7e4b0b6f4a9579ad5",
+   "kilde": "GDELT",
+   "domene": "huffingtonpost.co.uk",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Senior Hamas commander killed in Israeli strike in Gaza",
+   "url": "https://www.irishtimes.com/world/middle-east/2026/11/15/senior-hamas-commander-killed-in-israeli-strike-in-gaza/",
+   "kilde": "GDELT",
+   "domene": "irishtimes.com",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Houthis take control of Bab el-Mandeb Strait as Yemen's forces withdraw",
+   "url": "https://www.jpost.com/middle-east/article-914920",
+   "kilde": "GDELT",
+   "domene": "jpost.com",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb",
+    "houthi"
+   ]
+  },
+  {
+   "tittel": "Philippines misses goal of South China Sea code during ASEAN chairship",
+   "url": "https://www.philstar.com/headlines/2026/11/15/2570309/philippines-misses-goal-south-china-sea-code-during-asean-chairship",
+   "kilde": "GDELT",
+   "domene": "philstar.com",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "Philippines, China rift deepens in South China sea: What to know",
+   "url": "https://www.thenews.com.pk/latest/1423650-philippines-china-rift-deepens-in-south-china-sea-what-to-know",
+   "kilde": "GDELT",
+   "domene": "thenews.com.pk",
+   "publisert": "2026-11-15T10:30:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "1st LD Writethru: Iran's IRGC says drones hit U.S. air defense radar station in Bahrain",
+   "url": "http://www.bignewsnetwork.com/news/279433884/1st-ld-writethru-iran-irgc-says-drones-hit-us-air-defense-radar-station-in-bahrain",
+   "kilde": "GDELT",
+   "domene": "bignewsnetwork.com",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense"
+   ]
+  },
+  {
+   "tittel": "Northern Ireland crisis could escalate into trade war and more violence",
+   "url": "https://praag.org/?p=21097",
+   "kilde": "GDELT",
+   "domene": "praag.org",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "Global anti-dumping rules affect states' tax sovereignty – praag.org",
+   "url": "https://praag.org/?p=21114",
+   "kilde": "GDELT",
+   "domene": "praag.org",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "anti-dumping"
+   ]
+  },
+  {
+   "tittel": "America's infrastructure crisis: Israel, Iran and the growing pressure on Washington – praag.org",
+   "url": "https://praag.org/?p=21156",
+   "kilde": "GDELT",
+   "domene": "praag.org",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "EU Refusal to Consider Russia's Interests in Ukraine is Dead End – Lavrov",
+   "url": "https://sputnikglobe.com/20261115/eu-refusal-to-consider-russias-interests-in-ukraine-is-dead-end--lavrov-1125075029.html",
+   "kilde": "GDELT",
+   "domene": "sputnikglobe.com",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russian Forces Strike Ukrainian Airfields and Black Sea Ports, Inflict Heavy Troop Losses – MoD",
+   "url": "https://sputnikglobe.com/20261115/russian-forces-strike-ukrainian-airfields-and-black-sea-ports-inflict-heavy-troop-losses--mod-1125074862.html",
+   "kilde": "GDELT",
+   "domene": "sputnikglobe.com",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "US floated idea of Ukraine ceding Donbas for NATO membership, Zelenskiy says | Ariana News",
+   "url": "https://www.ariananews.af/us-floated-idea-of-ukraine-ceding-donbas-for-nato-membership-zelenskiy-says/",
+   "kilde": "GDELT",
+   "domene": "ariananews.af",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "US plan at risk of Russian manipulation, Ukraine says | The Arkansas Democrat-Gazette",
+   "url": "https://www.arkansasonline.com/news/2026/nov/15/us-plan-at-risk-of-russian-manipulation-ukraine/",
+   "kilde": "GDELT",
+   "domene": "arkansasonline.com",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Israel kills top Hamas commander in overnight airstrike on southern Gaza",
+   "url": "https://www.business-standard.com/world-news/israel-kills-top-hamas-commander-in-overnight-airstrike-on-southern-gaza-126111500280_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "US floats Ukraine ceding Donbas in exchange for NATO membership, Zelensky says",
+   "url": "https://www.mirror.co.uk/news/world-news/floats-ukraine-ceding-donbas-exchange-37878581",
+   "kilde": "GDELT",
+   "domene": "mirror.co.uk",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Israel kills Hamas commander in Gaza strike",
+   "url": "https://www.politico.eu/article/israel-kills-hamas-commander-in-gaza-strike/",
+   "kilde": "GDELT",
+   "domene": "politico.eu",
+   "publisert": "2026-11-15T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Bahrain intercepts Iranian attacks as Strait of Hormuz tensions persist",
+   "url": "https://news.az/news/bahrain-intercepts-iranian-attacks-as-strait-of-hormuz-tensions-persist",
+   "kilde": "GDELT",
+   "domene": "news.az",
+   "publisert": "2026-11-15T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "hormuz"
+   ]
+  },
+  {
+   "tittel": "Gold prices remain unchanged in Syrian markets",
+   "url": "https://sana.sy/en/economic/2358886/",
+   "kilde": "GDELT",
+   "domene": "sana.sy",
+   "publisert": "2026-11-15T10:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Muslim World League condemns Israeli strike on Gaza hospital",
+   "url": "https://sana.sy/en/middle-east/2358836/",
+   "kilde": "GDELT",
+   "domene": "sana.sy",
+   "publisert": "2026-11-15T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Arab News | Ukrainian strikes hit major Russian industrial city: authorities",
+   "url": "https://www.arabnews.com/world/ukrainian-strikes-hit-major-russian-industrial-city-authorities-3012023",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-15T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Philippines and Australia sign defence pact to strengthen military cooperation amid South China Sea tensions - Philippine Canadian Inquirer Nationwide Filipino Newspaper",
+   "url": "https://canadianinquirer.net/2026/11/15/philippines-and-australia-sign-defence-pact-to-strengthen-military-cooperation-amid-south-china-sea-tensions/",
+   "kilde": "GDELT",
+   "domene": "canadianinquirer.net",
+   "publisert": "2026-11-15T09:45:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "Russia may target Zelensky, Ukraine's military chiefs as Putin's security officials reportedly abandon assassination ban",
+   "url": "https://economictimes.indiatimes.com/world/us/russia-may-target-zelensky-ukraines-military-chiefs-as-putins-security-officials-reportedly-abandon-assassination-ban/articleshow/135851777.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-15T09:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine",
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Zelensky says US proposes land swap for NATO membership",
+   "url": "https://tribune.com.pk/story/2640383/zelensky-says-us-proposes-land-swap-for-nato-membership",
+   "kilde": "GDELT",
+   "domene": "tribune.com.pk",
+   "publisert": "2026-11-15T09:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "nato"
+   ]
+  },
   {
    "tittel": "Cede Donbas to Russia to join Nato, US tells Ukraine",
    "url": "https://timesofindia.indiatimes.com/world/europe/cede-donbas-to-russia-to-join-nato-us-tells-ukraine/articleshow/135845347.cms",
@@ -77,51 +875,6 @@
    "matchede_ord": [
     "ukraine",
     "nato"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia: Drone intercepted in eastern part of Kingdom",
-   "url": "https://www.israelnationalnews.com/flashes/697428",
-   "kilde": "GDELT",
-   "domene": "israelnationalnews.com",
-   "publisert": "2026-11-15T02:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Israel slams 'completely unbalanced' EU statement on Gaza humanitarian crisis",
-   "url": "http://www.jpost.com/israel-news/article-914889",
-   "kilde": "GDELT",
-   "domene": "jpost.com",
-   "publisert": "2026-11-15T02:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Russia 'lifts ban on killing Zelensky' after high-stakes meeting with Putin",
-   "url": "https://www.aol.co.uk/articles/russia-lifts-ban-killing-zelensky-012400000.html",
-   "kilde": "GDELT",
-   "domene": "aol.co.uk",
-   "publisert": "2026-11-15T02:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "russia",
-    "putin"
    ]
   },
   {
@@ -167,143 +920,6 @@
    ]
   },
   {
-   "tittel": "Three oil tankers catch fire after hitting naval mines in Hormuz, claims Iran's Navy",
-   "url": "https://aninews.in/news/world/middle-east/three-oil-tankers-catch-fire-after-hitting-naval-mines-in-hormuz-claims-irans-navy20261115061422/",
-   "kilde": "GDELT",
-   "domene": "aninews.in",
-   "publisert": "2026-11-15T01:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "US envoy Kushner says focus now on \"facilitating direct engagement\" between Russia, Europe on Ukraine peace talks",
-   "url": "https://news.webindia123.com/news/Articles/World/20261115/4519818.html",
-   "kilde": "GDELT",
-   "domene": "webindia123.com",
-   "publisert": "2026-11-15T01:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "US floated idea of Ukraine swapping land for NATO membership, Zelensky says",
-   "url": "https://www.kake.com/news/national/us-floated-idea-of-ukraine-swapping-land-for-nato-membership-zelensky-says/article_931c7cad-8f3a-46c9-b367-c0d4f4792307.html",
-   "kilde": "GDELT",
-   "domene": "kake.com",
-   "publisert": "2026-11-15T01:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "2 oil tankers hit mines, catch fire near Strait of Hormuz: Iran's Revolutionary Guard",
-   "url": "https://aa.com.tr/en/middle-east/2-oil-tankers-hit-mines-catch-fire-near-strait-of-hormuz-irans-revolutionary-guard/4125453",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Hamas' military wing says Rafah brigade commander killed in Israeli strike on southern Gaza",
-   "url": "https://aa.com.tr/en/middle-east/hamas-military-wing-says-rafah-brigade-commander-killed-in-israeli-strike-on-southern-gaza/4125463",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iran's Revolutionary Guard warns France against Israeli 'false flag' trap over cyberattack allegations",
-   "url": "https://aa.com.tr/en/middle-east/irans-revolutionary-guard-warns-france-against-israeli-false-flag-trap-over-cyberattack-allegations/4125461",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Israeli drone strike kills Palestinian, wounds 2 in southern Gaza",
-   "url": "https://aa.com.tr/en/middle-east/israeli-drone-strike-kills-palestinian-wounds-2-in-southern-gaza/4125458",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Saudi-led coalition says air defenses intercept drone over eastern Saudi Arabia",
-   "url": "https://aa.com.tr/en/middle-east/saudi-led-coalition-says-air-defenses-intercept-drone-over-eastern-saudi-arabia/4125465",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "air defense"
-   ]
-  },
-  {
-   "tittel": "Blinken Says Iran War Settlement May Require a Hormuz Concession",
-   "url": "https://econotimes.com/Blinken-Says-Iran-War-Settlement-May-Require-a-Hormuz-Concession-1777017",
-   "kilde": "GDELT",
-   "domene": "econotimes.com",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "[Column] The dangers of Ha-joon Chang's \"national state of emergency\" statement",
    "url": "https://english.hani.co.kr/arti/english_edition/english_editorials/875040.html",
    "kilde": "GDELT",
@@ -346,66 +962,6 @@
    ]
   },
   {
-   "tittel": "Israeli military says it struck senior member of Hamas military wing in Gaza",
-   "url": "https://economictimes.indiatimes.com/news/defence/israeli-military-says-it-struck-senior-member-of-hamas-military-wing-in-gaza/articleshow/135845024.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-15T01:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iran's navy says three tankers on fire after hitting mines in Hormuz",
-   "url": "https://whbl.com/2026/11/14/irans-navy-says-three-tankers-on-fire-after-hitting-mines-in-hormuz/",
-   "kilde": "GDELT",
-   "domene": "whbl.com",
-   "publisert": "2026-11-15T01:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "NATO Membership Deal For Donbas Withdrawal Emerges As A Never-Before-Raised Option In Ukraine Peace Talks",
-   "url": "https://www.foreignpolicyjournal.com/2026/11/14/nato-membership-deal-for-donbas-withdrawal-emerges-as-a-never-before-raised-option-in-ukraine-peace-talks/",
-   "kilde": "GDELT",
-   "domene": "foreignpolicyjournal.com",
-   "publisert": "2026-11-15T01:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Arab League condemns Israeli attack on Gaza hospital, calls for urgent int'l action-Xinhua",
-   "url": "https://english.news.cn/20261115/713fc3f25925438d883de90e1370d0b3/c.html",
-   "kilde": "GDELT",
-   "domene": "english.news.cn",
-   "publisert": "2026-11-14T23:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "US trade deal talks near finishing line: EAM",
    "url": "https://timesofindia.indiatimes.com/business/india-business/us-trade-deal-talks-near-finishing-line-eam/articleshow/135842477.cms",
    "kilde": "GDELT",
@@ -417,230 +973,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "US floats idea of Ukraine ceding Donbas for NATO club",
-   "url": "https://www.centralwesterndaily.com.au/story/9391677/us-floats-idea-of-ukraine-ceding-donbas-for-nato-club/",
-   "kilde": "GDELT",
-   "domene": "centralwesterndaily.com.au",
-   "publisert": "2026-11-14T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Zelensky Discloses U.S. Proposal for Ukraine to Surrender Donbas in Exchange for NATO Membership",
-   "url": "https://www.cubaheadlines.com/articles/345726",
-   "kilde": "GDELT",
-   "domene": "cubaheadlines.com",
-   "publisert": "2026-11-14T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Ukraine's Starshield access being restricted again, Zelenskyy says",
-   "url": "https://www.staradvertiser.com/2026/11/14/breaking-news/ukraines-starshield-access-being-restricted-again-zelenskyy-says/",
-   "kilde": "GDELT",
-   "domene": "staradvertiser.com",
-   "publisert": "2026-11-14T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
-   ]
-  },
-  {
-   "tittel": "Chelsea Green defends dress code for women on WWE shows in Saudi Arabia",
-   "url": "https://www.cagesideseats.com/wwe/486772/chelsea-green-defends-dress-code-for-women-on-wwe-shows-in-saudi-arabia",
-   "kilde": "GDELT",
-   "domene": "cagesideseats.com",
-   "publisert": "2026-11-14T23:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "US suggested Kyiv cede land for NATO, Zelenskyy says",
-   "url": "https://www.channelnewsasia.com/world/us-suggested-kyiv-cede-land-nato-zelenskyy-says-6551616",
-   "kilde": "GDELT",
-   "domene": "channelnewsasia.com",
-   "publisert": "2026-11-14T23:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Europe Picks Six-Nation Ukraine Team. Russia Already Objects",
-   "url": "https://www.latintimes.com/eu-six-seat-team-ukraine-peace-talks-601333",
-   "kilde": "GDELT",
-   "domene": "latintimes.com",
-   "publisert": "2026-11-14T23:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Pakistan, 16 other countries condemn Israeli strike on Gaza hospital",
-   "url": "https://dunyanews.tv/en/Pakistan/982945-pakistan-16-other-countries-condemn-israeli-strike-on-gaza-hospital",
-   "kilde": "GDELT",
-   "domene": "dunyanews.tv",
-   "publisert": "2026-11-14T22:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Ukraine Raises Estimate of Russian Personnel Losses to 1.62 Million",
-   "url": "https://econotimes.com/Ukraine-Raises-Estimate-of-Russian-Personnel-Losses-to-1-62-Million-1776944",
-   "kilde": "GDELT",
-   "domene": "econotimes.com",
-   "publisert": "2026-11-14T22:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Iran war live: Coalition downs 2 Houthi drones; 7 ships hit mines in Hormuz | News",
-   "url": "https://www.aljazeera.com/news/liveblog/2026/11/14/iran-war-live-fighting-grips-yemen-as-qatar-turkiye-sign-defence-deal?update=5153059",
-   "kilde": "GDELT",
-   "domene": "aljazeera.com",
-   "publisert": "2026-11-14T22:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "U.S. facilitating direct engagement between Europe and Russia amid push for peace in Ukraine, Kushner says",
-   "url": "https://www.cbsnews.com/news/us-europe-russia-engagement-ukraine-war/",
-   "kilde": "GDELT",
-   "domene": "cbsnews.com",
-   "publisert": "2026-11-14T22:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Israeli drone strike kills 2 Palestinians in Gaza, and other Mideast news",
-   "url": "http://www.dailyadvance.com/news/national/israeli-drone-strike-kills-2-palestinians-in-gaza-and-other-mideast-news/article_063e3f47-c88a-54e0-9a24-4021ce62a678.html",
-   "kilde": "GDELT",
-   "domene": "dailyadvance.com",
-   "publisert": "2026-11-14T22:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Israeli drone strike kills two Palestinians in Gaza",
-   "url": "https://www.standard.net.au/story/9391666/israeli-drone-strike-kills-two-palestinians-in-gaza/",
-   "kilde": "GDELT",
-   "domene": "standard.net.au",
-   "publisert": "2026-11-14T22:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Kenya sets target of 10,000 monthly jobs in Saudi Arabia under new deal",
-   "url": "https://www.the-star.co.ke/news/2026-11-14-kenya-targets-10000-monthly-jobs-in-saudi-arabia-under-new-deal",
-   "kilde": "GDELT",
-   "domene": "the-star.co.ke",
-   "publisert": "2026-11-14T22:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Middle East war: Trump weighs restraint as Israel warns of alleged Iranian plot",
-   "url": "https://gulfnews.com/world/mena/middle-east-war-trump-weighs-restraint-as-israel-warns-of-alleged-iranian-plot-1.500746947",
-   "kilde": "GDELT",
-   "domene": "gulfnews.com",
-   "publisert": "2026-11-14T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "israel"
-   ]
-  },
-  {
-   "tittel": "Zelensky says a new European security framework floated by U.S. could benefit Putin",
-   "url": "https://www.inquirer.com/news/nation-world/russia-ukraine-war-zelensky-putin-talks-europe-security-framework-nato-borders-20261114.html",
-   "kilde": "GDELT",
-   "domene": "inquirer.com",
-   "publisert": "2026-11-14T22:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "putin"
    ]
   },
   {
@@ -656,113 +988,6 @@
    "matchede_ord": [
     "trade war",
     "tariff"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia Launches Innovative Business Platform for Foreign Investors",
-   "url": "https://www.tiranatimes.com/saudi-arabia-launches-innovative-business-platform-for-foreign-investors/",
-   "kilde": "GDELT",
-   "domene": "tiranatimes.com",
-   "publisert": "2026-11-14T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Israel sees no immediate Iran threat, but prepares for possible solo strike",
-   "url": "https://www.ynetnews.com/article/hjv4tvuagg",
-   "kilde": "GDELT",
-   "domene": "ynetnews.com",
-   "publisert": "2026-11-14T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Russia lifts ban on killing Zelensky and decapitating Ukraine's leadership: reports",
-   "url": "https://nypost.com/2026/11/14/world-news/russia-lifts-ban-on-killing-zelensky-and-decapitating-ukraines-leadership-reports/",
-   "kilde": "GDELT",
-   "domene": "nypost.com",
-   "publisert": "2026-11-14T21:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "US suggested Kyiv cede land for NATO, Zelensky says",
-   "url": "https://www.channelnewsasia.com/world/us-suggested-kyiv-cede-land-nato-zelensky-says-6551616",
-   "kilde": "GDELT",
-   "domene": "channelnewsasia.com",
-   "publisert": "2026-11-14T21:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Zelensky: U.S. Asked if Ukraine Would Quit Donbas for NATO",
-   "url": "https://www.hngn.com/articles/273776/20261114/abu-dhabi-talks-yield-prisoner-swap-no-breakthrough.htm",
-   "kilde": "GDELT",
-   "domene": "hngn.com",
-   "publisert": "2026-11-14T21:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "US has raised idea of NATO membership for Ukraine, Volodymyr Zelenskyy says - 15-Nov-2026",
-   "url": "https://home.nzcity.co.nz/news/article.aspx?id=458008",
-   "kilde": "GDELT",
-   "domene": "nzcity.co.nz",
-   "publisert": "2026-11-14T19:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "'Give up Donbas to join NATO?': Zelensky reveals stunning question from Trump's negotiators - London Business News",
-   "url": "https://londonlovesbusiness.com/give-up-donbas-to-join-nato-zelensky-reveals-stunning-question-from-trumps-negotiators/",
-   "kilde": "GDELT",
-   "domene": "londonlovesbusiness.com",
-   "publisert": "2026-11-14T19:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "nato"
    ]
   },
   {
@@ -1003,90 +1228,6 @@
    ],
    "matchede_ord": [
     "world war"
-   ]
-  },
-  {
-   "tittel": "HMS Vengeance patrol shows why we must turn away from nuclear weapons",
-   "url": "https://www.thenational.scot/politics/26729016.hms-vengeance-patrol-shows-must-turn-away-nuclear-weapons/",
-   "kilde": "GDELT",
-   "domene": "thenational.scot",
-   "publisert": "2026-11-14T07:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "nuclear weapon"
-   ]
-  },
-  {
-   "tittel": "Mark Carney: PM touts Canada-Philippines trade deal",
-   "url": "https://www.bnnbloomberg.ca/business/politics/2026/11/14/carney-says-canada-philippines-conclude-free-trade-talks-target-deal-by-2027/",
-   "kilde": "GDELT",
-   "domene": "bnnbloomberg.ca",
-   "publisert": "2026-11-14T06:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "Egemen Mustafa Şener on the three words he learned in a Black Sea village that still run his business",
-   "url": "https://www.vanguardngr.com/2026/11/egemen-mustafa-sener-on-the-three-words-he-learned-in-a-black-sea-village-that-still-run-his-business/",
-   "kilde": "GDELT",
-   "domene": "vanguardngr.com",
-   "publisert": "2026-11-14T06:45:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "HT Leadership Summit: Economist Joseph E Stiglitz questions value of trade deals with Trump's US",
-   "url": "https://www.hindustantimes.com/india-news/ht-leadership-summit-economist-joseph-e-stiglitz-questions-value-of-trade-deals-with-trump-s-us-101794636194812.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-14T06:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "Bessent blames Commerce Dept over lack of export controls for Nvidia partner Megaspeed",
-   "url": "https://www.asiaone.com/world/bessent-blames-commerce-dept-over-lack-export-controls-nvidia-partner-megaspeed",
-   "kilde": "GDELT",
-   "domene": "asiaone.com",
-   "publisert": "2026-11-14T05:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "export control"
-   ]
-  },
-  {
-   "tittel": "S Jaishankar on India-US trade deal: 'Bulk of issues sorted'",
-   "url": "https://www.hindustantimes.com/india-news/most-remaining-issues-at-americas-end-jaishankar-on-india-us-trade-deals-status-htls-2026-101794632369661.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-14T05:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {
