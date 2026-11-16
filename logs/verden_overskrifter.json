@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-16T13:06:24+0100",
+ "hentet": "2026-11-16T13:09:24+0100",
  "dato": "2026-11-16",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (1895) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (983) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,15 +12,15 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 76
+   "antall": 70
   },
   {
    "tema": "conflict_defense",
-   "antall": 53
+   "antall": 49
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 14
+   "antall": 12
   },
   {
    "tema": "rare_earths_semis",
@@ -199,202 +199,6 @@
    ]
   },
   {
-   "tittel": "Israel says it struck weapons shipment bound for Hezbollah from Syria-Xinhua",
-   "url": "https://english.news.cn/20261116/25084bfc47ce48bb91c612a14e52f66d/c.html",
-   "kilde": "GDELT",
-   "domene": "english.news.cn",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hezbollah",
-    "israel"
-   ]
-  },
-  {
-   "tittel": "Two wounded by Israeli gunfire in the town of Gaza's Beit Lahia",
-   "url": "https://english.wafa.ps/Pages/Details/176978",
-   "kilde": "GDELT",
-   "domene": "english.wafa.ps",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "IRGC Navy captures US drone intact over Strait of Hormuz",
-   "url": "https://news.az/news/irgc-navy-captures-us-drone-intact-over-strait-of-hormuz",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Russia strikes energy facilities in Ukraine's Odesa, leaving thousands without power",
-   "url": "https://news.az/news/russia-strikes-energy-facilities-in-ukraine-s-odesa-leaving-thousands-without-power",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Israel Used a U.S.-Made Missile to Kill Six at Gaza's Nasser Hospital",
-   "url": "https://theintercept.com/2026/11/13/israel-gaza-nasser-hospital-attack/",
-   "kilde": "GDELT",
-   "domene": "theintercept.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Arab News | Israel using bad weather as a weapon in Gaza",
-   "url": "https://www.arabnews.com/opinion/israel-using-bad-weather-as-a-weapon-in-gaza-3012200",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
-   "url": "https://www.dailygazette.com/leader_herald/ap/national/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast/article_55720ba4-89b3-5cf3-a5ce-f4f730697421.html",
-   "kilde": "GDELT",
-   "domene": "dailygazette.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack",
-   "url": "https://www.dailygazette.com/the_recorder/ap/national/russia-says-its-air-defenses-intercept-over-1-300-ukrainian-drones-in-massive-aerial-attack/article_5da94e8a-289d-52dc-95f5-9cf187e2b001.html",
-   "kilde": "GDELT",
-   "domene": "dailygazette.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense",
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "EU ministers demand united response as Russian attacks spill beyond Ukraine",
-   "url": "https://www.euronews.com/2026/11/16/eu-ministers-demand-united-response-as-russian-attacks-spill-beyond-ukraine",
-   "kilde": "GDELT",
-   "domene": "euronews.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Sweden calls for new EU plan to unlock frozen Russian assets for Ukraine",
-   "url": "https://www.euronews.com/2026/11/16/sweden-calls-for-new-eu-plan-to-unlock-frozen-russian-assets-for-ukraine",
-   "kilde": "GDELT",
-   "domene": "euronews.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Scenario concerning Israeli military intelligence: Hezbollah may join a war with Iran",
-   "url": "https://www.israelnationalnews.com/flashes/697556",
-   "kilde": "GDELT",
-   "domene": "israelnationalnews.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hezbollah",
-    "israeli",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Iran says 2 oil tankers hit mines near Strait of Hormuz, 1 sinks",
-   "url": "https://www.middleeastmonitor.com/20261116-iran-says-2-oil-tankers-hit-mines-near-strait-of-hormuz-1-sinks/",
-   "kilde": "GDELT",
-   "domene": "middleeastmonitor.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Ukraine launches 1,336-drone attack on Russia; Crimea Bridge struck ahead of China summit",
-   "url": "https://www.moneycontrol.com/world/ukraine-launches-1-336-drone-attack-on-russia-crimea-bridge-struck-ahead-of-china-summit-article-14081481.html",
-   "kilde": "GDELT",
-   "domene": "moneycontrol.com",
-   "publisert": "2026-11-16T12:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Israeli airstrike hits Hezbollah terror operatives near Lebanon-Syria border",
    "url": "http://www.jpost.com/israel-news/defense-news/article-915038",
    "kilde": "GDELT",
@@ -407,6 +211,20 @@
    "matchede_ord": [
     "hezbollah",
     "israeli"
+   ]
+  },
+  {
+   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
+   "url": "http://www.wdtimes.com/news/national/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast/article_c38d1d45-81d1-5066-bfec-72a4843e96d9.html",
+   "kilde": "GDELT",
+   "domene": "wdtimes.com",
+   "publisert": "2026-11-16T11:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
    ]
   },
   {
@@ -437,6 +255,22 @@
    "matchede_ord": [
     "hormuz",
     "iran"
+   ]
+  },
+  {
+   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack",
+   "url": "https://kdhnews.com/news/nation/russia-says-its-air-defenses-intercept-over-1-300-ukrainian-drones-in-massive-aerial-attack/article_646eddf0-2d72-5c09-a076-8c630c1b015f.html",
+   "kilde": "GDELT",
+   "domene": "kdhnews.com",
+   "publisert": "2026-11-16T11:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukrainian",
+    "russia"
    ]
   },
   {
@@ -660,6 +494,21 @@
    ]
   },
   {
+   "tittel": "Iranian spokesperson rejects Trump's claim that Tehran started war",
+   "url": "http://www.vietnamtribune.com/news/279433667/iranian-spokesperson-rejects-trump-s-claim-that-tehran-started-war",
+   "kilde": "GDELT",
+   "domene": "vietnamtribune.com",
+   "publisert": "2026-11-16T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
    "tittel": "US F-35A Reportedly Transmits Emergency Signal Near Strait of Hormuz",
    "url": "https://cedarnews.net/newstasks/1154247/us-f-35a-reportedly-transmits-emergency-signal-near-strait-of-hormuz/",
    "kilde": "GDELT",
@@ -819,6 +668,66 @@
    ]
   },
   {
+   "tittel": "Italy joins UK, Australia, Canada in appeal to Israel to allow aid to get to Gaza - Politics",
+   "url": "https://www.ansa.it/english/news/politics/2026/11/16/italy-joins-uk-australia-canada-in-appeal-to-israel-to-allow-aid-to-get-to-gaza_e0b4da9b-af93-4c36-bed5-fc47e7566300.html",
+   "kilde": "GDELT",
+   "domene": "ansa.it",
+   "publisert": "2026-11-16T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Israeli ambassador accompanies UN envoys into Hamas tunnel in Gaza",
+   "url": "https://www.clevelandjewishnews.com/jns/israeli-ambassador-accompanies-un-envoys-into-hamas-tunnel-in-gaza/article_91f39cd4-f81d-56a2-a726-e33a581fec3c.html",
+   "kilde": "GDELT",
+   "domene": "clevelandjewishnews.com",
+   "publisert": "2026-11-16T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Trump Considered Iran Strike Before Election, But Israel's Military Chief Opposed It - Report",
+   "url": "https://www.i24news.tv/en/news/israel/defense/artc-trump-considered-iran-strike-before-election-but-israel-s-military-chief-opposed-it-report",
+   "kilde": "GDELT",
+   "domene": "i24news.tv",
+   "publisert": "2026-11-16T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "\"Still in state of war\": Iran's Deputy FM says Tehran prepared for diplomacy, blockade or military action with US",
+   "url": "http://www.iraqsun.com/news/279435173/still-in-state-of-war-iran-deputy-fm-says-tehran-prepared-for-diplomacy-blockade-or-military-action-with-us",
+   "kilde": "GDELT",
+   "domene": "iraqsun.com",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
    "tittel": "Estonia Slams Russian Border Shut After Foiled GRU Plot To Torch NATO Drone Maker",
    "url": "http://www.zerohedge.com/geopolitical/estonia-slams-russian-border-shut-after-foiled-gru-plot-torch-nato-drone-maker",
    "kilde": "GDELT",
@@ -834,6 +743,52 @@
    ]
   },
   {
+   "tittel": "UK Court Convicts 2 Iranian Men Of Spying For Tehran",
+   "url": "http://www.zerohedge.com/geopolitical/uk-court-convicts-2-iranian-men-spying-tehran",
+   "kilde": "GDELT",
+   "domene": "zerohedge.com",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "Korybko: Ukraine's Membership In NATO Is Unacceptable For Russia Under Any Conditions",
+   "url": "http://www.zerohedge.com/geopolitical/ukraines-membership-nato-unacceptable-russia-under-any-conditions",
+   "kilde": "GDELT",
+   "domene": "zerohedge.com",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Ukraine strikes Russian industrial sites as Moscow downs drones",
+   "url": "https://sana.sy/en/international/2359129/",
+   "kilde": "GDELT",
+   "domene": "sana.sy",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
    "tittel": "EU Boards Russian Shadow Fleet Tanker in Mediterranean",
    "url": "https://slguardian.org/eu-boards-russian-shadow-fleet-tanker-in-mediterranean/",
    "kilde": "GDELT",
@@ -845,6 +800,21 @@
    ],
    "matchede_ord": [
     "shadow fleet"
+   ]
+  },
+  {
+   "tittel": "Ukraine hits Putin's symbolic Crimea bridge in 1,300-drone strike",
+   "url": "https://www.dailymail.com/news/article-16295791/Ukraine-hits-Putins-symbolic-Crimea-bridge-1-300-drone-strike.html",
+   "kilde": "GDELT",
+   "domene": "dailymail.com",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
    ]
   },
   {
@@ -873,6 +843,22 @@
    ],
    "matchede_ord": [
     "south china sea"
+   ]
+  },
+  {
+   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack – Winnipeg Free Press",
+   "url": "https://www.winnipegfreepress.com/world/2026/11/16/russia-says-its-air-defenses-intercept-over-1300-ukrainian-drones-in-massive-aerial-attack",
+   "kilde": "GDELT",
+   "domene": "winnipegfreepress.com",
+   "publisert": "2026-11-16T10:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukrainian",
+    "russia"
    ]
   },
   {
