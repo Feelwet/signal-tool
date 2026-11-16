@@ -428,11 +428,12 @@ def ret_inner(r: dict | None, s: dict | None = None) -> str:
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     sh = r.get("short")
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
-    per = f"siden {_dm(s['since'])}" if s and s.get("since") else ""   # UxBot/AnalBot 11.11: periode ved hvert tall i 390-raden
+    # UxBot/AnalBot 11.11: periode ved hvert tall i 390-raden. AnalBot 16.11: både prosenten og pp mot indeks regnes fra innkursdatoen
+    # (price_date, se ret()), så begge viser «siden» den datoen; listedatoen brukes bare om innkursdatoen mangler.
+    st = (str(s.get("price_date") or "")[:10] or s.get("since")) if s else None
+    per = f"siden {_dm(st)}" if st else ""
     if per:   # bare mobil (≤ 599 px): «+1,2 % siden 10.11» og «+0,4 pp mot indeks siden 10.11»; skjult ved 1280
-        # AnalBot 16.11: datoen ved «mot indeks» = indeksparets faktiske startdato (innkursdatoen price_date, se ret()), ikke listedatoen
-        pix = f"siden {_dm(str(s['price_date'])[:10])}" if s.get("price_date") else per
-        ex += (f'<span class="rex-m">{E(pp(r["ex"]))}<span class="rper"> mot indeks {pix}</span></span>' if r.get("ex") is not None
+        ex += (f'<span class="rex-m">{E(pp(r["ex"]))}<span class="rper"> mot indeks {per}</span></span>' if r.get("ex") is not None
                else '<span class="rex-m">–</span>')
     rp = f'<span class="rper"> {per}</span>' if per else ""
     if sh:   # under 5 handelsdager: farget tall som ellers + grå «kort periode» (11 px) + ⓘ «Kort periode, mest tilfeldig svingning.»

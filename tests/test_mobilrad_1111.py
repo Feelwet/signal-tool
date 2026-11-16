@@ -78,7 +78,7 @@ def test_headless_390_link_data_period_96px(tmp_path):
     assert m["nmEll"] == "ellipsis"
     for i in (0, 1, 2):
         ts = [x["t"].strip() for x in m["per"][i]]
-        assert ts[0] == "siden 23.10" and ts[1] == "mot indeks siden 21.10", ts   # AnalBot 16.11: indeksparets startdato (price_date)
+        assert ts[0] == "siden 21.10" and ts[1] == "mot indeks siden 21.10", ts   # AnalBot 16.11: indeksparets startdato (price_date)
         assert all(x["fs"] == "12px" and x["lh"] == "16px" and x["c"] == "rgb(148, 163, 184)" and not x["cut"] for x in m["per"][i]), m["per"][i]
         assert m["rexm"][i] and not m["rex"][i]
     assert m["per"][3] == [] and m["per"][4] == []        # grå rader: ingen periode

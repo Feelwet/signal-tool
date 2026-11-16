@@ -76,6 +76,7 @@ def test_mot_indeks_uses_index_start_date_not_list_date():
     h = SN.ret_inner({"r": 0.012, "ex": 0.004, "bench": "OSEBX", "last": "2026-11-13", "illiquid": False},
                      {"since": "2026-10-24", "price": 1.0, "price_date": "2026-10-23"})
     assert '<span class="rper"> mot indeks siden 23.10</span>' in h
+    assert '<span class="rv rup">+1,2 %</span><span class="rper"> siden 23.10</span>' in h   # prosenten: samme innkursdato
 
 
 def test_data_chip_hidden_only_when_complete():
@@ -89,3 +90,23 @@ def test_data_chip_hidden_only_when_complete():
         assert "Data 6/7" in DC.chip({})
     finally:
         DC.coverage = orig
+
+
+def test_not_listed_dropped_from_list_and_members(tmp_path, monkeypatch):
+    from signaltool import not_listed as NL
+    from signaltool import ov_changes as CHG
+    assert NL.NOT_LISTED == {"DIASH.OL", "ERUGA.OL", "FLOAT.OL", "NPRO.OL", "SEIL.OL", "SFLN.OL", "SWG.OL", "VEOFF.OL"}
+    assert NL.drop([{"ticker": "SFLN.OL"}, {"ticker": "EQNR.OL"}]) == [{"ticker": "EQNR.OL"}]
+    monkeypatch.setattr("signaltool.overview.candidates", lambda snap: [{"ticker": "SWG.OL"}, {"ticker": "EQNR.OL"}])
+    p = tmp_path / "list_members.csv"
+    assert CHG.write_members({"date": "2026-11-16"}, p) == 1
+    assert "SWG.OL" not in p.read_text()
+    lg = tmp_path / "ex.csv"
+    assert NL.log_once(lg) == 8 and NL.log_once(lg) == 0
+    rs = list(csv.DictReader(open(lg)))
+    assert all(r["reason"] == "tatt ut: ikke notert" and "euronext.com" in r["source"] and "newsweb" in r["source"] for r in rs)
+
+
+def test_pipeline_drops_not_listed_before_top60():
+    src = (ROOT / "signaltool" / "pipeline.py").read_text()
+    assert 'NL.drop(ranked)' in src
