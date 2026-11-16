@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-16T00:07:29+0100",
+ "hentet": "2026-11-16T04:00:51+0100",
  "dato": "2026-11-16",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (3329) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (2797) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,30 +12,30 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 74
+   "antall": 70
   },
   {
    "tema": "conflict_defense",
-   "antall": 50
+   "antall": 44
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 13
-  },
-  {
-   "tema": "tariffs_trade",
-   "antall": 12
+   "antall": 14
   },
   {
    "tema": "rare_earths_semis",
+   "antall": 8
+  },
+  {
+   "tema": "tariffs_trade",
    "antall": 7
   },
   {
-   "tema": "risk_off_haven",
-   "antall": 5
+   "tema": "food_agri",
+   "antall": 4
   },
   {
-   "tema": "food_agri",
+   "tema": "risk_off_haven",
    "antall": 4
   },
   {
@@ -48,6 +48,271 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Bombardier secures 12-jet order from Saudi Arabia's THC (BBD.A:CA:TSX)",
+   "url": "https://seekingalpha.com/news/4672812-bombardier-secures-12-jet-order-from-saudi-arabia-s-thc",
+   "kilde": "GDELT",
+   "domene": "seekingalpha.com",
+   "publisert": "2026-11-16T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "ASEAN, China fail to conclude South China Sea code of conduct",
+   "url": "https://www.asiaone.com:443/asia/asean-china-fail-conclude-south-china-sea-code-conduct",
+   "kilde": "GDELT",
+   "domene": "asiaone.com",
+   "publisert": "2026-11-16T02:15:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "'Dire': Australia urges Israel to allow aid into Gaza",
+   "url": "https://www.muswellbrookchronicle.com.au/story/9392011/dire-australia-urges-israel-to-allow-aid-into-gaza/",
+   "kilde": "GDELT",
+   "domene": "muswellbrookchronicle.com.au",
+   "publisert": "2026-11-16T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Aussie shares waver as tech jitters, oil prices weigh",
+   "url": "https://www.perthnow.com.au/news/business/aussie-shares-waver-as-tech-jitters-oil-prices-weigh-c-23167184",
+   "kilde": "GDELT",
+   "domene": "perthnow.com.au",
+   "publisert": "2026-11-16T02:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Trump, Xi, Putin Set Nov. 19 Meeting; Ukraine Role Disputed",
+   "url": "https://www.hngn.com/articles/273717/20261115/china-confirms-talks-first-xi-putin-trump-summit-apec.htm",
+   "kilde": "GDELT",
+   "domene": "hngn.com",
+   "publisert": "2026-11-16T02:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Iranian Navy: Oil tanker catches fire after hitting mine near Strait of Hormuz",
+   "url": "https://www.israelnationalnews.com/flashes/697510",
+   "kilde": "GDELT",
+   "domene": "israelnationalnews.com",
+   "publisert": "2026-11-16T02:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "hormuz"
+   ]
+  },
+  {
+   "tittel": "\"Still in state of war\": Iran's Deputy FM says Tehran prepared for diplomacy, blockade or military action with US",
+   "url": "https://aninews.in/news/world/middle-east/still-in-state-of-war-irans-deputy-fm-says-tehran-prepared-for-diplomacy-blockade-or-military-action-with-us20261116053059/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-16T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Iran: 'Iran is not Cuba or Venezuela': Tehran warns it will not wait for US attack before responding",
+   "url": "https://timesofindia.indiatimes.com/world/middle-east/iran-is-not-cuba-or-venezuela-tehran-warns-it-will-not-wait-for-us-attack-before-responding/articleshow/135868860.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Rubio Claims North Not Pursuing Expansionism with Nuclear Weapons",
+   "url": "https://world.kbs.co.kr/service/news_view.htm?lang=e&Seq_Code=205588",
+   "kilde": "GDELT",
+   "domene": "kbs.co.kr",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Iran war live: Tehran warns it may strike first before another US attack | News",
+   "url": "https://www.aljazeera.com/news/liveblog/2026/11/16/iran-war-live-tehran-warns-it-may-strike-first-before-another-us-attack",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Putin, 74, Knows He Must Rejuvenate Russian Leadership And He Has A Plan - OpEd",
+   "url": "https://www.eurasiareview.com/16112026-putin-74-knows-he-must-rejuvenate-russian-leadership-and-he-has-a-plan-oped/",
+   "kilde": "GDELT",
+   "domene": "eurasiareview.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Trump To Meet Xi, Putin In China For Nuclear Arms Talks; Ukraine Off Agenda",
+   "url": "https://www.eurasiareview.com/16112026-trump-to-meet-xi-putin-in-china-for-nuclear-arms-talks-ukraine-off-agenda/",
+   "kilde": "GDELT",
+   "domene": "eurasiareview.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Ukraine Braces For Key Meetings With Allies Amid Ongoing Russian Strikes",
+   "url": "https://www.eurasiareview.com/16112026-ukraine-braces-for-key-meetings-with-allies-amid-ongoing-russian-strikes/",
+   "kilde": "GDELT",
+   "domene": "eurasiareview.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Yemeni forces withdraw from Bab el-Mandeb to defend Aden",
+   "url": "https://www.inquisitr.com/yemeni-forces-withdraw-bab-el-mandeb/",
+   "kilde": "GDELT",
+   "domene": "inquisitr.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Starshield restrictions threaten Ukraine's energy defenses ahead of winter",
+   "url": "https://www.wwaytv3.com/zelenskyy-says-starshield-restrictions-threaten-ukraines-energy-defenses-ahead-of-winter/",
+   "kilde": "GDELT",
+   "domene": "wwaytv3.com",
+   "publisert": "2026-11-16T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "The Messenger - Oil Prices Plunge Amid Middle East Conflicts",
+   "url": "http://messenger.com.ge/issues/6270_november_16_2026/6270_kopala.html",
+   "kilde": "GDELT",
+   "domene": "messenger.com.ge",
+   "publisert": "2026-11-16T01:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Russia suffered over 50,000 casualties in Oct, claims to disabled 55% of Moscow's oil refining capacity",
+   "url": "https://news.webindia123.com/news/Articles/World/20261116/4520125.html",
+   "kilde": "GDELT",
+   "domene": "webindia123.com",
+   "publisert": "2026-11-16T01:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Israel kills senior Hamas commander in Gaza",
+   "url": "https://www.koat.com/article/israel-kills-senior-hamas-official-gaza/74433602",
+   "kilde": "GDELT",
+   "domene": "koat.com",
+   "publisert": "2026-11-16T01:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
   {
    "tittel": "Australia, UK, Canada and Italy urge Israel to allow critical aid to Gaza ahead of winter",
    "url": "https://cedarnews.net/newstasks/1152542/australia-uk-canada-italy-urge-israel-allow/",
@@ -136,21 +401,6 @@
    ]
   },
   {
-   "tittel": "'Dire': Australia urges Israel to allow aid into Gaza",
-   "url": "https://www.greatlakesadvocate.com.au/story/9392011/dire-australia-urges-israel-to-allow-aid-into-gaza/",
-   "kilde": "GDELT",
-   "domene": "greatlakesadvocate.com.au",
-   "publisert": "2026-11-15T22:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "Even with a durable ceasefire, these factors will support oil prices: BCA | Hellenic Shipping News Worldwide",
    "url": "https://www.hellenicshippingnews.com/even-with-a-durable-ceasefire-these-factors-will-support-oil-prices-bca/",
    "kilde": "GDELT",
@@ -191,21 +441,6 @@
    "matchede_ord": [
     "shadow fleet",
     "sanction"
-   ]
-  },
-  {
-   "tittel": "Israel kills senior Hamas commander in Gaza",
-   "url": "https://www.koco.com/article/israel-kills-senior-hamas-official-gaza/74433602",
-   "kilde": "GDELT",
-   "domene": "koco.com",
-   "publisert": "2026-11-15T22:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
    ]
   },
   {
@@ -330,51 +565,6 @@
    ]
   },
   {
-   "tittel": "Palestinians bury bodies of 70 people killed during Israel's genocide in Gaza",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/15/780814/palestinians-recover-bodies-of-70-people-killed-in-early-days-of-israels-genocidal-war-on-gaza",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-15T22:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Trump to meet Xi, Putin in China for nuclear arms talks; Ukraine off agenda",
-   "url": "https://www.vtcng.com/shelburnenews/state_and_world/world_news/trump-to-meet-xi-putin-in-china-for-nuclear-arms-talks-ukraine-off-agenda/article_a70a12d6-6e6f-512c-aae1-99dcd3f458c5.html",
-   "kilde": "GDELT",
-   "domene": "vtcng.com",
-   "publisert": "2026-11-15T22:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "UNICEF calls on international community to pressure Israeli occupation to allow entry of aid for Gaza's children",
-   "url": "https://english.wafa.ps/Pages/Details/176962",
-   "kilde": "GDELT",
-   "domene": "english.wafa.ps",
-   "publisert": "2026-11-15T21:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "EU flexes muscle on Russia sanctions, as Trump and Putin discuss Ukraine's future in China – EUobserver",
    "url": "https://euobserver.com/248956/eu-flexes-muscle-on-russia-sanctions-as-trump-and-putin-discuss-ukraines-future-in-china/",
    "kilde": "GDELT",
@@ -391,21 +581,6 @@
    ]
   },
   {
-   "tittel": "Israel kills senior Hamas commander in Gaza two months after killing his predecessor as ceasefire stagnates",
-   "url": "https://keyt.com/news/national-world/cnn-world/2026/11/15/israel-kills-senior-hamas-commander-in-gaza-two-months-after-killing-his-predecessor-as-ceasefire-stagnates/",
-   "kilde": "GDELT",
-   "domene": "keyt.com",
-   "publisert": "2026-11-15T21:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "SHIPPING LIFELINE IN PERIL: Houthis Left In Control Near Bab el-Mandeb As Yemeni Government Forces Pull Out",
    "url": "https://www.theyeshivaworld.com/news/israel-news/2623381/shipping-lifeline-in-peril-houthis-left-in-control-near-bab-el-mandeb-as-yemeni-government-forces-pull-out.html",
    "kilde": "GDELT",
@@ -418,65 +593,6 @@
    "matchede_ord": [
     "bab el-mandeb",
     "houthi"
-   ]
-  },
-  {
-   "tittel": "END OF THE LIMBO: Iran's Parliament Speaker Warns Tehran Won't Stay In \"Neither War Nor Peace,\" Taunts Bessent For Fleeing To A Military Shelter – The Yeshiva World",
-   "url": "https://www.theyeshivaworld.com/news/israel-news/2623382/end-of-the-limbo-irans-parliament-speaker-warns-tehran-wont-stay-in-neither-war-nor-peace-taunts-bessent-for-fleeing-to-a-military-shelter.html",
-   "kilde": "GDELT",
-   "domene": "theyeshivaworld.com",
-   "publisert": "2026-11-15T21:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "SPYING OUT OF HATRED: Israeli Arab Charged With Filming IDF Base And Police Station For Iran, Asked For Nothing In Return",
-   "url": "https://www.theyeshivaworld.com/news/israel-news/2623400/spying-out-of-hatred-israeli-arab-charged-with-filming-idf-base-and-police-station-for-iran-asked-for-nothing-in-return.html",
-   "kilde": "GDELT",
-   "domene": "theyeshivaworld.com",
-   "publisert": "2026-11-15T21:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Logitech brings Logi Work to the UAE and Saudi Arabia",
-   "url": "https://www.zawya.com/en/press-release/companies-news/logitech-brings-logi-work-to-the-uae-and-saudi-arabia-2277708",
-   "kilde": "GDELT",
-   "domene": "zawya.com",
-   "publisert": "2026-11-15T21:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Trump's Hormuz squeeze has Iran strangled — slam its back door, too",
-   "url": "https://nypost.com/2026/11/15/opinion/trumps-hormuz-squeeze-has-iran-strangled-slam-its-back-door-too/",
-   "kilde": "GDELT",
-   "domene": "nypost.com",
-   "publisert": "2026-11-15T21:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
    ]
   },
   {
@@ -552,21 +668,6 @@
    "matchede_ord": [
     "kremlin",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy says Starshield restrictions threaten Ukraine's energy defenses ahead of winter",
-   "url": "https://mymotherlode.com/news/world/11312181/zelenskyy-says-starshield-restrictions-threaten-ukraines-energy-defenses-ahead-of-winter.html",
-   "kilde": "GDELT",
-   "domene": "mymotherlode.com",
-   "publisert": "2026-11-15T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
    ]
   },
   {
@@ -763,52 +864,6 @@
    ]
   },
   {
-   "tittel": "Zelenskyy warns Starshield restrictions threaten Ukraine's energy defenses",
-   "url": "https://abcnews.com/International/wireStory/zelenskyy-warns-starshield-restrictions-threaten-ukraines-energy-defenses-138156524",
-   "kilde": "GDELT",
-   "domene": "abcnews.com",
-   "publisert": "2026-11-15T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
-   ]
-  },
-  {
-   "tittel": "Russia strikes Ukrainian cargo ship in Black Sea, Interfax reports",
-   "url": "https://cyprus-mail.com/2026/11/15/russia-strikes-ukrainian-cargo-ship-in-black-sea-interfax-reports",
-   "kilde": "GDELT",
-   "domene": "cyprus-mail.com",
-   "publisert": "2026-11-15T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russian Forces Strike Logistics Hub and Ship Carrying Military Supplies for Ukraine – MoD",
-   "url": "https://sputnikglobe.com/20261115/russian-forces-strike-logistics-hub-and-ship-carrying-military-supplies-for-ukraine--mod-1125075592.html",
-   "kilde": "GDELT",
-   "domene": "sputnikglobe.com",
-   "publisert": "2026-11-15T16:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "Supertanker with 2 million barrels of oil sinks after hitting mine in Strait of Hormuz",
    "url": "https://timesofindia.indiatimes.com/world/middle-east/supertanker-with-2-million-barrels-of-oil-sinks-after-hitting-mine-in-strait-of-hormuz/articleshow/135858960.cms",
    "kilde": "GDELT",
@@ -848,21 +903,6 @@
    ],
    "matchede_ord": [
     "shadow fleet"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy warns Starshield restrictions threaten Ukraine's energy defenses ahead of winter - WSVN 7News | Miami News, Weather, Sports",
-   "url": "https://wsvn.com/news/us-world/zelenksyy-starshield-restrictions-ukraine/",
-   "kilde": "GDELT",
-   "domene": "wsvn.com",
-   "publisert": "2026-11-15T16:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
    ]
   },
   {
@@ -1091,104 +1131,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Carney to cap off ASEAN summit with focus on trade deals, ahead of Francophonie – Brandon Sun",
-   "url": "https://www.brandonsun.com/business/2026/11/14/carney-to-cap-off-asean-summit-with-focus-on-trade-deals-ahead-of-francophonie",
-   "kilde": "GDELT",
-   "domene": "brandonsun.com",
-   "publisert": "2026-11-15T02:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "Commerce Department under pressure for delaying export controls on Nvidia chips",
-   "url": "https://www.redriverradio.org/2026-11-14/commerce-department-under-pressure-for-delaying-export-controls-on-nvidia-chips",
-   "kilde": "GDELT",
-   "domene": "redriverradio.org",
-   "publisert": "2026-11-15T02:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "export control"
-   ]
-  },
-  {
-   "tittel": "Carney to cap off ASEAN summit with focus on trade deals, ahead of Francophonie",
-   "url": "https://www.therecord.com/business/carney-to-cap-off-asean-summit-with-focus-on-trade-deals-ahead-of-francophonie/article_7375c0c8-fcc3-539c-84d6-4d281f8af1b4.html",
-   "kilde": "GDELT",
-   "domene": "therecord.com",
-   "publisert": "2026-11-15T02:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "[Column] The dangers of Ha-joon Chang's \"national state of emergency\" statement",
-   "url": "https://english.hani.co.kr/arti/english_edition/english_editorials/875040.html",
-   "kilde": "GDELT",
-   "domene": "hani.co.kr",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Carney Says Canada–US Trade Deal Close Following Call With Trump, but Auto Sector a Thorny Issue",
-   "url": "https://www.theepochtimes.com/world/carney-says-canada-us-trade-deal-close-following-call-with-trump-but-auto-sector-a-thorny-issue-6125136",
-   "kilde": "GDELT",
-   "domene": "theepochtimes.com",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "Okeechobee County extends State of Emergency for flooding",
-   "url": "https://www.wpbf.com/article/okeechobee-county-extends-state-of-emergency-for-flooding/74431128",
-   "kilde": "GDELT",
-   "domene": "wpbf.com",
-   "publisert": "2026-11-15T01:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
-   "tittel": "US trade deal talks near finishing line: EAM",
-   "url": "https://timesofindia.indiatimes.com/business/india-business/us-trade-deal-talks-near-finishing-line-eam/articleshow/135842477.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-14T23:15:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {
