@@ -281,8 +281,9 @@ def _yf(tickers, start):
     return out
 
 
-def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR) -> list[dict]:
-    """Beregner hele serien på nytt (deterministisk fra loggen) og skriver logs/gs_index.csv."""
+def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR, rewrite: bool = False) -> list[dict]:
+    """Beregner hele serien på nytt (deterministisk fra loggen). Standard (nattkjøringen): bare nye rader legges til
+    logs/gs_index.csv (append_only). rewrite=True skriver hele fila (lokal ombygging, krever AnalBots godkjente diff)."""
     from datetime import date
     from .config import DATA
     rows = load_rows(cat_path, corr_path)
@@ -308,15 +309,62 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
             w.writerow(dict(x, ret=f"{x['ret']:.4f}"))
     if inv:
         log.warning("gs_index: %d ugyldige dagsavkastninger (|r| > 30 %%): %s", len(inv), inv)
+    fmt = [{"date": r["date"], "gs_index": f"{r['gs_index']:.4f}", "benchmark": f"{r['benchmark']:.4f}",
+            "n_members": r["n_members"], "n_no_price": r["n_no_price"], "n_invalid": r["n_invalid"], "flag": r["flag"],
+            "gs_with_tech": f"{wt[r['date']]['gs_index']:.4f}" if r["date"] in wt else ""} for r in res]
+    if rewrite:
+        write_full(out_path, fmt)
+    else:
+        append_only(out_path, fmt)
+    return res
+
+
+def write_full(out_path: Path, fmt: list[dict]) -> None:
+    """Full omskriving. Bare for lokal ombygging (diff til AnalBot); aldri i nattkjøringen."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="") as f:
         wr = csv.DictWriter(f, fieldnames=COLS)
         wr.writeheader()
-        for r in res:
-            wr.writerow({"date": r["date"], "gs_index": f"{r['gs_index']:.4f}", "benchmark": f"{r['benchmark']:.4f}",
-                         "n_members": r["n_members"], "n_no_price": r["n_no_price"], "n_invalid": r["n_invalid"], "flag": r["flag"],
-                         "gs_with_tech": f"{wt[r['date']]['gs_index']:.4f}" if r["date"] in wt else ""})
-    return res
+        wr.writerows(fmt)
+
+
+def append_only(out_path: Path, fmt: list[dict]) -> int:
+    """AnalBot 16.11: logs/gs_index.csv er fryst historikk. Nattkjøringen legger bare til rader med dato etter siste
+    eksisterende rad; eksisterende rader (bytene i fila) endres aldri. Nye rader kjedes fra siste fryste nivå med den nyberegnede
+    dagsendringen (ny[t] / ny[siste fryste dato]), så en avvikende omregning av historikken ikke gir et hopp. Finnes ikke siste
+    fryste dato i den nye serien, legges ingenting til. Returnerer antall nye rader."""
+    out_path = Path(out_path)
+    if not out_path.exists() or out_path.stat().st_size == 0:
+        write_full(out_path, fmt)
+        return len(fmt)
+    old = read(out_path)
+    if not old:
+        write_full(out_path, fmt)
+        return len(fmt)
+    last = old[-1]
+    by = {r["date"]: r for r in fmt}
+    base = by.get(last["date"])
+    new = [r for r in fmt if r["date"] > last["date"]]
+    if not new:
+        return 0
+    if base is None:
+        log.warning("gs_index: siste fryste dato %s finnes ikke i ny serie – ingen rader lagt til", last["date"])
+        return 0
+    add = []
+    for r in new:
+        x = dict(r)
+        for c in ("gs_index", "benchmark", "gs_with_tech"):
+            try:
+                x[c] = f"{float(last[c]) * float(r[c]) / float(base[c]):.4f}"
+            except (TypeError, ValueError, ZeroDivisionError, KeyError):
+                x[c] = ""
+        add.append(x)
+    raw = out_path.read_bytes()
+    with open(out_path, "a", newline="") as f:
+        if raw and not raw.endswith(b"\n"):
+            f.write("\r\n" if b"\r\n" in raw else "\n")
+        csv.DictWriter(f, fieldnames=COLS).writerows(add)
+    return len(add)
 
 
 def run(status: dict) -> None:
