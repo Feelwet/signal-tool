@@ -71,17 +71,18 @@ def test_inactive_before_dec2_or_without_flag_is_only_grey_text(tmp_path):
     log = _write(tmp_path / "m.csv", _rows(_const(date(2026, 11, 4), 13, "a", 10, 100)))
     shares = TT.daily_shares(TT.load_rows(log))
     as_of = date(2026, 11, 16)
-    tr = TT.compute("a", shares, as_of, ok=False)
+    today = date(2026, 11, 16)
+    tr = TT.compute("a", shares, as_of, ok=False, today=today)
     assert tr["active"] is False and tr["thin"] is True and tr["label"] is None
-    assert tr["text"] == "For lite data (13/28 dager)"
+    assert tr["text"] == "For lite data (12/28 dager)"
     # flag on, but før 02.12
-    tr2 = TT.compute("a", shares, as_of, ok=True)
-    assert tr2["active"] is False and tr2["text"] == "For lite data (13/28 dager)"
+    tr2 = TT.compute("a", shares, as_of, ok=True, today=today)
+    assert tr2["active"] is False and tr2["text"] == "For lite data (12/28 dager)"
     # etter 02.12, flagg av
     days = _const(date(2026, 11, 5), 28, "a", 10, 100)
     log2 = _write(tmp_path / "m2.csv", _rows(days))
     shares2 = TT.daily_shares(TT.load_rows(log2))
-    tr3 = TT.compute("a", shares2, date(2026, 12, 2), ok=False)
+    tr3 = TT.compute("a", shares2, date(2026, 12, 2), ok=False, today=date(2026, 12, 2))
     assert tr3["active"] is False and tr3["text"].startswith("For lite data")
     assert TT.temamatch_ok() is False
 
@@ -175,8 +176,8 @@ def _full_log(tmp_path, mer="hot", minder="cold"):
 def test_block_inactive_layout_contract(tmp_path):
     log = _write(tmp_path / "m.csv", _rows(_const(date(2026, 11, 4), 13, "hot", 10, 100)))
     html = TT.block(_themes(), {"date": "2026-11-16"}, score_badge=lambda *a, **k: "S",
-                    log_path=log, ok=False)
-    assert "For lite data (13/28 dager)" in html
+                    log_path=log, ok=False, today=date(2026, 11, 16))
+    assert "For lite data (12/28 dager)" in html
     assert "Mer omtale" not in html and "Mindre omtale" not in html and "Uendret" not in html
     assert "tt-spark" not in html and "stroke-dasharray" not in html
     assert 'class="tt-stripe"' not in html
@@ -259,7 +260,7 @@ def test_headless_390_rows_le_96_no_hscroll_focus_link(tmp_path):
     pw = pytest.importorskip("playwright.sync_api")
     log = _write(tmp_path / "m.csv", _rows(_const(date(2026, 11, 4), 13, "hot", 10, 100)))
     body = TT.block(_themes(), {"date": "2026-11-16"}, score_badge=lambda *a, **k: "S",
-                    log_path=log, ok=False)
+                    log_path=log, ok=False, today=date(2026, 11, 16))
     html = (f'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<style>body{{margin:0;background:#0d1117;color:#e6edf3}}main{{padding:10px;max-width:1100px}}'
             f'.card{{padding:14px 16px;border:1px solid #2d333b}}{TT.CSS}</style></head>'
@@ -303,7 +304,58 @@ def test_headless_390_rows_le_96_no_hscroll_focus_link(tmp_path):
     assert m["sw"] == m["cw"], m
     assert m["minH"] >= 44
     assert m["spark"] == 0
-    assert all("For lite data (13/28 dager)" in t for t in m["l2"])
+    assert all("For lite data (12/28 dager)" in t for t in m["l2"])
     assert d["w"] == pytest.approx(200, abs=1)
     assert d["lines"] == 18  # 13/18 én linje
     assert d["sortable"] is False and d["stripe"] is False
+
+
+def test_complete_days_in_current_log_are_12_on_16_nov():
+    """AnalBot 16.11: telleren låses til 12 for dagens logg (04.11–15.11; 16.11 teller ikke)."""
+    shares = TT.daily_shares(TT.load_rows())
+    today = date(2026, 11, 16)
+    days = sorted(d for d in shares if d < today)
+    assert days[0] == date(2026, 11, 4) and days[-1] == date(2026, 11, 15)
+    assert days == [date(2026, 11, 4) + timedelta(days=i) for i in range(12)]
+    assert TT.complete_logged_days(shares, today) == 12
+    assert TT.thin_text(shares, today=today) == "For lite data (12/28 dager)"
+    assert today in shares  # pågående dag finnes, men teller ikke
+
+
+def test_counter_ignores_stale_snapshot_date(tmp_path):
+    """Feilen 16.11: as_of fra natt-snapshot 11.11 ga 8/28 og utelot 12.–15.11."""
+    log = _write(tmp_path / "m.csv", _rows(_const(date(2026, 11, 4), 13, "hot", 10, 100)))
+    # snapshot fortsatt 11.11, men loggen har 04.–16.11 og i dag er 16.11
+    html = TT.block(_themes(), {"date": "2026-11-11"}, score_badge=lambda *a, **k: "S",
+                    log_path=log, ok=False, today=date(2026, 11, 16))
+    assert "For lite data (12/28 dager)" in html
+    assert "For lite data (8/28 dager)" not in html
+    shares = TT.daily_shares(TT.load_rows(log))
+    assert TT.complete_logged_days(shares, date(2026, 11, 11)) == 7   # bare før 11.11, brukes ikke
+    assert TT.logged_days(shares, date(2026, 11, 11)) == 8            # gammel (feil) telling
+
+
+def test_counter_uses_oslo_today_in_hourly_site_build(monkeypatch):
+    """Timesbygget kaller site.build -> TT.block uten egen dato; telleren skal følge oslo_today, ikke snap['date']."""
+    src = Path(S.__file__).read_text()
+    assert "TT.block(" in src and "python3 -m signaltool.verden --time" not in src
+    from signaltool import verden as VN
+    vsrc = Path(VN.__file__).read_text()
+    assert "site.build(snap)" in vsrc
+    seen = {}
+    real = TT.oslo_today
+    def fake():
+        seen["called"] = True
+        return date(2026, 11, 16)
+    monkeypatch.setattr(TT, "oslo_today", fake)
+    # block uten today= og med gammelt snap-dato
+    log_dates = _const(date(2026, 11, 4), 13, "hot", 10, 100)
+    import tempfile
+    from pathlib import Path as P
+    # use a temp file via existing helper would need tmp_path; write in-memory via monkeypatch load
+    rows = _rows(log_dates)
+    monkeypatch.setattr(TT, "load_rows", lambda path=None: rows)
+    html = TT.block(_themes(), {"date": "2026-11-11"}, score_badge=lambda *a, **k: "S", ok=False)
+    assert seen.get("called")
+    assert "For lite data (12/28 dager)" in html
+

@@ -18,6 +18,7 @@ import statistics
 from datetime import date, datetime, timedelta
 from html import escape as _esc
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -49,12 +50,19 @@ def _fmt_pct(x, d=0) -> str:
     return s + "\u00a0%"
 
 
+OSLO = ZoneInfo("Europe/Oslo")
+
+
+def oslo_today() -> date:
+    return datetime.now(OSLO).date()
+
+
 def as_of_from(snap) -> date:
     raw = (snap or {}).get("date") or ""
     try:
         return date.fromisoformat(str(raw)[:10])
     except ValueError:
-        return datetime.now().date()
+        return oslo_today()
 
 
 def temamatch_ok(path: Path | None = None) -> bool:
@@ -132,18 +140,28 @@ def ma7(series: dict[date, float | None], d: date) -> float | None:
 
 
 def logged_days(shares: dict[date, dict], until: date) -> int:
+    """Beholdt for tester av vinduer; telleren i thin_text bruker complete_logged_days."""
     return sum(1 for d in shares if d <= until)
 
 
-def thin_text(as_of: date, shares: dict[date, dict], hits_7: int | None = None) -> str:
+def complete_logged_days(shares: dict[date, dict], today: date | None = None) -> int:
+    """Antall hele dager med overskrifter i tema_match_sjekk.csv.
+    Dagens pågående dag (Oslo) teller ikke. Uavhengig av snapshot-dato og theme_score."""
+    today = today or oslo_today()
+    return sum(1 for d in shares if d < today)
+
+
+def thin_text(shares: dict[date, dict], today: date | None = None, *, as_of: date | None = None) -> str:
     """Inaktiv kolonne (før 02.12 eller flagg av): alltid «For lite data (x/28 dager)».
-    «For få treff» brukes bare i compute() når trenden er aktiv."""
-    x = min(NEEDED, logged_days(shares, as_of))
+    x = hele dager i loggen før i dag (Oslo), ikke snapshot-dato. as_of ignoreres."""
+    x = min(NEEDED, complete_logged_days(shares, today))
     return f"For lite data ({x}/{NEEDED} dager)"
 
 
-def compute(theme: str, shares: dict[date, dict], as_of: date, ok: bool) -> dict:
+def compute(theme: str, shares: dict[date, dict], as_of: date, ok: bool,
+            today: date | None = None) -> dict:
     """Én temarad. active=False => bare tynn tekst, ingen sparkline/etikett."""
+    today = today or oslo_today()
     end_7 = as_of
     days_7 = _window(end_7, 7)
     days_21 = _window(end_7 - timedelta(days=7), 21)
@@ -171,7 +189,7 @@ def compute(theme: str, shares: dict[date, dict], as_of: date, ok: bool) -> dict
     missing = [d for d in days_28 if d not in shares]
     active = is_active(as_of, ok)
     if not active:
-        return {"active": False, "thin": True, "label": None, "text": thin_text(as_of, shares),
+        return {"active": False, "thin": True, "label": None, "text": thin_text(shares, today=today),
                 "change": None, "rel": rel, "z": z, "hits_7": hits_7, "mean_7": mean_7,
                 "mean_21": mean_21, "ma": ma_pts, "missing": missing, "sort": None}
     if hits_7 < MIN_HITS_7:
@@ -306,12 +324,13 @@ def cell_and_mobile(tr: dict) -> tuple[str, str]:
 
 def block(themes: list, snap: dict, *, score_badge, as_of: date | None = None,
           log_path: Path | None = None, ok: bool | None = None, pre: str = "",
-          source_html: str = "", score_info_html: str = "") -> str:
+          source_html: str = "", score_info_html: str = "", today: date | None = None) -> str:
+    today = today or oslo_today()
     as_of = as_of or as_of_from(snap)
     ok = temamatch_ok() if ok is None else bool(ok)
     shares = daily_shares(load_rows(log_path))
     active = is_active(as_of, ok)
-    items = [(t, compute(t["key"], shares, as_of, ok)) for t in themes]
+    items = [(t, compute(t["key"], shares, as_of, ok, today=today)) for t in themes]
     items = _sort_themes(items) if active else items
     stripe = stripe_html(items, pre) if active else ""
     th_tr = (f'<th class="tt-tr-h sortable" scope="col" title="Sorter etter endring i andel">{E(COL)}</th>'
