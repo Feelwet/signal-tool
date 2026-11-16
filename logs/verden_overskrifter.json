@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-16T13:33:14+0100",
+ "hentet": "2026-11-16T13:45:21+0100",
  "dato": "2026-11-16",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1019) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,15 +12,15 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 74
+   "antall": 81
   },
   {
    "tema": "conflict_defense",
-   "antall": 55
+   "antall": 59
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 13
+   "antall": 14
   },
   {
    "tema": "rare_earths_semis",
@@ -28,7 +28,7 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 7
+   "antall": 8
   },
   {
    "tema": "tariffs_trade",
@@ -48,6 +48,287 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "'NATO will collapse': Russia stalls Ukraine talks, seeks to divide Europe  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
+   "url": "https://dominicanrepublicpost.com/nato-will-collapse-russia-stalls-ukraine-talks-seeks-to-divide-europe/",
+   "kilde": "GDELT",
+   "domene": "dominicanrepublicpost.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Sybiha: Russia's new ultimatum revives demands made before invasions of Georgia and Ukraine",
+   "url": "https://georgiatoday.ge/sybiha-russias-new-ultimatum-revives-demands-made-before-invasions-of-georgia-and-ukraine/",
+   "kilde": "GDELT",
+   "domene": "georgiatoday.ge",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack",
+   "url": "https://isp.netscape.com:443/news/world/story/0001/20261116/242cb3fd47fc79293cf264c321b93800",
+   "kilde": "GDELT",
+   "domene": "netscape.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "New Tanker Attack Reported in Strait of Hormuz — Ship & Bunker",
+   "url": "https://shipandbunker.com/news/emea/223527-new-tanker-attack-reported-in-strait-of-hormuz",
+   "kilde": "GDELT",
+   "domene": "shipandbunker.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Ukraine hits Russia's Crimea bridge in 1,300-drone barrage",
+   "url": "https://torontosun.com/news/world/ukraine-hits-russias-crimea-bridge-in-1300-drone-barrage",
+   "kilde": "GDELT",
+   "domene": "torontosun.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Ukrainian Drones Set Russia's Petrochemical Heartland Ablaze",
+   "url": "https://voiceofvienna.org/ukrainian-drones-set-russias-petrochemical-heartland-ablaze/",
+   "kilde": "GDELT",
+   "domene": "voiceofvienna.org",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
+   "url": "https://www.erienewsnow.com/news/national/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast/article_591f6053-5d5a-5852-bad9-3341e7de0dd7.html",
+   "kilde": "GDELT",
+   "domene": "erienewsnow.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Israeli military intelligence concerned Hezbollah may join a war with Iran",
+   "url": "https://www.israelnationalnews.com/news/436307",
+   "kilde": "GDELT",
+   "domene": "israelnationalnews.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hezbollah",
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3, more Mideast news",
+   "url": "https://www.journal-advocate.com/2026/11/16/houthis-saudi-arabia-strikes-mideast-news/",
+   "kilde": "GDELT",
+   "domene": "journal-advocate.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Kremlin denies Estonian accusation Russia was behind attempted arson that prompted border closure",
+   "url": "https://www.newstribune.com/news/2026/nov/16/kremlin-denies-estonian-accusation-russia-was-behind-attempted-arson-that-prompted-border-closure/",
+   "kilde": "GDELT",
+   "domene": "newstribune.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "kremlin",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "COP31's missing conversation: The environmental toll of wars on Iran, Gaza, Lebanon and call for accountability",
+   "url": "https://www.presstv.co.uk/Detail/2026/11/15/780764/wars-climate-toll-why-is-it-missing-from-the-cop31-agenda",
+   "kilde": "GDELT",
+   "domene": "presstv.co.uk",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Another tanker catches fire in Hormuz; Iran Navy warns of 'serious' repercussions for unauthorized passage",
+   "url": "https://www.presstv.co.uk/Detail/2026/11/16/780849/iran-army-navy-warns-of-serious-risks-of-unauthorized-entry-after-tanker-fire-in-hormuz",
+   "kilde": "GDELT",
+   "domene": "presstv.co.uk",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia emerges as a global tourism hotspot",
+   "url": "https://www.samaa.tv/2087360388-saudi-arabia-emerges-as-a-global-tourism-hotspot",
+   "kilde": "GDELT",
+   "domene": "samaa.tv",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Gold price in Pakistan latest - November 16, 2026",
+   "url": "https://www.samaa.tv/2087360389-gold-price-in-pakistan-drops-for-another-day-nov-16-2026",
+   "kilde": "GDELT",
+   "domene": "samaa.tv",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia announces 10-day autumn break for schools",
+   "url": "https://www.samaa.tv/2087360399-saudi-arabia-announces-10-day-autumn-break-for-schools",
+   "kilde": "GDELT",
+   "domene": "samaa.tv",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Thunderstorms expected across UAE, Saudi Arabia",
+   "url": "https://www.samaa.tv/2087360402-thunderstorms-expected-across-uae-saudi-arabia",
+   "kilde": "GDELT",
+   "domene": "samaa.tv",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Trade war in focus at ASEAN summit ahead of Trump arrival",
+   "url": "https://www.surinametimes.com/artikel/trade-war-in-focus-at-asean-summit-ahead-of-trump-arrival",
+   "kilde": "GDELT",
+   "domene": "surinametimes.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "Russia: Air defenses intercept Ukrainian drones in attack",
+   "url": "https://www.wdsu.com/article/russia-air-defenses-intercept-ukrainian-drones-aerial-attack/74436532",
+   "kilde": "GDELT",
+   "domene": "wdsu.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "EU accuses Russia of stalling Ukraine peace talks to target power plants as winter nears",
+   "url": "https://www.wmtw.com/article/eu-accuses-russia-stalling-ukraine-peace-talks/74437687",
+   "kilde": "GDELT",
+   "domene": "wmtw.com",
+   "publisert": "2026-11-16T12:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
   {
    "tittel": "Gold prices fall in Pakistan as strong US dollar weighs on global market",
    "url": "https://arynews.tv/gold-prices-fall-in-pakistan-as-strong-us-dollar-weighs-on-global-market",
@@ -216,35 +497,6 @@
    ]
   },
   {
-   "tittel": "EU accuses Russia of stalling Ukraine peace talks to target power plants as winter nears",
-   "url": "https://www.stcatharinesstandard.ca/news/world/europe/eu-accuses-russia-of-stalling-ukraine-peace-talks-to-target-power-plants-as-winter-nears/article_56dc3680-b14c-5450-8492-b94153f5d70e.html",
-   "kilde": "GDELT",
-   "domene": "stcatharinesstandard.ca",
-   "publisert": "2026-11-16T12:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
-   "url": "https://www.stcatharinesstandard.ca/news/world/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast-news/article_d0f12daa-0a2e-5667-9d3a-50344ad9f7d1.html",
-   "kilde": "GDELT",
-   "domene": "stcatharinesstandard.ca",
-   "publisert": "2026-11-16T12:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Kenya enters into carbon trade deal with Singapore",
    "url": "https://www.the-star.co.ke/news/2026-11-16-kenya-enters-into-carbon-trade-deal-with-singapore",
    "kilde": "GDELT",
@@ -271,22 +523,6 @@
    "matchede_ord": [
     "russia",
     "putin"
-   ]
-  },
-  {
-   "tittel": "Russia: Air defenses intercept Ukrainian drones in attack",
-   "url": "https://www.wlky.com/article/russia-air-defenses-intercept-ukrainian-drones-aerial-attack/74436532",
-   "kilde": "GDELT",
-   "domene": "wlky.com",
-   "publisert": "2026-11-16T12:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense",
-    "ukrainian",
-    "russia"
    ]
   },
   {
@@ -438,22 +674,6 @@
    ]
   },
   {
-   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack",
-   "url": "https://kdhnews.com/news/nation/russia-says-its-air-defenses-intercept-over-1-300-ukrainian-drones-in-massive-aerial-attack/article_646eddf0-2d72-5c09-a076-8c630c1b015f.html",
-   "kilde": "GDELT",
-   "domene": "kdhnews.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense",
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
    "tittel": "US envoy tells Hezbollah, Iran 'no country can have two armies'",
    "url": "https://naharnet.com/stories/en/323799-us-envoy-tells-hezbollah-iran-no-country-can-have-two-armies",
    "kilde": "GDELT",
@@ -529,49 +749,6 @@
    ]
   },
   {
-   "tittel": "Araqchi: US-israeli Aggression Is Root Cause of Persian Gulf Insecurity",
-   "url": "https://www.islamicinvitationturkey.com/araqchi-us-israeli-aggression-is-root-cause-of-persian-gulf-insecurity/",
-   "kilde": "GDELT",
-   "domene": "islamicinvitationturkey.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "persian gulf"
-   ]
-  },
-  {
-   "tittel": "Hamas: Terrorist 'israeli' regime continues to engineer starvation and tighten its siege on Gaza",
-   "url": "https://www.islamicinvitationturkey.com/hamas-terrorist-israeli-regime-continues-to-engineer-starvation-and-tighten-its-siege-on-gaza/",
-   "kilde": "GDELT",
-   "domene": "islamicinvitationturkey.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia Bombs School, Market and Hodeidah Airport in Yemen - Islamic Invitation Turkey",
-   "url": "https://www.islamicinvitationturkey.com/saudi-arabia-bombs-school-market-and-hodeidah-airport-in-yemen/",
-   "kilde": "GDELT",
-   "domene": "islamicinvitationturkey.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Two Oil Tankers Violating Regulations Strike Mines in Strait of Hormuz; One Sinks, IRGC Navy Says",
    "url": "https://www.islamicinvitationturkey.com/two-oil-tankers-violating-regulations-strike-mines-in-strait-of-hormuz-one-sinks-irgc-navy-says/",
    "kilde": "GDELT",
@@ -586,37 +763,6 @@
    ]
   },
   {
-   "tittel": "Ukraine fires 1,300 drones at Russia hours after Putin 'lifts ban on killing Zelensky'",
-   "url": "https://www.mirror.co.uk/news/world-news/ukraine-fires-1300-drones-russia-37881048",
-   "kilde": "GDELT",
-   "domene": "mirror.co.uk",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "ukraine",
-    "russia",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "DAR GLOBAL EXPANDS SAUDI ARABIA PORTFOLIO WITH NEW JEDDAH DEVELOPMENT VALUED AT SAR 1 BILLION",
-   "url": "https://www.prnewswire.com/news-releases/dar-global-expands-saudi-arabia-portfolio-with-new-jeddah-development-valued-at-sar-1-billion-302940332.html",
-   "kilde": "GDELT",
-   "domene": "prnewswire.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Romania Seeks Allied Help After Drones Hit Three Black Sea Ships",
    "url": "https://www.worthynews.com/119031-romania-seeks-allied-help-after-drones-hit-three-black-sea-ships",
    "kilde": "GDELT",
@@ -628,21 +774,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Israel Kills Top Hamas Commander In Southern Gaza - Worthy Christian News",
-   "url": "https://www.worthynews.com/119037-israel-kills-top-hamas-commander-in-southern-gaza",
-   "kilde": "GDELT",
-   "domene": "worthynews.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
    ]
   },
   {
@@ -671,21 +802,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Iranian spokesperson rejects Trump's claim that Tehran started war",
-   "url": "http://www.vietnamtribune.com/news/279433667/iranian-spokesperson-rejects-trump-s-claim-that-tehran-started-war",
-   "kilde": "GDELT",
-   "domene": "vietnamtribune.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "tehran"
    ]
   },
   {
@@ -731,66 +847,6 @@
    ]
   },
   {
-   "tittel": "Opinion: How to End Russia's War on Ukraine",
-   "url": "https://www.kyivpost.com/opinion/90155",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Opinion: Ukraine - NATO Membership for Donbas?",
-   "url": "https://www.kyivpost.com/opinion/90212",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Ukrainian Drone Blitz Sets Russian Oil Facilities Ablaze Across Three Regions",
-   "url": "https://www.kyivpost.com/post/90198",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Crimean Bridge Shut After Ukrainian Strike as Russia Claims Record 1,336 Drones Downed",
-   "url": "https://www.kyivpost.com/post/90199",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Gold Rate Today November 16: Check latest Gold prices in Coimbatore, Nagpur, Visakhapatnam, Surat, Jaipur, Lucknow, Chandigarh & Other Cities",
    "url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-coimbatore-nagpur-visakhapatnam-surat-jaipur-lucknow-chandigarh-gold-rates-other-cities-november-16-2026/article71707186.ece",
    "kilde": "GDELT",
@@ -830,21 +886,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Italy joins UK, Australia, Canada in appeal to Israel to allow aid to get to Gaza - Politics",
-   "url": "https://www.ansa.it/english/news/politics/2026/11/16/italy-joins-uk-australia-canada-in-appeal-to-israel-to-allow-aid-to-get-to-gaza_e0b4da9b-af93-4c36-bed5-fc47e7566300.html",
-   "kilde": "GDELT",
-   "domene": "ansa.it",
-   "publisert": "2026-11-16T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
    ]
   },
   {
@@ -1096,20 +1137,6 @@
    ],
    "matchede_ord": [
     "rare earth"
-   ]
-  },
-  {
-   "tittel": "Trade war in focus at Asean summit ahead of Trump arrival",
-   "url": "https://article.wn.com/view/2026/11/15/Trade_war_in_focus_at_Asean_summit_ahead_of_Trump_arrival_2/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-15T16:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade war"
    ]
   },
   {
