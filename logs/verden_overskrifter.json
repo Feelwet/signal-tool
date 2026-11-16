@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-16T13:09:24+0100",
+ "hentet": "2026-11-16T13:25:02+0100",
  "dato": "2026-11-16",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (983) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1080) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,15 +12,15 @@
  "temaer": [
   {
    "tema": "mideast_energy",
-   "antall": 70
+   "antall": 74
   },
   {
    "tema": "conflict_defense",
-   "antall": 49
+   "antall": 55
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 12
+   "antall": 13
   },
   {
    "tema": "rare_earths_semis",
@@ -28,14 +28,14 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 6
-  },
-  {
-   "tema": "food_agri",
-   "antall": 4
+   "antall": 7
   },
   {
    "tema": "tariffs_trade",
+   "antall": 5
+  },
+  {
+   "tema": "food_agri",
    "antall": 4
   },
   {
@@ -48,6 +48,247 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Gold prices fall in Pakistan as strong US dollar weighs on global market",
+   "url": "https://arynews.tv/gold-prices-fall-in-pakistan-as-strong-us-dollar-weighs-on-global-market",
+   "kilde": "GDELT",
+   "domene": "arynews.tv",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Iran says it captured US drone south of Qeshm Island in Strait of Hormuz",
+   "url": "https://en.apa.az/asia/iran-says-it-captured-us-drone-south-of-qeshm-island-in-strait-of-hormuz-536428",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Official Tehran responds to allegations of Iranian assassination threats against US officials",
+   "url": "https://en.apa.az/asia/official-tehran-responds-to-allegations-of-iranian-assassination-threats-against-us-officials-536371",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "Kremlin rejects Estonia's accusations of Russian sabotage",
+   "url": "https://en.apa.az/cis-countries/kremlin-rejects-estonias-accusations-of-russian-sabotage-536433",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Peskov: Kremlin wants to clarify EU's position on Ukraine talks",
+   "url": "https://en.apa.az/cis-countries/peskov-kremlin-wants-to-clarify-eus-position-on-ukraine-talks-536402",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Israel Strikes East Lebanon, Says Targeting Hezbollah Arms",
+   "url": "https://english.aawsat.com/arab-world/5341880-israel-strikes-east-lebanon-says-targeting-hezbollah-arms",
+   "kilde": "GDELT",
+   "domene": "aawsat.com",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hezbollah",
+    "israel"
+   ]
+  },
+  {
+   "tittel": "Change in Israel, and Questions Around Gaza, the West Bank and Palestinian Authority",
+   "url": "https://english.aawsat.com/opinion/5341774-change-israel-and-questions-around-gaza-west-bank-and-palestinian-authority",
+   "kilde": "GDELT",
+   "domene": "aawsat.com",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Ghost of Yalta returns, amid fears that Trump, Xi, and Putin will carve up Ukraine and Europe",
+   "url": "https://euobserver.com/248997/ghost-of-yalta-returns-amid-fears-that-trump-xi-and-putin-will-carve-up-ukraine-and-europe/",
+   "kilde": "GDELT",
+   "domene": "euobserver.com",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "'NATO will collapse': Russia stalls Ukraine talks, seeks to divide Europe | Russia-Ukraine war News",
+   "url": "https://www.aljazeera.com/news/2026/11/16/nato-will-collapse-russia-stalls-ukraine-talks-seeks-to-divide-europe",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Russia says air defences intercepted 1,300 Ukrainian drones in aerial attack",
+   "url": "https://www.eveningnews24.co.uk/news/national/26731996.russia-says-air-defences-intercepted-1-300-ukrainian-drones-aerial-attack/",
+   "kilde": "GDELT",
+   "domene": "eveningnews24.co.uk",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defence",
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russia says Ukraine attacked Crimean bridge",
+   "url": "https://www.politico.eu/article/russia-claims-ukraine-attacked-crimean-bridge-moscow/",
+   "kilde": "GDELT",
+   "domene": "politico.eu",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "EU accuses Russia of stalling Ukraine peace talks to target power plants as winter nears",
+   "url": "https://www.stcatharinesstandard.ca/news/world/europe/eu-accuses-russia-of-stalling-ukraine-peace-talks-to-target-power-plants-as-winter-nears/article_56dc3680-b14c-5450-8492-b94153f5d70e.html",
+   "kilde": "GDELT",
+   "domene": "stcatharinesstandard.ca",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
+   "url": "https://www.stcatharinesstandard.ca/news/world/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast-news/article_d0f12daa-0a2e-5667-9d3a-50344ad9f7d1.html",
+   "kilde": "GDELT",
+   "domene": "stcatharinesstandard.ca",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Kenya enters into carbon trade deal with Singapore",
+   "url": "https://www.the-star.co.ke/news/2026-11-16-kenya-enters-into-carbon-trade-deal-with-singapore",
+   "kilde": "GDELT",
+   "domene": "the-star.co.ke",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "Russia's mega-rich are already imagining a future after Putin",
+   "url": "https://www.the-star.co.ke/news/world/2026-11-16-russias-mega-rich-are-already-imagining-a-future-after-putin",
+   "kilde": "GDELT",
+   "domene": "the-star.co.ke",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Russia: Air defenses intercept Ukrainian drones in attack",
+   "url": "https://www.wlky.com/article/russia-air-defenses-intercept-ukrainian-drones-aerial-attack/74436532",
+   "kilde": "GDELT",
+   "domene": "wlky.com",
+   "publisert": "2026-11-16T12:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukrainian",
+    "russia"
+   ]
+  },
   {
    "tittel": "Ukraine fires 1,336 drones into Russia in one of war's largest attacks, Moscow says",
    "url": "https://abcnews.com/International/ukraine-fires-1336-drones-russia-wars-largest-attacks/story?id=138171397",
@@ -103,53 +344,6 @@
     "conflict_defense"
    ],
    "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "EU accuses Russia of stalling Ukraine peace talks to target power plants as winter nears",
-   "url": "https://www.ketv.com/article/eu-accuses-russia-stalling-ukraine-peace-talks/74437687",
-   "kilde": "GDELT",
-   "domene": "ketv.com",
-   "publisert": "2026-11-16T12:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russia: Air defenses intercept Ukrainian drones in attack",
-   "url": "https://www.ketv.com/article/russia-air-defenses-intercept-ukrainian-drones-aerial-attack/74436532",
-   "kilde": "GDELT",
-   "domene": "ketv.com",
-   "publisert": "2026-11-16T12:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense",
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russia says air defences intercepted 1,300 Ukrainian drones in aerial attack",
-   "url": "https://www.ledburyreporter.co.uk/news/national/26731996.russia-says-air-defences-intercepted-1-300-ukrainian-drones-aerial-attack/",
-   "kilde": "GDELT",
-   "domene": "ledburyreporter.co.uk",
-   "publisert": "2026-11-16T12:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defence",
     "ukrainian",
     "russia"
    ]
@@ -211,20 +405,6 @@
    "matchede_ord": [
     "hezbollah",
     "israeli"
-   ]
-  },
-  {
-   "tittel": "Houthis accuse Saudi Arabia of strikes that killed 3 including a child, and other Mideast news",
-   "url": "http://www.wdtimes.com/news/national/houthis-accuse-saudi-arabia-of-strikes-that-killed-3-including-a-child-and-other-mideast/article_c38d1d45-81d1-5066-bfec-72a4843e96d9.html",
-   "kilde": "GDELT",
-   "domene": "wdtimes.com",
-   "publisert": "2026-11-16T11:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -611,21 +791,6 @@
    ]
   },
   {
-   "tittel": "Russian Strikes Across Ukraine Kill 2, Injure at Least 12",
-   "url": "https://www.kyivpost.com/post/90219",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-16T10:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "Gold Rate Today November 16: Check latest Gold prices in Coimbatore, Nagpur, Visakhapatnam, Surat, Jaipur, Lucknow, Chandigarh & Other Cities",
    "url": "https://www.thehindubusinessline.com/gold-rate-today/gold-price-today-in-coimbatore-nagpur-visakhapatnam-surat-jaipur-lucknow-chandigarh-gold-rates-other-cities-november-16-2026/article71707186.ece",
    "kilde": "GDELT",
@@ -683,112 +848,6 @@
    ]
   },
   {
-   "tittel": "Israeli ambassador accompanies UN envoys into Hamas tunnel in Gaza",
-   "url": "https://www.clevelandjewishnews.com/jns/israeli-ambassador-accompanies-un-envoys-into-hamas-tunnel-in-gaza/article_91f39cd4-f81d-56a2-a726-e33a581fec3c.html",
-   "kilde": "GDELT",
-   "domene": "clevelandjewishnews.com",
-   "publisert": "2026-11-16T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Trump Considered Iran Strike Before Election, But Israel's Military Chief Opposed It - Report",
-   "url": "https://www.i24news.tv/en/news/israel/defense/artc-trump-considered-iran-strike-before-election-but-israel-s-military-chief-opposed-it-report",
-   "kilde": "GDELT",
-   "domene": "i24news.tv",
-   "publisert": "2026-11-16T10:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "\"Still in state of war\": Iran's Deputy FM says Tehran prepared for diplomacy, blockade or military action with US",
-   "url": "http://www.iraqsun.com/news/279435173/still-in-state-of-war-iran-deputy-fm-says-tehran-prepared-for-diplomacy-blockade-or-military-action-with-us",
-   "kilde": "GDELT",
-   "domene": "iraqsun.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Estonia Slams Russian Border Shut After Foiled GRU Plot To Torch NATO Drone Maker",
-   "url": "http://www.zerohedge.com/geopolitical/estonia-slams-russian-border-shut-after-foiled-gru-plot-torch-nato-drone-maker",
-   "kilde": "GDELT",
-   "domene": "zerohedge.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "UK Court Convicts 2 Iranian Men Of Spying For Tehran",
-   "url": "http://www.zerohedge.com/geopolitical/uk-court-convicts-2-iranian-men-spying-tehran",
-   "kilde": "GDELT",
-   "domene": "zerohedge.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "tehran"
-   ]
-  },
-  {
-   "tittel": "Korybko: Ukraine's Membership In NATO Is Unacceptable For Russia Under Any Conditions",
-   "url": "http://www.zerohedge.com/geopolitical/ukraines-membership-nato-unacceptable-russia-under-any-conditions",
-   "kilde": "GDELT",
-   "domene": "zerohedge.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Ukraine strikes Russian industrial sites as Moscow downs drones",
-   "url": "https://sana.sy/en/international/2359129/",
-   "kilde": "GDELT",
-   "domene": "sana.sy",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "EU Boards Russian Shadow Fleet Tanker in Mediterranean",
    "url": "https://slguardian.org/eu-boards-russian-shadow-fleet-tanker-in-mediterranean/",
    "kilde": "GDELT",
@@ -800,21 +859,6 @@
    ],
    "matchede_ord": [
     "shadow fleet"
-   ]
-  },
-  {
-   "tittel": "Ukraine hits Putin's symbolic Crimea bridge in 1,300-drone strike",
-   "url": "https://www.dailymail.com/news/article-16295791/Ukraine-hits-Putins-symbolic-Crimea-bridge-1-300-drone-strike.html",
-   "kilde": "GDELT",
-   "domene": "dailymail.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
    ]
   },
   {
@@ -843,22 +887,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Russia says its air defenses intercept over 1,300 Ukrainian drones in massive aerial attack – Winnipeg Free Press",
-   "url": "https://www.winnipegfreepress.com/world/2026/11/16/russia-says-its-air-defenses-intercept-over-1300-ukrainian-drones-in-massive-aerial-attack",
-   "kilde": "GDELT",
-   "domene": "winnipegfreepress.com",
-   "publisert": "2026-11-16T10:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defense",
-    "ukrainian",
-    "russia"
    ]
   },
   {
