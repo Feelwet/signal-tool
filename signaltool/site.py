@@ -610,7 +610,8 @@ def ticker_row(e, pre=""):
     pts = chips_html([_pl(k, v) for k, v in sorted(e["points"].items(), key=lambda kv: -kv[1]) if v > 0] + ([] if unr else [an]))
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
-    return (f'<tr class="rowlink" tabindex="0" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td>{NM.cell(e["ticker"], f"{pre}ticker/{slug(e['ticker'])}.html", e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
+    lab = E(e.get("name") or e["ticker"])
+    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
             f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 

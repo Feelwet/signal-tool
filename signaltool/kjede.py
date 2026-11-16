@@ -187,6 +187,25 @@ def type_and_date(c: dict) -> tuple[str, str]:
     return typ, dato
 
 
+
+def party_date(p: dict) -> str:
+    """Dato/år for linje 2, fra nyeste synlige kontrakt. År når kilden er ≥24 mnd eller year_only."""
+    cs = p.get("_contracts") or []
+    if not cs:
+        return ""
+    _, dato = type_and_date(cs[0])
+    return dato or ""
+
+
+def meta_html(role: str, dato: str) -> str:
+    """Linje 2: flex-rad med rolle (ellipsis) og dato/år i eget element (aldri kuttet)."""
+    if not role and not dato:
+        return ""
+    role_h = f'<div class="kjede-role">{E(role)}</div>' if role else '<div class="kjede-role"></div>'
+    date_h = f'<span class="kjede-date">{E(dato)}</span>' if dato else ""
+    return f'<div class="kjede-meta">{role_h}{date_h}</div>'
+
+
 def line_style(party: dict) -> str:
     if party.get("ikke_offentlig"):
         return "none"
@@ -261,12 +280,12 @@ def party_row_html(p: dict, available: set[str] | None, can: bool) -> str:
     return (
         f'<article class="{cls}"{attrs}>'
         f'<div class="kjede-id"><span class="kjede-name">{E(name)}</span>{chip}{arrow}</div>'
-        f'{f"<div class=kjede-role>{E(role)}</div>" if role else ""}'
+        f'{meta_html(role, party_date(p))}'
         f'{src}{more}</article>'
     )
 
 
-def col_html(title: str, n: int, rows: list[str], empty: str = "") -> str:
+def col_html(title: str, n: int, rows: list[str], empty: str = "", area: str = "") -> str:
     vis, rest = rows[:6], rows[6:]
     more = ""
     if rest:
@@ -275,7 +294,8 @@ def col_html(title: str, n: int, rows: list[str], empty: str = "") -> str:
                 f'<div class="kjede-col-extra" hidden>{"".join(rest)}</div>')
     body = "".join(vis) if vis else f'<p class="kjede-empty">{E(empty or "Ingen offentlig kilde")}</p>'
     # n i overskriften er bare kildebelagte (gitt inn)
-    return (f'<div class="kjede-col">'
+    cls = "kjede-col" + (f" kjede-{area}" if area else "")
+    return (f'<div class="{cls}">'
             f'<h3 class="kjede-col-h">{E(title)} <span class="kjede-n">({n})</span></h3>'
             f'{body}{more}</div>')
 
@@ -422,11 +442,21 @@ def component_panel_html(data: dict, available: set[str] | None, page: date) -> 
             title = f"Kunder av {pname} ({n})"
             craw = [komp_customer_row_html(c, available) for c in cust]
             path_c = f"{tick}|{name}|{pname}"
+            src_p = p.get("_source") or p
+            card = (
+                f'<aside class="komp-prod-card">'
+                f'<div class="kjede-id"><span class="kjede-name">{E(pname)}</span>'
+                f'{chip_html(p.get("ticker"), available) if p.get("ticker") else ""}</div>'
+                f'{meta_html(p.get("role") or "", type_and_date(src_p)[1] if src_p else "")}'
+                f'{source_line_html(src_p)}</aside>'
+            )
             views.append(
-                f'<div class="komp-view" data-komp-panel="{E(cid)}/{E(pid)}" '
+                f'<div class="komp-view komp-prod-view" data-komp-panel="{E(cid)}/{E(pid)}" '
                 f'data-path="{E(path_c)}" hidden>'
+                f'<div class="komp-prod-grid">'
+                f'<div class="komp-prod-cus">'
                 f'{komp_list_html(title, n, craw, "Ingen kunder navngitt i offentlige kilder")}'
-                f'</div>'
+                f'</div>{card}</div></div>'
             )
     path = (
         f'<nav class="komp-path" hidden aria-hidden="true">'
@@ -479,8 +509,8 @@ def section_html(ticker: str, available: set[str] | None = None, page_date: date
     # DOM-rekkefølge (fokus) i bekreftet fane: sti → midtkort → leverandører → kunder
     grid = (f'<div class="kjede-grid">'
             f'{mid}'
-            f'{col_html("Leverandører", ns, sup_h)}'
-            f'{col_html("Kunder", nc, cus_h)}'
+            f'{col_html("Leverandører", ns, sup_h, area="sup")}'
+            f'{col_html("Kunder", nc, cus_h, area="cus")}'
             f'</div>')
     komp = component_panel_html(data, avail, page)
     tabs = ""
@@ -533,8 +563,8 @@ CSS = r"""
 .kjede-back{box-sizing:border-box;min-width:44px;min-height:44px;padding:0 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .kjede-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"mid" "sup" "cus";gap:24px;min-width:0}
 .kjede-mid{grid-area:mid;box-sizing:border-box;min-width:0;padding:16px;background:#1c2430;border:1px solid #3b4757;border-radius:12px}
-.kjede-col:nth-of-type(1){grid-area:sup}
-.kjede-col:nth-of-type(2){grid-area:cus}
+.kjede-col.kjede-sup{grid-area:sup}
+.kjede-col.kjede-cus{grid-area:cus}
 .kjede-col{min-width:0;overflow-x:hidden}
 .kjede-col-h{margin:0 0 8px;font-size:15px;line-height:20px;font-weight:600}
 .kjede-n{font-weight:400;color:#94a3b8}
@@ -544,13 +574,19 @@ CSS = r"""
 .kjede-prod-h{font-size:13px;line-height:18px;color:#94a3b8;margin:10px 0 4px}
 .kjede-prod{display:inline-block;margin:0 6px 4px 0;padding:2px 8px;border:1px solid #3b4757;border-radius:4px;font-size:13px;line-height:18px}
 .kjede-dev{margin:8px 0 0;font-size:13px;line-height:18px;color:#94a3b8}
-.kjede-row{box-sizing:border-box;max-height:140px;overflow:hidden;margin:0 0 8px;padding:8px 8px 8px 10px;border:1px solid transparent;border-radius:8px;position:relative}
+.kjede-row{box-sizing:border-box;min-height:64px;max-height:96px;overflow:hidden;margin:0 0 8px;padding:8px 8px 8px 10px;border:1px solid transparent;border-radius:8px;position:relative}
+.kjede-row:has(.kjede-more){max-height:140px}
 .kjede-row[data-line="solid"]{border-left:1px solid #94a3b8}
 .kjede-row[data-line="dashed"]{border-left:1px dashed #94a3b8;background-image:none}
-.kjede-row.kjede-io{border:1px dashed #94a3b8;max-height:140px}
+.kjede-row.kjede-io{border:1px dashed #94a3b8;max-height:96px}
 .kjede-row.kjede-open{max-height:none;overflow:visible}
-.kjede-name{font-size:15px;line-height:20px;font-weight:600}
-.kjede-role{font-size:13px;line-height:18px;color:#94a3b8;margin:0 0 4px}
+.kjede-row:not(.kjede-open)>.kjede-src-line{display:none}
+.kjede-id{display:flex;align-items:center;min-width:0;overflow:hidden}
+.kjede-name{font-size:15px;line-height:20px;font-weight:600;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kjede-chip,.kjede-gt{flex:none}
+.kjede-meta{display:flex;align-items:baseline;min-width:0;margin:0}
+.kjede-role{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:16px;color:#94a3b8;margin:0}
+.kjede-date{flex:none;white-space:nowrap;margin-left:8px;overflow:visible;font-size:12px;line-height:16px;color:#94a3b8}
 .kjede-src-line{font-size:12px;line-height:16px;margin:0}
 .kjede-src{display:inline-flex;align-items:center;min-width:44px;min-height:44px;color:#94a3b8;text-decoration:none;font-size:12px;line-height:16px}
 .kjede-src:hover,.kjede-src:focus-visible{text-decoration:underline}
@@ -560,20 +596,21 @@ CSS = r"""
 .kjede-more,.kjede-visalle{box-sizing:border-box;display:flex;align-items:center;min-width:44px;min-height:44px;padding:0 8px;border:0;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:18px;cursor:pointer;text-align:left}
 .kjede-empty{font-size:13px;line-height:18px;color:#94a3b8;margin:0}
 @media(min-width:1280px){
-  .kjede-grid{grid-template-columns:360px 400px 360px;grid-template-areas:"sup mid cus";gap:24px}
-  .kjede-mid{width:400px}
-  .kjede-col{width:360px}
+  .kjede-grid{grid-template-columns:minmax(0,9fr) minmax(0,10fr) minmax(0,9fr);grid-template-areas:"sup mid cus";gap:24px}
   .kjede-jump{height:32px;white-space:nowrap;overflow:hidden}
-  .kjede-tab{flex:0 0 200px;width:200px}
 }
 @media(max-width:1279px){
   .kjede-grid{grid-template-columns:1fr;grid-template-areas:"mid" "sup" "cus";gap:24px}
   .kjede-jump{height:auto;max-height:56px;line-height:28px;overflow-x:hidden;overflow-y:hidden}
   .kjede-jump a{min-height:28px}
 }
-.kjede-tabs{display:flex;height:44px;margin:0 0 12px;padding:0;gap:0}
+.kjede-tabs{display:flex;justify-content:flex-start;height:44px;margin:0 0 12px;padding:0;gap:0}
 .kjede-tab{box-sizing:border-box;flex:1 1 50%;height:44px;min-height:44px;min-width:44px;padding:0 12px;border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:15px;line-height:20px;cursor:pointer}
 .kjede-tab[aria-selected="true"]{border-bottom-color:#94a3b8;font-weight:600}
+@media(min-width:1280px){
+  .kjede-tab{flex:0 0 200px;width:200px}
+  .komp-prod-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"cus card";gap:24px}
+}
 .kjede-panel[hidden],.komp-path[hidden],.komp-view[hidden]{display:none}
 .komp-disc{margin:0 0 12px;font-size:13px;line-height:18px;color:#94a3b8}
 .komp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
@@ -585,8 +622,17 @@ CSS = r"""
 .komp-row.komp-drill{cursor:pointer}
 .komp-empty{box-sizing:border-box;min-height:48px;display:flex;align-items:center;margin:0;font-size:13px;line-height:18px;color:#94a3b8}
 .komp-path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:44px;margin:0 0 12px}
-.komp-back{box-sizing:border-box;min-width:44px;min-height:44px;padding:0 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.komp-back{box-sizing:border-box;min-width:44px;min-height:44px;padding:0 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;flex:none}
 .komp-crumbs{display:flex;flex-wrap:wrap;gap:4px;margin:0;padding:0;list-style:none;font-size:13px;line-height:18px;color:#94a3b8}
+.komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"cus" "card";gap:24px;min-width:0}
+.komp-prod-cus{grid-area:cus;min-width:0}
+.komp-prod-card{grid-area:card;min-width:0;box-sizing:border-box;padding:16px;background:#1c2430;border:1px solid #3b4757;border-radius:12px}
+@media(max-width:599px){
+  .komp-path{flex-wrap:nowrap;align-items:center;height:44px;min-height:44px;max-height:44px;overflow:hidden;gap:8px}
+  .komp-crumbs{flex-wrap:nowrap;align-items:center;min-width:0;flex:1 1 auto;overflow:hidden}
+  .komp-crumb,.komp-crumb-sep{flex:none;white-space:nowrap}
+  .komp-crumb-mid{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+}
 """
 
 
@@ -668,8 +714,10 @@ JS = r"""
           ol.textContent='';
           var bits=(vis.getAttribute('data-path')||'').split('|').filter(Boolean);
           for(i=0;i<bits.length;i++){
-            if(i){var sep=document.createElement('li');sep.setAttribute('aria-hidden','true');sep.textContent=' › ';ol.appendChild(sep);}
-            var li=document.createElement('li');li.textContent=bits[i];ol.appendChild(li);
+            if(i){var sep=document.createElement('li');sep.className='komp-crumb-sep';sep.setAttribute('aria-hidden','true');sep.textContent=' › ';ol.appendChild(sep);}
+            var li=document.createElement('li');
+            li.className='komp-crumb'+(i>0&&i<bits.length-1?' komp-crumb-mid':'');
+            li.textContent=bits[i];ol.appendChild(li);
           }
         }
       }

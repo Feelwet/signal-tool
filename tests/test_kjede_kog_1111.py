@@ -185,7 +185,7 @@ def test_vis_alle_on_customers_not_on_six_supplier_rows():
     # leverandører: 5 + ikke offentlig = 6, ingen Vis alle
     sup = re.search(r"Leverandører.*?(?=<div class=\"kjede-col\">)", s, re.S)
     # fallback: first col after mid is suppliers in DOM... actually mid first, then suppliers
-    cols = re.findall(r'<div class="kjede-col">(.*?)</div>\s*(?=<div class="kjede-col">|</div>\s*<script)', s, re.S)
+    cols = re.findall(r'<div class="kjede-col kjede-(?:sup|cus)">(.*?)</div>\s*(?=<div class="kjede-col|</div>\s*<script)', s, re.S)
     assert len(cols) == 2
     assert "Vis alle" not in cols[0]
     assert "Vis alle 10" in cols[1]
@@ -217,7 +217,7 @@ def test_source_line_starts_with_type_and_has_44px_source_link():
 def test_layout_css_1280_three_columns_390_stacked_no_horizontal_scroll():
     s = section()
     assert "overflow-x:hidden" in s
-    assert "grid-template-columns:360px 400px 360px" in s
+    assert "grid-template-columns:minmax(0,9fr) minmax(0,10fr) minmax(0,9fr)" in s
     assert "gap:24px" in s
     assert 'grid-template-areas:"sup mid cus"' in s
     assert 'grid-template-areas:"mid" "sup" "cus"' in s
@@ -235,8 +235,8 @@ def test_layout_css_1280_three_columns_390_stacked_no_horizontal_scroll():
 def test_typography_sizes():
     s = section()
     assert "font-size:15px;line-height:20px" in s  # navn
-    assert "font-size:13px;line-height:18px" in s  # rolle / Raytheon / grå
-    assert "font-size:12px;line-height:16px" in s  # kildelinje
+    assert "font-size:13px;line-height:18px" in s  # Raytheon / grå / chip
+    assert "font-size:12px;line-height:16px" in s  # rolle, dato og kildelinje
     assert "height:32px" in K.jump_html("KOG.OL", page_date=PAGE) or "height:32px" in s or "height:32px" in (K.jump_html("KOG.OL", page_date=PAGE) + s)
     # jump CSS is in section style; jump_html itself has class kjede-jump
     assert "kjede-jump{height:32px" in s

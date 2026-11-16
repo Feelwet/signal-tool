@@ -23,7 +23,9 @@ def test_period_after_each_percentage_and_none_on_gray_rows():
 
 def test_css_link_focus_data_and_period_only_below_600():
     mob = U.CSS.split("@media(max-width:599px){", 1)[1].split("}@media(min-width:600px)", 1)[0]
-    for need in (".tn .nm a::after{content:'';position:absolute;inset:0;z-index:1}", "min-height:44px", ":focus-visible",
+    for need in ("a.row-a{position:absolute;top:0;left:0;bottom:0;right:44px;z-index:1",
+                 "td.mcol .mstar{width:44px;height:44px;min-width:44px;min-height:44px",
+                 "min-height:44px", "a.row-a:focus-visible",
                  ".tk .dci{display:inline!important", "color:#94a3b8!important;font-size:12px!important;line-height:16px!important",
                  ".rper{display:inline!important;font-size:12px!important;line-height:16px!important", ".rex:has(+.rex-m){display:none!important}"):
         assert need in mob, need
@@ -49,7 +51,8 @@ def test_headless_390_link_data_period_96px(tmp_path):
         per:rs.map(r=>[...r.querySelectorAll('td.ret-c .rper')].filter(vis).map(p=>{const b=p.getBoundingClientRect(),cs=getComputedStyle(p),c=p.closest('td');
           return {t:p.textContent,fs:cs.fontSize,lh:cs.lineHeight,c:cs.color,cut:b.right>c.getBoundingClientRect().right+0.5||b.right>r.getBoundingClientRect().right+0.5}})),
         rexm:rs.map(r=>vis(r.querySelector('td.ret-c .rex-m'))),rex:rs.map(r=>vis(r.querySelector('td.ret-c .rex'))),
-        hit:rs.map(r=>{const b=r.getBoundingClientRect(),x=b.left+b.width*0.45,y=b.top+b.height*0.75,e=document.elementFromPoint(x,y);return !!(e&&e.closest('a')&&e.closest('a').getAttribute('href')===r.dataset.href)}),
+        hit:rs.map(r=>{const b=r.getBoundingClientRect(),x=b.left+b.width*0.45,y=b.top+b.height*0.75,e=document.elementFromPoint(x,y);const a=e&&e.closest('a.row-a');return !!(a&&a.getAttribute('href')===r.dataset.href)}),
+        star:rs.map(r=>{const s=r.querySelector('td.mcol .mstar'),a=r.querySelector('a.row-a');if(!s||!a)return null;const sb=s.getBoundingClientRect(),ab=a.getBoundingClientRect(),cs=getComputedStyle(s);return {w:cs.width,h:cs.height,outside:!a.contains(s)&&sb.left>=ab.right-0.5};}),
         score:rs.map(r=>vis(r.querySelector('.rkp-s .score'))),
         nmEll:getComputedStyle(rs[1].querySelector('.tn .nm')).textOverflow}}"""
     with pw.sync_playwright() as p:
@@ -62,16 +65,17 @@ def test_headless_390_link_data_period_96px(tmp_path):
             if w == 390:
                 pg.keyboard.press("Tab")
                 for _ in range(8):
-                    if pg.evaluate("()=>!!document.activeElement.closest('.nm')"):
+                    if pg.evaluate("()=>!!document.activeElement.closest('a.row-a')"):
                         break
                     pg.keyboard.press("Tab")
-                res["ring"] = pg.evaluate("()=>{const r=document.activeElement.closest('tr.rowlink');const cs=getComputedStyle(r);return [cs.outlineStyle,cs.outlineWidth]}")
+                res["ring"] = pg.evaluate("()=>{const a=document.activeElement.closest('a.row-a');const cs=getComputedStyle(a);return [cs.outlineStyle,cs.outlineWidth]}")
             pg.close()
         b.close()
     m = res[390]
     assert max(m["h"]) <= 96 and min(m["h"]) >= 44, m["h"]
     assert m["sw"] == m["cw"], (m["sw"], m["cw"])
     assert all(m["hit"]), m["hit"]                       # hele raden (også linje 2) er lenken til tickersiden
+    assert all(s and s["w"] == "44px" and s["h"] == "44px" and s["outside"] for s in m["star"]), m["star"]
     assert res["ring"] == ["solid", "2px"], res["ring"]   # synlig fokusring på raden ved tastatur
     assert all(d and d["fs"] == "12px" and d["lh"] == "16px" and d["c"] == "rgb(148, 163, 184)" and d["inside"] and d["top"] < 30 for d in m["data"]), m["data"]
     assert all(m["score"]), "scoreboksen skal stå når «Data x/7» får plass"
