@@ -1,0 +1,4 @@
+# AnalBot 16.11: Mer/Mindre-etiketter og sparklines vises først når
+# temamatch-sjekken er ≥27/30 og datoen er ≥ 2026-12-02.
+# Sett temamatch_ok til true etter at AnalBot har godkjent sjekken.
+temamatch_ok: false

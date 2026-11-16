@@ -16,6 +16,7 @@ from . import usability as US
 from . import pwa as PWA
 from . import ux2 as UX2
 from . import ux390 as U390
+from . import tema_trend as TT
 from . import tabbar as TB
 from . import sectors as SEC
 from . import calendar_view as CV
@@ -819,7 +820,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS   # U390 sist (UxBot 11.11, bare ≤ 599 px)
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS   # U390 sist av mobilradene (≤ 599 px); TT etter (Temaer-trend)
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -863,8 +864,7 @@ def build(snap: dict) -> Path:
     (SITE / "trender.html").write_text(page("Trender", TR.html(available_tickers={e["ticker"] for e in tickers}, snap=snap, disp=DP.load()), 0, snap))
 
     # ---------- themes list + pages ----------
-    rows = "".join(f'<tr><td>{i}</td><td><a href="tema/{t["key"]}.html">{E(t["name"])}</a></td><td>{score_badge(t["score"], muted=True)}</td><td>{t["headline_count_3d"]}</td></tr>' for i, t in enumerate(themes, 1))
-    (SITE / "temaer.html").write_text(page("Temaer", MOD_CSS + L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")], meta=UX2.meta("GDELT", snap.get("gdelt_latest"))) + L.EXP() + f'<div class="card tw"><h2 style="margin-top:0">Temascore{UX2.csrc("GDELT", snap.get("gdelt_latest"))}</h2><table><tr><th>#</th><th>Tema</th><th>Score {score_info("Om temascore")}</th><th>Overskrifter 3d</th></tr>{rows}</table></div>' + sec("Temakart", TM.cards_html), 0, snap))
+    (SITE / "temaer.html").write_text(page("Temaer", MOD_CSS + L.head("Temaer", "Alle geopolitiske temaer rangert etter hvor uvanlig mye oppmerksomhet de får nå mot egen historikk.", [(str(len(themes)), "Temaer", "totalt", "#"), (str(sum(1 for t in themes if (t.get("score") or 0) >= 2)), "Score ≥ 2", "uvanlig høy", "#"), (str(len(TM.MAPS)), "Temakart", "", "#temakart")], meta=UX2.meta("GDELT", snap.get("gdelt_latest"))) + L.EXP() + TT.block(themes, snap, score_badge=score_badge, source_html=UX2.csrc("GDELT", snap.get("gdelt_latest")), score_info_html=score_info("Om temascore")) + sec("Temakart", TM.cards_html), 0, snap))
     have = {e["ticker"] for e in tickers}
     for M in TM.MAPS.values():
         (SITE / "tema" / f"{M['file']}.html").write_text(page(f"Temakart: {M['name']}", sec(f"Temakart: {M['name']}", TM.map_html, M["key"], snap, have), 1, snap))
@@ -955,6 +955,7 @@ def theme_page(t, catmap=None, snap=None):
     red = "".join(f'<li><a href="{E(r["link"])}">{E(r["title"])}</a> <span class="mut">r/{E(r["sub"])}</span></li>' for r in t["reddit"])
     ek = "".join(f'<li><a href="{E(x["url"])}">{E(x["company"])}</a> <span class="mut">{E(x["date"])}</span></li>' for x in t["eightk_examples"])
     return f"""<h1>{E(t['name'])} {score_badge(t['score'], muted=True)}{score_info("Om temascore")}</h1>
+{TT.theme_chart(t, snap or {})}
 <div class="card"><h2 style="margin-top:0">Geopolitisk scenario</h2><p>{E(t['reasoning'])}</p>
 <p><b>⚠️ Hva kan gå galt:</b> {E(t['risks'])}</p>
 <p><b>Sektorer:</b> {E(', '.join(t['sectors']))}<br><b>Vinnere ved eskalering (eksempler):</b> USA: {E(', '.join(t['tickers_us']))}; Oslo: {E(', '.join(t['tickers_ose']) or '–')}{('; andre: ' + E(', '.join(t['tickers_other']))) if t['tickers_other'] else ''}<br>
