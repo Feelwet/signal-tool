@@ -428,10 +428,15 @@ def ret_inner(r: dict | None, s: dict | None = None) -> str:
     w = ' <span class="ill" title="Lite omsatt aksje">⚠</span>' if r["illiquid"] else ""
     sh = r.get("short")
     ex = f'<span class="rex">{"vs " + r["bench"] + " " + pp(r["ex"]) if r.get("ex") is not None else "–"}</span>'
+    per = f"siden {_dm(s['since'])}" if s and s.get("since") else ""   # UxBot/AnalBot 11.11: periode ved hvert tall i 390-raden
+    if per:   # bare mobil (≤ 599 px): «+1,2 % siden 10.11» og «+0,4 pp mot indeks siden 10.11»; skjult ved 1280
+        ex += (f'<span class="rex-m">{E(pp(r["ex"]))}<span class="rper"> mot indeks {per}</span></span>' if r.get("ex") is not None
+               else '<span class="rex-m">–</span>')
+    rp = f'<span class="rper"> {per}</span>' if per else ""
     if sh:   # under 5 handelsdager: farget tall som ellers + grå «kort periode» (11 px) + ⓘ «Kort periode, mest tilfeldig svingning.»
         from .results import SHORT_TIP
-        return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(SHORT_TIP)}{w}<span class="rsh-t">{SHORT_T}</span>{ex}'
-    return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{ri(tip) if tip else ""}{w}{ex}'
+        return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{rp}{ri(SHORT_TIP)}{w}<span class="rsh-t">{SHORT_T}</span>{ex}'
+    return f'<span class="rv {_cls(r["r"])}">{pct(r["r"])}</span>{rp}{ri(tip) if tip else ""}{w}{ex}'
 
 
 def ret_cell(r: dict | None, s: dict | None = None) -> str:

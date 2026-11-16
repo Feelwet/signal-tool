@@ -150,6 +150,9 @@ def test_side_log_tickers_are_on_list_from_side_start(tmp_path):
 def test_candidate_table_has_days_column(tmp_path, monkeypatch):
     p = _write(tmp_path, [("2026-11-08", "C.OL"), ("2026-11-09", "A.OL"), ("2026-11-09", "C.OL"), ("2026-11-10", "A.OL"), ("2026-11-10", "B.OL")])
     monkeypatch.setattr(C, "LOG", p)
+    monkeypatch.setattr(C, "MEMBERS", tmp_path / "ingen_members.csv")   # isoler fra ekte logs/list_members.csv (finnes fra 11.11)
+    import signaltool.since as SN
+    monkeypatch.setattr(SN, "ENTRY_LOG", tmp_path / "ingen_entry.csv")    # og fra ekte sidelogg (nyere datoer enn testens 10.11)
     s = {"tickers": [{"ticker": "A.OL", "score": 5.0}, {"ticker": "B.OL", "score": 4.0}], "oslo_universe_flags": []}
     t = OV.candidates_table_html(s)
     assert '<th scope="col" class="dg-h">Dager på lista</th></tr></thead>' in t
@@ -221,6 +224,7 @@ def test_built_overview_strip_matches_candidate_table(tmp_path, monkeypatch):
     ep = tmp_path / "entry.csv"
     ep.write_text("date,ticker,category,price,price_date\n2026-11-09,SPY,watch,1,2026-11-09\n2026-11-10,SPY,watch,1,2026-11-10\n")
     monkeypatch.setattr(C, "LOG", p)
+    monkeypatch.setattr(C, "MEMBERS", tmp_path / "ingen_members.csv")   # isoler fra ekte logs/list_members.csv
     import signaltool.since as SN
     monkeypatch.setattr(SN, "ENTRY_LOG", ep)
     from tests.test_overview_0911 import snap as base

@@ -106,6 +106,55 @@ def _hist(tickers: list[str]) -> dict:
     return out
 
 
+def _write(rows: list[dict], out: Path = OUT) -> None:
+    with Path(out).open("w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=COLS, extrasaction="ignore", lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+
+
+def add_fill(row: dict, out: Path = OUT) -> bool:
+    """Legg til én intradag-fill (rommet 11.11: SCANA.OL nr. 32). close/diff står tomme til fill_closes() finner lukket bar."""
+    with Path(out).open(newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    if any(r["book"] == row["book"] and r["order_id"] == row["order_id"] for r in rows):
+        return False
+    rows.append({k: row.get(k, "") for k in COLS})
+    _write(rows, out)
+    return True
+
+
+def fill_closes(out: Path = OUT, hist=None, now=None, logs: Path = LOGS) -> int:
+    """Fyll inn sluttkurs for rader uten close – bare når fill-datoens bar er lukket (stengetid + 30, closedbars). Venter ellers
+    (aldri i åpen økt). Kjøres i hver pipeline-kjøring; antall fylte rader returneres. Endrer aldri rader som har close."""
+    from . import closedbars as CB
+    from . import portfolio as P
+    from .portfolio import _f
+    with Path(out).open(newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    todo = [r for r in rows if not r.get("close") and CB.ok(r["ticker"], r["fill_date"], now)]
+    if not todo:
+        return 0
+    h = hist(sorted({r["ticker"] for r in todo})) if hist else _hist(sorted({r["ticker"] for r in todo}))
+    bk = {}
+    for b, tp in books().items():
+        tp = Path(logs) / Path(tp).name
+        bk[b] = {r["order_id"]: r for r in P._read(tp) if r.get("event") == "fill"}
+    n = 0
+    for r in todo:
+        c = CB.series(h.get(r["ticker"]) or {}, r["ticker"], now).get(r["fill_date"])
+        f, tr = _f(r["fill_price"]), bk.get(r["book"], {}).get(r["order_id"]) or {}
+        if not (c and f):
+            continue
+        r["close"] = round(c, 4)
+        r["diff_pct"] = round(f / c - 1, 6)
+        r["diff_nok"] = round((_f(tr.get("shares")) or 0) * (f - c) * (_f(tr.get("fx")) or 1.0), 2)
+        n += 1
+    if n:
+        _write(rows, out)
+    return n
+
+
 # AnalBot 11.11: linje i bokrapporten + forberedt «med/uten intradag-fills» (vises først fra 30 lukkede handler per bok).
 FILTER_FROM = "11.11"          # sluttkursfilteret gjelder fra denne datoen; fills i loggen er alle fra før
 

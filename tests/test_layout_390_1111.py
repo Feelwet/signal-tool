@@ -55,7 +55,7 @@ def test_css_rules_only_below_600_and_loaded_last():
     body = css.split("@media(max-width:599px){", 1)[1]
     assert css.startswith("@media(max-width:599px){")
     rest = css.rsplit("}@media(min-width:600px)", 1)[1]
-    assert rest.strip() == "{#tf-table td.sg-c::after{content:none}}"
+    assert rest.strip() == "{#tf-table td.sg-c::after{content:none}}\n.rper,.rex-m{display:none}"   # rommet 11.11: periodetekst bare i 390-raden
     for need in ("grid-template-columns:auto minmax(0,1fr) 44px", "max-height:96px", "font-size:15px!important;line-height:20px!important",
                  "text-overflow:ellipsis", "min-width:0!important", "font-size:12px!important;line-height:16px!important",
                  "font-size:13px!important;line-height:18px!important", "text-align:right!important", "width:44px!important",

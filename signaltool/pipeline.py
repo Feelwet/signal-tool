@@ -646,6 +646,12 @@ def run(fast: bool = False) -> dict:
     except Exception as ex:
         log.exception("price log times failed")
         status["Kurs-loggtid"] = f"FAILED: {ex}"
+    try:   # rommet 11.11: sluttkurs for intradag-fills fylles inn først etter stengetid + 30 (uavhengig av kurs-loggtid)
+        from . import intraday_fills as IF
+        status["Intradag-fills"] = f"ok ({IF.fill_closes()} sluttkurser fylt inn)"
+    except Exception as ex:   # noqa: BLE001
+        log.exception("intraday fills close failed")
+        status["Intradag-fills"] = f"FAILED: {ex}"
     snap["source_last_ok"] = mark_stale(status, snap["date"])
     snap["status"] = status
     try:

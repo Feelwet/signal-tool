@@ -19,13 +19,14 @@ def _w(path, cols, rows):
 def test_line_from_real_log_not_hardcoded():
     rows = list(csv.DictReader(LOG.open()))
     st = I.stats(LOG)
-    assert st["samlet"]["n"] == len(rows) == 31
-    d = [abs(float(r["diff_pct"])) for r in rows]
+    assert st["samlet"]["n"] == len(rows) == 32          # rommet 11.11: SCANA.OL nr. 32
+    d = [abs(float(r["diff_pct"])) for r in rows if r["diff_pct"]]
     assert abs(st["samlet"]["mean_abs_pct"] - sum(d) / len(d)) < 1e-12
-    assert sum(st[b]["n"] for b in st if b != "samlet") == 31
-    assert I.line(st["samlet"]) == f"31 fills før 11.11 på intradag-kurs, snitt absolutt avvik " + f"{sum(d) / len(d) * 100:.1f} %".replace(".", ",")
+    assert sum(st[b]["n"] for b in st if b != "samlet") == len(rows)
+    d = [abs(float(r["diff_pct"])) for r in rows if r["diff_pct"]]
+    assert I.line(st["samlet"]) == f"{len(rows)} fills før 11.11 på intradag-kurs, snitt absolutt avvik " + f"{sum(d) / len(d) * 100:.1f} %".replace(".", ",")
     ls = I.report_lines(LOG)
-    assert ls[-1].startswith("Samlet: 31 fills før 11.11") and any(x.startswith("Høy risiko:") for x in ls)
+    assert ls[-1].startswith(f"Samlet: {len(rows)} fills før 11.11") and any(x.startswith("Høy risiko:") for x in ls)
 
 
 def test_line_follows_file(tmp_path):
@@ -73,3 +74,38 @@ def test_with_without_visible_at_30_drops_whole_round_trip(tmp_path):
 def test_drop_open_position_with_intraday_buy():
     tr = [_fill("b1", "A.OL", "buy", "2026-10-01", 10, 1), _fill("b2", "B.OL", "buy", "2026-10-01", 10, 1)]
     assert [r["order_id"] for r in I._drop_intraday(tr, {"b1"})] == ["b2"]
+
+
+def test_scana_row_32_waits_for_closed_bar_then_fills(tmp_path):
+    import datetime as dt
+    from zoneinfo import ZoneInfo
+    rows = list(csv.DictReader(LOG.open()))
+    sc = [r for r in rows if r["ticker"] == "SCANA.OL" and r["fill_date"] == "2026-11-11"]
+    assert len(sc) == 1 and sc[0]["fill_price"] == "1.425" and sc[0]["fill_time"] == "2026-11-11T12:44:44+00:00"   # 13:44 Oslo
+    p = tmp_path / "f.csv"
+    base = [dict(r, close="", diff_pct="", diff_nok="") if r is sc[0] else r for r in rows]   # nr. 32 som den ble ført 11.11: uten sluttkurs
+    _w(p, list(rows[0]), base)
+    rows = list(csv.DictReader(p.open()))
+    logs = tmp_path / "logs"
+    logs.mkdir()
+    tp = PB.paths("kontroll_tilfeldig_v1", logs)[0]
+    _w(tp, P.T_COLS, [{"event": "fill", "order_id": sc[0]["order_id"], "ticker": "SCANA.OL", "side": "buy", "shares": 1000, "fx": 1}])
+    hist = lambda ts: {"SCANA.OL": {"2026-11-10": 1.45, "2026-11-11": 1.40}}
+    o = ZoneInfo("Europe/Oslo")
+    open_ = dt.datetime(2026, 11, 11, 16, 40, tzinfo=o)       # Oslo stenger 16:25 -> gyldig fra 16:55
+    assert I.fill_closes(p, hist, open_, logs) == 0
+    assert [r for r in csv.DictReader(p.open()) if r["ticker"] == "SCANA.OL"][-1]["close"] == ""
+    after = dt.datetime(2026, 11, 11, 18, 15, tzinfo=o)
+    assert I.fill_closes(p, hist, after, logs) == 1
+    r = [r for r in csv.DictReader(p.open()) if r["ticker"] == "SCANA.OL"][-1]
+    assert r["close"] == "1.4" and abs(float(r["diff_pct"]) - (1.425 / 1.4 - 1)) < 1e-6 and float(r["diff_nok"]) == 25.0
+    other = [x for x in csv.DictReader(p.open()) if x["ticker"] != "SCANA.OL" or x["fill_date"] != "2026-11-11"]
+    assert other == [x for x in rows if x["ticker"] != "SCANA.OL" or x["fill_date"] != "2026-11-11"]   # resten urørt
+    assert I.fill_closes(p, hist, after, logs) == 0
+
+
+def test_pipeline_runs_fill_closes_and_workflow_commits_log():
+    from pathlib import Path as _P
+    root = _P(__file__).resolve().parents[1]
+    assert "IF.fill_closes()" in (root / "signaltool" / "pipeline.py").read_text()
+    assert "logs/intraday_fills.csv" in (root / ".github" / "workflows" / "nightly.yml").read_text()

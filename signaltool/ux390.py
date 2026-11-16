@@ -3,7 +3,8 @@
 Linje 1: navn 15/20 med ellipsis (min-width:0) + ticker 12/16 grå. Linje 2: avkastning 13/18 høyrestilt, «mot indeks» under.
 Høyre kolonne (44 px): ★ øverst, scoreboks under – ingen overlapp. Nederst: risikobrikke + én signalbrikke + «+n» for resten
 (data-m på cellen). Evidens-forklaringen brytes (flex-wrap). Krav: alle rader ≤ 96 px og scrollWidth = clientWidth ved 390.
-«siden/inn»-linja og «Detaljer» vises ikke i raden på mobil (står på tickersiden). Lastes sist og bare under 600 px:
+«siden/inn»-linja, «Detaljer» og ↗ vises ikke i raden på mobil (står på tickersiden). Rommet 11.11: hele raden er én
+lenke (≥ 44 px, :focus-visible-ring), «Data x/7» grå 12/16 etter tickeren, og hver prosent har periode («siden dd.mm»). Lastes sist og bare under 600 px:
 1280 er uendret. Prefikset «html body» gir høyere spesifisitet enn de eldre mobilreglene (ux2/usability/since)."""
 
 R = "html body #tf-table tr.rowlink"
@@ -34,5 +35,21 @@ CSS = ("@media(max-width:599px){"
        f"{R} td.sg-c .pill,{R} td.sg-c .pmore{{display:none!important}}"
        f"{R} td.sg-c>.pill:first-child,{R} td.sg-c>.sgw>.pill:first-child{{display:inline-block!important;flex:0 1 auto;min-width:0;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:11px;line-height:16px;padding:1px 6px;margin:0}}"
        f"{R} td.sg-c[data-m]::after{{content:'+' attr(data-m);flex:none;font-size:11px;line-height:16px;padding:1px 6px;border:1px solid #333b47;border-radius:999px;color:#d5dde6}}"
+       # Rommet 11.11 (AnalBot/UxBot, bindende): hele raden én lenke (navnelenken strukket over raden), ≥ 44 px, synlig fokusring
+       f"{R}{{position:relative;min-height:44px}}"
+       f"{R} .tn .nm a::after{{content:'';position:absolute;inset:0;z-index:1}}"
+       f"{R} td.mcol{{position:relative;z-index:2}}"
+       f"{R} .tn .nm a:focus-visible{{outline:none}}"
+       f"{R}:focus-visible,{R}:has(.nm a:focus-visible){{outline:2px solid #60a5fa!important;outline-offset:-2px}}"
+       # Linje 1: «Data x/7» grå 12/16 etter tickeren (AnalBot: sikkerhetsangivelse ved scoren); navnet tar ellipsis, aldri «Data»
+       f"{R} .tn .tk{{max-width:none!important;flex:0 0 auto!important}}"
+       f"{R} .tn .tk .dci{{display:inline!important;order:1;font-size:12px!important;line-height:16px!important;padding:0!important}}"
+       f"{R} .tn .tk .dci .dchip{{display:inline!important;margin:0!important;padding:0!important;border:0!important;background:none!important;color:#94a3b8!important;font-size:12px!important;line-height:16px!important}}"
+       f"{R} .tn .tk .dci .tip{{display:none!important}}"
+       # Linje 2: periode rett etter hver prosent, grå 12/16, kuttes aldri; «mot indeks» med samme periode som kolonnen ved 1280
+       f"{R} td.ret-c .rex:has(+.rex-m){{display:none!important}}"   # grå rader (ingen .rex-m) beholder grå «–»
+       f"{R} td.ret-c .rex-m{{display:block!important;font-size:13px!important;line-height:18px!important;font-weight:600;white-space:nowrap!important}}"
+       f"{R} td.ret-c .rper{{display:inline!important;font-size:12px!important;line-height:16px!important;font-weight:400;color:#94a3b8!important;white-space:nowrap!important}}"
        "}"
-       "@media(min-width:600px){#tf-table td.sg-c::after{content:none}}\n")
+       "@media(min-width:600px){#tf-table td.sg-c::after{content:none}}\n"
+       ".rper,.rex-m{display:none}\n")   # standard: periodetekstene finnes bare i 390-raden (1280 uendret)
