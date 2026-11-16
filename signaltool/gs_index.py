@@ -15,8 +15,11 @@ Metode
 - Likevekt, daglig rebalansering. Kostnad per handel = |vektendring| × 0,2 % (0,5 % lite omsatt, flagget «illiquid» i loggen),
   samme satser som Signal-boka (portfolio_rules.py). Kostnad for handler på sluttkurs t trekkes i raden for t
   (unntak: første rad er 100 før handel; inngangskostnaden trekkes i rad 2).
-- Kurs: loggførte sluttkurser (korrigert) når begge dager i et dagspar finnes i loggen, ellers Yahoo-sluttkurser (auto_adjust)
-  for begge dager. Aldri oppfunnet: mangler kurs for t eller t-1 (og børsen var åpen), droppes aksjen den dagen (n_no_price).
+- Kurs: én kurstype i hele serien for både nivå og avkastning (PRICE_TYPE = adj_close: Yahoo Adj Close, samme tall som
+  auto_adjust=True Close). Loggførte sluttkurser brukes bare når begge dager i dagsparet er av den typen; ujusterte
+  loggkurser (typisk frosset før et utbytte) brukes ikke, da tas Yahoo-paret. Blanding av justert og ujustert stopper
+  ombyggingen (RebuildStopped, dq_flags gs_price_type_mismatch). Aldri oppfunnet: mangler kurs for t eller t-1 (og børsen
+  var åpen), droppes aksjen den dagen (n_no_price).
   Stengt egen børs den dagen (indeksen har ingen kurs) = 0 % avkastning, ikke «uten kurs».
 - Referanse: OSEBX / Nasdaq Composite / NYSE Composite vektet etter lista sin børsfordeling den dagen (samme mapping som
   since.bench_for: Oslo -> OSEBX.OL, Nasdaq -> ^IXIC, NYSE/Arca/American -> ^NYA). Ingen kostnader.
@@ -43,6 +46,7 @@ MAX_DAY_MOVE = 0.30
 THIN_VOLUME = 20_000   # AnalBot 16.11: flagges i gs_invalid, tas ikke ut
 SPLITS: frozenset = frozenset()   # {(ticker, dato)} kjente splitter/hendelser som gjør |r| > 30 % gyldig
 MAIN_EXCLUDE = frozenset({"TECH.OL"})
+PRICE_TYPE = "adj_close"  # AnalBot 16.11: samme type for nivå og avkastning (Yahoo Adj Close / auto_adjust)
 INVALID = LOGS / "gs_invalid.csv"
 START = "2026-09-27"
 MIN_DAYS_PUBLIC = 60
@@ -299,27 +303,38 @@ def _extract(d, field: str) -> dict:
 
 
 def _series(d) -> dict:
-    return _extract(d, "Close")
+    """Justert sluttkurs: Adj Close når feltet finnes (auto_adjust=False), ellers Close (auto_adjust=True er allerede justert)."""
+    out = _extract(d, "Adj Close")
+    for t, ser in _extract(d, "Close").items():
+        out.setdefault(t, ser)
+    return out
 
 
-def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None, volume_out: dict | None = None):
-    """Yahoo-sluttkurser (auto_adjust). 16.11 (hentehullet): yf.download i én batch gir stille en tom kolonne for tickere som
-    feiler (tidsavbrudd/ratebegrensning) – AKRBP.OL, OKTA og CRWD manglet i ombyggingen 16.11 uten feilmelding. Tickere uten
-    serie etter batchen hentes derfor på nytt én og én (opptil `retries` forsøk med pause). Det som fortsatt mangler, mangler
-    i resultatet; build() avgjør om det stopper ombyggingen (missing_check).
-    volume_out: hvis gitt, fylles med {ticker: {dato: volum}} fra samme nedlasting (Volume, ikke justert)."""
+def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None, volume_out: dict | None = None,
+        unadj_out: dict | None = None):
+    """Yahoo-kurser for GS: justert sluttkurs (PRICE_TYPE=adj_close). auto_adjust=True (standard) gir justert verdi i Close;
+    når unadj_out er gitt, hentes auto_adjust=False så ujustert Close kan klassifiseres, og returen er Adj Close.
+    16.11 (hentehullet): yf.download i én batch gir stille en tom kolonne for tickere som feiler (tidsavbrudd/ratebegrensning)
+    – AKRBP.OL, OKTA og CRWD manglet i ombyggingen 16.11 uten feilmelding. Tickere uten serie etter batchen hentes derfor på
+    nytt én og én (opptil `retries` forsøk med pause). Det som fortsatt mangler, mangler i resultatet; build() avgjør om det
+    stopper ombyggingen (missing_check).
+    volume_out: {ticker: {dato: volum}} fra samme nedlasting (Volume, ikke justert).
+    unadj_out: {ticker: {dato: ujustert Close}} fra samme nedlasting."""
     import time
     if download is None:
         import yfinance as yf
         download = yf.download
     want = sorted(set(tickers))
+    aa = unadj_out is None
 
     def take(raw):
         if volume_out is not None:
             volume_out.update(_extract(raw, "Volume"))
+        if unadj_out is not None:
+            unadj_out.update(_extract(raw, "Close"))
         return _series(raw)
 
-    out = take(download(want, start=start, auto_adjust=True, progress=False, threads=False))
+    out = take(download(want, start=start, auto_adjust=aa, progress=False, threads=False))
     for i in range(retries):
         miss = [t for t in want if not out.get(t)]
         if not miss:
@@ -328,7 +343,7 @@ def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None, vol
             time.sleep(pause * i)
         for t in miss:
             try:
-                got = take(download([t], start=start, auto_adjust=True, progress=False, threads=False))
+                got = take(download([t], start=start, auto_adjust=aa, progress=False, threads=False))
             except Exception as ex:   # noqa: BLE001 – en feilet enkeltticker skal bare telles som manglende
                 log.warning("gs_index: Yahoo %s forsøk %d: %s", t, i + 1, ex)
                 continue
@@ -336,12 +351,64 @@ def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None, vol
                 out[t] = got[t]
     return out
 
+def price_kind(value, close=None, adj=None, rel: float = 0.005, abs_tol: float = 0.05) -> str | None:
+    """Klassifiserer en loggført kurs mot Yahoo Close og Adj Close: 'adj_close', 'close', 'both', eller None."""
+    def ok(x):
+        if x is None or not value:
+            return False
+        try:
+            x = float(x)
+        except (TypeError, ValueError):
+            return False
+        return abs(float(value) - x) <= max(abs_tol, rel * abs(x))
+    a, c = ok(adj), ok(close)
+    if a and c:
+        return "both"
+    if a:
+        return "adj_close"
+    if c:
+        return "close"
+    return None
+
+
+def logged_prices_of_type(logp: dict, close_px: dict, adj_px: dict, want: str = PRICE_TYPE) -> tuple[dict, list]:
+    """Beholder bare loggførte kurser av typen `want` eller 'both'. Avviste (annen type eller ukjent) returneres i lista."""
+    kept, rejected = {}, []
+    for tk, days in logp.items():
+        for d, (v, corr) in days.items():
+            kind = price_kind(v, (close_px.get(tk) or {}).get(d), (adj_px.get(tk) or {}).get(d))
+            if kind in (want, "both"):
+                kept.setdefault(tk, {})[d] = (v, corr)
+            else:
+                rejected.append({"ticker": tk, "date": d, "price": v, "price_type": kind or "unknown",
+                                 "close": (close_px.get(tk) or {}).get(d),
+                                 "adj_close": (adj_px.get(tk) or {}).get(d)})
+    return kept, rejected
+
+
+def check_price_types(level_type: str, return_types, dq_path: Path | None = None, date: str | None = None) -> None:
+    """Stopper ombyggingen hvis nivå og avkastning ikke bruker samme kurstype. Logges i dq_flags (gs_price_type_mismatch)."""
+    raw = {level_type, *({t for t in return_types if t} if not isinstance(return_types, str) else {return_types})}
+    norm = {t for t in raw if t != "both"}
+    if len(norm) <= 1:
+        return
+    note = (f"nivå={level_type}, avkastning={sorted(raw)} – blanding gir feil avkastning på utbyttedager")
+    dq_log([{"date": date or today_iso(), "ticker": "GS", "type": "gs_price_type_mismatch",
+             "level_type": level_type, "return_types": sorted(raw), "price_type": PRICE_TYPE, "note": note}], dq_path)
+    raise RebuildStopped(f"ulik kurstype for nivå og avkastning ({note})")
+
+
+def record_price_type(dq_path: Path | None = None) -> None:
+    """Lagrer den låste kurstypen én gang (AnalBot 16.11)."""
+    dq_log([{"date": "2026-11-16", "ticker": "GS", "type": "gs_price_type", "price_type": PRICE_TYPE,
+             "note": "justert sluttkurs (Yahoo Adj Close / auto_adjust) for nivå og avkastning"}], dq_path)
+
 
 DQ = LOGS / "dq_flags.jsonl"
 
 
 class RebuildStopped(RuntimeError):
-    """AnalBot 16.11: en ticker som mangler data i ombyggingen stopper hele ombyggingen (ingen omregning uten den)."""
+    """AnalBot 16.11: ombyggingen stoppes (gs_index.csv uendret) ved manglende data eller ulik kurstype for nivå og avkastning."""
 
 
 def missing_check(tks, yfp: dict, rows: list[dict], idx: dict) -> tuple[list[str], list[str]]:
@@ -389,8 +456,10 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     from . import closedbars as CB
     idx = {k: CB.series(v, k) for k, v in _yf(list(IDX.values()), "2026-09-20").items()}
     vols: dict = {}
-    yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20", volume_out=vols).items()}
+    unadj: dict = {}
+    yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20", volume_out=vols, unadj_out=unadj).items()}
     vol_closed = {k: CB.series(v, k) for k, v in vols.items()}
+    close_px = {k: CB.series(v, k) for k, v in unadj.items()}
     stop, nosrc = missing_check(tks, yfp, rows, idx)
     if stop:
         dq_log([{"date": today_iso(), "ticker": t, "type": "gs_rebuild_missing",
@@ -404,9 +473,16 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     today = date.today().isoformat()
     days = sorted({d for s in idx.values() for d in s if d < today or d == max(s)})
     known = unflagged_dates(rows)
-    res = compute(lists, days, logged_prices(rows), yfp, exch, idx, MAIN_EXCLUDE, known, volumes=vol_closed)
+    logp, _rejected = logged_prices_of_type(logged_prices(rows), close_px, yfp, PRICE_TYPE)
+    used_types = {PRICE_TYPE}
+    for tk, ds in logp.items():
+        for d, (v, _) in ds.items():
+            used_types.add(price_kind(v, (close_px.get(tk) or {}).get(d), (yfp.get(tk) or {}).get(d)) or PRICE_TYPE)
+    check_price_types(PRICE_TYPE, used_types, dq_path)
+    record_price_type(dq_path)
+    res = compute(lists, days, logp, yfp, exch, idx, MAIN_EXCLUDE, known, volumes=vol_closed)
     inv: list = []
-    wt = {r["date"]: r for r in compute(lists, days, logged_prices(rows), yfp, exch, idx, frozenset(), known,
+    wt = {r["date"]: r for r in compute(lists, days, logp, yfp, exch, idx, frozenset(), known,
                                         invalid_log=inv, volumes=vol_closed)}
     with open(Path(out_path).with_name("gs_invalid.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=["date", "prev", "ticker", "ret", "type", "volume"])
