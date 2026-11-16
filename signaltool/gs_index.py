@@ -5,7 +5,9 @@ Metode
   utelukkelsen var aldri godkjent). Logg-datoer uten rangert-feltet (før feltet kom) kan ikke skille «Ikke rangert» fra
   rangerte rader: alle radene tas med, og dagene som bruker en slik liste får flag=FLAG (telles).
 - Ugyldige dagsavkastninger: |r| > 30 % uten kjent splitt (SPLITS) er ugyldige: ute av dagens avkastning (ikke et tap),
-  vekten står, telles i n_invalid og logges i logs/gs_invalid.csv.
+  vekten står, telles i n_invalid og logges i logs/gs_invalid.csv (type=invalid_jump).
+- Tynt omsatt: volum < 20 000 (Yahoo, aksjevolum) på åpen børs logges i gs_invalid.csv (type=thin_volume). Aksjen tas
+  ikke ut av avkastningen (AnalBot 16.11).
 - NOKBF (OTC/PNK) er med og regnes på US-siden av referansen (^NYA).
 - logs/categories_corrections.csv brukes (exclude-rader tas ut, korrigerte priser brukes). categories.csv endres aldri.
 - Logg-dato L = lista kjent den dagen. Inngang/utgang skjer på sluttkurs første handelsdag ETTER L (holdingene som gjelder fra
@@ -38,6 +40,7 @@ CORR = LOGS / "categories_corrections.csv"
 OUT = LOGS / "gs_index.csv"
 LIST_CATS = {"kjop", "hold", "watch", "tema"}
 MAX_DAY_MOVE = 0.30
+THIN_VOLUME = 20_000   # AnalBot 16.11: flagges i gs_invalid, tas ikke ut
 SPLITS: frozenset = frozenset()   # {(ticker, dato)} kjente splitter/hendelser som gjør |r| > 30 % gyldig
 MAIN_EXCLUDE = frozenset({"TECH.OL"})
 INVALID = LOGS / "gs_invalid.csv"
@@ -136,7 +139,7 @@ def closed_logged(rows: list[dict], times: dict | None = None) -> list[dict]:
 
 def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp: dict, exch: dict, idx: dict,
             exclude: frozenset = frozenset(), known: set | None = None, splits: frozenset = SPLITS,
-            invalid_log: list | None = None) -> list[dict]:
+            invalid_log: list | None = None, volumes: dict | None = None) -> list[dict]:
     """lists: {logdato: {ticker: rad}}, days: handelsdager (stigende), logp/yfp: {ticker: {dato: kurs}},
     exch: {ticker: 'oslo'|'nasdaq'|'nyse'|None}, idx: {indeksticker: {dato: kurs}}. Returnerer rader fra første handelsdag > første logg-dato."""
     ldates = sorted(lists)
@@ -179,6 +182,11 @@ def compute(lists: dict[str, dict[str, dict]], days: list[str], logp: dict, yfp:
                     r = 0.0
                 else:
                     r = ret(tk, last_open(tk, prev, exch, idx), t)
+                    if volumes is not None and invalid_log is not None:
+                        vol = (volumes.get(tk) or {}).get(t)
+                        if vol is not None and vol < THIN_VOLUME:
+                            invalid_log.append({"date": t, "prev": prev, "ticker": tk, "ret": r,
+                                                "type": "thin_volume", "volume": vol})
                 if r is not None and abs(r) > MAX_DAY_MOVE and (tk, t) not in splits:
                     n_inv += 1         # ugyldig (splitt-/faktorfeil): ute av dagens avkastning, ikke et tap; vekten står
                     if invalid_log is not None:
@@ -271,32 +279,47 @@ def _exch(tickers, cache_path: Path) -> dict:
     return out
 
 
-def _series(d) -> dict:
+def _extract(d, field: str) -> dict:
+    """{ticker: {dato: verdi}} fra en yf.download-ramme (felt Close eller Volume). Tom dict hvis feltet mangler."""
     out = {}
     if d is None or getattr(d, "empty", True):
         return out
     try:
-        c = d["Close"]
+        c = d[field]
     except KeyError:
         return out
-    for col in c.columns:
+    cols = getattr(c, "columns", None)
+    if cols is None:
+        return out
+    for col in cols:
         s = c[col].dropna()
         if len(s):
             out[col] = {str(k.date()): float(v) for k, v in s.items()}
     return out
 
 
-def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None):
+def _series(d) -> dict:
+    return _extract(d, "Close")
+
+
+def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None, volume_out: dict | None = None):
     """Yahoo-sluttkurser (auto_adjust). 16.11 (hentehullet): yf.download i én batch gir stille en tom kolonne for tickere som
     feiler (tidsavbrudd/ratebegrensning) – AKRBP.OL, OKTA og CRWD manglet i ombyggingen 16.11 uten feilmelding. Tickere uten
     serie etter batchen hentes derfor på nytt én og én (opptil `retries` forsøk med pause). Det som fortsatt mangler, mangler
-    i resultatet; build() avgjør om det stopper ombyggingen (missing_check)."""
+    i resultatet; build() avgjør om det stopper ombyggingen (missing_check).
+    volume_out: hvis gitt, fylles med {ticker: {dato: volum}} fra samme nedlasting (Volume, ikke justert)."""
     import time
     if download is None:
         import yfinance as yf
         download = yf.download
     want = sorted(set(tickers))
-    out = _series(download(want, start=start, auto_adjust=True, progress=False, threads=False))
+
+    def take(raw):
+        if volume_out is not None:
+            volume_out.update(_extract(raw, "Volume"))
+        return _series(raw)
+
+    out = take(download(want, start=start, auto_adjust=True, progress=False, threads=False))
     for i in range(retries):
         miss = [t for t in want if not out.get(t)]
         if not miss:
@@ -305,7 +328,7 @@ def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None):
             time.sleep(pause * i)
         for t in miss:
             try:
-                got = _series(download([t], start=start, auto_adjust=True, progress=False, threads=False))
+                got = take(download([t], start=start, auto_adjust=True, progress=False, threads=False))
             except Exception as ex:   # noqa: BLE001 – en feilet enkeltticker skal bare telles som manglende
                 log.warning("gs_index: Yahoo %s forsøk %d: %s", t, i + 1, ex)
                 continue
@@ -365,7 +388,9 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     # kurser som ble logget før stengetid + 30 (intradag, logs/price_log_times.csv) brukes ikke – da tas Yahoo-paret.
     from . import closedbars as CB
     idx = {k: CB.series(v, k) for k, v in _yf(list(IDX.values()), "2026-09-20").items()}
-    yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20").items()}
+    vols: dict = {}
+    yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20", volume_out=vols).items()}
+    vol_closed = {k: CB.series(v, k) for k, v in vols.items()}
     stop, nosrc = missing_check(tks, yfp, rows, idx)
     if stop:
         dq_log([{"date": today_iso(), "ticker": t, "type": "gs_rebuild_missing",
@@ -379,16 +404,23 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     today = date.today().isoformat()
     days = sorted({d for s in idx.values() for d in s if d < today or d == max(s)})
     known = unflagged_dates(rows)
-    res = compute(lists, days, logged_prices(rows), yfp, exch, idx, MAIN_EXCLUDE, known)
+    res = compute(lists, days, logged_prices(rows), yfp, exch, idx, MAIN_EXCLUDE, known, volumes=vol_closed)
     inv: list = []
-    wt = {r["date"]: r for r in compute(lists, days, logged_prices(rows), yfp, exch, idx, frozenset(), known, invalid_log=inv)}
+    wt = {r["date"]: r for r in compute(lists, days, logged_prices(rows), yfp, exch, idx, frozenset(), known,
+                                        invalid_log=inv, volumes=vol_closed)}
     with open(Path(out_path).with_name("gs_invalid.csv"), "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["date", "prev", "ticker", "ret"])
+        w = csv.DictWriter(f, fieldnames=["date", "prev", "ticker", "ret", "type", "volume"])
         w.writeheader()
         for x in inv:
-            w.writerow(dict(x, ret=f"{x['ret']:.4f}"))
-    if inv:
-        log.warning("gs_index: %d ugyldige dagsavkastninger (|r| > 30 %%): %s", len(inv), inv)
+            ret = x.get("ret")
+            vol = x.get("volume")
+            w.writerow({"date": x["date"], "prev": x["prev"], "ticker": x["ticker"],
+                        "ret": "" if ret is None else f"{ret:.4f}",
+                        "type": x.get("type") or "invalid_jump",
+                        "volume": "" if vol is None else f"{vol:.0f}"})
+    jumps = [x for x in inv if (x.get("type") or "invalid_jump") == "invalid_jump"]
+    if jumps:
+        log.warning("gs_index: %d ugyldige dagsavkastninger (|r| > 30 %%): %s", len(jumps), jumps)
     fmt = [{"date": r["date"], "gs_index": f"{r['gs_index']:.4f}", "benchmark": f"{r['benchmark']:.4f}",
             "n_members": r["n_members"], "n_no_price": r["n_no_price"], "n_invalid": r["n_invalid"], "flag": r["flag"],
             "gs_with_tech": f"{wt[r['date']]['gs_index']:.4f}" if r["date"] in wt else ""} for r in res]
