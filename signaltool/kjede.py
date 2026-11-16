@@ -1,8 +1,8 @@
 """Bekreftede koblinger og komponentfane på tickersider (UxBot, bindende).
 
 Data ligger i site_config/kjeder/<TICKER>.json, med KOG.OL som første.
-Komponentfanen «Hvem lager dette» viser stål og kobber med produsenter og
-deres kunder. Aluminium og jern vises bare som «under kontroll».
+Komponentfanen «Hvem lager dette» viser stål, kobber, aluminium og jern
+med produsenter og deres kunder der kilden navngir dem.
 """
 from __future__ import annotations
 

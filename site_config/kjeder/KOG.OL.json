@@ -801,12 +801,233 @@
       {
         "id": "aluminium",
         "name": "Aluminium",
-        "status": "under_kontroll"
+        "gics": "Basic Materials",
+        "status": "ok",
+        "producers": [
+          {
+            "id": "1378.HK",
+            "name": "China Hongqiao Group Limited",
+            "ticker": "1378.HK",
+            "role": "Produserer aluminium",
+            "kildetype": "årsrapport",
+            "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400888.pdf",
+            "dokumentdato": "2026-04-24",
+            "source_label": "Hongqiao AR 2025",
+            "sitat": "s. 7: «the complete industrial chain covering bauxite mining, alumina production, primary aluminum smelting, deep processing of aluminum products, and aluminum recycling.» Også s. 10: «the Group’s sales volume of aluminum alloy products was approximately 5.824 million tonnes».",
+            "customers": []
+          },
+          {
+            "id": "HINDALCO.NS",
+            "name": "Hindalco Industries Limited",
+            "ticker": "HINDALCO.NS",
+            "role": "Produserer aluminium",
+            "kildetype": "årsrapport",
+            "url": "https://www.hindalco.com/Upload/PDF/hindalco-annual-report-2025-26.pdf",
+            "dokumentdato": "2026-07-01",
+            "source_label": "Hindalco IAR 2025-26",
+            "sitat": "s. 18–19 («Our business at a glance»): «Primary Aluminium» med «Smelting» og produkter «Primary Aluminium in the form of ingots, billets and wire rods».",
+            "customers": []
+          },
+          {
+            "id": "601600.SS",
+            "name": "Aluminum Corporation of China Limited",
+            "ticker": "601600.SS",
+            "role": "Produserer aluminium",
+            "kildetype": "årsrapport",
+            "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042302304.pdf",
+            "dokumentdato": "2026-04-23",
+            "source_label": "Chalco AR 2025",
+            "sitat": "s. 2: «a manufacturer and operator with integration of exploration and mining of bauxite, coal and other resources; production, sales and technology research of alumina, primary aluminum, aluminum alloy and carbon».",
+            "customers": []
+          },
+          {
+            "id": "VAML.NS",
+            "name": "Vedanta Aluminium Metal Limited",
+            "ticker": "VAML.NS",
+            "role": "Produserer aluminium",
+            "kildetype": "produksjonsmelding",
+            "url": "https://nsearchives.nseindia.com/corporate/VAML_03102026172407_SEIntimationProductionReleaseOctober32026signed.pdf",
+            "dokumentdato": "2026-10-03",
+            "source_label": "VAML Production Release 2Q FY27",
+            "sitat": "s. 2 (Production Release for 2Q ended 30.9.2026): «Aluminium Production 649» (’000 tonnes) for 2Q FY27; «Highest-ever Quarterly & Half-Yearly Aluminium production at 649 KT & 1281 KT respectively». Også Production Release 3.7.2026 for 1Q FY27, s. 2: «Aluminium Production 632», med merknad: «While Vedanta’s demerger became effective from May 1, 2026, the figures reported here are for the full quarter (April-June’26).» Q1-URL: https://nsearchives.nseindia.com/corporate/VAML_03072026172043_VAMLProductionReleaseQ1FY2027Signed.pdf",
+            "customers": []
+          },
+          {
+            "id": "NHY.OL",
+            "name": "Norsk Hydro ASA",
+            "ticker": "NHY.OL",
+            "role": "Produserer aluminium",
+            "kildetype": "årsrapport",
+            "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+            "dokumentdato": "2026-02-13",
+            "source_label": "Hydro IAR 2025",
+            "sitat": "s. 10: «Hydro Aluminium Metal is one of the leading producers and suppliers of extrusion ingots, sheet ingots, foundry alloys, wire rods and high-purity aluminium.»",
+            "customers": [
+              {
+                "name": "Mercedes-Benz",
+                "ticker": null,
+                "role": "Kjøper Hydro REDUXA",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 6: «Our collaboration with Mercedes-Benz is contributing to the decarbonization of their value chain, as seen in the launch of the new electric CLA featuring Hydro REDUXA, produced in Årdal.» Også s. 36: «frontrunner customers such as Velux, Porsche, Volvo Group, and Mercedes-Benz»."
+              },
+              {
+                "name": "Velux",
+                "ticker": null,
+                "role": "Kunde, produkt ikke oppgitt",
+                "kildetype": "fast forhold oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 36: «By working closely with frontrunner customers such as Velux, Porsche, Volvo Group, and Mercedes-Benz, Hydro supports the transition to low-carbon, circular products, and systems.»"
+              },
+              {
+                "name": "Porsche",
+                "ticker": null,
+                "role": "Kunde, produkt ikke oppgitt",
+                "kildetype": "fast forhold oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 36: «By working closely with frontrunner customers such as Velux, Porsche, Volvo Group, and Mercedes-Benz, Hydro supports the transition to low-carbon, circular products, and systems.»"
+              },
+              {
+                "name": "Volvo Group",
+                "ticker": null,
+                "role": "Kunde, produkt ikke oppgitt",
+                "kildetype": "fast forhold oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 36: «By working closely with frontrunner customers such as Velux, Porsche, Volvo Group, and Mercedes-Benz, Hydro supports the transition to low-carbon, circular products, and systems.»"
+              },
+              {
+                "name": "NKT",
+                "ticker": null,
+                "role": "Kjøper low-carbon aluminium wire rod",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 6: «…we signed a partnership with the European cable producer NKT to guarantee supply of low-carbon aluminium.» s. 7: «Hydro and NKT sign offtake agreement for aluminium wire rod as Europe moves to upgrade power grid infrastructure.»"
+              },
+              {
+                "name": "Vode Lighting",
+                "ticker": null,
+                "role": "Kjøper Hydro CIRCAL",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 6: «Vode Lighting became the first company in North America to incorporate Hydro CIRCAL into their products, helping to reduce emissions and promote a circular economy.»"
+              },
+              {
+                "name": "Frieze London",
+                "ticker": null,
+                "role": "Kjøper recycled aluminium façade",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrated-annual-report-2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Hydro IAR 2025",
+                "sitat": "s. 6: «…we were selected to deliver a recycled aluminium façade for Frieze London.»"
+              }
+            ]
+          },
+          {
+            "id": "8869.KL",
+            "name": "Press Metal Aluminium Holdings Berhad",
+            "ticker": "8869.KL",
+            "role": "Produserer aluminium",
+            "kildetype": "årsrapport",
+            "url": "https://www.insage.com.my/BursaNews/Attachment/202604/20260430/PMETAL-AN20260430A1-1.pdf",
+            "dokumentdato": "2026-04-30",
+            "source_label": "Press Metal IAR 2025",
+            "sitat": "s. 6: «Press Metal has grown into Southeast Asia’s largest integrated aluminium producer and a prominent aluminium extruder». Også s. 8: «Smelting Capacity 1.08 Million MT» og «manufacturing and trading of primary, value-added, and extruded aluminium products».",
+            "customers": []
+          }
+        ]
       },
       {
         "id": "iron",
         "name": "Jern",
-        "status": "under_kontroll"
+        "gics": "Basic Materials",
+        "status": "ok",
+        "producers": [
+          {
+            "id": "NUE",
+            "name": "Nucor Corporation",
+            "ticker": "NUE",
+            "role": "Produserer iron (direct reduced iron)",
+            "kildetype": "årsrapport",
+            "url": "https://s202.q4cdn.com/531038915/files/doc_financials/2026/ar/2025-Nucor-Annual-Report.pdf",
+            "dokumentdato": "2026-03-20",
+            "source_label": "Nucor AR 2025",
+            "sitat": "s. 22: «In the raw materials segment, Nucor produces direct reduced iron (“DRI”)…» s. 23: «Nucor owns and operates two DRI facilities, one in Trinidad and one in Louisiana.»",
+            "customers": []
+          },
+          {
+            "id": "MT",
+            "name": "ArcelorMittal S.A.",
+            "ticker": "MT",
+            "role": "Produserer iron (HBI / DRI)",
+            "kildetype": "årsrapport",
+            "url": "https://cdn.arcelormittal.com/media/g5obzl05/annual-report-2025.pdf",
+            "dokumentdato": "2026-03-06",
+            "source_label": "ArcelorMittal 20-F 2025",
+            "sitat": "s. 60 (tabell «Steel production facilities of ArcelorMittal», kolonner Number of Facilities, Capacity (in million tonnes per year), Production in 2025 (in million tonnes)): «DRI/HBI Plant 10 9.7 6.0». Også s. 61: «ArcelorMittal Texas HBI is one of the largest of its kind in the world and produces Hot Briquetted Iron (\"HBI\"), a high quality feedstock made through the direct reduction of iron ore which is used to produce high-quality steel grades in an EAF».",
+            "customers": []
+          },
+          {
+            "id": "JSWSTEEL.NS",
+            "name": "JSW Steel Limited",
+            "ticker": "JSWSTEEL.NS",
+            "role": "Produserer iron (DRI / HBI)",
+            "kildetype": "årsrapport",
+            "url": "https://www.jswsteel.in/jsw-steel-annual-report-2025-26/pdf/JSWSL-Integrated-Annual-Report-FY-2025-26.pdf",
+            "dokumentdato": "2026-07-02",
+            "source_label": "JSW Steel IAR 2025-26",
+            "sitat": "s. 32–33 (Operations and presence): Salav Works oppgis med «Direct Reduced Iron (DRI)/ Hot Briquetted Iron (HBI)». Også s. 65: «green hydrogen into the Direct Reduced Iron (DRI) process at our Vijayanagar ISP» og «the DRI shaft furnace».",
+            "customers": []
+          },
+          {
+            "id": "STLD",
+            "name": "Steel Dynamics, Inc.",
+            "ticker": "STLD",
+            "role": "Produserer iron (liquid pig iron)",
+            "kildetype": "årsrapport",
+            "url": "https://www.sec.gov/Archives/edgar/data/1022671/000110465926035859/tm269804d1_ars.pdf",
+            "dokumentdato": "2026-03-25",
+            "source_label": "Steel Dynamics ARS 2025",
+            "sitat": "s. 20: «In addition to scrap, pig iron, DRI, HBI, and internally sourced liquid pig iron are used in our EAF steel mill production.» s. 34 (Item 2 Properties, pr. 31.12.2025): «Iron Dynamics . . . Butler, IN … Liquid Ironmaking Facility». DRI/HBI omtales som innsatsvarer som forbrukes; pig iron fra eget Iron Dynamics-anlegg er intern produksjon.",
+            "customers": []
+          },
+          {
+            "id": "TATASTEEL.NS",
+            "name": "Tata Steel Limited",
+            "ticker": "TATASTEEL.NS",
+            "role": "Produserer iron (sponge iron / DRI)",
+            "kildetype": "årsrapport",
+            "url": "https://www.tatasteel.com/media/25902/tatasteel-iar-2025-26.pdf",
+            "dokumentdato": "2026-06-03",
+            "source_label": "Tata Steel IAR 2025-26",
+            "sitat": "s. 187: «Tata Steel Sponge Iron Plant, Joda Operations» i oversikt over driftsenheter. Også s. 84–85: «Gamharia achieved record production in sponge iron and coke».",
+            "customers": []
+          },
+          {
+            "id": "5401.T",
+            "name": "Nippon Steel Corporation",
+            "ticker": "5401.T",
+            "role": "Produserer iron (pig iron / masovn)",
+            "kildetype": "årsrapport",
+            "url": "https://www.nipponsteel.com/en/ir/library/annual_report/pdf/nsc_en_ir_2026_all.pdf",
+            "dokumentdato": "2026-11-05",
+            "source_label": "Nippon Steel IR 2026",
+            "sitat": "s. 152: «The upstream process consists of the pig-iron-making process, centered on a blast furnace that produces pig iron, and the steelmaking process, which produces steel products with diverse material properties from pig iron, scrap, alloys, and other raw materials.» Også s. 23: «In Japan, we aimed for a revenue improvement of approximately 150 billion yen, primarily through fixed cost reductions, by implementing facility structural measures to decrease our crude steel production capacity by about 20%, such as reducing the number of blast furnaces from 15 to 10 units.»",
+            "customers": []
+          }
+        ]
       }
     ]
   }

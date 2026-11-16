@@ -69,11 +69,9 @@ def test_n_counts_counterparties_not_rows_and_excludes_rtx_and_ikke_offentlig():
     assert (ns, nc) == (5, 10)
     j = K.jump_html("KOG.OL", page_date=PAGE)
     assert '<a href="#kjede">Leverandører 5 · Kunder 10</a>' in j
-    assert '<a href="#komp">Komponenter 2</a>' in j
-    assert '<span class="kjede-jump-uk"> · 2 under kontroll</span>' in j
+    assert '<a href="#komp">Komponenter 4</a>' in j
+    assert 'under kontroll' not in j
     assert '<span class="kjede-jump-komp">' in j
-    # «· 2 under kontroll» er ikke en lenke
-    assert not re.search(r'<a[^>]*>[^<]*under kontroll', j)
     s = section()
     # RTX er midtkort, ikke leverandørrad, og teller ikke
     assert 'class="kjede-name">Raytheon' not in s
@@ -143,8 +141,8 @@ def test_component_tabs_default_confirmed_and_jump_wrap():
     assert "kjede-jump-komp{white-space:nowrap}" in s
     assert "max-height:56px" in s
     assert "overflow-x:hidden" in s
-    assert "font-size:12px;line-height:16px" in s  # under kontroll
-    assert "Komponenter 2" in j and "2 under kontroll" in j
+    assert "font-size:12px;line-height:16px" in s  # kildelinje
+    assert "Komponenter 4" in j and "under kontroll" not in j
 
 
 def test_level_2_empty_hides_drill_path_and_back():
@@ -266,15 +264,17 @@ def test_hash_and_expand_handlers_exist_in_js():
     assert "replaceState" in s
 
 
-# ---------- Komponentfane (stål/kobber vises; aluminium/jern under kontroll) ----------
+# ---------- Komponentfane (stål, kobber, aluminium og jern) ----------
 
-def test_component_tab_steel_copper_only_no_private_or_nhy():
+def test_component_tab_four_components_no_private_or_held_rows():
     s = section()
-    # chips og statuslinjer
+    # chips; ingen «under kontroll»
     assert ">Steel<" in s or ">Steel</button>" in s
     assert ">Copper<" in s or ">Copper</button>" in s
-    assert "Aluminium: under kontroll" in s
-    assert "Jern: under kontroll" in s
+    assert ">Aluminium<" in s or ">Aluminium</button>" in s
+    assert ">Jern<" in s or ">Jern</button>" in s
+    assert "Aluminium: under kontroll" not in s
+    assert "Jern: under kontroll" not in s
     assert "Viser produsenter av komponenten, ikke bekreftede leverandører til KOG" in s
     # produsenter
     for name in (
@@ -282,27 +282,38 @@ def test_component_tab_steel_copper_only_no_private_or_nhy():
         "Steel Dynamics, Inc.", "Tata Steel Limited", "Nippon Steel Corporation",
         "Southern Copper Corporation", "Freeport-McMoRan Inc.", "Antofagasta plc",
         "Teck Resources Limited", "First Quantum Minerals Ltd.", "Lundin Mining Corporation",
+        "China Hongqiao Group Limited", "Hindalco Industries Limited",
+        "Aluminum Corporation of China Limited", "Vedanta Aluminium Metal Limited",
+        "Norsk Hydro ASA", "Press Metal Aluminium Holdings Berhad",
     ):
         assert name in s, name
     assert "Produserer steel" in s
     assert "Produserer copper" in s
+    assert "Produserer aluminium" in s
+    assert "Produserer iron (direct reduced iron)" in s
+    assert "Produserer iron (HBI / DRI)" in s
+    assert "Produserer iron (pig iron / masovn)" in s
     assert "Basic Materials" in s
-    # kunder av kobberprodusenter
+    # kunder av kobber- og aluminiumsprodusenter
     assert "Kunder av Southern Copper Corporation (6)" in s
     assert "Hartree Partners" in s
     assert "Kjøper copper cathodes" in s
     assert "Kunder av Freeport-McMoRan Inc. (1)" in s
     assert "Mitsubishi Materials Corporation" in s
     assert "Kunde, produkt ikke oppgitt" in s
+    assert "Kunder av Norsk Hydro ASA (7)" in s
+    assert "Mercedes-Benz" in s
+    assert "Kjøper Hydro REDUXA" in s
+    assert "Vis alle 7" in s
+    assert "Kunder av Vedanta Aluminium Metal Limited (0)" in s
     assert "Ingen kunder navngitt i offentlige kilder" in s
-    # aluminium/jern/NHY skal ikke vises
-    assert "Norsk Hydro" not in s
-    assert "Mercedes-Benz" not in s
-    assert "China Hongqiao" not in s
-    assert "Hindalco" not in s
-    assert "Press Metal" not in s
+    # holdt utenfor: AA, Cliffs, Baosteel, jernmalm, bauxitt/alumina
     assert "Cleveland-Cliffs" not in s
     assert "Alcoa" not in s
+    assert "Baosteel" not in s
+    assert "iron ore lump" not in s
+    assert "Hydro Bauxite" not in s
+    assert "Alunorte" not in s
     # ingen privat sti
     assert "/workspace/" not in s
     assert "file://" not in s
@@ -317,3 +328,16 @@ def test_component_tab_steel_copper_only_no_private_or_nhy():
     assert "avtale oppgitt i rapport" in s
     assert "kundekonsentrasjon oppgitt i 10-K" in s
     assert "årsrapport" in s
+    assert "produksjonsmelding" in s
+
+def test_iron_quotes_are_verbatim_from_source_documents():
+    # Sitat vises ikke i HTML (bare kildelenke), men ligger i data og er låst mot kilden.
+    iron = next(i for i in data()["components"]["items"] if i["id"] == "iron")
+    by = {p["ticker"]: p for p in iron["producers"]}
+    mt = by["MT"]["sitat"]
+    nip = by["5401.T"]["sitat"]
+    assert "s. 60" in mt and "DRI/HBI Plant 10 9.7 6.0" in mt
+    assert "produces Hot Briquetted Iron" in mt
+    assert "s. 152" in nip and "centered on a blast furnace that produces pig iron" in nip
+    assert "s. 23" in nip and "blast furnaces from 15 to 10 units" in nip
+    assert "operates ten blast furnaces" not in nip
