@@ -20,6 +20,18 @@ def slug(t: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "_", t)
 
 
+# UxBot 16.11: visningsnavn i brikker og brødsmule (ikke data-id).
+KOMP_NO = {"steel": "Stål", "copper": "Kobber", "aluminium": "Aluminium", "iron": "Jern"}
+
+
+def komp_label(comp: dict) -> str:
+    cid = str(comp.get("id") or "").lower()
+    if cid in KOMP_NO:
+        return KOMP_NO[cid]
+    name = comp.get("name") or ""
+    return KOMP_NO.get(name.lower(), name or cid)
+
+
 def add_months(d: date, months: int) -> date:
     y = d.year + (d.month - 1 + months) // 12
     m = (d.month - 1 + months) % 12 + 1
@@ -417,17 +429,18 @@ def component_panel_html(data: dict, available: set[str] | None, page: date) -> 
         name = comp.get("name") or comp.get("id") or ""
         cid = comp.get("id") or name
         if st == "under_kontroll":
-            uk.append(f'<p class="komp-uk">{E(name)}: under kontroll</p>')
+            uk.append(f'<p class="komp-uk">{E(komp_label(comp))}: under kontroll</p>')
             continue
+        label = komp_label(comp)
         chips.append(
             f'<button type="button" class="komp-chip" data-id="{E(cid)}" '
-            f'aria-pressed="false">{E(name)}</button>'
+            f'aria-pressed="false">{E(label)}</button>'
         )
         producers = visible_producers(comp, page)
         gics = comp.get("gics") or ""
-        heading = gics or name
+        heading = gics or label
         prow = [komp_producer_row_html(p, available, cid) for p in producers]
-        path_p = f"{tick}|{name}"
+        path_p = f"{tick}|{label}"
         views.append(
             f'<div class="komp-view" data-komp-panel="{E(cid)}" '
             f'data-path="{E(path_p)}" hidden>'
@@ -441,7 +454,7 @@ def component_panel_html(data: dict, available: set[str] | None, page: date) -> 
             n = len(cust)
             title = f"Kunder av {pname} ({n})"
             craw = [komp_customer_row_html(c, available) for c in cust]
-            path_c = f"{tick}|{name}|{pname}"
+            path_c = f"{tick}|{label}|{pname}"
             src_p = p.get("_source") or p
             card = (
                 f'<aside class="komp-prod-card">'
@@ -609,7 +622,6 @@ CSS = r"""
 .kjede-tab[aria-selected="true"]{border-bottom-color:#94a3b8;font-weight:600}
 @media(min-width:1280px){
   .kjede-tab{flex:0 0 200px;width:200px}
-  .komp-prod-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"cus card";gap:24px}
 }
 .kjede-panel[hidden],.komp-path[hidden],.komp-view[hidden]{display:none}
 .komp-disc{margin:0 0 12px;font-size:13px;line-height:18px;color:#94a3b8}
@@ -627,11 +639,15 @@ CSS = r"""
 .komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"cus" "card";gap:24px;min-width:0}
 .komp-prod-cus{grid-area:cus;min-width:0}
 .komp-prod-card{grid-area:card;min-width:0;box-sizing:border-box;padding:16px;background:#1c2430;border:1px solid #3b4757;border-radius:12px}
+@media(min-width:1024px){
+  .komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"cus card";gap:24px}
+}
 @media(max-width:599px){
+  .kjede-tab{white-space:nowrap;font-size:14px;line-height:20px;height:44px;min-height:44px}
   .komp-path{flex-wrap:nowrap;align-items:center;height:44px;min-height:44px;max-height:44px;overflow:hidden;gap:8px}
   .komp-crumbs{flex-wrap:nowrap;align-items:center;min-width:0;flex:1 1 auto;overflow:hidden}
-  .komp-crumb,.komp-crumb-sep{flex:none;white-space:nowrap}
-  .komp-crumb-mid{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .komp-crumb,.komp-crumb-sep,.komp-crumb-mid{flex:none;white-space:nowrap}
+  .komp-crumb-last{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
 """
 
@@ -716,7 +732,7 @@ JS = r"""
           for(i=0;i<bits.length;i++){
             if(i){var sep=document.createElement('li');sep.className='komp-crumb-sep';sep.setAttribute('aria-hidden','true');sep.textContent=' › ';ol.appendChild(sep);}
             var li=document.createElement('li');
-            li.className='komp-crumb'+(i>0&&i<bits.length-1?' komp-crumb-mid':'');
+            li.className='komp-crumb'+(i>0&&i<bits.length-1?' komp-crumb-mid':'')+(i===bits.length-1?' komp-crumb-last':'');
             li.textContent=bits[i];ol.appendChild(li);
           }
         }

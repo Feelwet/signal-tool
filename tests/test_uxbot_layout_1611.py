@@ -95,9 +95,12 @@ def test_tabs_200px_after_50_percent_and_left_aligned():
 
 def test_producer_view_50_50_at_1280_customers_first_when_stacked():
     s = section()
-    assert ".komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:\"cus\" \"card\"" in s
-    assert ("@media(min-width:1280px){" in s and
-            "minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"cus card\"" in s)
+    one = '.komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"cus" "card"'
+    mq = "@media(min-width:1024px){"
+    two = '.komp-prod-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"cus card";gap:24px}'
+    assert one in s and mq in s and two in s
+    # 1-kolonne-regelen må stå før 1024-regelen, ellers vinner den ved 1280 (live-avvik i 18c3289)
+    assert s.find(one) < s.find(mq) < s.find(two, s.find(mq))
     assert "komp-prod-view" in s
     assert "komp-prod-cus" in s
     assert "komp-prod-card" in s
@@ -110,9 +113,22 @@ def test_producer_view_50_50_at_1280_customers_first_when_stacked():
     assert "Kunder av Norsk Hydro ASA (7)" in s
 
 
-def test_komp_path_390_one_line_ellipsis_on_middle():
+def test_komp_path_390_one_line_ellipsis_on_last_norwegian_names():
     s = section()
-    assert "komp-crumb-mid" in s
+    assert "komp-crumb-mid" in s and "komp-crumb-last" in s
     assert "@media(max-width:599px)" in s
     assert ".komp-path{flex-wrap:nowrap;align-items:center;height:44px;min-height:44px;max-height:44px;overflow:hidden" in s
-    assert ".komp-crumb-mid{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}" in s
+    assert ".komp-crumb,.komp-crumb-sep,.komp-crumb-mid{flex:none;white-space:nowrap}" in s
+    assert ".komp-crumb-last{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}" in s
+    # norske visningsnavn i brikker og data-path (brødsmule)
+    for no, en in (("Stål", "Steel"), ("Kobber", "Copper"), ("Aluminium", "Aluminium"), ("Jern", "Jern")):
+        assert f">{no}<" in s
+        if no != en:
+            assert f'data-path="KOG.OL|{en}|' not in s
+            assert f'data-path="KOG.OL|{no}|' in s
+
+
+def test_tabs_390_nowrap_14_20_still_44px():
+    s = section()
+    mob = s.split("@media(max-width:599px){", 1)[1]
+    assert ".kjede-tab{white-space:nowrap;font-size:14px;line-height:20px;height:44px;min-height:44px}" in mob

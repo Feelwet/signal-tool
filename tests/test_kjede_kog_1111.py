@@ -269,8 +269,8 @@ def test_hash_and_expand_handlers_exist_in_js():
 def test_component_tab_four_components_no_private_or_held_rows():
     s = section()
     # chips; ingen «under kontroll»
-    assert ">Steel<" in s or ">Steel</button>" in s
-    assert ">Copper<" in s or ">Copper</button>" in s
+    assert ">Stål<" in s or ">Stål</button>" in s
+    assert ">Kobber<" in s or ">Kobber</button>" in s
     assert ">Aluminium<" in s or ">Aluminium</button>" in s
     assert ">Jern<" in s or ">Jern</button>" in s
     assert "Aluminium: under kontroll" not in s
