@@ -395,7 +395,7 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     if rewrite:
         write_full(out_path, fmt)
     else:
-        append_only(out_path, fmt)
+        append_only(out_path, fmt, dq_path)
     return res
 
 
@@ -408,7 +408,18 @@ def write_full(out_path: Path, fmt: list[dict]) -> None:
         wr.writerows(fmt)
 
 
-def append_only(out_path: Path, fmt: list[dict]) -> int:
+def chain_log(last: dict, base: dict, dq_path: Path | None = None) -> bool:
+    """AnalBot 16.11: kjedepunktet (dato + fryst nivå, og omregnet nivå samme dato) logges i dq_flags første gang det skjer."""
+    path = Path(dq_path or DQ)
+    if path.exists() and any('"type": "gs_chain"' in l for l in path.read_text().splitlines()):
+        return False
+    dq_log([{"date": last["date"], "ticker": "GS", "type": "gs_chain", "level": last["gs_index"], "benchmark": last["benchmark"],
+             "rebuilt_level": base["gs_index"], "rebuilt_benchmark": base["benchmark"],
+             "note": "nye rader kjedes fra fryst nivå denne datoen (ny[t] / ny[dato])"}], path)
+    return True
+
+
+def append_only(out_path: Path, fmt: list[dict], dq_path: Path | None = None) -> int:
     """AnalBot 16.11: logs/gs_index.csv er fryst historikk. Nattkjøringen legger bare til rader med dato etter siste
     eksisterende rad; eksisterende rader (bytene i fila) endres aldri. Nye rader kjedes fra siste fryste nivå med den nyberegnede
     dagsendringen (ny[t] / ny[siste fryste dato]), så en avvikende omregning av historikken ikke gir et hopp. Finnes ikke siste
@@ -439,6 +450,7 @@ def append_only(out_path: Path, fmt: list[dict]) -> int:
             except (TypeError, ValueError, ZeroDivisionError, KeyError):
                 x[c] = ""
         add.append(x)
+    chain_log(last, base, dq_path)
     raw = out_path.read_bytes()
     with open(out_path, "a", newline="") as f:
         if raw and not raw.endswith(b"\n"):

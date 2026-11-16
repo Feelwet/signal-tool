@@ -17,7 +17,7 @@ def test_existing_rows_never_change_and_new_rows_chain(tmp_path):
     before = p.read_bytes()
     # ny omregning med avvikende historikk (hull i hentingen) + én ny dag
     new = [_row("2026-11-10", 96.9491, 100.4059), _row("2026-11-11", 97.0, 100.5), _row("2026-11-12", 98.94, 100.0)]
-    assert G.append_only(p, new) == 1
+    assert G.append_only(p, new, tmp_path / "dq.jsonl") == 1
     after = p.read_bytes()
     assert after.startswith(before)
     rs = G.read(p)
@@ -30,7 +30,7 @@ def test_no_new_rows_leaves_file_byte_identical(tmp_path):
     p = tmp_path / "gs_index.csv"
     G.write_full(p, [_row("2026-11-10", 97.025, 100.336), _row("2026-11-11", 97.4686, 100.7903)])
     before = p.read_bytes()
-    assert G.append_only(p, [_row("2026-11-10", 1.0, 1.0), _row("2026-11-11", 2.0, 2.0)]) == 0
+    assert G.append_only(p, [_row("2026-11-10", 1.0, 1.0), _row("2026-11-11", 2.0, 2.0)], tmp_path / "dq.jsonl") == 0
     assert p.read_bytes() == before
 
 
@@ -38,7 +38,7 @@ def test_missing_base_date_appends_nothing(tmp_path):
     p = tmp_path / "gs_index.csv"
     G.write_full(p, [_row("2026-11-11", 97.4686, 100.7903)])
     before = p.read_bytes()
-    assert G.append_only(p, [_row("2026-11-12", 99.0, 100.0)]) == 0
+    assert G.append_only(p, [_row("2026-11-12", 99.0, 100.0)], tmp_path / "dq.jsonl") == 0
     assert p.read_bytes() == before
 
 
@@ -53,3 +53,15 @@ def test_build_default_is_append_only():
 def test_nightly_commit_keeps_origin_gs_index_unless_pure_append():
     y = (ROOT / ".github/workflows/nightly.yml").read_text()
     assert '"$f" = logs/gs_index.csv ] && ! python3 -c' in y
+
+
+def test_chain_point_logged_once_in_dq(tmp_path):
+    import json
+    p, dq = tmp_path / "gs_index.csv", tmp_path / "dq.jsonl"
+    G.write_full(p, [_row("2026-11-11", 97.4686, 100.7903)])
+    G.append_only(p, [_row("2026-11-11", 98.7188, 101.4824), _row("2026-11-12", 98.4821, 101.1723)], dq)
+    G.append_only(p, [_row("2026-11-12", 98.4821, 101.1723), _row("2026-11-13", 98.0964, 101.1120)], dq)
+    fl = [json.loads(l) for l in dq.read_text().splitlines()]
+    assert len(fl) == 1
+    f = fl[0]
+    assert (f["type"], f["date"], f["level"], f["benchmark"], f["rebuilt_level"]) == ("gs_chain", "2026-11-11", "97.4686", "100.7903", "98.7188")
