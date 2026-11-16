@@ -271,17 +271,89 @@ def _exch(tickers, cache_path: Path) -> dict:
     return out
 
 
-def _yf(tickers, start):
-    import yfinance as yf
-    d = yf.download(sorted(tickers), start=start, auto_adjust=True, progress=False)["Close"]
+def _series(d) -> dict:
     out = {}
-    for c in d.columns:
-        s = d[c].dropna()
-        out[c] = {str(k.date()): float(v) for k, v in s.items()}
+    if d is None or getattr(d, "empty", True):
+        return out
+    try:
+        c = d["Close"]
+    except KeyError:
+        return out
+    for col in c.columns:
+        s = c[col].dropna()
+        if len(s):
+            out[col] = {str(k.date()): float(v) for k, v in s.items()}
     return out
 
 
-def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR, rewrite: bool = False) -> list[dict]:
+def _yf(tickers, start, retries: int = 3, pause: float = 5.0, download=None):
+    """Yahoo-sluttkurser (auto_adjust). 16.11 (hentehullet): yf.download i én batch gir stille en tom kolonne for tickere som
+    feiler (tidsavbrudd/ratebegrensning) – AKRBP.OL, OKTA og CRWD manglet i ombyggingen 16.11 uten feilmelding. Tickere uten
+    serie etter batchen hentes derfor på nytt én og én (opptil `retries` forsøk med pause). Det som fortsatt mangler, mangler
+    i resultatet; build() avgjør om det stopper ombyggingen (missing_check)."""
+    import time
+    if download is None:
+        import yfinance as yf
+        download = yf.download
+    want = sorted(set(tickers))
+    out = _series(download(want, start=start, auto_adjust=True, progress=False, threads=False))
+    for i in range(retries):
+        miss = [t for t in want if not out.get(t)]
+        if not miss:
+            break
+        if i:
+            time.sleep(pause * i)
+        for t in miss:
+            try:
+                got = _series(download([t], start=start, auto_adjust=True, progress=False, threads=False))
+            except Exception as ex:   # noqa: BLE001 – en feilet enkeltticker skal bare telles som manglende
+                log.warning("gs_index: Yahoo %s forsøk %d: %s", t, i + 1, ex)
+                continue
+            if got.get(t):
+                out[t] = got[t]
+    return out
+
+
+DQ = LOGS / "dq_flags.jsonl"
+
+
+class RebuildStopped(RuntimeError):
+    """AnalBot 16.11: en ticker som mangler data i ombyggingen stopper hele ombyggingen (ingen omregning uten den)."""
+
+
+def missing_check(tks, yfp: dict, rows: list[dict], idx: dict) -> tuple[list[str], list[str]]:
+    """(stopper, uten_kilde). stopper = tickere som har hatt kurs (en loggført kurs i categories.csv) eller indekser, men
+    mangler Yahoo-serie nå = hull i hentingen. uten_kilde = tickere som aldri har hatt en kurs fra noen kilde (ingen
+    loggført kurs og ingen Yahoo-serie, f.eks. SFLN.OL, SWG.OL): de har alltid stått som «uten kurs» (n_no_price) og
+    stopper ikke ombyggingen."""
+    had = {r["ticker"] for r in rows if _f(r.get("price"))}
+    stop = sorted([t for t in tks if not yfp.get(t) and t in had] + [k for k in IDX.values() if not idx.get(k)])
+    nosrc = sorted(t for t in tks if not yfp.get(t) and t not in had)
+    return stop, nosrc
+
+
+def dq_log(flags: list[dict], path: Path | None = None) -> None:
+    """Append-only, én gang per (dato, ticker, type)."""
+    path = Path(path or DQ)
+    have = set()
+    if path.exists():
+        for l in path.read_text().splitlines():
+            try:
+                j = json.loads(l)
+                have.add((j.get("date"), j.get("ticker"), j.get("type")))
+            except Exception:
+                pass
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a") as f:
+        for x in flags:
+            k = (x["date"], x["ticker"], x["type"])
+            if k not in have:
+                have.add(k)
+                f.write(json.dumps(x, ensure_ascii=False) + "\n")
+
+
+def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR, rewrite: bool = False,
+          dq_path: Path | None = None) -> list[dict]:
     """Beregner hele serien på nytt (deterministisk fra loggen). Standard (nattkjøringen): bare nye rader legges til
     logs/gs_index.csv (append_only). rewrite=True skriver hele fila (lokal ombygging, krever AnalBots godkjente diff)."""
     from datetime import date
@@ -294,6 +366,14 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
     from . import closedbars as CB
     idx = {k: CB.series(v, k) for k, v in _yf(list(IDX.values()), "2026-09-20").items()}
     yfp = {k: CB.series(v, k) for k, v in _yf(tks, "2026-09-20").items()}
+    stop, nosrc = missing_check(tks, yfp, rows, idx)
+    if stop:
+        dq_log([{"date": today_iso(), "ticker": t, "type": "gs_rebuild_missing",
+                 "note": "mangler Yahoo-serie i GS-ombyggingen; ombyggingen stoppet, gs_index.csv uendret"} for t in stop],
+               dq_path)
+        raise RebuildStopped(f"mangler data for {', '.join(stop)} – ombyggingen stoppet (ingen omregning uten dem)")
+    if nosrc:
+        log.info("gs_index: %d tickere uten kurs fra noen kilde (n_no_price som før): %s", len(nosrc), nosrc)
     rows = closed_logged(rows)
     exch = _exch(tks, DATA / "cache" / "gs_exchange.json")
     today = date.today().isoformat()
@@ -367,10 +447,18 @@ def append_only(out_path: Path, fmt: list[dict]) -> int:
     return len(add)
 
 
+def today_iso() -> str:
+    from datetime import date
+    return date.today().isoformat()
+
+
 def run(status: dict) -> None:
     try:
         res = build()
         status["GS-indeks (intern)"] = f"ok ({len(res)} handelsdager; vises fra {MIN_DAYS_PUBLIC})"
+    except RebuildStopped as ex:
+        log.error("gs_index: %s", ex)
+        status["GS-indeks (intern)"] = f"STOPPET: {ex}"
     except Exception as ex:
         log.exception("gs_index failed")
         status["GS-indeks (intern)"] = f"FAILED: {ex}"
