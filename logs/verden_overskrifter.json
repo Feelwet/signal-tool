@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-16T12:39:07+0100",
+ "hentet": "2026-11-16T12:48:09+0100",
  "dato": "2026-11-16",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (1178) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
