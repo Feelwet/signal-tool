@@ -122,20 +122,17 @@ def logged_prices(rows: list[dict]) -> dict[str, dict[str, tuple]]:
 
 
 def closed_logged(rows: list[dict], times: dict | None = None) -> list[dict]:
-    """Radene med kurs bare når kursen var en sluttkurs da den ble logget (close_valid: logget etter stengetid + 30).
-    Korrigerte kurser (categories_corrections) beholdes. Ukjent loggtid: kursen tas bort (Yahoo brukes)."""
+    """Radene med kurs bare når kursen var en sluttkurs etter close_valid.is_close_own (AnalBot 16.11):
+    kursens eget tidspunkt (første logging av denne prisen for price_date) etter stengetid + 30 samme dag.
+    Et senere relogg av en intradagkurs teller ikke. Korrigerte kurser beholdes. Ukjent tid: kursen tas bort
+    (Yahoo brukes). Papirbøker og Siden bruker ikke denne funksjonen."""
     from . import close_valid as CV
     t = CV.load() if times is None else times
-    at = {}
-    for tk, lst in t.items():
-        for pd_, v, when, dd in lst:
-            at.setdefault((dd, tk, pd_, round(v, 6)), []).append(when)
     out = []
     for r in rows:
         v, d = _f(r.get("price")), (r.get("price_date") or "")[:10]
         if v and d and not r.get("_corrected"):
-            ws = at.get((r["date"], r["ticker"], d, round(v, 6))) or []
-            if not any(CV.is_close(r["ticker"], d, w) for w in ws):
+            if not CV.is_close_own(r["ticker"], d, v, t):
                 r = {**r, "price": "", "_intraday": True}
         out.append(r)
     return out
@@ -404,6 +401,58 @@ def record_price_type(dq_path: Path | None = None) -> None:
              "note": "justert sluttkurs (Yahoo Adj Close / auto_adjust) for nivå og avkastning"}], dq_path)
 
 
+def _pair_prices(tk, a, b, logp, yfp):
+    """(start, slutt, kilde) for dagsparet, samme regel som compute.ret."""
+    lp = logp.get(tk, {})
+    if a in lp and b in lp and lp[a][1] == lp[b][1]:
+        return lp[a][0], lp[b][0], "logg"
+    yp = yfp.get(tk, {})
+    if a in yp and b in yp:
+        return yp[a], yp[b], "yahoo"
+    return None, None, None
+
+
+def check_chain_prices(lists: dict, days: list[str], logp: dict, yfp: dict, exch: dict, idx: dict,
+                       exclude: frozenset = MAIN_EXCLUDE, dq_path: Path | None = None, tol: float = 1e-4) -> None:
+    """AnalBot 16.11: startkurs dag t skal være sluttkurs dag t-1 for hver ticker i GS-kjeden.
+    Avvik stopper ombyggingen og logges i dq_flags (gs_chain_break)."""
+    ldates = sorted(lists)
+    days = [d for d in days if ldates and d > ldates[0]]
+    used: dict = {}
+    breaks: list = []
+
+    def remember(tk, d, price, src, pair):
+        k = (tk, d)
+        if k in used and abs(used[k][0] - price) > max(tol, 1e-4 * abs(used[k][0] or 1)):
+            breaks.append({"date": d, "ticker": tk, "type": "gs_chain_break",
+                           "prev_price": used[k][0], "price": price, "prev_src": used[k][1], "src": src,
+                           "note": (f"startkurs {d} ({price}, {src}) ≠ sluttkurs i forrige par "
+                                    f"({used[k][0]}, {used[k][1]})")})
+        used[k] = (price, src, pair)
+
+    w, prev = {}, None
+    for t in days:
+        if prev is not None and w:
+            for tk in w:
+                e = exch.get(tk)
+                ser = idx.get(IDX[e]) if e else None
+                if ser and t not in ser:
+                    continue
+                a = last_open(tk, prev, exch, idx)
+                pa, pb, src = _pair_prices(tk, a, t, logp, yfp)
+                if pa is None:
+                    continue
+                remember(tk, a, pa, src, f"{a}->{t}")
+                remember(tk, t, pb, src, f"{a}->{t}")
+        prev_ld = [d for d in ldates if d < t]
+        w = ({k: v for k, v in lists[prev_ld[-1]].items() if k not in exclude} if prev_ld else {})
+        prev = t
+    if breaks:
+        dq_log(breaks, dq_path)
+        tickers = ", ".join(sorted({b["ticker"] for b in breaks}))
+        raise RebuildStopped(f"brudd i GS-kjeden for {tickers} – ombyggingen stoppet")
+
+
 DQ = LOGS / "dq_flags.jsonl"
 
 
@@ -480,6 +529,7 @@ def build(out_path: Path = OUT, cat_path: Path = CAT_LOG, corr_path: Path = CORR
             used_types.add(price_kind(v, (close_px.get(tk) or {}).get(d), (yfp.get(tk) or {}).get(d)) or PRICE_TYPE)
     check_price_types(PRICE_TYPE, used_types, dq_path)
     record_price_type(dq_path)
+    check_chain_prices(lists, days, logp, yfp, exch, idx, MAIN_EXCLUDE, dq_path)
     res = compute(lists, days, logp, yfp, exch, idx, MAIN_EXCLUDE, known, volumes=vol_closed)
     inv: list = []
     wt = {r["date"]: r for r in compute(lists, days, logp, yfp, exch, idx, frozenset(), known,

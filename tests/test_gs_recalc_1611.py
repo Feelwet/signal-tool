@@ -63,8 +63,11 @@ def test_history_0510_to_1111_is_rebuild_and_prefix_unchanged():
     assert [r["date"] for r in rs[:5]] == ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02"]
     assert by["2026-10-02"]["gs_index"] == "99.9754" and by["2026-10-02"]["benchmark"] == "99.1570"
     assert by["2026-10-05"]["gs_index"] == "99.8638" and by["2026-10-05"]["gs_with_tech"] == "99.5969"
-    assert by["2026-11-10"]["gs_index"] == "97.0249" and by["2026-11-10"]["benchmark"] == "100.3439"
-    assert by["2026-11-11"]["gs_index"] == "98.7188" and by["2026-11-11"]["benchmark"] == "101.4824"
+    assert by["2026-10-12"]["gs_index"] == "101.8102"  # uendret prefiks før 13.10
+    assert by["2026-10-13"]["gs_index"] == "102.1014" and by["2026-10-13"]["gs_with_tech"] == "101.7163"
+    assert by["2026-11-10"]["gs_index"] == "97.2653" and by["2026-11-10"]["benchmark"] == "100.3439"
+    assert by["2026-11-11"]["gs_index"] == "98.9634" and by["2026-11-11"]["benchmark"] == "101.4824"
+    assert by["2026-11-11"]["gs_with_tech"] == "98.9314"
     assert by["2026-11-11"]["n_no_price"] == "0"
     assert rs[-1]["date"] == "2026-11-11"  # nye dager kjedes av nattkjøringen, ikke skrevet inn her
 
@@ -72,12 +75,21 @@ def test_history_0510_to_1111_is_rebuild_and_prefix_unchanged():
 def test_gs_history_recalc_logged_once_with_1110_values():
     flags = [json.loads(l) for l in (ROOT / "logs/dq_flags.jsonl").read_text().splitlines()
              if l and json.loads(l).get("type") == "gs_history_recalc"]
-    assert len(flags) == 1
-    f = flags[0]
-    assert f["date"] == "2026-11-10" and f["ticker"] == "GS"
-    assert f["note"] == "omregnet til sluttkurs 16.11"
+    by = {f["date"]: f for f in flags}
+    assert set(by) == {"2026-11-10", "2026-11-11"}
+    f = by["2026-11-10"]
+    assert f["ticker"] == "GS" and f["note"] == "omregnet til sluttkurs 16.11"
     assert (f["level"], f["rebuilt_level"]) == ("97.0456", "97.0249")
     assert (f["benchmark"], f["rebuilt_benchmark"]) == ("100.3439", "100.3439")
+
+
+def test_gs_history_recalc_adj_close_1111():
+    flags = [json.loads(l) for l in (ROOT / "logs/dq_flags.jsonl").read_text().splitlines()
+             if l and json.loads(l).get("type") == "gs_history_recalc"]
+    f = [x for x in flags if x["date"] == "2026-11-11"][0]
+    assert f["ticker"] == "GS" and f["note"] == "omregnet til adj_close 16.11"
+    assert (f["level"], f["rebuilt_level"]) == ("98.7188", "98.9634")
+    assert (f["benchmark"], f["rebuilt_benchmark"]) == ("101.4824", "101.4824")
 
 
 def test_chain_from_new_1111_level(tmp_path):

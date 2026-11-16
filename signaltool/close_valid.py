@@ -30,11 +30,38 @@ def _dt(s: str) -> datetime:
     return d if d.tzinfo else d.replace(tzinfo=OSLO)
 
 
+def first_seen(times: dict, ticker: str, price_date: str, price) -> str | None:
+    """Kursens eget tidspunkt: første logged_at for denne (ticker, price_date, pris). Ikke et senere relogg av samme tall."""
+    if not price_date or price is None:
+        return None
+    try:
+        want = round(float(price), 6)
+    except (TypeError, ValueError):
+        return None
+    pd_ = str(price_date)[:10]
+    for d, v, at, _dd in times.get(ticker) or []:   # load() sorterer på logged_at
+        if d == pd_ and round(v, 6) == want:
+            return at
+    return None
+
+
 def is_close(ticker: str, price_date: str, logged_at) -> bool:
+    """True når `logged_at` er etter stengetid + 30 min for price_date (børsens tidssone).
+    Papirbøker og intradag-rapporten bruker denne (loggetidspunktet), uendret.
+
+    AnalBot 16.11 (bare GS-indeksen): bruk is_close_own, som sjekker kursens *eget* tidspunkt
+    (first_seen), ikke et senere relogg."""
     from .laering_fwd import day_closed
     if not price_date or not logged_at:
         return False
     return day_closed(str(price_date)[:10], ticker, _dt(logged_at) if isinstance(logged_at, str) else logged_at)
+
+
+def is_close_own(ticker: str, price_date: str, price, times: dict) -> bool:
+    """AnalBot 16.11, bare GS-indeksen: kursens eget tidspunkt (første gang denne prisen ble logget for
+    price_date) må ligge etter stengetid + 30 min samme dag som price_date. Et relogg neste morgen av en
+    intradagkurs teller ikke som sluttkurs."""
+    return is_close(ticker, price_date, first_seen(times, ticker, price_date, price))
 
 
 def load(path: Path | None = None) -> dict:
