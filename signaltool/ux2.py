@@ -147,6 +147,7 @@ CSS = (
 # Søk i lista: filtrerer synlige rader på navn/ticker sammen med filterknappene (skjuler bare, endrer ikke sortering).
 SEARCH_HTML = '<input type="search" class="tf-q" id="tf-q" placeholder="Søk" aria-label="Søk i lista" autocomplete="off">'
 SEARCH_JS = ("<script>(()=>{const q=document.getElementById('tf-q');if(!q)return;const run=()=>{const v=q.value.trim().toLowerCase();"
-             "document.querySelectorAll('#tf-table tr.rowlink').forEach(r=>{const t=(r.dataset.t+' '+(r.querySelector('.nm')||{}).textContent).toLowerCase();"
-             "if(v&&!t.includes(v)){r.dataset.qh='1';r.style.display='none'}else if(r.dataset.qh){delete r.dataset.qh;r.style.display=''}})};"
+             "document.querySelectorAll('#tf-table tr.rowlink').forEach(r=>{const tk=(r.dataset.t||'').toLowerCase(),nm=((r.querySelector('.nm')||{}).textContent||'').toLowerCase();"
+             "const hit=!v||tk===v||tk.startsWith(v)||nm.includes(v);"
+             "if(v&&!hit){r.dataset.qh='1';r.style.display='none'}else if(r.dataset.qh){delete r.dataset.qh;r.style.display=''}})};"
              "q.addEventListener('input',run)})()</script>")

@@ -47,7 +47,9 @@ def _dt(d: str) -> str:
 
 
 def _last_universe(book: str, logs: Path) -> tuple[str | None, int | None]:
-    rs = [r for r in P._read(logs / B.CANDS.name) if r.get("book_id") == book]
+    """Univers fra siste fullførte kjøring (NAV-rad). Kandidatrad uten kjøring (16.11) teller ikke."""
+    navs = {r["date"] for r in P._read(B.paths(book, logs)[1])}
+    rs = [r for r in P._read(logs / B.CANDS.name) if r.get("book_id") == book and r.get("date") in navs]
     return (rs[-1]["date"], int(rs[-1]["universe_n"])) if rs and str(rs[-1].get("universe_n") or "").isdigit() else (None, None)
 
 

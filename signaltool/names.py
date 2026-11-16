@@ -2,9 +2,7 @@
 Aldri håndskrevne navn: mangler navnet, vises bare tickeren.  Oppdater: python3 -m signaltool.names TICKER ..."""
 from __future__ import annotations
 
-import json
-import sys
-import time
+import json, re, sys, time
 from html import escape as E
 from pathlib import Path
 
@@ -24,6 +22,13 @@ def _load() -> dict:
 def name(ticker: str, fallback: str | None = None) -> str | None:
     r = _load().get(ticker) or {}
     return r.get("name") or fallback or None
+
+
+def has_ticker(text: str | None, ticker: str) -> bool:
+    """True iff `ticker` stands as its own token in `text`. A.OL does not match ATEA.OL, SCANA.OL or SNTIA.OL."""
+    if not ticker or not text:
+        return False
+    return re.search(r"(?<![\w.])" + re.escape(ticker) + r"(?![\w.])", text, re.I) is not None
 
 
 def missing(tickers, fallbacks: dict | None = None) -> list:

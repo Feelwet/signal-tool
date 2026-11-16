@@ -105,7 +105,8 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
         ran = any(r["date"] == day for r in P._read(npth))
         s = P.step(snap, usd, bench, tp, npth, rules=BOOKS[book], picks=picks, why_buy=why,
                    cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs, fx=fx, closed=closed)   # samme lukkede barer som bok 1
-        if not ran:   # 02.11: kandidatraden skrives først etter at steget har gått (morgenkjøringen 02.11 krasjet etter å ha logget)
+        # 16.11: kandidatraden bare når steget faktisk skrev NAV (ellers vises et univers uten kjøring).
+        if not ran and any(r["date"] == day for r in P._read(npth)):
             _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
                                            "tickers": "|".join(e["ticker"] for e in picks)})
         out[book] = s
@@ -163,6 +164,18 @@ STATIC_DEVIATIONS = [
      "note": ("Kandidatraden 2026-11-02 i portfolio_candidates.csv (BONHR.OL|GILD|LHX|NOFIN.OL|WEC|KOG.OL|DNB.OL|DOFG.OL|NXPI|LNG) "
               "ble skrevet av morgenkjøringen 41361721155 som krasjet før ordrene ble lagt. Raden står urettet. Faktiske ordre "
               "2026-11-02 (2026-11-02-0042..0046): BRG.OL, GD, KOG.OL, TECH.OL, NCLH.")},
+    {"date": "2026-11-16", "book_id": "hoy_risiko_v1", "kind": "kandidatlogg_uten_kjoring", "order_id": "cands-2026-11-16",
+     "ticker": "CLX|BONHR.OL|TTWO|HUM|BOUV.OL|DFENS.OL|IDEX.OL|NKR.OL|SCANA.OL|SNTIA.OL", "side": "buy",
+     "order_run": "2026-11-16", "fill_run": "", "missed_runs": "", "n_missed": "",
+     "note": ("Kandidatradene 2026-11-16 i portfolio_candidates.csv (hoy_risiko_v1 og kontroll_tilfeldig_v1, universe_n=45) "
+              "ble skrevet av nattkjøringen 43878284648, men NAV- og handelsfilene for bok 2/3 ble ikke tatt med i fremoverloggen "
+              "(origin beholdt b3f3338-omregningen). Ingen kjøring 16.11. Raden står urettet. Siste fullførte univers er 29 (11.11). "
+              "Blant 16.11-valgene står DFENS.OL, ODL.OL og SCANA.OL med 20d-avkastning ≤ 0 i samme natts learn_raw.")},
+    {"date": "2026-11-16", "book_id": "kontroll_tilfeldig_v1", "kind": "kandidatlogg_uten_kjoring", "order_id": "cands-2026-11-16",
+     "ticker": "REGN|DFENS.OL|TTWO|ODL.OL|NCLH|CEG|HII|FOXA|NKR.OL|SWK", "side": "buy",
+     "order_run": "2026-11-16", "fill_run": "", "missed_runs": "", "n_missed": "",
+     "note": ("Samme avvik som hoy_risiko_v1 cands-2026-11-16: kandidatrad uten NAV/handler. universe_n=45 (begge bøker samme tall). "
+              "Siste fullførte univers er 29 (11.11). Kontrollfills fra før 16.11 er ikke rullert tilbake.")},
 ]
 
 

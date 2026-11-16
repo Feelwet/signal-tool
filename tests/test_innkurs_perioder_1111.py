@@ -28,7 +28,8 @@ def test_dot_equals_entry_price_date_for_all_tickers_on_list():
         s = SN.from_period(rows, t, inn, today)
         row = next(r for r in rows if r["ticker"] == t and r["date"] == inn)
         # «start» for innkursen = Inn-kjøringens price_date (siste sluttkurs før/på Inn-datoen): aldri eldre. Kursen fra Yahoo.
-        assert s["since"] == inn and s["price_date"] == row["price_date"][:10] and s["price"] is None and s["src"] == "yahoo"
+        pd = (row.get("price_date") or "")[:10] or None   # tom price_date i loggen (ALPE.OL 16.11, ingen sluttkurs) = None
+        assert s["since"] == inn and s["price_date"] == pd and s["price"] is None and s["src"] == "yahoo"
         SN.yahoo_entry(s, t, ser, dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc))
         assert s["price"] == 100.0 or s["entry_state"] == SN.MISSING
         if s["price"]:

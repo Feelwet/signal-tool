@@ -86,6 +86,7 @@ def test_visible_book_card_counters_unchanged():
     k = TB.book_data("kontroll_tilfeldig_v1")
     assert (len(h["dates"]), h["closed"], h["open"], h["universe_n"]) == (14, 2, 20, 29)
     assert (len(k["dates"]), k["closed"], k["open"], k["universe_n"]) == (12, 13, 19, 29)
+    assert h["universe_date"] == "2026-11-11" and k["universe_date"] == "2026-11-11"  # siste fullførte kjøring, ikke 16.11-kandidatrad uten NAV
     html = TB.book_card(h, h["dates"]) + TB.book_card(k, k["dates"])
     assert "2 av 30" in html and "13 av 30" in html
     assert "lukkede · 20 åpne" in html and "lukkede · 19 åpne" in html

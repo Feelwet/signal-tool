@@ -32,7 +32,7 @@ def _setup(tmp_path):
 def _cands(tmp_path):
     P._append(tmp_path / "portfolio_candidates.csv", B.C_COLS, [
         {"date": "2026-10-31", "book_id": "hoy_risiko_v1", "seed": "", "universe_n": 35, "n": 10, "tickers": "A"},
-        {"date": "2026-10-31", "book_id": "kontroll_tilfeldig_v1", "seed": 1, "universe_n": 35, "n": 10, "tickers": "B"}])
+        {"date": "2026-10-30", "book_id": "kontroll_tilfeldig_v1", "seed": 1, "universe_n": 35, "n": 10, "tickers": "B"}])
 
 
 def test_section_no_charts_no_nav_numbers_0211(tmp_path):

@@ -1,6 +1,7 @@
 from html import escape
 from html.parser import HTMLParser
 from signaltool import site, trender, overview as OV, site_intro as I
+from signaltool.names import has_ticker
 
 class Visible(HTMLParser):
     def __init__(self):
@@ -26,7 +27,7 @@ def test_overview_has_one_flag_summary_and_preserved_count_date_and_link():
     assert '<a href="tickere.html?filter=flagg">Røde flagg Oslo<span class="gsub">' in h   # UxBot 09.11: undertekst også på mobil
     assert '<div class="big">1</div>' in h and '<div class="sub">av 2 Oslo-aksjer med 2+ flagg</div>' in h
     assert 'data per 2026-11-06' in h and 'href="tickere.html?filter=flagg"' in h
-    assert 'A.OL' not in h and 'B.OL' not in h
+    assert not has_ticker(h, 'A.OL') and not has_ticker(h, 'B.OL')
     assert 'Neste hendelse' not in h
 
 def test_overview_order_compact_entries_and_untested_score():
@@ -92,3 +93,13 @@ def test_deploy_check_accepts_new_overview_and_requires_themescore_on_themes(tmp
     (tmp_path/'temaer.html').write_text('Temaer Temascore')
     (tmp_path/'index.html').write_text(actual.replace('Marked og risiko',''))
     assert 'index.html: mangler «Marked og risiko»' in C.check(tmp_path)
+
+
+def test_has_ticker_is_exact():
+    assert has_ticker('chg-t">ATEA.OL</span>', "ATEA.OL")
+    assert not has_ticker('chg-t">ATEA.OL</span>', "A.OL")
+    assert not has_ticker("SCANA.OL", "A.OL") and not has_ticker("SNTIA.OL", "A.OL")
+    assert has_ticker("flagg A.OL i teksten", "A.OL")
+    from signaltool import ux2 as U
+    assert "t.includes(v)" not in U.SEARCH_JS
+    assert "tk===v||tk.startsWith(v)" in U.SEARCH_JS
