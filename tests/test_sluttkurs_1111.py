@@ -156,10 +156,14 @@ def test_intraday_fills_log():
     for r in rs:
         if r["close"]:
             assert abs(float(r["diff_pct"]) - (float(r["fill_price"]) / float(r["close"]) - 1)) < 1e-5
-    # ikke rettet bakover: handelsloggen inneholder fortsatt intradagkursen
+    # revisjonssporet beholder originalkursen; handelsloggen er omregnet til sluttkurs (AnalBot 16.11)
+    # unntatt TECH.OL 30.10 og 02.11 («kurs under kontroll»)
     tr = {(x["order_id"], x["event"]): x for x in csv.DictReader(Path("logs/portfolio_kontroll_tilfeldig_v1_trades.csv").open())}
     k = [r for r in rs if r["book"] == "kontroll_tilfeldig_v1"]
-    assert k and all(tr[(r["order_id"], "fill")]["price"] == r["fill_price"] for r in k)
+    tech = {"2026-10-29-0001", "2026-10-30-0018"}
+    assert k and all(tr[(r["order_id"], "fill")]["price"] == r["fill_price"] for r in k if r["order_id"] in tech)
+    redone = [r for r in k if r["order_id"] not in tech and r.get("close") and abs(float(r["fill_price"]) - float(r["close"])) >= 1e-9]
+    assert redone and all(abs(float(tr[(r["order_id"], "fill")]["price"]) - float(r["close"])) < 1e-6 for r in redone)
     assert "intraday_fills" not in Path("signaltool/site.py").read_text()                     # vises ikke på siden
 
 

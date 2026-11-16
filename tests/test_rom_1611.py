@@ -36,9 +36,9 @@ def test_scana_sell_filled_on_close_1211_once(tmp_path):
     assert (r["order_id"], r["side"], r["price_date"], r["price"], r["run_date"]) == ("2026-11-11-0099", "sell", "2026-11-12", 1.43, "2026-11-16")
     s = P.state(P._read(logs / FILES[0]))
     assert "SCANA.OL" not in s["open"] and "2026-11-11-0099" not in s["pending"]
-    assert abs(r["nok_value"] - 34800.981742 * 1.43) < 0.01 and abs(r["cost_nok"] - r["nok_value"] * 0.002) < 0.01
+    assert abs(r["nok_value"] - 33735.646259 * 1.43) < 0.01 and abs(r["cost_nok"] - r["nok_value"] * 0.002) < 0.01
     dev = list(csv.DictReader(open(logs / FILES[1])))
-    sen = [d for d in dev if d["order_id"] == "2026-11-11-0099"]
+    sen = [d for d in dev if d["order_id"] == "2026-11-11-0099" and d["kind"] == "sen_fylling"]
     assert len(sen) == 1 and sen[0]["note"].startswith("sen fylling, nattkjøring feilet")
     hull = [d for d in dev if d["kind"] == "ingen_kjoring"]
     assert {d["book_id"] for d in hull} == {"rules_v1", "hoy_risiko_v1", "kontroll_tilfeldig_v1"}
