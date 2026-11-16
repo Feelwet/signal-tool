@@ -509,5 +509,305 @@
       ],
       "role": "presisjonsmaskinerte komponenter til NSM-launcher"
     }
-  ]
+  ],
+  "components": {
+    "disclaimer": "Viser produsenter av komponenten, ikke bekreftede leverandører til KOG",
+    "items": [
+      {
+        "id": "steel",
+        "name": "Steel",
+        "gics": "Basic Materials",
+        "status": "ok",
+        "producers": [
+          {
+            "id": "NUE",
+            "name": "Nucor Corporation",
+            "ticker": "NUE",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://s202.q4cdn.com/531038915/files/doc_financials/2026/ar/2025-Nucor-Annual-Report.pdf",
+            "dokumentdato": "2026-03-20",
+            "source_label": "Nucor AR 2025",
+            "sitat": "s. 10: «As North America’s largest and most capable steel and steel products company, Nucor is well positioned to support these efforts.»",
+            "customers": []
+          },
+          {
+            "id": "MT",
+            "name": "ArcelorMittal S.A.",
+            "ticker": "MT",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://cdn.arcelormittal.com/media/g5obzl05/annual-report-2025.pdf",
+            "dokumentdato": "2026-03-06",
+            "source_label": "ArcelorMittal AR 2025",
+            "sitat": "s. 3: «ArcelorMittal is one of the world’s leading integrated steel and mining companies.»",
+            "customers": []
+          },
+          {
+            "id": "JSWSTEEL.NS",
+            "name": "JSW Steel Limited",
+            "ticker": "JSWSTEEL.NS",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://www.jswsteel.in/jsw-steel-annual-report-2025-26/pdf/JSWSL-Integrated-Annual-Report-FY-2025-26.pdf",
+            "dokumentdato": "2026-07-02",
+            "source_label": "JSW Steel IAR 2025-26",
+            "sitat": "s. 01: «WE ARE INDIA’S LARGEST STEELMAKER». Også s. 01: «36.4 MTPA Domestic installed … crude steel capacity» og «Consolidated crude steel production» (s. 5 i innholdet / produksjonstall for FY 2025-26).",
+            "customers": []
+          },
+          {
+            "id": "STLD",
+            "name": "Steel Dynamics, Inc.",
+            "ticker": "STLD",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://www.sec.gov/Archives/edgar/data/1022671/000110465926035859/tm269804d1_ars.pdf",
+            "dokumentdato": "2026-03-25",
+            "source_label": "Steel Dynamics ARS 2025",
+            "sitat": "s. 3 (Form 10-K i 2025 Annual Report): «Steel Dynamics, Inc. is a leading industrial metals solutions company, with facilities located throughout the United States and Mexico. SDI is one of the largest domestic steel producers and metal recyclers in North America, combined with a meaningful downstream steel fabrication platform.» Samme formulering i Form 10-K: https://www.sec.gov/Archives/edgar/data/1022671/000110465926021395/stld-20251231x10k.htm (innlevert 27.2.2026).",
+            "customers": []
+          },
+          {
+            "id": "TATASTEEL.NS",
+            "name": "Tata Steel Limited",
+            "ticker": "TATASTEEL.NS",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://www.tatasteel.com/media/25902/tatasteel-iar-2025-26.pdf",
+            "dokumentdato": "2026-06-03",
+            "source_label": "Tata Steel IAR 2025-26",
+            "sitat": "s. 10: «As One Tata Steel, a globally diversified integrated steel producer with a collective capacity of 36 MTPA spanning India, the Netherlands, the UK, and Thailand». Offisiell kopi også: https://www.tatasteel.com/investors/integrated-report-2025-26/pdf/tatasteel-iar-2025-26.pdf",
+            "customers": []
+          },
+          {
+            "id": "5401.T",
+            "name": "Nippon Steel Corporation",
+            "ticker": "5401.T",
+            "role": "Produserer steel",
+            "kildetype": "årsrapport",
+            "url": "https://www.nipponsteel.com/en/ir/library/annual_report/pdf/nsc_en_ir_2026_all.pdf",
+            "dokumentdato": "2026-11-05",
+            "source_label": "Nippon Steel IR 2026",
+            "sitat": "s. 14 (Message from the President): «Nippon Steel aims to return to the position of the world’s number one steelmaker». Også s. 18: «we aim to achieve global crude steel production of at least 100 million tons after FY2031».",
+            "customers": []
+          }
+        ]
+      },
+      {
+        "id": "copper",
+        "name": "Copper",
+        "gics": "Basic Materials",
+        "status": "ok",
+        "producers": [
+          {
+            "id": "SCCO",
+            "name": "Southern Copper Corporation",
+            "ticker": "SCCO",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+            "dokumentdato": "2026-02-28",
+            "source_label": "Southern Copper ARS 2025",
+            "sitat": "s. 3: «Southern Copper Corporation (“SCC”, “Southern Copper” or the “Company”) is one of the largest integrated copper producers in the world. Our major production includes copper, molybdenum, zinc and silver.» Også: «Our Peruvian copper operations involve mining, milling and flotation of copper ore to produce copper; the smelting of copper concentrates to produce blister and anode copper; and the refining of anode copper to produce copper cathodes.» Form 10-K (innlevert 27.2.2026): https://www.sec.gov/Archives/edgar/data/1001838/000110465926021492/scco-20251231x10k.htm",
+            "customers": [
+              {
+                "name": "Hartree Partners",
+                "ticker": null,
+                "role": "Kjøper copper cathodes",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «In 2025, SPCC Peru Branch signed a two-year contract copper cathode sales agreement with Hartree Partners, with shipments beginning in 2026. … The contract considers an annual volume of copper cathodes of 24,000 tonnes.»"
+              },
+              {
+                "name": "COFICAB Mexico",
+                "ticker": null,
+                "role": "Kjøper copper rod",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «In 2025, Minera Mexico signed a two-year contract copper rod sales agreement with COFICAB Mexico, with shipments beginning in 2026. … The contract considers an annual volume of 46,200 tonnes of copper rod.»"
+              },
+              {
+                "name": "Molymet Group",
+                "ticker": null,
+                "role": "Kjøper molybdenum concentrates",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «Under the terms of a sales contract with Molymet Group, SPCC Peru Branch is required to supply approximately 70% of the molybdenum concentrates production from 2026 through 2028.»"
+              },
+              {
+                "name": "Molymex, S.A. de C.V.",
+                "ticker": null,
+                "role": "Kjøper molybdenum concentrates",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «Under the terms of a sales contract with Molymex, S.A. de C.V., Operadora de Minas de Nacozari, S.A. de C.V. and Operadora de Minas e Instalaciones Mineras, S.A. de C. V. are required to supply at least 80% of their molybdenum concentrates production from 2024 through 2026.»"
+              },
+              {
+                "name": "Marcobre",
+                "ticker": null,
+                "role": "Kjøper sulfuric acid",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «In 2024, a two-year sulfuric acid sales agreement was signed between SPCC Peru Branch and Marcobre, with shipments scheduled to begin in 2025. … The contract considers annual volumes that could make Marcobre the Company’s most important customer for sulfuric acid.»"
+              },
+              {
+                "name": "Cobre del Mayo",
+                "ticker": null,
+                "role": "Kjøper sulfuric acid",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf",
+                "dokumentdato": "2026-02-28",
+                "source_label": "Southern Copper ARS 2025",
+                "sitat": "s. 187: «In 2022, a five-year sulfuric acid sales agreement was signed between Metalúrgica del Cobre and Cobre del Mayo. Shipments were scheduled to begin in 2022 and continue through December 2026.»"
+              }
+            ]
+          },
+          {
+            "id": "FCX",
+            "name": "Freeport-McMoRan Inc.",
+            "ticker": "FCX",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://s22.q4cdn.com/529358580/files/doc_financials/10-K/10_k2025.pdf",
+            "dokumentdato": "2026-02-13",
+            "source_label": "Freeport-McMoRan 10-K 2025",
+            "sitat": "s. 1: «We are one of the world’s largest publicly traded copper producers. Our portfolio of assets includes the Grasberg minerals district in Indonesia, one of the world’s largest copper and gold deposits; and significant operations in the U.S. and South America.» Også årsrapport: https://s22.q4cdn.com/529358580/files/doc_financials/annual/AR_2025.pdf (CreationDate 10.4.2026). SEC-fil: https://www.sec.gov/Archives/edgar/data/831259/000083125926000012/fcx-20251231.htm",
+            "customers": [
+              {
+                "name": "Mitsubishi Materials Corporation",
+                "ticker": null,
+                "role": "Kunde, produkt ikke oppgitt",
+                "kildetype": "kundekonsentrasjon oppgitt i 10-K",
+                "url": "https://s22.q4cdn.com/529358580/files/doc_financials/10-K/10_k2025.pdf",
+                "dokumentdato": "2026-02-13",
+                "source_label": "Freeport-McMoRan 10-K 2025",
+                "sitat": "s. 4: «For the three years ended December 31, 2025, the only customer that accounted for 10% or more of our consolidated revenues was Mitsubishi Materials Corporation, PTFI’s joint venture partner in PT Smelting (PTFI’s 66%-owned copper smelter and refinery), in 2024.»"
+              }
+            ]
+          },
+          {
+            "id": "ANTO.L",
+            "name": "Antofagasta plc",
+            "ticker": "ANTO.L",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://www.antofagasta.co.uk/media/4905/49913-antofagasta-ar25-web-ready.pdf",
+            "dokumentdato": "2026-03-20",
+            "source_label": "Antofagasta AR 2025",
+            "sitat": "s. 06 («At a glance»): «We operate four copper mines in Chile, with associated by-products of gold, molybdenum and silver, and we are listed on the London Stock Exchange.» Også «Copper production 2025 653,700 t» / «Antofagasta operates four copper mines: Los Pelambres … Centinela, Antucoya and Zaldívar». Alternativ offisiell URL: https://sr2025.antofagasta.co.uk/downloads/annual-report-2025.pdf",
+            "customers": []
+          },
+          {
+            "id": "TECK-B.TO",
+            "name": "Teck Resources Limited",
+            "ticker": "TECK-B.TO",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://www.teck.com/media/2025-Annual-Report.pdf",
+            "dokumentdato": "2026-03-03",
+            "source_label": "Teck AR 2025",
+            "sitat": "s. 3 («Our Business»): «We are a top 10 copper producer in the Americas, with ownership of or an interest in four operating mines in Canada, Chile and Peru, and an industry-leading copper growth portfolio.» Form 40-F 2025 (Teck filer ikke 10-K): https://www.teck.com/media/Teck-Form-40-F-2025.pdf (CreationDate 19.2.2026) og https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231.htm",
+            "customers": [
+              {
+                "name": "Royal Gold, Inc. (RGLD Gold AG)",
+                "ticker": null,
+                "role": "Kjøper gold (stream-avtale)",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.teck.com/media/2025-Annual-Report.pdf",
+                "dokumentdato": "2026-03-03",
+                "source_label": "Teck AR 2025",
+                "sitat": "s. 17: «Gold production of 35,900 ounces in 2025 was higher than the 20,800 ounces produced in 2024, with 100% of the gold produced for the account of RGLD Gold AG, a wholly owned subsidiary of Royal Gold, Inc. In effect, 100% of gold production from the mine has been sold to Royal Gold, Inc., who pays a cash price of 15% of the monthly average gold price at the time of each delivery, in addition to an upfront acquisition price previously paid.»"
+              }
+            ]
+          },
+          {
+            "id": "FM.TO",
+            "name": "First Quantum Minerals Ltd.",
+            "ticker": "FM.TO",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://www.first-quantum.com/wp-content/uploads/2026/03/First-Quantum-2025-AR-Final-Web.pdf",
+            "dokumentdato": "2026-03-17",
+            "source_label": "First Quantum AR 2025",
+            "sitat": "s. 1: «After 25 years of constructing and operating projects, First Quantum has grown to become a leading copper producer». Også i MD&A s. 9: «First Quantum Minerals Ltd. (“First Quantum” or “the Company”) is engaged in the production of copper, nickel and gold».",
+            "customers": [
+              {
+                "name": "Jiangxi Copper Company",
+                "ticker": null,
+                "role": "Kjøper copper",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.first-quantum.com/wp-content/uploads/2026/03/First-Quantum-2025-AR-Final-Web.pdf",
+                "dokumentdato": "2026-03-17",
+                "source_label": "First Quantum AR 2025",
+                "sitat": "s. 9 (MD&A): «In April, the Company supplemented the sale of copper to Jiangxi Copper Company for an additional $500 million prepayment»"
+              },
+              {
+                "name": "Royal Gold, Inc. (RGLD Gold AG)",
+                "ticker": null,
+                "role": "Kjøper gold (stream-avtale, referert til kobberproduksjon fra Kansanshi)",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.first-quantum.com/wp-content/uploads/2026/03/First-Quantum-2025-AR-Final-Web.pdf",
+                "dokumentdato": "2026-03-17",
+                "source_label": "First Quantum AR 2025",
+                "sitat": "s. 9 (MD&A): «in August entered into a $1.0 billion gold streaming agreement with RGLD Gold AG, a wholly-owned subsidiary of Royal Gold, Inc. (“Royal Gold”), on gold deliveries referenced to copper production from the Kansanshi mine.»"
+              },
+              {
+                "name": "Franco-Nevada Corporation",
+                "ticker": null,
+                "role": "Kjøper precious metals (stream-avtale)",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.first-quantum.com/wp-content/uploads/2026/03/First-Quantum-2025-AR-Final-Web.pdf",
+                "dokumentdato": "2026-03-17",
+                "source_label": "First Quantum AR 2025",
+                "sitat": "s. 73: «On October 5, 2015, the Company finalized an agreement with Franco-Nevada Corporation (“Franco-Nevada”) for the delivery of precious metals». (Sidenummer i årsrapportens finansdel; samme avtale også omtalt senere i dokumentet.)"
+              }
+            ]
+          },
+          {
+            "id": "LUN.TO",
+            "name": "Lundin Mining Corporation",
+            "ticker": "LUN.TO",
+            "role": "Produserer copper",
+            "kildetype": "årsrapport",
+            "url": "https://www.lundinmining.com/_resources/financials/2025-swedish-annual-report.pdf",
+            "dokumentdato": "2026-04-29",
+            "source_label": "Lundin Mining AR 2025",
+            "sitat": "s. 2: «We produce copper and other essential metals that support the global megatrends of urbanization, electrification, digitalization, and advanced technologies.» Også: «three operating mines in Chile and Brazil as well as the Vicuña development asset in Argentina.»",
+            "customers": [
+              {
+                "name": "Franco-Nevada Corporation",
+                "ticker": null,
+                "role": "Kjøper gold and silver (stream-avtale, Candelaria)",
+                "kildetype": "avtale oppgitt i rapport",
+                "url": "https://www.lundinmining.com/_resources/financials/2025-swedish-annual-report.pdf",
+                "dokumentdato": "2026-04-29",
+                "source_label": "Lundin Mining AR 2025",
+                "sitat": "s. 229: «The Company entered into a stream agreement with Franco-Nevada Corporation (“FN”), whereby the Company has agreed to sell 68% of all the gold and silver contained in production from Candelaria until 720,000 ounces (\"oz\") of gold and 12 million oz of silver have been delivered.»"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "aluminium",
+        "name": "Aluminium",
+        "status": "under_kontroll"
+      },
+      {
+        "id": "iron",
+        "name": "Jern",
+        "status": "under_kontroll"
+      }
+    ]
+  }
 }

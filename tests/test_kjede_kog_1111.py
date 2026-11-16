@@ -68,7 +68,12 @@ def test_n_counts_counterparties_not_rows_and_excludes_rtx_and_ikke_offentlig():
     ns, nc = K.counts(data(), PAGE)
     assert (ns, nc) == (5, 10)
     j = K.jump_html("KOG.OL", page_date=PAGE)
-    assert j == '<p class="kjede-jump"><a href="#kjede">Leverandører 5 · Kunder 10</a></p>'
+    assert '<a href="#kjede">Leverandører 5 · Kunder 10</a>' in j
+    assert '<a href="#komp">Komponenter 2</a>' in j
+    assert '<span class="kjede-jump-uk"> · 2 under kontroll</span>' in j
+    assert '<span class="kjede-jump-komp">' in j
+    # «· 2 under kontroll» er ikke en lenke
+    assert not re.search(r'<a[^>]*>[^<]*under kontroll', j)
     s = section()
     # RTX er midtkort, ikke leverandørrad, og teller ikke
     assert 'class="kjede-name">Raytheon' not in s
@@ -117,12 +122,29 @@ def test_one_row_per_counterparty_with_contract_expand():
 
 # ---------- UxBot visning ----------
 
-def test_no_component_tab_or_tab_bar():
+def test_component_tabs_default_confirmed_and_jump_wrap():
     s = section()
-    assert "Hvem lager dette" not in s
-    assert "kjede-tabs" not in s
-    assert 'role="tablist"' not in s
-    assert "fanelinje" not in s
+    j = K.jump_html("KOG.OL", page_date=PAGE)
+    assert "Hvem lager dette" in s
+    assert "Bekreftede koblinger" in s
+    assert 'role="tablist"' in s
+    assert 'class="kjede-tabs"' in s
+    assert 'aria-selected="true">Bekreftede koblinger' in s
+    assert 'aria-selected="false" tabindex="-1">Hvem lager dette' in s
+    assert 'id="kjede-panel-komp"' in s and "hidden" in s[s.find('id="kjede-panel-komp"'):s.find('id="kjede-panel-komp"')+80]
+    # faner: 44 px, 50/50 under 1280, 200 px hver fra 1280
+    assert "height:44px" in s
+    assert "flex:1 1 50%" in s
+    assert "flex:0 0 200px;width:200px" in s
+    # lenkerad: 1280 én linje 32 px; 390 maks 56 px, komp-gruppen nowrap
+    assert ".kjede-jump{height:32px" in s
+    assert "@media(min-width:1280px)" in s
+    assert "white-space:nowrap;overflow:hidden" in s  # 1280 hele raden
+    assert "kjede-jump-komp{white-space:nowrap}" in s
+    assert "max-height:56px" in s
+    assert "overflow-x:hidden" in s
+    assert "font-size:12px;line-height:16px" in s  # under kontroll
+    assert "Komponenter 2" in j and "2 under kontroll" in j
 
 
 def test_level_2_empty_hides_drill_path_and_back():
@@ -242,3 +264,56 @@ def test_hash_and_expand_handlers_exist_in_js():
     assert "kjede-more" in s
     assert "Escape" in s
     assert "replaceState" in s
+
+
+# ---------- Komponentfane (stål/kobber vises; aluminium/jern under kontroll) ----------
+
+def test_component_tab_steel_copper_only_no_private_or_nhy():
+    s = section()
+    # chips og statuslinjer
+    assert ">Steel<" in s or ">Steel</button>" in s
+    assert ">Copper<" in s or ">Copper</button>" in s
+    assert "Aluminium: under kontroll" in s
+    assert "Jern: under kontroll" in s
+    assert "Viser produsenter av komponenten, ikke bekreftede leverandører til KOG" in s
+    # produsenter
+    for name in (
+        "Nucor Corporation", "ArcelorMittal S.A.", "JSW Steel Limited",
+        "Steel Dynamics, Inc.", "Tata Steel Limited", "Nippon Steel Corporation",
+        "Southern Copper Corporation", "Freeport-McMoRan Inc.", "Antofagasta plc",
+        "Teck Resources Limited", "First Quantum Minerals Ltd.", "Lundin Mining Corporation",
+    ):
+        assert name in s, name
+    assert "Produserer steel" in s
+    assert "Produserer copper" in s
+    assert "Basic Materials" in s
+    # kunder av kobberprodusenter
+    assert "Kunder av Southern Copper Corporation (6)" in s
+    assert "Hartree Partners" in s
+    assert "Kjøper copper cathodes" in s
+    assert "Kunder av Freeport-McMoRan Inc. (1)" in s
+    assert "Mitsubishi Materials Corporation" in s
+    assert "Kunde, produkt ikke oppgitt" in s
+    assert "Ingen kunder navngitt i offentlige kilder" in s
+    # aluminium/jern/NHY skal ikke vises
+    assert "Norsk Hydro" not in s
+    assert "Mercedes-Benz" not in s
+    assert "China Hongqiao" not in s
+    assert "Hindalco" not in s
+    assert "Press Metal" not in s
+    assert "Cleveland-Cliffs" not in s
+    assert "Alcoa" not in s
+    # ingen privat sti
+    assert "/workspace/" not in s
+    assert "file://" not in s
+    assert "verdikjeder/" not in s
+    # hash og Esc for komponentfanen
+    assert "#komp" in s
+    assert "Escape" in s
+    # radhøyder
+    assert "min-height:64px;max-height:96px" in s
+    assert "komp-empty{box-sizing:border-box;min-height:48px" in s
+    # kildetype først på produsentkunder
+    assert "avtale oppgitt i rapport" in s
+    assert "kundekonsentrasjon oppgitt i 10-K" in s
+    assert "årsrapport" in s

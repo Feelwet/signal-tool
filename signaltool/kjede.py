@@ -1,7 +1,8 @@
-"""Bekreftede koblinger på tickersider (UxBot 11.11.2026, bindende).
+"""Bekreftede koblinger og komponentfane på tickersider (UxBot, bindende).
 
 Data ligger i site_config/kjeder/<TICKER>.json, med KOG.OL som første.
-Komponentfanen «Hvem lager dette» bygges ikke her.
+Komponentfanen «Hvem lager dette» viser stål og kobber med produsenter og
+deres kunder. Aluminium og jern vises bare som «under kontroll».
 """
 from __future__ import annotations
 
@@ -158,7 +159,9 @@ def type_and_date(c: dict) -> tuple[str, str]:
             return "fast"
         if t.startswith("rammeavtale") or "rammeavtale" in t:
             return "ramme"
-        return "kontrakt"
+        if "kontrakt" in t or not t.strip():
+            return "kontrakt"
+        return "other"
 
     kind = typ_kind(raw)
     if year_only:
@@ -174,6 +177,9 @@ def type_and_date(c: dict) -> tuple[str, str]:
     elif kind == "ramme":
         # keep date in type if present, else rammeavtale
         typ = "rammeavtale"
+        dato = fmt_dmy(doc) if doc else (c.get("dokumentdato") or "")
+    elif kind == "other":
+        typ = raw
         dato = fmt_dmy(doc) if doc else (c.get("dokumentdato") or "")
     else:
         typ = f"kontrakt {fmt_dmy(doc)}" if doc else "kontrakt"
@@ -294,13 +300,163 @@ def mid_html(data: dict, path: list, available: set[str] | None) -> str:
             f'<div class="kjede-mid-tk">{E(tick)}</div>{order}{prod}</div>')
 
 
+def component_counts(data: dict) -> tuple[int, int]:
+    """(kildebelagte komponenter med produsentliste, antall «under kontroll»)."""
+    items = ((data.get("components") or {}).get("items") or [])
+    n_ok = sum(1 for i in items if i.get("status") == "ok")
+    n_uk = sum(1 for i in items if i.get("status") == "under_kontroll")
+    return n_ok, n_uk
+
+
+def visible_source(item: dict, page: date) -> dict | None:
+    """Én kildelinje på produsent- eller kunderad; skjul ved ≥36 mnd."""
+    return annotate_contract(item, page)
+
+
+def visible_producers(comp: dict, page: date) -> list:
+    rows = []
+    for p in comp.get("producers") or []:
+        src = visible_source(p, page)
+        if not src:
+            continue
+        q = dict(p)
+        q["_source"] = src
+        q["_customers"] = [c for c in (p.get("customers") or []) if visible_source(c, page)]
+        # behold kundefeltets annoterte kilder
+        annotated = []
+        for c in (p.get("customers") or []):
+            a = visible_source(c, page)
+            if a:
+                annotated.append(a)
+        q["_customers"] = annotated
+        rows.append(q)
+    return rows
+
+
+def komp_producer_row_html(p: dict, available: set[str] | None, comp_id: str) -> str:
+    name = p.get("name") or ""
+    role = p.get("role") or ""
+    src = source_line_html(p.get("_source") or p)
+    chip = chip_html(p.get("ticker"), available) if p.get("ticker") else ""
+    return (
+        f'<article class="komp-row komp-drill" data-id="{E(p.get("id") or "")}" '
+        f'data-comp="{E(comp_id)}" tabindex="0" role="button">'
+        f'<div class="kjede-id"><span class="kjede-name">{E(name)}</span>{chip}</div>'
+        f'{f"<div class=kjede-role>{E(role)}</div>" if role else ""}'
+        f'{src}</article>'
+    )
+
+
+def komp_customer_row_html(c: dict, available: set[str] | None) -> str:
+    name = c.get("name") or ""
+    role = c.get("role") or ""
+    src = source_line_html(c)
+    chip = chip_html(c.get("ticker"), available) if c.get("ticker") else ""
+    return (
+        f'<article class="komp-row">'
+        f'<div class="kjede-id"><span class="kjede-name">{E(name)}</span>{chip}</div>'
+        f'{f"<div class=kjede-role>{E(role)}</div>" if role else ""}'
+        f'{src}</article>'
+    )
+
+
+def komp_list_html(title: str, n: int, rows: list[str], empty: str) -> str:
+    vis, rest = rows[:6], rows[6:]
+    more = ""
+    if rest:
+        more = (
+            f'<button type="button" class="kjede-visalle" aria-expanded="false">'
+            f'Vis alle {len(rows)}</button>'
+            f'<div class="kjede-col-extra" hidden>{"".join(rest)}</div>'
+        )
+    if vis:
+        body = "".join(vis)
+    else:
+        body = f'<p class="komp-empty">{E(empty)}</p>'
+    return (
+        f'<div class="komp-list">'
+        f'<h3 class="komp-gics">{E(title)}</h3>'
+        f'{body}{more}</div>'
+    )
+
+
+def component_panel_html(data: dict, available: set[str] | None, page: date) -> str:
+    bundle = data.get("components") or {}
+    items = bundle.get("items") or []
+    if not items:
+        return ""
+    disc = bundle.get("disclaimer") or (
+        "Viser produsenter av komponenten, ikke bekreftede leverandører til KOG"
+    )
+    tick = data.get("ticker") or ""
+    chips = []
+    uk = []
+    views = []
+    for comp in items:
+        st = comp.get("status") or "ok"
+        name = comp.get("name") or comp.get("id") or ""
+        cid = comp.get("id") or name
+        if st == "under_kontroll":
+            uk.append(f'<p class="komp-uk">{E(name)}: under kontroll</p>')
+            continue
+        chips.append(
+            f'<button type="button" class="komp-chip" data-id="{E(cid)}" '
+            f'aria-pressed="false">{E(name)}</button>'
+        )
+        producers = visible_producers(comp, page)
+        gics = comp.get("gics") or ""
+        heading = gics or name
+        prow = [komp_producer_row_html(p, available, cid) for p in producers]
+        path_p = f"{tick}|{name}"
+        views.append(
+            f'<div class="komp-view" data-komp-panel="{E(cid)}" '
+            f'data-path="{E(path_p)}" hidden>'
+            f'{komp_list_html(heading, len(prow), prow, "Ingen offentlig kilde")}'
+            f'</div>'
+        )
+        for p in producers:
+            pname = p.get("name") or ""
+            pid = p.get("id") or ""
+            cust = p.get("_customers") or []
+            n = len(cust)
+            title = f"Kunder av {pname} ({n})"
+            craw = [komp_customer_row_html(c, available) for c in cust]
+            path_c = f"{tick}|{name}|{pname}"
+            views.append(
+                f'<div class="komp-view" data-komp-panel="{E(cid)}/{E(pid)}" '
+                f'data-path="{E(path_c)}" hidden>'
+                f'{komp_list_html(title, n, craw, "Ingen kunder navngitt i offentlige kilder")}'
+                f'</div>'
+            )
+    path = (
+        f'<nav class="komp-path" hidden aria-hidden="true">'
+        f'<button type="button" class="komp-back">← Tilbake</button>'
+        f'<ol class="komp-crumbs"></ol></nav>'
+    )
+    chiprow = f'<div class="komp-chips">{"".join(chips)}</div>' if chips else ""
+    return (
+        f'{path}'
+        f'<p class="komp-disc">{E(disc)}</p>'
+        f'{chiprow}{"".join(uk)}{"".join(views)}'
+    )
+
+
 def jump_html(ticker: str, page_date: date | None = None, base: Path | None = None) -> str:
     data = load(ticker, base=base)
     if not data:
         return ""
     page = page_date or date.today()
     ns, nc = counts(data, page)
-    return (f'<p class="kjede-jump"><a href="#kjede">Leverandører {ns} · Kunder {nc}</a></p>')
+    parts = [f'<a href="#kjede">Leverandører {ns} · Kunder {nc}</a>']
+    n_ok, n_uk = component_counts(data)
+    if n_ok or n_uk:
+        komp = ""
+        if n_ok:
+            komp += f'<a href="#komp">Komponenter {n_ok}</a>'
+        if n_uk:
+            komp += f'<span class="kjede-jump-uk"> · {n_uk} under kontroll</span>'
+        parts.append(f'<span class="kjede-jump-komp"> · {komp}</span>')
+    return f'<p class="kjede-jump">{"".join(parts)}</p>'
 
 
 def section_html(ticker: str, available: set[str] | None = None, page_date: date | None = None,
@@ -320,29 +476,56 @@ def section_html(ticker: str, available: set[str] | None = None, page_date: date
             f'<button type="button" class="kjede-back" hidden>← Tilbake</button>'
             f'<ol class="kjede-crumbs"></ol></nav>')
     mid = mid_html(data, [], avail)
-    # DOM-rekkefølge (fokus): sti → midtkort → leverandører → kunder
+    # DOM-rekkefølge (fokus) i bekreftet fane: sti → midtkort → leverandører → kunder
     grid = (f'<div class="kjede-grid">'
             f'{mid}'
             f'{col_html("Leverandører", ns, sup_h)}'
             f'{col_html("Kunder", nc, cus_h)}'
             f'</div>')
+    komp = component_panel_html(data, avail, page)
+    tabs = ""
+    panel_bek = f'{path}{grid}'
+    panel_komp = ""
+    if komp:
+        tabs = (
+            f'<div class="kjede-tabs" role="tablist">'
+            f'<button type="button" class="kjede-tab" role="tab" id="kjede-tab-bek" '
+            f'aria-controls="kjede-panel-bek" aria-selected="true">'
+            f'Bekreftede koblinger</button>'
+            f'<button type="button" class="kjede-tab" role="tab" id="kjede-tab-komp" '
+            f'aria-controls="kjede-panel-komp" aria-selected="false" tabindex="-1">'
+            f'Hvem lager dette</button>'
+            f'</div>'
+        )
+        panel_bek = (
+            f'<div class="kjede-panel" id="kjede-panel-bek" role="tabpanel" '
+            f'aria-labelledby="kjede-tab-bek">{path}{grid}</div>'
+        )
+        panel_komp = (
+            f'<div class="kjede-panel" id="kjede-panel-komp" role="tabpanel" '
+            f'aria-labelledby="kjede-tab-komp" hidden>{komp}</div>'
+        )
     payload = json.dumps({"ticker": ticker, "canDrill": drill}, ensure_ascii=False)
     return (
         f"<style>{CSS}</style>"
         f'<section id="kjede" class="kjede" data-can-drill="{1 if drill else 0}" '
         f'data-ticker="{E(ticker)}">'
         f'<h2 class="kjede-h">Verdikjede</h2>'
-        f'{path}{grid}'
+        f'{tabs}{panel_bek}{panel_komp}'
         f'<script type="application/json" id="kjede-data">{payload}</script>'
         f"<script>{JS}</script>"
         f"</section>"
     )
 
 
+
+
 CSS = r"""
 .kjede-jump{height:32px;line-height:32px;margin:0 0 8px;font-size:13px;overflow:hidden}
 .kjede-jump a{display:inline-flex;align-items:center;min-height:32px;color:inherit;text-decoration:none}
 .kjede-jump a:hover,.kjede-jump a:focus-visible{text-decoration:underline}
+.kjede-jump-uk{font-size:12px;line-height:16px;color:#94a3b8}
+.kjede-jump-komp{white-space:nowrap}
 .kjede{margin:16px 0;overflow-x:hidden;min-width:0}
 .kjede-h{margin:0 0 12px;font-size:20px;line-height:28px}
 .kjede-path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:44px;margin:0 0 12px}
@@ -380,11 +563,32 @@ CSS = r"""
   .kjede-grid{grid-template-columns:360px 400px 360px;grid-template-areas:"sup mid cus";gap:24px}
   .kjede-mid{width:400px}
   .kjede-col{width:360px}
+  .kjede-jump{height:32px;white-space:nowrap;overflow:hidden}
+  .kjede-tab{flex:0 0 200px;width:200px}
 }
 @media(max-width:1279px){
   .kjede-grid{grid-template-columns:1fr;grid-template-areas:"mid" "sup" "cus";gap:24px}
+  .kjede-jump{height:auto;max-height:56px;line-height:28px;overflow-x:hidden;overflow-y:hidden}
+  .kjede-jump a{min-height:28px}
 }
+.kjede-tabs{display:flex;height:44px;margin:0 0 12px;padding:0;gap:0}
+.kjede-tab{box-sizing:border-box;flex:1 1 50%;height:44px;min-height:44px;min-width:44px;padding:0 12px;border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:15px;line-height:20px;cursor:pointer}
+.kjede-tab[aria-selected="true"]{border-bottom-color:#94a3b8;font-weight:600}
+.kjede-panel[hidden],.komp-path[hidden],.komp-view[hidden]{display:none}
+.komp-disc{margin:0 0 12px;font-size:13px;line-height:18px;color:#94a3b8}
+.komp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.komp-chip{box-sizing:border-box;min-height:44px;min-width:44px;padding:0 12px;border:1px solid #3b4757;border-radius:4px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:18px;cursor:pointer}
+.komp-chip[aria-pressed="true"]{font-weight:600}
+.komp-uk{margin:0 0 8px;font-size:13px;line-height:18px;color:#94a3b8}
+.komp-gics{margin:0 0 8px;font-size:15px;line-height:20px;font-weight:600}
+.komp-row{box-sizing:border-box;min-height:64px;max-height:96px;overflow:hidden;margin:0 0 8px;padding:8px;border-radius:8px;position:relative}
+.komp-row.komp-drill{cursor:pointer}
+.komp-empty{box-sizing:border-box;min-height:48px;display:flex;align-items:center;margin:0;font-size:13px;line-height:18px;color:#94a3b8}
+.komp-path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:44px;margin:0 0 12px}
+.komp-back{box-sizing:border-box;min-width:44px;min-height:44px;padding:0 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.komp-crumbs{display:flex;flex-wrap:wrap;gap:4px;margin:0;padding:0;list-style:none;font-size:13px;line-height:18px;color:#94a3b8}
 """
+
 
 JS = r"""
 (function(){
@@ -392,20 +596,40 @@ JS = r"""
   if(!root)return;
   var can=root.getAttribute('data-can-drill')==='1';
   var ticker=root.getAttribute('data-ticker')||'';
-  var pathEl=root.querySelector('.kjede-path');
-  var back=root.querySelector('.kjede-back');
-  function parseHash(){
+  var pathEl=root.querySelector('#kjede-panel-bek .kjede-path')||root.querySelector('.kjede-path');
+  var back=root.querySelector('#kjede-panel-bek .kjede-back')||root.querySelector('.kjede-back');
+  var tabBek=document.getElementById('kjede-tab-bek');
+  var tabKomp=document.getElementById('kjede-tab-komp');
+  var panBek=document.getElementById('kjede-panel-bek');
+  var panKomp=document.getElementById('kjede-panel-komp');
+  function isKompHash(){
+    var h=location.hash||'';
+    return h==='#komp'||h.indexOf('#komp=')===0;
+  }
+  function parseKjede(){
     var h=location.hash||'';
     var m=h.match(/^#kjede(?:=(.*))?$/);
     if(!m)return [];
     if(!m[1])return [];
-    var parts=m[1].split('/').filter(Boolean);
-    if(parts[0]&&ticker&&parts[0]!==ticker.split('.')[0]&&parts[0]!==ticker)parts=parts;
-    return parts;
+    return m[1].split('/').filter(Boolean);
   }
-  function setHash(parts){
-    var h=!parts.length?'#kjede':'#kjede='+parts.map(encodeURIComponent).join('/');
+  function parseKomp(){
+    var h=location.hash||'';
+    var m=h.match(/^#komp(?:=(.*))?$/);
+    if(!m||!m[1])return [];
+    return m[1].split('/').filter(Boolean).map(function(p){try{return decodeURIComponent(p)}catch(e){return p}});
+  }
+  function setHash(h){
     if(location.hash!==h)history.replaceState(null,'',h);
+  }
+  function showTab(komp){
+    if(!tabBek||!panBek||!tabKomp||!panKomp)return;
+    tabBek.setAttribute('aria-selected', komp?'false':'true');
+    tabKomp.setAttribute('aria-selected', komp?'true':'false');
+    tabBek.tabIndex=komp?-1:0;
+    tabKomp.tabIndex=komp?0:-1;
+    panBek.hidden=!!komp;
+    panKomp.hidden=!komp;
   }
   function showPath(parts){
     if(!can||!parts.length){
@@ -416,10 +640,49 @@ JS = r"""
     if(pathEl){pathEl.hidden=false;pathEl.removeAttribute('aria-hidden');}
     if(back)back.hidden=false;
   }
-  function apply(){
-    var parts=parseHash();
-    showPath(parts);
+  function renderKomp(){
+    var parts=parseKomp();
+    var views=root.querySelectorAll('.komp-view');
+    var i,key,show;
+    for(i=0;i<views.length;i++){
+      key=views[i].getAttribute('data-komp-panel')||'';
+      show=false;
+      if(parts.length===1&&key===parts[0])show=true;
+      if(parts.length>=2&&key===parts[0]+'/'+parts[1])show=true;
+      views[i].hidden=!show;
+    }
+    var chips=root.querySelectorAll('.komp-chip');
+    for(i=0;i<chips.length;i++){
+      chips[i].setAttribute('aria-pressed', parts[0]===chips[i].getAttribute('data-id')?'true':'false');
+    }
+    var path=root.querySelector('.komp-path');
+    var kback=root.querySelector('.komp-back');
+    var ol=path&&path.querySelector('.komp-crumbs');
+    var vis=null;
+    for(i=0;i<views.length;i++){if(!views[i].hidden){vis=views[i];break;}}
+    if(path){
+      if(!parts.length||!vis){path.hidden=true;path.setAttribute('aria-hidden','true');if(ol)ol.textContent='';}
+      else{
+        path.hidden=false;path.removeAttribute('aria-hidden');
+        if(ol){
+          ol.textContent='';
+          var bits=(vis.getAttribute('data-path')||'').split('|').filter(Boolean);
+          for(i=0;i<bits.length;i++){
+            if(i){var sep=document.createElement('li');sep.setAttribute('aria-hidden','true');sep.textContent=' › ';ol.appendChild(sep);}
+            var li=document.createElement('li');li.textContent=bits[i];ol.appendChild(li);
+          }
+        }
+      }
+    }
   }
+  function apply(){
+    var komp=isKompHash();
+    showTab(komp);
+    if(komp)renderKomp();
+    else showPath(parseKjede());
+  }
+  if(tabBek)tabBek.addEventListener('click',function(){setHash('#kjede');apply();});
+  if(tabKomp)tabKomp.addEventListener('click',function(){setHash('#komp');apply();});
   root.addEventListener('click',function(e){
     var more=e.target.closest('.kjede-more');
     if(more){
@@ -433,33 +696,61 @@ JS = r"""
     }
     var all=e.target.closest('.kjede-visalle');
     if(all){
-      var col=all.closest('.kjede-col');
+      var col=all.closest('.kjede-col, .komp-list');
       var extra=col&&col.querySelector('.kjede-col-extra');
       var open=all.getAttribute('aria-expanded')==='true';
       all.setAttribute('aria-expanded', open?'false':'true');
       if(extra)extra.hidden=open;
       return;
     }
+    var chip=e.target.closest('.komp-chip');
+    if(chip){
+      var cid=chip.getAttribute('data-id');
+      if(cid){setHash('#komp='+encodeURIComponent(cid));apply();}
+      return;
+    }
+    var kback=e.target.closest('.komp-back');
+    if(kback){
+      var kp=parseKomp();
+      if(kp.length)kp=kp.slice(0,-1);
+      setHash(kp.length?'#komp='+kp.map(encodeURIComponent).join('/'):'#komp');
+      apply();
+      return;
+    }
+    var krow=e.target.closest('.komp-row.komp-drill');
+    if(krow&&!e.target.closest('a,button')){
+      var id=krow.getAttribute('data-id');
+      var comp=krow.getAttribute('data-comp');
+      if(id&&comp){setHash('#komp='+encodeURIComponent(comp)+'/'+encodeURIComponent(id));apply();}
+      return;
+    }
     if(!can)return;
     var row=e.target.closest('.kjede-row.kjede-drill');
     if(row&&!e.target.closest('a,button')){
-      var id=row.getAttribute('data-id');
-      if(!id)return;
-      var parts=parseHash();
+      var id2=row.getAttribute('data-id');
+      if(!id2)return;
+      var parts=parseKjede();
       if(!parts.length)parts=[ticker.split('.')[0]||ticker];
-      parts=parts.concat([id]);
-      setHash(parts);apply();
+      parts=parts.concat([id2]);
+      setHash('#kjede='+parts.map(encodeURIComponent).join('/'));apply();
     }
   });
   if(back)back.addEventListener('click',function(){
-    var parts=parseHash();
+    var parts=parseKjede();
     if(parts.length)parts=parts.slice(0,-1);
-    setHash(parts);apply();
+    setHash(parts.length?'#kjede='+parts.map(encodeURIComponent).join('/'):'#kjede');
+    apply();
   });
   document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'&&can){
-      var parts=parseHash();
-      if(parts.length){parts=parts.slice(0,-1);setHash(parts);apply();}
+    if(e.key!=='Escape')return;
+    if(isKompHash()){
+      var kp=parseKomp();
+      if(kp.length){kp=kp.slice(0,-1);setHash(kp.length?'#komp='+kp.map(encodeURIComponent).join('/'):'#komp');apply();}
+      return;
+    }
+    if(can){
+      var parts=parseKjede();
+      if(parts.length){parts=parts.slice(0,-1);setHash(parts.length?'#kjede='+parts.map(encodeURIComponent).join('/'):'#kjede');apply();}
     }
   });
   window.addEventListener('hashchange',apply);
