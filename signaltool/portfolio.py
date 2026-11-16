@@ -168,6 +168,11 @@ def _value(s: dict, by: dict, usdnok: float, last: dict | None = None, fx: dict 
     return v
 
 
+# AnalBot 16.11: fyllinger ført manuelt etter at nattkjøringen feilet (portfolio_books.MANUAL_FILLS). De er ikke en kjøring og
+# skal ikke få samme dags kjøring til å hoppe over boka.
+MANUAL_FILL_IDS = frozenset({("kontroll_tilfeldig_v1", "2026-11-11-0099")})
+
+
 def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRADES, nav_path: Path = NAV,
          rules: dict = RULES, picks: list[dict] | None = None, extra: list[dict] | None = None, why_buy: str = "Kjøp",
          cols: list[str] = T_COLS, annotate=None, px_extra: dict | None = None, logs: Path | None = None,
@@ -180,7 +185,8 @@ def step(snap: dict, usdnok: float | None, bench: dict, trades_path: Path = TRAD
     today = str(snap.get("date"))
     trades = _read(trades_path)
     corr = load_corrections(Path(logs or Path(nav_path).parent) / CORR.name)
-    if any(r["run_date"] == today for r in trades) or any(r["date"] == today for r in _read(nav_path)):
+    if any(r["run_date"] == today and (r.get("rules_version"), r.get("order_id")) not in MANUAL_FILL_IDS for r in trades) \
+            or any(r["date"] == today for r in _read(nav_path)):
         return state(trades, corr)                                # allerede kjørt i dag
     by = {e["ticker"]: e for e in snap.get("tickers", [])}
     for e in extra or []:

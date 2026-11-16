@@ -98,3 +98,4 @@ kontroll_tilfeldig_v1,fill,2026-11-10-0090,2026-11-11,2026-11-10,GMED,buy,tilfel
 kontroll_tilfeldig_v1,fill,2026-11-10-0091,2026-11-11,2026-11-10,MOS,buy,tilfeldig seed=736535606,2026-11-10,22.99,USD,9.53285026550293,226.301821,49596.36,99.19,,,3.36,,Høy,2026-11-06,Basic Materials,watch,0.208,S&P 500 (^GSPC),7549.93994140625,7520.93017578125
 kontroll_tilfeldig_v1,fill,2026-11-10-0092,2026-11-11,2026-11-10,SCANA.OL,buy,tilfeldig seed=736535606,2026-11-11,1.425,NOK,1.0,34800.981742,49591.4,99.18,,,3.0,ose_contract,Middels,2026-11-06,Industrials,watch,0.0142,OSEBX (OSEBX.OL),2075.06005859375,2103.260009765625
 kontroll_tilfeldig_v1,order,2026-11-11-0099,2026-11-11,2026-11-11,SCANA.OL,sell,rødt flagg,2026-11-11,,NOK,,,,,,,,,,,,,,,,
+kontroll_tilfeldig_v1,fill,2026-11-11-0099,2026-11-16,2026-11-11,SCANA.OL,sell,rødt flagg,2026-11-12,1.43,NOK,1.0,34800.981742,49765.4,99.53,0.0,-24.71,,,,,,,,,,

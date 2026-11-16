@@ -68,11 +68,19 @@ def book_data(book: str, logs: Path = LOGS, snap: dict | None = None) -> dict:
             "start": navs[0]["date"] if navs else None, "universe_n": un, "universe_date": udate, "no_price": no_px}
 
 
-def book_card(d: dict, all_dates: list[str]) -> str:
+def no_run_dates(d: dict, today: str | None = None) -> list[str]:
+    """AnalBot 16.11: dagene i portfolio_books.NO_RUN_DATES uten egen kjøring, bare datoer før i dag (dagens kjøring kan komme)."""
+    from datetime import date
+    today = today or date.today().isoformat()
+    own = set(d["dates"])
+    return [x for x in B.NO_RUN_DATES if x < today and x not in own and (not d["start"] or x > d["start"])]
+
+
+def book_card(d: dict, all_dates: list[str], today: str | None = None) -> str:
     """AnalBot 02.11: ingen grafer, ingen NAV-tall, ingen tall mot referansen. Kjøringer, åpne/lukkede, univers, hull, regler."""
     book = d["book"]
     own = set(d["dates"])
-    gaps = [x for x in all_dates if d["start"] and x > d["start"] and x not in own]
+    gaps = [x for x in all_dates if d["start"] and x > d["start"] and x not in own and x not in B.NO_RUN_DATES]
     un = "–" if d["universe_n"] is None else str(d["universe_n"])
     k = (f'<div class="tb-k"><div><span class="l">Kjøringer</span><span class="v">{len(d["dates"])}</span><span class="s">fra {E(_dt(d["start"]))}</span></div>'
          f'<div><span class="l">Handler</span><span class="v">{d["closed"]} av {MIN_CLOSED}</span><span class="s">lukkede · {d["open"]} åpne</span></div>'
@@ -89,6 +97,9 @@ def book_card(d: dict, all_dates: list[str]) -> str:
         why = {KNOWN_GAPS.get((book, g)) for g in gaps} - {None}
         u.append(f"Mangler kjøring {', '.join(_dt(g)[:5] for g in gaps)}" + (f" ({'; '.join(sorted(why))})" if why else "")
                  + ". Dagene fylles ikke inn i etterkant.")
+    nr = no_run_dates(d, today)
+    if nr:
+        u.append(f"Ingen kjøring {', '.join(_dt(g)[:5] for g in nr)} ({B.NO_RUN_WHY}). Dagene fylles ikke inn i etterkant.")
     if d["no_price"]:
         u.append(f"Uten kurs siste kjøring: {', '.join(d['no_price'])}. Selges første dag det finnes kurs.")
     return (f'<div class="tb-card" id="tb-{E(book)}"><div class="tb-h"><b>{E(BOOK_TITLES.get(book, book))}</b><code>{E(book)}</code>'

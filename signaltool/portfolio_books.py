@@ -98,6 +98,7 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
     hoy = hoy_candidates(univ)
     ctl, seed = control_candidates(univ, len(hoy), day)
     why_fn = annotator(risk_levels())
+    apply_manual_fills(logs)   # AnalBot 16.11: idempotent, før stegene (ellers fyller steget 0099 på dagens kurs)
     out = {}
     for book, picks, why, sd in (("hoy_risiko_v1", hoy, "topp10 20d>0", ""), ("kontroll_tilfeldig_v1", ctl, f"tilfeldig seed={seed}", seed)):
         tp, npth = paths(book, logs)
@@ -163,6 +164,60 @@ STATIC_DEVIATIONS = [
               "ble skrevet av morgenkjøringen 41361721155 som krasjet før ordrene ble lagt. Raden står urettet. Faktiske ordre "
               "2026-11-02 (2026-11-02-0042..0046): BRG.OL, GD, KOG.OL, TECH.OL, NCLH.")},
 ]
+
+
+# AnalBot 16.11: nattkjøringen feilet 12.–16.11 (testene leste ekte logger, rettet 16.11 i 6aad3c3). Dagene er hull: ingen
+# signaler i ettertid, bøkene viser «ingen kjøring». Salgsordre 2026-11-11-0099 (SCANA.OL, rødt flagg) fylles på sluttkurs 12.11
+# fra Yahoo dagshistorikk (auto_adjust=False, samme kilde som portfolio._hist) = første lukkede bar etter ordren.
+NO_RUN_DATES = ("2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16")
+NO_RUN_WHY = "nattkjøringen feilet"
+MANUAL_FILLS = [{"book_id": "kontroll_tilfeldig_v1", "order_id": "2026-11-11-0099", "ticker": "SCANA.OL", "side": "sell",
+                 "price_date": "2026-11-12", "price": 1.43, "fx": 1.0, "run_date": "2026-11-16",
+                 "source": "Yahoo dagshistorikk SCANA.OL 12.11.2026, Close (auto_adjust=False), hentet 16.11"}]
+
+
+def apply_manual_fills(logs: Path = LOGS) -> list[dict]:
+    """Fører MANUAL_FILLS én gang (idempotent): fill-rad i bokas trades-logg regnet som portfolio.step (salg: hele posisjonen,
+    kostnad etter bokas sats, pnl mot nok_cost) + avviksrad «sen fylling, nattkjøring feilet». Eksisterende rader endres aldri."""
+    out = []
+    dpath = logs / DEV.name
+    have_dev = {(r["book_id"], r["order_id"], r["kind"]) for r in P._read(dpath)}
+    for m in MANUAL_FILLS:
+        b, R = m["book_id"], BOOKS[m["book_id"]]
+        tp = paths(b, logs)[0]
+        trades = P._read(tp)
+        if any(r["event"] in ("fill", "cancel") and r["order_id"] == m["order_id"] for r in trades):
+            continue
+        o = next((r for r in trades if r["event"] == "order" and r["order_id"] == m["order_id"]), None)
+        s = P.state(trades)
+        p = s["open"].get(m["ticker"])
+        if not o or not p or m["order_id"] not in s["pending"]:
+            log.warning("manuell fylling %s: ordre/posisjon finnes ikke – ikke ført", m["order_id"])
+            continue
+        illq = o["reason"].endswith("illiquid")
+        rate = R["cost_each_way_illiquid"] if illq else R["cost_each_way"]
+        nok = p["shares"] * m["price"] * m["fx"]
+        cost = nok * rate
+        row = {**o, "event": "fill", "run_date": m["run_date"], "price_date": m["price_date"], "price": m["price"], "fx": m["fx"],
+               "shares": p["shares"], "nok_value": round(nok, 2), "cost_nok": round(cost, 2), "fx_effect_nok": 0.0,
+               "pnl_nok": round(nok - cost - p["nok_cost"], 2)}
+        cols = list(trades[0].keys()) if trades else P.T_COLS
+        P._append(tp, cols, [row])
+        out.append(row)
+        if (b, m["order_id"], "sen_fylling") not in have_dev:
+            P._append(dpath, D_COLS, [{"date": m["run_date"], "book_id": b, "kind": "sen_fylling", "order_id": m["order_id"],
+                                       "ticker": m["ticker"], "side": m["side"], "order_run": o["signal_date"], "fill_run": m["run_date"],
+                                       "missed_runs": "|".join(d for d in NO_RUN_DATES if d < m["run_date"]),
+                                       "n_missed": len([d for d in NO_RUN_DATES if d < m["run_date"]]),
+                                       "note": f"sen fylling, nattkjøring feilet; sluttkurs {m['price_date']} ({m['source']})"}])
+            have_dev.add((b, m["order_id"], "sen_fylling"))
+    hull_d = [d for d in NO_RUN_DATES if d < "2026-11-16"]   # 16.11: hull bare om dagen går uten kjøring (vises da i bøkene)
+    hull = [{"date": "2026-11-16", "book_id": bk, "kind": "ingen_kjoring", "order_id": "runs-2026-11-12..2026-11-15", "ticker": "",
+             "side": "", "order_run": "", "fill_run": "", "missed_runs": "|".join(hull_d), "n_missed": len(hull_d),
+             "note": "hull: ingen kjøring (nattkjøringen feilet); ingen signaler i ettertid, dagene fylles ikke inn"}
+            for bk in ["rules_v1", *BOOKS]]
+    P._append(dpath, D_COLS, [h for h in hull if (h["book_id"], h["order_id"], h["kind"]) not in have_dev])
+    return out
 
 
 # AnalBot 02.11: TECH.OL-kurshoppet er uavklart (samme liste som GS-indeksens MAIN_EXCLUDE). Alle handler i disse merkes
