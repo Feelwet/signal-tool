@@ -517,7 +517,9 @@ def run(fast: bool = False) -> dict:
         e["why"], e["risks"] = explain(e)
     from .learnloop import rank_candidates, prev_list
     ranked = rank_candidates(list(cand.values()), prev_list(str(snap.get("date") or "")))
-    snap["tickers"] = [e for e in ranked if e["score"] > 0][:60]
+    from . import not_listed as NL   # AnalBot 16.11: ikke notert på Euronext Oslo -> tatt ut før topp 60 (logs/ticker_exclusions.csv)
+    NL.log_once()
+    snap["tickers"] = [e for e in NL.drop(ranked) if e["score"] > 0][:60]
     # decision data (priced-in / risk / invalidation / PEAD) + new free collectors, before categories use them
     from . import extras
     extras.decision(snap, status)

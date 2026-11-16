@@ -109,7 +109,8 @@ def write_members(snap: dict, path: Path | None = None) -> int:
     p, day = Path(path or MEMBERS), str(snap.get("date") or "")
     if not day:
         return 0
-    rows = [{"date": day, "ticker": t} for t in sorted({e["ticker"] for e in candidates(snap)})]
+    from .not_listed import NOT_LISTED   # AnalBot 16.11: «tatt ut: ikke notert»
+    rows = [{"date": day, "ticker": t} for t in sorted({e["ticker"] for e in candidates(snap)} - NOT_LISTED)]
     old = [r for r in _read(p) if r.get("date") != day]
     p.parent.mkdir(parents=True, exist_ok=True)
     with p.open("w", newline="") as f:

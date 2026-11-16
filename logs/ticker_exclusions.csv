@@ -1,0 +1,9 @@
+date,ticker,reason,source
+2026-11-16,DIASH.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 12676) ; https://newsweb.oslobors.no/search?issuer=12676
+2026-11-16,ERUGA.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 13008) ; https://newsweb.oslobors.no/search?issuer=13008
+2026-11-16,FLOAT.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 11215) ; https://newsweb.oslobors.no/search?issuer=11215
+2026-11-16,NPRO.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 8191) ; https://newsweb.oslobors.no/search?issuer=8191
+2026-11-16,SEIL.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 13055) ; https://newsweb.oslobors.no/search?issuer=13055
+2026-11-16,SFLN.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 11225) ; https://newsweb.oslobors.no/search?issuer=11225
+2026-11-16,SWG.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 13065) ; https://newsweb.oslobors.no/search?issuer=13065
+2026-11-16,VEOFF.OL,tatt ut: ikke notert,https://live.euronext.com/en/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS ; https://api3.oslo.oslobors.no/v1/newsreader/issuers (issuerId 13048) ; https://newsweb.oslobors.no/search?issuer=13048
