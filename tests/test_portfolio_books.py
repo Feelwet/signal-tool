@@ -397,3 +397,26 @@ def test_backward_fx_correction_for_existing_wrong_fill_used_in_nav_0211(tmp_pat
     assert abs(s["closed"][0]["pnl_nok"] - (nok - nok * 0.002 - 50100.0)) < 0.05
     assert abs(s["cash"] - (1e6 - 50100.0 + nok - nok * 0.002)) < 0.05
     assert rows(tp)[1]["shares"] == str(50000.0 / 700.0)                                 # handelsraden uendret
+
+
+def test_candidate_log_excludes_ret_20d_le_zero(tmp_path, monkeypatch):
+    """AnalBot 29.10/16.11: kandidatloggen bruker samme filter som trekket; 20d må være strengt > 0 (SCANA 0.0 ute)."""
+    monkeypatch.setattr(B, "risk_levels", lambda: {})
+    ts = [tk("OK.OL", score=5, r20=0.05),
+          tk("SCANA.OL", score=3, r20=0.0),
+          tk("ZEROSTR.OL", score=3, r20="0.0"),
+          tk("NEG.OL", score=4, r20=-0.02),
+          tk("DFENS.OL", score=3, r20="-0.022642")]
+    assert not B.qualifies(tk("SCANA.OL", r20=0.0))
+    assert not B.qualifies(tk("SCANA.OL", r20=0))
+    assert not B.qualifies(tk("SCANA.OL", r20="0.0"))
+    assert B.qualifies(tk("OK.OL", r20=0.05))
+    u = B.universe(snap("2026-10-02", *ts))
+    assert [e["ticker"] for e in u] == ["OK.OL"]
+    B.run(snap("2026-10-02", *ts), {}, 10.0, {"osebx": 1.0, "spx": 1.0}, logs=tmp_path)
+    cands = rows(tmp_path / "portfolio_candidates.csv")
+    assert len(cands) == 2
+    for c in cands:
+        assert c["universe_n"] == "1" and c["n"] == "1" and c["tickers"] == "OK.OL"
+        assert "SCANA.OL" not in c["tickers"] and "ZEROSTR.OL" not in c["tickers"]
+        assert "NEG.OL" not in c["tickers"] and "DFENS.OL" not in c["tickers"]

@@ -40,16 +40,33 @@ def paths(book: str, logs: Path = LOGS) -> tuple[Path, Path]:
     return logs / f"portfolio_{book}_trades.csv", logs / f"portfolio_{book}_nav.csv"
 
 
+def ret_20d(e: dict) -> float | None:
+    """20d-avkastning som tall. Tom, None og ualtid verdi gir None (teller ikke som > 0)."""
+    v = ((e or {}).get("stats") or {}).get("ret_20d")
+    if v is None or v is False or v == "":
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def qualifies(e: dict) -> bool:
+    """AnalBot 29.10: Følg/Hold med score og 20d-avkastning strengt > 0. 0.0 (SCANA.OL) er ute."""
+    if not e or e.get("category") not in UNIVERSE_CATS or e.get("score") is None:
+        return False
+    r = ret_20d(e)
+    return r is not None and r > 0
+
+
 def universe(snap: dict) -> list[dict]:
     """Felles univers for bok 2 og 3 (AnalBot 29.10): Følg/Hold med score og 20d-avkastning > 0. Tema er ute av begge bøkene."""
-    return [e for e in snap.get("tickers", []) if e.get("category") in UNIVERSE_CATS and e.get("score") is not None
-            and ((e.get("stats") or {}).get("ret_20d") or 0) > 0]
+    return [e for e in snap.get("tickers", []) if qualifies(e)]
 
 
 def hoy_candidates(univ: list[dict], n: int = HOY["top_n"]) -> list[dict]:
     """Topp n etter score i universet (filteret sjekkes på nytt, så funksjonen er trygg også på rå lister)."""
-    ok = [e for e in univ if e.get("category") in UNIVERSE_CATS and e.get("score") is not None
-          and ((e.get("stats") or {}).get("ret_20d") or 0) > 0]
+    ok = [e for e in univ if qualifies(e)]
     return sorted(ok, key=lambda e: (-e["score"], e["ticker"]))[:n]
 
 
@@ -107,8 +124,12 @@ def run(snap: dict, status: dict, usd, bench, logs: Path = LOGS, px_extra: dict 
                    cols=B_COLS, annotate=why_fn, px_extra=px_extra, logs=logs, fx=fx, closed=closed)   # samme lukkede barer som bok 1
         # 16.11: kandidatraden bare når steget faktisk skrev NAV (ellers vises et univers uten kjøring).
         if not ran and any(r["date"] == day for r in P._read(npth)):
-            _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd, "universe_n": len(univ), "n": len(picks),
-                                           "tickers": "|".join(e["ticker"] for e in picks)})
+            # Samme filter som trekket (qualifies / 20d strengt > 0); 0.0 telles ikke.
+            logged = [e for e in picks if qualifies(e)]
+            _log_cands(logs / CANDS.name, {"date": day, "book_id": book, "seed": sd,
+                                           "universe_n": len([e for e in univ if qualifies(e)]),
+                                           "n": len(logged),
+                                           "tickers": "|".join(e["ticker"] for e in logged)})
         out[book] = s
         status[f"Papirbok {book}"] = (f"ok ({len(picks)} kandidater i dag, {len(s['open'])} åpne, {len(s['pending'])} ventende, "
                                       f"{len(s['closed'])} lukket)" + (" – allerede kjørt i dag" if ran else ""))

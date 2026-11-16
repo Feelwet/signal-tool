@@ -54,6 +54,7 @@ def test_fill_recalc_close_logged_for_rewritten_and_follow_on_sales():
     want28 = {(r["book"], r["order_id"]) for r in csv.DictReader(DIFF.open())
               if r["typ"] == "fill" and (r["book"], r["order_id"]) not in SKIP}
     assert want28 <= keys and len(want28) == 28
+    assert sum(1 for r in dev if r["book_id"] == "kontroll_tilfeldig_v1") == 24
     follow = [r for r in dev if r["order_id"] in ("2026-11-09-0080", "2026-11-11-0099")]
     assert len(follow) == 2 and all("følge av endret inngang" in r["note"] for r in follow)
     assert all("kurs " in r["note"] and "pnl " in r["note"] for r in dev)
