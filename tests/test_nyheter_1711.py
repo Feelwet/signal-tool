@@ -328,3 +328,28 @@ def test_page_layout_tabs_raw_url_and_ft_credit():
     assert 'class="pg-nyheter"' in page or "pg-nyheter" in page
     assert "nyheter.html" in page
     assert "Børsmeldinger" in page
+
+
+def test_page_ux_avvik_1711():
+    """UxBot 17.11: Lukk 44×44, bakgrunn lukker, fokus til Kilder, kilderader 44/32, sticky 16, ingen «-»-chip, list-padding, søk 44."""
+    from signaltool import nyheter_page as P
+    h, css = P.html(), P.PAGE_CSS
+    assert 'id="ny-slukk"' in h and 'aria-label="Lukk"' in h and ">Lukk</button>" in h
+    assert "ny-sheet-head" in h and ".ny-slukk{" in css
+    assert "width:44px;height:44px;min-width:44px;min-height:44px" in css[css.index(".ny-slukk"):css.index(".ny-slukk")+200]
+    assert "sheetBg.addEventListener('click',()=>setSheet(false))" in h
+    assert "if(!open && wasOpen && kbtn) kbtn.focus()" in h
+    assert "ny-slukk" in h and "slukk.addEventListener('click',()=>setSheet(false))" in h
+    assert ".ny-ks{" in css and "min-height:44px" in css[css.index(".ny-ks{"):css.index(".ny-ks{")+220]
+    assert "width:100%" in css[css.index(".ny-ks{"):css.index(".ny-ks{")+220] and "cursor:pointer" in css[css.index(".ny-ks{"):css.index(".ny-ks{")+220]
+    assert '<label class="ny-ks' in h
+    assert "body.pg-nyheter .ny-ks{height:32px;min-height:32px;max-height:32px" in css
+    assert "position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto" in css
+    mq = css[css.index("@media(min-width:1280px)"):]
+    for sel in (".app", ".content", "main", ".ny", ".ny-desk"):
+        assert sel in mq
+    assert "overflow:visible;overflow-x:visible;overflow-y:visible" in mq
+    assert "iss!=='-'" in h and "const iss=(it.issuer||'').trim()" in h
+    assert "padding-bottom:calc(56px + env(safe-area-inset-bottom))" in css
+    assert ".ny-q{" in css and "min-height:44px" in css[css.index(".ny-q{"):css.index(".ny-q{")+160]
+    assert "body.pg-nyheter .ny-q{height:32px}" not in css

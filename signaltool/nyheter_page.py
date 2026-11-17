@@ -28,9 +28,9 @@ body.pg-nyheter .ny{min-width:0;max-width:100%;overflow-x:hidden}
 .ny-tab{flex:none;height:44px;min-height:44px;min-width:44px;padding:0 12px;margin:0;border:0;background:none;color:#94a3b8;font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer;box-shadow:inset 0 -2px 0 transparent;white-space:nowrap}
 .ny-tab[aria-selected="true"],.ny-tab.on{color:var(--ink,#e6edf3);box-shadow:inset 0 -2px 0 var(--acc,#6cb6ff)}
 .ny-tools{height:44px;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;box-sizing:border-box}
-.ny-q{flex:1 1 auto;min-width:0;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:400 14px/20px system-ui,-apple-system,sans-serif}
+.ny-q{flex:1 1 auto;min-width:0;height:44px;min-height:44px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:400 14px/20px system-ui,-apple-system,sans-serif}
 .ny-kbtn{flex:0 0 auto;width:auto;min-width:44px;height:44px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 12px/16px system-ui,-apple-system,sans-serif;cursor:pointer;white-space:nowrap}
-.ny-list{margin:0;padding:0;min-width:0}
+.ny-list{margin:0;padding:0;padding-bottom:calc(56px + env(safe-area-inset-bottom));min-width:0}
 .ny-row{display:flex;align-items:center;gap:8px;min-height:56px;max-height:72px;height:auto;margin:0 12px;padding:8px 0;box-sizing:border-box;border-bottom:1px solid var(--line,#2d333b);color:inherit!important;text-decoration:none!important;overflow:hidden}
 .ny-row:focus-visible{outline:2px solid var(--acc,#6cb6ff);outline-offset:2px;border-radius:4px}
 .ny-time{flex:0 0 44px;width:44px;font:400 12px/16px system-ui,-apple-system,sans-serif;color:#94a3b8;padding-top:2px}
@@ -46,8 +46,10 @@ body.pg-nyheter .ny{min-width:0;max-width:100%;overflow-x:hidden}
 .ny-sheet-bg[hidden]{display:none}
 .ny-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:71;max-height:min(70vh,480px);overflow:auto;background:#1c2430;border-top:1px solid #3b4757;border-radius:12px 12px 0 0;padding:8px 0 calc(16px + env(safe-area-inset-bottom,0px))}
 .ny-sheet[hidden]{display:none}
-.ny-sheet h2{margin:0;padding:8px 16px 10px;font:600 15px/20px system-ui,-apple-system,sans-serif}
-.ny-ks{display:flex;align-items:center;gap:8px;height:32px;min-height:32px;max-height:32px;padding:0 16px;box-sizing:border-box;font:400 13px/16px system-ui,-apple-system,sans-serif}
+.ny-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 16px;box-sizing:border-box;position:sticky;top:0;background:#1c2430;z-index:1}
+.ny-sheet h2{margin:0;padding:8px 0;font:600 15px/20px system-ui,-apple-system,sans-serif;flex:1 1 auto;min-width:0}
+.ny-slukk{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
+.ny-ks{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 16px;box-sizing:border-box;font:400 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
 .ny-ks.down{border:1px dashed #94a3b8;border-width:1px 0;background:transparent}
 .ny-ks input{flex:none;width:16px;height:16px;margin:0}
 .ny-ks .ny-kn{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -59,13 +61,14 @@ body.pg-nyheter header.top{display:flex;height:56px;min-height:56px;max-height:5
 body.pg-nyheter main{padding:0}
 }
 @media(min-width:1280px){
+body.pg-nyheter,body.pg-nyheter .app,body.pg-nyheter .content,body.pg-nyheter main,body.pg-nyheter .ny,body.pg-nyheter .ny-desk{overflow:visible;overflow-x:visible;overflow-y:visible}
 body.pg-nyheter .ny-desk{display:grid;grid-template-columns:minmax(0,720px) 280px;column-gap:24px;width:auto;max-width:1024px;margin:0 auto;align-items:start;padding:0 0 24px;box-sizing:border-box}
 body.pg-nyheter .ny-main{min-width:0;max-width:720px;width:auto}
-body.pg-nyheter .ny-kilder{display:block;width:280px;min-width:280px;position:sticky;top:56px;align-self:start;max-height:calc(100vh - 72px);overflow:auto;padding:8px 0;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:8px;background:var(--card,#161b22)}
+body.pg-nyheter .ny-kilder{display:block;width:280px;min-width:280px;position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;padding:8px 0;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:8px;background:var(--card,#161b22)}
 body.pg-nyheter .ny-kilder h2{margin:0;padding:8px 12px 6px;font:600 15px/20px system-ui,-apple-system,sans-serif}
+body.pg-nyheter .ny-ks{height:32px;min-height:32px;max-height:32px;padding:0 12px}
 body.pg-nyheter .ny-kbtn{display:none}
-body.pg-nyheter .ny-tools{height:40px;min-height:40px}
-body.pg-nyheter .ny-q{height:32px}
+body.pg-nyheter .ny-tools{height:44px;min-height:44px}
 body.pg-nyheter .ny-tabs{height:44px}
 body.pg-nyheter .ny-row{height:56px;min-height:56px;max-height:56px;align-items:center}
 body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowrap;display:block;text-overflow:ellipsis}
@@ -97,7 +100,10 @@ def html(snap=None) -> str:
 </div>
 <div class="ny-sheet-bg" id="ny-sheet-bg" hidden></div>
 <div class="ny-sheet" id="ny-sheet" role="dialog" aria-label="Kilder" hidden>
-  <h2>Kilder</h2>
+  <div class="ny-sheet-head">
+    <h2>Kilder</h2>
+    <button type="button" class="ny-slukk" id="ny-slukk" aria-label="Lukk">Lukk</button>
+  </div>
   <div id="ny-sheet-rows"></div>
 </div>
 <script>
@@ -144,8 +150,10 @@ def html(snap=None) -> str:
   function esc(s){{ return String(s??'').replace(/[&<>"']/g,c=>({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[c])); }}
   function setSheet(open){{
     if(!sheet) return;
+    const wasOpen=!sheet.hidden;
     sheet.hidden=!open; if(sheetBg) sheetBg.hidden=!open;
     if(kbtn) kbtn.setAttribute('aria-expanded',open?'true':'false');
+    if(!open && wasOpen && kbtn) kbtn.focus();
   }}
   function renderKilder(into){{
     if(!into) return;
@@ -179,7 +187,7 @@ def html(snap=None) -> str:
       return;
     }}
     list.innerHTML=items.map(it=>{{
-      const chip=it.issuer?'<span class="ny-chip">'+esc(it.issuer)+'</span>':'';
+      const iss=(it.issuer||'').trim(); const chip=(iss&&iss!=='-')?'<span class="ny-chip">'+esc(iss)+'</span>':'';
       const lock=it.paywall?' 🔒':'';
       return '<a class="ny-row" href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer"><span class="ny-time">'+esc(rowTime(it.published_utc))+'</span><span class="ny-body"><span class="ny-title">'+esc(it.title)+'</span><span class="ny-meta">'+chip+'<span class="ny-src">'+esc(it.source)+lock+'</span></span></span></a>';
     }}).join('');
@@ -218,6 +226,8 @@ def html(snap=None) -> str:
   }});
   if(qEl) qEl.addEventListener('input',renderList);
   if(kbtn) kbtn.addEventListener('click',()=>setSheet(sheet.hidden));
+  const slukk=document.getElementById('ny-slukk');
+  if(slukk) slukk.addEventListener('click',()=>setSheet(false));
   if(sheetBg) sheetBg.addEventListener('click',()=>setSheet(false));
   document.addEventListener('keydown',e=>{{ if(e.key==='Escape') setSheet(false); }});
 }})();
