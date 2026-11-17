@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-17T16:50:04+0100",
+ "hentet": "2026-11-17T17:19:35+0100",
  "dato": "2026-11-17",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (2815) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1358) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,31 +12,31 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 117
+   "antall": 114
   },
   {
    "tema": "mideast_energy",
-   "antall": 90
+   "antall": 86
   },
   {
    "tema": "tariffs_trade",
-   "antall": 37
-  },
-  {
-   "tema": "risk_off_haven",
-   "antall": 26
+   "antall": 36
   },
   {
    "tema": "rare_earths_semis",
    "antall": 24
   },
   {
+   "tema": "risk_off_haven",
+   "antall": 23
+  },
+  {
    "tema": "shipping_chokepoints",
-   "antall": 24
+   "antall": 23
   },
   {
    "tema": "food_agri",
-   "antall": 17
+   "antall": 15
   },
   {
    "tema": "elections_political",
@@ -52,6 +52,125 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "NVIDIA sets up new board committee to oversee national security, export controls",
+   "url": "http://www.birminghamstar.com/news/279438594/nvidia-sets-up-new-board-committee-to-oversee-national-security-export-controls",
+   "kilde": "GDELT",
+   "domene": "birminghamstar.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "Ukrainian drones and missiles strike Kerch Bridge that links Russia with Crimea",
+   "url": "http://www.postregister.com/businessreport/technology/ukrainian-drones-and-missiles-strike-kerch-bridge-that-links-russia-with-crimea/article_4920a978-97f6-5942-be83-3795e39438cb.html",
+   "kilde": "GDELT",
+   "domene": "postregister.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "missile",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Major blow to Putin as Ukrainian strike brings down part of Crimean Bridge",
+   "url": "https://article.wn.com/view/2026/11/17/Major_blow_to_Putin_as_Ukrainian_strike_brings_down_part_of_/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "NVIDIA Adds Board-Level Export Control Committee",
+   "url": "https://gamerheadlines.com/nvidia-national-security-export-control-oversight-committee/",
+   "kilde": "GDELT",
+   "domene": "gamerheadlines.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "Ukraine strike collapses section of Putin's prized bridge to occupied Crimea",
+   "url": "https://kesq.com/news/national-world/cnn-world/2026/11/17/critical-bridges-in-crimea-and-kyiv-damaged-as-russia-and-ukraine-exchange-large-scale-attacks/",
+   "kilde": "GDELT",
+   "domene": "kesq.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Malaysia-France rare earths project to begin operations in early 2027, Macron says",
+   "url": "https://mymotherlode.com/news/world/11316955/malaysia-france-rare-earths-project-to-begin-operations-in-early-2027-macron-says.html",
+   "kilde": "GDELT",
+   "domene": "mymotherlode.com",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "rare earth"
+   ]
+  },
+  {
+   "tittel": "Ukraine strikes major Russian bridge with drones and missiles as aerial attacks escalate",
+   "url": "https://www.ualrpublicradio.org/npr-news/2026-11-17/ukraine-strikes-major-russian-bridge-with-drones-and-missiles-as-aerial-attacks-escalate",
+   "kilde": "GDELT",
+   "domene": "ualrpublicradio.org",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Ukraine partly topples Russia's strategic Crimea bridge",
+   "url": "https://www.yasstribune.com.au/story/9393518/ukraine-partly-topples-russias-strategic-crimea-bridge/",
+   "kilde": "GDELT",
+   "domene": "yasstribune.com.au",
+   "publisert": "2026-11-17T16:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
   {
    "tittel": "Russia intercepts 1,336 Ukrainian drones in single day",
    "url": "http://www.europesun.com/news/279436820/russia-intercepts-1-336-ukrainian-drones-in-single-day",
@@ -110,20 +229,6 @@
    "matchede_ord": [
     "ukraine",
     "russia"
-   ]
-  },
-  {
-   "tittel": "NVIDIA sets up new board committee to oversee national security, export controls",
-   "url": "http://www.hongkongherald.com/news/279438594/nvidia-sets-up-new-board-committee-to-oversee-national-security-export-controls",
-   "kilde": "GDELT",
-   "domene": "hongkongherald.com",
-   "publisert": "2026-11-17T15:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "export control"
    ]
   },
   {
@@ -258,21 +363,6 @@
    "matchede_ord": [
     "israeli",
     "iran"
-   ]
-  },
-  {
-   "tittel": "Ukraine partly topples Russia's strategic Crimea bridge",
-   "url": "https://www.juneesoutherncross.com.au/story/9393518/ukraine-partly-topples-russias-strategic-crimea-bridge/",
-   "kilde": "GDELT",
-   "domene": "juneesoutherncross.com.au",
-   "publisert": "2026-11-17T15:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -573,22 +663,6 @@
    ]
   },
   {
-   "tittel": "Ukraine strikes major Russian bridge with drones and missiles as aerial attacks escalate",
-   "url": "https://www.kgou.org/world/2026-11-17/ukraine-strikes-major-russian-bridge-with-drones-and-missiles-as-aerial-attacks-escalate",
-   "kilde": "GDELT",
-   "domene": "kgou.org",
-   "publisert": "2026-11-17T15:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian",
-    "missile"
-   ]
-  },
-  {
    "tittel": "Russia Rejects Black Sea Ceasefire Without Full Peace Deal, Turkey Says",
    "url": "https://www.kyivpost.com/post/90346",
    "kilde": "GDELT",
@@ -630,51 +704,6 @@
    "matchede_ord": [
     "ukraine",
     "missile"
-   ]
-  },
-  {
-   "tittel": "'Putin's Favorite Toy': Russian War Bloggers Fume After Crimean Bridge Arch Collapses",
-   "url": "https://www.kyivpost.com/post/90374",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-17T15:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Hungary Suspends Ukraine Rail Links After Russian Drone Strike",
-   "url": "https://www.kyivpost.com/post/90377",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-17T15:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Russia Hits US-Owned Bunge Plant in Dnipro for Third Time as Strikes on Ukrainian Businesses Mount",
-   "url": "https://www.kyivpost.com/post/90381",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-17T15:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
    ]
   },
   {
@@ -760,20 +789,6 @@
    ],
    "matchede_ord": [
     "gold price"
-   ]
-  },
-  {
-   "tittel": "Malaysia-France rare earths project to begin operations in early 2027, Macron says",
-   "url": "https://abcnews.com/International/wireStory/malaysia-france-rare-earths-project-begin-operations-early-138201779",
-   "kilde": "GDELT",
-   "domene": "abcnews.com",
-   "publisert": "2026-11-17T15:00:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
    ]
   },
   {
@@ -1356,20 +1371,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "In the news today: China trade deal extended, Carney meets Sheinbaum, Giller awarded - Medicine Hat NewsMedicine Hat News",
-   "url": "https://medicinehatnews.com/news/national-news/2026/11/17/in-the-news-today-china-trade-deal-extended-carney-meets-sheinbaum-giller-awarded/",
-   "kilde": "GDELT",
-   "domene": "medicinehatnews.com",
-   "publisert": "2026-11-17T13:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {
@@ -1962,48 +1963,6 @@
    "matchede_ord": [
     "election",
     "coup"
-   ]
-  },
-  {
-   "tittel": "Oil tanker set ablaze in Strait of Hormuz attack",
-   "url": "https://punchng.com/oil-tanker-set-ablaze-in-hormuz-attack/",
-   "kilde": "GDELT",
-   "domene": "punchng.com",
-   "publisert": "2026-11-16T16:15:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Cargo ship with Azerbaijani, Turkish crew sinks in Black Sea",
-   "url": "https://news.am/en/news/1075176",
-   "kilde": "GDELT",
-   "domene": "news.am",
-   "publisert": "2026-11-16T16:00:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "EU, Black Sea, Caucasus and Central Asia Ministers Advance Security Ties",
-   "url": "https://www.miragenews.com/eu-black-sea-caucasus-and-central-asia-1778020/",
-   "kilde": "GDELT",
-   "domene": "miragenews.com",
-   "publisert": "2026-11-16T16:00:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
    ]
   },
   {
