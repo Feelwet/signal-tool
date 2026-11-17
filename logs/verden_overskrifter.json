@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-17T15:52:50+0100",
+ "hentet": "2026-11-17T16:12:41+0100",
  "dato": "2026-11-17",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (10904) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1272) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,27 +12,27 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 119
+   "antall": 116
   },
   {
    "tema": "mideast_energy",
-   "antall": 100
+   "antall": 96
   },
   {
    "tema": "tariffs_trade",
-   "antall": 35
-  },
-  {
-   "tema": "rare_earths_semis",
-   "antall": 25
-  },
-  {
-   "tema": "risk_off_haven",
-   "antall": 23
+   "antall": 37
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 23
+   "antall": 25
+  },
+  {
+   "tema": "rare_earths_semis",
+   "antall": 24
+  },
+  {
+   "tema": "risk_off_haven",
+   "antall": 24
   },
   {
    "tema": "food_agri",
@@ -52,6 +52,135 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "NVIDIA sets up new board committee to oversee national security, export controls",
+   "url": "http://www.nigeriasun.com/news/279438594/nvidia-sets-up-new-board-committee-to-oversee-national-security-export-controls",
+   "kilde": "GDELT",
+   "domene": "nigeriasun.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "India strongly condemns Strait of Hormuz tanker attack as one national remains missing",
+   "url": "https://aninews.in/news/world/asia/india-strongly-condemns-strait-of-hormuz-tanker-attack-as-one-national-remains-missing20261117202107/",
+   "kilde": "GDELT",
+   "domene": "aninews.in",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Nvidia Forms Export Control Board Committee After Chip Curbs",
+   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-forms-export-control-board-105132905.html",
+   "kilde": "GDELT",
+   "domene": "yahoo.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "Ukraine launches 'unprecedented' strike on Crimean bridge, Zelenskyy says",
+   "url": "https://kxly920.com/2026/11/17/ukraine-launches-unprecedented-strike-on-crimean-bridge-zelenskyy-says/",
+   "kilde": "GDELT",
+   "domene": "kxly920.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "Privy Council rules 2011 State of Emergency was constitutionally legal",
+   "url": "https://www.cnc3.co.tt/privy-council-rules-2011-state-of-emergency-was-constitutional-legal/",
+   "kilde": "GDELT",
+   "domene": "cnc3.co.tt",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "India condemns attack on LPG tanker carrying 24 Indians in Strait of Hormuz, 1 missing: 'The targeting must end'",
+   "url": "https://www.hindustantimes.com/india-news/india-condemns-attack-on-lpg-tanker-carrying-24-indians-in-strait-of-hormuz-1-seafarer-missing-mea-the-targeting-must-end-101794926651905.html",
+   "kilde": "GDELT",
+   "domene": "hindustantimes.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Ukraine partly topples Russia's strategic Crimea bridge",
+   "url": "https://www.thecourier.com.au/story/9393518/ukraine-partly-topples-russias-strategic-crimea-bridge/",
+   "kilde": "GDELT",
+   "domene": "thecourier.com.au",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Ukraine hits vital Kerch Bridge that links Russia with Crimea",
+   "url": "https://www.theglobeandmail.com/world/article-ukraine-strikes-major-russian-bridge/",
+   "kilde": "GDELT",
+   "domene": "theglobeandmail.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Critical Condition: What Are We Doing About Nuclear War?",
+   "url": "https://www.thenation.com/article/world/nuclear-war-warning-disarmament/",
+   "kilde": "GDELT",
+   "domene": "thenation.com",
+   "publisert": "2026-11-17T15:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear war"
+   ]
+  },
   {
    "tittel": "Russia, Ukraine Trade Strikes On Key Bridges In Kyiv And Crimea",
    "url": "http://www.chinanationalnews.com/news/279438050/russia-ukraine-trade-strikes-on-key-bridges-in-kyiv-and-crimea",
@@ -524,21 +653,6 @@
    ]
   },
   {
-   "tittel": "Ukraine partly topples Russia's strategic Crimea bridge",
-   "url": "https://www.queanbeyanage.com.au/story/9393518/ukraine-partly-topples-russias-strategic-crimea-bridge/",
-   "kilde": "GDELT",
-   "domene": "queanbeyanage.com.au",
-   "publisert": "2026-11-17T14:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Germany and Norway to buy more US air defences for Ukraine",
    "url": "https://www.thelocal.de/20261117/germany-and-norway-to-buy-more-us-air-defences-for-ukraine",
    "kilde": "GDELT",
@@ -755,37 +869,6 @@
    "matchede_ord": [
     "air defense",
     "zelensky"
-   ]
-  },
-  {
-   "tittel": "Putin's £4bn Crimea prestige project lies in ruins after devastating Ukrainian missile strike - London Business News",
-   "url": "https://londonlovesbusiness.com/putins-4bn-crimea-prestige-project-lies-in-ruins-after-devastating-ukrainian-missile-strike/",
-   "kilde": "GDELT",
-   "domene": "londonlovesbusiness.com",
-   "publisert": "2026-11-17T14:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "missile",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Russian warplanes swarm South Korea's air defence zone as Seoul scrambles fighter jets - London Business News",
-   "url": "https://londonlovesbusiness.com/russian-warplanes-swarm-south-koreas-air-defence-zone-as-seoul-scrambles-fighter-jets/",
-   "kilde": "GDELT",
-   "domene": "londonlovesbusiness.com",
-   "publisert": "2026-11-17T14:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "air defence",
-    "russian"
    ]
   },
   {
@@ -1386,20 +1469,6 @@
    ]
   },
   {
-   "tittel": "EU imposes anti-dumping duty on steel imports from India, 4 other nations",
-   "url": "https://www.business-standard.com/economy/news/eu-imposes-anti-dumping-duty-on-steel-imports-from-india-4-other-nations-126111700316_1.html",
-   "kilde": "GDELT",
-   "domene": "business-standard.com",
-   "publisert": "2026-11-17T06:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "anti-dumping"
-   ]
-  },
-  {
    "tittel": "Chinese AI firms scale back cyber capabilities amid proposed export ban",
    "url": "https://www.business-standard.com/world-news/chinese-ai-firms-scale-back-cyber-capabilities-amid-proposed-export-ban-126111700190_1.html",
    "kilde": "GDELT",
@@ -1439,20 +1508,6 @@
    ],
    "matchede_ord": [
     "world war"
-   ]
-  },
-  {
-   "tittel": "U.S. Rule Sets AI Export Controls for Singapore and Global Data Centers",
-   "url": "https://econotimes.com/U-S-Rule-Sets-AI-Export-Controls-for-Singapore-and-Global-Data-Centers-1777991",
-   "kilde": "GDELT",
-   "domene": "econotimes.com",
-   "publisert": "2026-11-17T04:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "export control"
    ]
   },
   {
@@ -1823,20 +1878,6 @@
    ]
   },
   {
-   "tittel": "Safe Haven baby is first in Iowa to be relinquished through an adoption service provider",
-   "url": "https://www.ktiv.com/2026/11/16/safe-haven-baby-is-first-iowa-be-relinquished-through-an-adoption-service-provider/",
-   "kilde": "GDELT",
-   "domene": "ktiv.com",
-   "publisert": "2026-11-16T20:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "safe haven"
-   ]
-  },
-  {
    "tittel": "Cargo ship sinks off Bulgaria's Black Sea coast",
    "url": "https://kdhnews.com/news/world/cargo-ship-sinks-off-bulgarias-black-sea-coast/article_fad5ede7-b420-5e8f-b80f-b469519bc0ce.html",
    "kilde": "GDELT",
@@ -1877,20 +1918,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Gold price slides as Fed hike bets rise, silver bar and coin sales drop despite lower prices – Heraeus",
-   "url": "http://www.kitco.com/news/article/2026-11-16/gold-price-slides-fed-hike-bets-rise-silver-bar-and-coin-sales-drop-despite",
-   "kilde": "GDELT",
-   "domene": "kitco.com",
-   "publisert": "2026-11-16T16:00:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
