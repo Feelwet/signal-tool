@@ -114,7 +114,8 @@ def test_first_seen_stable_and_latency_append(tmp_path):
     assert N.append_latency(data2["items"], {"https://e24.example/n1"}, p) == 0
     rows = list(csv.DictReader(p.open()))
     assert len(rows) == 1 and rows[0]["url"] == "https://e24.example/n1"
-    assert int(rows[0]["lag_sec"]) == 2 * 3600
+    assert int(rows[0]["lag_sec"]) == 2 * 3600 and rows[0].get("flag", "") == ""
+    assert data1["first_run_utc"] == N._iso(NOW) and data2["first_run_utc"] == N._iso(NOW)
 
 
 def test_source_down_after_6h_keeps_source_listed():
@@ -156,11 +157,12 @@ def test_newsweb_json_mapping_no_body():
          "publishedTime": "2026-11-17T10:00:00Z"},
     ]}}).encode()
     rows = N.fetch_newsweb(feed, lambda *a, **k: _R(payload), NOW)
-    assert rows[0]["title"] == "EQNR: Mandatory notification of trade"
+    assert rows[0]["title"] == "Mandatory notification of trade"  # issuer is not prefixed into the title
+    assert rows[0]["issuer"] == "EQNR"
     assert rows[0]["url"] == "https://newsweb.oslobors.no/message/42"
-    assert rows[0]["section"] == "Norge" and rows[0]["paywall"] is False
+    assert rows[0]["section"] == "Børsmeldinger" and rows[0]["paywall"] is False
     assert rows[0]["published_utc"] == "2026-11-17T14:16:47Z"
-    assert rows[1]["title"] == "EQNR: Quarterly report"  # issuer already in title
+    assert rows[1]["title"] == "EQNR: Quarterly report" and rows[1]["issuer"] == "EQNR"
     assert all("SECRET" not in json.dumps(r) and "body" not in r for r in rows)
 
 
@@ -180,10 +182,10 @@ def test_collect_sections_and_no_theme_import(monkeypatch):
     assert [it["title"] for it in data["items"]] == ["NRK-sak", "E24-sak"]  # newest first (1 t vs 2 t)
     assert data["items"][0]["section"] == "Norge" and data["items"][1]["section"] == "Marked"
     assert "tema" not in data and all("tema" not in it and "score" not in it for it in data["items"])
-    # module must not pull in the theme matcher
-    import sys
-    assert "signaltool.themes" not in sys.modules and "signaltool.tema_trend" not in sys.modules
-    assert "signaltool.theme_maps" not in sys.modules and "signaltool.categories" not in sys.modules
+    # samleren skal ikke trekke inn temamatcheren (sjekk kilden, ikke sys.modules — andre tester importerer site)
+    src = Path(N.__file__).read_text()
+    for name in ("signaltool.themes", "tema_trend", "theme_maps", "categories"):
+        assert name not in src
 
 
 def test_write_output_and_state(tmp_path, monkeypatch):
@@ -197,4 +199,129 @@ def test_write_output_and_state(tmp_path, monkeypatch):
     N.collect(cfg, now=NOW, get=lambda *a, **k: _R(body), state={}, write=True)
     data = json.loads((tmp_path / "nyheter.json").read_text())
     assert data["n"] == 1 and site.exists()
+    assert data["first_run_utc"] == N._iso(NOW) and data["n_editorial"] == 1 and data["n_newsweb"] == 0
     assert list(csv.DictReader((tmp_path / "lat.csv").open()))
+
+
+
+def test_newsweb_same_title_different_issuers_kept():
+    a = N._item("Mandatory notification of trade", "https://newsweb.oslobors.no/message/1",
+                "Oslo Børs Newsweb", "newsweb", T0, "Børsmeldinger", False, issuer="EQNR")
+    b = N._item("Mandatory notification of trade", "https://newsweb.oslobors.no/message/2",
+                "Oslo Børs Newsweb", "newsweb", T0, "Børsmeldinger", False, issuer="DNB")
+    c = N._item("Mandatory notification of trade", "https://newsweb.oslobors.no/message/3",
+                "Oslo Børs Newsweb", "newsweb", T0, "Børsmeldinger", False, issuer="EQNR")
+    out = N.dedupe([a, b, c])
+    assert {(it["url"], it["issuer"]) for it in out} == {
+        ("https://newsweb.oslobors.no/message/1", "EQNR"),
+        ("https://newsweb.oslobors.no/message/2", "DNB"),
+    }
+
+
+def test_prune_pools_300_editorial_150_newsweb_and_tabs():
+    ed = [N._item(f"E{i}", f"https://e24.example/{i}", "E24", "e24", NOW - timedelta(minutes=i), "Marked", True)
+          for i in range(320)]
+    no = [N._item(f"N{i}", f"https://nrk.example/{i}", "NRK", "nrk", NOW - timedelta(minutes=i, seconds=1), "Norge", False)
+          for i in range(20)]
+    nw = [N._item(f"W{i}", f"https://newsweb.oslobors.no/message/{i}", "Oslo Børs Newsweb", "newsweb",
+                  NOW - timedelta(minutes=i, seconds=2), "Børsmeldinger", False, issuer=f"T{i}")
+          for i in range(180)]
+    nw.append(N._item("OldW", "https://newsweb.oslobors.no/message/old", "Oslo Børs Newsweb", "newsweb",
+                      T_OLD, "Børsmeldinger", False, issuer="OLD"))
+    out = N.prune_pools(ed + no + nw, NOW, 48, 300, 150)
+    assert sum(1 for it in out if it["pool"] == "editorial") == 300
+    assert sum(1 for it in out if it["pool"] == "newsweb") == 150
+    assert "OldW" not in {it["title"] for it in out}
+    assert all(it["section"] == "Børsmeldinger" for it in out if it["pool"] == "newsweb")
+    alt = [it for it in out if N.in_tab(it, "Alt")]
+    norge = [it for it in out if N.in_tab(it, "Norge")]
+    bors = [it for it in out if N.in_tab(it, "Børsmeldinger")]
+    assert all(not N.is_newsweb(it) for it in alt)
+    assert all(it["section"] == "Norge" and not N.is_newsweb(it) for it in norge)
+    assert all(N.is_newsweb(it) for it in bors) and len(bors) == 150
+    assert len(alt) + len(bors) == len(out)
+
+
+def test_first_run_not_overwritten_and_pub_ugyldig(tmp_path):
+    p = tmp_path / "lat.csv"
+    now = NOW
+    ok = N._item("Ok", "https://e24.example/ok", "E24", "e24", now - timedelta(minutes=3), "Marked", False, first_seen=now)
+    missing = N._item("Mangler", "https://e24.example/miss", "E24", "e24", None, "Marked", False, first_seen=now)
+    missing["published_utc"] = None
+    future = N._item("Fremtid", "https://e24.example/fut", "E24", "e24", now + timedelta(minutes=6), "Marked", False, first_seen=now)
+    slight = N._item("Liten", "https://e24.example/sl", "E24", "e24", now + timedelta(minutes=2), "Marked", False, first_seen=now)
+    n = N.append_latency([ok, missing, future, slight], set(), p, now=now)
+    assert n == 4
+    rows = list(csv.DictReader(p.open()))
+    by = {r["url"].rsplit("/", 1)[-1]: r for r in rows}
+    assert by["ok"]["flag"] == "" and int(by["ok"]["lag_sec"]) == 180
+    assert by["miss"]["flag"] == "pub_ugyldig" and by["miss"]["lag_sec"] == ""
+    assert by["fut"]["flag"] == "pub_ugyldig" and by["fut"]["lag_sec"] == ""
+    assert by["sl"]["flag"] == ""  # <5 min future stays valid; lag may be negative
+    assert int(by["sl"]["lag_sec"]) == -120
+    # collect keeps first_run_utc
+    cfg = {"retention_hours": 48, "feeds": [_feed()]}
+    body = _rss([("Sak", "https://e24.example/a", _rfc2822(T0))])
+    d1, st = N.collect(cfg, now=NOW, get=lambda *a, **k: _R(body), state={})
+    d2, _ = N.collect(cfg, now=NOW + timedelta(hours=3), get=lambda *a, **k: _R(body), state=st)
+    assert d1["first_run_utc"] == N._iso(NOW) == d2["first_run_utc"] == st["first_run_utc"]
+
+
+def test_latency_report_median_flag_n_lt_30_and_first_run_cutoff(tmp_path):
+    first = NOW
+    rows = []
+    # 10 backfill rows published before first_run — excluded
+    for i in range(10):
+        rows.append({"source": "E24", "published_utc": N._iso(first - timedelta(hours=2, minutes=i)),
+                     "lag_sec": "9999", "flag": ""})
+    # 29 valid E24 after first_run, lags 10,20,...,290
+    for i in range(29):
+        rows.append({"source": "E24", "published_utc": N._iso(first + timedelta(minutes=i)),
+                     "lag_sec": str((i + 1) * 10), "flag": ""})
+    # invalid — never as 0, excluded
+    rows.append({"source": "E24", "published_utc": "", "lag_sec": "0", "flag": "pub_ugyldig"})
+    rows.append({"source": "E24", "published_utc": N._iso(first + timedelta(minutes=40)),
+                 "lag_sec": "", "flag": "pub_ugyldig"})
+    # BBC: 30 valid (no FLAG), lags 1..30 median 15.5
+    for i in range(30):
+        rows.append({"source": "BBC", "published_utc": N._iso(first + timedelta(minutes=i)),
+                     "lag_sec": str(i + 1), "flag": ""})
+    p = tmp_path / "lat.csv"
+    with p.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=N.LATENCY_FIELDS)
+        w.writeheader(); w.writerows(rows)
+    rep = N.latency_report(p, first_run_utc=N._iso(first), min_n=30)
+    by = {s["source"]: s for s in rep["sources"]}
+    assert by["E24"]["n"] == 29 and by["E24"]["flag"] == "FLAG"
+    assert by["E24"]["median_sec"] == 150  # 10..290, 29 values, middle is 150
+    assert by["BBC"]["n"] == 30 and by["BBC"]["flag"] == ""
+    assert by["BBC"]["median_sec"] == 15.5
+    assert rep["all"]["n"] == 59 and rep["all"]["flag"] == ""
+    # script entry
+    assert N.latency_counts([], first)["all"]["flag"] == "FLAG" and N.latency_counts([], first)["all"]["n"] == 0
+
+
+def test_page_layout_tabs_raw_url_and_ft_credit():
+    from signaltool import nyheter_page as P
+    from signaltool import site as S
+    h = P.html()
+    css = P.PAGE_CSS
+    assert P.TABS == ("Alt", "Norge", "Marked", "Verden", "Børsmeldinger")
+    for t in P.TABS:
+        assert f'data-tab="{t}"' in h
+    assert "Tech" not in h and "Energi" not in h and "data-tab=\"Alle\"" not in h
+    assert "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nyheter.json" in h
+    assert "data/nyheter.json" in h
+    assert "© The Financial Times Limited 2026" in h
+    # 390 px metrics
+    assert "height:56px" in css and "font:600 17px/24px" in css and "font:400 12px/16px" in css
+    assert ".ny-tabs{height:44px" in css.replace(" ", "") or "ny-tabs{height:44px" in css
+    assert "min-height:56px" in css and "max-height:72px" in css
+    assert "flex:0 0 44px" in css and "15px/20px" in css and "-webkit-line-clamp:2" in css
+    assert "width:720px" in css and "width:320px" in css and "gap:24px" in css and "width:1064px" in css
+    assert "height:48px" in css and "Ingen saker matcher" in h and "Ingen kilder svarer nå" in h
+    assert "ny-chip" in css and "issuer" in h
+    page = S.page("Nyheter", h, 0, {"generated": "2026-11-17 15:00"})
+    assert 'class="pg-nyheter"' in page or "pg-nyheter" in page
+    assert "nyheter.html" in page
+    assert "Børsmeldinger" in page

@@ -1,8 +1,8 @@
 """Fanelinje nederst på mobil (≤768 px, UxBot 01.11). 1280 beholder toppmeny/sidemeny.
-Fem faner: Oversikt, Tickere, Oslo, Signal-boka, Mer. «Mer» åpner bunnark med resten av sidene, så ingen side blir uoppnåelig."""
+Seks faner: Nyheter, Oversikt, Tickere, Oslo, Signal-boka, Mer. min-width:0 så sju trykkflater får plass på 390 px. «Mer» åpner bunnark med resten av sidene, så ingen side blir uoppnåelig."""
 from html import escape as E
 
-TABS = [("index.html", "Oversikt", "home"), ("tickere.html", "Tickere", "list"), ("oslo.html", "Oslo", "pin"),
+TABS = [("nyheter.html", "Nyheter", "news"), ("index.html", "Oversikt", "home"), ("tickere.html", "Tickere", "list"), ("oslo.html", "Oslo", "pin"),
         ("portefolje.html", "Signal-boka", "book")]
 # Alle sider fra ☰ som ikke har egen fane + undersider/ankre som hadde egen lenke (Røde flagg, Treffrate, Kilder)
 MORE = [("trender.html", "Trender"), ("om.html", "Om siden"), ("temaer.html", "Temaer"), ("sektorer.html", "Sektorer"), ("makro.html", "Makro"), ("kalender.html", "Kalender"),
@@ -16,6 +16,7 @@ ICON = {
     "list": f'<path {_P} d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
     "pin": f'<path {_P} d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle {_P} cx="12" cy="9.5" r="2.5"/>',
     "book": f'<path {_P} d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 5v16M8 7h7"/>',
+    "news": f'<path {_P} d="M4 5h12v14H6a2 2 0 0 1-2-2V5z"/><path {_P} d="M16 7h3a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H6"/><path {_P} d="M8 9h6M8 13h6M8 17h4"/>',
     "more": f'<circle {_P} cx="5" cy="12" r="1.3"/><circle {_P} cx="12" cy="12" r="1.3"/><circle {_P} cx="19" cy="12" r="1.3"/>',
 }
 
@@ -43,7 +44,7 @@ CSS = """
 .side,.side-toggle,body.nav-open::after{display:none!important}
 header.top{padding-left:calc(12px + env(safe-area-inset-left,0px))}
 .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);box-sizing:border-box;background:#1c2430;border-top:1px solid #3b4757}
-.tb-t{flex:1 1 0;min-width:64px;height:56px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#94a3b8!important;text-decoration:none!important;font:500 11px/14px system-ui,-apple-system,sans-serif;background:none;border:0;border-top:2px solid transparent;padding:0;margin:-1px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tb-t{flex:1 1 0;min-width:0;height:56px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#94a3b8!important;text-decoration:none!important;font:500 11px/14px system-ui,-apple-system,sans-serif;background:none;border:0;border-top:2px solid transparent;padding:0;margin:-1px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tb-t.on{color:#58a6ff!important;border-top-color:#58a6ff}.tb-t span{white-space:nowrap}.tb-i{width:22px;height:22px;flex:none}
 body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
 .ms-bg{display:block;position:fixed;inset:0;z-index:58;background:rgba(0,0,0,.5)}.ms-bg[hidden]{display:none}

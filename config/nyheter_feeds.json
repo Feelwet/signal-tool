@@ -3,17 +3,15 @@
   "checked_at_utc": "2026-11-17T14:25:38Z",
   "checked_at_oslo": "2026-11-17 15:25 CET",
   "retention_hours": 48,
-  "max_items": 300,
   "source_down_after_hours": 6,
   "sections": [
-    "Alle",
+    "Alt",
     "Norge",
     "Marked",
     "Verden",
-    "Tech",
-    "Energi"
+    "Børsmeldinger"
   ],
-  "notes": "v1: bare enabled-feeder hentes. Dedup er eksakt URL eller samme tittel+kilde. Ingen krysskilde-sammenslåing, ingen tematagger, ingen rangering, ingen artikkeltekst. Seksjon kommer fra denne fila, ikke temamatcheren.",
+  "notes": "v1: bare enabled-feeder hentes. Dedup er eksakt URL eller samme tittel+kilde (Newsweb: +utsteder). Ingen krysskilde-sammenslåing, ingen tematagger, ingen rangering, ingen artikkeltekst. Seksjon kommer fra denne fila, ikke temamatcheren. Tech/Energi-feeder ligger under Marked. Newsweb er bare i Børsmeldinger (ikke Alt/Norge), egen pulje maks 150 / 48 t. Redaksjonelt maks 300 / 48 t.",
   "feeds": [
     {
       "id": "nrk-siste",
@@ -119,7 +117,7 @@
       "url": "https://api3.oslo.oslobors.no/v1/newsreader/list",
       "kind": "newsweb_json",
       "item_url": "https://newsweb.oslobors.no/message/{}",
-      "section": "Norge",
+      "section": "Børsmeldinger",
       "paywall": false,
       "enabled": true,
       "terms": "Offentlig JSON-API uten nøkkel, allerede i bruk i signal-tool (collectors/newsweb.py). Ingen RSS funnet; API-et gir tittel, utsteder, tid og meldings-id. Ikke kursdata."
@@ -167,7 +165,7 @@
       "title": "NYT Technology",
       "url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
       "kind": "rss",
-      "section": "Tech",
+      "section": "Marked",
       "paywall": true,
       "enabled": true,
       "terms": "Samme som nyt-home."
@@ -179,7 +177,7 @@
       "title": "NYT Energy & Environment",
       "url": "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml",
       "kind": "rss",
-      "section": "Energi",
+      "section": "Marked",
       "paywall": true,
       "enabled": true,
       "terms": "Samme som nyt-home."
@@ -215,7 +213,7 @@
       "title": "BBC Technology",
       "url": "https://feeds.bbci.co.uk/news/technology/rss.xml",
       "kind": "rss",
-      "section": "Tech",
+      "section": "Marked",
       "paywall": false,
       "enabled": true,
       "terms": "Samme som bbc-world."
@@ -287,7 +285,7 @@
       "title": "Financial Times Technology",
       "url": "https://www.ft.com/technology?format=rss",
       "kind": "rss",
-      "section": "Tech",
+      "section": "Marked",
       "paywall": true,
       "enabled": true,
       "terms": "Samme som ft-world."
@@ -299,7 +297,7 @@
       "title": "Teknisk Ukeblad",
       "url": "https://www.tu.no/rss/",
       "kind": "rss",
-      "section": "Tech",
+      "section": "Marked",
       "paywall": true,
       "enabled": true,
       "terms": "Offisiell RSS (tu.no/rss/). Seksjonsfeeder for energi/olje/IT ga 404 17.11, så hovedfeeden brukes (blandet tech/industri/energi). Ingen særskilt RSS-lisens funnet raskt."
@@ -340,5 +338,7 @@
       "enabled": false,
       "terms": "Per-ticker-RSS virker (EQNR, AAPL, MSFT hadde ferske saker; DNB/NHY var eldre enn 24 t). Ingen generell Yahoo Finance-nyhetsfeed (rssindex/topfinstories 404). Yahoo ToS tillater visning av feedinnhold uendret med attribusjon og lenke, uten reklame i feeden. Ikke i 10-minuttersjobben: for mange tickere, og siden skal ikke ha tickerlenker."
     }
-  ]
+  ],
+  "max_items_editorial": 300,
+  "max_items_newsweb": 150
 }

@@ -4,7 +4,7 @@ from signaltool import site as S
 
 def test_tabbar_tabs_and_more_sheet():
     h = TB.html("makro.html", "")
-    for lab in ("Oversikt", "Tickere", "Oslo", "Signal-boka", "Mer"):
+    for lab in ("Nyheter", "Oversikt", "Tickere", "Oslo", "Signal-boka", "Mer"):
         assert f"<span>{lab}</span>" in h
     assert 'class="tb-t tb-more on"' in h                       # aktiv side under Mer lyser Mer-fanen
     for href in ("temaer.html", "sektorer.html", "makro.html", "kalender.html", "metode.html", "tickere.html?filter=flagg", "metode.html#treffrate", "kilder.html"):
@@ -25,3 +25,10 @@ def test_tabbar_css_and_page():
     assert "72px + env(safe-area-inset-bottom" in c and ".side-toggle" in c and "height:48px" in c and "height:40px" in c and "height:32px" in c
     html = S.page("Oversikt", "<p>x</p>", 0, {"generated": "2026-11-01 21:19"})
     assert 'class="tabbar"' in html and 'id="more-sheet"' in html
+
+
+def test_nyheter_is_first_tab_and_min_width_fits_390():
+    assert TB.TABS[0] == ("nyheter.html", "Nyheter", "news")
+    assert "min-width:0" in TB.CSS and "min-width:64px" not in TB.CSS
+    from signaltool import site_layout as L
+    assert L.NAV[0] == ("Nyheter", "nyheter.html", [])

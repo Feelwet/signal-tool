@@ -18,6 +18,7 @@ from . import ux2 as UX2
 from . import ux390 as U390
 from . import tema_trend as TT
 from . import tabbar as TB
+from . import nyheter_page as NP
 from . import sectors as SEC
 from . import calendar_view as CV
 from . import inflation as INF
@@ -431,6 +432,7 @@ def spark(vals, w=140, h=32):
 
 
 NAV = [
+    ("nyheter.html", "Nyheter"),
     ("index.html", "Oversikt"),
     ("temaer.html", "Temaer"),
     ("tickere.html", "Tickere"),
@@ -468,6 +470,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
         "Trender": "trender.html", "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html", "Om siden": "om.html",
+        "Nyheter": "nyheter.html",
     }
     cur = active.get(title)
     if cur is None:
@@ -821,7 +824,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS   # U390 sist av mobilradene (≤ 599 px); TT etter (Temaer-trend)
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS + NP.PAGE_CSS   # U390 sist av mobilradene (≤ 599 px); TT etter (Temaer-trend); Nyheter sist
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -931,6 +934,8 @@ def build(snap: dict) -> Path:
     if C.LOG_PATH.exists():  # public forward log of every day's categories (also restores CI state if the cache is lost)
         (SITE / "historikk").mkdir(exist_ok=True)
         shutil.copy(C.LOG_PATH, SITE / "historikk" / "kategorier.csv")
+    (SITE / "nyheter.html").write_text(page("Nyheter", NP.html(snap), 0, snap))
+    NP.copy_json(SITE)
     return SITE / "index.html"
 
 

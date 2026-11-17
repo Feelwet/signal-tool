@@ -14,6 +14,7 @@ REQUIRED = {
     "temaer.html": ["Temaer", "Temascore"],
     "oslo.html": ["Oslo Børs"],
     "makro.html": [], "kalender.html": [], "style.css": [],
+    "nyheter.html": ["Nyheter", "Børsmeldinger", "raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nyheter.json"],
 }
 
 
