@@ -554,7 +554,7 @@ def run(fast: bool = False) -> dict:
     # Læringsløkka (rådata, privat i logs/) + risikonivå (ukentlig, cache i data/) – feiler aldri kjøringen
     try:
         from . import learnloop
-        n = learnloop.record(snap, ranked)
+        n = learnloop.record(snap, ranked, frames=mdata)
         status["Læringsløkke (rådata)"] = f"ok ({n['raw']} rader, {n['exits']} ut, {n['flags']} flagg)"
     except Exception as ex:
         log.exception("learnloop failed")

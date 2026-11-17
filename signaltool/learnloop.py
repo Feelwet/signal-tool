@@ -24,18 +24,36 @@ FACTOR_TOL = 0.02     # avvik > 2 % mellom Yahoo i dag og loggført kurs på sam
 FACTOR_SPREAD = 0.005  # ... og samme forhold (±0,5 %) på minst 2 loggførte datoer = konstant faktor
 
 
-def _closes(tickers, period="1y"):
-    import yfinance as yf
+def _bar_date(k) -> str:
+    if hasattr(k, "to_pydatetime"):
+        k = k.to_pydatetime()
+    if hasattr(k, "date") and callable(k.date):
+        return str(k.date())[:10]
+    return str(k)[:10]
+
+
+def _frame_closes(frames: dict | None) -> dict:
+    """{ticker: {dato: sluttkurs}} fra samme kursrammer som snapshot (markets.collect)."""
     out = {}
-    if not tickers:
-        return out
-    d = yf.download(sorted(set(tickers)), period=period, auto_adjust=False, progress=False, group_by="column")["Close"]
-    if not hasattr(d, "columns"):
-        d = d.to_frame(tickers[0])
-    for t in d.columns:
-        s = d[t].dropna()
-        out[str(t)] = {str(k.date()): float(v) for k, v in s.items()}
+    for t, df in (frames or {}).items():
+        if df is None or not len(df):
+            continue
+        try:
+            s = df["Close"].dropna()
+        except Exception:
+            continue
+        out[str(t)] = {_bar_date(k): float(v) for k, v in s.items()}
     return out
+
+
+def _closes(tickers, period="2y"):
+    """Samme henting som snapshot: markets.download (freshness.repair_lagging inkl. meta-sluttkurs, clean_universe, auto_adjust=True)."""
+    from .collectors import markets
+    if not tickers:
+        return {}
+    short: dict = {}
+    data = markets.download(list(dict.fromkeys(tickers)), period=period, short=short)
+    return _frame_closes({**data, **short})
 
 
 def n_types(e: dict) -> int:
@@ -150,7 +168,7 @@ def dq_write(flags: list[dict]) -> None:
                 f.write(json.dumps(x, ensure_ascii=False) + "\n")
 
 
-def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
+def record(snap: dict, ranked: list[dict], today: str | None = None, frames: dict | None = None, now=None) -> dict:
     from .since import bench_for
     today = today or str(snap.get("date") or date.today())
     tick = [e["ticker"] for e in snap.get("tickers", [])]
@@ -163,15 +181,21 @@ def record(snap: dict, ranked: list[dict], today: str | None = None) -> dict:
     runs = sorted({r["date"] for r in rows if r["date"] < today})
     prev = runs[-1] if runs else None
     prev_t = sorted({r["ticker"] for r in rows if r["date"] == prev and r.get("category") != "tema"}) if prev else []
-    try:
-        px = _closes(tick + idx_t + [t for t in prev_t if t not in tick])
-    except Exception as ex:
-        log.warning("learnloop prices: %s", ex)
-        px = {}
+    want = tick + idx_t + [t for t in prev_t if t not in tick]
+    px = _frame_closes(frames)
+    missing = [t for t in want if t not in px or not px[t]]
+    if missing:
+        try:
+            px.update(_closes(missing))
+        except Exception as ex:
+            log.warning("learnloop prices: %s", ex)
     # AnalBot 11.11: close, close_date og r5/r20/r60 bare fra LUKKEDE barer (dagens bar droppes før stengetid + 30 min i
     # børsens tidssone, closedbars). Historiske rader (før 11.11) er ikke rettet bakover: de kan ha intradag-bar som siste kurs.
+    # AnalBot 17.11: kursene tas fra samme rammer som snapshot (markets.collect / freshness.repair_lagging, inkl. meta-sluttkurs),
+    # ikke et eget yfinance-kall uten reparasjon (det lå én bar bak 17.11, f.eks. SCANA.OL 13.11 i stedet for lukket 16.11).
+    # Historiske learn_raw-rader rettes ikke uten AnalBots godkjenning av diffen.
     from . import closedbars as CB
-    px = {t: CB.series(v, t) for t, v in px.items()}
+    px = {t: CB.series(v, t, now) for t, v in px.items()}
     # 1) rådata
     raw = []
     for i, e in enumerate(snap.get("tickers", []), 1):
