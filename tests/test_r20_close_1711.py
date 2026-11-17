@@ -141,3 +141,24 @@ def test_unknown_exchange_empty_flag():
     assert val == "" and flag == "ukjent børs"
     val2, flag2 = compute("SAAB-B.ST", s, now)
     assert val2 == "" and flag2 == "ukjent børs"
+
+
+def test_share_class_usa_after_market_suffix_change():
+    """Etter market()/bors_of (suffiks alene): BRK.B og MOG.A er fortsatt USA med US-stengetid.
+    .L og .ST er kjente suffiksbørser i market(), men r20_close har ingen stengetid (ukjent børs).
+    """
+    from signaltool.bors import bors_of
+    from signaltool.risk import market
+    assert market("BRK.B") == "US" and bors_of("BRK.B") == "USA"
+    assert market("MOG.A") == "US" and bors_of("MOG.A") == "USA"
+    assert exchange_close("BRK.B") == CLOSE[""]
+    assert exchange_close("MOG.A") == CLOSE[""]
+    assert yahoo_alias("BRK.B") == "BRK-B" and yahoo_alias("MOG.A") == "MOG-A"
+    assert market("BA.L") == "Storbritannia" and market("SAAB-B.ST") == "Sverige"
+    assert exchange_close("BA.L") is None and exchange_close("SAAB-B.ST") is None
+    now = datetime(2026, 10, 25, 21, 24, 47, tzinfo=timezone.utc)
+    s = _ser("2026-10-23", 30)
+    assert compute("BA.L", s, now) == ("", "ukjent børs")
+    assert compute("SAAB-B.ST", s, now) == ("", "ukjent børs")
+    val, flag = compute("BRK.B", s, now)
+    assert flag == "" and val == f"{_exp(s, '2026-10-23'):.6f}"
