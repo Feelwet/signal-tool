@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-17T16:12:41+0100",
+ "hentet": "2026-11-17T16:19:01+0100",
  "dato": "2026-11-17",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (1272) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,19 +12,15 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 116
+   "antall": 114
   },
   {
    "tema": "mideast_energy",
-   "antall": 96
+   "antall": 88
   },
   {
    "tema": "tariffs_trade",
-   "antall": 37
-  },
-  {
-   "tema": "shipping_chokepoints",
-   "antall": 25
+   "antall": 35
   },
   {
    "tema": "rare_earths_semis",
@@ -35,8 +31,12 @@
    "antall": 24
   },
   {
+   "tema": "shipping_chokepoints",
+   "antall": 24
+  },
+  {
    "tema": "food_agri",
-   "antall": 18
+   "antall": 16
   },
   {
    "tema": "elections_political",
@@ -1954,34 +1954,6 @@
    "kilde": "GDELT",
    "domene": "hurriyetdailynews.com",
    "publisert": "2026-11-16T15:30:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "PwC Romania Advises Mazarine Energy On Acquisition Of Black Sea Oil & Gas",
-   "url": "http://www.zfenglish.com/companies/pwc-romania-advises-mazarine-energy-on-acquisition-of-black-sea-oil-gas-23282885",
-   "kilde": "GDELT",
-   "domene": "zfenglish.com",
-   "publisert": "2026-11-16T15:15:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "Turkish, Azerbaijani crew rescued after Black Sea ship sinks",
-   "url": "https://www.dailysabah.com/turkiye/turkish-azerbaijani-crew-rescued-after-black-sea-ship-sinks/news",
-   "kilde": "GDELT",
-   "domene": "dailysabah.com",
-   "publisert": "2026-11-16T15:15:00Z",
    "tema": "food_agri",
    "temaer": [
     "food_agri"
