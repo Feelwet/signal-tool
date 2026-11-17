@@ -4,12 +4,16 @@ import csv
 import hashlib
 from pathlib import Path
 
+import pytest
+
 from signaltool import portfolio_books as B
 from signaltool import testbooks_page as TB
 from signaltool.portfolio import _f, _read, state
 
 ROOT = Path(__file__).resolve().parents[1]
 DIFF = Path("/workspace/signal-tool-avvik/closevalid_books_diff_1611.csv")
+# Diff-fila er privat (ligger på boksen, ikke i repoet); i CI hoppes de to testene som leser den over.
+needs_diff = pytest.mark.skipif(not DIFF.exists(), reason="privat diff-fil, ikke i repoet (CI)")
 SKIP = {("kontroll_tilfeldig_v1", "2026-10-29-0001"), ("kontroll_tilfeldig_v1", "2026-10-30-0018")}
 INTRA_HASH = "37909c88e52cb349738f278344e0ebabf2ebd6cafd29faad8434127e6f13f431"
 
@@ -19,6 +23,7 @@ def _fills(book):
     return [r for r in _read(tp) if r.get("event") == "fill"]
 
 
+@needs_diff
 def test_twenty_eight_fills_match_yahoo_close_tech_untouched():
     want = {(r["book"], r["order_id"]): r for r in csv.DictReader(DIFF.open()) if r["typ"] == "fill"}
     assert len(want) == 30
@@ -48,6 +53,7 @@ def test_intraday_fills_audit_trail_unchanged():
     assert intra[("hoy_risiko_v1", "2026-10-29-0001")]["fill_price"] == "350.5"
 
 
+@needs_diff
 def test_fill_recalc_close_logged_for_rewritten_and_follow_on_sales():
     dev = [r for r in _read(ROOT / "logs/portfolio_deviations.csv") if r.get("kind") == "fill_recalc_close"]
     keys = {(r["book_id"], r["order_id"]) for r in dev}
