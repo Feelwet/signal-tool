@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nyheter – signal-tool</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Midlertidig stub. UxBot eier layout; ikke bygg ferdig side herfra. */
+  .ny-wrap{max-width:52rem;margin:1.5rem auto;padding:0 1rem}
+  .ny-src{font-size:.8rem;color:#8b949e}
+  .ny-src.down{color:#92400E}
+  .ny-item{margin:0;padding:.55rem 0;border-bottom:1px solid #222}
+  .ny-item a{color:inherit;text-decoration:none}
+  .ny-item a:hover{text-decoration:underline}
+  .ny-meta{font-size:.75rem;color:#8b949e}
+  .ny-tabs button{margin:0 .3rem .4rem 0}
+  .ny-tabs button.on{font-weight:700}
+</style>
+</head>
+<body>
+<main class="ny-wrap">
+  <h1>Nyheter</h1>
+  <p>Automatisk oversikt over overskrifter. Bare tittel, kilde, tid og lenke. Ingen sammendrag.</p>
+  <p id="ny-gen" class="ny-src"></p>
+  <div id="ny-sources" class="ny-src"></div>
+  <div class="ny-tabs" id="ny-tabs"></div>
+  <div id="ny-list"></div>
+  <p class="ny-meta">© tilhører den enkelte kilden. Financial Times-saker: © The Financial Times Limited 2026. Lenkene går til originalen.</p>
+</main>
+<script>
+(function(){
+  const sections=["Alle","Norge","Marked","Verden","Tech","Energi"];
+  let data={items:[],sources:[]}, cur="Alle";
+  const urls=["data/nyheter.json","https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nyheter.json"];
+  function pad(iso){
+    if(!iso) return "";
+    const d=new Date(iso);
+    return isNaN(d) ? "" : d.toLocaleString("nb-NO",{timeZone:"Europe/Oslo",day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+  }
+  function render(){
+    const tabs=document.getElementById("ny-tabs");
+    tabs.innerHTML=sections.map(s=>`<button type="button" data-s="${s}" class="${s===cur?"on":""}">${s}</button>`).join("");
+    tabs.querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=b.dataset.s;render();});
+    const items=(data.items||[]).filter(it=>cur==="Alle"||it.section===cur);
+    document.getElementById("ny-list").innerHTML=items.map(it=>{
+      const lock=it.paywall?" 🔒":"";
+      return `<article class="ny-item"><a href="${it.url}" rel="noopener noreferrer">${it.title}</a>
+        <div class="ny-meta">${it.source}${lock} · ${pad(it.published_utc)} · ${it.section||""}</div></article>`;
+    }).join("") || "<p>Ingen saker lastet ennå.</p>";
+    document.getElementById("ny-gen").textContent=data.generated_at_oslo?("Sist hentet "+data.generated_at_oslo):"";
+    document.getElementById("ny-sources").innerHTML=(data.sources||[]).map(s=>{
+      const st=s.status==="kilde nede"?" · kilde nede":"";
+      const t=s.last_updated?(" sist "+s.last_updated):"";
+      return `<span class="${s.status==="kilde nede"?"down":""}">${s.name}${s.paywall?" 🔒":""}${t}${st}</span>`;
+    }).join(" · ");
+  }
+  async function load(){
+    for (const u of urls){
+      try{
+        const r=await fetch(u,{cache:"no-store"});
+        if(r.ok){data=await r.json();render();return;}
+      }catch(e){}
+    }
+    render();
+  }
+  load();
+})();
+</script>
+</body>
+</html>
