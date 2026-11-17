@@ -1,0 +1,108 @@
+name: Nyheter – overskrifter hvert 10. minutt
+
+# 17.11: ren Actions-jobb, ingen bot. Henter bare åpne RSS/Newsweb, skriver logs/nyheter.json
+# og logs/nyheter_latency.csv. Deployer ikke GitHub Pages (unngår kollisjon med nightly.yml
+# i gruppen «pages» og med news_hourly.yml). JSON blir synlig på siden når natt-/timesjobben
+# kopierer fila inn i site/data/, eller når stubben henter raw fra master.
+#
+# Cron: minutt 8,18,28,38,48,58 UTC – unna nattkjøringen (05:17 og 17:15 UTC) og
+# timesjobben (minutt 40). Offentlig repo: ubegrensede Actions-minutter. ~25 feeder × 1 s
+# throttling + oppstart ≈ 1–2 min, godt under 10-minuttersintervallet. timeout 8 min.
+# GitHub kan forsinke scheduled workflows; AnalBot måler median first_seen−published i latency-loggen (mål ≤ 15 min).
+on:
+  schedule:
+    - cron: "8,18,28,38,48,58 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: nyheter
+  cancel-in-progress: true
+
+env:
+  TZ: Europe/Oslo
+  PYTHONUNBUFFERED: "1"
+  SIGNAL_UA: ${{ vars.SIGNAL_UA || format('signal-tool nyheter (https://github.com/{0})', github.repository) }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.chk.outputs.go }}
+    steps:
+      - id: chk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=0
+          for st in queued in_progress waiting pending requested; do
+            c=$(gh api "repos/${{ github.repository }}/actions/workflows/nightly.yml/runs?status=$st&per_page=1" -q .total_count) || c=1
+            n=$((n + c))
+          done
+          if [ "$n" -gt 0 ]; then
+            echo "::notice::nattkjøringen står i kø eller kjører – nyheter hopper over denne runden"
+            echo go=false >> "$GITHUB_OUTPUT"
+          else
+            echo go=true >> "$GITHUB_OUTPUT"
+          fi
+
+  collect:
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Tester for Nyheter-samleren
+        run: python -m pytest -q tests/test_nyheter_1711.py
+      - name: Hent overskrifter
+        run: python -m signaltool.nyheter
+      - name: Commit liste og latency-logg
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/ours
+          cp logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv /tmp/ours/ 2>/dev/null || true
+          for i in 1 2 3 4 5; do
+            git fetch -q origin "${GITHUB_REF_NAME}" && git reset -q --hard "origin/${GITHUB_REF_NAME}"
+            mkdir -p logs
+            cp /tmp/ours/nyheter.json /tmp/ours/nyheter_state.json logs/ 2>/dev/null || true
+            # latency-loggen er append-only: behold union, origin vinner ikke over nye rader
+            if [ -f /tmp/ours/nyheter_latency.csv ]; then
+              if [ -f logs/nyheter_latency.csv ]; then
+                python3 - <<'PY'
+import csv
+from pathlib import Path
+ours, dest = Path("/tmp/ours/nyheter_latency.csv"), Path("logs/nyheter_latency.csv")
+def rows(p):
+    with p.open() as f:
+        return list(csv.DictReader(f))
+seen = {(r.get("url"), r.get("first_seen_utc")) for r in rows(dest)}
+out = rows(dest)
+for r in rows(ours):
+    key = (r.get("url"), r.get("first_seen_utc"))
+    if key not in seen:
+        out.append(r); seen.add(key)
+fields = list(out[0]) if out else ["first_seen_utc","published_utc","source","url","lag_sec"]
+with dest.open("w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=fields)
+    w.writeheader(); w.writerows(out)
+PY
+              else
+                cp /tmp/ours/nyheter_latency.csv logs/
+              fi
+            fi
+            git add logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv
+            git diff --cached --quiet && { echo "ingen endring"; exit 0; }
+            git -c user.name=GrokBot -c user.email=bot@box commit -q -m "Nyheter: overskrifter $(date '+%F %H:%M') [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          echo "::error::kunne ikke pushe nyhetslisten"; exit 1
