@@ -57,9 +57,14 @@ def cell(r: dict | None, score_html: str = "") -> str:
 EMPTY_BOOK = "Ingen avsluttede handler ennå. Resultater vises etter 30."
 
 CSS = """
-.rk{display:inline-flex;align-items:center;box-sizing:border-box;height:28px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;color:#fff;vertical-align:middle}
-/* UxBot 09.11: samme stil som flaggmerket – Høy rød tekst og kant, Middels gul (--warn), Lav grå; ingen lyse hex-bakgrunner */
-.rk-lav{background:transparent;color:var(--mut);border:1px solid var(--line)}.rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}.rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}.rk-na{background:transparent;color:var(--mut);border:1px solid #30363d}
+.rk{display:inline-flex;align-items:center;box-sizing:border-box;height:28px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;color:var(--ink,#e6edf3);vertical-align:middle}
+/* UxBot 17.11: nøytralt merke (tekst alltid synlig). Fargevariant ligger bak body.rk-farger, men er IKKE på – AnalBot har ikke godkjent farge ennå. */
+.rk-lav,.rk-middels,.rk-hoy,.rk-na{background:transparent;color:var(--ink,#e6edf3);border:1px solid #6b7787}
+/* Fargevariant (av): Høy --down, Middels --warn, Lav --up */
+body.rk-farger .rk-lav{background:transparent;color:var(--up);border:1px solid var(--up)}
+body.rk-farger .rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}
+body.rk-farger .rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}
+body.rk-farger .rk-na{background:transparent;color:var(--mut);border:1px solid #30363d}
 .rk.rk-s{height:20px;padding:0 7px;font-size:11px;border-radius:5px}
 p.since.rk-line{display:flex;align-items:center;gap:0;overflow:visible;white-space:nowrap;margin:0 0 8px;min-height:28px}
 p.since.rk-line .sl-t{overflow:hidden;text-overflow:ellipsis;min-width:0}

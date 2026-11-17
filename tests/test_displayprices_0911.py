@@ -245,9 +245,13 @@ def test_trend_meta_line_moved_into_trend_panels():
 
 def test_risk_badges_like_flag_badge_no_light_hex():
     from signaltool import site_risk as RK
-    assert '.rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}' in RK.CSS
-    assert '.rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}' in RK.CSS
-    assert '.rk-lav{background:transparent;color:var(--mut);border:1px solid var(--line)}' in RK.CSS
+    # Nøytralt merke er på; fargevariant bare bak body.rk-farger (ikke aktiv).
+    assert ".rk-lav,.rk-middels,.rk-hoy,.rk-na{background:transparent;color:var(--ink,#e6edf3);border:1px solid #6b7787}" in RK.CSS
+    assert "body.rk-farger .rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}" in RK.CSS
+    assert "body.rk-farger .rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}" in RK.CSS
+    assert "body.rk-farger .rk-lav{background:transparent;color:var(--up);border:1px solid var(--up)}" in RK.CSS
+    from signaltool import site as S
+    assert "rk-farger" not in S.CSS and 'rk-farger' not in S.page("Tickere", "<p>x</p>", 0, {"generated": "2026-11-17 12:00"})
     for hx in ('#FEF3C7', '#92400E', '#FEE2E2', '#991B1B'):
         assert hx not in RK.CSS
 

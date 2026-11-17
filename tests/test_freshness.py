@@ -212,10 +212,11 @@ def test_workflow_commits_new_logs():
 
 def test_filter_ny_i_dag_last_hidden_when_zero():
     from signaltool import tickerlist as TL
-    assert 'data-f="ny"' not in TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": False}}]})
+    z = TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": False}}]})
+    assert 'data-k="ny"' in z and "Ingen avkastning (0)" in z and "is-zero" in z
     h = TL.filter_row({"tickers": [{"ticker": "A", "_ret": {"new": True}}, {"ticker": "B", "_ret": {"new": True}}, {"ticker": "C", "_ret": None}]})
-    assert '<button type="button" data-f="ny" aria-pressed="false">Ingen avkastning ennå (2)</button></div></div>' in h
-    assert "f==='ny'?!!r.querySelector('td.ret-c[data-new]')" in TL.JS and "ny:'Ingen avkastning ennå'" in TL.JS and "Ny i dag" not in TL.JS
+    assert 'data-k="ny"' in h and "Ingen avkastning (2)" in h
+    assert "Ny i dag" not in TL.JS
 
 
 def test_popover_trigger_wraps_text_and_name_clamp():

@@ -47,9 +47,10 @@ CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CS
 E = lambda x: html.escape("" if x is None else str(x))
 
 CSS = """
-/* Dark theme (default). Contrast vs --card #161b22: ink 14.6:1, mut 7.2:1, acc 8.1:1, up 7.6:1, down 7.1:1, warn 8.9:1 (WCAG AA+). */
-:root{color-scheme:dark;--bg:#0d1117;--card:#161b22;--card2:#1c2330;--ink:#e6edf3;--mut:#9ea9b5;--acc:#6cb6ff;--acc-bg:rgba(108,182,255,.14);
---up:#4ac26b;--down:#ff8078;--line:#2d333b;--warn:#e3b341;--hdr:#060a10;--pill:#262d38}
+/* Dark theme (default). Contrast vs --card #161b22: ink 14.6:1, mut 7.2:1, acc 8.1:1, up 7.6:1, down 7.1:1, warn 8.9:1 (WCAG AA+).
+   UxBot 17.11: --bg #0b0f14 (kort #161b22 skiller seg tydeligere), --line #3a4350. Globalt, alle sider. */
+:root{color-scheme:dark;--bg:#0b0f14;--card:#161b22;--card2:#1c2330;--ink:#e6edf3;--mut:#9ea9b5;--acc:#6cb6ff;--acc-bg:rgba(108,182,255,.14);
+--up:#4ac26b;--down:#ff8078;--line:#3a4350;--warn:#e3b341;--hdr:#060a10;--pill:#262d38}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
 .app{display:flex;min-height:100vh;align-items:stretch}
 .side{position:sticky;top:0;align-self:flex-start;width:240px;flex:0 0 240px;height:100vh;overflow:auto;background:var(--hdr);color:#fff;padding:16px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
@@ -91,7 +92,7 @@ a{color:var(--acc)}a:visited{color:#b392f0}a:hover{color:#9dcbff}.mut{color:var(
 .score.hot{background:rgba(255,128,120,.14);color:#ff9a92;border-color:rgba(255,128,120,.45)}.score.warm{background:rgba(227,179,65,.14);color:var(--warn);border-color:rgba(227,179,65,.45)}
 .bar{height:8px;background:#262d38;border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#3d8bdb,var(--acc))}
 table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-weight:600;color:var(--mut);white-space:nowrap;background:var(--card2)}tr:hover td{background:rgba(255,255,255,.025)}.tw{overflow-x:auto}
+th{font-weight:600;color:var(--mut);white-space:nowrap;background:var(--card2)}tr:hover td,tr:focus-within td{background:#1f2733}tr:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}.tw{overflow-x:auto}
 .pill{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:999px;background:var(--pill);color:#d5dde6;border:1px solid #333b47;margin:2px 4px 2px 0;text-decoration:none}
 a.pill{color:var(--acc)}
 .warnbox{background:#2a2213;border:1px solid #6b5520;color:#f2dfae;border-radius:10px;padding:10px 14px;margin:0 0 14px;font-size:.92rem}
@@ -614,7 +615,8 @@ def ticker_row(e, pre=""):
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
     lab = E(e.get("name") or e["ticker"])
-    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
+    rk_m = (e.get("_risk") or {}).get("market") if isinstance(e.get("_risk"), dict) else None
+    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}" data-sektor="{E(TL.sektor_slug(e))}" data-bors="{E(TL.bors_slug(e.get("ticker") or "", rk_m))}" data-flag="{"1" if e.get("_flag") else "0"}" data-ny="{"1" if (e.get("_ret") or {}).get("new") else "0"}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
             f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -824,7 +826,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS + NP.PAGE_CSS   # U390 sist av mobilradene (≤ 599 px); TT etter (Temaer-trend); Nyheter sist
+    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS + NP.PAGE_CSS + TL.CSS   # U390 sist av mobilradene (≤ 599 px); TT etter; Nyheter; Tickere-filter sist så spesifikasjonen vinner over ux2
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache

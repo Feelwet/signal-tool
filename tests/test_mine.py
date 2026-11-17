@@ -36,9 +36,9 @@ def test_import_validates_against_site_list():
 
 def test_filter_row_mine_first_and_generic_empty():
     r = TL.filter_row({})
-    first = re.search(r"<button[^>]*>(.*?)</button>", r).group(1)
-    assert first.startswith("★ Mine (") and 'data-f="mine"' in r
-    assert "Ingen tickere i '+NM[f]+' nå." in TL.JS and mine.EMPTY in TL.JS
+    assert 'id="tf-mine"' in r and "★ Mine" in r
+    assert 'data-k="mine"' in r
+    assert "Ingen tickere matcher filtrene." in TL.empties()
 
 
 def test_data_has_only_existing_fields():

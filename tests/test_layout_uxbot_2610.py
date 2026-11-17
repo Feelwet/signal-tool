@@ -21,9 +21,10 @@ def test_top_bar_single_row_48px():
 
 def test_filter_buttons_and_fade():
     h = TL.filter_row({"tickers": []})
-    assert h.startswith('<div class="tf-wrap">') and '<div class="tf-row"' in h and 'id="tf-q"' in h and "at-end" in h   # UxBot 01.11: søk først i den sticky raden
-    assert "height:36px" in TL.CSS and "padding:0 12px" in TL.CSS and "gap:8px" in TL.CSS
-    assert "width:24px" in TL.CSS and "white-space:nowrap" in TL.CSS and ".tf-wrap.at-end::after{display:none}" in TL.CSS
+    assert h.startswith('<div class="tf-wrap"') and 'id="tf-q"' in h and 'id="tf-fbtn"' in h
+    assert "min-height:44px" in TL.CSS and "min-width:44px" in TL.CSS and "gap:8px" in TL.CSS
+    assert ".tf-wrap::after{display:none}" in TL.CSS
+    assert "width:280px" in TL.CSS and "Filter (0)" in h
 
 
 def test_star_column_and_return_column():

@@ -45,7 +45,7 @@ def test_ticker_list_mobile_grid_and_sticky_search():
     c = U.CSS
     assert "position:sticky" in c and "tf-q" in c and "border-bottom:1px solid #3b4757" in c
     assert 'id="tf-q"' in TL.filter_row({"tickers": []})
-    assert "#tf-table th{font-size:12px" in c and "background:#111821" in c
+    assert "#tf-table th{font-size:12px" in c and "background:#1f2733" in c
 
 
 def test_red_flag_cards():
