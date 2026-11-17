@@ -1,5 +1,5 @@
 {
- "hentet": "2026-11-17T17:27:47+0100",
+ "hentet": "2026-11-17T17:53:47+0100",
  "dato": "2026-11-17",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
@@ -7,41 +7,41 @@
   "GDELT": "hoppet over denne gangen: GDELT DOC etter 6 forsøk: HTTP 429: Please limit requests to one every 5 seconds or contact kale",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "GDELT 429": "4",
+  "GDELT 429": "6",
   "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 114
+   "antall": 100
   },
   {
    "tema": "mideast_energy",
-   "antall": 86
+   "antall": 78
   },
   {
    "tema": "tariffs_trade",
-   "antall": 36
-  },
-  {
-   "tema": "rare_earths_semis",
-   "antall": 24
+   "antall": 35
   },
   {
    "tema": "risk_off_haven",
    "antall": 23
   },
   {
+   "tema": "rare_earths_semis",
+   "antall": 22
+  },
+  {
    "tema": "shipping_chokepoints",
-   "antall": 23
+   "antall": 22
   },
   {
    "tema": "food_agri",
-   "antall": 15
+   "antall": 14
   },
   {
    "tema": "elections_political",
-   "antall": 4
+   "antall": 3
   },
   {
    "tema": "sentralbanker",
@@ -1935,35 +1935,6 @@
    ],
    "matchede_ord": [
     "panama canal"
-   ]
-  },
-  {
-   "tittel": "Cargo ship sinks off Bulgaria's Black Sea coast",
-   "url": "https://kdhnews.com/news/world/cargo-ship-sinks-off-bulgarias-black-sea-coast/article_fad5ede7-b420-5e8f-b80f-b469519bc0ce.html",
-   "kilde": "GDELT",
-   "domene": "kdhnews.com",
-   "publisert": "2026-11-16T16:45:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "Israel: Party chiefs say Netanyahu's election fraud claims a coup attempt",
-   "url": "https://www.africanews.com/2026/11/16/israel-party-chiefs-say-netanyahus-election-fraud-claims-a-coup-attempt/",
-   "kilde": "GDELT",
-   "domene": "africanews.com",
-   "publisert": "2026-11-16T16:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "election",
-    "coup"
    ]
   },
   {
