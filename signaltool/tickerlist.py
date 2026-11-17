@@ -4,12 +4,15 @@ from __future__ import annotations
 import csv
 import re
 import unicodedata
+from datetime import date
 from functools import lru_cache
 from html import escape as E
 from pathlib import Path
 
 from . import evidens as EV
 from . import names as NM
+from . import site_risk as RK
+from .bors import UKJENT_BORS, bors_of as _bors_of, bors_slug as _bors_slug
 from .config import LOGS
 from .mine import EMPTY
 
@@ -41,7 +44,12 @@ SEKTOR_NAV = (
 )
 UKJENT_SEKTOR = "Ukjent sektor"
 RISIKO_NAV = (("hoy", "Høy"), ("middels", "Middels"), ("lav", "Lav"))
-BORS_NAV = (("oslo", "Oslo"), ("usa", "USA"), ("tyskland", "Tyskland"))
+BORS_NAV = (
+    ("oslo", "Oslo"), ("usa", "USA"), ("tyskland", "Tyskland"),
+    ("danmark", "Danmark"), ("sverige", "Sverige"), ("storbritannia", "Storbritannia"),
+    ("japan", "Japan"), ("taiwan", "Taiwan"), ("ukjent-bors", "Ukjent børs"),
+)
+RISK_CAVEAT = "Risikonivå er rangert innen hver børs."
 ANNET_NAV = (("mine", "★ Mine"), ("flagg", "Røde flagg"), ("ny", "Ingen avkastning"))
 CAT_OF = {"hoy": "Høy", "middels": "Middels", "lav": "Lav"}
 BORS_FROM_MARKET = {
@@ -108,49 +116,34 @@ def markets_from_csv(path: str | None = None) -> dict[str, str]:
 
 
 def bors_of(ticker: str, market: str | None = None, use_csv: bool = True) -> str:
-    """Børs: suffix .OL = Oslo, .DE = Tyskland, uten suffix = USA.
-    market fra risk_levels.csv brukes når suffix ikke avgjør. Tom streng hvis ukjent (aldri gjett)."""
-    t = (ticker or "").strip()
-    if t.endswith(".OL"):
-        return "Oslo"
-    if t.endswith(".DE"):
-        return "Tyskland"
-    if "." not in t:
-        return "USA"
-    mk = (market or "").strip()
-    if not mk and use_csv:
-        mk = (markets_from_csv().get(t) or "").strip()
-    mapped = BORS_FROM_MARKET.get(mk)
-    # CSV/risk «US» er risikouniverset for alt som ikke er .OL, ikke børsen. Ikke bruk det
-    # på andre suffix (.L m.fl.). Oslo/Tyskland i market-feltet tas med.
-    if mapped == "USA":
-        return ""
-    return mapped or ""
+    """Børs fra tickersuffiks alene. market og use_csv ignoreres (beholdt for kallsteder)."""
+    return _bors_of(ticker)
 
 
 def bors_slug(ticker: str, market: str | None = None, use_csv: bool = True) -> str:
-    return _slug(bors_of(ticker, market, use_csv=use_csv))
+    return _bors_slug(ticker)
 
 
 def bors_of_entry(e: dict | None, use_csv: bool = True) -> str:
-    e = e or {}
-    mk = (e.get("_risk") or {}).get("market") if isinstance(e.get("_risk"), dict) else None
-    return bors_of(e.get("ticker") or "", mk, use_csv=use_csv)
+    return _bors_of((e or {}).get("ticker") or "")
 
 
 def row_meta(e: dict) -> dict:
     """Filterfelter for én ticker-rad (slugs + flagg)."""
-    rk = ((e.get("_risk") or {}).get("level") if isinstance(e.get("_risk"), dict) else None) or ""
-    risiko = next((k for k, lab in RISIKO_NAV if lab == rk), "")
+    tkr = e.get("ticker") or ""
+    rk = e.get("_risk") if isinstance(e.get("_risk"), dict) else None
+    lv = RK.shown_level(rk, tkr)
+    risiko = next((k for k, lab in RISIKO_NAV if lab == lv), "")
     return {
-        "ticker": e.get("ticker") or "",
+        "ticker": tkr,
         "name": e.get("name") or "",
         "risiko": risiko,
         "sektor": sektor_slug(e),
-        "bors": bors_slug(e.get("ticker") or "", (e.get("_risk") or {}).get("market") if isinstance(e.get("_risk"), dict) else None),
+        "bors": bors_slug(tkr),
         "flag": bool(e.get("_flag")),
         "ny": bool((e.get("_ret") or {}).get("new")),
         "mine": False,
+        "risk": bool(lv),
     }
 
 
@@ -218,8 +211,61 @@ def empties() -> str:
             '<button type="button" class="tf-empty-reset" id="tf-empty-reset">Nullstill</button></p>')
 
 
-def count_line(n: int, total: int) -> str:
-    return f'<p id="tf-count" class="tf-count">Viser {n} av {total}</p>'
+def risk_asof(path: str | None = None) -> date | None:
+    """Siste dato i logs/risk_levels.csv, eller None hvis fila mangler."""
+    pth = Path(path) if path else (LOGS / "risk_levels.csv")
+    if not pth.exists():
+        return None
+    last = ""
+    with pth.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            d = (r.get("date") or "").strip()
+            if d > last:
+                last = d
+    if len(last) >= 10:
+        try:
+            return date.fromisoformat(last[:10])
+        except ValueError:
+            return None
+    return None
+
+
+def build_date(snap: dict | None) -> date:
+    s = ""
+    if snap:
+        s = str(snap.get("date") or "")[:10] or str(snap.get("generated") or "")[:10]
+    if len(s) >= 10 and s[4] == "-":
+        try:
+            return date.fromisoformat(s[:10])
+        except ValueError:
+            pass
+    return date.today()
+
+
+def risk_per_label(asof: date | None) -> str:
+    return f"{asof.day:02d}.{asof.month:02d}" if asof else ""
+
+
+def risk_filter_open(asof: date | None, build: date | None) -> bool:
+    """Risikofilter vises når as-of ikke er mer enn 8 dager eldre enn byggdatoen."""
+    if not asof or not build:
+        return False
+    return (build - asof).days <= 8
+
+
+def count_text(n: int, total: int, omitted: int = 0, per: str = "") -> str:
+    t = f"Viser {n} av {total}"
+    if omitted:
+        t += f" · {omitted} uten risikonivå utelatt"
+    if per:
+        t += f" · Risiko per {per}"
+    return t
+
+
+def count_line(n: int, total: int, omitted: int = 0, per: str = "", caveat: bool = False) -> str:
+    note_h = "" if caveat else " hidden"
+    return (f'<p id="tf-count" class="tf-count">{E(count_text(n, total, omitted, per))}</p>'
+            f'<p id="tf-risk-note" class="tf-count"{note_h}>{E(RISK_CAVEAT)}</p>')
 
 
 def _opt(group: str, key: str, lab: str, n: int) -> str:
@@ -259,6 +305,10 @@ def filter_row(snap: dict) -> str:
     bors = _opts("bors", [(k, lab, c["bors"][k]) for k, lab in BORS_NAV])
     annet = _opts("annet", [(k, lab, c["annet"][k]) for k, lab in ANNET_NAV])
     total = sum(1 for e in snap.get("tickers", []) if not e.get("unranked"))
+    asof = snap.get("_risk_asof") if isinstance(snap.get("_risk_asof"), date) else risk_asof()
+    today = snap.get("_risk_today") if isinstance(snap.get("_risk_today"), date) else build_date(snap)
+    ropen = risk_filter_open(asof, today)
+    per = risk_per_label(asof)
     from .ux2 import SEARCH_HTML
     desk_dd = "".join(
         f'<div class="tf-dd" data-g="{g}">'
@@ -276,7 +326,8 @@ def filter_row(snap: dict) -> str:
     )
     # n_flag_all holdes i data-attributt så flag_block-lenker fortsatt kan vises
     return (
-        f'<div class="tf-wrap" id="tf-wrap" data-total="{total}" data-flag-all="{n_flag_all}" data-ls="{LS_KEY}">'
+        f'<div class="tf-wrap" id="tf-wrap" data-total="{total}" data-flag-all="{n_flag_all}" data-ls="{LS_KEY}"'
+        f' data-risk-open="{"1" if ropen else "0"}" data-risk-per="{E(per)}">'
         f'<div class="tf-top">'
         f'{SEARCH_HTML}'
         f'<button type="button" class="tf-fbtn" id="tf-fbtn" aria-controls="tf-sheet" aria-expanded="false">Filter (0)</button>'
@@ -285,7 +336,7 @@ def filter_row(snap: dict) -> str:
         f'{annet_dd}'
         f'</div>'
         f'<div class="tf-chips" id="tf-chips" hidden></div>'
-        f'{count_line(total, total)}'
+        f'{count_line(total, total, per=per)}'
         f'</div>'
         f'<div class="tf-sheet-bg" id="tf-sheet-bg" hidden></div>'
         f'<div class="tf-sheet" id="tf-sheet" role="dialog" aria-label="Filter" hidden>'
@@ -348,6 +399,9 @@ CSS = """
 .tf-chip-x{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-6px -4px -6px 0;padding:0;border:0;background:transparent;color:#e6edf3;font:inherit;cursor:pointer}
 .tf-chips-reset{flex:none;height:32px;min-height:32px;padding:0 8px;border:0;background:none;color:var(--acc,#6cb6ff);font:inherit;font-size:13px;cursor:pointer}
 .tf-count{margin:8px 0 6px;font-size:13px;line-height:18px;color:var(--mut,#9ea9b5)}
+.tf-count + .tf-count{margin-top:0}
+.tf-wrap[data-risk-open="0"] .tf-dd[data-g="risiko"],
+.tf-wrap[data-risk-open="0"] .tf-sec[data-g="risiko"]{display:none!important}
 .tf-empty{display:flex;align-items:center;gap:8px;min-height:48px;height:48px;margin:0;padding:0 12px;box-sizing:border-box;font-size:14px;color:var(--ink,#e6edf3)}
 .tf-empty[hidden]{display:none}
 .tf-empty-reset,.tf-sheet-reset{border:0;background:none;color:var(--acc,#6cb6ff);font:inherit;font-size:14px;cursor:pointer;padding:0}
@@ -393,6 +447,8 @@ const wrap=document.getElementById('tf-wrap');
 if(!wrap) return;
 const LS=wrap.getAttribute('data-ls')||'signaltool.tickere-filter';
 const TOTAL=parseInt(wrap.getAttribute('data-total')||'0',10)||0;
+const riskOpen=wrap.getAttribute('data-risk-open')!=='0';
+const riskPer=wrap.getAttribute('data-risk-per')||'';
 const qEl=document.getElementById('tf-q');
 const fbtn=document.getElementById('tf-fbtn');
 const sheet=document.getElementById('tf-sheet');
@@ -402,6 +458,7 @@ const applyBtn=document.getElementById('tf-apply');
 const sheetReset=document.getElementById('tf-sheet-reset');
 const chips=document.getElementById('tf-chips');
 const countEl=document.getElementById('tf-count');
+const noteEl=document.getElementById('tf-risk-note');
 const empty=document.getElementById('tf-empty');
 const emptyReset=document.getElementById('tf-empty-reset');
 const table=document.getElementById('tf-table');
@@ -453,6 +510,7 @@ function parseUrl(){
     if(raw) f[g]=raw.split(',').map(s=>s.trim()).filter(Boolean);
   });
   const q=u.searchParams.get('q'); if(q) f.q=q;
+  if(!riskOpen) f.risiko=[];
   return f;
 }
 function hasUrl(){
@@ -464,6 +522,7 @@ function loadLs(){
     const f=emptyFlt();
     GROUPS.forEach(g=>{ if(Array.isArray(j[g])) f[g]=j[g].map(String); });
     if(typeof j.q==='string') f.q=j.q;
+    if(!riskOpen) f.risiko=[];
     return f;
   }}catch(e){}
   return emptyFlt();
@@ -475,10 +534,25 @@ function writeUrl(f){
   const u=new URL(location.href);
   u.searchParams.delete('filter');
   GROUPS.forEach(g=>{
+    if(g==='risiko' && !riskOpen){ u.searchParams.delete('risiko'); return; }
     if(f[g]&&f[g].length) u.searchParams.set(g,f[g].join(',')); else u.searchParams.delete(g);
   });
   if(f.q) u.searchParams.set('q',f.q); else u.searchParams.delete('q');
   history.replaceState(null,'',u);
+}
+function countText(n,total,omitted){
+  let s='Viser '+n+' av '+total;
+  if(omitted) s+=' · '+omitted+' uten risikonivå utelatt';
+  if(riskPer) s+=' · Risiko per '+riskPer;
+  return s;
+}
+function omittedCount(f,rs){
+  if(!(f.risiko||[]).length) return 0;
+  const f0=copy(f); f0.risiko=[];
+  return rs.filter(r=>rowMatch(r,f0) && r.dataset.risk!=='1').length;
+}
+function showCaveat(f){
+  return riskOpen && (f.risiko||[]).length>0 && (f.bors||[]).length!==1;
 }
 function setChecks(root,f){
   if(!root) return;
@@ -553,7 +627,8 @@ function apply(f,push){
     && applied.annet.filter(x=>x!=='flagg').length===0 && !applied.q;
   if(flagBox) flagBox.hidden=!applied.annet.includes('flagg');
   if(table && flagOnly){ /* behold eldre visning: bare flaggblokka når filter=flagg alene */ table.querySelector('.card') && (table.hidden=false); }
-  if(countEl) countEl.textContent='Viser '+n+' av '+(rs.length||TOTAL);
+  if(countEl) countEl.textContent=countText(n, rs.length||TOTAL, omittedCount(applied,rs));
+  if(noteEl) noteEl.hidden=!showCaveat(applied);
   if(empty){ empty.hidden=n>0; if(!n && table) table.prepend(empty); }
   if(fbtn){ const a=nActive(applied); fbtn.textContent='Filter ('+a+')'; fbtn.classList.toggle('is-on',a>0); }
   document.querySelectorAll('.tf-dd').forEach(dd=>{

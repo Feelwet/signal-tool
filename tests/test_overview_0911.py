@@ -7,8 +7,8 @@ from signaltool import site, overview as OV, site_intro as I
 
 def snap():
     tk = [{"ticker": "A.OL", "name": "Alfa ASA", "score": 5.5, "points": {"price_move": 2.0, "unusual_volume": 1.2},
-           "stats": {"ret_5d": 0.136, "ret_20d": -0.05}, "_risk": {"level": "Høy"}},
-          {"ticker": "B.OL", "name": "Beta ASA", "score": 5.1, "points": {"ose_contracts": 1.0}, "stats": {"ret_5d": -0.02, "ret_20d": 0.0}, "_risk": {"level": "Lav"}},
+           "stats": {"ret_5d": 0.136, "ret_20d": -0.05}, "_risk": {"level": "Høy", "in_universe": 1}},
+          {"ticker": "B.OL", "name": "Beta ASA", "score": 5.1, "points": {"ose_contracts": 1.0}, "stats": {"ret_5d": -0.02, "ret_20d": 0.0}, "_risk": {"level": "Lav", "in_universe": 1}},
           {"ticker": "CCC", "name": "Charlie Holdings Incorporated With A Very Long Legal Name", "score": 4.8, "points": {"insider_cluster": 1.0}, "stats": {}},
           {"ticker": "D.OL", "score": 4.7, "points": {}, "stats": {"ret_5d": None, "ret_20d": 0.01}},
           {"ticker": "E.OL", "score": 4.6, "points": {"price_move": 1}}, {"ticker": "F", "score": 4.5}, {"ticker": "G.OL", "score": 4.4},
@@ -112,9 +112,9 @@ def test_fold_budget_390():
 
 def test_risk_three_neutral_steps_over_candidates_without_active_step():
     s = snap()
-    s["tickers"] = [{"ticker": "X", "score": 3, "_risk": {"level": "Høy"}}, {"ticker": "Y", "score": 2, "_risk": {"level": "Lav"}},
-                    {"ticker": "Z", "score": 1, "_risk": {"level": "Høy"}}, {"ticker": "W", "score": 1},
-                    {"ticker": "NOSCORE", "score": None, "_risk": {"level": "Høy"}}]   # ikke kandidat: telles ikke
+    s["tickers"] = [{"ticker": "X", "score": 3, "_risk": {"level": "Høy", "in_universe": 1}}, {"ticker": "Y", "score": 2, "_risk": {"level": "Lav", "in_universe": 1}},
+                    {"ticker": "Z", "score": 1, "_risk": {"level": "Høy", "in_universe": 1}}, {"ticker": "W", "score": 1},
+                    {"ticker": "NOSCORE", "score": None, "_risk": {"level": "Høy", "in_universe": 1}}]   # ikke kandidat: telles ikke
     h = OV.strip_html(s, False)
     assert '<div class="lbl">Kandidater etter risiko<' in h and "Risikonivå<" not in h
     st = h.split('class="ov-steps"', 1)[1].split("</div>", 1)[0]

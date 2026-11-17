@@ -180,8 +180,8 @@ def test_ny_i_dag_replaces_whole_cell_and_sorts_empty():
 def test_rk_na_cell_tooltip():
     from signaltool import site_risk as RK
     c = RK.cell(None)
-    assert ">–</span>" in c and 'title="Risikonivå mangler data"' in c and '<span class="tip">Risikonivå mangler data</span>' in c
-    assert 'data-v=""' in c and "Risikonivå mangler data" not in RK.cell({"level": "Lav"})
+    assert ">Ingen risikonivå</span>" in c and 'title="Ingen risikonivå"' in c and '<span class="tip">Ingen risikonivå</span>' in c
+    assert 'data-v=""' in c and "Ingen risikonivå" not in RK.cell({"level": "Lav"})
 
 
 def test_price_source_log_same_day_only(tmp_path):

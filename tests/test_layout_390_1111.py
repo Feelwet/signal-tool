@@ -12,7 +12,7 @@ from signaltool import ux390 as U
 def _e(t="KOG.OL", name="Kongsberg Gruppen ASA", n_pts=4, ret=None, since=None):
     keys = ["unusual_volume", "unusual_move", "theme_attention", "insider", "contract"][:n_pts]
     return {"ticker": t, "name": name, "score": 6.2, "points": {k: 3.0 - i * 0.5 for i, k in enumerate(keys)},
-            "stats": {"ret_5d": 0.01, "ret_20d": 0.02, "close": 355, "last_date": "2026-11-10"}, "_risk": {"level": "Høy"},
+            "stats": {"ret_5d": 0.01, "ret_20d": 0.02, "close": 355, "last_date": "2026-11-10"}, "_risk": {"level": "Høy", "in_universe": 1},
             "_since": since or {"since": "2026-10-23", "price": 308.8, "price_date": "2026-10-21", "category": "buy", "days": 19, "list_days": 19},
             "_ret": ret if ret is not None else {"r": 0.138, "ex": 0.152, "bench": "OSEBX", "last": "2026-11-10", "illiquid": False},
             "themes": [], "evidence": [], "flags": []}

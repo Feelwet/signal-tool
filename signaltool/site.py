@@ -615,9 +615,10 @@ def ticker_row(e, pre=""):
     href = f"{pre}ticker/{slug(e['ticker'])}.html"
     ptc = DC.low_chip(e) if unr else score_badge(e["score"], 4, 2, muted=True)   # UxBot 29.10: 390 px viser poeng under risikobrikken (kolonne «Risiko · Poeng»)
     lab = E(e.get("name") or e["ticker"])
-    rk_m = (e.get("_risk") or {}).get("market") if isinstance(e.get("_risk"), dict) else None
-    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E((e.get("_risk") or {}).get("level") or "")}" data-t="{E(e["ticker"])}" data-sektor="{E(TL.sektor_slug(e))}" data-bors="{E(TL.bors_slug(e.get("ticker") or "", rk_m))}" data-flag="{"1" if e.get("_flag") else "0"}" data-ny="{"1" if (e.get("_ret") or {}).get("new") else "0"}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
-            f'{RK.cell(e.get("_risk"), ptc)}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
+    _rk = e.get("_risk") if isinstance(e.get("_risk"), dict) else None
+    _lv = RK.shown_level(_rk, e["ticker"])
+    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E(_lv or "")}" data-t="{E(e["ticker"])}" data-sektor="{E(TL.sektor_slug(e))}" data-bors="{E(TL.bors_slug(e.get("ticker") or ""))}" data-risk="{"1" if _lv else "0"}" data-flag="{"1" if e.get("_flag") else "0"}" data-ny="{"1" if (e.get("_ret") or {}).get("new") else "0"}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
+            f'{RK.cell(e.get("_risk"), ptc, ticker=e["ticker"])}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
 def _dm(pts: str) -> str:

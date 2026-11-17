@@ -9,11 +9,11 @@ def snap():
         'date': '2026-11-08',
         'tickers': [
             {'ticker': 'TSM', 'name': 'TSMC', 'score': 3.3, 'points': {'unusual_volume': 2.0},
-             'stats': {'ret_5d': -0.076, 'ret_20d': -0.172, 'last_date': '2026-11-06'}, '_risk': {'level': 'Middels'}},
+             'stats': {'ret_5d': -0.076, 'ret_20d': -0.172, 'last_date': '2026-11-06'}, '_risk': {'level': 'Middels', 'in_universe': 1}},
             {'ticker': 'MU', 'name': 'Micron', 'score': 9.9, 'points': {'price_move': 1.0},
-             'stats': {'ret_5d': 0.0004, 'ret_20d': None, 'last_date': '2026-11-06'}, '_risk': {'level': 'Lav'}},
+             'stats': {'ret_5d': 0.0004, 'ret_20d': None, 'last_date': '2026-11-06'}, '_risk': {'level': 'Lav', 'in_universe': 1}},
             {'ticker': 'NVDA', 'name': 'NVIDIA', 'score': 1.0, 'points': {'price_move': 1.0},
-             'stats': {'ret_5d': 0.021, 'ret_20d': 0.05}, '_risk': {'level': 'Høy'}},   # ingen kursdato
+             'stats': {'ret_5d': 0.021, 'ret_20d': 0.05}, '_risk': {'level': 'Høy', 'in_universe': 1}},   # ingen kursdato
         ],
         'oslo_universe_flags': [
             {'ticker': 'NOD.OL', 'flags': {}},

@@ -19,7 +19,7 @@ def section():
 
 def test_tickere_row_is_anchor_star_outside():
     h = S.ticker_row({"ticker": "KOG.OL", "name": "Kongsberg Gruppen ASA", "score": 2.1,
-                      "points": {}, "stats": {"close": 1}, "_risk": {"level": "Lav"}})
+                      "points": {}, "stats": {"close": 1}, "_risk": {"level": "Lav", "in_universe": 1}})
     a = re.search(r'<a class="row-a" href="([^"]+)">(.*?)</a>', h)
     assert a and a.group(1).endswith("ticker/KOG_OL.html") and "Kongsberg Gruppen ASA" in a.group(2)
     assert "mstar" not in a.group(0)

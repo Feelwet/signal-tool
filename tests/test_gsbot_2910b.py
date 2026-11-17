@@ -34,7 +34,7 @@ def test_f_name_from_cache():
 # 3. Dempet Oversikt og temaer
 def _snap():
     return {"date": "2026-10-29", "themes": [{"key": "a", "name": "A", "score": 2.5}, {"key": "b", "name": "B", "score": 1.0}],
-            "tickers": [{"ticker": "VRT", "score": 3.98, "_risk": {"level": "Høy"}}]}
+            "tickers": [{"ticker": "VRT", "score": 3.98, "_risk": {"level": "Høy", "in_universe": 1}}]}
 
 
 def test_overview_themes_muted_one_info():

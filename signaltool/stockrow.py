@@ -182,7 +182,7 @@ def cells(e: dict | None, sym: str | None, snap: dict, listed: bool = True, pdat
     sc = (f'<span class="sr-na">Score {OV._nb(e["score"], 1)} · ikke testet</span>' if e.get('score') is not None
           else '<span class="sr-na">–</span>')
     return (f'<td class="sr-sg">{OV._main_signal(e)}</td><td class="sr-rt">{rt}</td>'
-            f'<td class="sr-rk">{RK.chip(e.get("_risk"), small=True, bare=True)}</td>'
+            f'<td class="sr-rk">{RK.chip(e.get("_risk"), small=True, bare=True, ticker=e["ticker"])}</td>'
             f'<td class="sr-flc">{flag_badge(sym, snap)}</td><td class="sr-sc">{sc}</td>')
 
 

@@ -17,7 +17,7 @@ DISP = {"4063.T": {"last_date": "2026-11-09", "ret_5d": -0.088, "ret_20d": -0.11
 def snap():
     return {'date': '2026-11-08',
             'tickers': [{'ticker': 'TSM', 'name': 'TSMC', 'score': 3.3, 'points': {'unusual_volume': 2.0},
-                         'stats': {'ret_5d': -0.076, 'ret_20d': -0.172, 'last_date': '2026-11-06'}, '_risk': {'level': 'Middels'}}],
+                         'stats': {'ret_5d': -0.076, 'ret_20d': -0.172, 'last_date': '2026-11-06'}, '_risk': {'level': 'Middels', 'in_universe': 1}}],
             'oslo_universe_flags': [{'ticker': 'NOD.OL', 'flags': {}}]}
 
 
@@ -245,11 +245,10 @@ def test_trend_meta_line_moved_into_trend_panels():
 
 def test_risk_badges_like_flag_badge_no_light_hex():
     from signaltool import site_risk as RK
-    # Nøytralt merke er på; fargevariant bare bak body.rk-farger (ikke aktiv).
+    # Nøytralt merke uten fargevariant. Ingen --up/--down/--warn på merket.
     assert ".rk-lav,.rk-middels,.rk-hoy,.rk-na{background:transparent;color:var(--ink,#e6edf3);border:1px solid #6b7787}" in RK.CSS
-    assert "body.rk-farger .rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}" in RK.CSS
-    assert "body.rk-farger .rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}" in RK.CSS
-    assert "body.rk-farger .rk-lav{background:transparent;color:var(--up);border:1px solid var(--up)}" in RK.CSS
+    assert "rk-farger" not in RK.CSS
+    assert "var(--up)" not in RK.CSS and "var(--down)" not in RK.CSS and "var(--warn)" not in RK.CSS
     from signaltool import site as S
     assert "rk-farger" not in S.CSS and 'rk-farger' not in S.page("Tickere", "<p>x</p>", 0, {"generated": "2026-11-17 12:00"})
     for hx in ('#FEF3C7', '#92400E', '#FEE2E2', '#991B1B'):

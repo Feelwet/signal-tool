@@ -2,6 +2,8 @@
 from __future__ import annotations
 from html import escape as E
 
+from .bors import RANKED, bors_of
+
 INFO = ("Risikonivået er regnet ut fra hvor mye aksjen har svingt de siste 60 dagene, det største fallet de siste 12 månedene og hvor mye "
         "aksjen omsettes. Det er relativt til andre aksjer på samme børs: Høy i USA er omtrent som Middels i Oslo. I historiske tester "
         "svingte Høy klart mer enn Lav de neste 60 dagene, men nivåene overlapper. Risikonivået sier ingenting om avkastning og er ikke et kjøpsråd.")
@@ -14,12 +16,34 @@ def _dm(d: str | None) -> str:
     return f"{d[8:10]}.{d[5:7]}" if d else "–"
 
 
-def chip(r: dict | None, small: bool = False, bare: bool = False) -> str:
+NA_LABEL = "Ingen risikonivå"
+
+
+def shown_level(r: dict | None, ticker: str | None = None) -> str | None:
+    """Nivå som vises på siden. Bare Oslo/USA med in_universe=1 og Lav/Middels/Høy.
+
+    Når ticker er None (enhetstester av chip/cell), brukes bare level-feltet.
+    """
+    if ticker is not None:
+        if bors_of(ticker) not in RANKED:
+            return None
+        try:
+            if int((r or {}).get("in_universe") or 0) != 1:
+                return None
+        except (TypeError, ValueError):
+            return None
+    if not r:
+        return None
+    lv = r.get("level")
+    return lv if lv in ORDER else None
+
+
+def chip(r: dict | None, small: bool = False, bare: bool = False, ticker: str | None = None) -> str:
     """bare=True: kun nivået (tabellceller under kolonneoverskriften «Risiko»)."""
-    lv = (r or {}).get("level")
+    lv = shown_level(r, ticker)
     pre = "" if bare else "Risiko: "
     if lv not in ORDER:
-        return f'<span class="rk rk-na{" rk-s" if small else ""}">{pre}–</span>'
+        return f'<span class="rk rk-na{" rk-s" if small else ""}">{pre}{NA_LABEL}</span>'
     return f'<span class="rk rk-{KEY[lv]}{" rk-s" if small else ""}">{pre}{lv}</span>'
 
 
@@ -41,30 +65,25 @@ def status() -> str:
     return f'<p class="catdisc rk-status">{E(RISK_LINE)}{i(STATUS, "Om risikonivået")}</p>'
 
 
-NA_TIP = "Risikonivå mangler data"
+NA_TIP = "Ingen risikonivå"
 
 
-def cell(r: dict | None, score_html: str = "") -> str:
+def cell(r: dict | None, score_html: str = "", ticker: str | None = None) -> str:
     """Risikocelle. score_html: poengboksen dupliseres under brikken, vises bare på 390 px (kolonne «Risiko · Poeng», UxBot 29.10)."""
     sc = f'<span class="rkp-s">{score_html}</span>' if score_html else ""
-    lv = (r or {}).get("level")
-    if lv not in ORDER:   # UxBot 28.10: «–» beholdes, ⓘ-tooltip som i avkastningscellen
+    lv = shown_level(r, ticker)
+    if lv not in ORDER:
         return (f'<td class="rk-c" data-v=""><span class="ri ri-c" tabindex="0" aria-expanded="false" aria-label="{NA_TIP}">'
-                f'<span class="rk rk-na rk-s" title="{NA_TIP}">–</span>ⓘ<span class="tip">{NA_TIP}</span></span>{sc}</td>')
-    return f'<td class="rk-c" data-v="{ORDER.get(lv, "")}">{chip(r, small=True, bare=True)}{sc}</td>'
+                f'<span class="rk rk-na rk-s" title="{NA_TIP}">{NA_LABEL}</span>ⓘ<span class="tip">{NA_TIP}</span></span>{sc}</td>')
+    return f'<td class="rk-c" data-v="{ORDER.get(lv, "")}">{chip(r, small=True, bare=True, ticker=ticker)}{sc}</td>'
 
 
 EMPTY_BOOK = "Ingen avsluttede handler ennå. Resultater vises etter 30."
 
 CSS = """
 .rk{display:inline-flex;align-items:center;box-sizing:border-box;height:28px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;color:var(--ink,#e6edf3);vertical-align:middle}
-/* UxBot 17.11: nøytralt merke (tekst alltid synlig). Fargevariant ligger bak body.rk-farger, men er IKKE på – AnalBot har ikke godkjent farge ennå. */
+/* UxBot/AnalBot 17.11: nøytralt merke uten fargevariant. Ingen --up/--down/--warn på merket. */
 .rk-lav,.rk-middels,.rk-hoy,.rk-na{background:transparent;color:var(--ink,#e6edf3);border:1px solid #6b7787}
-/* Fargevariant (av): Høy --down, Middels --warn, Lav --up */
-body.rk-farger .rk-lav{background:transparent;color:var(--up);border:1px solid var(--up)}
-body.rk-farger .rk-middels{background:transparent;color:var(--warn);border:1px solid var(--warn)}
-body.rk-farger .rk-hoy{background:transparent;color:var(--down);border:1px solid var(--down)}
-body.rk-farger .rk-na{background:transparent;color:var(--mut);border:1px solid #30363d}
 .rk.rk-s{height:20px;padding:0 7px;font-size:11px;border-radius:5px}
 p.since.rk-line{display:flex;align-items:center;gap:0;overflow:visible;white-space:nowrap;margin:0 0 8px;min-height:28px}
 p.since.rk-line .sl-t{overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -77,7 +96,7 @@ p.catdisc.rk-status{margin:2px 0 4px;font-size:11px;line-height:1.3;color:#8b949
 td.rk-c{white-space:nowrap}
 td.rk-c,th.rk-h{width:1%;min-width:64px;box-sizing:border-box}
 .rkp-m,.rkp-s{display:none}
-@media(max-width:599px){#tf-table th.pt-h,#tf-table td.pt-c{display:none}#tf-table .rkp-m{display:inline}#tf-table th.rk-h,#tf-table td.rk-c{width:68px;min-width:68px;max-width:68px;padding-left:2px;padding-right:2px;text-align:center}#tf-table th.rk-h{white-space:normal;line-height:1.2}#tf-table td.rk-c{white-space:normal;vertical-align:top}#tf-table td.rk-c .rkp-s{display:block;margin-top:4px}}
+@media(max-width:599px){#tf-table th.pt-h,#tf-table td.pt-c{display:none}#tf-table .rkp-m{display:inline}#tf-table th.rk-h,#tf-table td.rk-c{width:68px;min-width:68px;max-width:68px;padding-left:2px;padding-right:2px;text-align:center}#tf-table th.rk-h{white-space:normal;line-height:1.2}#tf-table td.rk-c{white-space:normal;vertical-align:top}#tf-table td.rk-c .rk-na{white-space:normal;height:auto;padding:2px 4px;line-height:1.2}#tf-table td.rk-c .rkp-s{display:block;margin-top:4px}}
 """
 
 JS = """<script>(()=>{const B=[...document.querySelectorAll('.rk-i,.rt-i')];const close=x=>B.forEach(b=>{if(b!==x){b.setAttribute('aria-expanded','false');const t=document.getElementById(b.getAttribute('aria-controls'));if(t)t.hidden=true}});

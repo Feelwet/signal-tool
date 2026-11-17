@@ -168,7 +168,7 @@ def candidates_html(snap: dict) -> str:
     tk = sorted([e for e in snap.get("tickers") or [] if e.get("score") is not None], key=lambda e: -e["score"])[:5]
     from . import site_risk as RK
     li = "".join(f'<li><span>{NM.cell(e["ticker"], "ticker/" + _slug(e["ticker"]) + ".html", e.get("name"))} '
-                 f'{RK.chip(e.get("_risk"), small=True)}</span><span class="sc-mu" title="Rangering, ikke testet">{_nb(e["score"], 1)} p<span class="score-note">Rangering, ikke testet</span></span></li>' for e in tk)
+                 f'{RK.chip(e.get("_risk"), small=True, ticker=e["ticker"])}</span><span class="sc-mu" title="Rangering, ikke testet">{_nb(e["score"], 1)} p<span class="score-note">Rangering, ikke testet</span></span></li>' for e in tk)
     from .site import score_info
     left = (f'<div class="card"><h2>Kandidater {score_info()}</h2><ul class="ov-list">{li or "<li class=mut>Ingen.</li>"}</ul>'
             f'<p style="margin:6px 0 0"><a href="tickere.html">Alle tickere →</a></p></div>')
@@ -380,7 +380,7 @@ def candidates_table_html(snap: dict) -> str:
         rt = "–" if e.get("unranked") else _ret("5d", st.get("ret_5d")) + " " + _ret("20d", st.get("ret_20d"))
         rows.append(f'<tr data-nf="{1 if nf else 0}"{" class=\"more\" hidden" if i >= TOP_N else ""}>'
                     f'<td class="nmc">{NM.cell(t, "ticker/" + _slug(t) + ".html", e.get("name"))}</td>'
-                    f'<td class="rkc">{RK.chip(e.get("_risk"), small=True)}</td>{fl}<td class="sgt">{_main_signal(e)}</td>'
+                    f'<td class="rkc">{RK.chip(e.get("_risk"), small=True, ticker=e["ticker"])}</td>{fl}<td class="sgt">{_main_signal(e)}</td>'
                     f'<td class="sc"><span class="sl">Score </span><span class="sv">{_nb(e["score"], 1)}</span><span class="snt"> · ikke testet</span></td>'
                     f'<td class="rt">{rt}</td>{CHG.days_cell(t, dmap, full)}</tr>')
     more = (f'<button type="button" class="ov-more" aria-expanded="false">Vis alle ({len(tk)})</button>' if len(tk) > TOP_N else "")

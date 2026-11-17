@@ -30,7 +30,16 @@ HERE = Path(__file__).parent
 
 
 def market(t: str) -> str:
-    return "Oslo" if t.endswith(".OL") else "US"
+    """Risikounivers fra suffiks. Bare Oslo og USA rangeres; andre børser returneres
+    med børsnavn (aldri «US») og hoppes over i refresh().
+    """
+    from .bors import bors_of
+    b = bors_of(t)
+    if b == "Oslo":
+        return "Oslo"
+    if b == "USA":
+        return "US"
+    return b
 
 
 def universe(mk: str) -> list[str]:
