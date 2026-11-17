@@ -29,7 +29,7 @@ body.pg-nyheter .ny{min-width:0;max-width:100%;overflow-x:hidden}
 .ny-tab[aria-selected="true"],.ny-tab.on{color:var(--ink,#e6edf3);box-shadow:inset 0 -2px 0 var(--acc,#6cb6ff)}
 .ny-tools{height:44px;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;box-sizing:border-box}
 .ny-q{flex:1 1 auto;min-width:0;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:400 14px/20px system-ui,-apple-system,sans-serif}
-.ny-kbtn{flex:0 0 44px;width:auto;min-width:44px;height:44px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 12px/16px system-ui,-apple-system,sans-serif;cursor:pointer;white-space:nowrap}
+.ny-kbtn{flex:0 0 auto;width:auto;min-width:44px;height:44px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 12px/16px system-ui,-apple-system,sans-serif;cursor:pointer;white-space:nowrap}
 .ny-list{margin:0;padding:0;min-width:0}
 .ny-row{display:flex;align-items:center;gap:8px;min-height:56px;max-height:72px;height:auto;margin:0 12px;padding:8px 0;box-sizing:border-box;border-bottom:1px solid var(--line,#2d333b);color:inherit!important;text-decoration:none!important;overflow:hidden}
 .ny-row:focus-visible{outline:2px solid var(--acc,#6cb6ff);outline-offset:2px;border-radius:4px}
