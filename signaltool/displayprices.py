@@ -76,8 +76,21 @@ CLOSE = {".T": ("Asia/Tokyo", 15, 30), ".TWO": ("Asia/Taipei", 13, 30), ".TW": (
 BUFFER_MIN = 30
 
 
+# AnalBot 17.11: vanlige amerikanske klasseaksjer. Yahoo bruker bindestrek; stengetid som øvrige US-ticker (16:00 ET).
+YAHOO_ALIAS = {"BRK.B": "BRK-B", "MOG.A": "MOG-A"}
+
+
+def yahoo_alias(sym: str) -> str:
+    """Yahoo-ticker for klasseaksjer (BRK.B → BRK-B, MOG.A → MOG-A). Uendret for alle andre."""
+    return YAHOO_ALIAS.get(sym, sym)
+
+
 def exchange_close(sym: str):
     """(tidssone, time, minutt) for symbolets børs; None når børsen er ukjent (da droppes dagens bar alltid)."""
+    if not sym:
+        return None
+    if sym in YAHOO_ALIAS or sym in YAHOO_ALIAS.values():
+        return CLOSE[""]
     if "." not in sym:
         return CLOSE[""]
     return CLOSE.get("." + sym.rsplit(".", 1)[1])

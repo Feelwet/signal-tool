@@ -3,6 +3,8 @@
 Hver natt:
   logs/learn_raw.csv   dato, ticker, rang, score, signaltyper, kurs, 5/20/60-dagers avkastning for tickeren og for hovedindeksen
                        på tickerens børs (samme kobling som den grå indekslinja: since.bench_for).
+                       r20 for 25.10–17.11 skal ikke brukes (ujustert og/eller én bar bak). Bruk r20_close
+                       (Yahoo adj close på siste lukkede bar før kjøringens start, stengetid + 30 min).
   logs/learn_exits.csv tickere som var på lista i forrige kjøring, men ikke i dag, med årsak: cut60 (score > 0, rang > 60),
                        score0 (fortsatt kandidat med score 0, eller ingen kandidat lenger), data (ingen kursdata i dag).
   logs/dq_flags.jsonl  datakvalitetsflagg: jump40 (> 40 % endring på én dag, siste 5 dager), factor (Yahoo har justert
@@ -13,7 +15,7 @@ Likt score ved kuttet på 60 (AnalBot 25.10): 1) ticker som allerede er på list
 from __future__ import annotations
 
 import csv, json, logging
-from datetime import date
+from datetime import date, datetime, timezone
 
 from .config import LOGS
 
@@ -47,13 +49,24 @@ def _frame_closes(frames: dict | None) -> dict:
 
 
 def _closes(tickers, period="2y"):
-    """Samme henting som snapshot: markets.download (freshness.repair_lagging inkl. meta-sluttkurs, clean_universe, auto_adjust=True)."""
+    """Samme henting som snapshot: markets.download (freshness.repair_lagging inkl. meta-sluttkurs, clean_universe, auto_adjust=True).
+    Yahoo-symbol kartlegges (BRK.B → BRK-B, MOG.A → MOG-A) og mappes tilbake til logg-ticker."""
     from .collectors import markets
+    from .displayprices import yahoo_alias
     if not tickers:
         return {}
+    want = list(dict.fromkeys(tickers))
+    ymap = {t: yahoo_alias(t) for t in want}
+    inv: dict[str, list[str]] = {}
+    for t, y in ymap.items():
+        inv.setdefault(y, []).append(t)
     short: dict = {}
-    data = markets.download(list(dict.fromkeys(tickers)), period=period, short=short)
-    return _frame_closes({**data, **short})
+    data = markets.download(list(dict.fromkeys(ymap.values())), period=period, short=short)
+    frames = {}
+    for y, df in {**data, **short}.items():
+        for t in inv.get(str(y), [str(y)]):
+            frames[t] = df
+    return _frame_closes(frames)
 
 
 def n_types(e: dict) -> int:
@@ -68,7 +81,7 @@ def prev_list(today: str = "") -> set:
 
 
 EXIT_COLS = ["date", "ticker", "prev_run", "reason", "rank", "score", "tie_step", "n_types", "tied_with", "run_id", "is_canonical"]
-RAW_COLS = ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60", "run_id", "is_canonical", "source_fallback"]
+RAW_COLS = ["date", "ticker", "rank", "score", "types", "close", "close_date", "index", "r5", "i5", "r20", "i20", "r60", "i60", "run_id", "is_canonical", "source_fallback", "r20_close", "r20_close_flag"]
 
 
 def run_meta() -> tuple[str, str]:
@@ -195,7 +208,9 @@ def record(snap: dict, ranked: list[dict], today: str | None = None, frames: dic
     # ikke et eget yfinance-kall uten reparasjon (det lå én bar bak 17.11, f.eks. SCANA.OL 13.11 i stedet for lukket 16.11).
     # Historiske learn_raw-rader rettes ikke uten AnalBots godkjenning av diffen.
     from . import closedbars as CB
+    from .r20_close import compute as _r20c
     px = {t: CB.series(v, t, now) for t, v in px.items()}
+    run_now = now or datetime.now(timezone.utc)
     # 1) rådata
     raw = []
     for i, e in enumerate(snap.get("tickers", []), 1):
@@ -208,6 +223,9 @@ def record(snap: dict, ranked: list[dict], today: str | None = None, frames: dic
             a, x = _ret(s, n), _ret(bs, n)
             rr[f"r{n}"] = "" if a is None else round(a, 6)
             rr[f"i{n}"] = "" if x is None else round(x, 6)
+        # AnalBot 17.11: r20_close er Yahoo adj close på siste lukkede bar før kjøringens start (stengetid + 30),
+        # mot baren 20 handelsdager tidligere. r20 for 25.10–17.11 skal ikke brukes.
+        rr["r20_close"], rr["r20_close_flag"] = _r20c(t, s, run_now)
         raw.append(rr)
     rid, canon = run_meta()
     for x in raw:
