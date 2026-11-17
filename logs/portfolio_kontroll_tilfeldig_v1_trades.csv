@@ -99,3 +99,4 @@ kontroll_tilfeldig_v1,fill,2026-11-10-0091,2026-11-11,2026-11-10,MOS,buy,tilfeld
 kontroll_tilfeldig_v1,fill,2026-11-10-0092,2026-11-11,2026-11-10,SCANA.OL,buy,tilfeldig seed=736535606,2026-11-11,1.47,NOK,1.0,33735.646259,49591.4,99.18,,,3.0,ose_contract,Middels,2026-11-06,Industrials,watch,0.0142,OSEBX (OSEBX.OL),2075.06005859375,2103.260009765625
 kontroll_tilfeldig_v1,order,2026-11-11-0099,2026-11-11,2026-11-11,SCANA.OL,sell,rødt flagg,2026-11-11,,NOK,,,,,,,,,,,,,,,,
 kontroll_tilfeldig_v1,fill,2026-11-11-0099,2026-11-16,2026-11-11,SCANA.OL,sell,rødt flagg,2026-11-12,1.43,NOK,1.0,33735.646259,48241.97,96.48,0.0,-1545.09,,,,,,,,,,
+kontroll_tilfeldig_v1,order,2026-11-17-0101,2026-11-17,2026-11-17,NCLH,buy,tilfeldig seed=2270386781,2026-11-16,,USD,,,,,,,2.5,pead,Høy,2026-11-13,Consumer Cyclical,hold,0.1745,S&P 500 (^GSPC),7416.58984375,

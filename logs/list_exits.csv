@@ -39,3 +39,9 @@ date,ticker,code,old_score,new_score
 2026-11-16,SMH,out_of_top60,,0.71
 2026-11-16,XLE,out_of_top60,,0.93
 2026-11-16,XOM,out_of_top60,2.2,0.93
+2026-11-17,AVGO,out_of_top60,2.23,0.5
+2026-11-17,BRUT.OL,,1.74,
+2026-11-17,BWO.OL,,1.5,
+2026-11-17,EWG,out_of_top60,,0.31
+2026-11-17,LNG,out_of_top60,1.55,0.74
+2026-11-17,NORBT.OL,moved_to_theme,2.54,
