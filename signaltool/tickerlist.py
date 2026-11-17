@@ -296,7 +296,6 @@ def filter_row(snap: dict) -> str:
         f'<button type="button" class="tf-apply" id="tf-apply">Vis {total} tickere</button>'
         f'<button type="button" class="tf-sheet-reset" id="tf-sheet-reset">Nullstill</button>'
         f'</div></div>'
-        + JS
     )
 
 

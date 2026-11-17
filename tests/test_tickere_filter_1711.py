@@ -167,6 +167,14 @@ def test_filter_row_url_localstorage_and_sheet():
     assert 'id="tf-mine"' in h and "Annet ▾" in h
 
 
+def test_filter_js_not_duplicated_in_row():
+    # JS ligger i TL.JS og settes inn én gang av site.build (etter fold_tables).
+    assert "function setSheet" not in TL.filter_row({"tickers": []})
+    assert "function setSheet" in TL.JS
+    src = open(__import__("signaltool.site", fromlist=["x"]).__file__).read()
+    assert src.count("+ TL.JS") == 1
+
+
 def _fixture(tmp_path: Path) -> Path:
     rows = [
         ("AAPL", "Apple", "hoy", "teknologi", "usa", "0", "0", "Høy"),
@@ -200,7 +208,7 @@ def _fixture(tmp_path: Path) -> Path:
         "</style></head><body class='pg-tickere'>"
         + body +
         f"<div id='tf-table'><div class='card'><table>{tr}</table></div></div>"
-        + TL.empties() +
+        + TL.empties() + TL.JS +
         "</body></html>"
     )
     f = tmp_path / "tickere-filter.html"
