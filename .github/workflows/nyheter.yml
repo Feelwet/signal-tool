@@ -78,23 +78,23 @@ jobs:
             if [ -f /tmp/ours/nyheter_latency.csv ]; then
               if [ -f logs/nyheter_latency.csv ]; then
                 python3 - <<'PY'
-import csv
-from pathlib import Path
-ours, dest = Path("/tmp/ours/nyheter_latency.csv"), Path("logs/nyheter_latency.csv")
-def rows(p):
-    with p.open() as f:
-        return list(csv.DictReader(f))
-seen = {(r.get("url"), r.get("first_seen_utc")) for r in rows(dest)}
-out = rows(dest)
-for r in rows(ours):
-    key = (r.get("url"), r.get("first_seen_utc"))
-    if key not in seen:
-        out.append(r); seen.add(key)
-fields = ["first_seen_utc","published_utc","source","url","lag_sec","flag"]
-with dest.open("w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=fields)
-    w.writeheader(); w.writerows(out)
-PY
+          import csv
+          from pathlib import Path
+          ours, dest = Path("/tmp/ours/nyheter_latency.csv"), Path("logs/nyheter_latency.csv")
+          def rows(p):
+              with p.open() as f:
+                  return list(csv.DictReader(f))
+          seen = {(r.get("url"), r.get("first_seen_utc")) for r in rows(dest)}
+          out = rows(dest)
+          for r in rows(ours):
+              key = (r.get("url"), r.get("first_seen_utc"))
+              if key not in seen:
+                  out.append(r); seen.add(key)
+          fields = ["first_seen_utc","published_utc","source","url","lag_sec","flag"]
+          with dest.open("w", newline="") as f:
+              w = csv.DictWriter(f, fieldnames=fields)
+              w.writeheader(); w.writerows(out)
+          PY
               else
                 cp /tmp/ours/nyheter_latency.csv logs/
               fi
