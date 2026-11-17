@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-11-17T14:47:03Z",
-  "generated_at_oslo": "2026-11-17 15:47 CET",
+  "generated_at_utc": "2026-11-17T14:49:49Z",
+  "generated_at_oslo": "2026-11-17 15:49 CET",
   "retention_hours": 48,
   "max_items_editorial": 300,
   "max_items_newsweb": 150,
@@ -9,6 +9,42 @@
   "n_editorial": 300,
   "n_newsweb": 150,
   "items": [
+    {
+      "title": "US tech stocks stabilise after volatile run of trading",
+      "url": "https://www.ft.com/content/4a3b9892-67c6-4177-8503-80c0a5eb3b60?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-17T14:48:44Z",
+      "first_seen_utc": "2026-11-17T14:47:03Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Spår nytt løft i riggmarkedet: Det strammer seg til",
+      "url": "https://www.finansavisen.no/energi/2026/11/17/8396477/spar-nytt-loft-i-markedet-na-strammer-det-seg-til",
+      "source": "Finansavisen",
+      "source_id": "finansavisen",
+      "published_utc": "2026-11-17T14:48:19Z",
+      "first_seen_utc": "2026-11-17T14:49:49Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Dow slides weighed by Home Depot; Nasdaq is flat ahead of Nvidia earnings: Live updates",
+      "url": "https://www.cnbc.com/2026/11/16/stock-market-today-live-updates.html",
+      "source": "CNBC",
+      "source_id": "cnbc",
+      "published_utc": "2026-11-17T14:47:13Z",
+      "first_seen_utc": "2026-11-17T14:47:03Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
     {
       "title": "Disney turns to job cuts in latest cost blitz",
       "url": "https://www.ft.com/content/68aac78a-baee-4123-9c65-7b6e631a02ac?syn-25a6b1a6=1",
@@ -34,6 +70,30 @@
       "pool": "editorial"
     },
     {
+      "title": "SpaceX got a vote of confidence from Nvidia ahead of Jensen Huang’s exit",
+      "url": "https://www.marketwatch.com/story/spacex-got-a-vote-of-confidence-from-nvidia-ahead-of-jensen-huangs-exit-6fe52365?mod=mw_rss_topstories",
+      "source": "MarketWatch",
+      "source_id": "marketwatch",
+      "published_utc": "2026-11-17T14:46:00Z",
+      "first_seen_utc": "2026-11-17T14:49:49Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Financing for next year’s AI build-out is looking increasingly funky",
+      "url": "https://www.ft.com/content/115eeb4e-4d7c-468b-968d-0bbb74a229b1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-17T14:45:01Z",
+      "first_seen_utc": "2026-11-17T14:49:49Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
       "title": "I tried TikTok’s viral ‘corporate slop lunch hacks’ — and finally escaped the $20 desk salad",
       "url": "https://www.marketwatch.com/story/i-tried-tiktoks-viral-corporate-slop-lunch-hacks-and-finally-escaped-the-20-desk-salad-60daf133?mod=mw_rss_topstories",
       "source": "MarketWatch",
@@ -47,11 +107,11 @@
     },
     {
       "title": "Politiet: Fortsatt ingen pågrepet etter luksusinnbrudd i Oslo sentrum",
-      "url": "https://www.aftenposten.no/norge/i/mMR33v/politiet-fortsatt-ingen-paagrepet-etter-luksusinnbrudd-i-oslo-sentrum?utm_medium=rss",
+      "url": "https://www.aftenposten.no/oslo/i/mMR33v/politiet-fortsatt-ingen-paagrepet-etter-luksusinnbrudd-i-oslo-sentrum?utm_medium=rss",
       "source": "Aftenposten",
       "source_id": "aftenposten",
       "published_utc": "2026-11-17T14:40:15Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
+      "first_seen_utc": "2026-11-17T14:49:49Z",
       "section": "Norge",
       "paywall": true,
       "issuer": null,
@@ -89,18 +149,6 @@
       "published_utc": "2026-11-17T14:38:29Z",
       "first_seen_utc": "2026-11-17T14:47:03Z",
       "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Dow slides weighed by Home Depot; Nasdaq is flat ahead of Nvidia earnings: Live updates",
-      "url": "https://www.cnbc.com/2026/11/16/stock-market-today-live-updates.html",
-      "source": "CNBC",
-      "source_id": "cnbc",
-      "published_utc": "2026-11-17T14:38:16Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
-      "section": "Marked",
       "paywall": false,
       "issuer": null,
       "pool": "editorial"
@@ -394,7 +442,7 @@
       "pool": "editorial"
     },
     {
-      "title": "Ankesaken etter drapet på Jonas Aarseth Henriksen skal opp for Høyesterett",
+      "title": "Drapet på Jonas Aarseth Henriksen skal opp for Høyesterett",
       "url": "https://www.nrk.no/buskerud/ankesaken-etter-drapet-pa-jonas-aarseth-henriksen-skal-opp-for-hoyesterett-1.17959846",
       "source": "NRK",
       "source_id": "nrk",
@@ -1616,18 +1664,6 @@
       "paywall": false,
       "issuer": "-",
       "pool": "newsweb"
-    },
-    {
-      "title": "US tech stocks set to stabilise after volatile run of trading",
-      "url": "https://www.ft.com/content/4a3b9892-67c6-4177-8503-80c0a5eb3b60?syn-25a6b1a6=1",
-      "source": "FT",
-      "source_id": "ft",
-      "published_utc": "2026-11-17T12:49:14Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
-      "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
     },
     {
       "title": "Ukraine damages Putin’s prized Crimea bridge as Zelenskyy lauds ‘unprecedented operation’",
@@ -4702,42 +4738,6 @@
       "pool": "editorial"
     },
     {
-      "title": "Lonnie Thompson Has Died. He Dodged Avalanches to Preserve Climate History.",
-      "url": "https://www.nytimes.com/2026/11/06/science/lonnie-thompson-dead.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-17T03:13:16Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
-      "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Teknologifrykt sender Asia-børsene ned – IMF advarer",
-      "url": "https://www.dn.no/dn-ekspress/kina/imf/teknologifrykt-sender-asia-borsene-ned-imf-advarer/2-1-2075034",
-      "source": "DN",
-      "source_id": "dn",
-      "published_utc": "2026-11-17T03:00:54Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
-      "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Trump til toppmøte med nye KI-restriksjoner: – Det kommer til å bli svært ubehagelig",
-      "url": "https://www.dn.no/utenriks/usa/kina/apec/trump-til-toppmote-med-nye-ki-restriksjoner-det-kommer-til-a-bli-svart-ubehagelig/2-1-2075028",
-      "source": "DN",
-      "source_id": "dn",
-      "published_utc": "2026-11-17T02:58:32Z",
-      "first_seen_utc": "2026-11-17T14:47:03Z",
-      "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "Q3 2026 Earning Release",
       "url": "https://newsweb.oslobors.no/message/686638",
       "source": "Oslo Børs Newsweb",
@@ -5415,9 +5415,9 @@
       "id": "aftenposten",
       "name": "Aftenposten",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
-      "last_new_item_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
+      "last_new_item_utc": "2026-11-17T14:49:49Z",
       "status": "ok",
       "error": null
     },
@@ -5425,8 +5425,8 @@
       "id": "bbc",
       "name": "BBC",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5435,8 +5435,8 @@
       "id": "cnbc",
       "name": "CNBC",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5445,8 +5445,8 @@
       "id": "dn",
       "name": "DN",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5455,8 +5455,8 @@
       "id": "e24",
       "name": "E24",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5465,9 +5465,9 @@
       "id": "finansavisen",
       "name": "Finansavisen",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
-      "last_new_item_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
+      "last_new_item_utc": "2026-11-17T14:49:49Z",
       "status": "ok",
       "error": null
     },
@@ -5475,9 +5475,9 @@
       "id": "ft",
       "name": "FT",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
-      "last_new_item_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
+      "last_new_item_utc": "2026-11-17T14:49:49Z",
       "status": "ok",
       "error": null
     },
@@ -5485,9 +5485,9 @@
       "id": "marketwatch",
       "name": "MarketWatch",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
-      "last_new_item_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
+      "last_new_item_utc": "2026-11-17T14:49:49Z",
       "status": "ok",
       "error": null
     },
@@ -5495,8 +5495,8 @@
       "id": "nettavisen",
       "name": "Nettavisen",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5505,8 +5505,8 @@
       "id": "nrk",
       "name": "NRK",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5515,8 +5515,8 @@
       "id": "nyt",
       "name": "NYT",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5525,8 +5525,8 @@
       "id": "newsweb",
       "name": "Oslo Børs Newsweb",
       "paywall": false,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
@@ -5535,8 +5535,8 @@
       "id": "tu",
       "name": "TU",
       "paywall": true,
-      "last_updated": "15:47",
-      "last_updated_utc": "2026-11-17T14:47:03Z",
+      "last_updated": "15:49",
+      "last_updated_utc": "2026-11-17T14:49:49Z",
       "last_new_item_utc": "2026-11-17T14:47:03Z",
       "status": "ok",
       "error": null
