@@ -1,5 +1,5 @@
 """Fanelinje nederst på mobil (≤768 px, UxBot 01.11). 1280 beholder toppmeny/sidemeny.
-Seks faner: Nyheter, Oversikt, Tickere, Oslo, Signal-boka, Mer. min-width:0 så sju trykkflater får plass på 390 px. «Mer» åpner bunnark med resten av sidene, så ingen side blir uoppnåelig."""
+Seks faner: Nyheter, Oversikt, Tickere, Oslo, Signal-boka, Mer. min-width:44 px, høyde minst 44 px, nowrap; raden scroller horisontalt om de ikke får plass, aldri siden. «Mer» åpner bunnark med resten av sidene, så ingen side blir uoppnåelig."""
 from html import escape as E
 
 TABS = [("nyheter.html", "Nyheter", "news"), ("index.html", "Oversikt", "home"), ("tickere.html", "Tickere", "list"), ("oslo.html", "Oslo", "pin"),
@@ -43,8 +43,8 @@ CSS = """
 @media(max-width:768px){
 .side,.side-toggle,body.nav-open::after{display:none!important}
 header.top{padding-left:calc(12px + env(safe-area-inset-left,0px))}
-.tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);box-sizing:border-box;background:#1c2430;border-top:1px solid #3b4757}
-.tb-t{flex:1 1 0;min-width:0;height:56px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#94a3b8!important;text-decoration:none!important;font:500 11px/14px system-ui,-apple-system,sans-serif;background:none;border:0;border-top:2px solid transparent;padding:0;margin:-1px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);box-sizing:border-box;background:#1c2430;border-top:1px solid #3b4757;overflow-x:auto;overflow-y:hidden}
+.tb-t{flex:1 1 0;min-width:44px;height:56px;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#94a3b8!important;text-decoration:none!important;font:500 11px/14px system-ui,-apple-system,sans-serif;background:none;border:0;border-top:2px solid transparent;padding:0;margin:-1px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tb-t.on{color:#58a6ff!important;border-top-color:#58a6ff}.tb-t span{white-space:nowrap}.tb-i{width:22px;height:22px;flex:none}
 body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
 .ms-bg{display:block;position:fixed;inset:0;z-index:58;background:rgba(0,0,0,.5)}.ms-bg[hidden]{display:none}

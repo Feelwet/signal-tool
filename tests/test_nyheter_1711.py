@@ -318,9 +318,12 @@ def test_page_layout_tabs_raw_url_and_ft_credit():
     assert ".ny-tabs{height:44px" in css.replace(" ", "") or "ny-tabs{height:44px" in css
     assert "min-height:56px" in css and "max-height:72px" in css
     assert "flex:0 0 44px" in css and "15px/20px" in css and "-webkit-line-clamp:2" in css
-    assert "width:720px" in css and "width:320px" in css and "gap:24px" in css and "width:1064px" in css
+    assert "minmax(0,720px)" in css and "280px" in css and "column-gap:24px" in css and "max-width:1024px" in css
+    assert "min-width:44px" in css and "min-height:44px" in css
     assert "height:48px" in css and "Ingen saker matcher" in h and "Ingen kilder svarer nå" in h
     assert "ny-chip" in css and "issuer" in h
+    assert "body.pg-nyheter footer" in css and "body.pg-nyheter header.top{display:flex" in css
+    assert "body.pg-nyheter header.top,body.pg-nyheter footer" not in css
     page = S.page("Nyheter", h, 0, {"generated": "2026-11-17 15:00"})
     assert 'class="pg-nyheter"' in page or "pg-nyheter" in page
     assert "nyheter.html" in page

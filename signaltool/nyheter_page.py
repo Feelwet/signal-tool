@@ -25,13 +25,13 @@ body.pg-nyheter .ny{min-width:0;max-width:100%;overflow-x:hidden}
 .ny-upd{margin:0;font:400 12px/16px system-ui,-apple-system,sans-serif;color:#94a3b8;white-space:nowrap}
 .ny-tabs{height:44px;min-height:44px;display:flex;align-items:stretch;gap:0;overflow-x:auto;overflow-y:hidden;padding:0 12px;box-sizing:border-box;border-bottom:1px solid var(--line,#2d333b);scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .ny-tabs::-webkit-scrollbar{display:none}
-.ny-tab{flex:none;height:44px;padding:0 12px;margin:0;border:0;background:none;color:#94a3b8;font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer;box-shadow:inset 0 -2px 0 transparent;white-space:nowrap}
+.ny-tab{flex:none;height:44px;min-height:44px;min-width:44px;padding:0 12px;margin:0;border:0;background:none;color:#94a3b8;font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer;box-shadow:inset 0 -2px 0 transparent;white-space:nowrap}
 .ny-tab[aria-selected="true"],.ny-tab.on{color:var(--ink,#e6edf3);box-shadow:inset 0 -2px 0 var(--acc,#6cb6ff)}
 .ny-tools{height:44px;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;box-sizing:border-box}
 .ny-q{flex:1 1 auto;min-width:0;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:400 14px/20px system-ui,-apple-system,sans-serif}
 .ny-kbtn{flex:0 0 44px;width:auto;min-width:44px;height:44px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 12px/16px system-ui,-apple-system,sans-serif;cursor:pointer;white-space:nowrap}
 .ny-list{margin:0;padding:0;min-width:0}
-.ny-row{display:flex;align-items:flex-start;gap:8px;min-height:56px;max-height:72px;margin:0 12px;padding:8px 0;box-sizing:border-box;border-bottom:1px solid var(--line,#2d333b);color:inherit!important;text-decoration:none!important;overflow:hidden}
+.ny-row{display:flex;align-items:center;gap:8px;min-height:56px;max-height:72px;height:auto;margin:0 12px;padding:8px 0;box-sizing:border-box;border-bottom:1px solid var(--line,#2d333b);color:inherit!important;text-decoration:none!important;overflow:hidden}
 .ny-row:focus-visible{outline:2px solid var(--acc,#6cb6ff);outline-offset:2px;border-radius:4px}
 .ny-time{flex:0 0 44px;width:44px;font:400 12px/16px system-ui,-apple-system,sans-serif;color:#94a3b8;padding-top:2px}
 .ny-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
@@ -54,16 +54,14 @@ body.pg-nyheter .ny{min-width:0;max-width:100%;overflow-x:hidden}
 .ny-ks .ny-kst{flex:none;color:#94a3b8;font:400 12px/16px system-ui,-apple-system,sans-serif}
 body.pg-nyheter{overflow-x:hidden}
 @media(max-width:768px){
-body.pg-nyheter header.top,body.pg-nyheter footer,body.pg-nyheter .gen-line{display:none!important}
+body.pg-nyheter footer,body.pg-nyheter .gen-line{display:none!important}
+body.pg-nyheter header.top{display:flex;height:56px;min-height:56px;max-height:56px}
 body.pg-nyheter main{padding:0}
 }
 @media(min-width:1280px){
-body.pg-nyheter .side{display:none;position:fixed;inset:0 auto 0 0;transform:none;z-index:40;height:100vh;box-shadow:8px 0 24px rgba(0,0,0,.45)}
-body.pg-nyheter.nav-open .side{display:flex!important}
-body.pg-nyheter.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30}
-body.pg-nyheter .ny-desk{display:flex;gap:24px;width:1064px;max-width:100%;margin:0 auto;align-items:flex-start;padding:0 0 24px;box-sizing:border-box}
-body.pg-nyheter .ny-main{width:720px;flex:0 0 720px;min-width:0}
-body.pg-nyheter .ny-kilder{display:block;width:320px;flex:0 0 320px;position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 72px);overflow:auto;padding:8px 0;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:8px;background:var(--card,#161b22)}
+body.pg-nyheter .ny-desk{display:grid;grid-template-columns:minmax(0,720px) 280px;column-gap:24px;width:auto;max-width:1024px;margin:0 auto;align-items:start;padding:0 0 24px;box-sizing:border-box}
+body.pg-nyheter .ny-main{min-width:0;max-width:720px;width:auto}
+body.pg-nyheter .ny-kilder{display:block;width:280px;min-width:280px;position:sticky;top:56px;align-self:start;max-height:calc(100vh - 72px);overflow:auto;padding:8px 0;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:8px;background:var(--card,#161b22)}
 body.pg-nyheter .ny-kilder h2{margin:0;padding:8px 12px 6px;font:600 15px/20px system-ui,-apple-system,sans-serif}
 body.pg-nyheter .ny-kbtn{display:none}
 body.pg-nyheter .ny-tools{height:40px;min-height:40px}

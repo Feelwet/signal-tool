@@ -29,6 +29,7 @@ def test_tabbar_css_and_page():
 
 def test_nyheter_is_first_tab_and_min_width_fits_390():
     assert TB.TABS[0] == ("nyheter.html", "Nyheter", "news")
-    assert "min-width:0" in TB.CSS and "min-width:64px" not in TB.CSS
+    assert "min-width:44px" in TB.CSS and "min-height:44px" in TB.CSS and "min-width:64px" not in TB.CSS
+    assert "overflow-x:auto" in TB.CSS
     from signaltool import site_layout as L
     assert L.NAV[0] == ("Nyheter", "nyheter.html", [])

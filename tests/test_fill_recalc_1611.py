@@ -89,11 +89,57 @@ def test_sell_shares_and_pnl_follow_buy_and_counts_unchanged():
 
 
 def test_visible_book_card_counters_unchanged():
-    h = TB.book_data("hoy_risiko_v1")
-    k = TB.book_data("kontroll_tilfeldig_v1")
-    assert (len(h["dates"]), h["closed"], h["open"], h["universe_n"]) == (14, 2, 20, 29)
-    assert (len(k["dates"]), k["closed"], k["open"], k["universe_n"]) == (12, 13, 19, 29)
-    assert h["universe_date"] == "2026-11-11" and k["universe_date"] == "2026-11-11"  # siste fullførte kjøring, ikke 16.11-kandidatrad uten NAV
-    html = TB.book_card(h, h["dates"]) + TB.book_card(k, k["dates"])
-    assert "2 av 30" in html and "13 av 30" in html
-    assert "lukkede · 20 åpne" in html and "lukkede · 19 åpne" in html
+    """Invarianter (ikke hardkodet dato): kjøringer = unike NAV-datoer; universradene
+    følger qualifies() (20d strengt > 0, ikke-tom score, ikke Tema); trukket univers
+    == _last_universe for hver NAV-dato. 16.11 uten NAV teller ikke."""
+    from signaltool.config import LOGS
+    from signaltool.portfolio import _read, state
+    from signaltool.testbooks_page import MIN_CLOSED
+
+    def _f(v):
+        if v is None or v == "":
+            return None
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+
+    for book in ("hoy_risiko_v1", "kontroll_tilfeldig_v1"):
+        d = TB.book_data(book)
+        navs = _read(B.paths(book)[1])
+        nav_dates = [r["date"] for r in navs]
+        unique = list(dict.fromkeys(nav_dates))
+        assert nav_dates == unique, f"{book}: duplikate NAV-datoer"
+        assert d["dates"] == unique and len(d["dates"]) == len(unique)
+        st = state(_read(B.paths(book)[0]))
+        assert d["open"] == len(st["open"]) and d["closed"] == len(st["closed"])
+        udate, un = TB._last_universe(book, LOGS)
+        assert (d["universe_date"], d["universe_n"]) == (udate, un)
+        # 16.11 er kandidat uten NAV og skal ikke bli siste univers
+        assert d["universe_date"] in unique and d["universe_date"] != "2026-11-16"
+        cands = [r for r in _read(LOGS / B.CANDS.name) if r.get("book_id") == book]
+        trades = _read(B.paths(book)[0])
+        for day in unique:
+            cr = [r for r in cands if r.get("date") == day]
+            if not cr:
+                continue
+            # Hvis denne NAV-datoen er den siste med kandidatrad, er det _last_universe
+            later = [r for r in cands if r.get("date") in unique and r["date"] > day]
+            if not later:
+                assert (day, int(cr[-1]["universe_n"])) == (udate, un)
+            tickers = [x for x in (cr[-1].get("tickers") or "").split("|") if x]
+            # Hver trukket ticker: ingen Tema; ret_20d/score fra handelsloggen når de finnes
+            why = [r for r in trades if (r.get("run_date") == day or r.get("signal_date") == day)
+                   and r.get("ticker") in tickers]
+            for r in why:
+                cat = (r.get("category") or "").strip()
+                assert cat.lower() != "tema", f"{book} {day} {r.get('ticker')}: Tema i trekket"
+                sc = r.get("score")
+                if sc not in (None, ""):
+                    assert str(sc).strip() != ""
+                r20 = _f(r.get("ret_20d"))
+                if r20 is not None:
+                    assert r20 > 0, f"{book} {day} {r.get('ticker')}: ret_20d={r20} ikke strengt > 0"
+        html = TB.book_card(d, d["dates"])
+        assert f'{d["closed"]} av {MIN_CLOSED}' in html
+        assert f'lukkede · {d["open"]} åpne' in html

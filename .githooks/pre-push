@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Wrapper: se scripts/pre-push. Aktiveres med: git config core.hooksPath .githooks
+root="$(git rev-parse --show-toplevel)"
+exec "$root/scripts/pre-push"

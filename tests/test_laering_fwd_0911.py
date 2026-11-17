@@ -44,8 +44,11 @@ def test_20d_window_needs_finished_close_on_exchange():
 
 
 def test_mandag_script_uses_helpers():
+    """Bare tracked mandag.py. Utracked lokal reports/laering/ telles ikke (CI og lokal klone)."""
+    import subprocess
     p = Path('reports/laering/mandag.py')
-    if not p.exists():                                          # privat, ikke i repoet (CI)
-        return
-    s = p.read_text()
+    tracked = subprocess.check_output(['git', 'ls-files', '--', str(p)], text=True).strip()
+    if not tracked:
+        return                                                  # privat, ikke i repoet (CI / lokal utracket fil)
+    s = Path(tracked).read_text()
     assert 'r.flags' not in s and 'L.row_flags(r)' in s and 'L.window_complete(' in s

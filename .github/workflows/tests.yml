@@ -1,0 +1,22 @@
+name: Tester
+
+# Full pytest-suite på push og PR. [skip ci] på rene logg-commits (nyheter hvert 10. min)
+# hopper over, så vi ikke kjører 5 minutter tester på hver overskriftsoppdatering.
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message || '', '[skip ci]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Full pytest-suite
+        run: python3 -m pytest -q
