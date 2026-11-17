@@ -154,7 +154,7 @@ def test_chains_never_touch_score_candidates_or_signal_book():
                      if re.search(r'import trender|trender as|from \.trender|from \. import .*\btrender\b', p.read_text(errors='ignore'))}
     assert trender_users <= {'site.py', 'displayprices.py'}
     dp_users = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'displayprices', p.read_text(errors='ignore'))} - {'displayprices.py'}
-    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py', 'laering_fwd.py', 'close_valid.py', 'since.py', 'closedbars.py'}   # closedbars (11.11): stengetidsregelen for papirbøker/GS/learn_raw/Siden-kurs; since (11.11): stengetidstabellen for Yahoo-innkursen (bare i yahoo_entry); stockrow: bare docstring; laering_fwd: bare stengetidstabellen til læringsrapporten; close_valid (11.11): samme stengetidsregel for innkurs-valget i Siden-raden
+    assert dp_users <= {'site.py', 'verden.py', 'cli.py', 'trender.py', 'verdikjeder.py', 'stockrow.py', 'laering_fwd.py', 'close_valid.py', 'since.py', 'closedbars.py', 'learnloop.py', 'r20_close.py'}   # closedbars (11.11): stengetidsregelen for papirbøker/GS/learn_raw/Siden-kurs; since (11.11): stengetidstabellen for Yahoo-innkursen (bare i yahoo_entry); stockrow: bare docstring; laering_fwd: bare stengetidstabellen til læringsrapporten; close_valid (11.11): samme stengetidsregel for innkurs-valget i Siden-raden; learnloop/r20_close (17.11): yahoo_alias og stengetid for r20_close, ikke scoring
     logs = {p: p.stat().st_mtime_ns for p in Path('logs').glob('*') if p.is_file()}
     block(); T.html()
     assert logs == {p: p.stat().st_mtime_ns for p in logs}
@@ -272,7 +272,7 @@ def test_laering_fwd_not_used_by_scoring():
     assert users <= {'close_valid.py', 'since.py', 'closedbars.py'}   # 11.11: revisjonsloggen, Yahoo-innkursen og closedbars bruker day_closed
     # closedbars (AnalBot 11.11) brukes av papirbøkene, GS-indeksen, learn_raw og Siden-kursen – aldri av scoring/kategorier/kandidater
     cb = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'closedbars', p.read_text(errors='ignore'))} - {'closedbars.py'}
-    assert cb <= {'portfolio.py', 'learnloop.py', 'gs_index.py', 'site.py', 'intraday_fills.py'}
+    assert cb <= {'portfolio.py', 'learnloop.py', 'gs_index.py', 'site.py', 'intraday_fills.py', 'r20_close.py'}   # r20_close (17.11): siste lukkede bar før kjøringens start, ikke scoring
     sn = Path('signaltool/since.py').read_text()
     body = sn.split('def yahoo_entry', 1)[1].split('\ndef ', 1)[0]
     assert sn.count('laering_fwd') == body.count('laering_fwd') and sn.count('displayprices') == body.count('displayprices')
