@@ -1,42 +1,43 @@
 {
- "hentet": "2026-11-18T00:07:03+0100",
+ "hentet": "2026-11-18T01:53:00+0100",
  "dato": "2026-11-18",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (6265) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (3837) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "fra forrige henting"
+  "Oslo Børs Newsweb": "ok (6854 i 95d-uttrekket)",
+  "Norges Bank": "ok (5)"
  },
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 104
+   "antall": 110
   },
   {
    "tema": "mideast_energy",
-   "antall": 77
+   "antall": 78
   },
   {
    "tema": "tariffs_trade",
-   "antall": 33
+   "antall": 35
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 21
+   "antall": 22
+  },
+  {
+   "tema": "food_agri",
+   "antall": 19
   },
   {
    "tema": "rare_earths_semis",
    "antall": 19
   },
   {
-   "tema": "food_agri",
-   "antall": 18
-  },
-  {
    "tema": "risk_off_haven",
-   "antall": 18
+   "antall": 19
   },
   {
    "tema": "sentralbanker",
@@ -47,17 +48,166 @@
    "antall": 2
   },
   {
+   "tema": "nordic_arctic",
+   "antall": 1
+  },
+  {
    "tema": "sanctions_energy",
    "antall": 1
   }
  ],
  "saker": [
   {
-   "tittel": "Zelenskyy says Ukraine preparing for prisoner exchange with Russia afterAbu Dhabi talks",
-   "url": "http://www.newzealandstar.com/news/279439376/zelenskyy-says-ukraine-preparing-for-prisoner-exchange-with-russia-afterabu-dhabi-talks",
+   "tittel": "Rutte: NATO has not yet raised full amount needed for arms supplies to Ukraine",
+   "url": "https://en.apa.az/europe/rutte-nato-has-not-yet-raised-full-amount-needed-for-arms-supplies-to-ukraine-536769",
    "kilde": "GDELT",
-   "domene": "newzealandstar.com",
-   "publisert": "2026-11-17T22:15:00Z",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Lower Crude Oil Prices Ease Pressure at Texas Gas Pumps",
+   "url": "https://kissfm969.com/ixp/195/p/texas-gas-prices-1106/",
+   "kilde": "GDELT",
+   "domene": "kissfm969.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Ukraine Strikes Russia's Crimean Bridge For Second Day, Collapsing Roadway Arch",
+   "url": "https://news.antiwar.com/2026/11/17/ukraine-strikes-russias-crimean-bridge-for-second-day-collapsing-roadway-arch/",
+   "kilde": "GDELT",
+   "domene": "antiwar.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Trump Meets Quad Leaders, Signs Trade Deal with Thailand on Sidelines of ASEAN Summit",
+   "url": "https://www.breitbart.com/asia/2026/11/17/trump-meets-quad-leaders-signs-trade-deal-with-thailand-on-sidelines-of-asean-summit/",
+   "kilde": "GDELT",
+   "domene": "breitbart.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "PODCAST | The Spillover: Nvidia, China, and Chip Export Controls | Council on Foreign Relations",
+   "url": "https://www.cfr.org/podcasts/spillover/the-nvidia-scandal-spotlights-chinas-evasion-of-u-s-chip-export-controls",
+   "kilde": "GDELT",
+   "domene": "cfr.org",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "US criticises Ukraine's 'deep strike' campaign against Russia",
+   "url": "https://www.euronews.com/2026/11/17/us-criticises-ukraines-deep-strike-campaign-against-russia",
+   "kilde": "GDELT",
+   "domene": "euronews.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Ukraine strikes major Russian bridge as aerial attacks escalate",
+   "url": "https://www.halsteadgazette.co.uk/news/national/26735858.ukraine-strikes-major-russian-bridge-aerial-attacks-escalate/",
+   "kilde": "GDELT",
+   "domene": "halsteadgazette.co.uk",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Ukraine hits Russia's Kerch Bridge, as Russia strikes back at Kyiv's bridges",
+   "url": "https://www.koaa.com/investigations/russia-ukraine-war-on-the-ground/ukraine-says-it-brought-down-part-of-russias-kerch-bridge-as-russia-hits-back-at-kyivs-bridges",
+   "kilde": "GDELT",
+   "domene": "koaa.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Romania: Russian boat adrift in the Black Sea. Enough ammunition on board (…)",
+   "url": "https://www.romaniapress.com/news=198061",
+   "kilde": "GDELT",
+   "domene": "romaniapress.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Cablenet Secures Subsea Cable Connectivity in Cyprus with BMIT Technologies Until 2047",
+   "url": "https://www.thefastmode.com/services-and-innovations/51454-cablenet-secures-subsea-cable-connectivity-in-cyprus-with-bmit-technologies-until-2047",
+   "kilde": "GDELT",
+   "domene": "thefastmode.com",
+   "publisert": "2026-11-18T00:00:00Z",
+   "tema": "nordic_arctic",
+   "temaer": [
+    "nordic_arctic"
+   ],
+   "matchede_ord": [
+    "subsea cable"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Ukraine preparing for prisoner exchange with Russia afterAbu Dhabi talks",
+   "url": "http://www.austinglobe.com/news/279439376/zelenskyy-says-ukraine-preparing-for-prisoner-exchange-with-russia-afterabu-dhabi-talks",
+   "kilde": "GDELT",
+   "domene": "austinglobe.com",
+   "publisert": "2026-11-17T23:45:00Z",
    "tema": "conflict_defense",
    "temaer": [
     "conflict_defense"
@@ -66,6 +216,78 @@
     "zelenskyy",
     "ukraine",
     "russia"
+   ]
+  },
+  {
+   "tittel": "Brad Pitt Officially Confirms 'World War Z 2' Status",
+   "url": "https://collider.com/world-war-z-2-sequel-update-brad-pitt/",
+   "kilde": "GDELT",
+   "domene": "collider.com",
+   "publisert": "2026-11-17T23:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "world war"
+   ]
+  },
+  {
+   "tittel": "Kuwait air defences respond to hostile drone attacks",
+   "url": "https://www.emirates247.com/world/kuwait-air-defences-respond-to-hostile-drone-attacks/7894",
+   "kilde": "GDELT",
+   "domene": "emirates247.com",
+   "publisert": "2026-11-17T23:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defence"
+   ]
+  },
+  {
+   "tittel": "Ukraine Talks Run Up Against Deep Enmity Between Russia and Europe",
+   "url": "https://article.wn.com/view/2026/11/17/Ukraine_Talks_Run_Up_Against_Deep_Enmity_Between_Russia_and__6/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-17T23:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Fighting in Yemen has made crossing the Bab el-Mandeb even more dangerous – jeopardizing aid and refuge for millions",
+   "url": "https://theconversation.com/fighting-in-yemen-has-made-crossing-the-bab-el-mandeb-even-more-dangerous-jeopardizing-aid-and-refuge-for-millions-295106",
+   "kilde": "GDELT",
+   "domene": "theconversation.com",
+   "publisert": "2026-11-17T23:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "bab el-mandeb"
+   ]
+  },
+  {
+   "tittel": "Ukraine  – Fourth NATO/U.S. Strike On Kerch Bridge Takes Down Road Span – Moon of Alabama",
+   "url": "https://www.moonofalabama.org/2026/11/ukraine-fourth-nato-u-s-strike-on-kerch-bridge-takes-down-road-span.html",
+   "kilde": "GDELT",
+   "domene": "moonofalabama.org",
+   "publisert": "2026-11-17T23:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "nato"
    ]
   },
   {
@@ -211,36 +433,6 @@
    "matchede_ord": [
     "ukraine",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine hits Russia's Kerch Bridge, as Russia strikes back at Kyiv's bridges",
-   "url": "https://www.wcpo.com/investigations/russia-ukraine-war-on-the-ground/ukraine-says-it-brought-down-part-of-russias-kerch-bridge-as-russia-hits-back-at-kyivs-bridges",
-   "kilde": "GDELT",
-   "domene": "wcpo.com",
-   "publisert": "2026-11-17T22:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine strikes major Russian bridge as aerial attacks escalate",
-   "url": "https://www.wiltshiretimes.co.uk/news/national/26735858.ukraine-strikes-major-russian-bridge-aerial-attacks-escalate/",
-   "kilde": "GDELT",
-   "domene": "wiltshiretimes.co.uk",
-   "publisert": "2026-11-17T22:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
    ]
   },
   {
@@ -555,21 +747,6 @@
    ]
   },
   {
-   "tittel": "US Centcom commander expected in Saudi Arabia with dozens of air defence experts, sources say",
-   "url": "https://www.middleeasteye.net/news/us-centcom-commander-expected-saudi-arabia-dozens-air-defence-experts-sources-say",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-17T21:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "air defence"
-   ]
-  },
-  {
    "tittel": "Israel's genocide in Gaza continues. So must the protests",
    "url": "https://www.middleeasteye.net/opinion/israels-genocide-gaza-continues-so-must-protests",
    "kilde": "GDELT",
@@ -684,37 +861,6 @@
    ]
   },
   {
-   "tittel": "Ukrainian drones and missiles strike Kerch Bridge that links Russia with Crimea",
-   "url": "http://www.postregister.com/businessreport/technology/ukrainian-drones-and-missiles-strike-kerch-bridge-that-links-russia-with-crimea/article_4920a978-97f6-5942-be83-3795e39438cb.html",
-   "kilde": "GDELT",
-   "domene": "postregister.com",
-   "publisert": "2026-11-17T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "missile",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Major blow to Putin as Ukrainian strike brings down part of Crimean Bridge",
-   "url": "https://article.wn.com/view/2026/11/17/Major_blow_to_Putin_as_Ukrainian_strike_brings_down_part_of_/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-17T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "putin"
-   ]
-  },
-  {
    "tittel": "NVIDIA Adds Board-Level Export Control Committee",
    "url": "https://gamerheadlines.com/nvidia-national-security-export-control-oversight-committee/",
    "kilde": "GDELT",
@@ -729,21 +875,6 @@
    ]
   },
   {
-   "tittel": "Ukraine strike collapses section of Putin's prized bridge to occupied Crimea",
-   "url": "https://kesq.com/news/national-world/cnn-world/2026/11/17/critical-bridges-in-crimea-and-kyiv-damaged-as-russia-and-ukraine-exchange-large-scale-attacks/",
-   "kilde": "GDELT",
-   "domene": "kesq.com",
-   "publisert": "2026-11-17T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Malaysia-France rare earths project to begin operations in early 2027, Macron says",
    "url": "https://mymotherlode.com/news/world/11316955/malaysia-france-rare-earths-project-to-begin-operations-in-early-2027-macron-says.html",
    "kilde": "GDELT",
@@ -755,37 +886,6 @@
    ],
    "matchede_ord": [
     "rare earth"
-   ]
-  },
-  {
-   "tittel": "Ukraine strikes major Russian bridge with drones and missiles as aerial attacks escalate",
-   "url": "https://www.ualrpublicradio.org/npr-news/2026-11-17/ukraine-strikes-major-russian-bridge-with-drones-and-missiles-as-aerial-attacks-escalate",
-   "kilde": "GDELT",
-   "domene": "ualrpublicradio.org",
-   "publisert": "2026-11-17T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian",
-    "missile"
-   ]
-  },
-  {
-   "tittel": "Ukraine partly topples Russia's strategic Crimea bridge",
-   "url": "https://www.yasstribune.com.au/story/9393518/ukraine-partly-topples-russias-strategic-crimea-bridge/",
-   "kilde": "GDELT",
-   "domene": "yasstribune.com.au",
-   "publisert": "2026-11-17T16:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -860,21 +960,6 @@
    "matchede_ord": [
     "saudi arabia",
     "iranian"
-   ]
-  },
-  {
-   "tittel": "Former Israeli Navy Chief: US could strike Iran within two weeks, Israel would join",
-   "url": "https://www.israelnationalnews.com/news/436441",
-   "kilde": "GDELT",
-   "domene": "israelnationalnews.com",
-   "publisert": "2026-11-17T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
    ]
   },
   {
@@ -1359,20 +1444,6 @@
    ]
   },
   {
-   "tittel": "India, Egypt To Explore Trade Deal",
-   "url": "https://www.deccanchronicle.com/business/india-egypt-to-explore-trade-deal-2005241",
-   "kilde": "GDELT",
-   "domene": "deccanchronicle.com",
-   "publisert": "2026-11-17T14:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
    "tittel": "Gold price falls to lowest level in a year in key signal over interest rates",
    "url": "https://www.independent.co.uk/news/business/gold-price-interest-rates-iran-b3085468.html",
    "kilde": "GDELT",
@@ -1398,20 +1469,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Letters to the editor, Nov. 17: 'Why finalize any trade deal now … rag the puck a while longer until the dust settles'",
-   "url": "https://www.theglobeandmail.com/opinion/letters/article-why-finalize-any-trade-deal-rag-the-puck-until-the-dust-settles/",
-   "kilde": "GDELT",
-   "domene": "theglobeandmail.com",
-   "publisert": "2026-11-17T14:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {

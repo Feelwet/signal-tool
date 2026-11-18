@@ -679,6 +679,27 @@
 "kind": "makro"
 },
 {
+"date": "2026-12-02",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Eksport av laks, ukentlig (tabell 03024)",
+"kind": "makro"
+},
+{
+"date": "2026-12-02",
+"time": "14:30",
+"source": "BEA",
+"title": "GDP by County and Personal Income by County, 2025",
+"kind": "makro"
+},
+{
+"date": "2026-12-02",
+"time": "16:30",
+"source": "EIA (estimert)",
+"title": "Weekly Petroleum Status Report (råoljelagre)",
+"kind": "makro"
+},
+{
 "date": "2026-12-09",
 "time": "20:00",
 "source": "Federal Reserve",
