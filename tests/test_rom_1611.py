@@ -41,8 +41,13 @@ def test_scana_sell_filled_on_close_1211_once(tmp_path):
     sen = [d for d in dev if d["order_id"] == "2026-11-11-0099" and d["kind"] == "sen_fylling"]
     assert len(sen) == 1 and sen[0]["note"].startswith("sen fylling, nattkjøring feilet")
     hull = [d for d in dev if d["kind"] == "ingen_kjoring"]
-    assert {d["book_id"] for d in hull} == {"rules_v1", "hoy_risiko_v1", "kontroll_tilfeldig_v1"}
-    assert all(d["missed_runs"] == "2026-11-12|2026-11-13|2026-11-14|2026-11-15" for d in hull)
+    h12 = [d for d in hull if d["order_id"] == "runs-2026-11-12..2026-11-15"]
+    h19 = [d for d in hull if d["order_id"] == "runs-2026-11-19..2026-11-22"]
+    assert {d["book_id"] for d in h12} == {"rules_v1", "hoy_risiko_v1", "kontroll_tilfeldig_v1"}
+    assert all(d["missed_runs"] == "2026-11-12|2026-11-13|2026-11-14|2026-11-15" for d in h12)
+    # 19.–22.11 kan ligge i kopien (logg-dato 23.11, ikke strippet) og skrives idempotent
+    assert {d["book_id"] for d in h19} == {"rules_v1", "hoy_risiko_v1", "kontroll_tilfeldig_v1"}
+    assert all(d["missed_runs"] == "2026-11-19|2026-11-20|2026-11-21|2026-11-22" for d in h19)
     snap = [(logs / f).read_bytes() for f in FILES]
     assert B.apply_manual_fills(logs) == []                       # idempotent
     assert [(logs / f).read_bytes() for f in FILES] == snap
@@ -70,6 +75,40 @@ def test_books_show_ingen_kjoring_only_for_past_days_without_run():
     assert TB.no_run_dates(d2, "2026-11-16") == ["2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15"]   # 16.11 kan komme
     assert TB.no_run_dates(d2, "2026-11-17")[-1] == "2026-11-16"
     assert "Mangler kjøring" not in h
+
+
+def test_committed_logs_mark_19_to_22_as_no_run_without_backfill():
+    """19.–22.11 er hull i avviksloggen; ingen NAV, fills eller innkurs er fylt inn bakover."""
+    dev = list(csv.DictReader(open(ROOT / "logs/portfolio_deviations.csv")))
+    h19 = [d for d in dev if d["kind"] == "ingen_kjoring" and d["order_id"] == "runs-2026-11-19..2026-11-22"]
+    assert {d["book_id"] for d in h19} == {"rules_v1", "hoy_risiko_v1", "kontroll_tilfeldig_v1"}
+    assert all(d["missed_runs"] == "2026-11-19|2026-11-20|2026-11-21|2026-11-22" for d in h19)
+    gap = {"2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22"}
+    for name in ("portfolio_nav.csv", "portfolio_hoy_risiko_v1_nav.csv", "portfolio_kontroll_tilfeldig_v1_nav.csv"):
+        dates = {r["date"] for r in csv.DictReader(open(ROOT / "logs" / name))}
+        assert not (dates & gap), (name, dates & gap)
+    for name in ("portfolio_trades.csv", "portfolio_hoy_risiko_v1_trades.csv", "portfolio_kontroll_tilfeldig_v1_trades.csv"):
+        pth = ROOT / "logs" / name
+        if not pth.exists():
+            continue
+        days = {r.get("run_date") or "" for r in csv.DictReader(open(pth))}
+        assert not (days & gap), (name, days & gap)
+    ep = ROOT / "logs/entry_prices.csv"
+    if ep.exists():
+        cols = csv.DictReader(open(ep)).fieldnames or []
+        dcol = "date" if "date" in cols else ("run_date" if "run_date" in cols else cols[0])
+        days = {r[dcol][:10] for r in csv.DictReader(open(ep)) if r.get(dcol)}
+        assert not (days & gap), ("entry_prices", days & gap)
+    d = {"book": "kontroll_tilfeldig_v1", "dates": ["2026-11-11", "2026-11-17", "2026-11-18"],
+         "start": "2026-10-27", "open": 20, "closed": 13, "pending": 0, "fills": 46,
+         "universe_n": 10, "universe_date": "2026-11-18", "no_price": []}
+    h = TB.book_card(d, d["dates"], today="2026-11-23")
+    assert "19.11, 20.11, 21.11, 22.11" in h and "nattkjøringen feilet" in h
+    assert "2026-11-18" not in TB.no_run_dates(d, "2026-11-23")
+    assert TB.no_run_dates(d, "2026-11-23") == [
+        "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16",
+        "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22",
+    ]
 
 
 def test_mot_indeks_uses_index_start_date_not_list_date():

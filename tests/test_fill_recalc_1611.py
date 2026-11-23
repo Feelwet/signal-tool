@@ -66,11 +66,26 @@ def test_fill_recalc_close_logged_for_rewritten_and_follow_on_sales():
     assert all("kurs " in r["note"] and "pnl " in r["note"] for r in dev)
 
 
+def _order_date(r: dict) -> str:
+    """Datoen i ordre-id (YYYY-MM-DD-…), ellers signal_date/run_date."""
+    oid = r.get("order_id") or ""
+    if len(oid) >= 10 and oid[4] == "-" and oid[7] == "-":
+        return oid[:10]
+    return r.get("signal_date") or r.get("run_date") or ""
+
+
+def _trade_path(book: str) -> Path:
+    return ROOT / "logs/portfolio_trades.csv" if book == "rules_v1" else B.paths(book)[0]
+
+
 def test_sell_shares_and_pnl_follow_buy_and_counts_unchanged():
+    # AnalBot 23.11: tellesjekken gjelder bare ordre til og med 2026-11-16 (NCLH-fill 18.11 er utenfor).
+    cutoff = "2026-11-16"
     for book, n_open, n_closed in (("hoy_risiko_v1", 20, 2), ("kontroll_tilfeldig_v1", 19, 13)):
         rows = _read(B.paths(book)[0])
-        s = state(rows)
-        assert len(s["open"]) == n_open and len(s["closed"]) == n_closed
+        early = [r for r in rows if _order_date(r) <= cutoff]
+        s = state(early)
+        assert len(s["open"]) == n_open and len(s["closed"]) == n_closed, (book, len(s["open"]), len(s["closed"]))
         pos = {}
         for r in rows:
             if r["event"] != "fill":
@@ -86,6 +101,13 @@ def test_sell_shares_and_pnl_follow_buy_and_counts_unchanged():
                 assert abs((_f(r["nok_value"]) or 0) - nok) < 0.011
                 assert abs((_f(r["cost_nok"]) or 0) - cost) < 0.011
                 assert abs((_f(r["pnl_nok"]) or 0) - round(nok - cost - entry, 2)) < 0.011
+    # AnalBot 23.11: åpne posisjoner = kjøp − salg, for hver bok, på hele loggen.
+    for book in ("hoy_risiko_v1", "kontroll_tilfeldig_v1", "rules_v1"):
+        rows = _read(_trade_path(book))
+        buys = sum(1 for r in rows if r["event"] == "fill" and r["side"] == "buy")
+        sells = sum(1 for r in rows if r["event"] == "fill" and r["side"] == "sell")
+        s = state(rows)
+        assert len(s["open"]) == buys - sells, (book, len(s["open"]), buys, sells)
 
 
 def test_visible_book_card_counters_unchanged():

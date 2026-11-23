@@ -203,7 +203,19 @@ STATIC_DEVIATIONS = [
 # AnalBot 16.11: nattkjøringen feilet 12.–16.11 (testene leste ekte logger, rettet 16.11 i 6aad3c3). Dagene er hull: ingen
 # signaler i ettertid, bøkene viser «ingen kjøring». Salgsordre 2026-11-11-0099 (SCANA.OL, rødt flagg) fylles på sluttkurs 12.11
 # fra Yahoo dagshistorikk (auto_adjust=False, samme kilde som portfolio._hist) = første lukkede bar etter ordren.
-NO_RUN_DATES = ("2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16")
+# AnalBot 23.11: 19.–22.11 logges på samme måte (nattkjøringen feilet på test_fill_recalc_1611 etter NCLH-fill 18.11).
+# Ingen NAV, fills eller innkurs fylles inn bakover. 18.11 hadde vellykket kjøring og er ikke hull. 23.11 kan fortsatt komme.
+NO_RUN_DATES = (
+    "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16",
+    "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22",
+)
+# (logg-dato, order_id, missed_runs): eksisterende rader endres aldri; nye hull skrives idempotent.
+NO_RUN_GAPS = (
+    ("2026-11-16", "runs-2026-11-12..2026-11-15",
+     ("2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15")),
+    ("2026-11-23", "runs-2026-11-19..2026-11-22",
+     ("2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22")),
+)
 NO_RUN_WHY = "nattkjøringen feilet"
 MANUAL_FILLS = [{"book_id": "kontroll_tilfeldig_v1", "order_id": "2026-11-11-0099", "ticker": "SCANA.OL", "side": "sell",
                  "price_date": "2026-11-12", "price": 1.43, "fx": 1.0, "run_date": "2026-11-16",
@@ -245,11 +257,13 @@ def apply_manual_fills(logs: Path = LOGS) -> list[dict]:
                                        "n_missed": len([d for d in NO_RUN_DATES if d < m["run_date"]]),
                                        "note": f"sen fylling, nattkjøring feilet; sluttkurs {m['price_date']} ({m['source']})"}])
             have_dev.add((b, m["order_id"], "sen_fylling"))
-    hull_d = [d for d in NO_RUN_DATES if d < "2026-11-16"]   # 16.11: hull bare om dagen går uten kjøring (vises da i bøkene)
-    hull = [{"date": "2026-11-16", "book_id": bk, "kind": "ingen_kjoring", "order_id": "runs-2026-11-12..2026-11-15", "ticker": "",
-             "side": "", "order_run": "", "fill_run": "", "missed_runs": "|".join(hull_d), "n_missed": len(hull_d),
-             "note": "hull: ingen kjøring (nattkjøringen feilet); ingen signaler i ettertid, dagene fylles ikke inn"}
-            for bk in ["rules_v1", *BOOKS]]
+    hull = []
+    for logged, oid, missed in NO_RUN_GAPS:
+        for bk in ["rules_v1", *BOOKS]:
+            hull.append({"date": logged, "book_id": bk, "kind": "ingen_kjoring", "order_id": oid, "ticker": "",
+                         "side": "", "order_run": "", "fill_run": "", "missed_runs": "|".join(missed),
+                         "n_missed": len(missed),
+                         "note": "hull: ingen kjøring (nattkjøringen feilet); ingen signaler i ettertid, dagene fylles ikke inn"})
     P._append(dpath, D_COLS, [h for h in hull if (h["book_id"], h["order_id"], h["kind"]) not in have_dev])
     return out
 
