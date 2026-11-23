@@ -10,7 +10,8 @@ def test_gen_short():
 
 def test_top_bar_single_row_48px():
     html = S.page("Tickere", "<p>x</p>", 0, {"generated": "2026-10-26 21:05"})
-    assert re.search(r'</header><p class="gen gen-line"[^>]*>Oppdatert 26\.10 kl\. 21:05</p>', html)     # UxBot 28.10: under toppbaren
+    assert re.search(r'</header><p id="stale-line" class="stale-line" hidden>', html)
+    assert re.search(r'<p class="gen gen-line"[^>]*>Oppdatert 26\.10 kl\. 21:05</p>', html)     # UxBot 28.10: under toppbaren
     assert html.count('gen-line') == 1 and 'class="gen"' not in html                       # egen datolinje i sidemenyen er fjernet
     css = S.CSS
     assert "height:48px" in css and "width:40px;height:40px" in css

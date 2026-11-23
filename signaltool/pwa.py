@@ -106,7 +106,7 @@ def js(pre: str) -> str:
     return ("<script>(()=>{const d=document,H=d.documentElement;"
             f"if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('{pre}sw.js',{{scope:'{sc}'}}).catch(()=>0));"
             # frakoblet: siden kom fra cache (SW merker <html data-offline>); kursdato fra data, hentetid fra build
-            "if(H.dataset.offline){const g=d.querySelector('header.top+p.gen');if(g){const h=g.dataset.hent||g.textContent.replace(/^Oppdatert\\s*/,'')||'ukjent tid';"
+            "if(H.dataset.offline){const g=d.querySelector('header.top ~ p.gen');if(g){const h=g.dataset.hent||g.textContent.replace(/^Oppdatert\\s*/,'')||'ukjent tid';"
             f"g.textContent=g.dataset.kd?{json.dumps(OFFLINE_TXT)}.replace('{{kurs}}',g.dataset.kd).replace('{{hentet}}',h):{json.dumps(OFFLINE_NOKD)}.replace('{{hentet}}',h)}}}}"
             # ferskhet: Brent = siste handelsdag (UTC >= 23 -> i dag, ellers i går; helg tilbake), BTC = i går UTC
             "const day=86400000,iso=x=>new Date(x+'T00:00:00Z').getTime(),n=new Date(),u=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());"

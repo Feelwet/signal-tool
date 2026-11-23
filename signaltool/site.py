@@ -2,7 +2,9 @@
 GitHub Pages / Netlify / Cloudflare Pages for free."""
 from __future__ import annotations
 import hashlib, html, json, re, shutil
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from .config import ROOT, REPORTS
 from . import categories as C
 from . import site_extra as X
@@ -79,6 +81,9 @@ header.top .brand{font-weight:700;font-size:16px;line-height:20px;color:#fff;tex
 header.top .gen{color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap;flex:0 0 auto}
 /* UxBot 28.10: «Oppdatert DD.MM kl. HH:MM» (kjøretidspunkt) 12 px under toppbaren */
 .gen-line{margin:6px 0 0;padding:0 16px;color:#94a3b8;font-size:12px;line-height:16px;white-space:nowrap}
+/* UxBot 23.11: varsellinje under header.top når snapshotet er mer enn 36 t gammelt (alder regnes i nettleseren) */
+.stale-line{display:flex;align-items:center;box-sizing:border-box;height:44px;min-height:44px;max-height:44px;margin:0;padding:0 16px;background:#1f2733;border-left:3px solid var(--warn);color:#e6edf3;font-size:13px;line-height:18px;white-space:nowrap;overflow:hidden}
+.stale-line[hidden]{display:none!important}
 /* UxBot 09.11: på Oversikt bærer statuslinjen tidspunktet; topplinjens «Oppdatert» skjules (frakoblet-varselet vises fortsatt) */
 html:not([data-offline]) p.gen-line[data-ov]{display:none}
 .side .brand,.side .gen{display:none!important}
@@ -455,18 +460,40 @@ def fold(title: str, body: str, *, open_: bool = True, hid: str | None = None) -
             f'<div class="fold-body">{body}</div></details>')
 
 
+def gen_dt(g):
+    """snap['generated'] (Oslo-tid, uten sone) som tidssonebevisst tidspunkt, eller None."""
+    m = re.match(r"\s*(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})", str(g or ""))
+    if not m:
+        return None
+    return datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)), int(m.group(5)),
+                    tzinfo=ZoneInfo("Europe/Oslo"))
+
+
 def gen_short(g) -> str:
-    """«2026-10-26 21:05» -> «26.10 21:05» (UxBot 26.10: Oppdatert DD.MM HH:MM)."""
-    m = re.match(r"\s*\d{4}-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})", str(g or ""))
-    return f"{m.group(2)}.{m.group(1)} {m.group(3)}:{m.group(4)}" if m else str(g or "")
+    """«2026-10-26 21:05» -> «26.10 21:05» (UxBot 26.10: Oppdatert DD.MM HH:MM). Samme kilde som gen_iso."""
+    dt = gen_dt(g)
+    return f"{dt.strftime('%d.%m %H:%M')}" if dt else str(g or "")
+
+
+def gen_iso(g) -> str:
+    """«2026-10-26 21:05» -> «2026-10-26T21:05:00+01:00» (Europe/Oslo, med sone). Samme kilde som gen_short."""
+    dt = gen_dt(g)
+    return dt.isoformat() if dt else ""
 
 
 def page(title: str, body: str, depth=0, snap=None) -> str:
     body = L.no_robust(body).replace("(eksperimentell, teller ikke mot Kjøp)", "(eksperimentell)").replace("(eksperimentell – teller ikke mot Kjøp)", "(eksperimentell)")
     pre = "../" * depth
-    gen = f"Oppdatert {E(gen_short(snap['generated']).replace(' ', ' kl. ', 1))}" if snap and snap.get("generated") else ""
+    gdt = gen_dt((snap or {}).get("generated")) if snap else None
+    short = gen_short(snap["generated"]) if gdt else ""
+    short_kl = short.replace(" ", " kl. ", 1) if short else ""
+    gen = f"Oppdatert {E(short_kl)}" if short_kl else ""
+    iso = gen_iso(snap["generated"]) if gdt else ""
+    stale = (f'<p id="stale-line" class="stale-line" hidden>'
+             f'{f"Dataene er ikke oppdatert siden {E(short_kl)}." if short_kl else ""}</p>')
+    body_g = f' data-generated="{E(iso)}"' if iso else ""
     kd = PWA.kurs_date(snap)   # AnalBot 01.11: frakoblet-linja viser kursdato (fra data) + hentetid (fra build)
-    gattr = (f' data-kd="{kd[8:10]}.{kd[5:7]}"' if kd else "") + (f' data-hent="{E(gen_short(snap["generated"]).replace(" ", " kl. ", 1))}"' if gen else "")
+    gattr = (f' data-kd="{kd[8:10]}.{kd[5:7]}"' if kd else "") + (f' data-hent="{E(short_kl)}"' if gen else "")
     active = {
         "Trender": "trender.html", "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
@@ -493,6 +520,12 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
   var closeBtn=document.getElementById('folds-close');
   if(openBtn) openBtn.addEventListener('click',function(){setAll(true);});
   if(closeBtn) closeBtn.addEventListener('click',function(){setAll(false);});
+  var sl=document.getElementById('stale-line');
+  var iso=document.body.getAttribute('data-generated');
+  if(sl && iso){
+    var ts=Date.parse(iso);
+    if(!isNaN(ts) && Date.now()-ts>36*60*60*1000) sl.hidden=false;
+  }
   var tog=document.getElementById('nav-toggle');
   if(tog) tog.addEventListener('click',function(){document.body.classList.toggle('nav-open');});
   document.querySelectorAll('.side nav a').forEach(function(a){
@@ -530,7 +563,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 })();
 </script>"""
     return f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark">{PWA.head(pre)}<meta name="robots" content="noindex"></head><body class="{UX2.body_class(cur)}">
+<title>{E(title)} – Geo-signal</title><link rel="stylesheet" href="{pre}style.css?v={CSS_V[0]}"><meta name="color-scheme" content="dark">{PWA.head(pre)}<meta name="robots" content="noindex"></head><body class="{UX2.body_class(cur)}"{body_g}>
 <div class="app">
 <aside class="side" id="side">
 <nav>{nav}</nav>
@@ -542,7 +575,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
 </aside>
 <div class="content">
 <header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
-<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{f'<p class="gen gen-line"{gattr}{" data-ov" if title == "Oversikt" else ""}>{gen}</p>' if gen else ""}
+<a class="brand" href="{pre}index.html">🛰️ Geo-signal</a></header>{stale}{f'<p class="gen gen-line"{gattr}{" data-ov" if title == "Oversikt" else ""}>{gen}</p>' if gen else ""}
 <main>{body}{PWA.install_html() if title == "Oversikt" else ""}</main>
 <footer>{DISCLAIMER}<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="{pre}metode.html#treffrate">Treffrate</a></footer>
 </div></div>
