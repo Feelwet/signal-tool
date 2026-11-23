@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 import shutil
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -141,9 +142,12 @@ def test_css_contrast_tokens():
     assert "border:1px solid #6b7787" in TL.CSS
     assert "background:rgba(108,182,255,.18)" in TL.CSS
     assert "content:\"✓ \"" in TL.CSS or "content:\"✓ \";" in TL.CSS
+    assert ".tf-opt.is-on .tf-opt-lab::before" not in TL.CSS
+    assert ".tf-mine[aria-pressed=true]::before{content:\"✓ \";}" in TL.CSS
     assert ".tf-slukk{flex:none;width:44px;height:44px" in TL.CSS
     assert ".tf-apply{height:48px;min-height:48px" in TL.CSS
     assert ".tf-empty{" in TL.CSS and "min-height:48px" in TL.CSS
+    assert ".tf-empty-reset,.tf-sheet-reset" in TL.CSS and "min-height:44px" in TL.CSS[TL.CSS.find(".tf-empty-reset"):TL.CSS.find(".tf-empty-reset")+400]
     assert contrast("#e6edf3", "#161b22") >= 7
     assert contrast("#9ea9b5", "#161b22") >= 4.5
     assert contrast("#6b7787", "#161b22") >= 3
@@ -172,8 +176,9 @@ def test_filter_row_url_localstorage_and_sheet():
     assert "Vis 2 tickere" in h and "Nullstill" in h
     assert 'data-g="risiko"' in h and 'data-g="sektor"' in h and 'data-g="bors"' in h and 'data-g="annet"' in h
     assert "Energi (1)" in h and "Ukjent sektor (1)" in h
-    assert "Høy (1)" in h and "Lav (1)" in h
+    assert "Høy (1)" in h and "Lav (1)" in h and "Ingen risikonivå (0)" in h
     assert "Oslo (1)" in h and "USA (1)" in h
+    assert 'data-total="2"' in h
     assert "signaltool.tickere-filter" in h
     assert "searchParams" in TL.JS and "'risiko'" in TL.JS and "join(',')" in TL.JS
     assert "localStorage" in TL.JS and "Escape" in TL.JS
@@ -490,6 +495,189 @@ def test_sheet_stays_open_after_one_click(tmp_path):
         assert pg.evaluate("()=>!document.getElementById('tf-sheet').hidden")
         pg.wait_for_timeout(200)
         assert pg.evaluate("()=>!document.getElementById('tf-sheet').hidden")
+        pg.close()
+        b.close()
+
+
+def _listed_snap():
+    """Fire synlige rader, én av dem ikke rangert (ALPE.OL), to uten risikonivå."""
+    return {
+        "date": "2026-11-17",
+        "_risk_asof": date(2026, 11, 13),
+        "_risk_today": date(2026, 11, 17),
+        "tickers": [
+            {"ticker": "EQNR.OL", "name": "Equinor", "points": {}, "score": 1.0,
+             "stats": {"close": 10, "ret_5d": 0.01, "ret_20d": 0.02},
+             "decision": {"sector": "Energy"},
+             "_risk": {"level": "Høy", "market": "Oslo", "in_universe": 1}},
+            {"ticker": "AAPL", "name": "Apple", "points": {}, "score": 1.0,
+             "stats": {"close": 10, "ret_5d": 0.01, "ret_20d": 0.02},
+             "decision": {"sector": "Technology"},
+             "_risk": {"level": "Lav", "market": "US", "in_universe": 1}},
+            {"ticker": "RHM.DE", "name": "Rheinmetall", "points": {}, "score": 1.0,
+             "stats": {"close": 10, "ret_5d": 0.01, "ret_20d": 0.02},
+             "decision": {"sector": "Industrials"},
+             "_risk": {"level": "Høy", "market": "US", "in_universe": 0}},
+            {"ticker": "ALPE.OL", "name": "Alpine", "points": {}, "score": 0.0,
+             "stats": {"close": 10}, "decision": {}, "unranked": True, "_risk": None},
+        ],
+    }
+
+
+def _listed_page(snap: dict) -> str:
+    ranked = [e for e in snap["tickers"] if not e.get("unranked")]
+    unr = [e for e in snap["tickers"] if e.get("unranked")]
+    tables = ('<div class="card"><div class="tw"><table>'
+              + "".join(S.ticker_row(e) for e in ranked) + "</table></div>")
+    if unr:
+        tables += ('<div class="ur-head"><b>Ikke rangert</b></div>'
+                   + '<div class="tw"><table class="ur-tab">'
+                   + "".join(S.ticker_row(e) for e in unr) + "</table></div>")
+    tables += "</div>"
+    return (
+        "<!doctype html><html lang='no'><head><meta charset='utf-8'>"
+        "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+        "<style>:root{--bg:#0b0f14;--card:#161b22;--ink:#e6edf3;--mut:#9ea9b5;--acc:#6cb6ff;--line:#3a4350}"
+        "body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 sans-serif}"
+        + TL.CSS +
+        "</style></head><body class='pg-tickere'>"
+        + TL.tickere_intro(snap) + TL.filter_row(snap)
+        + f"<div id='tf-table'>{tables}</div>"
+        + TL.empties() + TL.JS +
+        "</body></html>"
+    )
+
+
+def _facet_counts(html: str, group: str) -> dict[str, int]:
+    m = re.search(rf'<section class="tf-sec" data-g="{group}">(.*?)</section>', html, re.S)
+    assert m, group
+    out = {}
+    for mm in re.finditer(
+        rf'data-g="{group}" data-k="([^"]+)"[^>]*>\s*<input[^>]*>\s*<span class="tf-opt-lab">([^<]+) \((\d+)\)</span>',
+        m.group(1),
+    ):
+        out[mm.group(1)] = int(mm.group(3))
+    return out
+
+
+def _assert_totals_match(html: str, n_rows: int | None = None):
+    if n_rows is None:
+        n_rows = len(re.findall(r'<tr class="rowlink"', html))
+    total = int(re.search(r'data-total="(\d+)"', html).group(1))
+    vis = re.search(r'id="tf-count"[^>]*>Viser (\d+) av (\d+)', html)
+    assert vis, html[html.find("tf-count"):html.find("tf-count")+200]
+    n, tot = int(vis.group(1)), int(vis.group(2))
+    risiko = _facet_counts(html, "risiko")
+    sektor = _facet_counts(html, "sektor")
+    bors = _facet_counts(html, "bors")
+    assert "ingen" in risiko and "Ingen risikonivå" in html
+    assert "ukjent-sektor" in sektor
+    assert n_rows == total == n == tot == sum(risiko.values()) == sum(sektor.values()) == sum(bors.values()), {
+        "rows": n_rows, "data-total": total, "viser": (n, tot),
+        "risiko": risiko, "risiko_sum": sum(risiko.values()),
+        "sektor_sum": sum(sektor.values()), "bors": bors, "bors_sum": sum(bors.values()),
+    }
+    return {"rows": n_rows, "total": total, "risiko": risiko, "sektor": sektor, "bors": bors}
+
+
+def test_intro_and_listed_count_include_unranked():
+    snap = _listed_snap()
+    assert TL.listed_count(snap) == 4
+    assert "4 kandidat-tickere" in TL.tickere_intro(snap)
+    src = Path("signaltool/site.py").read_text()
+    assert "TL.tickere_intro" in src
+    meta = [TL.row_meta(e) for e in snap["tickers"]]
+    assert sum(1 for r in meta if r["bors"] == "oslo") == 2  # EQNR + ALPE.OL
+
+
+def test_static_html_row_count_equals_total_and_facet_sums():
+    snap = _listed_snap()
+    html = _listed_page(snap)
+    got = _assert_totals_match(html, 4)
+    assert got["bors"]["oslo"] == 2
+    assert got["risiko"]["ingen"] == 2
+    assert got["sektor"]["ukjent-sektor"] == 1
+    assert "Viser 4 av 4" in html
+    assert 'data-total="4"' in html
+
+
+@pytest.mark.skipif(not (shutil.which("google-chrome") or shutil.which("chromium")), reason="ingen headless Chrome")
+def test_headless_totals_nullstill_target_and_no_check_on_options(tmp_path):
+    """Etter JS: radtall = total i teksten = fasettsum. Nullstill ≥ 44 px. Ingen ✓ i avkrysningsrader."""
+    pw = pytest.importorskip("playwright.sync_api")
+    snap = _listed_snap()
+    html = _listed_page(snap)
+    _assert_totals_match(html, 4)
+    f = tmp_path / "tickere-total.html"
+    f.write_text(html)
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome" if shutil.which("google-chrome") else None)
+        pg = b.new_page(viewport={"width": 390, "height": 844})
+        pg.goto(f.as_uri())
+        after = pg.evaluate(r"""()=>{
+          const rows=[...document.querySelectorAll('#tf-table tr.rowlink')];
+          const count=(document.getElementById('tf-count')||{}).textContent||'';
+          const total=parseInt((document.getElementById('tf-wrap')||{}).getAttribute('data-total')||'0',10);
+          const facets={};
+          document.querySelectorAll('.tf-sheet .tf-sec').forEach(sec=>{
+            const g=sec.getAttribute('data-g');
+            facets[g]={};
+            sec.querySelectorAll('.tf-opt').forEach(lab=>{
+              const k=lab.getAttribute('data-k');
+              const t=(lab.querySelector('.tf-opt-lab')||{}).textContent||'';
+              const m=t.match(/[(](\d+)[)] *$/);
+              facets[g][k]=m?parseInt(m[1],10):null;
+            });
+          });
+          const m=count.match(/Viser (\d+) av (\d+)/);
+          return {nRows:rows.length, total, count, viser:m?[parseInt(m[1],10),parseInt(m[2],10)]:null, facets,
+                  intro:(document.querySelector('.pintro')||{}).textContent||''};
+        }""")
+        n = after["nRows"]
+        assert n == after["total"] == after["viser"][0] == after["viser"][1] == 4, after
+        assert after["intro"].startswith("4 kandidat-tickere")
+        for g in ("risiko", "sektor", "bors"):
+            assert sum(after["facets"][g].values()) == n, (g, after["facets"][g])
+        assert after["facets"]["bors"]["oslo"] == 2
+        assert after["facets"]["risiko"]["ingen"] == 2
+        assert "ukjent-sektor" in after["facets"]["sektor"]
+
+        pg.click("#tf-fbtn")
+        # huk av Lav, sjekk at raden ikke har ✓
+        pg.locator('.tf-sheet .tf-opt[data-g="risiko"][data-k="lav"] input').click()
+        mark = pg.evaluate("""()=>{
+          const lab=document.querySelector('.tf-sheet .tf-opt[data-g="risiko"][data-k="lav"]');
+          const span=lab.querySelector('.tf-opt-lab');
+          const before=getComputedStyle(span, '::before').content;
+          return {text:span.textContent, before, hasChk:!!lab.querySelector('input[type=checkbox]'),
+                  on:lab.classList.contains('is-on')};
+        }""")
+        assert mark["hasChk"] and mark["on"]
+        assert "✓" not in mark["text"]
+        assert mark["before"] in ("none", "normal", '""', "''") or not mark["before"] or mark["before"] == "none"
+
+        rst = pg.evaluate("""()=>{
+          const b=document.getElementById('tf-sheet-reset');
+          const r=b.getBoundingClientRect();
+          const cs=getComputedStyle(b);
+          return {h:r.height, w:r.width, fs:cs.fontSize, bg:cs.backgroundColor, color:cs.color};
+        }""")
+        assert rst["h"] >= 44, rst
+        assert rst["fs"] == "14px", rst
+
+        pg.click("#tf-apply")
+        # tom tilstand via søk som ikke treffer
+        pg.fill("#tf-q", "zzzz-ingen-treff")
+        empty = pg.evaluate("""()=>{
+          const e=document.getElementById('tf-empty');
+          const b=document.getElementById('tf-empty-reset');
+          const r=b.getBoundingClientRect();
+          const cs=getComputedStyle(b);
+          return {shown:!e.hidden, h:r.height, w:r.width, fs:cs.fontSize, text:b.textContent};
+        }""")
+        assert empty["shown"] and empty["text"] == "Nullstill"
+        assert empty["h"] >= 44, empty
+        assert empty["fs"] == "14px", empty
         pg.close()
         b.close()
 

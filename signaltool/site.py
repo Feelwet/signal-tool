@@ -881,7 +881,7 @@ def build(snap: dict) -> Path:
     # ---------- tickers ----------
     lf = "".join(f'<li>{E(x["date"])} {E(x["form"])}: <a href="{E(x["url"])}">{E(x["company"])}</a></li>' for x in snap.get("late_filings", [])[:20])
     ins = "".join(f'<tr><td>{E(r["ticker"])}</td><td><a href="{E(r["url"])}">{E(r["issuer"])}</a></td><td>{r["n_insiders"]}</td><td>${r["total_value"]:,.0f}</td><td class="mut">{E(r["roles"])}</td></tr>' for r in snap.get("insider_clusters", [])[:20])
-    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1><p class="pintro">{len(tickers)} kandidat-tickere med risikonivå og poengsum – «verdt å undersøke», ikke «kjøp».</p>' + (f'<p class="frz-line">{E(frz_text(snap["frozen_from"]))}</p>' if snap.get("frozen_from") else "")
+    (SITE / "tickere.html").write_text(page("Tickere", fold_tables(f'<h1>Tickere</h1>{TL.tickere_intro({"tickers": tickers})}' + (f'<p class="frz-line">{E(frz_text(snap["frozen_from"]))}</p>' if snap.get("frozen_from") else "")
                                             + TL.filter_row(snap) + TL.flag_block(snap) + '<div id="tf-table">' + RK.status() + TL.empties() + '<div class="card">' + ES.legend(dnb=True).replace('class="evleg"', 'class="evleg evleg-pc"', 1) + '<div class="tw"><table>' + TICKER_HEAD + ''
                                             + "".join(ticker_row(e) for e in tickers if not e.get("unranked")) + "</table></div>"
                                             # UxBot 25.10: overskrift + (i)-tekst utenfor scrollboksen, full bredde, bryter linjer

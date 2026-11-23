@@ -43,7 +43,7 @@ SEKTOR_NAV = (
     "Ukjent sektor",
 )
 UKJENT_SEKTOR = "Ukjent sektor"
-RISIKO_NAV = (("hoy", "Høy"), ("middels", "Middels"), ("lav", "Lav"))
+RISIKO_NAV = (("hoy", "Høy"), ("middels", "Middels"), ("lav", "Lav"), ("ingen", "Ingen risikonivå"))
 BORS_NAV = (
     ("oslo", "Oslo"), ("usa", "USA"), ("tyskland", "Tyskland"),
     ("danmark", "Danmark"), ("sverige", "Sverige"), ("storbritannia", "Storbritannia"),
@@ -133,7 +133,7 @@ def row_meta(e: dict) -> dict:
     tkr = e.get("ticker") or ""
     rk = e.get("_risk") if isinstance(e.get("_risk"), dict) else None
     lv = RK.shown_level(rk, tkr)
-    risiko = next((k for k, lab in RISIKO_NAV if lab == lv), "")
+    risiko = next((k for k, lab in RISIKO_NAV if lab == lv), "ingen")
     return {
         "ticker": tkr,
         "name": e.get("name") or "",
@@ -198,6 +198,21 @@ def chip(r: dict | None) -> str:
 def nokurs(e: dict) -> str:
     """Grå chip når tickeren mangler kursdata (UxBot 26.10): raden vises, hullet synes."""
     return "" if (e.get("stats") or {}).get("close") is not None else '<span class="nokurs">Ingen kursdata</span>'
+
+
+def listed_tickers(snap: dict) -> list[dict]:
+    """Rader brukeren ser i tabellen, inkludert «Ikke rangert»."""
+    return list(snap.get("tickers") or [])
+
+
+def listed_count(snap: dict) -> int:
+    return len(listed_tickers(snap))
+
+
+def tickere_intro(snap: dict) -> str:
+    n = listed_count(snap)
+    return (f'<p class="pintro">{n} kandidat-tickere med risikonivå og poengsum – '
+            f'«verdt å undersøke», ikke «kjøp».</p>')
 
 
 def n_new(snap: dict) -> int:
@@ -279,7 +294,7 @@ def _opts(group: str, items: list[tuple[str, str, int]]) -> str:
 
 
 def _counts(snap: dict) -> dict[str, dict[str, int]]:
-    rows = [row_meta(e) for e in snap.get("tickers", []) if not e.get("unranked")]
+    rows = [row_meta(e) for e in listed_tickers(snap)]
     empty = {"risiko": [], "sektor": [], "bors": [], "annet": [], "q": ""}
     out = {"risiko": {}, "sektor": {}, "bors": {}, "annet": {}}
     for k, _lab in RISIKO_NAV:
@@ -304,7 +319,7 @@ def filter_row(snap: dict) -> str:
     sektor = _opts("sektor", [(SEKTOR_SLUG[lab], lab, c["sektor"][SEKTOR_SLUG[lab]]) for lab in SEKTOR_NAV])
     bors = _opts("bors", [(k, lab, c["bors"][k]) for k, lab in BORS_NAV])
     annet = _opts("annet", [(k, lab, c["annet"][k]) for k, lab in ANNET_NAV])
-    total = sum(1 for e in snap.get("tickers", []) if not e.get("unranked"))
+    total = listed_count(snap)
     asof = snap.get("_risk_asof") if isinstance(snap.get("_risk_asof"), date) else risk_asof()
     today = snap.get("_risk_today") if isinstance(snap.get("_risk_today"), date) else build_date(snap)
     ropen = risk_filter_open(asof, today)
@@ -386,7 +401,7 @@ CSS = """
 .tf-mine,.tf-dd-btn{height:44px;min-height:44px;padding:0 12px;border:1px solid #6b7787;border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
 .tf-mine[aria-pressed=true],.tf-dd-btn.is-on,.tf-opt.is-on,.tf-fbtn.is-on{
   background:rgba(108,182,255,.18);border-color:var(--acc,#6cb6ff);color:#e6edf3}
-.tf-mine[aria-pressed=true]::before,.tf-opt.is-on .tf-opt-lab::before{content:"✓ ";}
+.tf-mine[aria-pressed=true]::before{content:"✓ ";}
 .tf-dd{position:relative;display:none}
 .tf-dd-list{position:absolute;top:calc(100% + 4px);left:0;z-index:30;min-width:180px;max-width:320px;max-height:320px;overflow:auto;background:var(--card,#161b22);border:1px solid #6b7787;border-radius:8px;padding:4px 0}
 .tf-opt{display:flex;align-items:center;gap:8px;min-height:44px;height:44px;padding:0 12px;box-sizing:border-box;cursor:pointer;color:var(--ink,#e6edf3);font-size:14px}
@@ -404,7 +419,8 @@ CSS = """
 .tf-wrap[data-risk-open="0"] .tf-sec[data-g="risiko"]{display:none!important}
 .tf-empty{display:flex;align-items:center;gap:8px;min-height:48px;height:48px;margin:0;padding:0 12px;box-sizing:border-box;font-size:14px;color:var(--ink,#e6edf3)}
 .tf-empty[hidden]{display:none}
-.tf-empty-reset,.tf-sheet-reset{border:0;background:none;color:var(--acc,#6cb6ff);font:inherit;font-size:14px;cursor:pointer;padding:0}
+.tf-empty-reset,.tf-sheet-reset{border:0;background:none;color:var(--acc,#6cb6ff);font:inherit;font-size:14px;line-height:18px;cursor:pointer;padding:0;margin:0;box-sizing:border-box;min-width:44px;min-height:44px;height:44px;display:inline-flex;align-items:center;justify-content:center}
+.tf-sheet-reset{width:100%}
 .tf-sheet-bg{display:block;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5)}
 .tf-sheet-bg[hidden]{display:none}
 .tf-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:71;max-height:min(80vh,560px);overflow:auto;background:#1c2430;border-top:1px solid #3b4757;border-radius:12px 12px 0 0;padding:8px 0 calc(16px + env(safe-area-inset-bottom,0px))}
@@ -465,7 +481,9 @@ const table=document.getElementById('tf-table');
 const flagBox=document.getElementById('tf-flag');
 const mineBtn=document.getElementById('tf-mine');
 const GROUPS=['risiko','sektor','bors','annet'];
-const LAB={hoy:'Høy',middels:'Middels',lav:'Lav',oslo:'Oslo',usa:'USA',tyskland:'Tyskland',
+const LAB={hoy:'Høy',middels:'Middels',lav:'Lav',ingen:'Ingen risikonivå',
+  oslo:'Oslo',usa:'USA',tyskland:'Tyskland',danmark:'Danmark',sverige:'Sverige',
+  storbritannia:'Storbritannia',japan:'Japan',taiwan:'Taiwan','ukjent-bors':'Ukjent børs',
   energi:'Energi',ravarer:'Råvarer',industri:'Industri','syklisk-forbruk':'Syklisk forbruk',
   'defensivt-forbruk':'Defensivt forbruk',helse:'Helse',finans:'Finans',teknologi:'Teknologi',
   kommunikasjon:'Kommunikasjon',forsyning:'Forsyning',eiendom:'Eiendom','ukjent-sektor':'Ukjent sektor',
@@ -482,7 +500,8 @@ function nActive(f){return GROUPS.reduce((n,g)=>n+(f[g]||[]).length,0)}
 function rows(){return [...document.querySelectorAll('#tf-table tr.rowlink')]}
 function rowMatch(r,f){
   const group=(k,v)=>{const sel=f[k]||[]; return !sel.length||sel.includes(v)};
-  if(!group('risiko',r.dataset.cat==='Høy'?'hoy':r.dataset.cat==='Middels'?'middels':r.dataset.cat==='Lav'?'lav':'')) return false;
+  const risk=r.dataset.cat==='Høy'?'hoy':r.dataset.cat==='Middels'?'middels':r.dataset.cat==='Lav'?'lav':'ingen';
+  if(!group('risiko',risk)) return false;
   if(!group('sektor',r.dataset.sektor||'')) return false;
   if(!group('bors',r.dataset.bors||'')) return false;
   const an=f.annet||[];
@@ -547,7 +566,8 @@ function countText(n,total,omitted){
   return s;
 }
 function omittedCount(f,rs){
-  if(!(f.risiko||[]).length) return 0;
+  const sel=f.risiko||[];
+  if(!sel.length || sel.includes('ingen')) return 0;
   const f0=copy(f); f0.risiko=[];
   return rs.filter(r=>rowMatch(r,f0) && r.dataset.risk!=='1').length;
 }
