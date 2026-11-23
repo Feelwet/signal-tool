@@ -1,6 +1,160 @@
 {
 "saker": [
 {
+"tittel": "NATO entering Ukraine risks WWIII",
+"url": "http://www.parisguardian.com/news/279450969/nato-entering-ukraine-risks-wwiii-le-pen",
+"kilde": "GDELT",
+"domene": "parisguardian.com",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "Latvia lodges a protest with the Russian Federation regarding the consequences of its war of aggression against Ukraine and violations of the airspace of European Union and NATO member states",
+"url": "https://www.mfa.gov.lv/en/article/latvia-lodges-protest-russian-federation-regarding-consequences-its-war-aggression-against-ukraine-and-violations-airspace-european-union-and-nato-member-states",
+"kilde": "GDELT",
+"domene": "mfa.gov.lv",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "Gold Price in Pakistan Jumps by Rs 7,800 Per Tola as Silver Rates Also Rise",
+"url": "https://www.pakistantimes.com/__trashed-16-16789/",
+"kilde": "GDELT",
+"domene": "pakistantimes.com",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "India Says U.S. Trade Deal Nears Final Stage",
+"url": "https://www.rfdtv.com/india-says-u-s-trade-deal-nears-final-stage",
+"kilde": "GDELT",
+"domene": "rfdtv.com",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "Ukraine sinks Russian warship in Libya as conflict spreads beyond Europe",
+"url": "https://www.rnz.co.nz/news/world/2753996/ukraine-sinks-russian-warship-in-libya-as-conflict-spreads-beyond-europe",
+"kilde": "GDELT",
+"domene": "rnz.co.nz",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "Russian attack near Ukraine's capital strikes apartment building, killing 3 and burying others",
+"url": "https://www.whec.com/ap-top-news/russian-attack-near-ukraines-capital-strikes-apartment-building-killing-3-and-burying-others/",
+"kilde": "GDELT",
+"domene": "whec.com",
+"publisert": "2026-11-23T19:00:00Z"
+},
+{
+"tittel": "Missiles land in Poland, Russia accused of provocation",
+"url": "http://www.irishsun.com/news/279447448/missiles-land-in-poland-russia-accused-of-provocation",
+"kilde": "GDELT",
+"domene": "irishsun.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Trump Praises NVIDIA's CEO Comeback but Has One Export-Control Reminder",
+"url": "https://redstate.com/wardclark/2026/11/23/trump-praises-nvidias-ceo-comeback-but-has-one-export-control-reminder-n2209702",
+"kilde": "GDELT",
+"domene": "redstate.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Omani architect Marwan Al Balushi wins pestigious Abdullatif Al Fozan Award in Saudi Arabia",
+"url": "https://timesofoman.com/article/179516-omani-architect-marwan-al-balushi-wins-pestigious-abdullatif-al-fozan-award-in-saudi-arabia",
+"kilde": "GDELT",
+"domene": "timesofoman.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
+"url": "https://www.butlereagle.com/20261123/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya/",
+"kilde": "GDELT",
+"domene": "butlereagle.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "After Targeting Russian Ships In Libya... Zelenskyy Claims Responsibility And Moscow Considers A Response – الشروق أونلاين",
+"url": "https://www.echoroukonline.com/after-targeting-russian-ships-in-libya-zelenskyy-claims-responsibility-and-moscow-considers-a-response",
+"kilde": "GDELT",
+"domene": "echoroukonline.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Russia's £440m plan to secure Kaliningrad supplies amid Nato tensions",
+"url": "https://www.independent.co.uk/news/world/europe/russia-ferry-kaliningrad-exclave-nato-b3089954.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Russia 'planning to launch satellite with nuclear weapon into space by end of the year'",
+"url": "https://www.independent.co.uk/news/world/europe/russia-satellite-nuclear-weapon-space-b3089665.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Russia allegedly tried to kill Ukrainian rapper in Poland and then Denmark",
+"url": "https://www.independent.co.uk/news/world/europe/russia-ukraine-rapper-albert-vasiliev-assassination-denmark-poland-b3089573.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Satellite images reveal fate of Russian warship hit by Ukraine drones in Libya",
+"url": "https://www.independent.co.uk/news/world/europe/russia-warship-drone-attack-merkury-b3089708.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Russian warship sinks at Libya port in suspected Ukrainian drone attack, officials say",
+"url": "https://www.independent.co.uk/news/world/middle-east/benghazi-naval-base-russian-ship-fire-b3089494.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Israel has almost wiped out Gaza's ancient olive trees",
+"url": "https://www.independent.co.uk/news/world/middle-east/gaza-olive-trees-al-suri-al-nabali-israel-b3088112.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "British endurance athlete Lewis Pugh dodges tankers during Strait of Hormuz swim",
+"url": "https://www.independent.co.uk/news/world/middle-east/strait-of-hormuz-lewis-pugh-uk-swimmer-b3089676.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Israeli strike kills three in car distributing aid in Gaza, witnesses say",
+"url": "https://www.independent.co.uk/news/world/middle-east/world-central-kitchen-gaza-strike-b3089195.html",
+"kilde": "GDELT",
+"domene": "independent.co.uk",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Iranian Official Denies Iraq's Shalamcheh Border Closure - Islamic Invitation Turkey",
+"url": "https://www.islamicinvitationturkey.com/iranian-official-denies-iraqs-shalamcheh-border-closure/",
+"kilde": "GDELT",
+"domene": "islamicinvitationturkey.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Ukraine sinks Russian ship as war spreads beyond Europe",
+"url": "https://www.merimbulanewsweekly.com.au/story/9396883/ukraine-sinks-russian-ship-as-war-spreads-beyond-europe/",
+"kilde": "GDELT",
+"domene": "merimbulanewsweekly.com.au",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
+"tittel": "Israeli premier-designate says 'no imminent threat' from Iran requiring action before government formation – Middle East Monitor",
+"url": "https://www.middleeastmonitor.com/20261123-israeli-premier-designate-says-no-imminent-threat-from-iran-requiring-action-before-government-formation/",
+"kilde": "GDELT",
+"domene": "middleeastmonitor.com",
+"publisert": "2026-11-23T18:45:00Z"
+},
+{
 "tittel": "Air Defense: Steelfin Air Defense",
 "url": "http://www.strategypage.com/htmw/htada/articles/20261123091743.aspx",
 "kilde": "GDELT",
@@ -57,24 +211,10 @@
 "publisert": "2026-11-23T18:30:00Z"
 },
 {
-"tittel": "NATO entering Ukraine risks WWIII",
-"url": "http://www.bignewsnetwork.com/news/279450969/nato-entering-ukraine-risks-wwiii-le-pen",
-"kilde": "GDELT",
-"domene": "bignewsnetwork.com",
-"publisert": "2026-11-23T18:15:00Z"
-},
-{
 "tittel": "Israeli bombardment has left Gaza a 'toxic wasteland' for decades to come, report says",
 "url": "https://keyt.com/news/national-world/cnn-world/2026/11/23/israeli-bombardment-has-left-gaza-a-toxic-wasteland-for-decades-to-come-report-says/",
 "kilde": "GDELT",
 "domene": "keyt.com",
-"publisert": "2026-11-23T18:15:00Z"
-},
-{
-"tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
-"url": "https://santamariatimes.com/ap/international/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya/article_dd26216c-7d26-5c0a-9fa0-bc78d6c5fc73.html",
-"kilde": "GDELT",
-"domene": "santamariatimes.com",
 "publisert": "2026-11-23T18:15:00Z"
 },
 {
@@ -414,13 +554,6 @@
 "publisert": "2026-11-23T17:15:00Z"
 },
 {
-"tittel": "Missiles land in Poland, Russia accused of provocation",
-"url": "http://www.brazilsun.com/news/279447448/missiles-land-in-poland-russia-accused-of-provocation",
-"kilde": "GDELT",
-"domene": "brazilsun.com",
-"publisert": "2026-11-23T17:00:00Z"
-},
-{
 "tittel": "'No pullback, push back': India committed to UK trade deal concessions on Scotch, says Commerce Secretary",
 "url": "https://aninews.in/news/national/general-news/no-pullback-push-back-india-committed-to-uk-trade-deal-concessions-on-scotch-says-commerce-secretary20261123214509/",
 "kilde": "GDELT",
@@ -451,13 +584,6 @@
 {
 "tittel": "NATO believes Russia is ready to launch nuclear-armed satellite, German media say",
 "url": "https://tribune.com.pk/story/2641871/nato-believes-russia-is-ready-to-launch-nuclear-armed-satellite-german-media-say",
-"kilde": "GDELT",
-"domene": "tribune.com.pk",
-"publisert": "2026-11-23T17:00:00Z"
-},
-{
-"tittel": "Ukraine sinks Russian warship in Libya as conflict spreads beyond Europe",
-"url": "https://tribune.com.pk/story/2641886/ukraine-sinks-russian-warship-in-libya-as-conflict-spreads-beyond-europe",
 "kilde": "GDELT",
 "domene": "tribune.com.pk",
 "publisert": "2026-11-23T17:00:00Z"
@@ -1910,33 +2036,12 @@
 "publisert": "2026-11-22T19:45:00Z"
 },
 {
-"tittel": "Russian ship hit in Benghazi by suspected Ukrainian drone attack, say Libyan officials",
-"url": "https://cedarnews.net/newstasks/1181204/russian-ship-hit-benghazi-suspected-ukrainian-drone/",
-"kilde": "GDELT",
-"domene": "cedarnews.net",
-"publisert": "2026-11-22T19:30:00Z"
-},
-{
-"tittel": "Putin is 'not America's friend in Ukraine', says US intelligence chief",
-"url": "https://www.timeslive.co.za/news/world/2026-11-22-putin-is-not-americas-friend-in-ukraine-says-us-intelligence-chief/",
-"kilde": "GDELT",
-"domene": "timeslive.co.za",
-"publisert": "2026-11-22T19:30:00Z"
-},
-{
-"tittel": "Poland alleges Russia twice tried to kill a Ukrainian American rapper",
-"url": "https://www.wsbradio.com/news/world/poland-says-russia/TB2PWG7LRU6O3H6ICJYS5PGU5A/",
-"kilde": "GDELT",
-"domene": "wsbradio.com",
-"publisert": "2026-11-22T19:30:00Z"
-},
-{
 "tittel": "Federal Reserve announces College Fed Challenge winners",
 "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
 "kilde": "Federal Reserve",
 "publisert": "2026-11-20T21:15:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-23T18:30:00Z",
-"hentet": "2026-11-23T18:33:32Z"
+"gkg_siste_fil": "2026-11-23T19:45:00Z",
+"hentet": "2026-11-23T19:38:25Z"
 }
