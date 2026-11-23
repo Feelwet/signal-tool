@@ -1,19 +1,16 @@
 """Tickere-listen med filter på risiko, sektor og børs (UxBot 17.11). Tilstand i URL og localStorage."""
 from __future__ import annotations
 
-import csv
 import re
 import unicodedata
 from datetime import date
 from functools import lru_cache
 from html import escape as E
-from pathlib import Path
 
 from . import evidens as EV
 from . import names as NM
 from . import site_risk as RK
 from .bors import UKJENT_BORS, bors_of as _bors_of, bors_slug as _bors_slug
-from .config import LOGS
 from .mine import EMPTY
 
 # Yahoo-sektor og offisiell GICS-sektor → de 11 GICS-sektorene på norsk.
@@ -102,16 +99,16 @@ def sektor_slug(e: dict | None) -> str:
 
 @lru_cache(maxsize=1)
 def markets_from_csv(path: str | None = None) -> dict[str, str]:
-    """Siste kjente market-verdi per ticker fra logs/risk_levels.csv. Tom dict hvis fila mangler."""
-    p = Path(path) if path else (LOGS / "risk_levels.csv")
-    if not p.exists():
-        return {}
+    """Siste kjente market-verdi per ticker fra logs/risk_levels.csv. Tom dict hvis fila mangler.
+
+    Leser via risk.read_log (erstattet=1 hoppes over).
+    """
+    from .risk import read_log
     last: dict[str, tuple[str, str]] = {}
-    with p.open(newline="", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            t, d, m = (r.get("ticker") or "").strip(), r.get("date") or "", (r.get("market") or "").strip()
-            if t and m and d >= last.get(t, ("", ""))[0]:
-                last[t] = (d, m)
+    for r in read_log(path):
+        t, d, m = (r.get("ticker") or "").strip(), r.get("date") or "", (r.get("market") or "").strip()
+        if t and m and d >= last.get(t, ("", ""))[0]:
+            last[t] = (d, m)
     return {t: v[1] for t, v in last.items()}
 
 
@@ -227,16 +224,16 @@ def empties() -> str:
 
 
 def risk_asof(path: str | None = None) -> date | None:
-    """Siste dato i logs/risk_levels.csv, eller None hvis fila mangler."""
-    pth = Path(path) if path else (LOGS / "risk_levels.csv")
-    if not pth.exists():
-        return None
+    """Siste dato i logs/risk_levels.csv, eller None hvis fila mangler.
+
+    Leser via risk.read_log (erstattet=1 hoppes over).
+    """
+    from .risk import read_log
     last = ""
-    with pth.open(newline="", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            d = (r.get("date") or "").strip()
-            if d > last:
-                last = d
+    for r in read_log(path):
+        d = (r.get("date") or "").strip()
+        if d > last:
+            last = d
     if len(last) >= 10:
         try:
             return date.fromisoformat(last[:10])

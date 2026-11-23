@@ -420,20 +420,16 @@ def test_shown_level_in_universe_and_market_matches_suffix():
 
 def test_page_levels_from_csv_have_in_universe_and_matching_market():
     """Hver ticker som får nivå på siden har in_universe=1, og market samsvarer med suffiks-børsen."""
-    import csv
-    from collections import defaultdict
-    from pathlib import Path as P
     from signaltool.bors import bors_of
-    from signaltool.config import LOGS
-    path = LOGS / "risk_levels.csv"
-    if not path.exists():
+    from signaltool.risk import read_log
+    rows = read_log()   # erstattet=1 filtrert bort
+    if not rows:
         return
     last = {}
-    with path.open(newline="", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            tkr = (r.get("ticker") or "").strip()
-            if tkr and (tkr not in last or r["date"] >= last[tkr]["date"]):
-                last[tkr] = r
+    for r in rows:
+        tkr = (r.get("ticker") or "").strip()
+        if tkr and (tkr not in last or r["date"] >= last[tkr]["date"]):
+            last[tkr] = r
     shown = 0
     for tkr, r in last.items():
         rec = {

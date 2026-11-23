@@ -8,7 +8,12 @@ Kompositten regnes likt som signaltool/backtest/risk_levels.py, per marked og pe
 Krav: ≥ 252 kursdager, handlet siste 5 dager, alle tre mål finnes; Oslo også kurs ≥ 1,0.
 Univers: US = S&P 500 (risk_universe_us.txt), Oslo = oslo_universe.txt. Tickere utenfor universet rangeres mot universet.
 Grenser (fryst på IS): US Lav < 0,407 ≤ Middels < 0,596 ≤ Høy; Oslo Lav < 0,387 ≤ Middels < 0,609 ≤ Høy.
-Nivået sier ingenting om avkastning. Resultat lagres i data/cache/risk_levels.json og logs/risk_levels.csv (privat)."""
+Nivået sier ingenting om avkastning. Resultat lagres i data/cache/risk_levels.json og logs/risk_levels.csv (privat).
+
+logs/risk_levels.csv har kolonnen erstattet (0/1, samme flaggstil som in_universe).
+erstattet=1 betyr at raden er overstyrt av en senere dato for samme ticker, marked og ISO-uke;
+raden beholdes. Lesere filtrerer bort erstattet=1. Manglende kolonne eller tom verdi leses som 0.
+"""
 from __future__ import annotations
 
 import csv, json, logging
@@ -27,6 +32,7 @@ ETF_X = {"SPY", "OSEBX.OL", "XLK", "XLV", "XLF", "XLY", "XLC", "XLI", "XLP", "XL
 CPATH = CACHE / "risk_levels.json"
 LPATH = LOGS / "risk_levels.csv"
 HERE = Path(__file__).parent
+LOG_COLS = ["date", "ticker", "market", "comp", "level", "in_universe", "erstattet"]
 
 
 def market(t: str) -> str:
@@ -154,17 +160,102 @@ def refresh(tickers: list[str], today: date | None = None, force: bool = False) 
     return levels
 
 
+def iso_week(d: str) -> tuple[int, int]:
+    """ISO-år og ISO-ukenr fra datostreng (YYYY-MM-DD)."""
+    return date.fromisoformat(d[:10]).isocalendar()[:2]
+
+
+def replaced(row: dict) -> bool:
+    """True bare ved erstattet=1. 0, tom og manglende kolonne er ikke erstattet."""
+    return str(row.get("erstattet") or "").strip() == "1"
+
+
+def read_log(path: str | Path | None = None, include_replaced: bool = False) -> list[dict]:
+    """Les risk_levels.csv. Standard: hopp over erstattet=1."""
+    p = Path(path) if path else LPATH
+    if not p.exists():
+        return []
+    with p.open(newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    return rows if include_replaced else [r for r in rows if not replaced(r)]
+
+
+def mark_overridden(rows: list[dict]) -> int:
+    """Sett erstattet=1 på eldre datoer i samme ticker, marked og ISO-uke. Sletter ingenting.
+
+    Returnerer antall rader som ble merket i dette kallet.
+    """
+    latest: dict[tuple, str] = {}
+    for r in rows:
+        t, mk, d = (r.get("ticker") or "").strip(), (r.get("market") or "").strip(), (r.get("date") or "").strip()
+        if not (t and mk and d):
+            continue
+        key = (t, mk, iso_week(d))
+        if d > latest.get(key, ""):
+            latest[key] = d
+    n = 0
+    for r in rows:
+        t, mk, d = (r.get("ticker") or "").strip(), (r.get("market") or "").strip(), (r.get("date") or "").strip()
+        if not (t and mk and d):
+            continue
+        if d < latest[(t, mk, iso_week(d))] and not replaced(r):
+            r["erstattet"] = "1"
+            n += 1
+        elif "erstattet" not in r or r.get("erstattet") in (None, ""):
+            r["erstattet"] = "0"
+    return n
+
+
+def _row_vals(r: dict) -> list:
+    out = []
+    for c in LOG_COLS:
+        if c == "erstattet":
+            out.append("1" if replaced(r) else "0")
+        else:
+            out.append(r[c] if c in r and r[c] is not None else "")
+    return out
+
+
+def write_log(rows: list[dict], path: str | Path | None = None) -> None:
+    p = Path(path) if path else LPATH
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(LOG_COLS)
+        for r in rows:
+            w.writerow(_row_vals(r))
+
+
+def _header_fields(path: Path) -> list[str]:
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as f:
+        r = csv.reader(f)
+        return next(r, [])
+
+
 def _log(levels: dict) -> None:
-    have = set()
-    if LPATH.exists():
-        with LPATH.open() as f:
-            have = {(r["date"], r["ticker"]) for r in csv.DictReader(f)}
-    new = [(v["date"], t, v["market"], v["comp"], v["level"], int(v["in_universe"])) for t, v in sorted(levels.items()) if (v["date"], t) not in have]
-    if not new:
+    """Legg til nye (date, ticker). Eldre rader i samme ISO-uke og marked merkes erstattet=1, aldri slettet."""
+    rows = read_log(LPATH, include_replaced=True)
+    for r in rows:
+        if "erstattet" not in r or r.get("erstattet") in (None, ""):
+            r["erstattet"] = "0"
+    have = {(r["date"], r["ticker"]) for r in rows}
+    new = []
+    for t, v in sorted(levels.items()):
+        if (v["date"], t) in have:
+            continue
+        new.append({"date": v["date"], "ticker": t, "market": v["market"], "comp": v["comp"],
+                    "level": v["level"], "in_universe": int(v["in_universe"]), "erstattet": "0"})
+    all_rows = rows + new
+    n_mark = mark_overridden(all_rows)
+    old = "erstattet" not in _header_fields(LPATH) if LPATH.exists() else False
+    if not new and n_mark == 0 and not old:
         return
-    head = not LPATH.exists()
-    with LPATH.open("a", newline="") as f:
-        w = csv.writer(f)
-        if head:
-            w.writerow(["date", "ticker", "market", "comp", "level", "in_universe"])
-        w.writerows(new)
+    if n_mark or old or not LPATH.exists():
+        write_log(all_rows)
+        return
+    with LPATH.open("a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        for r in new:
+            w.writerow(_row_vals(r))
