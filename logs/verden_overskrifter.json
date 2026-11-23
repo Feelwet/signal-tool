@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-23T23:46:23+0100",
+ "hentet": "2026-11-23T23:53:30+0100",
  "dato": "2026-11-23",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (2573) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1292) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,15 +12,15 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 173
+   "antall": 176
   },
   {
    "tema": "mideast_energy",
-   "antall": 80
+   "antall": 82
   },
   {
    "tema": "risk_off_haven",
-   "antall": 16
+   "antall": 17
   },
   {
    "tema": "shipping_chokepoints",
@@ -57,6 +57,141 @@
  ],
  "saker": [
   {
+   "tittel": "Is It Time for Kyiv to Compromise With Russia Over the War in Ukraine?",
+   "url": "https://foreignpolicy.com/2026/11/23/oleksiy-goncharenko-interview-ukraine-russia-war-compromise-negotiations-trump-zelensky/",
+   "kilde": "GDELT",
+   "domene": "foreignpolicy.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Israeli bombardment has left Gaza a 'toxic wasteland' for decades to come, report says",
+   "url": "https://kesq.com/news/national-world/cnn-world/2026/11/23/israeli-bombardment-has-left-gaza-a-toxic-wasteland-for-decades-to-come-report-says/",
+   "kilde": "GDELT",
+   "domene": "kesq.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "As Tech Stocks Crash, Is Berkshire Hathaway a Safe-Haven Investment?",
+   "url": "https://www.fool.com/investing/2026/11/23/as-tech-stocks-crash-is-berkshire-hathaway-a-safe-haven-investment/",
+   "kilde": "GDELT",
+   "domene": "fool.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "safe haven"
+   ]
+  },
+  {
+   "tittel": "Ukraine Sinks Russian Corvette Merkury at Libya's Benghazi Port",
+   "url": "https://www.hngn.com/articles/273935/20261123/ukraine-sinks-russian-corvette-merkury-libyas-benghazi-port.htm",
+   "kilde": "GDELT",
+   "domene": "hngn.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "NATO Sends AWACS to Poland, Says Russia Bears Full Responsibility",
+   "url": "https://www.hngn.com/articles/273936/20261123/nato-sends-awacs-poland-says-russia-bears-full-responsibility.htm",
+   "kilde": "GDELT",
+   "domene": "hngn.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Ukraine war expands as Zelenskyy claims sea drone strike in Libya",
+   "url": "https://www.southcarolinapublicradio.org/news/2026-11-23/ukraine-war-expands-as-zelenskyy-claims-sea-drone-strike-in-libya",
+   "kilde": "GDELT",
+   "domene": "southcarolinapublicradio.org",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
+   "url": "https://www.southcarolinapublicradio.org/news/2026-11-23/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya",
+   "kilde": "GDELT",
+   "domene": "southcarolinapublicradio.org",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "PolitiFact Fl: Is more oil going through Hormuz than before the Iran war, as Byron Donalds said? No.",
+   "url": "https://www.wlrn.org/government-politics/2026-11-23/politifact-fl-is-more-oil-going-through-hormuz-than-before-the-iran-war-as-byron-donalds-said-no",
+   "kilde": "GDELT",
+   "domene": "wlrn.org",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Kushner warns Israel heading toward 'global-pariah status' over Gaza",
+   "url": "https://www.ynetnews.com/article/bkydffgyqx",
+   "kilde": "GDELT",
+   "domene": "ynetnews.com",
+   "publisert": "2026-11-23T23:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
    "tittel": "Costa Rica Fuel Bill Surges 56% to $3.086 Billion in 2026 Amid Oil Price Spike",
    "url": "https://english.pravda.ru/news/world/174015-costa-rica-fuel-import-bill-56-surge-2026/",
    "kilde": "GDELT",
@@ -83,21 +218,6 @@
    "matchede_ord": [
     "israeli",
     "iran"
-   ]
-  },
-  {
-   "tittel": "Ukraine war expands as Zelenskyy claims sea drone strike in Libya",
-   "url": "https://www.kacu.org/2026-11-23/ukraine-war-expands-as-zelenskyy-claims-sea-drone-strike-in-libya",
-   "kilde": "GDELT",
-   "domene": "kacu.org",
-   "publisert": "2026-11-23T22:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
    ]
   },
   {
@@ -201,22 +321,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
-   "url": "https://www.upr.org/npr-news/2026-11-23/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya",
-   "kilde": "GDELT",
-   "domene": "upr.org",
-   "publisert": "2026-11-23T22:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "russian"
    ]
   },
   {
@@ -533,21 +637,6 @@
    ]
   },
   {
-   "tittel": "Satellite Imagery Suggests Russia May Be Deploying RS-28 Sarmat Missiles",
-   "url": "https://idrw.org/russia-rs28-sarmat-icbm-deployment-satellite-imagery/",
-   "kilde": "GDELT",
-   "domene": "idrw.org",
-   "publisert": "2026-11-23T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "missile",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Oil Prices Fall as Rising Supplies Offset Middle East Tensions",
    "url": "https://pakobserver.net/oil-prices-fall-as-rising-supplies-offset-middle-east-tensions/",
    "kilde": "GDELT",
@@ -559,21 +648,6 @@
    ],
    "matchede_ord": [
     "oil price"
-   ]
-  },
-  {
-   "tittel": "What strike on Russian ship in Libya says about spread of Ukraine war",
-   "url": "https://www.bbc.co.uk/news/articles/cm894p88jzxpo",
-   "kilde": "GDELT",
-   "domene": "bbc.co.uk",
-   "publisert": "2026-11-23T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
    ]
   },
   {
@@ -618,21 +692,6 @@
    "matchede_ord": [
     "israeli",
     "gaza"
-   ]
-  },
-  {
-   "tittel": "Benghazi drone attack: Is Ukraine opening a Mediterranean front against Russia?",
-   "url": "https://www.middleeasteye.net/opinion/ukraine-opening-mediterranean-front-against-russia",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-23T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -782,20 +841,6 @@
    ]
   },
   {
-   "tittel": "Oil Prices Fall As Middle East Flows Increase",
-   "url": "https://www.marinelink.com/news/oil-prices-fall-middle-east-flows-544538",
-   "kilde": "GDELT",
-   "domene": "marinelink.com",
-   "publisert": "2026-11-23T20:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
    "tittel": "Gold Price in Pakistan Jumps by Rs 7,800 Per Tola as Silver Rates Also Rise",
    "url": "https://www.pakistantimes.com/__trashed-16-16789/",
    "kilde": "GDELT",
@@ -838,20 +883,6 @@
    ]
   },
   {
-   "tittel": "Omani architect Marwan Al Balushi wins pestigious Abdullatif Al Fozan Award in Saudi Arabia",
-   "url": "https://timesofoman.com/article/179516-omani-architect-marwan-al-balushi-wins-pestigious-abdullatif-al-fozan-award-in-saudi-arabia",
-   "kilde": "GDELT",
-   "domene": "timesofoman.com",
-   "publisert": "2026-11-23T18:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Russia 'planning to launch satellite with nuclear weapon into space by end of the year'",
    "url": "https://www.independent.co.uk/news/world/europe/russia-satellite-nuclear-weapon-space-b3089665.html",
    "kilde": "GDELT",
@@ -863,21 +894,6 @@
    ],
    "matchede_ord": [
     "nuclear weapon"
-   ]
-  },
-  {
-   "tittel": "Israel has almost wiped out Gaza's ancient olive trees",
-   "url": "https://www.independent.co.uk/news/world/middle-east/gaza-olive-trees-al-suri-al-nabali-israel-b3088112.html",
-   "kilde": "GDELT",
-   "domene": "independent.co.uk",
-   "publisert": "2026-11-23T18:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
    ]
   },
   {
