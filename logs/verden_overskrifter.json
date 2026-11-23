@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-23T02:56:44+0100",
+ "hentet": "2026-11-23T12:10:24+0100",
  "dato": "2026-11-23",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (4327) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (7414) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,23 +12,23 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 58
+   "antall": 123
   },
   {
    "tema": "mideast_energy",
-   "antall": 51
+   "antall": 57
   },
   {
    "tema": "shipping_chokepoints",
-   "antall": 12
+   "antall": 16
+  },
+  {
+   "tema": "risk_off_haven",
+   "antall": 8
   },
   {
    "tema": "tariffs_trade",
    "antall": 6
-  },
-  {
-   "tema": "nordic_arctic",
-   "antall": 5
   },
   {
    "tema": "food_agri",
@@ -36,10 +36,10 @@
   },
   {
    "tema": "rare_earths_semis",
-   "antall": 3
+   "antall": 4
   },
   {
-   "tema": "risk_off_haven",
+   "tema": "nordic_arctic",
    "antall": 3
   },
   {
@@ -57,18 +57,727 @@
  ],
  "saker": [
   {
-   "tittel": "The real-life War divorce. Why the wife of a Russian oligarch - and Putin's ice hockey buddy - is fighting for £2billion in Britain's biggest ever divorce battle",
-   "url": "https://www.dailymail.com/news/article-16311251/War-divorce-wife-Russian-oligarch-Putins-Britains-battle.html",
+   "tittel": "Russian Warship Capsizes After Ukrainian Drone Attack In Libya",
+   "url": "https://koacolorado.iheart.com/content/2026-11-23-russian-warship-capsizes-after-ukrainian-drone-attack-in-libya/",
    "kilde": "GDELT",
-   "domene": "dailymail.com",
-   "publisert": "2026-11-23T02:00:00Z",
+   "domene": "iheart.com",
+   "publisert": "2026-11-23T11:15:00Z",
    "tema": "conflict_defense",
    "temaer": [
     "conflict_defense"
    ],
    "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Russian Warship Capsizes After Ukrainian Drone Attack In Libya | News Radio 1410 AM & 100.9 FM",
+   "url": "https://newsradio1410.iheart.com/content/2026-11-23-russian-warship-capsizes-after-ukrainian-drone-attack-in-libya/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "The Netherlands pours fuel on the fire - Attacks on Crimea with 7 Ruta missiles - Devastation from Russia in The Hague",
+   "url": "https://www.bankingnews.gr/diethni/articles/912715/the-netherlands-pours-fuel-on-the-fire-attacks-on-crimea-with-7-ruta-missiles-devastation-from-russia-in-the-hague",
+   "kilde": "GDELT",
+   "domene": "bankingnews.gr",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "missile",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "\"Hit them now\": Netanyahu demands blood in Iran, Trump threats - Shock IRGC revenge, 25 tankers turned to ashes in 7 days in Hormuz",
+   "url": "https://www.bankingnews.gr/diethni/articles/912719/hit-them-now-netanyahu-demands-blood-in-iran-trump-threats-shock-irgc-revenge-25-tankers-turned-to-ashes-in-7-days-in-hormuz",
+   "kilde": "GDELT",
+   "domene": "bankingnews.gr",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Brit SWIMS through the Strait of Hormuz as vessels are attacked around him - to highlight environmental damage",
+   "url": "https://www.dailymail.com/news/article-16314713/Brit-SWIMS-Strait-Hormuz-vessels-attacked-highlight-environmental-damage.html",
+   "kilde": "GDELT",
+   "domene": "dailymail.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Explainer-Why Russia's Kaliningrad exclave is a potential flashpoint with NATO",
+   "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/23/explainer-why-russia-s-kaliningrad-is-a-potential-flashpoint-with-nato",
+   "kilde": "GDELT",
+   "domene": "internazionale.it",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russia",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Ukrainian drones hit a Russian warship at a naval base in Libya, Zelenskyy says",
+   "url": "https://www.kawc.org/npr-news/2026-11-23/ukrainian-drones-hit-a-russian-warship-at-a-naval-base-in-libya-zelenskyy-says",
+   "kilde": "GDELT",
+   "domene": "kawc.org",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "zelenskyy",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia's Fossil Fuel Stance At Center Of COP31",
+   "url": "https://www.marinelink.com/news/saudi-arabias-fossil-fuel-stance-center-544512",
+   "kilde": "GDELT",
+   "domene": "marinelink.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia condemns attack on UN building in Khartoum",
+   "url": "https://www.middleeastmonitor.com/20261123-saudi-arabia-condemns-attack-on-un-building-in-khartoum/",
+   "kilde": "GDELT",
+   "domene": "middleeastmonitor.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Zelensky acknowledges attack on Russian warship in Libya's Benghazi – Middle East Monitor",
+   "url": "https://www.middleeastmonitor.com/20261123-zelensky-acknowledges-attack-on-russian-warship-in-libyas-benghazi/",
+   "kilde": "GDELT",
+   "domene": "middleeastmonitor.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Iran says it can reopen Strait of Hormuz in 48 hours, but puts a major condition before Washington",
+   "url": "https://www.moneycontrol.com/world/iran-says-it-can-reopen-strait-of-hormuz-in-48-hours-but-puts-a-major-condition-before-washington-article-14087287.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Zelensky says Ukraine sank Russian warship, destroyed helicopter in naval drone attack off Libya",
+   "url": "https://www.moneycontrol.com/world/zelensky-says-ukraine-sank-russian-warship-destroyed-helicopter-in-naval-drone-attack-off-libya-article-14087238.html",
+   "kilde": "GDELT",
+   "domene": "moneycontrol.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Ukrainian drones hit a Russian warship at a naval base in Libya – NBC 6 South Florida",
+   "url": "https://www.nbcmiami.com/news/national-international/ukraine-drone-attack-hits-russian-warship-in-libya/3891718/",
+   "kilde": "GDELT",
+   "domene": "nbcmiami.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Ukrainian drones hit a Russian warship at a naval base in Libya : NPR",
+   "url": "https://www.npr.org/2026/11/23/g-s1-155017/ukraine-attack-russian-warship-libya",
+   "kilde": "GDELT",
+   "domene": "npr.org",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelensky confirms Ukraine behind attack that sank Russian warship off Libya",
+   "url": "https://www.rhyljournal.co.uk/news/national/26752283.zelensky-confirms-ukraine-behind-attack-sank-russian-warship-off-libya/",
+   "kilde": "GDELT",
+   "domene": "rhyljournal.co.uk",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelensky Confirms Attack Against Russian Warship in Libya",
+   "url": "https://www.themoscowtimes.com/2026/11/23/zelensky-confirms-attack-against-russian-warship-in-libya-a94346",
+   "kilde": "GDELT",
+   "domene": "themoscowtimes.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Ukrainian naval drones strike new Russian warship in Libya, and other Mideast news",
+   "url": "https://www.wral.com/news/ap/c2cb6-ukrainian-naval-drones-strike-new-russian-warship-in-libya-and-other-mideast-news/",
+   "kilde": "GDELT",
+   "domene": "wral.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Ukraine carried out drone attack that hit Russian warship at naval base in Libya",
+   "url": "https://www.wral.com/news/ap/c382f-ukrainian-president-zelenskyy-confirms-ukraine-was-behind-attack-that-sank-russian-warship-off-libya/",
+   "kilde": "GDELT",
+   "domene": "wral.com",
+   "publisert": "2026-11-23T11:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy Confirms Ukraine Struck Russian Warship Near Benghazi",
+   "url": "http://www.russiaherald.com/news/279450114/zelenskyy-confirms-ukraine-struck-russian-warship-near-benghazi",
+   "kilde": "GDELT",
+   "domene": "russiaherald.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy confirms Ukrainian naval drones sank Russian corvette Merkury and struck cargo ship off Libya",
+   "url": "http://www.russiaherald.com/news/279450217/zelenskyy-confirms-ukrainian-naval-drones-sank-russian-corvette-merkury-and-struck-cargo-ship-off-libya",
+   "kilde": "GDELT",
+   "domene": "russiaherald.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "zelenskyy",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Start of World War 3? NATO chief Rutte reaffirms the Western alliance's Article 5 commitment after Russian missile incursions into Poland",
+   "url": "https://economictimes.indiatimes.com/world/us/start-of-world-war-3-nato-chief-rutte-reaffirms-the-western-alliances-article-5-commitment-after-russian-missile-incursions-into-poland/articleshow/136097233.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
     "russian",
-    "putin"
+    "missile",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "One killed, two injured in Ukrainian drone attack on Russia's Perm Krai",
+   "url": "https://en.apa.az/cis-countries/one-killed-two-injured-in-ukrainian-drone-attack-on-russias-perm-krai-537917",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Russian Warship Capsizes After Ukrainian Drone Attack In Libya | NewsRadio WKCY",
+   "url": "https://newsradiowkcy.iheart.com/content/2026-11-23-russian-warship-capsizes-after-ukrainian-drone-attack-in-libya/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Couples in UAE, Saudi Arabia favour local destinations for multi-day weddings: Hyatt survey",
+   "url": "https://tradearabia.com:443/News/490033/Couples-in-UAE-Saudi-Arabia-favour-local-destinations-for-multi-day-weddings-Hyatt-survey",
+   "kilde": "GDELT",
+   "domene": "tradearabia.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Ukraine war briefing: European leaders react with anger and alarm after Russian missiles crash in Poland",
+   "url": "https://www.aol.co.uk/articles/ukraine-war-briefing-european-leaders-024114000.html",
+   "kilde": "GDELT",
+   "domene": "aol.co.uk",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Ukraine war briefing: Race to find survivors after Russian attack on apartment block kills at least 11",
+   "url": "https://www.aol.co.uk/articles/ukraine-war-briefing-race-survivors-021055000.html",
+   "kilde": "GDELT",
+   "domene": "aol.co.uk",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Arab News | Acwa, Jarir assess impact of Saudi Arabia's new minimum tax",
+   "url": "https://www.arabnews.com/finance/acwa-jarir-assess-impact-of-saudi-arabias-new-minimum-tax-3013684",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "China, ASEAN countries struggle over South China Sea code of conduct  - International",
+   "url": "https://www.dailymirror.lk/international/China-ASEAN-countries-struggle-over-South-China-Sea-code-of-conduct/107-355565",
+   "kilde": "GDELT",
+   "domene": "dailymirror.lk",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "rare_earths_semis",
+   "temaer": [
+    "rare_earths_semis"
+   ],
+   "matchede_ord": [
+    "south china sea"
+   ]
+  },
+  {
+   "tittel": "Bulgaria's Defense Minister Urges NATO Support to Counter Black Sea Drone Threat - Novinite.com",
+   "url": "https://www.novinite.com/articles/241742/Bulgaria",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Iran says nuclear weapons claims have persisted for 30 years",
+   "url": "https://www.trend.az/iran/4249703.html",
+   "kilde": "GDELT",
+   "domene": "trend.az",
+   "publisert": "2026-11-23T11:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Iran preparations: Squadron rotation in Israel",
+   "url": "https://www.israelnationalnews.com/flashes/698292",
+   "kilde": "GDELT",
+   "domene": "israelnationalnews.com",
+   "publisert": "2026-11-23T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Iran deal could be worse for Israel than war, Middle East expert warns",
+   "url": "https://www.jpost.com/middle-east/iran-news/article-915787",
+   "kilde": "GDELT",
+   "domene": "jpost.com",
+   "publisert": "2026-11-23T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Gold price forecast: Goldman Sachs sees $4,650 by 2027 despite US rate pressures — what investors should do",
+   "url": "https://www.livemint.com/money/personal-finance/gold-price-forecast-goldman-sachs-sees-4-650-by-2027-despite-us-rate-pressures-what-investors-should-do-11795423263881.html",
+   "kilde": "GDELT",
+   "domene": "livemint.com",
+   "publisert": "2026-11-23T10:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia and Japan Plan to Triple Joint Crude Storage Capacity to 24 Million Barrels",
+   "url": "https://www.newdelhitimes.com/saudi-arabia-japan-crude-storage-expansion-2026/",
+   "kilde": "GDELT",
+   "domene": "newdelhitimes.com",
+   "publisert": "2026-11-23T10:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "US Treasury Chief Defends Existing Nvidia Chip Export Controls on China",
+   "url": "https://www.newdelhitimes.com/us-nvidia-h200-chip-exports-china-bessent-2026/",
+   "kilde": "GDELT",
+   "domene": "newdelhitimes.com",
+   "publisert": "2026-11-23T10:45:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "Iran live updates: Tehran says Strait of Hormuz will be safe if its demands are met",
+   "url": "https://abcnews.com/International/live-updates/iran-live-updates-tehran-strait-hormuz-safe-demands/?id=138369648",
+   "kilde": "GDELT",
+   "domene": "abcnews.com",
+   "publisert": "2026-11-23T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy",
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Oil prices dip amid focus on Middle East - Shafaqna English | International Shia News & Fatwas",
+   "url": "https://en.shafaqna.com/494219/oil-prices-dip-amid-focus-on-middle-east/",
+   "kilde": "GDELT",
+   "domene": "shafaqna.com",
+   "publisert": "2026-11-23T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Israel's political deadlock raises security concerns amid Iran threat",
+   "url": "https://www.jns.org/jns-tv/jlminute/israels-political-deadlock-raises-security-concerns-amid-iran-threat",
+   "kilde": "GDELT",
+   "domene": "jns.org",
+   "publisert": "2026-11-23T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Blair: Hamas disarmament should give Israel 'confidence' to withdraw from Gaza - Israel & Jewish News",
+   "url": "https://www.jns.org/news/israel-news/blair-hamas-disarmament-should-give-israel-confidence-to-withdraw-from-gaza",
+   "kilde": "GDELT",
+   "domene": "jns.org",
+   "publisert": "2026-11-23T10:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Crews prepare to pull last of container ship run aground off Newfoundland",
+   "url": "https://www.wellandtribune.ca/news/canada/crews-prepare-to-pull-last-of-container-ship-run-aground-off-newfoundland/article_01c323d1-a76d-5048-af7d-f16fab7ff9b0.html",
+   "kilde": "GDELT",
+   "domene": "wellandtribune.ca",
+   "publisert": "2026-11-23T10:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "container ship"
+   ]
+  },
+  {
+   "tittel": "German bond yields edge higher as equity rebound eases safe-haven demand",
+   "url": "https://economictimes.indiatimes.com/markets/bonds/german-bond-yields-edge-higher-as-equity-rebound-eases-safe-haven-demand/articleshow/136097404.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-23T10:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "safe haven"
+   ]
+  },
+  {
+   "tittel": "Iran says it can reopen Hormuz Strait if US meets conditions",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/iran-says-it-can-reopen-hormuz-strait-if-us-meets-conditions",
+   "kilde": "GDELT",
+   "domene": "middleeasteye.net",
+   "publisert": "2026-11-23T10:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Attacks on shipping near Strait of Hormuz hit wartime high in October: UK maritime monitor",
+   "url": "https://tribune.com.pk/story/2641850/attacks-on-shipping-near-strait-of-hormuz-hit-wartime-high-in-october-uk-maritime-monitor",
+   "kilde": "GDELT",
+   "domene": "tribune.com.pk",
+   "publisert": "2026-11-23T10:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Attacks on commercial ships in Strait of Hormuz reach record high",
+   "url": "https://www.azernews.az/region/267921.html",
+   "kilde": "GDELT",
+   "domene": "azernews.az",
+   "publisert": "2026-11-23T10:00:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "ECB expands acceptance of DLT-based assets as eligible Eurosystem collateral",
+   "url": "https://www.ecb.europa.eu//press/pr/date/2026/html/ecb.pr261123~76b6f57b74.en.html",
+   "kilde": "ECB",
+   "publisert": "2026-11-23T10:00:00Z",
+   "tema": "sentralbanker",
+   "temaer": [
+    "sentralbanker"
+   ]
+  },
+  {
+   "tittel": "Unilateral Israeli Strike On Iran Would Trigger Regional War, Intelligence Warns Netanyahu",
+   "url": "https://www.ibtimes.com/israeli-intelligence-warns-iran-attack-regional-war-3810068",
+   "kilde": "GDELT",
+   "domene": "ibtimes.com",
+   "publisert": "2026-11-23T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Houthis claim to have targeted Saudi Arabia's Rabigh oil refinery",
+   "url": "https://www.middle-east-online.com/en/houthis-claim-have-targeted-saudi-arabias-rabigh-oil-refinery",
+   "kilde": "GDELT",
+   "domene": "middle-east-online.com",
+   "publisert": "2026-11-23T10:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Tankers struck in Hormuz, as Iran says held talks with mediator Qatar",
+   "url": "https://www.surinametimes.com/artikel/tankers-struck-in-hormuz-as-iran-says-held-talks-with-mediator-qatar",
+   "kilde": "GDELT",
+   "domene": "surinametimes.com",
+   "publisert": "2026-11-23T09:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "hormuz",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Gold prices decline as PM Modi says Indians saved by cutting gold purchases",
+   "url": "https://article.wn.com/view/2026/11/23/Gold_prices_decline_as_PM_Modi_says_Indians_saved_by_cutting/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-23T09:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
    ]
   },
   {
@@ -84,21 +793,6 @@
    "matchede_ord": [
     "semiconductor",
     "taiwan"
-   ]
-  },
-  {
-   "tittel": "Ukraine war spilling into NATO territory",
-   "url": "https://www.wxxinews.org/npr-news/2026-11-22/ukraine-war-spilling-into-nato-territory",
-   "kilde": "GDELT",
-   "domene": "wxxinews.org",
-   "publisert": "2026-11-23T02:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
    ]
   },
   {
@@ -131,36 +825,6 @@
    ]
   },
   {
-   "tittel": "Russian warship hit by suspected Ukrainian drone at Benghazi naval base, Libyan officials say – Ya Libnan",
-   "url": "https://yalibnan.com/2026/11/23/russian-warship-hit-by-suspected-ukrainian-drone-at-benghazi-naval-base-libyan-officials-say/",
-   "kilde": "GDELT",
-   "domene": "yalibnan.com",
-   "publisert": "2026-11-23T01:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "India's ties with Russia an 'added value', can help push for end to Ukraine war: Dutch FM Tom Berendsen",
-   "url": "https://economictimes.indiatimes.com/news/india/indias-ties-with-russia-an-added-value-can-help-push-for-end-to-ukraine-war-dutch-fm-tom-berendsen/articleshow/136086152.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "US Iran war: Trump  'inclined' to resume conflict on Tehran if no deal reached by New Year",
    "url": "https://economictimes.indiatimes.com/news/international/world-news/us-iran-war-trump-says-inclined-to-resume-conflict-on-tehran-if-no-deal-reached-by-new-year/articleshow/136086184.cms",
    "kilde": "GDELT",
@@ -190,126 +854,6 @@
    ]
   },
   {
-   "tittel": "Trump dares Iran to breach US port blockade as Tehran reportedly readies 14 oil tankers",
-   "url": "https://freerepublic.com/focus/f-news/4403980/posts",
-   "kilde": "GDELT",
-   "domene": "freerepublic.com",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Israel's latest attacks test the world's willingness to protect Gaza",
-   "url": "https://www.crikey.com.au/2026/11/23/israel-gaza-ground-offensive-yellow-line-trump-board-peace/",
-   "kilde": "GDELT",
-   "domene": "crikey.com.au",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "World News: Finland and Estonia help douse fire on Russian ship hit by Ukraine",
-   "url": "https://www.gdnonline.com:443/Details/1413627/Finland-and-Estonia-help-douse-fire-on-Russian-ship-hit-by-Ukraine",
-   "kilde": "GDELT",
-   "domene": "gdnonline.com",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "NATO's Rutte Vows to Defend 'Every Inch' of Poland After Russian Missile Incursion",
-   "url": "https://www.latintimes.com/nato-defend-poland-russian-missiles-drone-border-601695",
-   "kilde": "GDELT",
-   "domene": "latintimes.com",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "missile",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Suspected Ukrainian sea drones hit Russian warship at Benghazi naval base, Libyan officials say",
-   "url": "https://www.thehindu.com/news/international/suspected-ukrainian-sea-drones-hit-russian-warship-at-benghazi-naval-base-libyan-officials-say/article71733178.ece",
-   "kilde": "GDELT",
-   "domene": "thehindu.com",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Gaza has turned into a 'toxic wasteland' three years after the start of Israel's war",
-   "url": "https://www.thejournal.ie/gaza-toxic-wasteland-report-7232658-Nov2026/",
-   "kilde": "GDELT",
-   "domene": "thejournal.ie",
-   "publisert": "2026-11-23T01:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Oil price cooling flattens bond curve, shifts RBI rate expectations",
-   "url": "https://economictimes.indiatimes.com/markets/bonds/oil-price-cooling-flattens-bond-curve-shifts-rbi-rate-expectations/articleshow/136085868.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-23T01:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "oil price"
-   ]
-  },
-  {
-   "tittel": "Gaza is now a 'toxic wasteland' after Israel's 'environmental war crimes' with fears for human survival",
-   "url": "https://www.aol.co.uk/articles/gaza-now-toxic-wasteland-israels-000539000.html",
-   "kilde": "GDELT",
-   "domene": "aol.co.uk",
-   "publisert": "2026-11-23T01:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "Anthony Albanese freezes $25 PBS prescription price cap, says extension will be good for inflation",
    "url": "https://www.afr.com/politics/federal/242m-prescription-price-cap-freeze-good-for-inflation-albanese-20261123-p61gds",
    "kilde": "GDELT",
@@ -321,36 +865,6 @@
    ],
    "matchede_ord": [
     "price cap"
-   ]
-  },
-  {
-   "tittel": "Gaza is now a 'toxic wasteland' after Israel's 'environmental war crimes'",
-   "url": "https://www.mirror.co.uk/news/world-news/gaza-toxic-wasteland-israel-palestine-37900916",
-   "kilde": "GDELT",
-   "domene": "mirror.co.uk",
-   "publisert": "2026-11-23T01:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Even the robots hate Israel: 'Death to Israel' chant in Tehran",
-   "url": "https://www.israelnationalnews.com/news/436863",
-   "kilde": "GDELT",
-   "domene": "israelnationalnews.com",
-   "publisert": "2026-11-23T00:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "tehran"
    ]
   },
   {
@@ -368,36 +882,6 @@
    ]
   },
   {
-   "tittel": "Poland says Russia allegedly twice tried to kill a Ukrainian American rapper",
-   "url": "http://www.dailyadvance.com/news/world/poland-says-russia-allegedly-twice-tried-to-kill-a-ukrainian-american-rapper/article_8ebd5e11-4a6a-58cc-b77a-0de14986ba1e.html",
-   "kilde": "GDELT",
-   "domene": "dailyadvance.com",
-   "publisert": "2026-11-23T00:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Boy, 7, rescued from rubble hours after Russian strike in Ukraine, rescuers say",
-   "url": "https://www.bbc.com/news/articles/cqdr15l32d3go",
-   "kilde": "GDELT",
-   "domene": "bbc.com",
-   "publisert": "2026-11-23T00:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "IRGC Navy says two oil supertankers hit naval mines in Strait of Hormuz, issues warning to shipping firms",
    "url": "https://www.presstv.co.uk/Detail/2026/11/22/781364/two-oil-supertankers-explode-in-strait-of-hormuz-irgc-navy-warns-shipping-companies",
    "kilde": "GDELT",
@@ -409,110 +893,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "After murder plot at Danish concert, kicking out Russian diplomats may be the only language Putin understands",
-   "url": "https://euobserver.com/250498/after-murder-plot-at-danish-concert-kicking-out-russian-diplomats-may-be-the-only-language-putin-understands/",
-   "kilde": "GDELT",
-   "domene": "euobserver.com",
-   "publisert": "2026-11-23T00:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Watch: Russian warship hit by suspected Ukrainian drones at Benghazi naval base, bursts into flames",
-   "url": "https://timesofindia.indiatimes.com/world/rest-of-world/watch-russian-warship-hit-by-suspected-ukrainian-drones-at-benghazi-naval-base-bursts-into-flames/articleshow/136085577.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-23T00:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Kratikal Tech's Subsidiary Secures ₹3.16 Crore Cybersecurity Assignment in Saudi Arabia",
-   "url": "https://www.equitybulls.com/news/379419/kratikal-tech-s-subsidiary-secures-3-16-crore",
-   "kilde": "GDELT",
-   "domene": "equitybulls.com",
-   "publisert": "2026-11-23T00:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Ukraine says Russian strikes kill 6 in Kyiv region",
-   "url": "https://www.freemalaysiatoday.com/category/world/2026/11/23/ukraine-says-russian-strikes-kill-6-in-kyiv-region",
-   "kilde": "GDELT",
-   "domene": "freemalaysiatoday.com",
-   "publisert": "2026-11-23T00:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "IDF's intelligence officials warned Netanyahu against unilateral Israeli attack on Iran: Report",
-   "url": "https://www.hindustantimes.com/world-news/idfs-intelligence-officials-warned-netanyahu-against-unilateral-israeli-attack-on-iran-report-101795386925125.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-23T00:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Ukrainian lawmakers 'shout and swear in Russian'",
-   "url": "http://www.russiaherald.com/news/279449013/ukrainian-lawmakers-hout-and-swear-in-russian-mp",
-   "kilde": "GDELT",
-   "domene": "russiaherald.com",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Appreciate PM Modi's appeal to Russia to stop Ukraine war, return to talks: Netherlands FM",
-   "url": "http://www.russiaherald.com/news/279449171/appreciate-pm-modi-appeal-to-russia-to-stop-ukraine-war-return-to-talks-netherlands-fm",
-   "kilde": "GDELT",
-   "domene": "russiaherald.com",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
    ]
   },
   {
@@ -531,67 +911,6 @@
    ]
   },
   {
-   "tittel": "Trump calling Putin a friend is 'appalling,' says former ambassador to NATO",
-   "url": "https://www.cbc.ca/player/play/video/9.7431916",
-   "kilde": "GDELT",
-   "domene": "cbc.ca",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "putin",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Russia tried to kill a Ukrainian American rapper: Poland",
-   "url": "https://www.cp24.com/news/world/2026/11/22/poland-says-russia-allegedly-twice-tried-to-kill-a-ukrainian-american-rapper/",
-   "kilde": "GDELT",
-   "domene": "cp24.com",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Three killed after Russian attack near Ukraine's capital strikes apartment building",
-   "url": "https://www.kilburntimes.co.uk/news/national/26751822.three-killed-russian-attack-near-ukraines-capital-strikes-apartment-building/",
-   "kilde": "GDELT",
-   "domene": "kilburntimes.co.uk",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Iranian attacks in the Strait of Hormuz reach peak | Nation & World News",
-   "url": "https://www.komu.com/news/nationworld/iranian-attacks-in-the-strait-of-hormuz-reach-highest-levels-since-the-conflict-began/article_d0c1043a-aeaa-5380-a980-a0ceb5aebbf6.html",
-   "kilde": "GDELT",
-   "domene": "komu.com",
-   "publisert": "2026-11-22T21:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "hormuz"
-   ]
-  },
-  {
    "tittel": "Qatar and Germany take a firm stand on Strait of Hormuz freedom and regional stability",
    "url": "https://arynews.tv/qatar-and-germany-take-a-firm-stand-on-strait-of-hormuz-freedom-and-regional-stability",
    "kilde": "GDELT",
@@ -606,21 +925,6 @@
    ]
   },
   {
-   "tittel": "US intelligence chief says Putin is 'not America's friend in Ukraine'",
-   "url": "https://dunyanews.tv/en/World/984329-us-intelligence-chief-says-putin-is-not-americas-friend-in-ukraine",
-   "kilde": "GDELT",
-   "domene": "dunyanews.tv",
-   "publisert": "2026-11-22T21:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Business groups seek clarity on US-Philippines trade deal",
    "url": "https://qa.philstar.com/headlines/2026/11/23/2571950/business-groups-seek-clarity-us-philippines-trade-deal",
    "kilde": "GDELT",
@@ -632,21 +936,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "Suspected Ukrainian drones hit Russian warship in Libya port",
-   "url": "https://www.ckom.com/2026/11/22/suspected-ukrainian-drones-hit-russian-warship-in-libya-port/",
-   "kilde": "GDELT",
-   "domene": "ckom.com",
-   "publisert": "2026-11-22T21:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
    ]
   },
   {
@@ -678,78 +967,6 @@
    ]
   },
   {
-   "tittel": "Russian attack near Ukraine's capital strikes apartment building, killing 3 and burying others – The Mercury News",
-   "url": "https://www.mercurynews.com/2026/11/22/russian-attack-near-ukraines-capital-strikes-apartment-building-killing-3-and-burying-others/",
-   "kilde": "GDELT",
-   "domene": "mercurynews.com",
-   "publisert": "2026-11-22T21:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Korea Republic check in, Saudi Arabia bounce back",
-   "url": "https://www.the-afc.com/en/national/fifa_u-17_world_cup.html/news/korea-republic-check-in-saudi-arabia-bounce-back",
-   "kilde": "GDELT",
-   "domene": "the-afc.com",
-   "publisert": "2026-11-22T21:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Iran's IRGC says 2 \"violating\" supertankers exploded after hitting mines in Hormuz Strait-Xinhua",
-   "url": "https://english.news.cn/20261123/9e8ce320ddab45d5a7c3da4314634bcc/c.html",
-   "kilde": "GDELT",
-   "domene": "english.news.cn",
-   "publisert": "2026-11-22T20:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Houthis claim strike on Saudi Arabia's Rabigh refinery as Ri",
-   "url": "https://www.pakistantoday.com.pk/2026/11/22/yemens-houthis-say-they-attacked-saudi-rabigh-oil-refinery",
-   "kilde": "GDELT",
-   "domene": "pakistantoday.com.pk",
-   "publisert": "2026-11-22T20:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Pakistan, Saudi Arabia and Türkiye to hold Nov 26-27 talks i",
-   "url": "https://www.pakistantoday.com.pk/2026/11/23/pakistan-saudi-arabia-and-turkiye-set-nov-26-27-talks-to-advance-trilateral-defence-pact",
-   "kilde": "GDELT",
-   "domene": "pakistantoday.com.pk",
-   "publisert": "2026-11-22T20:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "2026 Elections: KMT to step up nuclear referendum campaign efforts",
    "url": "https://www.taipeitimes.com/News/taiwan/archives/2026/11/23/2003868235",
    "kilde": "GDELT",
@@ -762,52 +979,6 @@
    "matchede_ord": [
     "referendum",
     "election"
-   ]
-  },
-  {
-   "tittel": "Iranian attacks in the Strait of Hormuz are at the highest levels since the conflict began",
-   "url": "https://peakoil.com/publicpolicy/iranian-attacks-in-the-strait-of-hormuz-are-at-the-highest-levels-since-the-conflict-began",
-   "kilde": "GDELT",
-   "domene": "peakoil.com",
-   "publisert": "2026-11-22T20:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "hormuz"
-   ]
-  },
-  {
-   "tittel": "US Iran War Live Updates: Yemen's Houthis claim attack on Saudi Arabia's Rabigh oil refinery",
-   "url": "https://timesofindia.indiatimes.com/world/middle-east/us-iran-war-live-updates-donald-trump-khamenei-hormuz-oil-tankers-fire-saudi-houthi-tensions-latest-news/liveblog/136082229.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-22T20:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Trump threatens fresh strikes on Iran after New Year if talks fail, accuses Tehran of stalling negotiations",
-   "url": "https://timesofindia.indiatimes.com/world/us/trump-threatens-fresh-strikes-on-iran-after-new-year-if-talks-fail-accuses-tehran-of-stalling-negotiations/articleshow/136083179.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-22T20:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "tehran",
-    "iran"
    ]
   },
   {
@@ -979,76 +1150,6 @@
    ]
   },
   {
-   "tittel": "India, Bulgaria discuss bilateral ties, IMEC, Black Sea situation",
-   "url": "https://www.thehindubusinessline.com/economy/india-bulgaria-discuss-bilateral-ties-imec-black-sea-situation/article71730625.ece",
-   "kilde": "GDELT",
-   "domene": "thehindubusinessline.com",
-   "publisert": "2026-11-22T06:30:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
-   ]
-  },
-  {
-   "tittel": "PANI project to connect Andaman's eight islands through undersea cable network",
-   "url": "https://www.hindustantimes.com/india-news/pani-project-to-connect-andaman-s-eight-islands-through-undersea-cable-network-101795325743696.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-22T06:15:00Z",
-   "tema": "nordic_arctic",
-   "temaer": [
-    "nordic_arctic"
-   ],
-   "matchede_ord": [
-    "undersea cable"
-   ]
-  },
-  {
-   "tittel": "Russian Cargo Ship Sparta II Ablaze After Baltic Sea Drone Strike",
-   "url": "https://arynews.tv/russian-cargo-ship-ablaze-in-baltic-sea-after-drone-strike-crew-evacuates",
-   "kilde": "GDELT",
-   "domene": "arynews.tv",
-   "publisert": "2026-11-22T06:00:00Z",
-   "tema": "nordic_arctic",
-   "temaer": [
-    "nordic_arctic"
-   ],
-   "matchede_ord": [
-    "baltic sea"
-   ]
-  },
-  {
-   "tittel": "Thailand opens pork market to US in major trade deal",
-   "url": "https://www.businesstimes.com.sg/international/global/thailand-opens-door-us-pork-raising-risks-farmers",
-   "kilde": "GDELT",
-   "domene": "businesstimes.com.sg",
-   "publisert": "2026-11-22T06:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
-   "tittel": "Why British endurance swimmer Lewis Pugh risked his life in war-hit Strait of Hormuz",
-   "url": "https://www.moneycontrol.com/world/why-british-endurance-swimmer-lewis-pugh-risked-his-life-in-war-hit-strait-of-hormuz-article-14086410.html",
-   "kilde": "GDELT",
-   "domene": "moneycontrol.com",
-   "publisert": "2026-11-22T06:00:00Z",
-   "tema": "shipping_chokepoints",
-   "temaer": [
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "strait of hormuz"
-   ]
-  },
-  {
    "tittel": "Federal Reserve announces College Fed Challenge winners",
    "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
    "kilde": "Federal Reserve",
@@ -1063,16 +1164,6 @@
    "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
    "kilde": "Federal Reserve",
    "publisert": "2026-11-20T15:00:00Z",
-   "tema": "sentralbanker",
-   "temaer": [
-    "sentralbanker"
-   ]
-  },
-  {
-   "tittel": "Christine Lagarde: Acting in time",
-   "url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261120~e52bcc4db2.en.html",
-   "kilde": "ECB",
-   "publisert": "2026-11-20T08:30:00Z",
    "tema": "sentralbanker",
    "temaer": [
     "sentralbanker"
