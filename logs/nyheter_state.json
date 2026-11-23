@@ -1,6 +1,426 @@
 {
   "items": [
     {
+      "title": "S&P 500 futures rebound sharply to rise 2%, kick-starting shortened week after tech rout: Live updates",
+      "url": "https://www.cnbc.com/2026/11/22/stock-market-today-live-updates.html",
+      "source": "CNBC",
+      "source_id": "cnbc",
+      "published_utc": "2026-11-23T01:50:10Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Dødstallet stiger etter angrep mot Kyiv",
+      "url": "https://www.nettavisen.no/nyheter/dodstallet-stiger-etter-angrep-mot-kyiv/s/80-95-272516",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-23T01:45:22Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Israeli Political Leaders Denounce ‘Jewish Terrorism’ After West Bank Attacks",
+      "url": "https://www.nytimes.com/2026/11/22/world/middleeast/israeli-political-leaders-decry-jewish-terrorism-after-west-bank-attacks.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-23T01:32:02Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Is Mexico Stepping Up in the War on Drugs?",
+      "url": "https://www.nytimes.com/2026/11/22/world/americas/mexico-us-cartel-arrests.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-23T01:26:59Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Mann til sykehus etter knivhendelse i Førde",
+      "url": "https://www.nettavisen.no/nyheter/mann-til-sykehus-etter-knivhendelse-i-forde/s/80-95-272513",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-23T01:25:39Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Undersøkelse: Nær halvparten sier nei til EU",
+      "url": "https://www.nettavisen.no/nyheter/undersokelse-nar-halvparten-sier-nei-til-eu/s/80-95-272504",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-23T01:24:13Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Democrats win largest House majority since 1992 after flipping North Carolina seat",
+      "url": "https://www.bbc.co.uk/news/articles/c6vg29g7dlyno?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T01:23:43Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "S&P 500 Futures Rise After Tough Week",
+      "url": "https://www.nytimes.com/2026/11/22/business/ai-stocks-sp500.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-23T01:17:46Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Hevder Zlatan Ibrahimovic har landet ny jobb: – Overraskende",
+      "url": "https://www.nettavisen.no/sport/hevder-zlatan-ibrahimovic-har-landet-ny-jobb-overraskende/s/80-95-272501",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-23T01:16:23Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Energy bills will soar - here's how you can ease the pain",
+      "url": "https://www.bbc.co.uk/news/articles/crm4rygl4m3o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T01:05:07Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Førde: Person til sykehus etter knivhendelse",
+      "url": "https://www.nrk.no/nyheter/forde_-person-til-sykehus-etter-knivhendelse-1.18086853",
+      "source": "NRK",
+      "source_id": "nrk",
+      "published_utc": "2026-11-23T00:59:41Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "COP31 fails to reach major climate deal as talks expose deep divisions",
+      "url": "https://www.bbc.co.uk/news/articles/cqwy06zrd26lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T00:50:35Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Italian jeweller and businessman Paolo Bulgari dies aged 89",
+      "url": "https://www.bbc.co.uk/news/articles/c8e39qk5vrpdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T00:33:36Z",
+      "first_seen_utc": "2026-11-22T15:29:07Z",
+      "section": "Verden",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Why Democrat Abdul El-Sayed is Talking Up ‘TrumpCare’",
+      "url": "https://www.nytimes.com/2026/11/22/us/politics/el-sayed-trump-health-care.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-23T00:27:25Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "What is going on with Poundland?",
+      "url": "https://www.bbc.co.uk/news/articles/cm4g10p2r0g9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T00:22:27Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "San Francisco is enjoying an AI boom, but worries about a crash are growing",
+      "url": "https://www.bbc.co.uk/news/articles/cqe9k09j9jv4o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-23T00:08:00Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "U.S. Tracked Alice Huang’s Contacts With China Spy Agency During Nvidia Affair",
+      "url": "https://www.nytimes.com/2026/11/22/us/politics/alice-huang-china-spy-agency-nvidia.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-23T00:05:50Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Jim O’Neill calls for Burnham to overhaul property taxes",
+      "url": "https://www.ft.com/content/7151f7cb-58eb-43ce-844d-05cd62a985ba?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-23T00:01:00Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Begge visste han skulle dø. Likevel sa hun ja",
+      "url": "https://www.nettavisen.no/nyheter/begge-visste-han-skulle-do-likevel-sa-hun-ja/s/80-95-269768",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-22T23:59:02Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Danmark: 120 avviste asylsøkere kan sendes til Rwanda",
+      "url": "https://www.nrk.no/nyheter/danmark_-120-avviste-asylsokere-kan-sendes-til-rwanda-1.18086852",
+      "source": "NRK",
+      "source_id": "nrk",
+      "published_utc": "2026-11-22T23:48:27Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Democrats Clinch 258 House Seats, an Election-Year Record This Century",
+      "url": "https://www.nytimes.com/2026/11/22/us/politics/democrats-midterm-house-majority-record.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T23:30:07Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Danmark: 120 avviste asylsøkere kan sendes til Rwanda",
+      "url": "https://www.nettavisen.no/nyheter/danmark-120-avviste-asylsokere-kan-sendes-til-rwanda/s/80-95-272492",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-22T23:29:14Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Democrat Chuck Hubbard Defeats 11-Term Republican Virginia Foxx in North Carolina",
+      "url": "https://www.nytimes.com/2026/11/22/us/virginia-foxx-chuck-hubbard-north-carolina-house.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T23:28:41Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "'Danger seems greater all the time': Ukrainians search for missing after Russian strikes",
+      "url": "https://www.bbc.co.uk/news/videos/cre3dvd1k9y1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-22T22:37:43Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Danmark: 120 avviste asylsøkere kan sendes til Rwanda",
+      "url": "https://www.aftenposten.no/verden/i/kMJj6a/danmark-120-avviste-asylsoekere-kan-sendes-til-rwanda?utm_medium=rss",
+      "source": "Aftenposten",
+      "source_id": "aftenposten",
+      "published_utc": "2026-11-22T22:30:08Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Could history help predict the next two years of US politics? | Martin Wolf on the US midterms",
+      "url": "https://www.ft.com/video/06206392-4100-4aa2-86e7-e38e4ceb9138?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T22:21:31Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "House Democrats to start new Congress with largest majority this century",
+      "url": "https://www.ft.com/content/9d2983a7-196d-4164-a0c1-e262f32fd8c9?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T22:10:45Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "FirstFT: Scott Bessent refuses to rule out Jensen Huang’s return to Nvidia",
+      "url": "https://www.ft.com/content/67014244-a737-4be5-ac81-97b77a6912ff?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T22:07:25Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Nytt skip angrepet utenfor Benghazi i Libya",
+      "url": "https://www.nettavisen.no/libya/benghazi-libya/russisk-skip/nytt-droneangrep-utenfor-libya-skip-truffet-ved-benghazi-se-video/v/80-95-272486",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-22T22:00:36Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Bombet russisk krigsskip: Viser enorme ødeleggelser",
+      "url": "https://www.nettavisen.no/nyheter/russisk-krigsskip-senket-etter-droneangrep-i-libya/s/80-95-272456",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-22T21:56:44Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Corporate America hunts for ‘generational’ growth in AI, trading cards and the L.A. airport",
+      "url": "https://www.marketwatch.com/story/corporate-america-hunts-for-generational-growth-in-ai-trading-cards-and-the-l-a-airport-3072eb1a?mod=mw_rss_topstories",
+      "source": "MarketWatch",
+      "source_id": "marketwatch",
+      "published_utc": "2026-11-22T21:51:00Z",
+      "first_seen_utc": "2026-11-22T15:29:07Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Libya: To skip trolig angrepet av droner i Benghazi",
+      "url": "https://www.aftenposten.no/verden/i/9BvAOM/libya-to-skip-trolig-angrepet-av-droner-i-benghazi?utm_medium=rss",
+      "source": "Aftenposten",
+      "source_id": "aftenposten",
+      "published_utc": "2026-11-22T21:40:20Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Ron Johnson’s Social Security gaffe buried important news",
+      "url": "https://www.marketwatch.com/story/ron-johnsons-social-security-gaffe-buried-important-news-b96e0ce8?mod=mw_rss_topstories",
+      "source": "MarketWatch",
+      "source_id": "marketwatch",
+      "published_utc": "2026-11-22T21:28:00Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Miley Cyrus marries Maxx Morando in California ceremony",
+      "url": "https://www.bbc.co.uk/news/articles/cq8e0p87l89lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC",
+      "source_id": "bbc",
+      "published_utc": "2026-11-22T21:22:40Z",
+      "first_seen_utc": "2026-11-22T21:15:38Z",
+      "section": "Verden",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Fotballfruen åpner opp: – Vært oss siden den dagen",
+      "url": "https://www.nettavisen.no/sport/malene-pedersen-og-lsk-profilen-fredrik-gulbrandsen-venter-sitt-andre-barn-ikke-planlagt/s/80-95-262403",
+      "source": "Nettavisen",
+      "source_id": "nettavisen",
+      "published_utc": "2026-11-22T21:16:37Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Norge",
+      "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
       "title": "Delta Delays Flights as Thanksgiving Travel Begins, After Automated System Falters",
       "url": "https://www.nytimes.com/2026/11/22/us/delta-flight-delays-system-outage.html",
       "source": "NYT",
@@ -90,18 +510,6 @@
       "source": "BBC",
       "source_id": "bbc",
       "published_utc": "2026-11-22T20:28:09Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Democrats win largest House majority since 1992 after flipping North Carolina seat",
-      "url": "https://www.bbc.co.uk/news/articles/c6vg29g7dlyno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T20:26:24Z",
       "first_seen_utc": "2026-11-22T21:15:38Z",
       "section": "Verden",
       "paywall": false,
@@ -325,6 +733,18 @@
       "pool": "editorial"
     },
     {
+      "title": "Delta flight delays add to concerns about US air travel systems",
+      "url": "https://www.ft.com/content/14566557-3f63-4eeb-b589-6cb1144dc918?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T19:25:06Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
       "title": "Medicare beneficiaries could skip the nursing home for cheaper care at home under new bill",
       "url": "https://www.marketwatch.com/story/medicare-beneficiaries-could-skip-the-nursing-home-for-cheaper-care-at-home-under-new-bill-e289c8d0?mod=mw_rss_topstories",
       "source": "MarketWatch",
@@ -393,6 +813,18 @@
       "first_seen_utc": "2026-11-22T21:15:38Z",
       "section": "Norge",
       "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Donald Hooton Sr., Who Crusaded Against Steroids in Sports, Has Died",
+      "url": "https://www.nytimes.com/2026/11/22/us/donald-hooton-sr-dead.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T19:10:04Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
       "issuer": null,
       "pool": "editorial"
     },
@@ -529,18 +961,6 @@
       "pool": "editorial"
     },
     {
-      "title": "Democrat Chuck Hubbard Defeats 11-Term Republican Virginia Foxx in North Carolina",
-      "url": "https://www.nytimes.com/2026/11/22/us/virginia-foxx-chuck-hubbard-north-carolina-house.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-22T18:37:10Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "US Army to detonate tonnes of unstable explosives in Iowa despite court order",
       "url": "https://www.bbc.co.uk/news/articles/cvglrx764gdxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC",
@@ -560,18 +980,6 @@
       "published_utc": "2026-11-22T18:25:51Z",
       "first_seen_utc": "2026-11-22T21:15:38Z",
       "section": "Norge",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Democrats Clinch 258 House Seats, an Election-Year Record This Century",
-      "url": "https://www.nytimes.com/2026/11/22/us/politics/democrats-midterm-house-majority-record.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-22T18:23:08Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -637,18 +1045,6 @@
       "pool": "editorial"
     },
     {
-      "title": "COP31 fails to reach major climate deal as talks expose deep divisions",
-      "url": "https://www.bbc.co.uk/news/articles/cqwy06zrd26lo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T18:17:59Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "Budsjettforhandlingene: Venter på skisse fra Ap",
       "url": "https://www.nrk.no/nyheter/budsjettforhandlingene_-venter-pa-skisse-fra-ap-1.18086707",
       "source": "NRK",
@@ -703,7 +1099,7 @@
       "source_id": "nyt",
       "published_utc": "2026-11-22T18:05:48Z",
       "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Marked",
+      "section": "Verden",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -716,18 +1112,6 @@
       "published_utc": "2026-11-22T18:02:51Z",
       "first_seen_utc": "2026-11-22T21:15:38Z",
       "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "'Danger seems greater all the time': Ukrainians search for missing after Russian strikes",
-      "url": "https://www.bbc.co.uk/news/videos/cre3dvd1k9y1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T17:57:43Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
       "paywall": false,
       "issuer": null,
       "pool": "editorial"
@@ -1009,6 +1393,18 @@
       "pool": "editorial"
     },
     {
+      "title": "How a Crash Into a Cruise Ship in New Orleans Became a ‘Miracle on the Mississippi’",
+      "url": "https://www.nytimes.com/2026/11/22/us/new-orleans-riverboat-crash-tanker-tick-tock.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T16:32:19Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
       "title": "I’m terrified of a market crash. Should I put $400,000 of my $1 million retirement savings into an annuity?",
       "url": "https://www.marketwatch.com/story/were-in-our-50s-and-terrified-of-a-market-crash-should-we-put-400-000-of-our-1-million-retirement-savings-into-an-annuity-1943f240?mod=mw_rss_topstories",
       "source": "MarketWatch",
@@ -1261,18 +1657,6 @@
       "pool": "editorial"
     },
     {
-      "title": "Corporate America hunts for ‘generational’ growth in AI, trading cards and the L.A. airport",
-      "url": "https://www.marketwatch.com/story/corporate-america-hunts-for-generational-growth-in-ai-trading-cards-and-the-l-a-airport-3072eb1a?mod=mw_rss_topstories",
-      "source": "MarketWatch",
-      "source_id": "marketwatch",
-      "published_utc": "2026-11-22T15:01:00Z",
-      "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "Russisk krigsskip angrepet i Libya",
       "url": "https://www.nettavisen.no/russland/krigsskip/merkury/russisk-korvett-merkury-angrepet-i-benghazi-i-libya/v/80-95-272006",
       "source": "Nettavisen",
@@ -1339,7 +1723,7 @@
       "source_id": "nyt",
       "published_utc": "2026-11-22T14:35:24Z",
       "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Marked",
+      "section": "Verden",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -1509,6 +1893,18 @@
       "first_seen_utc": "2026-11-22T15:29:07Z",
       "section": "Norge",
       "paywall": false,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "A Riverboat Captain Recalls a Crash on the Mississippi",
+      "url": "https://www.nytimes.com/2026/11/22/us/new-orleans-riverboat-crash-captain.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T14:02:55Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
       "issuer": null,
       "pool": "editorial"
     },
@@ -1927,7 +2323,7 @@
       "source_id": "nyt",
       "published_utc": "2026-11-22T12:27:46Z",
       "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Verden",
+      "section": "Marked",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -2557,18 +2953,6 @@
       "pool": "editorial"
     },
     {
-      "title": "Miley Cyrus marries Maxx Morando in California ceremony",
-      "url": "https://www.bbc.co.uk/news/articles/cq8e0p87l89lo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T08:46:28Z",
-      "first_seen_utc": "2026-11-22T21:15:38Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "South Korea’s Education Minister Resigns Over Anti-A.I. Cheating Rules",
       "url": "https://www.nytimes.com/2026/11/22/world/asia/korea-csat-exam-ai-cheating.html",
       "source": "NYT",
@@ -2665,6 +3049,30 @@
       "pool": "editorial"
     },
     {
+      "title": "The District Attorney Who Declined to Charge the Men Accused of Sexually Assaulting Jane Doe",
+      "url": "https://www.nytimes.com/2026/11/22/nyregion/cornell-jane-doe-case.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T08:00:15Z",
+      "first_seen_utc": "2026-11-23T01:50:43Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Europe Needs to Save Itself",
+      "url": "https://www.nytimes.com/2026/11/22/opinion/europe-us-congress-allies.html",
+      "source": "NYT",
+      "source_id": "nyt",
+      "published_utc": "2026-11-22T07:23:08Z",
+      "first_seen_utc": "2026-11-22T07:17:11Z",
+      "section": "Verden",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
       "title": "MP criticises Guernsey and Jersey company ownership register plans",
       "url": "https://www.bbc.co.uk/news/articles/cqkgmy2nxy4lo?at_medium=RSS&at_campaign=rss",
       "source": "BBC",
@@ -2709,18 +3117,6 @@
       "first_seen_utc": "2026-11-22T07:17:11Z",
       "section": "Marked",
       "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Italian jeweller and businessman Paolo Bulgari dies aged 89",
-      "url": "https://www.bbc.co.uk/news/articles/c8e39qk5vrpdo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T07:12:41Z",
-      "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Verden",
-      "paywall": false,
       "issuer": null,
       "pool": "editorial"
     },
@@ -2924,18 +3320,6 @@
       "published_utc": "2026-11-22T06:04:46Z",
       "first_seen_utc": "2026-11-22T07:17:11Z",
       "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Now Is Not the Time for Europe to Relax",
-      "url": "https://www.nytimes.com/2026/11/22/opinion/europe-us-congress-allies.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-22T06:00:05Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Verden",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -3151,7 +3535,31 @@
       "source_id": "ft",
       "published_utc": "2026-11-22T05:00:06Z",
       "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Verden",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Private equity backers flag fresh concerns about sell-to-yourself deals",
+      "url": "https://www.ft.com/content/d299785f-dc83-4850-95b8-e08b9a643f98?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T05:00:06Z",
+      "first_seen_utc": "2026-11-22T07:17:11Z",
+      "section": "Marked",
+      "paywall": true,
+      "issuer": null,
+      "pool": "editorial"
+    },
+    {
+      "title": "Amazon’s AI resistance: workers ready for battle over data centres",
+      "url": "https://www.ft.com/content/d194e93b-8d3c-42eb-85dd-46d58c4f2a80?syn-25a6b1a6=1",
+      "source": "FT",
+      "source_id": "ft",
+      "published_utc": "2026-11-22T05:00:06Z",
+      "first_seen_utc": "2026-11-22T07:17:11Z",
+      "section": "Marked",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -3169,18 +3577,6 @@
       "pool": "editorial"
     },
     {
-      "title": "Private equity backers flag fresh concerns about sell-to-yourself deals",
-      "url": "https://www.ft.com/content/d299785f-dc83-4850-95b8-e08b9a643f98?syn-25a6b1a6=1",
-      "source": "FT",
-      "source_id": "ft",
-      "published_utc": "2026-11-22T05:00:06Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
       "title": "Heathrow’s biggest investor confident airport will build a third runway",
       "url": "https://www.ft.com/content/5f83965d-e74d-4088-af9f-b59f2fa5e8f1?syn-25a6b1a6=1",
       "source": "FT",
@@ -3188,18 +3584,6 @@
       "published_utc": "2026-11-22T05:00:06Z",
       "first_seen_utc": "2026-11-22T07:17:11Z",
       "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Amazon’s AI resistance: workers ready for battle over data centres",
-      "url": "https://www.ft.com/content/d194e93b-8d3c-42eb-85dd-46d58c4f2a80?syn-25a6b1a6=1",
-      "source": "FT",
-      "source_id": "ft",
-      "published_utc": "2026-11-22T05:00:06Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Marked",
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
@@ -3263,551 +3647,143 @@
       "paywall": true,
       "issuer": null,
       "pool": "editorial"
-    },
-    {
-      "title": "Internasjonalt maratonløp utsettes",
-      "url": "https://www.nettavisen.no/nyheter/nord-korea-utsetter-neste-ars-maratonlop/s/80-95-271277",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-22T03:49:48Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Tre personer til sykehus etter voldshendelse i Våler",
-      "url": "https://www.nettavisen.no/nyheter/tre-personer-til-sykehus-etter-voldshendelse-i-valer/s/80-95-271274",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-22T03:37:53Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Nye rykter rundt stjerneparet",
-      "url": "https://www.nettavisen.no/sport/nye-rykter-rundt-stjerneparet-de-gea-og-edurne/s/80-95-271193",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-22T03:14:40Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Tre personer døde og 36 savnet i Indonesia",
-      "url": "https://www.nrk.no/nyheter/tre-personer-dode-og-36-savnet-i-indonesia-1.18086532",
-      "source": "NRK",
-      "source_id": "nrk",
-      "published_utc": "2026-11-22T02:27:16Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Drones, Texts and Diversions: How Mexico Captured a Most Wanted Man",
-      "url": "https://www.nytimes.com/2026/11/21/world/americas/mexico-captures-drug-kingpin.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-22T01:56:16Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "India’s $126bn insurance sector slams proposed commission cap",
-      "url": "https://www.ft.com/content/2e67313b-d6c5-4e62-bd50-14639fe5ef95?syn-25a6b1a6=1",
-      "source": "FT",
-      "source_id": "ft",
-      "published_utc": "2026-11-22T01:30:02Z",
-      "first_seen_utc": "2026-11-22T07:17:11Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Trump Moves to Restrict Congressional Oversight of Contractors",
-      "url": "https://www.nytimes.com/2026/11/21/us/politics/trump-congressional-oversight-contractors.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-22T01:29:53Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
-      "url": "https://www.bbc.co.uk/news/articles/ckz749ey0r75o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T01:25:03Z",
-      "first_seen_utc": "2026-11-21T19:58:50Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "My husband is happily retired at 64 and thinks I should keep working. Is he being fair?",
-      "url": "https://www.marketwatch.com/story/my-husband-is-happily-retired-at-64-and-thinks-i-should-keep-working-is-he-being-fair-325c5f38?mod=mw_rss_topstories",
-      "source": "MarketWatch",
-      "source_id": "marketwatch",
-      "published_utc": "2026-11-22T01:15:00Z",
-      "first_seen_utc": "2026-11-21T19:58:50Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "FBI reportedly investigating apparent hack of its criminal database",
-      "url": "https://www.bbc.co.uk/news/articles/cvze7de86pk3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T00:10:44Z",
-      "first_seen_utc": "2026-11-21T12:49:44Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Nigerian youth have shown their power in the past - why aren't they shaping this election?",
-      "url": "https://www.bbc.co.uk/news/articles/ck4g174n020eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T00:10:37Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Klimatoppmøtet fortsetter søndag",
-      "url": "https://www.nrk.no/nyheter/klimatoppmotet-fortsetter-sondag-1.18086531",
-      "source": "NRK",
-      "source_id": "nrk",
-      "published_utc": "2026-11-22T00:10:10Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "How a teen gamer and his mother helped rescue a missing girl",
-      "url": "https://www.bbc.co.uk/news/articles/cmq8lyv8lkjwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T00:09:58Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Employers are being asked to give interview feedback - here's what applicants want",
-      "url": "https://www.bbc.co.uk/news/articles/cm2d94le23xyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-22T00:04:07Z",
-      "first_seen_utc": "2026-11-22T15:29:07Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Britisk by stemte for å forlate Storbritannia",
-      "url": "https://www.nettavisen.no/nyheter/far-900-asylsokere-britisk-landsby-stemte-for-a-losrive-seg/s/80-95-271130",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-22T00:03:15Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "My wife is bankrolling her family’s trips to New York and it’s draining our savings. Should I ask her to stop?",
-      "url": "https://www.marketwatch.com/story/my-wife-pays-thousands-of-dollars-for-her-family-to-visit-from-argentina-how-can-i-convince-her-to-stop-9381351c?mod=mw_rss_topstories",
-      "source": "MarketWatch",
-      "source_id": "marketwatch",
-      "published_utc": "2026-11-22T00:03:00Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Russefest over styr i Troms",
-      "url": "https://www.nettavisen.no/nyheter/russefest-over-styr-i-troms/s/80-95-271256",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T23:59:00Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Brann i hus i Bømlo",
-      "url": "https://www.nrk.no/nyheter/brann-i-hus-i-bomlo-1.18086519",
-      "source": "NRK",
-      "source_id": "nrk",
-      "published_utc": "2026-11-21T23:50:17Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Full overtenning i bolig i Bømlo",
-      "url": "https://www.nettavisen.no/nyheter/full-overtenning-i-bolig-i-bomlo/s/80-95-271253",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T23:45:19Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "The Penny Is Dead. Now It’s Official.",
-      "url": "https://www.nytimes.com/2026/11/21/us/politics/penny-mint-trump-common-cent-act.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-21T23:12:24Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Marked",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "I’m in my 40s. Should I accept a lower pension in exchange for naming my husband or child as a beneficiary?",
-      "url": "https://www.marketwatch.com/story/im-in-my-40s-should-i-accept-a-lower-pension-in-exchange-for-naming-my-husband-or-child-as-a-beneficiary-b2352059?mod=mw_rss_topstories",
-      "source": "MarketWatch",
-      "source_id": "marketwatch",
-      "published_utc": "2026-11-21T23:05:00Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "The Army Rejected a Cleaner Option to Destroy Lead-Laced Explosives in Iowa",
-      "url": "https://www.nytimes.com/2026/11/21/climate/army-lead-azide-blast.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-21T22:57:09Z",
-      "first_seen_utc": "2026-11-21T19:58:50Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "What to Know About the Planned Explosion in Iowa",
-      "url": "https://www.nytimes.com/2026/11/21/climate/what-to-know-about-the-planned-explosion-in-iowa.html",
-      "source": "NYT",
-      "source_id": "nyt",
-      "published_utc": "2026-11-21T22:41:17Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Fight over fossil fuels leaves COP31 climate talks in deadlock",
-      "url": "https://www.bbc.co.uk/news/articles/c6ly5w40eg07o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-21T22:19:43Z",
-      "first_seen_utc": "2026-11-21T12:49:44Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Mexico captures top drug lord 'El Chapo Isidro,' latest in string of arrests",
-      "url": "https://www.cnbc.com/2026/11/21/mexico-drug-lord-el-chapo-isidro.html",
-      "source": "CNBC",
-      "source_id": "cnbc",
-      "published_utc": "2026-11-21T22:09:16Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Marked",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Ny deltaker ute av «Skal vi danse»",
-      "url": "https://www.nettavisen.no/kjendis/ny-deltaker-ute-av-skal-vi-danse/s/80-95-270998",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T22:08:11Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Trump deler Putin-bilde: – Min venn",
-      "url": "https://www.nettavisen.no/nyheter/donald-trump-deler-bilde-med-vladimir-putin-min-venn/s/80-95-271196",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T22:06:08Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Lock of former US President George Washington's hair sells for $4,000",
-      "url": "https://www.bbc.co.uk/news/articles/cwe9k23dpz0do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC",
-      "source_id": "bbc",
-      "published_utc": "2026-11-21T22:01:19Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Verden",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Pinnsvinet avslørt i «Maskorama»",
-      "url": "https://www.nettavisen.no/kjendis/pinnsvinet-avslort-i-maskorama/s/80-95-271175",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T21:48:47Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Synne Lykkeslet (15) fra «Team Pølsa» vinner Åpenhetsprisen",
-      "url": "https://www.aftenposten.no/norge/i/XogLEx/synne-lykkeslet-15-fra-team-poelsa-vinner-aapenhetsprisen?utm_medium=rss",
-      "source": "Aftenposten",
-      "source_id": "aftenposten",
-      "published_utc": "2026-11-21T21:36:02Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": true,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "På stemmejakt: Infantino fikk stående applaus",
-      "url": "https://www.nettavisen.no/sport/infantino-rival-pa-stemmejakt-ble-ydmyket/s/80-95-271148",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T21:33:35Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "Frykter å miste plassen til Russland",
-      "url": "https://www.nettavisen.no/sport/ukraina-frykter-a-miste-vm-plassen-til-russland/s/80-95-271097",
-      "source": "Nettavisen",
-      "source_id": "nettavisen",
-      "published_utc": "2026-11-21T21:30:34Z",
-      "first_seen_utc": "2026-11-22T00:19:22Z",
-      "section": "Norge",
-      "paywall": false,
-      "issuer": null,
-      "pool": "editorial"
-    },
-    {
-      "title": "SNOR: SpareBank 1 Nordmøre - Meldepliktige handler for primærinnsidere",
-      "url": "https://newsweb.oslobors.no/message/687115",
-      "source": "Oslo Børs Newsweb",
-      "source_id": "newsweb",
-      "published_utc": "2026-11-20T21:50:00Z",
-      "first_seen_utc": "2026-11-20T23:25:46Z",
-      "section": "Børsmeldinger",
-      "paywall": false,
-      "issuer": "SNOR",
-      "pool": "newsweb"
-    },
-    {
-      "title": "SNOR: SpareBank 1 Nordmøre - Viderefordeling av egenkapitalbevis i spareprogram for ansatte",
-      "url": "https://newsweb.oslobors.no/message/687114",
-      "source": "Oslo Børs Newsweb",
-      "source_id": "newsweb",
-      "published_utc": "2026-11-20T21:50:00Z",
-      "first_seen_utc": "2026-11-20T23:25:46Z",
-      "section": "Børsmeldinger",
-      "paywall": false,
-      "issuer": "SNOR",
-      "pool": "newsweb"
     }
   ],
   "source_ok_at": {
-    "aftenposten": "2026-11-22T21:15:38Z",
-    "bbc": "2026-11-22T21:15:38Z",
-    "cnbc": "2026-11-22T21:15:38Z",
-    "dn": "2026-11-22T21:15:38Z",
-    "e24": "2026-11-22T21:15:38Z",
-    "finansavisen": "2026-11-22T21:15:38Z",
-    "ft": "2026-11-22T21:15:38Z",
-    "marketwatch": "2026-11-22T21:15:38Z",
-    "nettavisen": "2026-11-22T21:15:38Z",
-    "nrk": "2026-11-22T21:15:38Z",
-    "nyt": "2026-11-22T21:15:38Z",
-    "newsweb": "2026-11-22T21:15:38Z",
-    "tu": "2026-11-22T21:15:38Z"
+    "aftenposten": "2026-11-23T01:50:43Z",
+    "bbc": "2026-11-23T01:50:43Z",
+    "cnbc": "2026-11-23T01:50:43Z",
+    "dn": "2026-11-23T01:50:43Z",
+    "e24": "2026-11-23T01:50:43Z",
+    "finansavisen": "2026-11-23T01:50:43Z",
+    "ft": "2026-11-23T01:50:43Z",
+    "marketwatch": "2026-11-23T01:50:43Z",
+    "nettavisen": "2026-11-23T01:50:43Z",
+    "nrk": "2026-11-23T01:50:43Z",
+    "nyt": "2026-11-23T01:50:43Z",
+    "newsweb": "2026-11-23T01:50:43Z",
+    "tu": "2026-11-23T01:50:43Z"
   },
   "first_run_utc": "2026-11-17T14:47:03Z",
   "results": {
     "nrk-siste": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 20
     },
     "nrk-norge": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 20
     },
     "nrk-urix": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 20
     },
     "e24": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 39
     },
     "dn": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 13
     },
     "finansavisen": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 10
     },
     "nettavisen": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 15
     },
     "aftenposten": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 42
     },
     "newsweb": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
-      "n": 94
+      "at": "2026-11-23T01:50:43Z",
+      "n": 5
     },
     "nyt-home": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
-      "n": 13
+      "at": "2026-11-23T01:50:43Z",
+      "n": 18
     },
     "nyt-world": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 53
     },
     "nyt-business": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 48
     },
     "nyt-technology": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
-      "n": 42
+      "at": "2026-11-23T01:50:43Z",
+      "n": 41
     },
     "nyt-energy": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 20
     },
     "bbc-world": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 35
     },
     "bbc-business": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
-      "n": 58
+      "at": "2026-11-23T01:50:43Z",
+      "n": 46
     },
     "bbc-technology": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 21
     },
     "cnbc-top": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 30
     },
     "cnbc-world": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 30
     },
     "marketwatch-top": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 10
     },
     "ft-world": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 25
     },
     "ft-markets": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 25
     },
     "ft-technology": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 25
     },
     "tu": {
       "ok": true,
-      "at": "2026-11-22T21:15:38Z",
+      "at": "2026-11-23T01:50:43Z",
       "n": 248
     }
   }
