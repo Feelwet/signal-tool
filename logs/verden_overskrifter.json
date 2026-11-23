@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-23T19:19:10+0100",
+ "hentet": "2026-11-23T19:33:32+0100",
  "dato": "2026-11-23",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (0) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1468) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,11 +12,11 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 159
+   "antall": 163
   },
   {
    "tema": "mideast_energy",
-   "antall": 69
+   "antall": 72
   },
   {
    "tema": "shipping_chokepoints",
@@ -24,7 +24,7 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 11
+   "antall": 12
   },
   {
    "tema": "tariffs_trade",
@@ -56,6 +56,124 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Air Defense: Steelfin Air Defense",
+   "url": "http://www.strategypage.com/htmw/htada/articles/20261123091743.aspx",
+   "kilde": "GDELT",
+   "domene": "strategypage.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense"
+   ]
+  },
+  {
+   "tittel": "LIVE : Israeli strikes kill at least three in Gaza, including UNRWA worker",
+   "url": "https://news.az/news/live-israeli-strikes-kill-at-least-three-in-gaza-including-unrwa-worker",
+   "kilde": "GDELT",
+   "domene": "news.az",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Rethinking Limited Nuclear War",
+   "url": "https://warontherocks.com/episode/thinkingtheunthinkable/48738/rethinking-limited-nuclear-war/",
+   "kilde": "GDELT",
+   "domene": "warontherocks.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear war"
+   ]
+  },
+  {
+   "tittel": "Israeli strikes kill at least three, including UNRWA worker, in Gaza",
+   "url": "https://www.aljazeera.com/news/2026/11/23/israeli-drone-strike-kills-unrwa-worker-in-gaza",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Russia warns Ukraine of 'dangerous trend' after Libya and Baltic attacks | Drone Strikes News",
+   "url": "https://www.aljazeera.com/news/2026/11/23/russia-warns-ukraine-of-dangerous-trend-after-libya-and-baltic-attacks",
+   "kilde": "GDELT",
+   "domene": "aljazeera.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Video. Ukraine releases footage of strikes on two Russian vessels off Libya",
+   "url": "https://www.euronews.com/video/2026/11/23/ukraine-releases-footage-of-strikes-on-two-russian-vessels-off-libya",
+   "kilde": "GDELT",
+   "domene": "euronews.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Trump Threatens to Sink Iranian Ships as Tehran Vows Response",
+   "url": "https://www.hngn.com/articles/273933/20261123/trump-threatens-sink-iranian-ships-tehran-vows-response.htm",
+   "kilde": "GDELT",
+   "domene": "hngn.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "How Ukraine is taking the war to Russia thousands of kilometres from its borders",
+   "url": "https://www.irishtimes.com/world/europe/2026/11/23/how-ukraine-is-taking-the-war-to-russia-far-beyond-its-borders/",
+   "kilde": "GDELT",
+   "domene": "irishtimes.com",
+   "publisert": "2026-11-23T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
   {
    "tittel": "NATO entering Ukraine risks WWIII",
    "url": "http://www.bignewsnetwork.com/news/279450969/nato-entering-ukraine-risks-wwiii-le-pen",
@@ -553,21 +671,6 @@
    ]
   },
   {
-   "tittel": "Kremlin comments on Ukrainian naval attacks",
-   "url": "http://www.greekherald.com/news/279450541/kremlin-comments-on-ukrainian-naval-attacks",
-   "kilde": "GDELT",
-   "domene": "greekherald.com",
-   "publisert": "2026-11-23T17:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "kremlin"
-   ]
-  },
-  {
    "tittel": "Four oil tankers hit mines in Strait of Hormuz",
    "url": "http://www.iranherald.com/news/279450561/four-oil-tankers-hit-mines-in-strait-of-hormuz-iran",
    "kilde": "GDELT",
@@ -579,52 +682,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Merz calls for NATO Article 5-like security guarantees for Ukraine",
-   "url": "https://en.apa.az/europe/merz-calls-for-nato-article-5-like-security-guarantees-for-ukraine-538059",
-   "kilde": "GDELT",
-   "domene": "en.apa.az",
-   "publisert": "2026-11-23T17:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Russia Sends Three Kh-101 Cruise Missiles Into Polish Airspace in Latest NATO Violation",
-   "url": "https://www.ibtimes.co.uk/three-russian-missiles-crashed-poland-1834029",
-   "kilde": "GDELT",
-   "domene": "ibtimes.co.uk",
-   "publisert": "2026-11-23T17:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "missile",
-    "russia",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Attack on Russian cargo ship in Gulf of Finland escalating tensions in region: Kremlin",
-   "url": "https://www.prokerala.com/news/articles/a1840307.html",
-   "kilde": "GDELT",
-   "domene": "prokerala.com",
-   "publisert": "2026-11-23T17:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "kremlin"
    ]
   },
   {
@@ -743,49 +800,6 @@
     "israel",
     "tehran",
     "iran"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia's influence loomed large over failed COP31 deal",
-   "url": "https://tribune.com.pk/story/2641900/saudi-arabias-influence-loomed-large-over-failed-cop31-deal",
-   "kilde": "GDELT",
-   "domene": "tribune.com.pk",
-   "publisert": "2026-11-23T17:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Iran's FM requests urgent OIC ministerial meeting on Gaza",
-   "url": "https://www.plenglish.com/news/2026/11/20/irans-fm-requests-urgent-oic-ministerial-meeting-on-gaza/",
-   "kilde": "GDELT",
-   "domene": "plenglish.com",
-   "publisert": "2026-11-23T17:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iran",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Ansarullah: Saudi Arabia forces Yemenis to choose between starving to death and being killed in war",
-   "url": "https://www.presstv.co.uk/Detail/2026/11/23/781412/ansarullah-saudi-arabia-pushing-yemenis-to-choose-between-starvation-to-death-getting-killed",
-   "kilde": "GDELT",
-   "domene": "presstv.co.uk",
-   "publisert": "2026-11-23T17:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
