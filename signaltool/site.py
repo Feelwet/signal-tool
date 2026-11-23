@@ -489,8 +489,11 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
     short_kl = short.replace(" ", " kl. ", 1) if short else ""
     gen = f"Oppdatert {E(short_kl)}" if short_kl else ""
     iso = gen_iso(snap["generated"]) if gdt else ""
-    stale = (f'<p id="stale-line" class="stale-line" hidden>'
-             f'{f"Dataene er ikke oppdatert siden {E(short_kl)}." if short_kl else ""}</p>')
+    # UxBot 23.11: varsellinja vises ikke på Nyheter (10-min oppdatering, status i Kilder-arket).
+    stale = "" if title == "Nyheter" else (
+        f'<p id="stale-line" class="stale-line" hidden>'
+        f'{f"Dataene er ikke oppdatert siden {E(short_kl)}." if short_kl else ""}</p>'
+    )
     body_g = f' data-generated="{E(iso)}"' if iso else ""
     kd = PWA.kurs_date(snap)   # AnalBot 01.11: frakoblet-linja viser kursdato (fra data) + hentetid (fra build)
     gattr = (f' data-kd="{kd[8:10]}.{kd[5:7]}"' if kd else "") + (f' data-hent="{E(short_kl)}"' if gen else "")

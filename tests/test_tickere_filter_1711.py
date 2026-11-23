@@ -176,8 +176,12 @@ def test_filter_row_url_localstorage_and_sheet():
     assert "Vis 2 tickere" in h and "Nullstill" in h
     assert 'data-g="risiko"' in h and 'data-g="sektor"' in h and 'data-g="bors"' in h and 'data-g="annet"' in h
     assert "Energi (1)" in h and "Ukjent sektor (1)" in h
-    assert "Høy (1)" in h and "Lav (1)" in h and "Ingen risikonivå (0)" in h
+    assert "Høy (1)" in h and "Lav (1)" in h
+    assert "Ingen risikonivå" not in h and "Middels (" not in h
     assert "Oslo (1)" in h and "USA (1)" in h
+    assert "Danmark" not in h and "Sverige" not in h and "Storbritannia" not in h
+    assert "Japan" not in h and "Taiwan" not in h and "Ukjent børs" not in h and "Tyskland" not in h
+    assert "Råvarer" not in h
     assert 'data-total="2"' in h
     assert "signaltool.tickere-filter" in h
     assert "searchParams" in TL.JS and "'risiko'" in TL.JS and "join(',')" in TL.JS
@@ -681,3 +685,73 @@ def test_headless_totals_nullstill_target_and_no_check_on_options(tmp_path):
         pg.close()
         b.close()
 
+
+
+def test_unfiltered_zero_facet_options_omitted():
+    """UxBot 23.11: børs/sektor/risiko med 0 rader i ufiltrert liste vises ikke. Annet beholder 0 (★ Mine)."""
+    h = TL.filter_row({"tickers": [
+        {"ticker": "EQNR.OL", "decision": {"sector": "Energy"}, "_risk": {"level": "Høy", "market": "Oslo", "in_universe": 1}},
+        {"ticker": "AAPL", "decision": {}, "_risk": {"level": "Lav", "market": "US", "in_universe": 1}},
+    ], "date": "2026-11-17"})
+    risiko = _facet_counts(h, "risiko")
+    sektor = _facet_counts(h, "sektor")
+    bors = _facet_counts(h, "bors")
+    annet = _facet_counts(h, "annet")
+    assert risiko == {"hoy": 1, "lav": 1}
+    assert set(sektor) == {"energi", "ukjent-sektor"} and all(n > 0 for n in sektor.values())
+    assert bors == {"oslo": 1, "usa": 1}
+    assert "mine" in annet and annet["mine"] == 0
+    assert all(n > 0 for n in (*risiko.values(), *sektor.values(), *bors.values()))
+
+
+@pytest.mark.skipif(not (shutil.which("google-chrome") or shutil.which("chromium")), reason="ingen headless Chrome")
+def test_headless_zero_from_other_filters_is_dimmed_not_hidden(tmp_path):
+    """0-treff som skyldes andre aktive filtre skal bare tones ned, ikke skjules."""
+    pw = pytest.importorskip("playwright.sync_api")
+    snap = _listed_snap()
+    html = _listed_page(snap)
+    # ufiltrert: ingen middels (utelatt), men lav/hoy/ingen, usa/oslo/tyskland, teknologi finnes
+    risiko = _facet_counts(html, "risiko")
+    assert "middels" not in risiko and risiko["lav"] == 1
+    f = tmp_path / "tickere-dim.html"
+    f.write_text(html)
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome" if shutil.which("google-chrome") else None)
+        pg = b.new_page(viewport={"width": 390, "height": 844})
+        pg.goto(f.as_uri())
+        pg.click("#tf-fbtn")
+        pg.locator('.tf-sheet .tf-opt[data-g="bors"][data-k="oslo"] input').click()
+        got = pg.evaluate("""()=>{
+          const pick=(g,k)=>{
+            const lab=document.querySelector(`.tf-sheet .tf-opt[data-g="${g}"][data-k="${k}"]`);
+            if(!lab) return null;
+            const cs=getComputedStyle(lab);
+            return {present:true, zero:lab.classList.contains('is-zero'),
+                    text:(lab.querySelector('.tf-opt-lab')||{}).textContent||'',
+                    opacity:cs.opacity};
+          };
+          return {
+            lav: pick('risiko','lav'),
+            hoy: pick('risiko','hoy'),
+            ingen: pick('risiko','ingen'),
+            middels: pick('risiko','middels'),
+            teknologi: pick('sektor','teknologi'),
+            energi: pick('sektor','energi'),
+            usa: pick('bors','usa'),
+            danmark: pick('bors','danmark'),
+          };
+        }""")
+        pg.close()
+        b.close()
+    # Lav og Teknologi blir 0 fordi Oslo-filteret ikke treffer AAPL; skal vises, nedtonet
+    assert got["lav"] and got["lav"]["zero"] and "(0)" in got["lav"]["text"]
+    assert float(got["lav"]["opacity"]) < 1
+    assert got["teknologi"] and got["teknologi"]["zero"] and "(0)" in got["teknologi"]["text"]
+    assert float(got["teknologi"]["opacity"]) < 1
+    # Høy og Energi treffer EQNR.OL, ikke nedtonet
+    assert got["hoy"] and not got["hoy"]["zero"] and "(1)" in got["hoy"]["text"]
+    assert got["energi"] and not got["energi"]["zero"] and "(1)" in got["energi"]["text"]
+    # USA finnes fortsatt (facet erstatter børs-valget); Danmark var 0 ufiltrert og skal ikke finnes
+    assert got["usa"] and not got["usa"]["zero"]
+    assert got["middels"] is None
+    assert got["danmark"] is None

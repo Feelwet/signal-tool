@@ -315,9 +315,11 @@ def filter_row(snap: dict) -> str:
     c = _counts(snap)
     n_flag_all = len(EV.red_rows(snap))
     # Annet «Røde flagg»: vis antall i lista; flag_block har fortsatt hele Oslo-settet
-    risiko = _opts("risiko", [(k, lab, c["risiko"][k]) for k, lab in RISIKO_NAV])
-    sektor = _opts("sektor", [(SEKTOR_SLUG[lab], lab, c["sektor"][SEKTOR_SLUG[lab]]) for lab in SEKTOR_NAV])
-    bors = _opts("bors", [(k, lab, c["bors"][k]) for k, lab in BORS_NAV])
+    # UxBot 23.11: vis bare risiko/sektor/børs med minst én rad i den ufiltrerte lista.
+    # Nedtoning (is-zero) gjelder bare når 0 skyldes andre aktive filtre (JS updateOptCounts).
+    risiko = _opts("risiko", [(k, lab, c["risiko"][k]) for k, lab in RISIKO_NAV if c["risiko"][k] > 0])
+    sektor = _opts("sektor", [(SEKTOR_SLUG[lab], lab, c["sektor"][SEKTOR_SLUG[lab]]) for lab in SEKTOR_NAV if c["sektor"][SEKTOR_SLUG[lab]] > 0])
+    bors = _opts("bors", [(k, lab, c["bors"][k]) for k, lab in BORS_NAV if c["bors"][k] > 0])
     annet = _opts("annet", [(k, lab, c["annet"][k]) for k, lab in ANNET_NAV])
     total = listed_count(snap)
     asof = snap.get("_risk_asof") if isinstance(snap.get("_risk_asof"), date) else risk_asof()

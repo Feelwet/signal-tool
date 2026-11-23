@@ -85,7 +85,9 @@ def test_tickerlist_filter_row_and_flag_groups():
     from signaltool import tickerlist as TL
     s = _fsnap()
     fr = TL.filter_row(s)
-    assert [x in fr for x in ("Høy", "Middels", "Lav", "Røde flagg")] == [True] * 4
+    # UxBot 23.11: ingen listede tickere → risiko/sektor/børs uten 0-valg; Annet beholder Røde flagg
+    assert "Røde flagg" in fr
+    assert "Høy" not in fr and "Middels" not in fr and "Lav" not in fr
     assert 'id="tf-fbtn"' in fr and 'id="tf-sheet"' in fr
     fb = TL.flag_block(s)
     assert "Bare Oslo-aksjer er sjekket for røde flagg" in fb and "Z.OL" in fb and "E.OL" in fb  # alle flaggede, også utenfor tickerlisten

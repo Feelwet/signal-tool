@@ -16,7 +16,7 @@ ISO = "2026-11-18T00:57:00+01:00"
 TEXT = "Dataene er ikke oppdatert siden 18.11 kl. 00:57."
 TITLES = (
     "Oversikt", "Trender", "Temaer", "Tickere", "Makro", "Kalender",
-    "Oslo Børs", "Sektorer", "Metode", "Om siden", "Signal-boka", "Nyheter",
+    "Oslo Børs", "Sektorer", "Metode", "Om siden", "Signal-boka",
     "EQNR.OL",
 )
 
@@ -155,3 +155,49 @@ def test_headless_height_44_at_390_and_1280(tmp_path):
         assert abs(g["h"] - 44) < 0.5, (w, g)
         assert g["fs"] == "13px" and g["lh"] == "18px"
         assert g["bl"] == "3px"
+
+
+
+def test_banner_absent_on_nyheter():
+    """UxBot 23.11: varsellinja skal ikke vises på Nyheter (egne 10-min-oppdateringer)."""
+    for generated in (GEN, None):
+        html = _page("Nyheter", generated=generated)
+        assert 'id="stale-line"' not in html
+        assert 'class="stale-line"' not in html
+        assert "Dataene er ikke oppdatert siden" not in html
+    # andre sider beholder linja
+    html = _page("Tickere")
+    assert 'id="stale-line" class="stale-line" hidden' in html
+    assert TEXT in html
+
+
+@pytest.mark.skipif(not (shutil.which("google-chrome") or shutil.which("chromium")), reason="ingen headless Chrome")
+def test_headless_nyheter_has_no_banner_when_stale(tmp_path):
+    pw = pytest.importorskip("playwright.sync_api")
+    html = _page("Nyheter")
+    if "<link rel=\"stylesheet\"" in html:
+        html = html.replace(
+            html[html.find("<link rel=\"stylesheet\""):html.find(">", html.find("<link rel=\"stylesheet\"")) + 1],
+            f"<style>{S.CSS}</style>",
+            1,
+        )
+    f = tmp_path / "nyheter-stale.html"
+    f.write_text(html)
+    start = S.gen_dt(GEN)
+    epoch_ms = int((start + timedelta(hours=37)).timestamp() * 1000)
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome" if shutil.which("google-chrome") else None)
+        out = {}
+        for w in (390, 1280):
+            pg = b.new_page(viewport={"width": w, "height": 844 if w == 390 else 800})
+            pg.add_init_script(f"Date.now=()=>{epoch_ms};")
+            pg.goto(f.as_uri())
+            out[w] = pg.evaluate("""()=>{
+              const el=document.getElementById('stale-line');
+              return {present:!!el, texts:[...document.body.innerText.matchAll(/Dataene er ikke oppdatert/g)].length};
+            }""")
+            pg.close()
+        b.close()
+    for w, g in out.items():
+        assert g["present"] is False, (w, g)
+        assert g["texts"] == 0, (w, g)
