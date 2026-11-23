@@ -1,27 +1,26 @@
 {
- "hentet": "2026-11-23T23:07:01+0100",
+ "hentet": "2026-11-23T23:46:23+0100",
  "dato": "2026-11-23",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (7953) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (2573) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "ok (7000 i 95d-uttrekket)",
-  "Norges Bank": "ok (5)"
+  "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 168
+   "antall": 173
   },
   {
    "tema": "mideast_energy",
-   "antall": 78
+   "antall": 80
   },
   {
    "tema": "risk_off_haven",
-   "antall": 15
+   "antall": 16
   },
   {
    "tema": "shipping_chokepoints",
@@ -33,7 +32,7 @@
   },
   {
    "tema": "food_agri",
-   "antall": 3
+   "antall": 6
   },
   {
    "tema": "elections_political",
@@ -57,6 +56,273 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Costa Rica Fuel Bill Surges 56% to $3.086 Billion in 2026 Amid Oil Price Spike",
+   "url": "https://english.pravda.ru/news/world/174015-costa-rica-fuel-import-bill-56-surge-2026/",
+   "kilde": "GDELT",
+   "domene": "english.pravda.ru",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Israeli diplomat backtracks after implying US soldiers to return after Iran defeated",
+   "url": "https://www.clevelandjewishnews.com/jns/israeli-diplomat-backtracks-after-implying-us-soldiers-to-return-after-iran-defeated/article_d3d60464-3883-5d87-aac8-6d5a99d01b4e.html",
+   "kilde": "GDELT",
+   "domene": "clevelandjewishnews.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Ukraine war expands as Zelenskyy claims sea drone strike in Libya",
+   "url": "https://www.kacu.org/2026-11-23/ukraine-war-expands-as-zelenskyy-claims-sea-drone-strike-in-libya",
+   "kilde": "GDELT",
+   "domene": "kacu.org",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine"
+   ]
+  },
+  {
+   "tittel": "Poland receives NATO early-warning aircraft after Russian missiles cross border",
+   "url": "https://www.nbcnews.com/world/russia/poland-nato-early-warning-aircraft-russia-missiles-cross-border-rcna610957",
+   "kilde": "GDELT",
+   "domene": "nbcnews.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "missile",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Russian Warship Sinks After Suspected Ukrainian Drone Strike in Libya - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241738",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Near Bulgaria: Analyst Attributes 21 Black Sea Ship Attacks to Russia - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241739",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Bulgaria's Defense Minister Urges NATO Support to Counter Black Sea Drone Threat - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241742",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Two Ships Sunk, No Shots Fired: Why Bulgaria Can't Do What Romania Did in the Black Sea - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241743",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "NATO Allies Warned of Possible Russian Nuclear Weapon Deployment in Orbit - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241744",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "russian",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "IBF Extends Black Sea High-Risk Zone to Bulgarian and Romanian Coasts - Novinite.com",
+   "url": "https://www.novinite.com/view_news.php?id=241747",
+   "kilde": "GDELT",
+   "domene": "novinite.com",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
+   "url": "https://www.upr.org/npr-news/2026-11-23/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya",
+   "kilde": "GDELT",
+   "domene": "upr.org",
+   "publisert": "2026-11-23T22:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "'No pullback, push back': India committed to UK trade deal concessions on Scotch, says Commerce Secretary",
+   "url": "http://www.theuknews.com/news/279450937/no-pullback-push-back-india-committed-to-uk-trade-deal-concessions-on-scotch-says-commerce-secretary",
+   "kilde": "GDELT",
+   "domene": "theuknews.com",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "Polish alert says air-defense readiness was raised during Russian attack on Ukraine",
+   "url": "https://cedarnews.net/newstasks/1186878/polish-alert-says-air-defense-readiness-was-raised-during-russian-attack-on-ukraine/",
+   "kilde": "GDELT",
+   "domene": "cedarnews.net",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Russia's war dead: the hidden toll of the Ukraine conflict",
+   "url": "https://freerepublic.com/focus/f-news/4404072/posts",
+   "kilde": "GDELT",
+   "domene": "freerepublic.com",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Ukrainian naval drones strike a new Russian warship in Libya, and other Mideast news",
+   "url": "https://www.channel3000.com/news/ukrainian-naval-drones-strike-a-new-russian-warship-in-libya-and-other-mideast-news/article_1162fbbc-ee3f-5262-9d6b-4069c86d467e.html",
+   "kilde": "GDELT",
+   "domene": "channel3000.com",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Oil prices are lower, with the risk premium built into the market easing further",
+   "url": "https://www.interest.co.nz/currencies/141202/reinstatement-jensen-huang-ceo-nvidia-triggered-sharp-recovery-us-equities",
+   "kilde": "GDELT",
+   "domene": "interest.co.nz",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Not Admitting Ukraine to NATO in 2008 Was a Mistake, Merz Says",
+   "url": "https://www.kyivpost.com/post/90977",
+   "kilde": "GDELT",
+   "domene": "kyivpost.com",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "nato"
+   ]
+  },
+  {
+   "tittel": "Libya's Tripoli Condemns Ukraine's Strikes on Russian Ships",
+   "url": "https://www.kyivpost.com/post/90978",
+   "kilde": "GDELT",
+   "domene": "kyivpost.com",
+   "publisert": "2026-11-23T22:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
   {
    "tittel": "Ukrainian naval drones sank Russia's Merkury warship in Libya, Zelenskyy confirms",
    "url": "https://abc7news.com/story/ukrainian-naval-drones-sank-russias-merkury-warship-libya-zelenskyy-confirms/20070891/",
@@ -237,37 +503,6 @@
    ]
   },
   {
-   "tittel": "Ukrainian naval drones strike a new Russian warship in Libya, and other Mideast news",
-   "url": "https://www.gjsentinel.com/news/us/ukrainian-naval-drones-strike-a-new-russian-warship-in-libya-and-other-mideast-news/article_a77cfc3e-8ecd-5f7a-b1d2-196c98eac03d.html",
-   "kilde": "GDELT",
-   "domene": "gjsentinel.com",
-   "publisert": "2026-11-23T21:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy hails Ukraine's attack on a Russian warship docked at a naval base in Libya",
-   "url": "https://www.wvxu.org/news-from-npr/2026-11-23/zelenskyy-hails-ukraines-attack-on-a-russian-warship-docked-at-a-naval-base-in-libya",
-   "kilde": "GDELT",
-   "domene": "wvxu.org",
-   "publisert": "2026-11-23T21:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "NATO entering Ukraine risks WWIII",
    "url": "http://www.europesun.com/news/279450969/nato-entering-ukraine-risks-wwiii-le-pen",
    "kilde": "GDELT",
@@ -310,21 +545,6 @@
    "matchede_ord": [
     "missile",
     "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine war expands as Zelenskyy claims sea drone strike in Libya",
-   "url": "https://news.wfsu.org/npr-news/2026-11-23/ukraine-war-expands-as-zelenskyy-claims-sea-drone-strike-in-libya",
-   "kilde": "GDELT",
-   "domene": "wfsu.org",
-   "publisert": "2026-11-23T21:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine"
    ]
   },
   {
@@ -386,21 +606,6 @@
    ]
   },
   {
-   "tittel": "Israeli diplomat backtracks after implying US soldiers to return after Iran defeated",
-   "url": "https://www.jns.org/news/u-s-news/israeli-diplomat-backtracks-after-implying-us-soldiers-to-return-after-iran-defeated",
-   "kilde": "GDELT",
-   "domene": "jns.org",
-   "publisert": "2026-11-23T21:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Palestinian critically wounded by Israeli gunfire in Gaza, Al Jazeera reports",
    "url": "https://www.middleeasteye.net/live-blog/live-blog-update/palestinian-critically-wounded-israeli-fires-al-jazeera-reports",
    "kilde": "GDELT",
@@ -447,36 +652,6 @@
    ]
   },
   {
-   "tittel": "Russia has lost astonishing 700K soldiers since start of Ukraine war — 1 in every 200 citizens killed, study finds",
-   "url": "https://nypost.com/2026/11/23/world-news/russia-has-lost-astonishing-700k-soldiers-since-start-of-ukraine-war-1-in-every-200-citizens-killed-study-finds/",
-   "kilde": "GDELT",
-   "domene": "nypost.com",
-   "publisert": "2026-11-23T21:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "NATO to send early-warning system aircraft to Poland after missiles incident",
-   "url": "https://www.dailymaverick.co.za/article/2026-11-23-nato-to-send-early-warning-system-aircraft-to-poland-after-missiles-incident/",
-   "kilde": "GDELT",
-   "domene": "dailymaverick.co.za",
-   "publisert": "2026-11-23T21:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "missile",
-    "nato"
-   ]
-  },
-  {
    "tittel": "Egypt urges completion of Israeli withdrawal from Gaza, deployment of stabilization force",
    "url": "http://www.iraqsun.com/news/279450907/egypt-urges-completion-of-israeli-withdrawal-from-gaza-deployment-of-stabilization-force",
    "kilde": "GDELT",
@@ -489,22 +664,6 @@
    "matchede_ord": [
     "israeli",
     "gaza"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy confirms Ukraine was behind attack that struck Russian warship off Libya",
-   "url": "https://americanpress.com/2026/11/23/zelenskyy-confirms-ukraine-was-behind-attack-that-struck-russian-warship-off-libya/",
-   "kilde": "GDELT",
-   "domene": "americanpress.com",
-   "publisert": "2026-11-23T20:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "ukraine",
-    "russian"
    ]
   },
   {
@@ -535,21 +694,6 @@
    ],
    "matchede_ord": [
     "baltic sea"
-   ]
-  },
-  {
-   "tittel": "Rutte: Ukraine's NATO membership will remain a long-term goal",
-   "url": "https://en.apa.az/europe/rutte-ukraines-nato-membership-will-remain-a-long-term-goal-538083",
-   "kilde": "GDELT",
-   "domene": "en.apa.az",
-   "publisert": "2026-11-23T20:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "nato"
    ]
   },
   {
@@ -592,51 +736,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "Ukraine's Attack on Russian Vessel in Libya Opens New Theater in Broader Confrontation",
-   "url": "https://www.military.com/ukraines-attack-on-russian-vessel-in-libya-opens-new-theater-in-broader-confrontation",
-   "kilde": "GDELT",
-   "domene": "military.com",
-   "publisert": "2026-11-23T20:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Ukraine claims drone strikes on Russian ships off Libya: What do we know? — One News Page",
-   "url": "https://www.onenewspage.com/story/zelenskyy-says-ukraine-behind-attacks-on-russian-ships-near-libya-f72d3853/",
-   "kilde": "GDELT",
-   "domene": "onenewspage.com",
-   "publisert": "2026-11-23T20:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "More than 700,000 Russian Soldiers Killed in Ukraine War, New Analysis Finds",
-   "url": "https://www.rferl.org/a/russia-ukraine-war-casualty-estimate-killed/33904373.html",
-   "kilde": "GDELT",
-   "domene": "rferl.org",
-   "publisert": "2026-11-23T20:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
    ]
   },
   {
@@ -796,36 +895,6 @@
    ]
   },
   {
-   "tittel": "Israeli strike kills three in car distributing aid in Gaza, witnesses say",
-   "url": "https://www.independent.co.uk/news/world/middle-east/world-central-kitchen-gaza-strike-b3089195.html",
-   "kilde": "GDELT",
-   "domene": "independent.co.uk",
-   "publisert": "2026-11-23T18:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iranian Official Denies Iraq's Shalamcheh Border Closure - Islamic Invitation Turkey",
-   "url": "https://www.islamicinvitationturkey.com/iranian-official-denies-iraqs-shalamcheh-border-closure/",
-   "kilde": "GDELT",
-   "domene": "islamicinvitationturkey.com",
-   "publisert": "2026-11-23T18:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iranian",
-    "iraq"
-   ]
-  },
-  {
    "tittel": "Rethinking Limited Nuclear War",
    "url": "https://warontherocks.com/episode/thinkingtheunthinkable/48738/rethinking-limited-nuclear-war/",
    "kilde": "GDELT",
@@ -953,20 +1022,6 @@
    ]
   },
   {
-   "tittel": "'No pullback, push back': India committed to UK trade deal concessions on Scotch, says Commerce Secretary",
-   "url": "https://aninews.in/news/national/general-news/no-pullback-push-back-india-committed-to-uk-trade-deal-concessions-on-scotch-says-commerce-secretary20261123214509/",
-   "kilde": "GDELT",
-   "domene": "aninews.in",
-   "publisert": "2026-11-23T17:00:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
    "tittel": "World War Z - Florida Episode Review",
    "url": "https://www.thexboxhub.com/world-war-z-florida-episode-review/",
    "kilde": "GDELT",
@@ -1058,20 +1113,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "Bulgaria's Defense Minister Urges NATO Support to Counter Black Sea Drone Threat - Novinite.com",
-   "url": "https://www.novinite.com/articles/241742/Bulgaria",
-   "kilde": "GDELT",
-   "domene": "novinite.com",
-   "publisert": "2026-11-23T11:00:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "black sea"
    ]
   },
   {
