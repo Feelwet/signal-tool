@@ -101,3 +101,4 @@ kontroll_tilfeldig_v1,order,2026-11-11-0099,2026-11-11,2026-11-11,SCANA.OL,sell,
 kontroll_tilfeldig_v1,fill,2026-11-11-0099,2026-11-16,2026-11-11,SCANA.OL,sell,rødt flagg,2026-11-12,1.43,NOK,1.0,33735.646259,48241.97,96.48,0.0,-1545.09,,,,,,,,,,
 kontroll_tilfeldig_v1,order,2026-11-17-0101,2026-11-17,2026-11-17,NCLH,buy,tilfeldig seed=2270386781,2026-11-16,,USD,,,,,,,2.5,pead,Høy,2026-11-13,Consumer Cyclical,hold,0.1745,S&P 500 (^GSPC),7416.58984375,
 kontroll_tilfeldig_v1,fill,2026-11-17-0101,2026-11-18,2026-11-17,NCLH,buy,tilfeldig seed=2270386781,2026-11-17,17.61,USD,9.633859634399414,285.30196,48402.12,96.8,,,2.5,pead,Høy,2026-11-13,Consumer Cyclical,hold,0.1745,S&P 500 (^GSPC),7416.58984375,7340.52978515625
+kontroll_tilfeldig_v1,order,2026-11-23-0103,2026-11-23,2026-11-23,AKRBP.OL,sell,rødt flagg,2026-11-23,,NOK,,,,,,,,,,,,,,,,
