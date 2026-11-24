@@ -69,4 +69,11 @@ date,ticker,code,old_score,new_score
 2026-11-23,SNTIA.OL,,2.69,
 2026-11-23,TECH.OL,out_of_top60,2.5,0.5
 2026-11-23,YETI,out_of_top60,5.05,0.5
-2026-11-24,BORR.OL,out_of_top60,2.25,1.0
+2026-11-24,EWG,out_of_top60,,0.62
+2026-11-24,FEZ,out_of_top60,,0.62
+2026-11-24,GDX,out_of_top60,,0.28
+2026-11-24,MU,out_of_top60,1.54,1.0
+2026-11-24,REMX,out_of_top60,,1.16
+2026-11-24,SPY,out_of_top60,,0.62
+2026-11-24,TEL.OL,out_of_top60,2.0,1.0
+2026-11-24,XLE,out_of_top60,,0.68

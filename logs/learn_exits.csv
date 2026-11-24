@@ -614,3 +614,6 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-23,YETI,2026-11-18,cut60,131,0.5,,,,45272747732,false
 2026-11-24,BORR.OL,2026-11-23,cut60,86,1.0,,,,45318763003,true
 2026-11-24,STRC,2026-11-23,for lite data,19,2.96,,,,45318763003,true
+2026-11-24,MU,2026-11-23,cut60,84,1.0,,,,45431128308,true
+2026-11-24,STRC,2026-11-23,for lite data,33,2.06,,,,45431128308,true
+2026-11-24,TEL.OL,2026-11-23,cut60,85,1.0,,,,45431128308,true
