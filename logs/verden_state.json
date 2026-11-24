@@ -1,6 +1,202 @@
 {
 "saker": [
 {
+"tittel": "RBI cautions NBFCs over falling gold prices and rising loan-to-value ratios",
+"url": "https://economictimes.indiatimes.com/industry/banking/finance/banking/rbi-cautions-nbfcs-over-falling-gold-prices-and-rising-loan-to-value-ratios/articleshow/136113465.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Russian warship hit by suspected Ukrainian drone at Benghazi naval base, Libyan officials say – Ghanamma.com",
+"url": "https://www.ghanamma.com/2026/11/23/russian-warship-hit-by-suspected-ukrainian-drone-at-benghazi-naval-base-libyan-officials-say-2/",
+"kilde": "GDELT",
+"domene": "ghanamma.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Zelensky Warns of New Russian Strikes, Seeks Patriot Missiles",
+"url": "https://www.kyivpost.com/post/90982",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Ukraine Confronts Russia at UN Over Civilian Strikes, Ceasefire Rejection",
+"url": "https://www.kyivpost.com/post/90983",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Russian Drone Violates Polish Airspace During Attack on Ukraine",
+"url": "https://www.kyivpost.com/post/90985",
+"kilde": "GDELT",
+"domene": "kyivpost.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Pentagon sharply rebukes Canada over defense spending and the F-35 fighter jet review",
+"url": "https://www.mainlinemedianews.com/2026/11/23/canada-us-defense/",
+"kilde": "GDELT",
+"domene": "mainlinemedianews.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "South Korea says several Russian aircraft flew into its air defense zone",
+"url": "https://www.news-gazette.com/news/nation-world/south-korea-says-several-russian-aircraft-flew-into-its-air-defense-zone/article_b6ba0e79-96fc-5eef-a22f-092d60983f15.html",
+"kilde": "GDELT",
+"domene": "news-gazette.com",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Russian incursions into NATO territory are increasing",
+"url": "https://www.publicradioeast.org/2026-11-23/russian-incursions-into-nato-territory-are-increasing",
+"kilde": "GDELT",
+"domene": "publicradioeast.org",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "Research finds more than 99 percent of Gaza contaminated by Israeli attacks",
+"url": "https://www.rnz.co.nz/news/world/2761306/research-finds-more-than-99-percent-of-gaza-contaminated-by-israeli-attacks",
+"kilde": "GDELT",
+"domene": "rnz.co.nz",
+"publisert": "2026-11-24T03:00:00Z"
+},
+{
+"tittel": "India calls for end to attacks on commercial shipping, safe navigation in Black Sea at UNSC amid Russia-Ukraine conflict",
+"url": "http://www.heraldglobe.com/news/279451261/india-calls-for-end-to-attacks-on-commercial-shipping-safe-navigation-in-black-sea-at-unsc-amid-russia-ukraine-conflict",
+"kilde": "GDELT",
+"domene": "heraldglobe.com",
+"publisert": "2026-11-24T02:45:00Z"
+},
+{
+"tittel": "U.S. adds Megaspeed to trade blacklist over export control concerns",
+"url": "https://www.cnbc.com/2026/11/24/us-adds-megaspeed-to-trade-blacklist-over-export-control-concerns-.html",
+"kilde": "GDELT",
+"domene": "cnbc.com",
+"publisert": "2026-11-24T02:45:00Z"
+},
+{
+"tittel": "Inside the Ukrainian attack that sank Russian warship docked in Libya",
+"url": "https://www.livemint.com/global/inside-the-ukrainian-attack-that-sank-russian-warship-docked-in-libya-11795484879158.html",
+"kilde": "GDELT",
+"domene": "livemint.com",
+"publisert": "2026-11-24T02:45:00Z"
+},
+{
+"tittel": "Netanyahu's Push for Renewed US-Israeli Attacks on Iran Faces Internal Opposition: Israeli Media",
+"url": "https://news.antiwar.com/2026/11/23/netanyahus-push-for-renewed-us-israeli-attacks-on-iran-faces-internal-opposition-israeli-media/",
+"kilde": "GDELT",
+"domene": "antiwar.com",
+"publisert": "2026-11-24T02:30:00Z"
+},
+{
+"tittel": "IRGC says three oil tankers hit naval mines in Strait of Hormuz",
+"url": "https://www.arabtimesonline.com/news/irgc-says-three-oil-tankers-hit-naval-mines-in-strait-of-hormuz/",
+"kilde": "GDELT",
+"domene": "arabtimesonline.com",
+"publisert": "2026-11-24T02:30:00Z"
+},
+{
+"tittel": "Myanmar genocide judgment may bolster Gaza case against Israel",
+"url": "https://www.asiaone.com/asia/myanmar-genocide-judgment-may-bolster-gaza-case-against-israel",
+"kilde": "GDELT",
+"domene": "asiaone.com",
+"publisert": "2026-11-24T02:30:00Z"
+},
+{
+"tittel": "South Korea says several Russian aircraft flew into its air defence zone",
+"url": "https://www.asiaone.com/asia/south-korea-says-several-russian-aircraft-flew-its-air-defence-zone",
+"kilde": "GDELT",
+"domene": "asiaone.com",
+"publisert": "2026-11-24T02:30:00Z"
+},
+{
+"tittel": "How Ukraine Sank Russia's Merkury Warship in Libya",
+"url": "https://article.wn.com/view/2026/11/24/How_Ukraine_Sank_Russia_s_Merkury_Warship_in_Libya/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "More than 700,000 Russian soldiers have been killed in Ukraine: Analysis",
+"url": "https://article.wn.com/view/2026/11/24/More_than_700000_Russian_soldiers_have_been_killed_in_Ukrain/",
+"kilde": "GDELT",
+"domene": "wn.com",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "Israeli airstrike kills three Palestinians in southern Gaza",
+"url": "https://news.az/news/israeli-airstrike-kills-three-palestinians-in-southern-gaza",
+"kilde": "GDELT",
+"domene": "news.az",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "How Ukraine destroyed one of Russia's newest warships",
+"url": "https://www.cbc.ca/player/play/video/9.7433139",
+"kilde": "GDELT",
+"domene": "cbc.ca",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "Iran believed to have launched dozens of cyber attacks and bomb threats against nearly 50 tankers as Tehran ramps up terror plots",
+"url": "https://www.dailymail.com/news/article-16316883/iran-tankers-cyberattack-suspect-fed.html",
+"kilde": "GDELT",
+"domene": "dailymail.com",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "Zelenskyy hails Ukraine's attack on a Russian warship",
+"url": "https://www.ironmountaindailynews.com/news/2026/11/zelenskyy-hails-ukraines-attack-on-a-russian-warship/",
+"kilde": "GDELT",
+"domene": "ironmountaindailynews.com",
+"publisert": "2026-11-24T02:15:00Z"
+},
+{
+"tittel": "NATO witnesses a surge of airspace violations by Russia as Moscow seeks to test alliance",
+"url": "https://theconversation.com/nato-witnesses-a-surge-of-airspace-violations-by-russia-as-moscow-seeks-to-test-alliance-297361",
+"kilde": "GDELT",
+"domene": "theconversation.com",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
+"tittel": "Israel leadership rivals clash over Iran threat",
+"url": "https://timesofindia.indiatimes.com/world/middle-east/israel-leadership-rivals-clash-over-iran-threat/articleshow/136116802.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
+"tittel": "99 Percent of Gaza Is Polluted With Toxins Due to Israel's Genocide, Report Says",
+"url": "https://truthout.org/articles/99-percent-of-gaza-is-polluted-with-toxins-due-to-israels-genocide-report-says/",
+"kilde": "GDELT",
+"domene": "truthout.org",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
+"tittel": "Russia planning launch of nuclear weapon into space, according to German media",
+"url": "https://www.abc.net.au/news/2026-11-24/naus_nrnuclearrussiasm_2411/107420012",
+"kilde": "GDELT",
+"domene": "abc.net.au",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
+"tittel": "Taiwan Trade Deal Could Help Canada Limit China's Economic Leverage – China Money Network",
+"url": "https://www.chinamoneynetwork.com/2026/11/24/taiwan-trade-deal-could-help-canada-limit-chinas-economic-leverage",
+"kilde": "GDELT",
+"domene": "chinamoneynetwork.com",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
+"tittel": "South Korea says Russian aircraft entered air defence zone, fighter jets scrambled",
+"url": "https://www.hindustantimes.com/world-news/south-korea-says-russian-aircraft-entered-air-defence-zone-fighter-jets-scrambled-101795481448953.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-24T02:00:00Z"
+},
+{
 "tittel": "Is It Time for Kyiv to Compromise With Russia Over the War in Ukraine?",
 "url": "https://foreignpolicy.com/2026/11/23/oleksiy-goncharenko-interview-ukraine-russia-war-compromise-negotiations-trump-zelensky/",
 "kilde": "GDELT",
@@ -1943,204 +2139,8 @@
 "kilde": "GDELT",
 "domene": "theguardian.com",
 "publisert": "2026-11-23T09:30:00Z"
-},
-{
-"tittel": "The real-life War divorce. Why the wife of a Russian oligarch - and Putin's ice hockey buddy - is fighting for £2billion in Britain's biggest ever divorce battle",
-"url": "https://www.dailymail.com/news/article-16311251/War-divorce-wife-Russian-oligarch-Putins-Britains-battle.html",
-"kilde": "GDELT",
-"domene": "dailymail.com",
-"publisert": "2026-11-23T02:00:00Z"
-},
-{
-"tittel": "Taiwan startup investment contracts as AI, semiconductors attract capital",
-"url": "https://www.digitimes.com/news/a20261120PD246/investment-taiwan-startup-venture-capital-semiconductors.html",
-"kilde": "GDELT",
-"domene": "digitimes.com",
-"publisert": "2026-11-23T02:00:00Z"
-},
-{
-"tittel": "Ukraine war spilling into NATO territory",
-"url": "https://www.wxxinews.org/npr-news/2026-11-22/ukraine-war-spilling-into-nato-territory",
-"kilde": "GDELT",
-"domene": "wxxinews.org",
-"publisert": "2026-11-23T02:00:00Z"
-},
-{
-"tittel": "WTI crude oil prices may trend lower",
-"url": "https://www.businesstimes.com.sg/companies-markets/wti-crude-oil-prices-may-trend-lower",
-"kilde": "GDELT",
-"domene": "businesstimes.com.sg",
-"publisert": "2026-11-23T01:45:00Z"
-},
-{
-"tittel": "Iran war live updates: Tankers set ablaze in Hormuz as IRGC warns of unrest threat – Ya Libnan",
-"url": "https://yalibnan.com/2026/11/23/iran-war-live-updates-tankers-set-ablaze-in-hormuz-as-irgc-warns-of-unrest-threat/",
-"kilde": "GDELT",
-"domene": "yalibnan.com",
-"publisert": "2026-11-23T01:45:00Z"
-},
-{
-"tittel": "Russian warship hit by suspected Ukrainian drone at Benghazi naval base, Libyan officials say – Ya Libnan",
-"url": "https://yalibnan.com/2026/11/23/russian-warship-hit-by-suspected-ukrainian-drone-at-benghazi-naval-base-libyan-officials-say/",
-"kilde": "GDELT",
-"domene": "yalibnan.com",
-"publisert": "2026-11-23T01:45:00Z"
-},
-{
-"tittel": "India's ties with Russia an 'added value', can help push for end to Ukraine war: Dutch FM Tom Berendsen",
-"url": "https://economictimes.indiatimes.com/news/india/indias-ties-with-russia-an-added-value-can-help-push-for-end-to-ukraine-war-dutch-fm-tom-berendsen/articleshow/136086152.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "US Iran war: Trump  'inclined' to resume conflict on Tehran if no deal reached by New Year",
-"url": "https://economictimes.indiatimes.com/news/international/world-news/us-iran-war-trump-says-inclined-to-resume-conflict-on-tehran-if-no-deal-reached-by-new-year/articleshow/136086184.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "EU and Indonesia Sign Trade Deal After 10 Years of Negotiations",
-"url": "https://english.kontan.co.id/news/eu-and-indonesia-sign-trade-deal-after-10-years-of-negotiations",
-"kilde": "GDELT",
-"domene": "kontan.co.id",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "Trump dares Iran to breach US port blockade as Tehran reportedly readies 14 oil tankers",
-"url": "https://freerepublic.com/focus/f-news/4403980/posts",
-"kilde": "GDELT",
-"domene": "freerepublic.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "Israel's latest attacks test the world's willingness to protect Gaza",
-"url": "https://www.crikey.com.au/2026/11/23/israel-gaza-ground-offensive-yellow-line-trump-board-peace/",
-"kilde": "GDELT",
-"domene": "crikey.com.au",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "World News: Finland and Estonia help douse fire on Russian ship hit by Ukraine",
-"url": "https://www.gdnonline.com:443/Details/1413627/Finland-and-Estonia-help-douse-fire-on-Russian-ship-hit-by-Ukraine",
-"kilde": "GDELT",
-"domene": "gdnonline.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "NATO's Rutte Vows to Defend 'Every Inch' of Poland After Russian Missile Incursion",
-"url": "https://www.latintimes.com/nato-defend-poland-russian-missiles-drone-border-601695",
-"kilde": "GDELT",
-"domene": "latintimes.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "Suspected Ukrainian sea drones hit Russian warship at Benghazi naval base, Libyan officials say",
-"url": "https://www.thehindu.com/news/international/suspected-ukrainian-sea-drones-hit-russian-warship-at-benghazi-naval-base-libyan-officials-say/article71733178.ece",
-"kilde": "GDELT",
-"domene": "thehindu.com",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "Gaza has turned into a 'toxic wasteland' three years after the start of Israel's war",
-"url": "https://www.thejournal.ie/gaza-toxic-wasteland-report-7232658-Nov2026/",
-"kilde": "GDELT",
-"domene": "thejournal.ie",
-"publisert": "2026-11-23T01:30:00Z"
-},
-{
-"tittel": "Oil price cooling flattens bond curve, shifts RBI rate expectations",
-"url": "https://economictimes.indiatimes.com/markets/bonds/oil-price-cooling-flattens-bond-curve-shifts-rbi-rate-expectations/articleshow/136085868.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-23T01:15:00Z"
-},
-{
-"tittel": "Gaza is now a 'toxic wasteland' after Israel's 'environmental war crimes' with fears for human survival",
-"url": "https://www.aol.co.uk/articles/gaza-now-toxic-wasteland-israels-000539000.html",
-"kilde": "GDELT",
-"domene": "aol.co.uk",
-"publisert": "2026-11-23T01:15:00Z"
-},
-{
-"tittel": "Anthony Albanese freezes $25 PBS prescription price cap, says extension will be good for inflation",
-"url": "https://www.afr.com/politics/federal/242m-prescription-price-cap-freeze-good-for-inflation-albanese-20261123-p61gds",
-"kilde": "GDELT",
-"domene": "afr.com",
-"publisert": "2026-11-23T01:00:00Z"
-},
-{
-"tittel": "Gaza is now a 'toxic wasteland' after Israel's 'environmental war crimes'",
-"url": "https://www.mirror.co.uk/news/world-news/gaza-toxic-wasteland-israel-palestine-37900916",
-"kilde": "GDELT",
-"domene": "mirror.co.uk",
-"publisert": "2026-11-23T01:00:00Z"
-},
-{
-"tittel": "Even the robots hate Israel: 'Death to Israel' chant in Tehran",
-"url": "https://www.israelnationalnews.com/news/436863",
-"kilde": "GDELT",
-"domene": "israelnationalnews.com",
-"publisert": "2026-11-23T00:45:00Z"
-},
-{
-"tittel": "Government intervention 'a drop in the ocean' ahead of energy price cap rise",
-"url": "https://www.standard.co.uk/business/business-news/ofgem-government-simon-francis-experts-b1305875.html",
-"kilde": "GDELT",
-"domene": "standard.co.uk",
-"publisert": "2026-11-23T00:45:00Z"
-},
-{
-"tittel": "Boy, 7, rescued from rubble hours after Russian strike in Ukraine, rescuers say",
-"url": "https://www.bbc.com/news/articles/cqdr15l32d3go",
-"kilde": "GDELT",
-"domene": "bbc.com",
-"publisert": "2026-11-23T00:30:00Z"
-},
-{
-"tittel": "IRGC Navy says two oil supertankers hit naval mines in Strait of Hormuz, issues warning to shipping firms",
-"url": "https://www.presstv.co.uk/Detail/2026/11/22/781364/two-oil-supertankers-explode-in-strait-of-hormuz-irgc-navy-warns-shipping-companies",
-"kilde": "GDELT",
-"domene": "presstv.co.uk",
-"publisert": "2026-11-23T00:30:00Z"
-},
-{
-"tittel": "After murder plot at Danish concert, kicking out Russian diplomats may be the only language Putin understands",
-"url": "https://euobserver.com/250498/after-murder-plot-at-danish-concert-kicking-out-russian-diplomats-may-be-the-only-language-putin-understands/",
-"kilde": "GDELT",
-"domene": "euobserver.com",
-"publisert": "2026-11-23T00:15:00Z"
-},
-{
-"tittel": "Watch: Russian warship hit by suspected Ukrainian drones at Benghazi naval base, bursts into flames",
-"url": "https://timesofindia.indiatimes.com/world/rest-of-world/watch-russian-warship-hit-by-suspected-ukrainian-drones-at-benghazi-naval-base-bursts-into-flames/articleshow/136085577.cms",
-"kilde": "GDELT",
-"domene": "indiatimes.com",
-"publisert": "2026-11-23T00:15:00Z"
-},
-{
-"tittel": "Kratikal Tech's Subsidiary Secures ₹3.16 Crore Cybersecurity Assignment in Saudi Arabia",
-"url": "https://www.equitybulls.com/news/379419/kratikal-tech-s-subsidiary-secures-3-16-crore",
-"kilde": "GDELT",
-"domene": "equitybulls.com",
-"publisert": "2026-11-23T00:15:00Z"
-},
-{
-"tittel": "Ukraine says Russian strikes kill 6 in Kyiv region",
-"url": "https://www.freemalaysiatoday.com/category/world/2026/11/23/ukraine-says-russian-strikes-kill-6-in-kyiv-region",
-"kilde": "GDELT",
-"domene": "freemalaysiatoday.com",
-"publisert": "2026-11-23T00:15:00Z"
-},
-{
-"tittel": "IDF's intelligence officials warned Netanyahu against unilateral Israeli attack on Iran: Report",
-"url": "https://www.hindustantimes.com/world-news/idfs-intelligence-officials-warned-netanyahu-against-unilateral-israeli-attack-on-iran-report-101795386925125.html",
-"kilde": "GDELT",
-"domene": "hindustantimes.com",
-"publisert": "2026-11-23T00:15:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-23T23:00:00Z",
-"hentet": "2026-11-23T22:53:30Z"
+"gkg_siste_fil": "2026-11-24T03:45:00Z",
+"hentet": "2026-11-24T03:39:08Z"
 }
