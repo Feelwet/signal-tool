@@ -77,3 +77,9 @@ date,ticker,code,old_score,new_score
 2026-11-24,SPY,out_of_top60,,0.62
 2026-11-24,TEL.OL,out_of_top60,2.0,1.0
 2026-11-24,XLE,out_of_top60,,0.68
+2026-11-25,ASML,out_of_top60,1.66,1.54
+2026-11-25,BNS,out_of_top60,2.07,1.55
+2026-11-25,DLTR,,2.0,
+2026-11-25,NOD.OL,moved_to_theme,2.29,1.04
+2026-11-25,NOHAL.OL,out_of_top60,2.32,1.0
+2026-11-25,TXN,out_of_top60,2.32,1.0
