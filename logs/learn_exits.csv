@@ -633,3 +633,7 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-25,STRC,2026-11-24,cut60,139,0.5,,,,45647553890,true
 2026-11-25,TGS.OL,2026-11-24,cut60,72,1.5,,,,45647553890,true
 2026-11-25,WY,2026-11-24,"lik score, kutt 60",61,2.0,3,1,ATEA.OL:på:2|AFL:på:1|BEN:på:1|CEG:på:1|CLX:på:1|DASH:på:1|DLTR:på:1|GILD:på:1|HII:på:1|HUM:på:1|KIM:på:1|MRK:på:1|NRG:på:1|PWR:på:1|REGN:på:1|SPOL.OL:på:1|SWK:på:1|TPR:på:1|TXT:på:1|VRT:på:1|WEC:på:1,45647553890,true
+2026-11-26,BHE,2026-11-25,cut60,89,1.0,,,,45732618740,true
+2026-11-26,ENDUR.OL,2026-11-25,cut60,66,1.5,,,,45732618740,true
+2026-11-26,GTES,2026-11-25,cut60,65,1.57,,,,45732618740,true
+2026-11-26,WEC,2026-11-25,"lik score, kutt 60",62,2.0,3,1,ATEA.OL:på:2|AFL:på:1|BEN:på:1|CEG:på:1|CLX:på:1|DASH:på:1|DLTR:på:1|GILD:på:1|HAS:på:1|HII:på:1|HUM:på:1|KIM:på:1|MRK:på:1|NRG:på:1|PWR:på:1|REGN:på:1|SPOL.OL:på:1|SWK:på:1|TPR:på:1|TXT:på:1|VRT:på:1,45732618740,true

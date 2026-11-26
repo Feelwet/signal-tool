@@ -735,6 +735,13 @@
 "kind": "sentralbank"
 },
 {
+"date": "2026-12-10",
+"time": "08:00",
+"source": "SSB (estimert)",
+"title": "Konsumprisindeksen (KPI)",
+"kind": "makro"
+},
+{
 "date": "2026-12-17",
 "time": "14:15",
 "source": "ECB",
