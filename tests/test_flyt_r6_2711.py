@@ -255,7 +255,10 @@ def test_js_and_python_same_counts_official_and_fixture(official_preview, r6_pre
         for n in ov["land_synlige"]:
             lab = selskap_count_label(ov["counts"][n["id"]])
             assert any(n["navn"] in t and lab in t for t in texts), (n, texts)
-        assert any("1 ticker" in t for t in texts)  # vare-etikett uendret
+        # runde 7: vareetiketter viser bare navnet, uten ticker-telling
+        vare_texts = [t for t in texts if t.startswith("Råaluminium") or t.startswith("Bauksitt") or t.startswith("Alumina") or t.startswith("Halvfabrikata")]
+        assert vare_texts, texts
+        assert all("ticker" not in t.lower() for t in vare_texts), vare_texts
         assert all("1 tickere" not in t for t in texts)
         # Qatar-panel
         page.locator('.flyt-lab').filter(has_text="Qatar").first.click()

@@ -276,9 +276,10 @@ def test_r5_playwright_a_and_r1_to_r7(official_preview, fixture_preview):
         eu = [L for L in meas["lands"] if "EU-27" in L["t"] or "EU27" in L["t"] or L["id"] == "land:EU-27" or "EU" in L["t"]]
         # EU-27 kan ligge i +n andre; da er den ikke en egen etikett, men «andre» har samme x
         blob = " | ".join(page.evaluate("() => [...document.querySelectorAll('.flyt-lab,.flyt-col-h')].map(e => e.innerText)"))
-        # bøyning R5
-        assert "1 ticker" in blob or re.search(r"\b1 ticker\b", blob)
+        # bøyning: land bruker «1 selskap»; varer har ingen ticker-telling i oversikten (runde 7)
+        assert "1 selskap" in blob
         assert "1 tickere" not in blob
+        assert "1 ticker" not in blob
         ovp = _overlap(page)
         assert ovp["overlap"] == 0, ovp["pairs"]
         page.screenshot(path=str(SHOTS / "r5_1280_oversikt.png"), full_page=False)

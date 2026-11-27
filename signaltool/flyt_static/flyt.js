@@ -1243,8 +1243,9 @@ function placeLabels(visu, pos, hitN) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = (n.type === 'land' ? selskapCountLabel : tickerCountLabel)(counts.get(n.id));
-    else {
+    if (visu.overview) {
+      if (n.type === 'land' && counts.has(n.id)) vv.textContent = selskapCountLabel(counts.get(n.id));
+    } else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
     }
@@ -1396,8 +1397,9 @@ function placeLabelsProjected(visu, pos, hitN, t) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = (n.type === 'land' ? selskapCountLabel : tickerCountLabel)(counts.get(n.id));
-    else {
+    if (visu.overview) {
+      if (n.type === 'land' && counts.has(n.id)) vv.textContent = selskapCountLabel(counts.get(n.id));
+    } else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
     }
