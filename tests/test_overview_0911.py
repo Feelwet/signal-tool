@@ -73,6 +73,9 @@ def test_compact_table_columns_top6_and_vis_alle():
     # bruker/AnalBot 09.11: rødt merke «⚑ 2» (var «⚑ 2 flagg» som ren tekst)
     assert '<td class="fl"><span class="sr-fl fl-red">⚑ 2</span></td>' in a and 'Uvanlig kursbevegelse</span>' in a and 'class="sgc"' in a
     assert '<span class="ov-ret tup">5d +13.6%</span>' in a and '<span class="ov-ret tdn">20d -5.0%</span>' in a
+    assert '<th scope="col">Kurs 5d / 20d</th>' in t and '<span class="rtl">Kurs 5d / 20d </span>' in a
+    assert ".ov-ct .rt .rtl{display:none}" in OV.CSS
+    assert ".ov-ct .rt .rtl{display:inline;font-size:13px;line-height:18px;color:#94a3b8}" in OV.CSS.split("@media(max-width:699px)", 1)[1]
     assert '<td class="fl n0">ikke sjekket</td>' in t and '<td class="fl n0">✔ 0</td>' in t and "⚑ bare EBIT" in t
     assert '<span class="ov-ret">5d –</span>' in t   # manglende tall vises som –
     assert ".ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}" in OV.CSS and ".ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}" in OV.CSS

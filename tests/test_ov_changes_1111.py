@@ -1,4 +1,4 @@
-"""UxBot/AnalBot 11.11: endringsstripe, «N dager på rad», ut-grunner (logs/list_exits.csv), perioder og graflinjer."""
+"""UxBot/AnalBot 11.11: endringsstripe, «På lista siden DD.MM» (UxBot 27.11), ut-grunner, perioder og graflinjer."""
 import copy
 import csv
 import json
@@ -128,12 +128,13 @@ def test_days_counter_known_example(tmp_path):
     rows = [("2026-11-05", "A"), ("2026-11-06", "A"), ("2026-11-07", "A"), ("2026-11-08", "A"), ("2026-11-09", "A"), ("2026-11-10", "A"),
             ("2026-11-06", "B"), ("2026-11-07", "B"), ("2026-11-09", "B"), ("2026-11-10", "B"),   # mangler 08.11 -> rekken brytes
             ("2026-11-10", "N"), ("2026-11-09", "OUT"), ("2026-11-05", "Z")]
-    dmap, full = C.days_ctx(_write(tmp_path, rows))
-    assert dmap == {"A": 6, "B": 2, "N": 1} and full == {"A": "2026-11-05"}
-    assert C.days_cell("A", dmap, full) == '<td class="dg"><span class="dgv">fra 05.11</span></td>'   # sammenhengende siden første loggdato
-    assert C.days_cell("B", dmap, full) == '<td class="dg"><span class="dgv">2 dager på rad</span></td>'
-    assert C.days_cell("N", dmap, full) == '<td class="dg"><span class="dgv">1 dag på rad</span><span class="dg-ny">Ny</span></td>'
-    assert C.days_cell("OUT", dmap, full) == '<td class="dg"><span class="dgv">–</span></td>'
+    dmap, since = C.days_ctx(_write(tmp_path, rows))
+    assert dmap == {"A": 6, "B": 2, "N": 1}
+    assert since == {"A": "2026-11-05", "B": "2026-11-09", "N": "2026-11-10"}
+    assert C.days_cell("A", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 05.11</span></td>'
+    assert C.days_cell("B", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 09.11</span></td>'   # rekken startet 09.11, ikke 06.11
+    assert C.days_cell("N", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 10.11</span><span class="dg-ny">Ny</span></td>'
+    assert C.days_cell("OUT", dmap, since) == '<td class="dg"><span class="dgv">–</span></td>'
 
 
 def test_side_log_tickers_are_on_list_from_side_start(tmp_path):
@@ -157,8 +158,8 @@ def test_candidate_table_has_days_column(tmp_path, monkeypatch):
     t = OV.candidates_table_html(s)
     assert '<th scope="col" class="dg-h">Dager på lista</th></tr></thead>' in t
     rows = re.findall(r"<tr data-nf=.*?</tr>", t)
-    assert '<span class="dgv">2 dager på rad</span></td></tr>' in rows[0] and "dg-ny" not in rows[0]
-    assert '<span class="dgv">1 dag på rad</span><span class="dg-ny">Ny</span></td></tr>' in rows[1]
+    assert '<span class="dgv">På lista siden 09.11</span></td></tr>' in rows[0] and "dg-ny" not in rows[0]
+    assert '<span class="dgv">På lista siden 10.11</span><span class="dg-ny">Ny</span></td></tr>' in rows[1]
     assert "sortable" not in t and "aria-sort" not in t
     assert ".ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8" in C.CSS and ".ov-ct th.dg-h,.ov-ct td.dg{text-align:right" in C.CSS
     assert '"nm nm nm dg" "rk fl sg sg"' in OV.CSS and ".ov-ct td.dg{grid-area:dg;justify-self:end;" in C.CSS   # < 600: navnelinja
@@ -336,8 +337,8 @@ def test_b_gap_in_side_log_is_one_period_with_data_missing(tmp_path):
     assert C.periods(by)["ETF"] == [["2026-10-29", None]]
     assert C.gaps(p, ep, None) == {"ETF": ["2026-10-30", "2026-11-01", "2026-11-02"]}
     assert C.gap_text(C.gaps(p, ep, None)["ETF"], sorted(by)) == "data mangler 30.10, 01.11–02.11"
-    dmap, full = C.days_ctx(p, ep, None)
-    assert dmap["ETF"] == 6 and full["ETF"] == "2026-10-29"       # hullet er ikke brudd
+    dmap, since = C.days_ctx(p, ep, None)
+    assert dmap["ETF"] == 6 and since["ETF"] == "2026-10-29"       # hullet er ikke brudd
     snap = {"date": "2026-11-03", "tickers": [{"ticker": "A", "score": 1.0}, {"ticker": "ETF", "score": 1.0}]}
     assert C.exit_rows(snap, snap["tickers"], p, entry_path=ep, members_path=None) == []   # ingen utgang for hullet
     assert "ETF" not in C.strip_html(None, p, tmp_path / "x.csv", None)   # ingen Ut/Inn for hullet i stripen
@@ -400,7 +401,7 @@ def _mobile_rule(css, sel):
 def test_mobile_days_on_name_line_not_signal_row():
     areas = re.search(r'\.ov-ct tr\{display:grid;grid-template-columns:([^;]+);grid-template-areas:((?:"[^"]+" ?)+);', OV.CSS)
     rows = re.findall(r'"([^"]+)"', areas.group(2))
-    assert rows[0].split() == ["nm", "nm", "nm", "dg"]            # «n dager på rad»/«Ny» på navnelinja, høyre
+    assert rows[0].split() == ["nm", "nm", "nm", "dg"]            # «På lista siden DD.MM»/«Ny» på navnelinja, høyre
     assert "dg" not in rows[1].split() and rows[1].split()[-2:] == ["sg", "sg"]   # linje 2: risiko · flagg · signal, full bredde
     assert "minmax(0,1fr)" in areas.group(1)                       # navnet tar resten og brytes
     m = C.CSS.split("@media(max-width:699px){", 1)[1]

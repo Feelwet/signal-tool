@@ -266,7 +266,7 @@ CSS += """
 .ov-ct .fl{white-space:nowrap;font-size:13px;line-height:18px}.ov-ct .fl.n0{color:#94a3b8}
 .ov-ct .sgc{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:1px 8px;border-radius:999px;border:1px solid #333b47;background:var(--pill,#1c2430);font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ov-ct .sc{white-space:nowrap;font-variant-numeric:tabular-nums;color:#94a3b8}.ov-ct .sc .sl,.ov-ct .sc .snt{display:none}
-.ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
+.ov-ct .rt{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;line-height:18px}.ov-ct .rt .rtl{display:none}.ov-ct .ov-ret{display:inline-block;padding:0 4px;border-radius:4px}.ov-ct .ov-ret.tup{background:rgba(63,185,80,.12)}.ov-ct .ov-ret.tdn{background:rgba(248,81,73,.12)}
 /* bruker 09.11: 5d/20d grønn ved positiv, rød ved negativ (historisk kursendring); 0/mangler grå. Grønn aldri på status/score/kandidat */
 /* UxBot 09.11: ↗ går til TradingView (annen URL enn navnet) -> 44x44 trykkflate, negativ marg holder raden lav */
 .ov-page a.tv,.ov-ct a.tv{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin:-14px -12px -14px -10px;box-sizing:border-box}
@@ -285,6 +285,7 @@ CSS += """
 .ov-ct td.nmc{grid-area:nm}.ov-ct td.rkc{grid-area:rk}.ov-ct td.fl{grid-area:fl}.ov-ct td.sgt{grid-area:sg}.ov-ct td.sc{grid-area:sc}.ov-ct td.rt{grid-area:rt;justify-self:end}
 .ov-ct .tn .nm{display:inline;font-size:15px;line-height:20px}.ov-ct .tn .tk{display:inline;margin-left:6px}
 .ov-ct .sc{font-size:13px;line-height:18px}.ov-ct .sc .sl,.ov-ct .sc .snt{display:inline}
+.ov-ct .rt .rtl{display:inline;font-size:13px;line-height:18px;color:#94a3b8}
 }
 """
 
@@ -330,6 +331,7 @@ def go_html(snap: dict | None = None) -> str:
 GO_NF_SUB = "Filter: 0 røde flagg (bare Oslo) · Vis alle"
 
 
+RET_HEAD = "Kurs 5d / 20d"   # UxBot 27.11: bare etikett, samme tall
 SCORE_TIP_TEXT = "Rangering, ikke testet"
 THEME_SUB = "Temaets score · " + SCORE_TIP_TEXT   # UxBot 09.11: temaets score, ikke kandidatens; AnalBots ordlyd intakt
 
@@ -371,7 +373,7 @@ def candidates_table_html(snap: dict) -> str:
     from . import site_risk as RK
     tk = candidates(snap)
     checked, fm = _flag_state(snap)
-    dmap, full = CHG.days_ctx()   # UxBot 11.11: «N dager på rad» fra logs/categories.csv
+    dmap, since = CHG.days_ctx()   # UxBot 27.11: «På lista siden DD.MM» fra samme rekke som N
     rows = []
     for i, e in enumerate(tk):
         t = e["ticker"]
@@ -382,10 +384,10 @@ def candidates_table_html(snap: dict) -> str:
                     f'<td class="nmc">{NM.cell(t, "ticker/" + _slug(t) + ".html", e.get("name"))}</td>'
                     f'<td class="rkc">{RK.chip(e.get("_risk"), small=True, ticker=e["ticker"])}</td>{fl}<td class="sgt">{_main_signal(e)}</td>'
                     f'<td class="sc"><span class="sl">Score </span><span class="sv">{_nb(e["score"], 1)}</span><span class="snt"> · ikke testet</span></td>'
-                    f'<td class="rt">{rt}</td>{CHG.days_cell(t, dmap, full)}</tr>')
+                    f'<td class="rt"><span class="rtl">{E(RET_HEAD)} </span>{rt}</td>{CHG.days_cell(t, dmap, since)}</tr>')
     more = (f'<button type="button" class="ov-more" aria-expanded="false">Vis alle ({len(tk)})</button>' if len(tk) > TOP_N else "")
     head = (f'<thead><tr><th scope="col">Aksje</th><th scope="col">Risiko</th><th scope="col">Røde flagg</th><th scope="col">Hovedsignal</th>'
-            f'<th scope="col">{E(SCORE_HEAD)}</th><th scope="col">5d / 20d</th><th scope="col" class="dg-h">{E(CHG.DAYS_HEAD)}</th></tr></thead>')
+            f'<th scope="col">{E(SCORE_HEAD)}</th><th scope="col">{E(RET_HEAD)}</th><th scope="col" class="dg-h">{E(CHG.DAYS_HEAD)}</th></tr></thead>')
     fbar = (f'<p class="ov-fbar" hidden>Filter: 0 røde flagg · <button type="button" class="ov-clear">Vis alle</button>'
             f'<span class="mut">{E(NO_FLAG_NOTE)}</span></p>')
     empty = '<p class="ov-none mut" hidden>Ingen kandidater uten røde flagg nå.</p>'

@@ -1,11 +1,11 @@
-"""Kandidatlista over tid (UxBot/AnalBot 11.11): endringsstripe på Oversikt, «N dager på rad» i kandidattabellen,
-ut-grunner (logs/list_exits.csv), inn/ut-perioder (data/list_periods.json) og periodelinjene under kursgrafen.
+"""Kandidatlista over tid (UxBot/AnalBot 11.11, etikett UxBot 27.11): endringsstripe på Oversikt, «På lista siden DD.MM»
+i kandidattabellen, ut-grunner (logs/list_exits.csv), inn/ut-perioder (data/list_periods.json) og periodelinjene under kursgrafen.
 
 Kilde: logs/categories.csv. «Lista» = kandidatlista = loggens rader uten kategori «tema» (temakart-tickere står utenfor
 kandidatlista, jf. tickersiden) + innkurs-sideloggen for ikke-loggbare kandidater (ETF-er o.l.), som i since.py. «Kjøring» = en dato i loggen (helger med); stripen sammenligner siste mot forrige kjøring.
 - Stripe: inn = siste − forrige, ut = forrige − siste, står fortsatt = siste ∩ forrige (inn + står fortsatt = dagens antall).
-- Dager: sammenhengende kjøringer bakover t.o.m. siste kjøring. Har tickeren stått på lista i hver kjøring siden første
-  loggdato: «fra DD.MM» (første loggdato, lest fra loggen). Ikke på lista i siste kjøring: «–».
+- Dager: sammenhengende kjøringer bakover t.o.m. siste kjøring. Cellen viser «På lista siden DD.MM», der DD.MM er første
+  dato i den rekka (samme rekke som N teller). Ikke på lista i siste kjøring: «–».
 - Perioder: [inn, ut|None]; ut = første kjøring tickeren manglet (hver manglende kjøring bryter perioden).
 - Ut-grunner logges fra 11.11 (record_exits) med kode below_threshold / out_of_top60 / no_price / delisted / moved_to_theme. Historiske
   utfall har ingen kode og vises som «grunn ikke logget». Ingen kode -> aldri en grunn; «rødt flagg» er aldri en grunn.
@@ -431,23 +431,27 @@ def strip_check(html: str) -> dict:
             "text": f"Siden {m.group(3)}: {inn} inn · {ut} ut · {stay} står fortsatt", "rows": rows, "last": m.group(1), "prev": m.group(2)}
 
 
-def days_cell(t: str, dmap: dict[str, int], full: set | None = None) -> str:
-    """«N dager på rad», «fra DD.MM» (sammenhengende siden første dato i kilden), «–» (ikke på lista). Grå, ingen sortering."""
+def days_cell(t: str, dmap: dict[str, int], since: dict | None = None) -> str:
+    """«På lista siden DD.MM» fra første dato i den sammenhengende rekka som slutter i siste kjøring; «–» ellers.
+
+    Ny-merket vises fortsatt når N=1. Grå, ingen sortering. Ingen ny typografi.
+    """
     n = dmap.get(t)
     if n is None:
         return '<td class="dg"><span class="dgv">–</span></td>'
-    if full and t in full:
-        return f'<td class="dg"><span class="dgv">fra {_dm(full[t])}</span></td>'
+    d = (since or {}).get(t)
+    if not d:   # since skal følge dmap; mangler dato vises «–», aldri oppdiktet
+        return '<td class="dg"><span class="dgv">–</span></td>'
     ny = '<span class="dg-ny">Ny</span>' if n == 1 else ""
-    return f'<td class="dg"><span class="dgv">{n} {"dag" if n == 1 else "dager"} på rad</span>{ny}</td>'
+    return f'<td class="dg"><span class="dgv">På lista siden {_dm(d)}</span>{ny}</td>'
 
 
 def days_ctx(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> tuple[dict, dict]:
-    """(dager, {ticker: første dato} for tickere som har stått i hver kjøring siden første dato i sin kilde). Hull er ikke brudd."""
-    by, _, sf = _model(path, entry_path, members_path)
+    """(dager, {ticker: første dato i den sammenhengende rekka som slutter i siste kjøring}). Hull er ikke brudd."""
+    by, _, _ = _model(path, entry_path, members_path)
     dmap, ds = days(by), sorted(by)
-    full = {t: sf[t] for t, n in dmap.items() if t in sf and n >= len([d for d in ds if d >= sf[t]])}
-    return dmap, full
+    since = {t: ds[-n] for t, n in dmap.items()}
+    return dmap, since
 
 
 # ---------------------------------------------------------------------------------------------------------- tickergraf
