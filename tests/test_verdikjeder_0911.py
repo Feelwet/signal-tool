@@ -272,7 +272,7 @@ def test_laering_fwd_not_used_by_scoring():
     assert users <= {'close_valid.py', 'since.py', 'closedbars.py'}   # 11.11: revisjonsloggen, Yahoo-innkursen og closedbars bruker day_closed
     # closedbars (AnalBot 11.11) brukes av papirbøkene, GS-indeksen, learn_raw og Siden-kursen – aldri av scoring/kategorier/kandidater
     cb = {p.name for p in Path('signaltool').rglob('*.py') if re.search(r'closedbars', p.read_text(errors='ignore'))} - {'closedbars.py'}
-    assert cb <= {'portfolio.py', 'learnloop.py', 'gs_index.py', 'site.py', 'intraday_fills.py', 'r20_close.py'}   # r20_close (17.11): siste lukkede bar før kjøringens start, ikke scoring
+    assert cb <= {'portfolio.py', 'learnloop.py', 'gs_index.py', 'site.py', 'intraday_fills.py', 'r20_close.py', 'shared_closes.py'}   # r20_close (17.11): siste lukkede bar før kjøringens start, ikke scoring. shared_closes (27.11): felles lukket serie for siden og learn_raw, ikke scoring
     sn = Path('signaltool/since.py').read_text()
     body = sn.split('def yahoo_entry', 1)[1].split('\ndef ', 1)[0]
     assert sn.count('laering_fwd') == body.count('laering_fwd') and sn.count('displayprices') == body.count('displayprices')
