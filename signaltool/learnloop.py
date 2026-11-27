@@ -197,11 +197,14 @@ def record(snap: dict, ranked: list[dict], today: str | None = None, frames: dic
     want = tick + idx_t + [t for t in prev_t if t not in tick]
     px = _frame_closes(frames)
     missing = [t for t in want if t not in px or not px[t]]
-    if missing:
+    if missing and frames is None:
+        # Bare når ingen felles rammer er gitt (eldre kall/tester). Etter den felles repairen lastes det ikke ned her.
         try:
             px.update(_closes(missing))
         except Exception as ex:
             log.warning("learnloop prices: %s", ex)
+    elif missing:
+        log.warning("learnloop: %d tickere uten ramme, ingen egen nedlasting: %s", len(missing), missing[:20])
     # AnalBot 11.11: close, close_date og r5/r20/r60 bare fra LUKKEDE barer (dagens bar droppes før stengetid + 30 min i
     # børsens tidssone, closedbars). Historiske rader (før 11.11) er ikke rettet bakover: de kan ha intradag-bar som siste kurs.
     # AnalBot 17.11: kursene tas fra samme rammer som snapshot (markets.collect / freshness.repair_lagging, inkl. meta-sluttkurs),

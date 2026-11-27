@@ -720,17 +720,30 @@ def _prep(snap: dict) -> dict:
     # AnalBot 11.11 (bindende): innkurs = Yahoos sluttkurs for price_date (dagshistorikken, samme serie som grafen), bare når
     # stengetid + 30 min har passert i børsens tidssone. Aldri loggede/intradag-verdier.
     _ys = [t for t, x in sin.items() if (x or {}).get("src") == "yahoo"]
-    if _ys:
-        try:
-            _px = PC.download([e["ticker"] for e in snap.get("tickers", [])])
-        except Exception as ex:
-            print(f"yahoo entry: {ex}"); _px = {}
+    _px = {}
+    if _ys or snap.get("_frames") or snap.get("shared_closes"):
+        if snap.get("_frames") is not None:
+            from . import shared_closes as SC
+            _px = SC.as_pairs(snap["_frames"])
+        elif not snap.get("shared_closes"):
+            try:
+                _px = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+            except Exception as ex:
+                print(f"yahoo entry: {ex}"); _px = {}
         for t in _ys:
             SN.yahoo_entry(sin[t], t, _px.get(t))
     for t in list(sin):
         SN.price_hold(sin[t], t)
     snap["_sin"] = sin
-    idx = _index_closes()
+    if snap.get("_frames") is not None:
+        from . import shared_closes as SC
+        from .since import BENCH as _BENCH
+        _all = SC.index_closes(snap["_frames"])
+        idx = {k: _all[k] for k in {v[0] for v in _BENCH.values()} if k in _all}
+        if not idx:
+            idx = _index_closes()
+    else:
+        idx = _index_closes()
     recs = AN.load(universe=[e["ticker"] for e in snap.get("tickers", [])])
     _gen = _gen_time(snap)
     for e in snap.get("tickers", []):
@@ -739,7 +752,7 @@ def _prep(snap: dict) -> dict:
         e["_since"] = sin.get(e["ticker"])
         e["_regime"] = regime.for_ticker(snap, e["ticker"])
         st = e.get("stats") or {}
-        _lc, _ld = _last_closed(e, _px if _ys else None, _gen)   # AnalBot 11.11: siste LUKKEDE bar (stengetid + 30), aldri intradag
+        _lc, _ld = _last_closed(e, _px or None, _gen)   # AnalBot 11.11/27.11: siste LUKKEDE bar fra snap-stats eller felles serie, ingen egen nedlasting
         e["_ret"] = None if e.get("unranked") else SN.ret(e["_since"], _lc, _ld, idx, e["ticker"], str(snap.get("date") or "") or None)
         if e.get("unranked") and e["_since"] and not e["_since"].get("uncertain"):
             e["_since"] = {"since": e["_since"]["since"]}   # «Ikke rangert»: bare datoen, ingen tall
@@ -766,18 +779,15 @@ def _gen_time(snap: dict):
 
 
 def _last_closed(e: dict, px: dict | None = None, gen=None):
-    """(kurs, dato) for siste lukkede bar til Siden-avkastningen: snapshotets bar bare hvis stengetid + 30 min hadde passert DA
-    snapshotet hentet kursen (`gen`), ellers siste lukkede bar i Yahoo-dagshistorikken (samme serie som grafen, hentet nå).
-    Ingen lukket bar: (None, None) – ingen avkastning."""
+    """(kurs, dato) for siste lukkede bar til Siden-avkastningen: snapshotets bar hvis den er lukket ved `gen`,
+    eller hvis den kommer fra den felles lukkede serien (shared_closed). Ellers siste lukkede bar i oppgitt serie
+    (`px`, samme tabell som learn_raw). Ingen egen nedlasting. Ingen lukket bar: (None, None)."""
     from . import closedbars as CB
     st = e.get("stats") or {}
-    if st.get("close") and gen is not None and CB.ok(e["ticker"], st.get("last_date"), gen):
+    if st.get("close") and st.get("last_date") and gen is not None and (
+        CB.ok(e["ticker"], st.get("last_date"), gen) or st.get("shared_closed")
+    ):
         return st.get("close"), st.get("last_date")
-    if px is None:
-        try:
-            px = PC.download([e["ticker"]])
-        except Exception:
-            px = {}
     return CB.last((px or {}).get(e["ticker"]) or [], e["ticker"])
 
 
@@ -793,10 +803,16 @@ def _entry_check(snap):
           and (e.get("_since") or {}).get("src") != "yahoo"]   # Yahoo-innkurs er selve sluttkursen: ingenting å sammenligne
     if not tk:
         return
-    try:
-        pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
-    except Exception as ex:
-        print(f"entry check: {ex}"); return
+    if snap.get("_frames") is not None:
+        from . import shared_closes as SC
+        pxs = SC.as_pairs(snap["_frames"])
+    elif snap.get("shared_closes"):
+        return
+    else:
+        try:
+            pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+        except Exception as ex:
+            print(f"entry check: {ex}"); return
     for e in tk:
         s = e["_since"]
         y = dict((d, v) for d, v in (pxs.get(e["ticker"]) or []) if v is not None).get(s["price_date"])
@@ -811,9 +827,21 @@ def _factor_fix(snap):
     tk = [e for e in snap.get("tickers", []) if e.get("_since") and e["_since"].get("price") and e["_since"].get("src") != "yahoo"]
     if not tk:
         return
-    pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
+    if snap.get("_frames") is not None:
+        from . import shared_closes as SC
+        pxs = SC.as_pairs(snap["_frames"])
+    elif snap.get("shared_closes"):
+        return
+    else:
+        pxs = PC.download([e["ticker"] for e in snap.get("tickers", [])])
     rows = SN.load()
-    idx = _index_closes()
+    if snap.get("_frames") is not None:
+        from . import shared_closes as SC
+        from .since import BENCH as _BENCH
+        _all = SC.index_closes(snap["_frames"])
+        idx = {k: _all[k] for k in {v[0] for v in _BENCH.values()} if k in _all} or _index_closes()
+    else:
+        idx = _index_closes()
     flags = []
     for e in tk:
         s, t = e["_since"], e["ticker"]

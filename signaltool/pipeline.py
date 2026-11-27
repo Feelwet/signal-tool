@@ -235,8 +235,9 @@ def run(fast: bool = False) -> dict:
         status["News RSS"] = f"FAILED: {_err(ex)}"
 
     # ---------- Markets ----------
-    watch = all_watch_tickers() + ["SPY"]
-    mstats, mdata = S("Prices (yfinance)", lambda: markets.collect(watch), (E(), {}))
+    from .since import BENCH as _BENCH
+    watch = list(dict.fromkeys(all_watch_tickers() + ["SPY"] + [v[0] for v in _BENCH.values()]))
+    mstats, mdata = S("Prices (yfinance)", lambda: markets.collect(watch, all_frames=True), (E(), {}))
 
     # ---------- Google Trends ----------
     if fast:
@@ -494,9 +495,11 @@ def run(fast: bool = False) -> dict:
     # prices for discovered tickers
     extra = [t for t in cand if t not in mstats.index]
     if extra:
-        es, ed, _ = markets.collect(extra)
+        es, ed, _ = markets.collect(extra, all_frames=True)
         if not es.empty:
             mstats = pd.concat([mstats, es])
+        if ed:
+            mdata.update(ed)   # AnalBot 27.11: samme rammer som snap-stats, også for oppdagede tickere
     for t, e in cand.items():
         if t in mstats.index:
             st = mstats.loc[t]
@@ -551,10 +554,25 @@ def run(fast: bool = False) -> dict:
     # GS-indeksen (AnalBot 26.10): regnes på nytt fra loggen hver natt -> logs/gs_index.csv; skjult på siden til 60 handelsdager
     from . import gs_index
     gs_index.run(status)
+    # AnalBot 27.11: én felles repair (bare lukkede barer) FØR learnloop.record og site.build.
+    # Etter repair oppdateres snap-stats fra den felles lukkede serien; learnloop laster ikke ned selv.
+    _closes_now = datetime.now()
+    try:
+        from zoneinfo import ZoneInfo as _TZ
+        _closes_now = datetime.now(_TZ("Europe/Oslo"))
+    except Exception:
+        pass
+    try:
+        from . import shared_closes as SC
+        mdata = SC.prepare(snap, mdata if isinstance(mdata, dict) else {}, now=_closes_now)
+        status["Felles kurstabell"] = f"ok ({sum(1 for e in snap.get('tickers') or [] if (e.get('stats') or {}).get('shared_closed'))} tickere, lukket serie)"
+    except Exception as ex:
+        log.exception("shared closes failed")
+        status["Felles kurstabell"] = f"FAILED: {_err(ex)}"
     # Læringsløkka (rådata, privat i logs/) + risikonivå (ukentlig, cache i data/) – feiler aldri kjøringen
     try:
         from . import learnloop
-        n = learnloop.record(snap, ranked, frames=mdata)
+        n = learnloop.record(snap, ranked, frames=mdata, now=_closes_now)
         status["Læringsløkke (rådata)"] = f"ok ({n['raw']} rader, {n['exits']} ut, {n['flags']} flagg)"
     except Exception as ex:
         log.exception("learnloop failed")
@@ -667,6 +685,9 @@ def run(fast: bool = False) -> dict:
     snap["runtime_s"] = round(time.time() - t0)
     (SNAP_DIR / f"{snap['date']}.json").write_text(json.dumps(snap, indent=1, default=str))
     (SNAP_DIR / "latest.json").write_text(json.dumps(snap, indent=1, default=str))
+    # Rammer holdes bare i minnet til site.build i samme prosess; de skrives ikke til snapshot-JSON.
+    if isinstance(mdata, dict):
+        snap["_frames"] = mdata
     return snap
 
 

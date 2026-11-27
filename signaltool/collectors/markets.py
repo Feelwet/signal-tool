@@ -93,7 +93,7 @@ def ticker_stats(df: pd.DataFrame) -> dict:
     return out
 
 
-def collect(tickers: list[str]) -> tuple[pd.DataFrame, dict[str, pd.DataFrame], str]:
+def collect(tickers: list[str], all_frames: bool = False) -> tuple[pd.DataFrame, dict[str, pd.DataFrame], str]:
     try:
         short: dict = {}
         data = download(tickers, short=short)
@@ -104,7 +104,8 @@ def collect(tickers: list[str]) -> tuple[pd.DataFrame, dict[str, pd.DataFrame], 
     missing = sorted(set(tickers) - set(data) - set(short))
     from ..freshness import summary
     msg = f"ok ({len(data)}/{len(tickers)} tickers)" + (f"; missing {missing}" if missing else "") + summary(LAST_FRESH)
-    return pd.DataFrame(stats).T, data, msg
+    frames = {**data, **short} if all_frames else data
+    return pd.DataFrame(stats).T, frames, msg
 
 
 def earnings_calendar(tickers: list[str], days_ahead=21) -> tuple[list[dict], str]:

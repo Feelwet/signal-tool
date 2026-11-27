@@ -128,7 +128,7 @@ def test_site_return_uses_last_closed_bar():
     e2 = {"ticker": "VRT", "stats": {"close": 180.0, "last_date": "2026-11-09"}}
     assert _last_closed(e2, {}, gen) == (180.0, "2026-11-09")     # US 09.11 var lukket da snapshotet ble hentet
     assert _last_closed(e2, {}, None) == (None, None)            # ukjent hentetid: aldri snapshotets kurs
-    assert "_last_closed(e, _px if _ys else None, _gen)" in Path("signaltool/site.py").read_text()
+    assert "_last_closed(e, _px or None, _gen)" in Path("signaltool/site.py").read_text()
 
 
 def test_gs_index_drops_intraday_logged_prices():
