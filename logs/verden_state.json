@@ -1,6 +1,230 @@
 {
 "saker": [
 {
+"tittel": "Spain to vote in snap election on Nov 29 amid housing crisis, immigration debate; far-right Vox eyes power",
+"url": "http://www.caribbeanherald.com/news/279467979/spain-to-vote-in-snap-election-on-nov-29-amid-housing-crisis-immigration-debate-far-right-vox-eyes-power",
+"kilde": "GDELT",
+"domene": "caribbeanherald.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Pakistan, Turkiye and Saudi Arabia hold Makkah alliance meeting, condemn Houthi attacks",
+"url": "https://bdnews24.com/world/sresia1jyr",
+"kilde": "GDELT",
+"domene": "bdnews24.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Ukrainian military strikes plant producing fuel for Iskander missiles",
+"url": "https://en.apa.az/cis-countries/ukrainian-military-strikes-plant-producing-fuel-for-iskander-missiles-538994",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Ukraine proposes ceasefire in Black Sea, awaits Russia's response",
+"url": "https://en.apa.az/europe/ukraine-proposes-ceasefire-in-black-sea-awaits-russias-response-539010",
+"kilde": "GDELT",
+"domene": "en.apa.az",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "UPDATE: Four Palestinians killed, several others injured in Israeli attacks across Gaza",
+"url": "https://english.wafa.ps/Pages/Details/177357",
+"kilde": "GDELT",
+"domene": "english.wafa.ps",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Pakistan, Turkey pledge to support Saudi Arabia against Houthi attacks under defense pact",
+"url": "https://krcgtv.com/news/nation-world/pakistan-turkey-pledge-to-support-saudi-arabia-against-houthi-attacks-under-defense-pact",
+"kilde": "GDELT",
+"domene": "krcgtv.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Zelenskyy urges US to pressure Putin, questions Trump's reference to Putin as a 'friend'",
+"url": "https://krcgtv.com/news/nation-world/zelenskyy-urges-us-to-pressure-putin-questions-trumps-reference-to-putin-as-a-friend",
+"kilde": "GDELT",
+"domene": "krcgtv.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "OPEC+ Faces Growing Pressure As Iraq Pushes for Higher Quota",
+"url": "https://oilprice.com/Latest-Energy-News/World-News/OPEC-Faces-Growing-Pressure-As-Iraq-Pushes-for-Higher-Quota.html",
+"kilde": "GDELT",
+"domene": "oilprice.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "U.S. Encouraged Iraq and Venezuela to Leave OPEC, Sources Say",
+"url": "https://oilprice.com/Latest-Energy-News/World-News/US-Pushed-Iraq-and-Venezuela-to-Consider-Quitting-OPEC-Sources-Say.html",
+"kilde": "GDELT",
+"domene": "oilprice.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Zelensky faults Trump for calling Putin his 'friend'",
+"url": "https://punchng.com/zelensky-faults-trump-for-calling-putin-his-friend/",
+"kilde": "GDELT",
+"domene": "punchng.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Novak: Not heard Iraq, Venezuela could quit OPEC",
+"url": "https://www.azernews.az/region/268252.html",
+"kilde": "GDELT",
+"domene": "azernews.az",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "IT, bank heavyweights drag markets down 1% amid rising crude oil prices",
+"url": "https://www.business-standard.com/markets/news/it-bank-heavyweights-drag-markets-down-1-amid-rising-crude-oil-prices-126112701207_1.html",
+"kilde": "GDELT",
+"domene": "business-standard.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Ukraine submits Black Sea truce offer, waits for Russian response: Minister",
+"url": "https://www.business-standard.com/world-news/ukraine-submits-black-sea-truce-offer-waits-for-russian-response-minister-126112701458_1.html",
+"kilde": "GDELT",
+"domene": "business-standard.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Zelenskyy criticizes Trump for cozying up to Putin as EU kicks Ukraine funding down the road",
+"url": "https://www.cinaradio.com/2026/11/27/zelenskyy-criticizes-trump-for-cozying-up-to-putin-as-eu-kicks-ukraine-funding-down-the-road/",
+"kilde": "GDELT",
+"domene": "cinaradio.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Oil prices are again rising - here's why",
+"url": "https://www.cp24.com/news/world/2026/11/27/oil-prices-are-again-rising-heres-why/",
+"kilde": "GDELT",
+"domene": "cp24.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+"url": "https://www.echopress.com/news/national/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade",
+"kilde": "GDELT",
+"domene": "echopress.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Trump stands by calling Putin his 'friend' despite backlash from Zelensky: 'I want to make a deal'",
+"url": "https://www.hindustantimes.com/world-news/us-news/trump-stands-by-calling-putin-his-friend-despite-backlash-from-zelensky-i-want-to-make-a-deal-101795801908648.html",
+"kilde": "GDELT",
+"domene": "hindustantimes.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Cumbrian farmers cautiously welcome UK-EU food trade deal",
+"url": "https://www.in-cumbria.com/news/26763155.cumbrian-farmers-cautiously-welcome-uk-eu-food-trade-deal/",
+"kilde": "GDELT",
+"domene": "in-cumbria.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Why Trump's trade war may benefit Canada in the long run | News",
+"url": "https://www.thedailynewsonline.com/news/why-trump-s-trade-war-may-benefit-canada-in-the-long-run/article_14fd7ee3-2e34-4130-b2f0-368024e17b86.html",
+"kilde": "GDELT",
+"domene": "thedailynewsonline.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "India Says US Trade Deal Is Near Amid Ongoing Tariff Talks",
+"url": "https://www.theepochtimes.com/world/india-says-us-trade-deal-is-near-amid-ongoing-tariff-talks-6130096",
+"kilde": "GDELT",
+"domene": "theepochtimes.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "IRANIAN TERROR THREAT: Security Officials Warn Tehran Is Pushing Kidnappings And Car Bombs Against Israel",
+"url": "https://www.theyeshivaworld.com/news/israel-news/2629221/iranian-terror-threat-security-officials-warn-tehran-is-pushing-kidnappings-and-car-bombs-against-israel.html",
+"kilde": "GDELT",
+"domene": "theyeshivaworld.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "North Korea's Kim vows to build more nuclear weapons after ignoring Trump's overture",
+"url": "https://www.tpr.org/news/2026-11-27/north-koreas-kim-vows-to-build-more-nuclear-weapons-after-ignoring-trumps-overture",
+"kilde": "GDELT",
+"domene": "tpr.org",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Mendocino County declares state of emergency amid latest storms",
+"url": "https://www.willitsnews.com/2026/11/27/mendocino-county-declares-state-of-emergency-amid-latest-storms/",
+"kilde": "GDELT",
+"domene": "willitsnews.com",
+"publisert": "2026-11-27T19:00:00Z"
+},
+{
+"tittel": "Russia Extends Jet Fuel Export Ban As Ukrainian Drone Barrage Batters Refineries",
+"url": "http://www.zerohedge.com/energy/russia-extends-jet-fuel-export-ban-ukrainian-drone-barrage-batters-refineries",
+"kilde": "GDELT",
+"domene": "zerohedge.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Ukraine urges countries to follow Canada's lead in barring Russian athletes",
+"url": "https://panow.com/2026/11/27/ukraine-urges-countries-to-follow-canadas-lead-in-barring-russian-athletes-2/",
+"kilde": "GDELT",
+"domene": "panow.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Zelensky Likens Putin 'Friend' Talk to Hitler",
+"url": "https://politicalwire.com/2026/11/27/zelensky-likens-putin-friend-talk-to-hitler/",
+"kilde": "GDELT",
+"domene": "politicalwire.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Stock Market This Week: Sensex, Nifty Snap Mid-Week Recovery as Brent Crude Tops $97 – The Indian Awaaz",
+"url": "https://theindianawaaz.com/stock-market-this-week-why-sensex-lost-580-pts-despite-strong-fii-inflows-and-defence-rally/",
+"kilde": "GDELT",
+"domene": "theindianawaaz.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Zelenskyy warns Black Sea export disruptions threaten global food supplies – The Indian Awaaz",
+"url": "https://theindianawaaz.com/zelenskyy-warns-black-sea-export-disruptions-threaten-global-food-supplies/",
+"kilde": "GDELT",
+"domene": "theindianawaaz.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Houthi attacks on Saudi Arabia increase with strikes in Riyadh – The New Statesman :: Ghana Oldest Mainstream Newspaper since 1949",
+"url": "https://thestatesmanonline.com/houthi-attacks-on-saudi-arabia-increase-with-strikes-in-riyadh/",
+"kilde": "GDELT",
+"domene": "thestatesmanonline.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Arab News | US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+"url": "https://www.arabnews.com/middle-east/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade-3014303",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Ukraine urges countries to follow Canada's lead in barring Russian athletes – Brandon Sun",
+"url": "https://www.brandonsun.com/national/2026/11/27/ukraine-urges-countries-to-follow-canadas-lead-in-barring-russian-athletes",
+"kilde": "GDELT",
+"domene": "brandonsun.com",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
+"tittel": "Trump's Thanksgiving Fighter Jet Question Gets an Unexpected Reply From an F-16 Pilot in Saudi Arabia",
+"url": "https://www.ibtimes.co.uk/air-force-pilot-picks-f16-over-f22-f35-trump-1835287",
+"kilde": "GDELT",
+"domene": "ibtimes.co.uk",
+"publisert": "2026-11-27T18:45:00Z"
+},
+{
 "tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
 "url": "http://www.shanghaisun.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
 "kilde": "GDELT",
@@ -190,13 +414,6 @@
 "publisert": "2026-11-27T17:45:00Z"
 },
 {
-"tittel": "Spain to vote in snap election on Nov 29 amid housing crisis, immigration debate; far-right Vox eyes power",
-"url": "https://aninews.in/news/world/europe/spain-to-vote-in-snap-election-on-nov-29-amid-housing-crisis-immigration-debate-far-right-vox-eyes-power20261127225356/",
-"kilde": "GDELT",
-"domene": "aninews.in",
-"publisert": "2026-11-27T17:45:00Z"
-},
-{
 "tittel": "Palestinians in Gaza and the West Bank Want Israel to Disappear",
 "url": "https://www.algemeiner.com/2026/11/27/palestinians-gaza-west-bank-want-israel-disappear/",
 "kilde": "GDELT",
@@ -292,13 +509,6 @@
 "url": "https://www.wsbradio.com/news/world/pakistan-set-host/WQIIFTN6SAYZ3OTX3TB6V6R7PU/",
 "kilde": "GDELT",
 "domene": "wsbradio.com",
-"publisert": "2026-11-27T17:15:00Z"
-},
-{
-"tittel": "Russia Extends Jet Fuel Export Ban As Ukrainian Drone Barrage Batters Refineries",
-"url": "https://www.zerohedge.com/energy/russia-extends-jet-fuel-export-ban-ukrainian-drone-barrage-batters-refineries",
-"kilde": "GDELT",
-"domene": "zerohedge.com",
 "publisert": "2026-11-27T17:15:00Z"
 },
 {
@@ -726,13 +936,6 @@
 "url": "https://www.irishmirror.ie/news/world-news/state-emergency-declared-after-storm-37922449",
 "kilde": "GDELT",
 "domene": "irishmirror.ie",
-"publisert": "2026-11-27T15:15:00Z"
-},
-{
-"tittel": "North Korea's Kim Vows to Build More Nuclear Weapons After Ignoring Trump's Overture",
-"url": "https://www.military.com/north-koreas-kim-vows-to-build-more-nuclear-weapons-after-ignoring-trumps-overture",
-"kilde": "GDELT",
-"domene": "military.com",
 "publisert": "2026-11-27T15:15:00Z"
 },
 {
@@ -2415,6 +2618,6 @@
 "publisert": "2026-11-24T19:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-27T18:30:00Z",
-"hentet": "2026-11-27T18:31:42Z"
+"gkg_siste_fil": "2026-11-27T19:00:00Z",
+"hentet": "2026-11-27T18:59:29Z"
 }

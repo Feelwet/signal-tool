@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-27T19:31:42+0100",
+ "hentet": "2026-11-27T19:59:29+0100",
  "dato": "2026-11-27",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (1807) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (2208) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,23 +12,23 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 142
+   "antall": 152
   },
   {
    "tema": "mideast_energy",
-   "antall": 106
-  },
-  {
-   "tema": "risk_off_haven",
-   "antall": 27
+   "antall": 120
   },
   {
    "tema": "tariffs_trade",
-   "antall": 27
+   "antall": 30
+  },
+  {
+   "tema": "risk_off_haven",
+   "antall": 28
   },
   {
    "tema": "food_agri",
-   "antall": 19
+   "antall": 22
   },
   {
    "tema": "shipping_chokepoints",
@@ -56,6 +56,479 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "Spain to vote in snap election on Nov 29 amid housing crisis, immigration debate; far-right Vox eyes power",
+   "url": "http://www.caribbeanherald.com/news/279467979/spain-to-vote-in-snap-election-on-nov-29-amid-housing-crisis-immigration-debate-far-right-vox-eyes-power",
+   "kilde": "GDELT",
+   "domene": "caribbeanherald.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "elections_political",
+   "temaer": [
+    "elections_political"
+   ],
+   "matchede_ord": [
+    "snap election",
+    "election"
+   ]
+  },
+  {
+   "tittel": "Pakistan, Turkiye and Saudi Arabia hold Makkah alliance meeting, condemn Houthi attacks",
+   "url": "https://bdnews24.com/world/sresia1jyr",
+   "kilde": "GDELT",
+   "domene": "bdnews24.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Ukrainian military strikes plant producing fuel for Iskander missiles",
+   "url": "https://en.apa.az/cis-countries/ukrainian-military-strikes-plant-producing-fuel-for-iskander-missiles-538994",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Ukraine proposes ceasefire in Black Sea, awaits Russia's response",
+   "url": "https://en.apa.az/europe/ukraine-proposes-ceasefire-in-black-sea-awaits-russias-response-539010",
+   "kilde": "GDELT",
+   "domene": "en.apa.az",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "UPDATE: Four Palestinians killed, several others injured in Israeli attacks across Gaza",
+   "url": "https://english.wafa.ps/Pages/Details/177357",
+   "kilde": "GDELT",
+   "domene": "english.wafa.ps",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Pakistan, Turkey pledge to support Saudi Arabia against Houthi attacks under defense pact",
+   "url": "https://krcgtv.com/news/nation-world/pakistan-turkey-pledge-to-support-saudi-arabia-against-houthi-attacks-under-defense-pact",
+   "kilde": "GDELT",
+   "domene": "krcgtv.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges US to pressure Putin, questions Trump's reference to Putin as a 'friend'",
+   "url": "https://krcgtv.com/news/nation-world/zelenskyy-urges-us-to-pressure-putin-questions-trumps-reference-to-putin-as-a-friend",
+   "kilde": "GDELT",
+   "domene": "krcgtv.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "OPEC+ Faces Growing Pressure As Iraq Pushes for Higher Quota",
+   "url": "https://oilprice.com/Latest-Energy-News/World-News/OPEC-Faces-Growing-Pressure-As-Iraq-Pushes-for-Higher-Quota.html",
+   "kilde": "GDELT",
+   "domene": "oilprice.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iraq",
+    "opec"
+   ]
+  },
+  {
+   "tittel": "U.S. Encouraged Iraq and Venezuela to Leave OPEC, Sources Say",
+   "url": "https://oilprice.com/Latest-Energy-News/World-News/US-Pushed-Iraq-and-Venezuela-to-Consider-Quitting-OPEC-Sources-Say.html",
+   "kilde": "GDELT",
+   "domene": "oilprice.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iraq",
+    "opec"
+   ]
+  },
+  {
+   "tittel": "Zelensky faults Trump for calling Putin his 'friend'",
+   "url": "https://punchng.com/zelensky-faults-trump-for-calling-putin-his-friend/",
+   "kilde": "GDELT",
+   "domene": "punchng.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Novak: Not heard Iraq, Venezuela could quit OPEC",
+   "url": "https://www.azernews.az/region/268252.html",
+   "kilde": "GDELT",
+   "domene": "azernews.az",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iraq",
+    "opec"
+   ]
+  },
+  {
+   "tittel": "IT, bank heavyweights drag markets down 1% amid rising crude oil prices",
+   "url": "https://www.business-standard.com/markets/news/it-bank-heavyweights-drag-markets-down-1-amid-rising-crude-oil-prices-126112701207_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "Ukraine submits Black Sea truce offer, waits for Russian response: Minister",
+   "url": "https://www.business-standard.com/world-news/ukraine-submits-black-sea-truce-offer-waits-for-russian-response-minister-126112701458_1.html",
+   "kilde": "GDELT",
+   "domene": "business-standard.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy criticizes Trump for cozying up to Putin as EU kicks Ukraine funding down the road",
+   "url": "https://www.cinaradio.com/2026/11/27/zelenskyy-criticizes-trump-for-cozying-up-to-putin-as-eu-kicks-ukraine-funding-down-the-road/",
+   "kilde": "GDELT",
+   "domene": "cinaradio.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Oil prices are again rising - here's why",
+   "url": "https://www.cp24.com/news/world/2026/11/27/oil-prices-are-again-rising-heres-why/",
+   "kilde": "GDELT",
+   "domene": "cp24.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "oil price"
+   ]
+  },
+  {
+   "tittel": "US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+   "url": "https://www.echopress.com/news/national/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade",
+   "kilde": "GDELT",
+   "domene": "echopress.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Trump stands by calling Putin his 'friend' despite backlash from Zelensky: 'I want to make a deal'",
+   "url": "https://www.hindustantimes.com/world-news/us-news/trump-stands-by-calling-putin-his-friend-despite-backlash-from-zelensky-i-want-to-make-a-deal-101795801908648.html",
+   "kilde": "GDELT",
+   "domene": "hindustantimes.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Cumbrian farmers cautiously welcome UK-EU food trade deal",
+   "url": "https://www.in-cumbria.com/news/26763155.cumbrian-farmers-cautiously-welcome-uk-eu-food-trade-deal/",
+   "kilde": "GDELT",
+   "domene": "in-cumbria.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal"
+   ]
+  },
+  {
+   "tittel": "Why Trump's trade war may benefit Canada in the long run | News",
+   "url": "https://www.thedailynewsonline.com/news/why-trump-s-trade-war-may-benefit-canada-in-the-long-run/article_14fd7ee3-2e34-4130-b2f0-368024e17b86.html",
+   "kilde": "GDELT",
+   "domene": "thedailynewsonline.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade war"
+   ]
+  },
+  {
+   "tittel": "India Says US Trade Deal Is Near Amid Ongoing Tariff Talks",
+   "url": "https://www.theepochtimes.com/world/india-says-us-trade-deal-is-near-amid-ongoing-tariff-talks-6130096",
+   "kilde": "GDELT",
+   "domene": "theepochtimes.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal",
+    "tariff"
+   ]
+  },
+  {
+   "tittel": "IRANIAN TERROR THREAT: Security Officials Warn Tehran Is Pushing Kidnappings And Car Bombs Against Israel",
+   "url": "https://www.theyeshivaworld.com/news/israel-news/2629221/iranian-terror-threat-security-officials-warn-tehran-is-pushing-kidnappings-and-car-bombs-against-israel.html",
+   "kilde": "GDELT",
+   "domene": "theyeshivaworld.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iranian",
+    "israel",
+    "tehran"
+   ]
+  },
+  {
+   "tittel": "North Korea's Kim vows to build more nuclear weapons after ignoring Trump's overture",
+   "url": "https://www.tpr.org/news/2026-11-27/north-koreas-kim-vows-to-build-more-nuclear-weapons-after-ignoring-trumps-overture",
+   "kilde": "GDELT",
+   "domene": "tpr.org",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "nuclear weapon"
+   ]
+  },
+  {
+   "tittel": "Mendocino County declares state of emergency amid latest storms",
+   "url": "https://www.willitsnews.com/2026/11/27/mendocino-county-declares-state-of-emergency-amid-latest-storms/",
+   "kilde": "GDELT",
+   "domene": "willitsnews.com",
+   "publisert": "2026-11-27T19:00:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Russia Extends Jet Fuel Export Ban As Ukrainian Drone Barrage Batters Refineries",
+   "url": "http://www.zerohedge.com/energy/russia-extends-jet-fuel-export-ban-ukrainian-drone-barrage-batters-refineries",
+   "kilde": "GDELT",
+   "domene": "zerohedge.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukrainian",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Ukraine urges countries to follow Canada's lead in barring Russian athletes",
+   "url": "https://panow.com/2026/11/27/ukraine-urges-countries-to-follow-canadas-lead-in-barring-russian-athletes-2/",
+   "kilde": "GDELT",
+   "domene": "panow.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelensky Likens Putin 'Friend' Talk to Hitler",
+   "url": "https://politicalwire.com/2026/11/27/zelensky-likens-putin-friend-talk-to-hitler/",
+   "kilde": "GDELT",
+   "domene": "politicalwire.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Stock Market This Week: Sensex, Nifty Snap Mid-Week Recovery as Brent Crude Tops $97 – The Indian Awaaz",
+   "url": "https://theindianawaaz.com/stock-market-this-week-why-sensex-lost-580-pts-despite-strong-fii-inflows-and-defence-rally/",
+   "kilde": "GDELT",
+   "domene": "theindianawaaz.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "brent crude"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy warns Black Sea export disruptions threaten global food supplies – The Indian Awaaz",
+   "url": "https://theindianawaaz.com/zelenskyy-warns-black-sea-export-disruptions-threaten-global-food-supplies/",
+   "kilde": "GDELT",
+   "domene": "theindianawaaz.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Houthi attacks on Saudi Arabia increase with strikes in Riyadh – The New Statesman :: Ghana Oldest Mainstream Newspaper since 1949",
+   "url": "https://thestatesmanonline.com/houthi-attacks-on-saudi-arabia-increase-with-strikes-in-riyadh/",
+   "kilde": "GDELT",
+   "domene": "thestatesmanonline.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Arab News | US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+   "url": "https://www.arabnews.com/middle-east/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade-3014303",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "tehran",
+    "iran"
+   ]
+  },
+  {
+   "tittel": "Ukraine urges countries to follow Canada's lead in barring Russian athletes – Brandon Sun",
+   "url": "https://www.brandonsun.com/national/2026/11/27/ukraine-urges-countries-to-follow-canadas-lead-in-barring-russian-athletes",
+   "kilde": "GDELT",
+   "domene": "brandonsun.com",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Trump's Thanksgiving Fighter Jet Question Gets an Unexpected Reply From an F-16 Pilot in Saudi Arabia",
+   "url": "https://www.ibtimes.co.uk/air-force-pilot-picks-f16-over-f22-f35-trump-1835287",
+   "kilde": "GDELT",
+   "domene": "ibtimes.co.uk",
+   "publisert": "2026-11-27T18:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
   {
    "tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
    "url": "http://www.shanghaisun.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
@@ -336,36 +809,6 @@
    ]
   },
   {
-   "tittel": "By Putin's logic, Russia should be returned to Mongolia, Belarus' Lukashenka says",
-   "url": "https://www.euronews.com/2026/11/27/by-putins-logic-russia-should-go-back-to-mongolia-belarus-lukashenka-says",
-   "kilde": "GDELT",
-   "domene": "euronews.com",
-   "publisert": "2026-11-27T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russia",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Russian drone strikes hit Ukraine's energy, rail and civilian infrastructure, causing deaths",
-   "url": "https://www.euronews.com/2026/11/27/russian-drone-strikes-hit-ukraines-energy-rail-and-civilian-infrastructure-causing-deaths",
-   "kilde": "GDELT",
-   "domene": "euronews.com",
-   "publisert": "2026-11-27T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "Israeli military says six militants killed in Gaza over past week",
    "url": "https://www.prokerala.com/news/articles/a1841995.html",
    "kilde": "GDELT",
@@ -378,97 +821,6 @@
    "matchede_ord": [
     "israeli",
     "gaza"
-   ]
-  },
-  {
-   "tittel": "Neculaescu: Romania wants NATO to take joint measures against hybrid attacks in response to Russia's threats",
-   "url": "https://www.stiripesurse.ro/neculaescu-romania-wants-nato-to-take-joint-measures-against-hybrid-attacks-in-response-to-russias-threats_3940494",
-   "kilde": "GDELT",
-   "domene": "stiripesurse.ro",
-   "publisert": "2026-11-27T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russia",
-    "nato"
-   ]
-  },
-  {
-   "tittel": "Russia Accuses Latvia of Obstructing Grain Transit, Aiding Ukrainian Drone Attacks",
-   "url": "https://www.themoscowtimes.com/2026/11/27/russia-accuses-latvia-of-obstructing-grain-transit-aiding-ukrainian-drone-a812399",
-   "kilde": "GDELT",
-   "domene": "themoscowtimes.com",
-   "publisert": "2026-11-27T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange",
-   "url": "https://www.wjcl.com/article/zelenskyy-urges-us-pressure-putin-trump-my-friend-remark/74548685",
-   "kilde": "GDELT",
-   "domene": "wjcl.com",
-   "publisert": "2026-11-27T18:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "\"From Algeria to India, Sudan to Indonesia\": Zelenskyy warns of threats to food exports through Black Sea amid Russia war",
-   "url": "http://www.indiagazette.com/news/279466435/from-algeria-to-india-sudan-to-indonesia-zelenskyy-warns-of-threats-to-food-exports-through-black-sea-amid-russia-war",
-   "kilde": "GDELT",
-   "domene": "indiagazette.com",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Europe preparing for war with Russia, demanding truce in Ukraine: Russian FM Lavrov says US displaying more",
-   "url": "http://www.middleeaststar.com/news/279467013/europe-preparing-for-war-with-russia-demanding-truce-in-ukraine-russian-fm-lavrov-says-us-displaying-more-political-maturity",
-   "kilde": "GDELT",
-   "domene": "middleeaststar.com",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Spain to vote in snap election on Nov 29 amid housing crisis, immigration debate; far-right Vox eyes power",
-   "url": "https://aninews.in/news/world/europe/spain-to-vote-in-snap-election-on-nov-29-amid-housing-crisis-immigration-debate-far-right-vox-eyes-power20261127225356/",
-   "kilde": "GDELT",
-   "domene": "aninews.in",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "elections_political",
-   "temaer": [
-    "elections_political"
-   ],
-   "matchede_ord": [
-    "snap election",
-    "election"
    ]
   },
   {
@@ -487,64 +839,6 @@
    ]
   },
   {
-   "tittel": "Japan pushes for substantial increase in defense spending; expert warns of shift toward offensive military capability",
-   "url": "https://www.globaltimes.cn/page/202611/1375188.shtml",
-   "kilde": "GDELT",
-   "domene": "globaltimes.cn",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "defense spending"
-   ]
-  },
-  {
-   "tittel": "Israeli drone strike on vehicle kills Palestinian man in northern Gaza",
-   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/israeli-drone-strike-vehicle-kills-palestinian-man-northern-gaza",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Mecca pact members meet in Islamabad, condemn Houthi attacks on Saudi Arabia",
-   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/mecca-pact-members-meet-islamabad-condemn-houthi-attacks-saudi-arabia",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "US lobbied Iraq and Venezuela to exit Opec, sparking Saudi intervention",
-   "url": "https://www.middleeasteye.net/news/us-lobbied-iraq-and-venezuela-exit-opec-sparking-saudi-intervention",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iraq",
-    "opec"
-   ]
-  },
-  {
    "tittel": "IRGC: Oil tanker hits naval mine while attempting to transit Strait of Hormuz",
    "url": "http://www.jpost.com/middle-east/iran-news/article-916328",
    "kilde": "GDELT",
@@ -556,21 +850,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "NATO gave Kiev naval strike capability. Then the Ukrainians attacked Libya",
-   "url": "http://www.russiaherald.com/news/279466477/nato-gave-kiev-naval-strike-capability-then-the-ukrainians-attacked-libya",
-   "kilde": "GDELT",
-   "domene": "russiaherald.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "nato"
    ]
   },
   {
@@ -588,67 +867,6 @@
    ]
   },
   {
-   "tittel": "Israel Attempts to Assassinate Hamas Leader's Last Surviving Son as Gaza Attacks Escalate",
-   "url": "https://english.aawsat.com/arab-world/5346333-israel-attempts-assassinate-hamas-leaders-last-surviving-son-gaza-attacks",
-   "kilde": "GDELT",
-   "domene": "aawsat.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Mossad and Israeli Military Chiefs at Odds Over Striking Iran",
-   "url": "https://english.aawsat.com/world/5346304-mossad-and-israeli-military-chiefs-odds-over-striking-iran",
-   "kilde": "GDELT",
-   "domene": "aawsat.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "'It's ecocide': Ukraine's Black Sea wildlife is being devastated by the Russian invasion",
-   "url": "https://www.breakingnews.ie/world/its-ecocide-ukraines-black-sea-wildlife-is-being-devastated-by-the-russian-invasion-1960366.html",
-   "kilde": "GDELT",
-   "domene": "breakingnews.ie",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Iran's IRGC says 'violating' tanker exploded after hitting mines in Hormuz Strait | MorungExpress",
-   "url": "https://www.morungexpress.com/irans-irgc-says-violating-tanker-exploded-after-hitting-mines-in-hormuz-strait",
-   "kilde": "GDELT",
-   "domene": "morungexpress.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hormuz",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Tanker hits mine near Strait of Hormuz",
    "url": "https://www.omanobserver.om/article/1200288/world/region/tanker-hits-mine-near-strait-of-hormuz",
    "kilde": "GDELT",
@@ -660,50 +878,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Pakistan hosts talks with Saudi Arabia and Turkey under defense pact",
-   "url": "https://www.wsbradio.com/news/world/pakistan-set-host/WQIIFTN6SAYZ3OTX3TB6V6R7PU/",
-   "kilde": "GDELT",
-   "domene": "wsbradio.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Russia Extends Jet Fuel Export Ban As Ukrainian Drone Barrage Batters Refineries",
-   "url": "https://www.zerohedge.com/energy/russia-extends-jet-fuel-export-ban-ukrainian-drone-barrage-batters-refineries",
-   "kilde": "GDELT",
-   "domene": "zerohedge.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukrainian",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Mecca Defence Pact Explained: Pakistan, Saudi Arabia And Türkiye",
-   "url": "https://www.outlookindia.com/international/mecca-defence-pact-pakistan-saudi-arabia-turkiye-mutual-defence-houthi-attacks",
-   "kilde": "GDELT",
-   "domene": "outlookindia.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -721,35 +895,6 @@
    ]
   },
   {
-   "tittel": "Saudi Arabia shoots down 90 per cent of Houthi missiles in five-month barrage",
-   "url": "https://www.thenationalnews.com/news/mena/2026/11/27/saudi-arabia-shoots-down-90-per-cent-of-houthi-missiles-in-five-month-barrage/",
-   "kilde": "GDELT",
-   "domene": "thenationalnews.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Spain: Israel and Gaza found a place in the campaign for Sunday's general elections",
-   "url": "https://ejpress.org/spain-israel-and-gaza-found-a-place-in-the-campaign-for-sundays-general-elections/",
-   "kilde": "GDELT",
-   "domene": "ejpress.org",
-   "publisert": "2026-11-27T16:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
    "tittel": "Ethiopia's Prime Minister Rejects Invasion Claims, Calls for Dialogue on Red Sea Access",
    "url": "https://kenya-today.com/report-ethiopias-prime-minister-rejects-invasion-claims-calls-for-dialogue-on-red-sea-access-34427/",
    "kilde": "GDELT",
@@ -761,21 +906,6 @@
    ],
    "matchede_ord": [
     "red sea"
-   ]
-  },
-  {
-   "tittel": "Israel accuses Hezbollah of using civilian fishing boats for 'intelligence gathering'",
-   "url": "https://www.naharnet.com/stories/en/324059-israel-accuses-hezbollah-of-using-civilian-fishing-boats-for-intelligence-gathering",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-27T16:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "hezbollah",
-    "israel"
    ]
   },
   {
@@ -821,37 +951,6 @@
    ]
   },
   {
-   "tittel": "Inside Iran's secret 'space programme': How Tehran spent DECADES developing nuke missile that can hit most of Europe in plain sight - before America and Israel blew it all up",
-   "url": "https://www.dailymail.com/news/article-16326785/iran-secret-space-programme-nuclear-missile-europe.html",
-   "kilde": "GDELT",
-   "domene": "dailymail.com",
-   "publisert": "2026-11-27T16:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "tehran",
-    "iran"
-   ]
-  },
-  {
-   "tittel": "Flight from Abu Dhabi to Tel Aviv turned back after two failed attempts to reach Israel amid Iran strikes",
-   "url": "https://www.independent.co.uk/news/world/middle-east/tel-aviv-abu-dhabi-iran-saudi-arabia-flight-b3091388.html",
-   "kilde": "GDELT",
-   "domene": "independent.co.uk",
-   "publisert": "2026-11-27T16:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "iran"
-   ]
-  },
-  {
    "tittel": "Spain heads to snap election amid housing crisis: Who are the key candidates and what is at stake in November 29 vote?",
    "url": "https://www.moneycontrol.com/world/spain-heads-to-snap-election-amid-housing-crisis-who-are-the-key-candidates-and-what-is-at-stake-in-november-29-vote-article-14090532.html",
    "kilde": "GDELT",
@@ -864,20 +963,6 @@
    "matchede_ord": [
     "snap election",
     "election"
-   ]
-  },
-  {
-   "tittel": "Pakistan set to host talks with Saudi Arabia and Turkey under trilateral defense pact",
-   "url": "https://www.naharnet.com/stories/en/324053-pakistan-set-to-host-talks-with-saudi-arabia-and-turkey-under-trilateral-defense-pact",
-   "kilde": "GDELT",
-   "domene": "naharnet.com",
-   "publisert": "2026-11-27T16:00:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
    ]
   },
   {
@@ -1032,20 +1117,6 @@
    ],
    "matchede_ord": [
     "state of emergency"
-   ]
-  },
-  {
-   "tittel": "North Korea's Kim Vows to Build More Nuclear Weapons After Ignoring Trump's Overture",
-   "url": "https://www.military.com/north-koreas-kim-vows-to-build-more-nuclear-weapons-after-ignoring-trumps-overture",
-   "kilde": "GDELT",
-   "domene": "military.com",
-   "publisert": "2026-11-27T15:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "nuclear weapon"
    ]
   },
   {
@@ -1555,20 +1626,6 @@
    ]
   },
   {
-   "tittel": "Neskantaga First Nation remains under state of emergency after nearly 3-month evacuation",
-   "url": "https://www.cbc.ca/news/canada/thunder-bay/neskantaga-first-nation-soe-update-9.7437867",
-   "kilde": "GDELT",
-   "domene": "cbc.ca",
-   "publisert": "2026-11-27T10:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
    "tittel": "Russia extends jet fuel export ban amid refinery disruptions",
    "url": "https://news.az/news/russia-extends-jet-fuel-export-ban-amid-refinery-disruptions",
    "kilde": "GDELT",
@@ -1621,35 +1678,6 @@
    ]
   },
   {
-   "tittel": "Singapore engages firms over tighter US chip export controls",
-   "url": "https://punchng.com/singapore-engages-firms-over-tighter-us-chip-export-controls/",
-   "kilde": "GDELT",
-   "domene": "punchng.com",
-   "publisert": "2026-11-27T08:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "export control"
-   ]
-  },
-  {
-   "tittel": "India-US trade deal: Why talks are back on table amid fresh tariff threat",
-   "url": "https://www.business-standard.com/economy/news/india-us-trade-deal-why-talks-are-back-on-table-amid-fresh-tariff-threat-126112700266_1.html",
-   "kilde": "GDELT",
-   "domene": "business-standard.com",
-   "publisert": "2026-11-27T08:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal",
-    "tariff"
-   ]
-  },
-  {
    "tittel": "Improving Grain Weight And Yield Potential In Wheat",
    "url": "https://www.miragenews.com/improving-grain-weight-and-yield-potential-in-1784907/",
    "kilde": "GDELT",
@@ -1691,20 +1719,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Goyal says US trade deal nearing culmination with \"pathway\" taking shape",
-   "url": "https://www.thehindubusinessline.com/economy/goyal-says-us-trade-deal-nearing-culmination-with-pathway-taking-shape/article71749809.ece",
-   "kilde": "GDELT",
-   "domene": "thehindubusinessline.com",
-   "publisert": "2026-11-27T08:15:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
    ]
   },
   {
