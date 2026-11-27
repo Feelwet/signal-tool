@@ -9,6 +9,7 @@ from signaltool.flyt_schema import (
     OFFISIELL_MD5,
     coverage,
     published_only,
+    ticker_has_published,
     scenario_chips,
     universe_tickers,
     verk_for,
@@ -60,9 +61,15 @@ def test_official_nhy_tall_kraft_mangler_verk_13_and_chips():
     ]
     uni = universe_tickers()
     cov = coverage(noder, kanter, uni)
-    assert cov["n"] == len(uni) == 61
-    assert "av 61" in cov["statuslinje"]
-    assert cov["statuslinje"] == f"Råvaredata for {cov['råvare_n']} av 61 · Selskapsdata for {cov['selskap_n']} av 61"
+    assert cov["n"] == len(uni)
+    assert "NHY.OL" not in uni
+    assert cov["k"] == sum(1 for tck in uni if ticker_has_published(noder, kanter, tck))
+    # NHY telles ikke i k når den ikke er på Tickere
+    assert cov["k"] == 0
+    assert cov["statuslinje"] == (
+        f"Råvaredata for {cov['råvare_n']} av {cov['n']} · "
+        f"Selskapsdata for {cov['selskap_n']} av {cov['n']}"
+    )
 
 
 def test_site_flyt_is_byte_identical_when_present():

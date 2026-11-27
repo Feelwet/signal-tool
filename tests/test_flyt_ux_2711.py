@@ -305,16 +305,17 @@ def test_ux_playwright_verk_land_kraft_hvis(preview):
 def test_kontekst_ingen_tall_no_badge_in_source():
     src = JS.read_text(encoding="utf-8")
     css = CSS.read_text(encoding="utf-8")
-    assert "Ingen tall for denne noden." in src
+    assert "Noden har ingen egne tall." in src
     assert "flyt-kontekst-tall" in src and "flyt-kontekst-tall" in css
     assert "font-size:13px" in css.split(".flyt-kontekst-tall", 1)[1][:200]
     assert "line-height:18px" in css.split(".flyt-kontekst-tall", 1)[1][:200]
+    assert "var(--muted)" in css.split(".flyt-kontekst-tall", 1)[1][:200]
     # merke bare på Mangler data, ikke på kontekst
     place = src
     # badge-setning for etikett: bare estimat og mangler
     assert place.count("b.textContent = 'Mangler data'") >= 1
     assert "kontekst" in src
-    assert "Ingen tall for denne noden." not in css  # teksten ligger i JS, typografien i CSS
+    assert "Noden har ingen egne tall." not in css  # teksten ligger i JS, typografien i CSS
 
 
 def test_ux_playwright_kontekst_panel(preview):
@@ -339,7 +340,7 @@ def test_ux_playwright_kontekst_panel(preview):
         assert tall.count() == 1
         line = tall.locator(".flyt-kontekst-tall")
         assert line.count() == 1
-        assert line.inner_text().strip() == "Ingen tall for denne noden."
+        assert line.inner_text().strip() == "Noden har ingen egne tall."
         assert tall.locator(".badge").count() == 0
         assert "Mangler data" not in tall.inner_text()
         # én linje, 13/18 i dempet farge
