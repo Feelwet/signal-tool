@@ -638,7 +638,7 @@ def build_card(rel: Release, interp: dict | None = None, exposures: list[dict] |
 
     cause = interp.get("cause") if interp.get("ok") else None
     forklaring = {
-        "label": "Kildens egen forklaring",
+        "label": ATTR,
         "text": cause or MISSING_CAUSE,
         "attribution": ATTR if cause else "",
         "missing": not bool(cause),

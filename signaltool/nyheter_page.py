@@ -18,6 +18,7 @@ FALLBACK_KORT = "data/nbs_industriprofitt.json"
 # Lenken går derfor til GitHub-blob og åpnes i samme fane (uten target=_blank).
 TEST_LINE = "Testet 27.11.2026: Å kjøpe bransjene med høyest profittvekst etter NBS-tallet ga ingen påviselig meravkastning 1–20 dager etter (106 publiseringer, 2017–2026). Kursene hadde i snitt steget før tallet kom."
 TEST_HREF = "https://github.com/Feelwet/signal-tool/blob/master/tester/nbs_test_2711.md"
+INNGANG_TITLE = "Forklart: Kinas industriprofitt (NBS)"
 TABS = ("Alt", "Norge", "Marked", "Verden", "Børsmeldinger")
 FT_CREDIT = "© The Financial Times Limited 2026. Overskrifter og lenker; ingen artikkeltekst lagres."
 
@@ -92,7 +93,11 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fk-h:first-child{margin-top:0}
 .ny-fk-body,.ny-fk-kort p,.ny-fk-txt{font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
 .ny-fk-src,.ny-fk-src a{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;text-decoration:underline}
-.ny-fk-pub{display:block;margin:0 0 8px;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8}
+.ny-fk-srclink{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;text-decoration:underline}
+.ny-fk-visalle{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:8px 0;padding:0 12px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
+.ny-fk-inngang{display:flex;flex-direction:column;justify-content:center;width:100%;box-sizing:border-box;height:56px;min-height:56px;max-height:56px;margin:0;padding:0 12px;border:0;border-left:3px solid var(--line,#2d333b);background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.ny-fk-inngang-tittel{display:block;font:400 15px/20px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-inngang-dato{display:block;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8}
 
 .ny-fk-tall{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 6px}
 .ny-fk-tall span{font:600 24px/28px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
@@ -104,7 +109,7 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fk-attr{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;margin-left:6px}
 .ny-fk-bg{display:block;position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5)}
 .ny-fk-bg[hidden]{display:none}
-.ny-fk-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:81;width:390px;max-width:100%;min-height:560px;max-height:90vh;overflow:auto;margin:0 auto;background:#1c2430;border-top:1px solid #3b4757;border-radius:12px 12px 0 0;padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
+.ny-fk-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:81;width:100%;max-width:390px;height:min(560px, calc(100dvh - 56px));max-height:min(560px, calc(100dvh - 56px));overflow-x:hidden;overflow-y:auto;margin:0 auto;background:#1c2430;border-top:1px solid #3b4757;border-radius:12px 12px 0 0;padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
 .ny-fk-sheet[hidden]{display:none}
 .ny-fk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;position:sticky;top:0;background:#1c2430;z-index:1;padding:0 0 8px}
 .ny-fk-slukk{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
@@ -224,9 +229,7 @@ def html(snap=None) -> str:
     const tall=tal.map(v=>'<span>'+esc(v.label)+'</span>').join('');
     const srcUrl=(b.tallet&&b.tallet.source_url)||(c.source&&c.source.url)||'';
     const srcLine=(b.tallet&&b.tallet.source_line)||(c.source&&c.source.line)||'NBS';
-    const src='<p class="ny-fk-src">'+(srcUrl?('<a href="'+esc(srcUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(srcLine)+'</a>'):esc(srcLine))+'</p>';
-    // Fast rad: bare NBS-publiseringsdato fra kortdata (source.published_row). Aldri bygge- eller hentedato.
-    const pubRow=(c.source&&c.source.published_row)?'<div class="ny-fk-pub">'+esc(c.source.published_row)+'</div>':'';
+    const src='<p class="ny-fk-src">'+(srcUrl?('<a class="ny-fk-srclink" href="'+esc(srcUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(srcLine)+'</a>'):esc(srcLine))+'</p>';
     function rows(list, cls){{
       return (list||[]).map(r=>{{
         const ch=esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change);
@@ -238,23 +241,29 @@ def html(snap=None) -> str:
     const up=rows(chg.up,'ny-fk-br');
     const down=rows(chg.down,'ny-fk-br');
     const fk=b.forklaring||{{}};
-    const expl='<div class="ny-fk-tag">'+esc(fk.label||'Kildens egen forklaring')+'</div><p class="ny-fk-txt">'+esc(fk.text||'')+(fk.attribution?'<span class="ny-fk-attr">'+esc(fk.attribution)+'</span>':'')+'</p>';
+    const tag=esc(fk.label||'ifølge NBS');
+    const attr=(fk.attribution&&fk.attribution!==(fk.label||'ifølge NBS'))?'<span class="ny-fk-attr">'+esc(fk.attribution)+'</span>':'';
+    const expl='<div class="ny-fk-tag">'+tag+'</div><p class="ny-fk-txt">'+esc(fk.text||'')+attr+'</p>';
     const nv=b.nevnt||{{}};
     let nevnt='';
     if(!nv.hidden&&((nv.sectors||[]).length||(nv.exposures||[]).length)){{
-      const sec=(nv.sectors||[]).map(s=>'<div class="ny-fk-nv"><span>'+esc(s.detail||s.name)+'</span></div>').join('');
-      const exp=(nv.exposures||[]).map(e=>{{
+      const rows=[];
+      (nv.sectors||[]).forEach(s=>rows.push('<div class="ny-fk-nv"><span>'+esc(s.detail||s.name)+'</span></div>'));
+      (nv.exposures||[]).forEach(e=>{{
         const lab=esc(e.ticker||'')+' '+esc(e.share_label||'')+' '+esc(e.report_date||'');
         const href=e.report_url?'<a class="ny-fk-src" href="'+esc(e.report_url)+'" target="_blank" rel="noopener noreferrer">'+lab+'</a>':lab;
-        return '<div class="ny-fk-nv">'+href+'</div>';
-      }}).join('');
-      nevnt='<h3 class="ny-fk-h">Nevnt i kilden</h3>'+sec+exp;
+        rows.push('<div class="ny-fk-nv">'+href+'</div>');
+      }});
+      const first=rows.slice(0,6).join('');
+      const rest=rows.slice(6).join('');
+      const more=rest?('<button type="button" class="ny-fk-visalle" aria-expanded="false">Vis alle ('+rows.length+')</button><div class="ny-fk-nv-rest" hidden>'+rest+'</div>'):'';
+      nevnt='<h3 class="ny-fk-h">Nevnt i kilden</h3>'+first+more;
     }}
     const testLine='{E(TEST_LINE)}';
     const testHref='{E(TEST_HREF)}';
     const test='<a class="ny-fk-test" href="'+testHref+'">'+testLine+'</a>';
     return '<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>'
-      +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+pubRow+src
+      +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+src
       +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største økning</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
       +'<h3 class="ny-fk-h">Kildens forklaring</h3>'+expl
       +nevnt
@@ -274,7 +283,7 @@ def html(snap=None) -> str:
     if(isWide()){{
       closeForklaring();
       const box=btn.parentElement && btn.parentElement.querySelector('.ny-fkort');
-      if(box){{ box.innerHTML=inner; box.classList.add('open'); box.hidden=false; }}
+      if(box){{ box.innerHTML=inner; box.classList.add('open'); box.hidden=false; bindVisAlle(box); }}
       return;
     }}
     document.querySelectorAll('.ny-fkort.open').forEach(el=>el.classList.remove('open'));
@@ -284,6 +293,19 @@ def html(snap=None) -> str:
     if(body) body.innerHTML=inner;
     if(sh) sh.hidden=false;
     if(bg) bg.hidden=false;
+    bindVisAlle(isWide()?box:body);
+  }}
+  function bindVisAlle(root){{
+    if(!root) return;
+    root.querySelectorAll('.ny-fk-visalle').forEach(btn=>{{
+      btn.addEventListener('click',e=>{{
+        e.preventDefault(); e.stopPropagation();
+        const rest=btn.nextElementSibling;
+        if(rest) rest.hidden=false;
+        btn.setAttribute('aria-expanded','true');
+        btn.remove();
+      }});
+    }});
   }}
   function setSheet(open){{
     if(!sheet) return;
@@ -309,21 +331,38 @@ def html(snap=None) -> str:
       }});
     }});
   }}
+  function showInngang(){{
+    return (tab==='Alt'||tab==='Marked') && kortOk(kort) && !!(kort.source&&kort.source.published_row);
+  }}
+  function inngangHtml(){{
+    if(!showInngang()) return '';
+    return '<div class="ny-item ny-fk-inngang-wrap"><button type="button" class="ny-fk-inngang" aria-haspopup="dialog"><span class="ny-fk-inngang-tittel">{E(INNGANG_TITLE)}</span><span class="ny-fk-inngang-dato">'+esc(kort.source.published_row)+'</span></button><div class="ny-fkort" hidden></div></div>';
+  }}
+  function bindForklaring(root){{
+    if(!root) return;
+    root.querySelectorAll('.ny-fkbtn,.ny-fk-inngang').forEach(btn=>{{
+      btn.addEventListener('click',e=>{{ e.preventDefault(); e.stopPropagation(); openForklaring(btn); }});
+    }});
+  }}
   function renderList(){{
     const q=(qEl&&qEl.value||'').trim().toLowerCase();
     const srcs=data.sources||[];
     const allDown=srcs.length>0&&srcs.every(s=>s.status==='kilde nede');
     const items=(data.items||[]).filter(it=>inTab(it,tab)&&!off[it.source_id]&&(!q||(it.title||'').toLowerCase().includes(q)||(it.source||'').toLowerCase().includes(q)||(it.issuer||'').toLowerCase().includes(q)));
     if(kbtn) kbtn.textContent='Kilder ('+srcs.length+')';
+    const head=inngangHtml();
     if(!items.length){{
-      if(q) list.innerHTML='<div class="ny-empty">Ingen saker matcher «'+esc(qEl.value.trim())+'»</div>';
+      let empty='';
+      if(q) empty='<div class="ny-empty">Ingen saker matcher «'+esc(qEl.value.trim())+'»</div>';
       else if(allDown) {{
         const hm=data.generated_at_utc?osloHm(new Date(data.generated_at_utc)):(upd.textContent.replace(/^Oppdatert\\s/,'' )||'--:--');
-        list.innerHTML='<div class="ny-empty">Ingen kilder svarer nå. Sist oppdatert '+esc(hm)+'.</div>';
-      }} else list.innerHTML='';
+        empty='<div class="ny-empty">Ingen kilder svarer nå. Sist oppdatert '+esc(hm)+'.</div>';
+      }}
+      list.innerHTML=head+empty;
+      bindForklaring(list);
       return;
     }}
-    list.innerHTML=items.map(it=>{{
+    list.innerHTML=head+items.map(it=>{{
       const iss=(it.issuer||'').trim(); const chip=(iss&&iss!=='-')?'<span class="ny-chip">'+esc(iss)+'</span>':'';
       const lock=it.paywall?' 🔒':'';
       const row='<a class="ny-row" href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer"><span class="ny-time">'+esc(rowTime(it.published_utc))+'</span><span class="ny-body"><span class="ny-title">'+esc(it.title)+'</span><span class="ny-meta">'+chip+'<span class="ny-src">'+esc(it.source)+lock+'</span></span></span></a>';
@@ -332,9 +371,7 @@ def html(snap=None) -> str:
       }}
       return '<div class="ny-item">'+row+'</div>';
     }}).join('');
-    list.querySelectorAll('.ny-fkbtn').forEach(btn=>{{
-      btn.addEventListener('click',e=>{{ e.preventDefault(); e.stopPropagation(); openForklaring(btn); }});
-    }});
+    bindForklaring(list);
   }}
   function apply(d){{
     data=d||{{items:[],sources:[]}};

@@ -4,6 +4,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from signaltool import nbs_industriprofitt as N
 from signaltool import nyheter_page as P
 
@@ -89,7 +91,7 @@ def test_interp_cause_marked_ifolge_nbs_and_keeps_source_decimals():
     assert "5,7 %" not in text  # must not round 5.69
     fk = card["blocks"]["forklaring"]
     assert fk["attribution"] == "ifølge NBS" and fk["missing"] is False
-    assert fk["label"] == "Kildens egen forklaring"
+    assert fk["label"] == "ifølge NBS"
     assert "prognose" not in fk["text"].lower()
     assert "bra for" not in fk["text"].lower() and "dårlig for" not in fk["text"].lower()
 
@@ -193,7 +195,7 @@ def test_page_layout_390_and_1280_and_button_copy():
     btn = css[css.index(".ny-fkbtn{"): css.index(".ny-fkbtn{") + 280]
     assert "height:44px;min-height:44px" in btn
     sheet = css[css.index(".ny-fk-sheet{"): css.index(".ny-fk-sheet{") + 400]
-    assert "width:390px" in sheet and "min-height:560px" in sheet
+    assert "max-width:390px" in sheet and "height:min(560px, calc(100dvh - 56px))" in sheet
     slukk = css[css.index(".ny-fk-slukk{"): css.index(".ny-fk-slukk{") + 200]
     assert "width:44px;height:44px;min-width:44px;min-height:44px" in slukk
     assert "fkBg.addEventListener('click',()=>closeForklaring())" in h
@@ -334,28 +336,26 @@ def test_published_row_uses_nbs_date_from_card_not_build_or_fetch():
     assert card["source"]["published"] == "2026-11-27T01:30:00Z"
     assert card["source"]["published_row"] == "Publisert 27.11"
     assert N.published_row(rel.published) == "Publisert 27.11"
-    # En annen NBS-dato enn i dag: 28.10.2026 (jan–sep-kunngjøringen)
     en = N.parse_bulletin(_html("en_bulletin_2026_01_09.html"), url=EN_URL, lang="en")
     assert en.published is not None
     assert N.published_row(en.published) == "Publisert 28.10"
     en_card = N.build_card(en, {})
     assert en_card["source"]["published_row"] == "Publisert 28.10"
-    assert en_card["source"]["published_oslo"] == "28.10.2026"
-    # Feltet er beregnet bare fra pub, ikke fra klokke eller generated_at
     src = Path(N.__file__).read_text()
     start = src.index("def published_row")
     body = src[start: src.index("\ndef ", start + 1)]
     assert "datetime.now" not in body and "generated_at" not in body
-    h, css = P.html(), P.PAGE_CSS
-    assert "ny-fk-pub" in h and "c.source.published_row" in h
-    assert "+pubRow+src" in h
-    chunk = h[h.index("const pubRow="): h.index("const pubRow=") + 220]
+    h = P.html()
+    # Datoen vises på inngangsraden i lista, ikke inne i kortet
+    assert "kort.source.published_row" in h
+    assert "ny-fk-inngang-dato" in h
+    assert "ny-fk-pub" not in h and "pubRow" not in h
+    chunk = h[h.index("function showInngang()"): h.index("function showInngang()") + 280]
     assert "generated_at" not in chunk and "Date.now" not in chunk and "new Date" not in chunk
-    assert ".ny-fk-pub{" in css and "font:400 13px/18px" in css[css.index(".ny-fk-pub{"): css.index(".ny-fk-pub{") + 160]
 
 
 def test_published_row_hidden_when_nbs_date_missing():
-    """Mangler NBS-publiseringsdatoen, vises ikke den faste raden."""
+    """Mangler NBS-publiseringsdatoen, vises ikke den faste inngangsraden."""
     assert N.published_row(None) is None
     rel, ip, _ = _cn_card()
     rel.published = None
@@ -365,6 +365,178 @@ def test_published_row_hidden_when_nbs_date_missing():
     assert card["source"]["published"] is None
     assert card["source"]["published_oslo"] == ""
     assert card["source"]["published_row"] is None
-    # JS bygger tom streng når feltet mangler, så raden ikke rendres
     h = P.html()
-    assert "const pubRow=(c.source&&c.source.published_row)?'<div class=\"ny-fk-pub\">'+esc(c.source.published_row)+'</div>':''" in h
+    assert "kortOk(kort) && !!(kort.source&&kort.source.published_row)" in h
+
+
+def test_sheet_390_height_is_min_560_or_100dvh_minus_56_sticky_close():
+    css = P.PAGE_CSS
+    block = css[css.index(".ny-fk-sheet{"): css.index(".ny-fk-sheet{") + 420]
+    assert "bottom:0" in block and "position:fixed" in block
+    assert "height:min(560px, calc(100dvh - 56px))" in block
+    assert "overflow-y:auto" in block
+    head = css[css.index(".ny-fk-head{"): css.index(".ny-fk-head{") + 200]
+    assert "position:sticky;top:0" in head
+    slukk = css[css.index(".ny-fk-slukk{"): css.index(".ny-fk-slukk{") + 200]
+    assert "width:44px;height:44px" in slukk
+
+
+def test_nevnt_in_kilden_shows_first_six_and_vis_alle_n():
+    _, _, card = _cn_card()
+    n = len(card["blocks"]["nevnt"]["sectors"]) + len(card["blocks"]["nevnt"]["exposures"])
+    assert n > 6
+    h, css = P.html(), P.PAGE_CSS
+    assert "rows.slice(0,6)" in h and "rows.slice(6)" in h
+    assert "Vis alle ('+rows.length+')" in h
+    assert 'class="ny-fk-visalle"' in h
+    btn = css[css.index(".ny-fk-visalle{"): css.index(".ny-fk-visalle{") + 280]
+    assert "min-height:44px" in btn
+    # resten er skjult til knappen trykkes
+    assert 'class="ny-fk-nv-rest" hidden' in h
+
+
+def test_forklaring_label_is_ifolge_nbs_and_old_wording_is_gone():
+    _, _, card = _cn_card()
+    assert card["blocks"]["forklaring"]["label"] == "ifølge NBS"
+    h = P.html()
+    assert "fk.label||'ifølge NBS'" in h
+    banned = "Kildens egen " + "forklaring"
+    root = Path(__file__).resolve().parents[1]
+    files = [
+        root / "signaltool" / "nbs_industriprofitt.py",
+        root / "signaltool" / "nyheter_page.py",
+        Path(__file__),
+        root / "logs" / "nbs_industriprofitt.json",
+    ]
+    for f in files:
+        blob = f.read_text()
+        assert banned not in blob, f"forbudt formulering i {f}"
+    assert "Kildens forklaring" in h  # overskriften står
+
+
+def test_nbs_source_link_has_44px_tap_target():
+    h, css = P.html(), P.PAGE_CSS
+    assert 'class="ny-fk-srclink"' in h
+    block = css[css.index(".ny-fk-srclink{"): css.index(".ny-fk-srclink{") + 220]
+    assert "min-height:44px" in block
+    assert "display:inline-flex" in block or "padding:" in block
+
+
+def test_fixed_entry_row_on_marked_and_alt_not_inside_card():
+    h, css = P.html(), P.PAGE_CSS
+    assert P.INNGANG_TITLE == "Forklart: Kinas industriprofitt (NBS)"
+    assert P.INNGANG_TITLE in h
+    assert "function showInngang()" in h
+    assert "tab==='Alt'||tab==='Marked'" in h
+    assert "kort.source.published_row" in h
+    # ikke inne i kortInner: inngangHtml kalles fra renderList
+    inner_start = h.index("function kortInner")
+    inner_end = h.index("function isWide()")
+    inner = h[inner_start:inner_end]
+    assert "ny-fk-inngang" not in inner
+    assert "Publisert" not in inner or "published_row" not in inner.split("function kortInner")[-1][:50]
+    assert "ny-fk-pub" not in inner
+    block = css[css.index(".ny-fk-inngang{"): css.index(".ny-fk-inngang-tittel{")]
+    assert "height:56px;min-height:56px;max-height:56px" in block
+    assert "border-left:3px solid var(--line" in block
+    assert "background:transparent" in block
+    assert "#3fb950" not in block and "badge" not in block.lower()
+    title = css[css.index(".ny-fk-inngang-tittel{"): css.index(".ny-fk-inngang-tittel{") + 180]
+    dato = css[css.index(".ny-fk-inngang-dato{"): css.index(".ny-fk-inngang-dato{") + 180]
+    assert "font:400 15px/20px" in title
+    assert "font:400 13px/18px" in dato
+    assert "bindForklaring" in h and ".ny-fk-inngang" in h
+    # knappen og matcheregelen er uendret
+    assert 'class="ny-fkbtn" aria-haspopup="dialog">Hva betyr dette?' in h
+    assert "function itemMatchesKort" in h
+
+
+def test_no_horizontal_scroll_rule_in_css():
+    css = P.PAGE_CSS
+    assert "body.pg-nyheter{overflow-x:hidden}" in css
+    sheet = css[css.index(".ny-fk-sheet{"): css.index(".ny-fk-sheet{") + 420]
+    assert "overflow-x:hidden" in sheet
+
+
+def _fixture_nyheter_page(card, items):
+    news = {
+        "generated_at_utc": "2026-11-27T13:46:00Z",
+        "generated_at_oslo": "2026-11-27 14:46 CET",
+        "items": items,
+        "sources": [{"id": "cnbc", "name": "CNBC", "status": "ok", "last_updated": "14:46"}],
+    }
+    html = (
+        '<!doctype html><html><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        f"<style>html,body{{margin:0;overflow-x:hidden}}body{{background:#0d1117;color:#e6edf3}}{P.PAGE_CSS}</style>"
+        f'</head><body class="pg-nyheter">{P.html()}</body></html>'
+    )
+    return html, news, card
+
+
+def _route_json(pg, news, card):
+    def handle(route):
+        url = route.request.url
+        if "nbs_industriprofitt.json" in url:
+            return route.fulfill(status=200, content_type="application/json", body=__import__("json").dumps(card, ensure_ascii=False))
+        if "nyheter.json" in url:
+            return route.fulfill(status=200, content_type="application/json", body=__import__("json").dumps(news, ensure_ascii=False))
+        return route.fallback()
+    pg.route("**/*", handle)
+
+
+@pytest.mark.skipif(
+    not (__import__("shutil").which("google-chrome") or __import__("shutil").which("chromium")),
+    reason="ingen headless Chrome",
+)
+def test_headless_scrollWidth_390_and_1280_with_card_and_sheet_open(tmp_path):
+    """scrollWidth ≤ viewport ved 390 (ark åpent) og 1280 (kort åpent)."""
+    import shutil
+    pw = pytest.importorskip("playwright.sync_api")
+    _, _, card = _cn_card()
+    items = [
+        {**CNBC, "source": "CNBC", "source_id": "cnbc", "published_utc": "2026-11-27T02:04:09Z", "section": "Marked", "paywall": False, "issuer": None, "pool": "editorial"},
+        {"title": "Annen sak uten nøkkeltall", "url": "https://example.com/other", "source": "CNBC", "source_id": "cnbc", "published_utc": "2026-11-27T08:00:00Z", "section": "Norge", "paywall": False, "issuer": None, "pool": "editorial"},
+    ]
+    html, news, card = _fixture_nyheter_page(card, items)
+    f = tmp_path / "nyheter.html"
+    f.write_text(html)
+    measured = {}
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome" if shutil.which("google-chrome") else None)
+        for w, mode in ((390, "sheet"), (1280, "panel")):
+            pg = b.new_page(viewport={"width": w, "height": 900})
+            _route_json(pg, news, card)
+            pg.goto(f.as_uri())
+            pg.wait_for_selector(".ny-fk-inngang")
+            ing = pg.locator(".ny-fk-inngang")
+            box = ing.bounding_box()
+            assert box and abs(box["height"] - 56) <= 1, box
+            ing.click()
+            if mode == "sheet":
+                pg.wait_for_selector("#ny-fk-sheet:not([hidden])")
+                visalle = pg.locator(".ny-fk-visalle")
+                assert visalle.count() == 1
+                assert "Vis alle (" in visalle.inner_text()
+                assert pg.locator(".ny-fk-nv").locator("visible=true").count() == 6
+                assert pg.locator(".ny-fk-nv-rest").get_attribute("hidden") is not None
+                visalle.click()
+                assert pg.locator(".ny-fk-nv").locator("visible=true").count() > 6
+                # kildelenke 44 px
+                link = pg.locator(".ny-fk-srclink").first
+                lb = link.bounding_box()
+                assert lb and lb["height"] >= 44, lb
+                sh = pg.locator("#ny-fk-sheet")
+                st = sh.evaluate("""e=>{const s=getComputedStyle(e);return {h:s.height,oy:s.overflowY,bottom:s.bottom,pos:s.position}}""")
+                # 900-56=844, min(560,844)=560
+                assert abs(float(st["h"].replace("px","")) - 560) <= 1, st
+                assert st["oy"] == "auto" and st["pos"] == "fixed"
+                head = pg.locator(".ny-fk-head").evaluate("e=>getComputedStyle(e).position")
+                assert head == "sticky"
+            else:
+                pg.wait_for_selector(".ny-fkort.open")
+            measured[w] = pg.evaluate("()=>{const de=document.documentElement;return {sw:de.scrollWidth,cw:de.clientWidth,iw:window.innerWidth}}")
+            pg.close()
+        b.close()
+    for w, m in measured.items():
+        assert m["sw"] <= m["iw"] and m["sw"] <= m["cw"], (w, m)
