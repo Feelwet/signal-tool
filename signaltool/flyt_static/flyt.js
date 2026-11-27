@@ -1422,12 +1422,14 @@ function resetView() {
   scenario = null;
   verkOpen = false;
   document.querySelectorAll('.flyt-chip').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-  const initial = start.fokus;
-  crumb = initial ? [initial] : [];
   dimExcept = null;
   path = new Set();
-  if (initial) go(initial, false, true);
-  else {
+  const initial = start.fokus;
+  if (initial) {
+    go(initial, false, true);
+    closePanel();
+  } else {
+    crumb = [];
     fokus = null;
     setFokusUrl(null, false);
     closePanel();
