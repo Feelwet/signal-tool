@@ -20,6 +20,8 @@ USER_AGENT = os.environ.get("SIGNAL_UA", "signal-tool personal research (contact
 
 # Minimum seconds between requests per host (be polite / respect published limits).
 RATE_LIMITS = {
+    'www.stats.gov.cn': 1.5,
+    'stats.gov.cn': 1.5,
     "api.gdeltproject.org": 6.0,        # GDELT asks for max 1 request / 5 s
     "data.gdeltproject.org": 0.2,
     "www.sec.gov": 0.15,                # SEC fair-access: max 10 req/s

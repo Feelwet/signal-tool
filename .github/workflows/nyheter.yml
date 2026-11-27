@@ -62,18 +62,18 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Tester for Nyheter-samleren
-        run: python -m pytest -q tests/test_nyheter_1711.py
+        run: python -m pytest -q tests/test_nyheter_1711.py tests/test_nbs_kort_2711.py
       - name: Hent overskrifter
         run: python -m signaltool.nyheter
       - name: Commit liste og latency-logg
         continue-on-error: true
         run: |
           mkdir -p /tmp/ours
-          cp logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv /tmp/ours/ 2>/dev/null || true
+          cp logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv logs/nbs_industriprofitt.json /tmp/ours/ 2>/dev/null || true
           for i in 1 2 3 4 5; do
             git fetch -q origin "${GITHUB_REF_NAME}" && git reset -q --hard "origin/${GITHUB_REF_NAME}"
             mkdir -p logs
-            cp /tmp/ours/nyheter.json /tmp/ours/nyheter_state.json logs/ 2>/dev/null || true
+            cp /tmp/ours/nyheter.json /tmp/ours/nyheter_state.json /tmp/ours/nbs_industriprofitt.json logs/ 2>/dev/null || true
             # latency-loggen er append-only: behold union, origin vinner ikke over nye rader
             if [ -f /tmp/ours/nyheter_latency.csv ]; then
               if [ -f logs/nyheter_latency.csv ]; then
@@ -99,7 +99,7 @@ jobs:
                 cp /tmp/ours/nyheter_latency.csv logs/
               fi
             fi
-            git add logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv
+            git add logs/nyheter.json logs/nyheter_state.json logs/nyheter_latency.csv logs/nbs_industriprofitt.json
             git diff --cached --quiet && { echo "ingen endring"; exit 0; }
             git -c user.name=GrokBot -c user.email=bot@box commit -q -m "Nyheter: overskrifter $(date '+%F %H:%M') [skip ci]"
             git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0

@@ -11,6 +11,8 @@ import shutil
 
 RAW_JSON = "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nyheter.json"
 FALLBACK_JSON = "data/nyheter.json"
+RAW_KORT = "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nbs_industriprofitt.json"
+FALLBACK_KORT = "data/nbs_industriprofitt.json"
 TABS = ("Alt", "Norge", "Marked", "Verden", "Børsmeldinger")
 FT_CREDIT = "© The Financial Times Limited 2026. Overskrifter og lenker; ingen artikkeltekst lagres."
 
@@ -73,6 +75,36 @@ body.pg-nyheter .ny-tabs{height:44px}
 body.pg-nyheter .ny-row{height:56px;min-height:56px;max-height:56px;align-items:center}
 body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowrap;display:block;text-overflow:ellipsis}
 }
+
+/* Forklaringskort (UxBot + AnalBot 27.11). Retning med pil og tekst, ikke farge. */
+.ny-item{margin:0 12px;border-bottom:1px solid var(--line,#2d333b);min-width:0}
+.ny-item .ny-row{margin:0;border-bottom:0;padding-left:0;padding-right:0}
+.ny-fkbtn{display:inline-flex;align-items:center;justify-content:center;height:44px;min-height:44px;max-height:44px;margin:0 0 8px;padding:0 12px;box-sizing:border-box;border:1px solid var(--line,#2d333b);border-radius:6px;background:var(--card,#161b22);color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
+.ny-fkort{display:none;box-sizing:border-box;max-width:720px;padding:12px 0 16px}
+.ny-fkort.open{display:block}
+.ny-fk-note{margin:0 0 12px;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8}
+.ny-fk-h{margin:16px 0 8px;font:600 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-h:first-child{margin-top:0}
+.ny-fk-body,.ny-fk-kort p,.ny-fk-txt{font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-src,.ny-fk-src a{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;text-decoration:underline}
+.ny-fk-tall{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 6px}
+.ny-fk-tall span{font:600 24px/28px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-tag{display:inline-block;margin:0 0 8px;padding:2px 8px;border-radius:4px;background:var(--pill,#262d38);color:#94a3b8;font:500 13px/18px system-ui,-apple-system,sans-serif}
+.ny-fk-br{display:flex;align-items:center;justify-content:space-between;gap:8px;height:44px;min-height:44px;max-height:44px;box-sizing:border-box;font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-br .ny-fk-ch{margin-left:auto;text-align:right;white-space:nowrap}
+.ny-fk-nv{display:flex;align-items:center;justify-content:space-between;gap:8px;height:56px;min-height:56px;max-height:56px;box-sizing:border-box;font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3);border-bottom:1px solid var(--line,#2d333b)}
+.ny-fk-nv .ny-fk-ch{margin-left:auto;text-align:right}
+.ny-fk-attr{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;margin-left:6px}
+.ny-fk-bg{display:block;position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5)}
+.ny-fk-bg[hidden]{display:none}
+.ny-fk-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:81;width:390px;max-width:100%;min-height:560px;max-height:90vh;overflow:auto;margin:0 auto;background:#1c2430;border-top:1px solid #3b4757;border-radius:12px 12px 0 0;padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
+.ny-fk-sheet[hidden]{display:none}
+.ny-fk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;position:sticky;top:0;background:#1c2430;z-index:1;padding:0 0 8px}
+.ny-fk-slukk{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
+@media(min-width:1280px){
+.ny-fk-bg,.ny-fk-sheet{display:none!important}
+.ny-fkort{max-width:720px}
+}
 """
 
 
@@ -82,8 +114,9 @@ def html(snap=None) -> str:
         for t in TABS
     )
     raw, fb = E(RAW_JSON), E(FALLBACK_JSON)
+    rawk, fbk = E(RAW_KORT), E(FALLBACK_KORT)
     return f"""
-<div class="ny" id="ny" data-raw="{raw}" data-fallback="{fb}">
+<div class="ny" id="ny" data-raw="{raw}" data-fallback="{fb}" data-kort="{rawk}" data-kort-fallback="{fbk}">
   <div class="ny-bar"><h1>Nyheter</h1><p class="ny-upd" id="ny-upd">Oppdatert --:--</p></div>
   <div class="ny-desk">
     <div class="ny-main">
@@ -97,6 +130,14 @@ def html(snap=None) -> str:
     </div>
     <aside class="ny-kilder" id="ny-kilder" aria-label="Kilder"><h2>Kilder</h2><div id="ny-kilder-rows"></div></aside>
   </div>
+</div>
+<div class="ny-fk-bg" id="ny-fk-bg" hidden></div>
+<div class="ny-fk-sheet" id="ny-fk-sheet" role="dialog" aria-label="Hva betyr dette?" hidden>
+  <div class="ny-fk-head">
+    <p class="ny-fk-note" id="ny-fk-note-sheet">Forklaring fra kildene, ikke en prognose</p>
+    <button type="button" class="ny-fk-slukk" id="ny-fk-slukk" aria-label="Lukk">Lukk</button>
+  </div>
+  <div class="ny-fk-body" id="ny-fk-sheet-body"></div>
 </div>
 <div class="ny-sheet-bg" id="ny-sheet-bg" hidden></div>
 <div class="ny-sheet" id="ny-sheet" role="dialog" aria-label="Kilder" hidden>
@@ -112,6 +153,8 @@ def html(snap=None) -> str:
   if(!root) return;
   const RAW=root.getAttribute('data-raw');
   const FB=root.getAttribute('data-fallback');
+  const RAWK=root.getAttribute('data-kort');
+  const FBK=root.getAttribute('data-kort-fallback');
   const TABS=["Alt","Norge","Marked","Verden","Børsmeldinger"];
   const LS='nyheter-kilder';
   const list=document.getElementById('ny-list');
@@ -122,7 +165,7 @@ def html(snap=None) -> str:
   const sheetBg=document.getElementById('ny-sheet-bg');
   const sheetRows=document.getElementById('ny-sheet-rows');
   const colRows=document.getElementById('ny-kilder-rows');
-  let data={{items:[],sources:[],generated_at_utc:null}}, tab='Alt', off={{}};
+  let data={{items:[],sources:[],generated_at_utc:null}}, tab='Alt', off={{}}, kort=null;
   try{{ off=JSON.parse(localStorage.getItem(LS)||'{{}}')||{{}} }}catch(e){{ off={{}} }}
   function isNw(it){{ return it.pool==='newsweb'||it.source_id==='newsweb'||it.section==='Børsmeldinger'; }}
   function inTab(it,t){{ if(isNw(it)) return t==='Børsmeldinger'; if(t==='Alt') return true; return it.section===t; }}
@@ -148,6 +191,80 @@ def html(snap=None) -> str:
     return osloHm(d);
   }}
   function esc(s){{ return String(s??'').replace(/[&<>"']/g,c=>({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[c])); }}
+  function kortOk(c){{ return !!(c&&c.ok&&!c.hide); }}
+  function itemMatchesKort(it,c){{
+    if(!kortOk(c)) return false;
+    const rules=c.match||{{}};
+    const url=String(it.url||'').trim();
+    const title=String(it.title||'');
+    const blob=(title+' '+url).toLowerCase();
+    const srcs=rules.source_urls||[];
+    for(let i=0;i<srcs.length;i++){{ if(srcs[i]&&(url===srcs[i]||(url.endsWith('/')?url.slice(0,-1):url)===(String(srcs[i]).endsWith('/')?String(srcs[i]).slice(0,-1):String(srcs[i])))) return true; }}
+    const needles=rules.url_needles||[];
+    for(let i=0;i<needles.length;i++){{ if(needles[i]&&url.toLowerCase().indexOf(String(needles[i]).toLowerCase())>=0&&url.toLowerCase().indexOf('stats.gov.cn')>=0) return true; }}
+    const phrase=(rules.phrases||[]).some(p=>blob.indexOf(String(p).toLowerCase())>=0);
+    const fig=(rules.figures||[]).some(f=>blob.indexOf(String(f).toLowerCase())>=0||title.indexOf(String(f))>=0);
+    const geo=(rules.geo||[]).some(g=>blob.indexOf(String(g).toLowerCase())>=0);
+    return phrase&&fig&&geo;
+  }}
+  function kortInner(c){{
+    if(!kortOk(c)) return '';
+    const b=c.blocks||{{}};
+    const tal=(b.tallet&&b.tallet.values)||[];
+    const tall=tal.map(v=>'<span>'+esc(v.label)+'</span>').join('');
+    const srcUrl=(b.tallet&&b.tallet.source_url)||(c.source&&c.source.url)||'';
+    const srcLine=(b.tallet&&b.tallet.source_line)||(c.source&&c.source.line)||'NBS';
+    const src='<p class="ny-fk-src">'+(srcUrl?('<a href="'+esc(srcUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(srcLine)+'</a>'):esc(srcLine))+'</p>';
+    function rows(list, cls){{
+      return (list||[]).map(r=>'<div class="'+cls+'"><span>'+esc(r.industry)+'</span><span class="ny-fk-ch">'+esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change)+'</span></div>').join('');
+    }}
+    const contrib=b.bidrag||{{}};
+    const up=rows(contrib.up,'ny-fk-br');
+    const down=rows(contrib.down,'ny-fk-br');
+    const fk=b.forklaring||{{}};
+    const expl='<div class="ny-fk-tag">'+esc(fk.label||'Kildens egen forklaring')+'</div><p class="ny-fk-txt">'+esc(fk.text||'')+(fk.attribution?'<span class="ny-fk-attr">'+esc(fk.attribution)+'</span>':'')+'</p>';
+    const nv=b.nevnt||{{}};
+    let nevnt='';
+    if(!nv.hidden&&((nv.sectors||[]).length||(nv.exposures||[]).length)){{
+      const sec=(nv.sectors||[]).map(s=>'<div class="ny-fk-nv"><span>'+esc(s.detail||s.name)+'</span></div>').join('');
+      const exp=(nv.exposures||[]).map(e=>{{
+        const lab=esc(e.ticker||'')+' '+esc(e.share_label||'')+' '+esc(e.report_date||'');
+        const href=e.report_url?'<a class="ny-fk-src" href="'+esc(e.report_url)+'" target="_blank" rel="noopener noreferrer">'+lab+'</a>':lab;
+        return '<div class="ny-fk-nv">'+href+'</div>';
+      }}).join('');
+      nevnt='<h3 class="ny-fk-h">Nevnt i kilden</h3>'+sec+exp;
+    }}
+    return '<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>'
+      +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+src
+      +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største bidrag</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
+      +'<h3 class="ny-fk-h">Kildens forklaring</h3>'+expl
+      +nevnt;
+  }}
+  function isWide(){{ return window.matchMedia && window.matchMedia('(min-width:1280px)').matches; }}
+  function closeForklaring(){{
+    const sh=document.getElementById('ny-fk-sheet');
+    const bg=document.getElementById('ny-fk-bg');
+    if(sh) sh.hidden=true;
+    if(bg) bg.hidden=true;
+    document.querySelectorAll('.ny-fkort.open').forEach(el=>el.classList.remove('open'));
+  }}
+  function openForklaring(btn){{
+    const inner=kortInner(kort);
+    if(!inner) return;
+    if(isWide()){{
+      closeForklaring();
+      const box=btn.parentElement && btn.parentElement.querySelector('.ny-fkort');
+      if(box){{ box.innerHTML=inner; box.classList.add('open'); box.hidden=false; }}
+      return;
+    }}
+    document.querySelectorAll('.ny-fkort.open').forEach(el=>el.classList.remove('open'));
+    const sh=document.getElementById('ny-fk-sheet');
+    const bg=document.getElementById('ny-fk-bg');
+    const body=document.getElementById('ny-fk-sheet-body');
+    if(body) body.innerHTML=inner;
+    if(sh) sh.hidden=false;
+    if(bg) bg.hidden=false;
+  }}
   function setSheet(open){{
     if(!sheet) return;
     const wasOpen=!sheet.hidden;
@@ -189,8 +306,15 @@ def html(snap=None) -> str:
     list.innerHTML=items.map(it=>{{
       const iss=(it.issuer||'').trim(); const chip=(iss&&iss!=='-')?'<span class="ny-chip">'+esc(iss)+'</span>':'';
       const lock=it.paywall?' 🔒':'';
-      return '<a class="ny-row" href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer"><span class="ny-time">'+esc(rowTime(it.published_utc))+'</span><span class="ny-body"><span class="ny-title">'+esc(it.title)+'</span><span class="ny-meta">'+chip+'<span class="ny-src">'+esc(it.source)+lock+'</span></span></span></a>';
+      const row='<a class="ny-row" href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer"><span class="ny-time">'+esc(rowTime(it.published_utc))+'</span><span class="ny-body"><span class="ny-title">'+esc(it.title)+'</span><span class="ny-meta">'+chip+'<span class="ny-src">'+esc(it.source)+lock+'</span></span></span></a>';
+      if(itemMatchesKort(it,kort)){{
+        return '<div class="ny-item">'+row+'<button type="button" class="ny-fkbtn" aria-haspopup="dialog">Hva betyr dette?</button><div class="ny-fkort" hidden></div></div>';
+      }}
+      return '<div class="ny-item">'+row+'</div>';
     }}).join('');
+    list.querySelectorAll('.ny-fkbtn').forEach(btn=>{{
+      btn.addEventListener('click',e=>{{ e.preventDefault(); e.stopPropagation(); openForklaring(btn); }});
+    }});
   }}
   function apply(d){{
     data=d||{{items:[],sources:[]}};
@@ -209,7 +333,14 @@ def html(snap=None) -> str:
       return r.json();
     }});
   }}
-  fetchJson(RAW).catch(()=>fetchJson(FB)).then(apply).catch(()=>{{
+  function loadKort(){{
+    if(!RAWK) return Promise.resolve(null);
+    return fetchJson(RAWK).catch(()=>FBK?fetchJson(FBK):Promise.reject()).catch(()=>null);
+  }}
+  Promise.all([fetchJson(RAW).catch(()=>fetchJson(FB)), loadKort()]).then(([d,k])=>{{
+    kort=k&&k.ok&&!k.hide?k:null;
+    apply(d);
+  }}).catch(()=>{{
     upd.textContent='Oppdatert --:--';
     list.innerHTML='<div class="ny-empty">Ingen kilder svarer nå. Sist oppdatert --:--.</div>';
   }});
@@ -229,7 +360,11 @@ def html(snap=None) -> str:
   const slukk=document.getElementById('ny-slukk');
   if(slukk) slukk.addEventListener('click',()=>setSheet(false));
   if(sheetBg) sheetBg.addEventListener('click',()=>setSheet(false));
-  document.addEventListener('keydown',e=>{{ if(e.key==='Escape') setSheet(false); }});
+  const fkSlukk=document.getElementById('ny-fk-slukk');
+  const fkBg=document.getElementById('ny-fk-bg');
+  if(fkSlukk) fkSlukk.addEventListener('click',()=>closeForklaring());
+  if(fkBg) fkBg.addEventListener('click',()=>closeForklaring());
+  document.addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ setSheet(false); closeForklaring(); }} }});
 }})();
 </script>
 """
@@ -244,4 +379,9 @@ def copy_json(site: Path, src: Path | None = None) -> Path | None:
     dest = Path(site) / "data" / "nyheter.json"
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(src, dest)
+    from .nbs_industriprofitt import OUT_PATH as KORT_OUT
+    if KORT_OUT.exists():
+        kdest = Path(site) / "data" / "nbs_industriprofitt.json"
+        kdest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(KORT_OUT, kdest)
     return dest

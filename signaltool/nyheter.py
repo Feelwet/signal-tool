@@ -471,6 +471,11 @@ def collect(cfg: dict | None = None, now: datetime | None = None, get=None, stat
         write_output(data)
         save_state(new_state)
         log.info("nyheter: %s saker (%s redaksjonelt, %s newsweb), %s nye i latency-loggen", len(items), n_ed, n_nw, n_new)
+        try:
+            from . import nbs_industriprofitt as NBS
+            NBS.collect(write=True, get=get)
+        except Exception as ex:
+            log.warning("nbs_industriprofitt: %s", ex)
     return data, new_state
 
 
