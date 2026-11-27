@@ -65,7 +65,10 @@ def _check(page, width, height, url, shot_name):
         visible_scene = min(scene["y"] + scene["height"], height) - scene["y"]
         assert visible_scene >= 300, visible_scene
         assert abs(scene["width"] - 390) <= 1 or scene["width"] <= 390
-        assert scene["height"] >= 420 and abs(scene["height"] - 660) <= 2
+        # R2: min(660px, 100dvh − scene-top − 56px − 8px)
+        expected = min(660, height - scene["y"] - 56 - 8)
+        assert scene["height"] >= 200
+        assert abs(scene["height"] - expected) <= 2, (scene, expected, height)
     if width == 1280:
         assert abs(scene["width"] - 840) <= 2, scene
         assert abs(scene["height"] - 600) <= 2, scene

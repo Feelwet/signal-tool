@@ -57,6 +57,7 @@ function canonType(typ) {
   return typ;
 }
 function isVare(n) { return n && canonType(n.type) === 'råvare'; }
+let overviewPackGap = 44;
 function isMobile() { return matchMedia('(max-width:900px)').matches; }
 function inUniverse(ticker) { return !!(ticker && universe.includes(ticker)); }
 function tickerPageHref(ticker) {
@@ -526,13 +527,19 @@ function layout(visu) {
     // Zoom ligger 16/16 øverst til venstre; hold venstre kolonne unna zoom-stacken.
     const zoomW = 120, zoomH = 16 + 44 * 3 + 8 + 16;
     const minBox = 52, gap = 44; // faktisk etikett-høyde (navn+verdi+padding) + minstegap 44
-    const pack = (col, x, startY) => {
+    overviewPackGap = 44;
+    const packFit = (col, x, startY) => {
       const n = col.length;
       if (!n) return;
-      const usedGap = gap;
-      let y0 = startY;
+      const labH = W < 500 ? 68 : 50;
+      const avail = Math.max(labH, H - startY - 8);
+      let usedGap = gap;
+      if (n > 1 && n * labH + (n - 1) * gap > avail) {
+        usedGap = Math.max(4, (avail - n * labH) / (n - 1));
+      }
+      overviewPackGap = Math.min(overviewPackGap, usedGap);
       col.forEach((node, i) => {
-        const y = y0 + minBox / 2 + i * (minBox + usedGap);
+        const y = startY + labH / 2 + i * (labH + usedGap);
         pos.set(node.id, { x, y, z: 0, hop: x > W / 2 ? 1 : 0 });
       });
     };
@@ -542,8 +549,8 @@ function layout(visu) {
     const headY = narrow ? zoomH + 10 : 16 + 9;
     const leftStart = narrow ? zoomH + 28 : 16 + 22;
     pos.set('__varer_h', { x: xL, y: headY, z: 0, hop: 0, heading: visu.heading || ('Varer (' + mats.length + ')') });
-    pack(mats, xL, leftStart);
-    pack(lands, xR, 16);
+    packFit(mats, xL, leftStart);
+    packFit(lands, xR, 16);
     return pos;
   }
   const focusId = visu.focus?.id || fokus;
@@ -646,6 +653,15 @@ function fmtSceneVal(row) {
   return [num, row.enhet, y].filter((x) => x != null && x !== '').join(' ');
 }
 
+function sizeScene() {
+  if (!el.wrap) return;
+  if (isMobile()) {
+    const top = el.wrap.getBoundingClientRect().top;
+    document.body.style.setProperty('--flyt-scene-top', `${top}px`);
+  } else {
+    document.body.style.removeProperty('--flyt-scene-top');
+  }
+}
 function updateStatus() {
   const cov = meta.coverage;
   const k = cov && cov.k != null ? Number(cov.k) : 0;
@@ -1037,7 +1053,7 @@ function resolveOverlaps(visu) {
       verk.style.left = (Math.min(parent.width - 8, cx) / parent.width * 100) + '%';
     }
   }
-  const minGap = visu.overview ? 44 : 4;
+  const minGap = visu.overview ? overviewPackGap : 4;
   const mid = parent.left + parent.width / 2;
   const cols = [
     items.filter((d) => toBox(d).left + toBox(d).width / 2 < mid),
@@ -1310,6 +1326,7 @@ function want3D() {
 }
 
 function redraw() {
+  sizeScene();
   vis = visibleSet(fokus);
   const pos = layout(vis);
   if (mode === 'liste') {
@@ -1536,7 +1553,10 @@ function bind() {
     el.hvisBox.hidden = !on;
     el.hvis.setAttribute('aria-pressed', on ? 'true' : 'false');
     if (el.chips) el.chips.hidden = !on;
+    sizeScene();
+    if (mode === 'kart') redraw();
   });
+  window.addEventListener('resize', () => { sizeScene(); if (mode === 'kart') redraw(); });
   el.pclose.addEventListener('click', closePanel);
   el.zin.addEventListener('click', () => { zoom = Math.min(ZOOM_MAX, zoom + 0.2); redraw(); });
   el.zout.addEventListener('click', () => { zoom = Math.max(ZOOM_MIN, zoom - 0.2); redraw(); });
@@ -1639,6 +1659,7 @@ async function init() {
   start = { zoom: 1, yaw: 0, pitch: is3d ? Math.PI / 18 : 0, fokus: qf ? resolveFokus(qf) : null };
   pitch = start.pitch;
   syncToggle();
+  sizeScene();
   if (qf) go(qf, false, true);
   else redraw();
 }
