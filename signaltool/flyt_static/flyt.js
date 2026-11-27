@@ -471,13 +471,17 @@ function overviewGraph() {
       status: 'kontekst',
     });
   }
-  return { nodes, counts, varerN: mats.length, heading: 'Varer (' + mats.length + ')' };
+  return {
+    nodes, counts,
+    varerN: mats.length, heading: 'Varer (' + mats.length + ')',
+    landN: lands.length, landHeading: 'Land (' + lands.length + ')',
+  };
 }
 
 function visibleSet(focusId) {
   if (!focusId) {
     const ov = overviewGraph();
-    return { nodes: ov.nodes.slice(), edges: [], overview: true, counts: ov.counts, hidden: 0, heading: ov.heading, varerN: ov.varerN };
+    return { nodes: ov.nodes.slice(), edges: [], overview: true, counts: ov.counts, hidden: 0, heading: ov.heading, varerN: ov.varerN, landN: ov.landN, landHeading: ov.landHeading };
   }
   const t = tickerOf(byId.get(focusId)) || (byId.has(focusId) ? null : focusId);
   const focusNode = byId.get(focusId) || noder.find((n) => tickerOf(n) === focusId);
@@ -543,14 +547,20 @@ function layout(visu) {
         pos.set(node.id, { x, y, z: 0, hop: x > W / 2 ? 1 : 0 });
       });
     };
+    const zoomEl = document.querySelector('.flyt-zoom');
+    const sceneBox = el.scene.getBoundingClientRect();
+    const zoomRight = zoomEl && sceneBox.width
+      ? Math.max(0, zoomEl.getBoundingClientRect().right - sceneBox.left)
+      : 16 + zoomW;
     const narrow = W < 500;
-    const xL = narrow ? W * 0.22 : Math.max(W * 0.32, zoomW + 70);
-    const xR = narrow ? W * 0.80 : W * 0.72;
-    const headY = narrow ? zoomH + 10 : 16 + 9;
-    const leftStart = narrow ? zoomH + 28 : 16 + 22;
+    const xL = narrow ? zoomRight + (W - zoomRight) * 0.28 : Math.max(W * 0.32, zoomRight + 70);
+    const xR = narrow ? zoomRight + (W - zoomRight) * 0.78 : W * 0.72;
+    const headY = 16 + 9;
+    const colStart = 16 + 18 + 8;
     pos.set('__varer_h', { x: xL, y: headY, z: 0, hop: 0, heading: visu.heading || ('Varer (' + mats.length + ')') });
-    packFit(mats, xL, leftStart);
-    packFit(lands, xR, 16);
+    pos.set('__land_h', { x: xR, y: headY, z: 0, hop: 1, heading: visu.landHeading || ('Land (' + (visu.landN != null ? visu.landN : lands.filter((n) => n.type === 'land').length) + ')') });
+    packFit(mats, xL, colStart);
+    packFit(lands, xR, colStart);
     return pos;
   }
   const focusId = visu.focus?.id || fokus;
@@ -1054,6 +1064,8 @@ function resolveOverlaps(visu) {
     }
   }
   const minGap = visu.overview ? overviewPackGap : 4;
+  const isHead = (d) => d.classList.contains('flyt-col-h');
+  const gapAB = (a, b) => (isHead(a) || isHead(b) ? 8 : minGap);
   const mid = parent.left + parent.width / 2;
   const cols = [
     items.filter((d) => toBox(d).left + toBox(d).width / 2 < mid),
@@ -1064,13 +1076,38 @@ function resolveOverlaps(visu) {
     for (let i = 1; i < col.length; i++) {
       const prev = toBox(col[i - 1]);
       const cur = toBox(col[i]);
-      const needTop = prev.bottom + minGap;
+      const needTop = prev.bottom + gapAB(col[i - 1], col[i]);
       if (cur.top < needTop - 0.5) {
         const dy = needTop - cur.top;
         const y = (cur.top - parent.top) + dy + cur.height / 2;
         col[i].style.top = (Math.min(parent.height - 8, Math.max(8, y)) / parent.height * 100) + '%';
       }
     }
+  }
+  if (visu.overview) {
+    // Hold kolonne-x fast (EU-27 og øvrige land samme x). Bare vertikal justering.
+    let oGuard = 0;
+    while (oGuard++ < 10) {
+      let moved = false;
+      const boxes = items.map((d) => ({ d, b: toBox(d) }));
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const A = boxes[i], B = boxes[j];
+          const g = gapAB(A.d, B.d);
+          if (!boxesOverlap(A.b, B.b, 0) && !boxesOverlap(A.b, B.b, g)) continue;
+          const lower = A.b.top >= B.b.top ? A : B;
+          const upper = lower === A ? B : A;
+          const dy = (upper.b.bottom + gapAB(upper.d, lower.d)) - lower.b.top;
+          if (dy > 0) {
+            const y = (lower.b.top - parent.top) + dy + lower.b.height / 2;
+            lower.d.style.top = (Math.min(parent.height - 8, Math.max(8, y)) / parent.height * 100) + '%';
+            moved = true;
+          }
+        }
+      }
+      if (!moved) break;
+    }
+    return;
   }
   let guard = 0;
   while (guard++ < 10) {
@@ -1114,14 +1151,17 @@ function resolveOverlaps(visu) {
   }
 }
 function placeOverviewHeading(pos) {
-  const head = pos.get('__varer_h');
-  if (!head || !head.heading) return;
-  const h = document.createElement('div');
-  h.className = 'flyt-col-h';
-  h.textContent = head.heading;
-  h.style.left = (head.x / (el.scene.clientWidth) * 100) + '%';
-  h.style.top = (head.y / (el.scene.clientHeight) * 100) + '%';
-  el.labels.appendChild(h);
+  for (const key of ['__varer_h', '__land_h']) {
+    const head = pos.get(key);
+    if (!head || !head.heading) continue;
+    const h = document.createElement('div');
+    h.className = 'flyt-col-h';
+    h.dataset.id = key;
+    h.textContent = head.heading;
+    h.style.left = (head.x / (el.scene.clientWidth) * 100) + '%';
+    h.style.top = (head.y / (el.scene.clientHeight) * 100) + '%';
+    el.labels.appendChild(h);
+  }
 }
 
 function placeLabels(visu, pos, hitN) {
@@ -1336,7 +1376,8 @@ function redraw() {
   if (mode === 'kart') {
     el.listView.hidden = true;
     el.wrap.style.display = '';
-    if (want3D()) draw3D(vis, pos);
+    // Oversikten er to faste kolonner; 3D-projeksjon med pitch forskyver x/y og bryter R4.
+    if (want3D() && !vis.overview) draw3D(vis, pos);
     else {
       if (three) { three.renderer.dispose(); three = null; }
       draw2D(vis, pos);

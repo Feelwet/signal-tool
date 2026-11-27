@@ -631,6 +631,8 @@ def oversikt_varer_og_land(noder: list, kanter: list) -> dict:
         "varer": varer,
         "varer_n": len(varer),
         "varer_label": f"Varer ({len(varer)})",
+        "land_n": len(lands),
+        "land_label": f"Land ({len(lands)})",
         "land_synlige": visible,
         "andre": andre,
         "counts": counts,
