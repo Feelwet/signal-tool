@@ -1,15 +1,32 @@
-id,lag,navn,hva_det_er,type,ticker,verdi,enhet,år,hs_kode,kilde,kilde_url,status,metode,grunn
-NHY.OL,selskap,Norsk Hydro,Selskap (fiktiv testdata): primæraluminium.,selskap,NHY.OL,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s40,kilde,,
-EQNR.OL,selskap,Equinor (fiktiv),Selskap uten kildebelagte verdikjedetall i testdata.,selskap,EQNR.OL,,,,,,,mangler,,Mangler data for verdikjeden
-bauxitt,råvare,Bauksitt,Råvare til alumina (fiktiv).,råvare,,2500000,tonn,2024,2606,Fiktiv handelsdata,https://example.test/fiktiv/hs2606,kilde,,
-alumina,råvare,Alumina,Innsatsvare til primæraluminium (fiktiv).,råvare,,1800000,tonn,2024,2818.20,Fiktiv handelsdata,https://example.test/fiktiv/hs2818,kilde,,
-kraft_norge,råvare,Kraft Norge,Elektrisk kraft brukt i produksjon i Norge (fiktiv).,råvare,,,TWh,2024,,Fiktiv testdata,https://example.test/fiktiv/kraft,estimat,"Fiktiv testfordeling, ikke et målt tall.",
-brasil,råvare,Brasil,Produksjonsland for bauksitt og alumina (fiktiv).,land,,,,2024,,Fiktiv handelsdata,https://example.test/fiktiv/brasil,kilde,,
-norge,selskap,Norge,Produksjonsland for primæraluminium (fiktiv).,land,,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s41,kilde,,
-eu,råvare,EU,Importregion for aluminium (fiktiv).,land,,800000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-eu,kilde,,
-tyskland,råvare,Tyskland,Importland (fiktiv).,land,,300000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-de,kilde,,
-usa,råvare,USA,Importland (fiktiv).,land,,150000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-us,kilde,,
-bil,selskap,Bil,Sluttbruk i bilindustrien (fiktiv bransjeandel).,sluttbruk,,35,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
-bygg,selskap,Bygg,Sluttbruk i bygg og anlegg (fiktiv bransjeandel).,sluttbruk,,25,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
-emballasje,selskap,Emballasje,Sluttbruk i emballasje (fiktiv bransjeandel).,sluttbruk,,15,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
-forsvar,selskap,Forsvar,Sluttbruk i forsvar.,sluttbruk,,,,,,,,mangler,,Kilden beskriver ikke andel til forsvar
+id,lag,navn,hva_det_er,type,ticker,verdi,enhet,år,hs_kode,kilde,kilde_url,status,metode,grunn,land
+NHY.OL,selskap,Norsk Hydro,Selskap (fiktiv testdata): primæraluminium.,selskap,NHY.OL,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s40,kilde,,,
+EQNR.OL,selskap,Equinor (fiktiv),Selskap uten kildebelagte verdikjedetall i testdata.,selskap,EQNR.OL,,,,,,,mangler,,Mangler data for verdikjeden,
+bauxitt,råvare,Bauksitt,Råvare til alumina (fiktiv).,råvare,,2500000,tonn,2024,2606,Fiktiv handelsdata,https://example.test/fiktiv/hs2606,kilde,,,
+alumina,råvare,Alumina,Innsatsvare til primæraluminium (fiktiv).,råvare,,1800000,tonn,2024,2818.20,Fiktiv handelsdata,https://example.test/fiktiv/hs2818,kilde,,,
+kraft_norge,råvare,Kraft Norge,Elektrisk kraft brukt i produksjon i Norge (fiktiv).,råvare,,,TWh,2024,,Fiktiv testdata,https://example.test/fiktiv/kraft,estimat,"Fiktiv testfordeling, ikke et målt tall.",,
+brasil,råvare,Brasil,Produksjonsland for bauksitt og alumina (fiktiv).,land,,,,2024,,Fiktiv handelsdata,https://example.test/fiktiv/brasil,kilde,,,
+norge,selskap,Norge,Produksjonsland for primæraluminium (fiktiv).,land,,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s41,kilde,,,
+eu,råvare,EU,Importregion for aluminium (fiktiv).,land,,800000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-eu,kilde,,,
+tyskland,råvare,Tyskland,Importland (fiktiv).,land,,300000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-de,kilde,,,
+usa,råvare,USA,Importland (fiktiv).,land,,150000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-us,kilde,,,
+bil,selskap,Bil,Sluttbruk i bilindustrien (fiktiv bransjeandel).,sluttbruk,,35,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+bygg,selskap,Bygg,Sluttbruk i bygg og anlegg (fiktiv bransjeandel).,sluttbruk,,25,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+emballasje,selskap,Emballasje,Sluttbruk i emballasje (fiktiv bransjeandel).,sluttbruk,,15,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+forsvar,selskap,Forsvar,Sluttbruk i forsvar.,sluttbruk,,,,,,,,mangler,,Kilden beskriver ikke andel til forsvar,
+verk_sunndal,selskap,Sunndal,Verk/anlegg i Norge (fiktiv testdata).,verk,,400000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Norge
+verk_karmoy,selskap,Karmøy,Verk/anlegg i Norge (fiktiv testdata).,verk,,270000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Norge
+verk_ardal,selskap,Årdal,Verk/anlegg i Norge (fiktiv testdata).,verk,,200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Norge
+verk_hoyanger,selskap,Høyanger,Verk/anlegg i Norge (fiktiv testdata).,verk,,50000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Norge
+verk_husnes,selskap,Husnes,Verk/anlegg i Norge (fiktiv testdata).,verk,,180000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Norge
+verk_slovalco,selskap,Slovalco,Verk/anlegg i Slovakia (fiktiv testdata).,verk,,160000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Slovakia
+verk_albras,selskap,Albras,Verk/anlegg i Brasil (fiktiv testdata).,verk,,450000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Brasil
+verk_alouette,selskap,Alouette,Verk/anlegg i Canada (fiktiv testdata).,verk,,300000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#verk,kilde,,,Canada
+frankrike,råvare,Frankrike,Importland (fiktiv).,land,,200000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-frankrike,kilde,,,
+italia,råvare,Italia,Importland (fiktiv).,land,,180000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-italia,kilde,,,
+spania,råvare,Spania,Importland (fiktiv).,land,,90000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-spania,kilde,,,
+polen,råvare,Polen,Importland (fiktiv).,land,,70000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-polen,kilde,,,
+storbritannia,råvare,Storbritannia,Importland (fiktiv).,land,,40000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-storbritannia,kilde,,,
+belgia,råvare,Belgia,Importland (fiktiv).,land,,20000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-belgia,kilde,,,
+sveits,råvare,Sveits,Importland (fiktiv).,land,,,,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-sveits,kilde,,,
+osterrrike,råvare,Østerrike,Importland (fiktiv).,land,,,,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-osterrrike,kilde,,,
+aluminium,selskap,Aluminium,Ferdig primæraluminium i verdikjeden (fiktiv kontekst uten tall).,råvare,,,,,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#kontekst,kontekst,,,

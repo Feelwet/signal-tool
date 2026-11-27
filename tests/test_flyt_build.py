@@ -21,7 +21,7 @@ def test_convert_csv_to_two_files(tmp_path):
     assert any(x["id"] == "NHY.OL" for x in n["noder"])
     assert any(x["fra"] == "NHY.OL" for x in k["kanter"])
     assert all(x.get("publisert") is False for x in k["kanter"])
-    assert {x["id"] for x in s["scenarioer"]} == {"energi_opp", "import_eu_ned", "bil_opp"}
+    assert {x["id"] for x in s["scenarioer"]} == {"energi_opp", "import_eu_ned", "bil_opp", "uten_setning"}
     assert not validate(n, k, s, allow_fictive=False)
     assert info["noder"]
 

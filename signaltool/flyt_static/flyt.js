@@ -1,7 +1,8 @@
 import * as THREE from './vendor/three.module.min.js';
 
 const LAG_SRC = { 'råvare': 'Handelsdata', 'selskap': 'Selskapsrapport' };
-const TYPE_LAB = { selskap: 'Selskaper', råvare: 'Råvarer', land: 'Land', sluttbruk: 'Sluttbruk' };
+const TYPE_LAB = { selskap: 'Selskaper', råvare: 'Råvarer', land: 'Land', sluttbruk: 'Sluttbruk', verk: 'Verk og anlegg' };
+const MAX_LAND_PER_LAG = 6;
 const TONN = new Set(['tonn', 't', 'tonnes', 'metric tonnes', 'metriske tonn', 'mt']);
 const MAX_NODES = 25;
 const YAW_MAX = Math.PI / 6;      // ±30°
@@ -41,6 +42,7 @@ let dimExcept = null;
 let scenario = null;
 let crumb = [];
 let vis = { nodes: [], edges: [] };
+let verkOpen = false;
 let three = null; // {renderer, scene, camera, frames}
 let dragging = null;
 let webgl = true;
@@ -79,6 +81,134 @@ function hasPublished(ticker) {
   }
   return false;
 }
+
+function nodeTall(node) {
+  if (node?.status === 'kontekst') return [];
+  if (Array.isArray(node?.tall) && node.tall.length) return node.tall.filter((r) => r && typeof r === 'object');
+  if (node && ((node.verdi != null && node.verdi !== '') || node.tekst)) return [node];
+  return [];
+}
+function landTonn(node) {
+  if (node?.verdi == null || node.verdi === '' || !isTonn(node.enhet) || node.år == null || node.år === '') return null;
+  const y = Number(node.år), v = Number(node.verdi);
+  if (!Number.isFinite(y) || !Number.isFinite(v)) return null;
+  return { year: y, val: v };
+}
+function landForLag(nodes) {
+  const lands = nodes.filter((n) => n.type === 'land');
+  const measured = [], unmeasured = [];
+  for (const n of lands) {
+    const t = landTonn(n);
+    if (t) measured.push({ n, ...t });
+    else unmeasured.push(n);
+  }
+  if (!measured.length) return { visible: [], andre: unmeasured };
+  const years = new Map();
+  for (const m of measured) years.set(m.year, (years.get(m.year) || 0) + 1);
+  let maxn = 0, year = 0;
+  for (const [y, c] of years) {
+    if (c > maxn || (c === maxn && y > year)) { maxn = c; year = y; }
+  }
+  const ranked = measured.filter((m) => m.year === year).sort((a, b) => b.val - a.val);
+  const otherYear = measured.filter((m) => m.year !== year).map((m) => m.n);
+  return {
+    visible: ranked.slice(0, MAX_LAND_PER_LAG).map((m) => m.n),
+    andre: ranked.slice(MAX_LAND_PER_LAG).map((m) => m.n).concat(otherYear, unmeasured),
+  };
+}
+function verkFor(companyId) {
+  const linked = new Set();
+  for (const e of pubKanter()) {
+    if (e.fra === companyId) linked.add(e.til);
+    else if (e.til === companyId) linked.add(e.fra);
+  }
+  return noder.filter((n) => n.type === 'verk' && linked.has(n.id));
+}
+function verkLabel(verks) {
+  return 'Verk (' + verks.length + ')';
+}
+function packVisible(rawNodes, edges, focus) {
+  const verks = rawNodes.filter((n) => n.type === 'verk');
+  let nodes = rawNodes.filter((n) => n.type !== 'verk');
+  const focusId = focus?.id;
+  if (verks.length && focusId) {
+    nodes.push({
+      id: 'verk:' + focusId,
+      type: 'verkgruppe',
+      navn: verkLabel(verks),
+      hva_det_er: 'Samlenode for verk og anlegg.',
+      verk: verks,
+      lag: 'selskap',
+      status: 'kilde',
+    });
+    if (verkOpen) nodes = nodes.concat(verks);
+  }
+  const byHop = [[], [], []];
+  const rest = [];
+  for (const n of nodes) {
+    if (n.type === 'land' && focusId) {
+      const h = Math.min(hopOf(n.id, focusId), 2);
+      byHop[h].push(n);
+    } else rest.push(n);
+  }
+  nodes = rest;
+  byHop.forEach((lands, hop) => {
+    if (!lands.length) return;
+    const { visible, andre } = landForLag(lands);
+    nodes.push(...visible);
+    if (andre.length) {
+      nodes.push({
+        id: 'andre:' + hop,
+        type: 'andre',
+        navn: '+' + andre.length + ' andre',
+        hva_det_er: 'Land utenfor de seks med mest tonn samme år, og land uten tonn.',
+        medlemmer: andre,
+        lag: 'råvare',
+        status: 'kilde',
+      });
+    }
+  });
+  const keep = new Set(nodes.map((n) => n.id));
+  const clusterId = focusId ? 'verk:' + focusId : null;
+  const packedEdges = [];
+  for (const e of edges) {
+    const mapEnd = (id) => {
+      const n = byId.get(id);
+      if (n?.type === 'verk' && clusterId) {
+        if (verkOpen && keep.has(id)) return id;
+        return clusterId;
+      }
+      if (n?.type === 'land' && !keep.has(id) && focusId) return 'andre:' + Math.min(hopOf(id, focusId), 2);
+      return id;
+    };
+    const fra = mapEnd(e.fra), til = mapEnd(e.til);
+    if (keep.has(fra) && keep.has(til) && fra !== til) packedEdges.push({ ...e, fra, til });
+  }
+  return { nodes, edges: packedEdges };
+}
+function scenarioHasChip(s) {
+  return (s?.tekst || []).some((t) => String(t.setning || '').trim() && String(t.kilde_url || '').trim());
+}
+function fillChips() {
+  const box = document.getElementById('flyt-hvis-chips') || document.querySelector('.flyt-hvis-chips');
+  if (!box) return;
+  box.innerHTML = '';
+  for (const s of scenarioer) {
+    if (!scenarioHasChip(s)) continue;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'flyt-chip';
+    b.dataset.scenario = s.id;
+    b.setAttribute('aria-pressed', 'false');
+    b.textContent = s.navn;
+    b.addEventListener('click', () => {
+      if (scenario?.id === s.id) applyScenario(null);
+      else applyScenario(s.id);
+    });
+    box.appendChild(b);
+  }
+}
+
 function parseFokus() {
   const u = new URL(location.href);
   return u.searchParams.get('fokus');
@@ -221,16 +351,18 @@ function visibleSet(focusId) {
     return { nodes: [focusNode], edges: [], overview: false, hidden: 0, missingChain: true };
   }
   const nb = neighbors(focusNode.id, 2);
-  let nodes = noder.filter((n) => nb.ids.has(n.id));
-  const hidden = Math.max(0, nodes.length - MAX_NODES);
-  if (nodes.length > MAX_NODES) {
-    // keep focus + nearest
-    const rest = nodes.filter((n) => n.id !== focusNode.id);
-    nodes = [focusNode, ...rest.slice(0, MAX_NODES - 1)];
+  const nodes = noder.filter((n) => nb.ids.has(n.id));
+  const packed = packVisible(nodes, nb.edges, focusNode);
+  const hidden = Math.max(0, packed.nodes.length - MAX_NODES);
+  let pnodes = packed.nodes;
+  if (pnodes.length > MAX_NODES) {
+    const head = pnodes.filter((n) => n.id === focusNode.id || n.type === 'verkgruppe');
+    const rest = pnodes.filter((n) => n.id !== focusNode.id && n.type !== 'verkgruppe');
+    pnodes = [...head, ...rest.slice(0, Math.max(0, MAX_NODES - head.length))];
   }
-  const keep = new Set(nodes.map((n) => n.id));
-  const edges = nb.edges.filter((e) => keep.has(e.fra) && keep.has(e.til));
-  return { nodes, edges, overview: false, hidden, focus: focusNode };
+  const keep = new Set(pnodes.map((n) => n.id));
+  const edges = packed.edges.filter((e) => keep.has(e.fra) && keep.has(e.til));
+  return { nodes: pnodes, edges, overview: false, hidden, focus: focusNode };
 }
 
 function hopOf(id, focusId) {
@@ -259,7 +391,10 @@ function layout(visu) {
   }
   const focusId = visu.focus?.id || fokus;
   const groups = [[], [], []];
-  for (const n of visu.nodes) groups[hopOf(n.id, focusId)].push(n);
+  for (const n of visu.nodes) {
+    if (n.type === 'verkgruppe' || n.type === 'verk') continue;
+    groups[hopOf(n.id, focusId)].push(n);
+  }
   groups.forEach((g, hop) => {
     const x = W * (0.18 + hop * 0.32);
     g.forEach((n, i) => {
@@ -267,6 +402,20 @@ function layout(visu) {
       pos.set(n.id, { x, y, z: (hop - 1) * 20, hop });
     });
   });
+  const cluster = visu.nodes.find((n) => n.type === 'verkgruppe');
+  const plants = visu.nodes.filter((n) => n.type === 'verk');
+  if (cluster) {
+    const nhy = pos.get(focusId) || { x: W * 0.18, y: H * 0.5 };
+    const cx = nhy.x + W * 0.14;
+    const cy = nhy.y;
+    pos.set(cluster.id, { x: cx, y: cy, z: 0, hop: 0 });
+    if (verkOpen && plants.length) {
+      plants.forEach((p, i) => {
+        const ang = (Math.PI / 2) * ((i + 0.5) / plants.length - 0.5);
+        pos.set(p.id, { x: cx + Math.cos(ang) * (W * 0.08), y: cy + Math.sin(ang) * (H * 0.42), z: 0, hop: 0 });
+      });
+    }
+  }
   return pos;
 }
 
@@ -448,34 +597,55 @@ function esc(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function renderPanel(node) {
-  el.pbody.innerHTML = '';
-  if (!node) { closePanel(); return; }
-  el.pbody.appendChild(sec('Hva det er', node.hva_det_er || node.navn, 'hva'));
-  const tall = document.createElement('div');
-  const fv = fmtVal(node);
-  if (node.status === 'mangler') {
+
+function appendTallRows(container, node) {
+  if (node.status === 'kontekst') {
     const p = document.createElement('p');
-    p.innerHTML = '<span class="badge">Mangler data</span>';
-    if (node.grunn) p.append(' ' + node.grunn);
-    tall.appendChild(p);
-  } else if (fv) {
+    p.className = 'flyt-kontekst-tall';
+    p.textContent = 'Ingen tall for denne noden.';
+    container.appendChild(p);
+    return;
+  }
+  const rows = nodeTall(node);
+  if (!rows.length) {
     const p = document.createElement('p');
-    p.textContent = fv;
-    if (node.status === 'estimat') {
+    p.className = 'flyt-miss';
+    if (node.status === 'mangler') {
+      const b = document.createElement('span');
+      b.className = 'badge';
+      b.textContent = 'Mangler data';
+      p.appendChild(b);
+      if (node.grunn) p.append(' ' + node.grunn);
+    } else {
+      p.textContent = 'Mangler data';
+    }
+    container.appendChild(p);
+    if (node.kilde || node.kilde_url || node.status === 'mangler') container.appendChild(srcLine(node));
+    return;
+  }
+  for (const r of rows) {
+    const wrap = document.createElement('div');
+    wrap.className = 'flyt-tall-rad';
+    const p = document.createElement('p');
+    p.textContent = r.tekst || fmtVal(r) || 'Mangler data';
+    if (r.status === 'estimat') {
       const b = document.createElement('span');
       b.className = 'badge';
       b.textContent = ' Estimat';
       p.appendChild(b);
     }
-    tall.appendChild(p);
-  } else {
-    const p = document.createElement('p');
-    p.className = 'flyt-miss';
-    p.textContent = 'Mangler data';
-    tall.appendChild(p);
+    wrap.appendChild(p);
+    wrap.appendChild(srcLine(r));
+    container.appendChild(wrap);
   }
-  tall.appendChild(srcLine(node));
+}
+
+function renderPanel(node) {
+  el.pbody.innerHTML = '';
+  if (!node) { closePanel(); return; }
+  el.pbody.appendChild(sec('Hva det er', node.hva_det_er || node.navn, 'hva'));
+  const tall = document.createElement('div');
+  appendTallRows(tall, node);
   // edges into/out of node, each with source line
   for (const e of pubKanter().filter((x) => x.fra === node.id || x.til === node.id)) {
     if (e.status === 'mangler') continue;
@@ -489,7 +659,37 @@ function renderPanel(node) {
     tall.appendChild(p);
     tall.appendChild(srcLine(e));
   }
-  el.pbody.appendChild(sec('Tall', tall, 'tall'));
+  if (node.type !== 'verkgruppe') el.pbody.appendChild(sec('Tall', tall, 'tall'));
+  if (node.type === 'verkgruppe') {
+    const box = document.createElement('div');
+    for (const v of node.verk || []) {
+      const row = document.createElement('div');
+      row.className = 'flyt-verk-rad';
+      const a = document.createElement('span'); a.textContent = v.navn;
+      const b = document.createElement('span'); b.textContent = v.land || '';
+      const c = document.createElement('span'); c.textContent = fmtVal(v) || 'Mangler data';
+      row.append(a, b, c);
+      row.tabIndex = 0;
+      row.addEventListener('click', () => { if (!verkOpen) { verkOpen = true; redraw(); } renderPanel(v); });
+      box.appendChild(row);
+    }
+    el.pbody.appendChild(sec('Verk og anlegg', box, 'verk'));
+  }
+  if (node.type === 'andre') {
+    const box = document.createElement('div');
+    for (const m of node.medlemmer || []) {
+      const row = document.createElement('div');
+      row.className = 'flyt-verk-rad';
+      const a = document.createElement('span'); a.textContent = m.navn;
+      const c = document.createElement('span');
+      c.textContent = landTonn(m) ? fmtVal(m) : 'uten tonn';
+      row.append(a, c);
+      row.tabIndex = 0;
+      row.addEventListener('click', () => { go(m.id, true); });
+      box.appendChild(row);
+    }
+    el.pbody.appendChild(sec('Andre land', box, 'andre'));
+  }
   const tk = tickerOf(node);
   if (tk) el.pbody.appendChild(sec('Kurs', kursBlock(tk), 'kurs'));
   const rel = document.createElement('div');
@@ -559,6 +759,17 @@ function markPath(id) {
   while (up.length) {
     const u = up.pop();
     for (const e of pubKanter()) if (e.til === u && !seenU.has(e.fra)) { seenU.add(e.fra); path.add(e.fra); up.push(e.fra); }
+  }
+  for (const n of noder) {
+    if (n.type === 'verk' && path.has(n.id)) {
+      const cid = (n.id && path.has(id) ? 'verk:' + id : null);
+      if (cid) path.add(cid);
+      // also cluster for the linked company
+      for (const e of pubKanter()) {
+        if (e.fra === n.id) path.add('verk:' + e.til);
+        if (e.til === n.id) path.add('verk:' + e.fra);
+      }
+    }
   }
   dimExcept = path;
 }
@@ -865,6 +1076,19 @@ function syncToggle() {
 }
 
 function onNode(id) {
+  const syn = (vis.nodes || []).find((x) => x.id === id);
+  if (syn && syn.type === 'verkgruppe') {
+    verkOpen = !verkOpen;
+    if (crumb[crumb.length - 1] !== id) crumb.push(id);
+    renderCrumb();
+    redraw();
+    renderPanel(syn);
+    return;
+  }
+  if (syn && syn.type === 'andre') {
+    renderPanel(syn);
+    return;
+  }
   const n = byId.get(id);
   if (!n) return;
   if (crumb[crumb.length - 1] !== id) crumb.push(id);
@@ -904,6 +1128,7 @@ function resetView() {
   yaw = start.yaw;
   pitch = start.pitch;
   scenario = null;
+  verkOpen = false;
   document.querySelectorAll('.flyt-chip').forEach((b) => b.setAttribute('aria-pressed', 'false'));
   const initial = start.fokus;
   crumb = initial ? [initial] : [];
@@ -920,18 +1145,17 @@ function resetView() {
 }
 
 function applyScenario(id) {
-  const s = scenarioer.find((x) => x.id === id) || null;
+  let s = scenarioer.find((x) => x.id === id) || null;
+  if (s && !scenarioHasChip(s)) s = null;
   scenario = s;
-  document.querySelectorAll('.flyt-chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scenario === id ? 'true' : 'false'));
+  document.querySelectorAll('.flyt-chip').forEach((b) => b.setAttribute('aria-pressed', s && b.dataset.scenario === s.id ? 'true' : 'false'));
   const box = el.hvisTekst;
   box.innerHTML = '';
-  if (!s || !s.tekst || !s.tekst.length) {
-    const p = document.createElement('p');
-    p.className = 'flyt-hvis-s';
-    p.textContent = EMPTY;
-    box.appendChild(p);
-  } else {
-    for (const t of s.tekst) {
+  const tallBox = document.getElementById('flyt-hvis-tall');
+  if (tallBox) tallBox.innerHTML = '';
+  if (s) {
+    for (const t of s.tekst || []) {
+      if (!String(t.setning || '').trim()) continue;
       const p = document.createElement('p');
       p.className = 'flyt-hvis-s';
       p.textContent = t.setning + ' ';
@@ -944,6 +1168,30 @@ function applyScenario(id) {
         p.appendChild(a);
       }
       box.appendChild(p);
+    }
+    if (tallBox) {
+      const rows = Array.isArray(s.tall) ? s.tall : [];
+      if (!rows.length) {
+        const p = document.createElement('p');
+        p.className = 'flyt-hvis-tall-rad flyt-miss';
+        p.textContent = EMPTY;
+        tallBox.appendChild(p);
+      } else {
+        for (const r of rows) {
+          const p = document.createElement('p');
+          p.className = 'flyt-hvis-tall-rad';
+          p.textContent = r.tekst || '';
+          if (r.kilde_url) {
+            const a = document.createElement('a');
+            a.href = r.kilde_url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = r.side ? ` Kilde, s. ${r.side}` : ' Kilde';
+            p.appendChild(a);
+          }
+          tallBox.appendChild(p);
+        }
+      }
     }
   }
   redraw();
@@ -964,13 +1212,6 @@ function bind() {
   el.reset.addEventListener('click', resetView);
   el.q.addEventListener('change', () => { const v = el.q.value.trim(); if (v) go(v, true); });
   el.q.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const v = el.q.value.trim(); if (v) go(v, true); } });
-  document.querySelectorAll('.flyt-chip').forEach((b) => {
-    b.addEventListener('click', () => {
-      const id = b.dataset.scenario;
-      if (scenario?.id === id) applyScenario(null);
-      else applyScenario(id);
-    });
-  });
   // bottom sheet snap 50 / 90
   let startY = null, startH = null;
   el.panel.addEventListener('pointerdown', (e) => {
@@ -1047,6 +1288,7 @@ async function init() {
   }
   updateStatus();
   fillSearch();
+  fillChips();
   bind();
   const qf = parseFokus();
   start = { zoom: 1, yaw: 0, pitch: is3d ? Math.PI / 18 : 0, fokus: qf ? resolveFokus(qf) : null };
@@ -1056,6 +1298,8 @@ async function init() {
   else redraw();
 }
 
+window.__flyt = { onNode, applyScenario, resetView, fillChips,
+  get vis() { return vis; }, get verkOpen() { return verkOpen; } };
 init().catch((err) => {
   el.status.textContent = 'Kunne ikke laste flyt-data.';
   console.error(err);

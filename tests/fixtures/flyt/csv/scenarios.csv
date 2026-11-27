@@ -2,3 +2,4 @@ id,navn,noder,kanter,setning,kilde_url,side
 energi_opp,Energipris i Norge opp,kraft_norge|NHY.OL,kraft_norge>NHY.OL,"Fiktiv testdata, sitert ordrett: «En økning i kraftprisen på 10 NOK/MWh reduserer EBITDA med 1,2 milliarder NOK.»",https://example.test/fiktiv/hydro-2024#s99,99
 import_eu_ned,Import til EU ned,eu|NHY.OL,NHY.OL>eu,"Fiktiv testdata: kilden beskriver at lavere etterspørsel i EU reduserer leveransevolum, uten å angi kursutfall.",https://example.test/fiktiv/hs7601-eu,
 bil_opp,Etterspørsel fra bil opp,bil|NHY.OL,NHY.OL>bil,"Fiktiv testdata: kilden beskriver at høyere etterspørsel fra bilindustrien øker behovet for aluminium, uten å angi kursutfall.",https://example.test/fiktiv/sluttbruk,
+uten_setning,Et scenario uten kilde,NHY.OL,,,,

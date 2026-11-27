@@ -20,8 +20,9 @@ def _meta():
 
 def _page():
     uni, n, k = _meta()
+    s = json.loads((FIX / "scenarioer.json").read_text())
     return FY.html({"generated": "2026-11-27 13:00"}, universe=uni, noder=n, kanter=k,
-                   data_base="flyt", kurs_url="data.json")
+                   scenarioer=s, data_base="flyt", kurs_url="data.json")
 
 
 def test_toolbar_disclaimer_status_and_chips():
@@ -31,6 +32,8 @@ def test_toolbar_disclaimer_status_and_chips():
     assert "Undersøkelse og kontekst, ikke kjøpsanbefaling. Stiplet = estimat." in h
     assert 'id="flyt-status"' in h
     assert "Energipris i Norge opp" in h and "Import til EU ned" in h and "Etterspørsel fra bil opp" in h
+    assert 'data-scenario="uten_setning"' not in h
+    assert 'id="flyt-hvis-tall"' in h
     assert "Forklaring fra kildene, ikke en prognose" in h
     assert "Hva kildene sier" in h and "Mekanisme ifølge kilden" in h
     assert "Kilden beskriver ikke dette" not in h or 'id="flyt-hvis-tekst"' in h

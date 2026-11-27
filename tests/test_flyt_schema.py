@@ -109,3 +109,21 @@ def test_site_flyt_has_no_fictive_json():
     for p in root.glob("*.json"):
         raw = json.loads(p.read_text())
         assert not (isinstance(raw, dict) and raw.get("_fiktiv")), f"{p} er merket fiktiv"
+
+
+def test_kontekst_status_is_valid_for_nodes_without_tall():
+    from signaltool.flyt_schema import STATUS
+    assert "kontekst" in STATUS
+    n, k, s = _load()
+    node = next(x for x in n["noder"] if x["status"] == "kontekst")
+    assert node["id"] == "aluminium"
+    assert node.get("verdi") in (None, "")
+    assert not node.get("tall")
+    assert not validate(n, k, s, allow_fictive=True)
+    bad = copy.deepcopy(n)
+    hit = next(x for x in bad["noder"] if x["id"] == "aluminium")
+    hit["verdi"] = 100
+    hit["enhet"] = "tonn"
+    hit["år"] = 2024
+    err = validate(bad, k, s, allow_fictive=True)
+    assert any("kontekst" in e and "uten tall" in e for e in err)

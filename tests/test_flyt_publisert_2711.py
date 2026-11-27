@@ -50,8 +50,10 @@ def test_apply_godkjent_sets_only_matching_rows():
     out = apply_godkjent(k["kanter"], FIX / "godkjent.csv")
     pub = [e for e in out if e["publisert"] is True]
     unpub = [e for e in out if e["publisert"] is False]
-    assert len(pub) == 7 and unpub
-    assert all(e["status"] == "kilde" for e in pub)
+    expect = sum(1 for r in __import__("csv").DictReader((FIX / "godkjent.csv").open(encoding="utf-8", newline="")))
+    assert len(pub) == expect and unpub
+    orig = {(e["fra"], e["til"], e.get("lag")): e.get("status") for e in k["kanter"]}
+    assert all(e.get("status") == orig[(e["fra"], e["til"], e.get("lag"))] for e in pub)
     assert all(e.get("godkjent_dato") == "2026-11-27" for e in pub)
     assert all(e.get("kontroll") == "fiktiv-testkontroll" for e in pub)
     assert all("godkjent_dato" not in e for e in unpub)
@@ -88,9 +90,10 @@ def test_apply_godkjent_file_roundtrip(tmp_path):
     convert(FIX / "csv", dest)
     assert all(e["publisert"] is False for e in json.loads((dest / "kanter.json").read_text())["kanter"])
     n = apply_godkjent_file(dest, FIX / "godkjent.csv")
-    assert n == 7
+    expect = sum(1 for r in __import__("csv").DictReader((FIX / "godkjent.csv").open(encoding="utf-8", newline="")))
+    assert n == expect
     k = json.loads((dest / "kanter.json").read_text())
-    assert sum(1 for e in k["kanter"] if e["publisert"] is True) == 7
+    assert sum(1 for e in k["kanter"] if e["publisert"] is True) == expect
     # å fjerne fila og kjøre apply på tomt utvalg: ny fil uten rader setter alt til false
     empty = tmp_path / "empty.csv"
     empty.write_text("kant-id,lag,dato,kontroll\n", encoding="utf-8")

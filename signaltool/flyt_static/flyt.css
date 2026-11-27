@@ -26,7 +26,9 @@ body.pg-flyt footer{max-width:none}
 .flyt-stage-wrap{position:relative;flex:0 0 auto;min-width:0}
 .flyt-scene{position:relative;background:var(--card,#161b22);border:1px solid var(--line,#3a4350);border-radius:10px;overflow:hidden;touch-action:none}
 .flyt-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.flyt-lab{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);text-align:center;color:var(--ink,#e6edf3);cursor:pointer;max-width:140px}
+.flyt-lab{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);text-align:center;color:var(--ink,#e6edf3);cursor:pointer;max-width:140px;z-index:2}
+.flyt-lab.path,.flyt-lab.on{z-index:3}
+.flyt-lab[data-id^="verk:"]{z-index:6}
 .flyt-lab .n{display:block;font-size:13px;line-height:18px;font-weight:600;overflow-wrap:anywhere}
 .flyt-lab .v{display:block;font-size:12px;line-height:16px;color:var(--mut,#9ea9b5)}
 .flyt-lab .badge{display:inline-block;margin-top:2px;font-size:11px;line-height:14px;padding:0 6px;border-radius:4px;border:1px solid var(--line,#3a4350);color:var(--mut,#9ea9b5);background:transparent}
@@ -102,4 +104,22 @@ a.flyt-l{position:relative;z-index:2;color:var(--acc,#6cb6ff);background:transpa
 }
 @media (max-width:390px){
   body.pg-flyt .flyt-stage-wrap,body.pg-flyt .flyt-scene{width:390px;max-width:100%;height:420px}
+}
+
+.flyt-verk-rad,.flyt-andre-rad{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:44px;height:44px;box-sizing:border-box;padding:0 8px;
+  border-bottom:1px solid var(--line,#3a4350);font-size:14px;line-height:20px;cursor:pointer;
+}
+.flyt-verk-rad span:first-child,.flyt-andre-rad span:first-child{flex:1;min-width:0}
+.flyt-tall-rad{margin:0 0 12px}
+.flyt-tall-rad p{margin:0 0 4px}
+.flyt-hvis-tall{margin-top:8px;border-top:1px solid var(--line,#3a4350);padding-top:8px}
+.flyt-hvis-tall:empty{display:none;border:0;margin:0;padding:0}
+.flyt-hvis-tall-rad{margin:0 0 6px;font-size:14px;line-height:20px}
+.flyt-sec p.flyt-kontekst-tall,.flyt-kontekst-tall{
+  margin:0;
+  font-size:13px;
+  line-height:18px;
+  color:var(--mut,#9ea9b5);
 }

@@ -18,6 +18,13 @@
           "kilde_url": "https://example.test/fiktiv/hydro-2024#s99",
           "side": "99"
         }
+      ],
+      "tall": [
+        {
+          "tekst": "Fiktiv testdata, sitert ordrett: «En økning i kraftprisen på 10 NOK/MWh reduserer EBITDA med 1,2 milliarder NOK.»",
+          "side": "99",
+          "kilde_url": "https://example.test/fiktiv/hydro-2024#s99"
+        }
       ]
     },
     {
@@ -35,7 +42,8 @@
           "setning": "Fiktiv testdata: kilden beskriver at lavere etterspørsel i EU reduserer leveransevolum, uten å angi kursutfall.",
           "kilde_url": "https://example.test/fiktiv/hs7601-eu"
         }
-      ]
+      ],
+      "tall": []
     },
     {
       "id": "bil_opp",
@@ -52,7 +60,17 @@
           "setning": "Fiktiv testdata: kilden beskriver at høyere etterspørsel fra bilindustrien øker behovet for aluminium, uten å angi kursutfall.",
           "kilde_url": "https://example.test/fiktiv/sluttbruk"
         }
-      ]
+      ],
+      "tall": []
+    },
+    {
+      "id": "uten_setning",
+      "navn": "Et scenario uten kilde",
+      "noder": [
+        "NHY.OL"
+      ],
+      "kanter": [],
+      "tekst": []
     }
   ]
 }

@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from .config import ROOT
-from .flyt_schema import coverage, universe_tickers
+from .flyt_schema import coverage, universe_tickers, scenario_chips
 
 STATIC = Path(__file__).resolve().parent / "flyt_static"
 LINK_CSS = (
@@ -19,13 +19,6 @@ LINK_CSS = (
 E = lambda x: _html.escape("" if x is None else str(x))
 SITE = ROOT / "site"
 FLYT = SITE / "flyt"
-SCENARIO_CHIPS = (
-    ("energi_opp", "Energipris i Norge opp"),
-    ("import_eu_ned", "Import til EU ned"),
-    ("bil_opp", "Etterspørsel fra bil opp"),
-)
-
-
 def fokus_href(ticker: str, pre: str = "") -> str:
     return f"{pre}flyt.html?fokus={quote(str(ticker), safe='')}"
 
@@ -39,17 +32,19 @@ def jump(ticker: str, pre: str = "../") -> str:
     return f'<p class="flyt-jump">{link(ticker, pre)}</p>'
 
 
-def _chips() -> str:
+def _chips(scenarioer=None) -> str:
+    """Bare scenarioer med minst én kildebelagt mekanismesetning får chip."""
     btns = "".join(
         f'<button type="button" class="flyt-chip" data-scenario="{E(i)}" aria-pressed="false">{E(n)}</button>'
-        for i, n in SCENARIO_CHIPS
+        for i, n in scenario_chips(scenarioer)
     )
-    return f'<div class="flyt-hvis-chips" role="group" aria-label="Hva hvis">{btns}</div>'
+    return f'<div class="flyt-hvis-chips" id="flyt-hvis-chips" role="group" aria-label="Hva hvis">{btns}</div>'
 
 
 def body_html(*, meta: dict | None = None) -> str:
     meta = meta or {}
     meta_json = json.dumps(meta, ensure_ascii=False)
+    chips = _chips(meta.get("scenarioer"))
     return f"""
 <div class="flyt" id="flyt-app">
   <div class="flyt-top" id="flyt-top">
@@ -85,12 +80,13 @@ def body_html(*, meta: dict | None = None) -> str:
   </div>
   <div id="flyt-list" class="flyt-list" hidden></div>
   <div id="flyt-hvis-box" class="flyt-hvis" hidden>
-    {_chips()}
+    {chips}
     <div class="flyt-hvis-panel">
       <p class="flyt-hvis-lead">Forklaring fra kildene, ikke en prognose</p>
       <h2>Hva kildene sier</h2>
       <p class="flyt-etikett">Mekanisme ifølge kilden</p>
       <div id="flyt-hvis-tekst"></div>
+      <div id="flyt-hvis-tall" class="flyt-hvis-tall"></div>
     </div>
   </div>
 </div>
@@ -109,7 +105,7 @@ def _attach_assets(page: str, pre: str = "") -> str:
 
 
 def meta_from(*, universe: list[str] | None = None, noder=None, kanter=None,
-              data_base: str = "flyt", kurs_url: str = "data.json") -> dict:
+              scenarioer=None, data_base: str = "flyt", kurs_url: str = "data.json") -> dict:
     uni = list(universe) if universe is not None else universe_tickers()
     cov = None
     if noder is not None and kanter is not None:
@@ -121,13 +117,14 @@ def meta_from(*, universe: list[str] | None = None, noder=None, kanter=None,
         "data_base": data_base,
         "kurs_url": kurs_url,
         "default_fokus": "NHY.OL",
+        "scenarioer": scenarioer or [],
     }
 
 
 def html(snap=None, *, universe: list[str] | None = None, noder=None, kanter=None,
-         data_base: str = "flyt", kurs_url: str = "data.json", pre: str = "") -> str:
+         scenarioer=None, data_base: str = "flyt", kurs_url: str = "data.json", pre: str = "") -> str:
     from . import site as S
-    meta = meta_from(universe=universe, noder=noder, kanter=kanter, data_base=data_base, kurs_url=kurs_url)
+    meta = meta_from(universe=universe, noder=noder, kanter=kanter, scenarioer=scenarioer, data_base=data_base, kurs_url=kurs_url)
     page = S.page("Flyt", body_html(meta=meta), 0, snap)
     return _attach_assets(page, pre)
 
@@ -181,6 +178,9 @@ def prepare_preview(dest: Path, *, fixture: bool = False, snap=None) -> Path:
         uni = universe_tickers(fx / "list_members.csv")
         noder = json.loads((fx / "noder.json").read_text(encoding="utf-8"))
         kanter = json.loads((fx / "kanter.json").read_text(encoding="utf-8"))
+        scenarioer = json.loads((fx / "scenarioer.json").read_text(encoding="utf-8"))
+    else:
+        scenarioer = None
     write(dest, snap or {"generated": "2026-11-27 13:00"}, universe=uni, noder=noder, kanter=kanter,
-          data_base=data_base, kurs_url=kurs_url)
+          scenarioer=scenarioer, data_base=data_base, kurs_url=kurs_url)
     return dest / "flyt.html"
