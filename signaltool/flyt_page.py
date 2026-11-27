@@ -33,18 +33,29 @@ def jump(ticker: str, pre: str = "../") -> str:
 
 
 def _chips(scenarioer=None) -> str:
-    """Bare scenarioer med minst én kildebelagt mekanismesetning får chip."""
+    """Bare scenarioer med minst én kildebelagt mekanismesetning får chip.
+
+    Chip-raden ligger rett under topplinja (over scenen); vises når Hva hvis er aktivt.
+    """
     btns = "".join(
         f'<button type="button" class="flyt-chip" data-scenario="{E(i)}" aria-pressed="false">{E(n)}</button>'
         for i, n in scenario_chips(scenarioer)
     )
-    return f'<div class="flyt-hvis-chips" id="flyt-hvis-chips" role="group" aria-label="Hva hvis">{btns}</div>'
+    return (
+        f'<div class="flyt-hvis-chips" id="flyt-hvis-chips" role="group" '
+        f'aria-label="Hva hvis" hidden>{btns}</div>'
+    )
 
 
 def body_html(*, meta: dict | None = None) -> str:
     meta = meta or {}
     meta_json = json.dumps(meta, ensure_ascii=False)
     chips = _chips(meta.get("scenarioer"))
+    cov = meta.get("coverage") or {}
+    if cov.get("beregnet") and cov.get("statuslinje"):
+        status = f'<p class="flyt-status" id="flyt-status">{E(cov["statuslinje"])}</p>'
+    else:
+        status = '<p class="flyt-status" id="flyt-status" hidden></p>'
     return f"""
 <div class="flyt" id="flyt-app">
   <div class="flyt-top" id="flyt-top">
@@ -58,8 +69,18 @@ def body_html(*, meta: dict | None = None) -> str:
     </div>
     <button type="button" id="flyt-hvis" aria-pressed="false">Hva hvis</button>
   </div>
+  {chips}
+  <div id="flyt-hvis-box" class="flyt-hvis" hidden>
+    <div class="flyt-hvis-panel">
+      <p class="flyt-hvis-lead">Forklaring fra kildene, ikke en prognose</p>
+      <h2>Hva kildene sier</h2>
+      <p class="flyt-etikett">Mekanisme ifølge kilden</p>
+      <div id="flyt-hvis-tekst"></div>
+      <div id="flyt-hvis-tall" class="flyt-hvis-tall"></div>
+    </div>
+  </div>
   <p class="flyt-disc">Undersøkelse og kontekst, ikke kjøpsanbefaling. Stiplet = estimat.</p>
-  <p class="flyt-status" id="flyt-status"></p>
+  {status}
   <div class="flyt-crumb" id="flyt-crumb" hidden></div>
   <div class="flyt-desk" id="flyt-desk">
     <div class="flyt-stage-wrap" id="flyt-stage-wrap">
@@ -73,22 +94,13 @@ def body_html(*, meta: dict | None = None) -> str:
     </div>
     <aside id="flyt-panel" class="flyt-panel" hidden>
       <div class="flyt-panel-bar">
+        <button type="button" class="flyt-sheet-handle" id="flyt-sheet-handle" aria-label="Utvid detaljer"></button>
         <button type="button" id="flyt-panel-close" aria-label="Lukk">Lukk</button>
       </div>
       <div id="flyt-panel-body"></div>
     </aside>
   </div>
   <div id="flyt-list" class="flyt-list" hidden></div>
-  <div id="flyt-hvis-box" class="flyt-hvis" hidden>
-    {chips}
-    <div class="flyt-hvis-panel">
-      <p class="flyt-hvis-lead">Forklaring fra kildene, ikke en prognose</p>
-      <h2>Hva kildene sier</h2>
-      <p class="flyt-etikett">Mekanisme ifølge kilden</p>
-      <div id="flyt-hvis-tekst"></div>
-      <div id="flyt-hvis-tall" class="flyt-hvis-tall"></div>
-    </div>
-  </div>
 </div>
 <script type="application/json" id="flyt-meta">{meta_json}</script>
 """
@@ -106,10 +118,20 @@ def _attach_assets(page: str, pre: str = "") -> str:
 
 def meta_from(*, universe: list[str] | None = None, noder=None, kanter=None,
               scenarioer=None, data_base: str = "flyt", kurs_url: str = "data.json") -> dict:
-    uni = list(universe) if universe is not None else universe_tickers()
+    # N og k bare når univers og flyt-data kommer fra samme bygg.
+    # Mangler ett av dem: coverage.beregnet = False, statuslinja skjules.
+    if universe is not None:
+        uni = list(universe)
+        uni_ok = True
+    else:
+        uni = universe_tickers()
+        uni_ok = bool(uni)
     cov = None
-    if noder is not None and kanter is not None:
+    if noder is not None and kanter is not None and uni_ok:
         cov = coverage(noder, kanter, uni)
+        cov["beregnet"] = True
+    else:
+        cov = {"beregnet": False, "n": len(uni), "k": None, "statuslinje": ""}
     return {
         "universe": uni,
         "n": len(uni),
@@ -192,9 +214,10 @@ def prepare_preview(dest: Path, *, fixture: bool = False, snap=None) -> Path:
             from .flyt_build import apply_godkjent_file
             apply_godkjent_file(dest / "flyt", dest / "flyt" / "godkjent.csv")
         uni = universe_tickers(fx / "list_members.csv")
-        noder = json.loads((fx / "noder.json").read_text(encoding="utf-8"))
-        kanter = json.loads((fx / "kanter.json").read_text(encoding="utf-8"))
-        scenarioer = json.loads((fx / "scenarioer.json").read_text(encoding="utf-8"))
+        # Dekning og meta skal bruke de samme filene som siden laster (etter godkjent.csv).
+        noder = json.loads((dest / "flyt" / "noder.json").read_text(encoding="utf-8"))
+        kanter = json.loads((dest / "flyt" / "kanter.json").read_text(encoding="utf-8"))
+        scenarioer = json.loads((dest / "flyt" / "scenarioer.json").read_text(encoding="utf-8"))
     else:
         scenarioer = None
     write(dest, snap or {"generated": "2026-11-27 13:00"}, universe=uni, noder=noder, kanter=kanter,

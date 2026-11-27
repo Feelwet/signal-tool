@@ -300,16 +300,39 @@ def coverage(noder: list, kanter: list, universe: list[str]) -> dict:
             frontier = nxt
         return False
 
-    uni = list(dict.fromkeys(universe))
-    raw = [t for t in uni if has_kilde(t, "råvare")]
-    sel = [t for t in uni if has_kilde(t, "selskap")]
+    uni = list(dict.fromkeys(universe)) if universe is not None else []
+
+    def has_published(ticker: str, lag: str | None = None) -> bool:
+        nid = ticker_ids.get(ticker)
+        if not nid:
+            return False
+        seen = {nid}
+        frontier = [nid]
+        for _hop in range(2):
+            nxt = []
+            for u in frontier:
+                for v, e in adj.get(u, []):
+                    if lag is None or e.get("lag") == lag:
+                        return True
+                    if v not in seen:
+                        seen.add(v)
+                        nxt.append(v)
+            frontier = nxt
+        return False
+
+    raw = [t for t in uni if has_published(t, "råvare") or has_kilde(t, "råvare")]
+    sel = [t for t in uni if has_published(t, "selskap") or has_kilde(t, "selskap")]
+    k = [t for t in uni if has_published(t)]
     return {
         "universe": uni,
         "n": len(uni),
+        "k": len(k),
+        "med_kant": k,
         "råvare": raw,
         "selskap": sel,
         "råvare_n": len(raw),
         "selskap_n": len(sel),
+        "beregnet": True,
         "statuslinje": f"Råvaredata for {len(raw)} av {len(uni)} · Selskapsdata for {len(sel)} av {len(uni)}",
     }
 
@@ -533,3 +556,89 @@ def verk_for(noder, kanter, company_id: str, *, only_published: bool = True) -> 
 
 def verk_label(verks: list) -> str:
     return f"Verk ({len(verks)})"
+
+
+def tickers_on_node(noder: list, kanter: list, node_id: str) -> list[str]:
+    """Tickere koblet til en node via publiserte kanter (inntil to hopp)."""
+    noder = _load(noder, "noder") if not isinstance(noder, list) else noder
+    kanter = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
+    by_id = {n["id"]: n for n in noder if isinstance(n, dict) and n.get("id")}
+    seen: set[str] = set()
+    out: list[str] = []
+    for e in kanter:
+        other = e["til"] if e.get("fra") == node_id else (e["fra"] if e.get("til") == node_id else None)
+        if not other:
+            continue
+        tck = ticker_of(by_id.get(other) or {})
+        if tck and tck not in seen:
+            seen.add(tck)
+            out.append(tck)
+    adj: dict[str, list[str]] = {}
+    for e in kanter:
+        a, b = e.get("fra"), e.get("til")
+        adj.setdefault(a, []).append(b)
+        adj.setdefault(b, []).append(a)
+    for n in noder:
+        tck = ticker_of(n)
+        if not tck or n.get("id") == node_id or tck in seen:
+            continue
+        seen_h = {n["id"]}
+        fringe = [n["id"]]
+        found = False
+        for _ in range(2):
+            nxt = []
+            for u in fringe:
+                for v in adj.get(u, []):
+                    if v == node_id:
+                        found = True
+                        break
+                    if v not in seen_h:
+                        seen_h.add(v)
+                        nxt.append(v)
+                if found:
+                    break
+            if found:
+                break
+            fringe = nxt
+        if found:
+            seen.add(tck)
+            out.append(tck)
+    return out
+
+
+def oversikt_varer_og_land(noder: list, kanter: list) -> dict:
+    """Oversikten: venstre Varer (n), høyre topp 6 land etter tickerantall + «+n andre».
+
+    Land med 0 tickere går alltid i +n andre og fyller ikke de 6 plassene.
+    """
+    noder = _load(noder, "noder") if not isinstance(noder, list) else noder
+    pub = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
+    connected = {e.get("fra") for e in pub} | {e.get("til") for e in pub}
+    varer = [n for n in noder if isinstance(n, dict) and canon_type(n.get("type")) == "råvare" and n.get("id") in connected]
+    lands = [n for n in noder if isinstance(n, dict) and n.get("type") == "land" and n.get("id") in connected]
+    counts: dict[str, int] = {}
+    deg: dict[str, int] = {}
+    for n in lands + varer:
+        nid = n["id"]
+        counts[nid] = len(set(tickers_on_node(noder, pub, nid)))
+        deg[nid] = sum(1 for e in pub if e.get("fra") == nid or e.get("til") == nid)
+    with_t = [n for n in lands if counts.get(n["id"], 0) > 0]
+    with_t.sort(key=lambda n: (-counts.get(n["id"], 0), -deg.get(n["id"], 0), str(n.get("navn") or n["id"])))
+    visible = with_t[:MAX_LAND_PER_LAG]
+    vis_ids = {n["id"] for n in visible}
+    andre = [n for n in lands if n["id"] not in vis_ids]
+    return {
+        "varer": varer,
+        "varer_n": len(varer),
+        "varer_label": f"Varer ({len(varer)})",
+        "land_synlige": visible,
+        "andre": andre,
+        "counts": counts,
+    }
+
+
+def round_tonn_scene(verdi) -> int:
+    """Vanlig avrunding av tonn til heltall for scenen: 0,5 rundes opp."""
+    import math
+    return math.floor(float(verdi) + 0.5)
+

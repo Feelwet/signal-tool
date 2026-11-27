@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - name: Hent origin/master til historikk-tester
+        run: git fetch --no-tags origin master:refs/remotes/origin/master
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
