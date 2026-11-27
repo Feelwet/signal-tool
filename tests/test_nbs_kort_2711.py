@@ -61,6 +61,7 @@ def test_parse_cn_bulletin_october_2026_figures_and_industries():
     labels = [v["label"] for v in card["blocks"]["tallet"]["values"]]
     assert labels == ["+20,1 % okt.", "+16,0 % jan.–okt."]
     assert card["source"]["published_oslo"] == "27.11.2026"
+    assert card["source"]["published_row"] == "Publisert 27.11"
     assert card["source"]["line"] == "NBS · 27.11.2026"
     assert card["source"]["url"] == CN_URL
     # 09:30 Beijing = 01:30 UTC = 02:30 Europe/Oslo (CET)
@@ -325,3 +326,45 @@ def test_nbs_test_report_has_no_workspace_and_is_published():
     html = md_to_html(md)
     assert "/workspace" not in html
     assert "<table>" in html
+
+
+def test_published_row_uses_nbs_date_from_card_not_build_or_fetch():
+    """«Publisert dd.mm» er NBS sin egen dato i kortdataene, aldri bygge- eller hentedato."""
+    rel, ip, card = _cn_card()
+    assert card["source"]["published"] == "2026-11-27T01:30:00Z"
+    assert card["source"]["published_row"] == "Publisert 27.11"
+    assert N.published_row(rel.published) == "Publisert 27.11"
+    # En annen NBS-dato enn i dag: 28.10.2026 (jan–sep-kunngjøringen)
+    en = N.parse_bulletin(_html("en_bulletin_2026_01_09.html"), url=EN_URL, lang="en")
+    assert en.published is not None
+    assert N.published_row(en.published) == "Publisert 28.10"
+    en_card = N.build_card(en, {})
+    assert en_card["source"]["published_row"] == "Publisert 28.10"
+    assert en_card["source"]["published_oslo"] == "28.10.2026"
+    # Feltet er beregnet bare fra pub, ikke fra klokke eller generated_at
+    src = Path(N.__file__).read_text()
+    start = src.index("def published_row")
+    body = src[start: src.index("\ndef ", start + 1)]
+    assert "datetime.now" not in body and "generated_at" not in body
+    h, css = P.html(), P.PAGE_CSS
+    assert "ny-fk-pub" in h and "c.source.published_row" in h
+    assert "+pubRow+src" in h
+    chunk = h[h.index("const pubRow="): h.index("const pubRow=") + 220]
+    assert "generated_at" not in chunk and "Date.now" not in chunk and "new Date" not in chunk
+    assert ".ny-fk-pub{" in css and "font:400 13px/18px" in css[css.index(".ny-fk-pub{"): css.index(".ny-fk-pub{") + 160]
+
+
+def test_published_row_hidden_when_nbs_date_missing():
+    """Mangler NBS-publiseringsdatoen, vises ikke den faste raden."""
+    assert N.published_row(None) is None
+    rel, ip, _ = _cn_card()
+    rel.published = None
+    ip = dict(ip)
+    ip["published"] = None
+    card = N.build_card(rel, ip)
+    assert card["source"]["published"] is None
+    assert card["source"]["published_oslo"] == ""
+    assert card["source"]["published_row"] is None
+    # JS bygger tom streng når feltet mangler, så raden ikke rendres
+    h = P.html()
+    assert "const pubRow=(c.source&&c.source.published_row)?'<div class=\"ny-fk-pub\">'+esc(c.source.published_row)+'</div>':''" in h

@@ -594,6 +594,13 @@ def _oslo_date(ts: datetime | None) -> str:
     return ts.astimezone(OSLO).strftime("%d.%m.%Y")
 
 
+def published_row(pub: datetime | None) -> str | None:
+    """Fast rad «Publisert dd.mm» fra NBS sin egen publiseringsdato. Ingen rad uten dato."""
+    if pub is None:
+        return None
+    return "Publisert " + pub.astimezone(OSLO).strftime("%d.%m")
+
+
 def _iso(ts: datetime | None) -> str | None:
     if ts is None:
         return None
@@ -690,6 +697,7 @@ def build_card(rel: Release, interp: dict | None = None, exposures: list[dict] |
             "urls": urls,
             "published": _iso(pub),
             "published_oslo": _oslo_date(pub),
+            "published_row": published_row(pub),
             "line": source_line,
             "lang": rel.lang,
         },

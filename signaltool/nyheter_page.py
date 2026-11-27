@@ -92,6 +92,8 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fk-h:first-child{margin-top:0}
 .ny-fk-body,.ny-fk-kort p,.ny-fk-txt{font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
 .ny-fk-src,.ny-fk-src a{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;text-decoration:underline}
+.ny-fk-pub{display:block;margin:0 0 8px;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8}
+
 .ny-fk-tall{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 6px}
 .ny-fk-tall span{font:600 24px/28px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
 .ny-fk-tag{display:inline-block;margin:0 0 8px;padding:2px 8px;border-radius:4px;background:var(--pill,#262d38);color:#94a3b8;font:500 13px/18px system-ui,-apple-system,sans-serif}
@@ -223,6 +225,8 @@ def html(snap=None) -> str:
     const srcUrl=(b.tallet&&b.tallet.source_url)||(c.source&&c.source.url)||'';
     const srcLine=(b.tallet&&b.tallet.source_line)||(c.source&&c.source.line)||'NBS';
     const src='<p class="ny-fk-src">'+(srcUrl?('<a href="'+esc(srcUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(srcLine)+'</a>'):esc(srcLine))+'</p>';
+    // Fast rad: bare NBS-publiseringsdato fra kortdata (source.published_row). Aldri bygge- eller hentedato.
+    const pubRow=(c.source&&c.source.published_row)?'<div class="ny-fk-pub">'+esc(c.source.published_row)+'</div>':'';
     function rows(list, cls){{
       return (list||[]).map(r=>{{
         const ch=esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change);
@@ -250,7 +254,7 @@ def html(snap=None) -> str:
     const testHref='{E(TEST_HREF)}';
     const test='<a class="ny-fk-test" href="'+testHref+'">'+testLine+'</a>';
     return '<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>'
-      +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+src
+      +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+pubRow+src
       +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største økning</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
       +'<h3 class="ny-fk-h">Kildens forklaring</h3>'+expl
       +nevnt
