@@ -648,7 +648,8 @@ function fmtSceneVal(row) {
 
 function updateStatus() {
   const cov = meta.coverage;
-  if (cov && cov.beregnet && cov.statuslinje) {
+  const k = cov && cov.k != null ? Number(cov.k) : 0;
+  if (cov && cov.beregnet && cov.statuslinje && k >= 1) {
     el.status.hidden = false;
     el.status.textContent = cov.statuslinje;
   } else {

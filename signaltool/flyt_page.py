@@ -52,7 +52,8 @@ def body_html(*, meta: dict | None = None) -> str:
     meta_json = json.dumps(meta, ensure_ascii=False)
     chips = _chips(meta.get("scenarioer"))
     cov = meta.get("coverage") or {}
-    if cov.get("beregnet") and cov.get("statuslinje"):
+    # A (runde 5): vis statuslinja bare når k ≥ 1; skjul ved k = 0.
+    if cov.get("beregnet") and cov.get("statuslinje") and (cov.get("k") or 0) >= 1:
         status = f'<p class="flyt-status" id="flyt-status">{E(cov["statuslinje"])}</p>'
     else:
         status = '<p class="flyt-status" id="flyt-status" hidden></p>'
