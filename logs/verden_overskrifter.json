@@ -1,22 +1,23 @@
 {
- "hentet": "2026-11-27T16:09:16+0100",
+ "hentet": "2026-11-27T16:27:55+0100",
  "dato": "2026-11-27",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (3441) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (4373) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "fra forrige henting"
+  "Oslo Børs Newsweb": "ok (6910 i 95d-uttrekket)",
+  "Norges Bank": "ok (5)"
  },
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 105
+   "antall": 111
   },
   {
    "tema": "mideast_energy",
-   "antall": 94
+   "antall": 96
   },
   {
    "tema": "risk_off_haven",
@@ -31,11 +32,11 @@
    "antall": 13
   },
   {
-   "tema": "sentralbanker",
-   "antall": 8
+   "tema": "shipping_chokepoints",
+   "antall": 9
   },
   {
-   "tema": "shipping_chokepoints",
+   "tema": "sentralbanker",
    "antall": 8
   },
   {
@@ -57,6 +58,242 @@
  ],
  "saker": [
   {
+   "tittel": "\"From Algeria to India, Sudan to Indonesia\": Zelenskyy warns of threats to food exports through Black Sea amid Russia war",
+   "url": "http://www.kenyastar.com/news/279466435/from-algeria-to-india-sudan-to-indonesia-zelenskyy-warns-of-threats-to-food-exports-through-black-sea-amid-russia-war",
+   "kilde": "GDELT",
+   "domene": "kenyastar.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "russia"
+   ]
+  },
+  {
+   "tittel": "Europe preparing for war with Russia, demanding truce in Ukraine: Russian FM Lavrov says US displaying more",
+   "url": "http://www.kenyastar.com/news/279467013/europe-preparing-for-war-with-russia-demanding-truce-in-ukraine-russian-fm-lavrov-says-us-displaying-more-political-maturity",
+   "kilde": "GDELT",
+   "domene": "kenyastar.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Iran claims air defenses forced US F-16 to retreat near Hengam Island",
+   "url": "https://article.wn.com/view/2026/11/27/Iran_claims_air_defenses_forced_US_F16_to_retreat_near_Henga/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "air defense"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy says Ukraine coordinates strikes on Russian ships with partners",
+   "url": "https://article.wn.com/view/2026/11/27/Zelenskyy_says_Ukraine_coordinates_strikes_on_Russian_ships_/",
+   "kilde": "GDELT",
+   "domene": "wn.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Gold Prices in Pakistan Surge by Rs11,500 Per Tola",
+   "url": "https://arynews.tv/gold-prices-skyrocket-in-pakistan",
+   "kilde": "GDELT",
+   "domene": "arynews.tv",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "gold price"
+   ]
+  },
+  {
+   "tittel": "Dutch PM to discuss US MATCH Act chipmaking export controls with Trump at G20",
+   "url": "https://economictimes.indiatimes.com/tech/technology/dutch-pm-to-discuss-us-match-act-chipmaking-export-controls-with-trump-at-g20/articleshow/136225240.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "export control"
+   ]
+  },
+  {
+   "tittel": "Pakistan, Saudi Arabia, Turkiye begin Key Talks on Collective Defence, Joint Military Response",
+   "url": "https://en.dailypakistan.com.pk/27-Nov-2026/pakistan-saudi-arabia-turkiye-begin-key-talks-on-collective-defence-joint-military-response",
+   "kilde": "GDELT",
+   "domene": "dailypakistan.com.pk",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Israeli attacks on women and girls meant 'to destroy life' in Gaza: Amnesty  - Grenada Chronicle – Daily Grenada And Caribbean News",
+   "url": "https://grenadachronicle.com/israeli-attacks-on-women-and-girls-meant-to-destroy-life-in-gaza-amnesty/",
+   "kilde": "GDELT",
+   "domene": "grenadachronicle.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange – WTOP News",
+   "url": "https://wtop.com/world/2026/11/zelenskyy-urges-the-us-to-pressure-putin-calling-trumps-my-friend-remark-strange/",
+   "kilde": "GDELT",
+   "domene": "wtop.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges US to pressure Putin, calling Trump 'friend' remark strange",
+   "url": "https://www.dailyherald.com/2026/11/27/zelenskyy-trump-putin-friend-remark/",
+   "kilde": "GDELT",
+   "domene": "dailyherald.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Putin is an aggressor and killer and cannot be Trump's friend, says Zelensky | Dumbarton and Vale of Leven Reporter",
+   "url": "https://www.dumbartonreporter.co.uk/news/national/26769204.putin-aggressor-killer-cannot-trumps-friend-says-zelensky/",
+   "kilde": "GDELT",
+   "domene": "dumbartonreporter.co.uk",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "IRGC says tanker hit mine, exploded in Strait of Hormuz",
+   "url": "https://www.pakistantoday.com.pk/2026/11/27/irgc-says-tanker-hit-mine-exploded-in-strait-of-hormuz",
+   "kilde": "GDELT",
+   "domene": "pakistantoday.com.pk",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "shipping_chokepoints",
+   "temaer": [
+    "shipping_chokepoints"
+   ],
+   "matchede_ord": [
+    "strait of hormuz"
+   ]
+  },
+  {
+   "tittel": "Putin is an aggressor and killer and cannot be Trump's friend, says Zelensky",
+   "url": "https://www.penarthtimes.co.uk/news/national/26769204.putin-aggressor-killer-cannot-trumps-friend-says-zelensky/",
+   "kilde": "GDELT",
+   "domene": "penarthtimes.co.uk",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Russia Extends Jet Fuel Export Ban Until March 2027",
+   "url": "https://www.themoscowtimes.com/2026/11/27/russia-extends-jet-fuel-export-ban-until-march-2027-a812395",
+   "kilde": "GDELT",
+   "domene": "themoscowtimes.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "export ban"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange | International",
+   "url": "https://www.wboc.com/news/international/zelenskyy-urges-the-us-to-pressure-putin-calling-trump-s-my-friend-remark-strange/article_23447ab5-905f-5b3e-8dec-4897164c65d2.html",
+   "kilde": "GDELT",
+   "domene": "wboc.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange :: WRAL.com",
+   "url": "https://www.wral.com/news/ap/d8911-zelenskyy-urges-the-us-to-pressure-putin-calling-trump-s-my-friend-remark-strange/",
+   "kilde": "GDELT",
+   "domene": "wral.com",
+   "publisert": "2026-11-27T15:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
    "tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
    "url": "http://www.calcuttanews.net/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
    "kilde": "GDELT",
@@ -69,22 +306,6 @@
    "matchede_ord": [
     "trade deal",
     "tariff"
-   ]
-  },
-  {
-   "tittel": "\"From Algeria to India, Sudan to Indonesia\": Zelenskyy warns of threats to food exports through Black Sea amid Russia war",
-   "url": "http://www.zimbabwestar.com/news/279466435/from-algeria-to-india-sudan-to-indonesia-zelenskyy-warns-of-threats-to-food-exports-through-black-sea-amid-russia-war",
-   "kilde": "GDELT",
-   "domene": "zimbabwestar.com",
-   "publisert": "2026-11-27T15:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "russia"
    ]
   },
   {
@@ -201,21 +422,6 @@
    ],
    "matchede_ord": [
     "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Putin is an aggressor and killer and cannot be Trump's friend, says Zelensky",
-   "url": "https://www.malverngazette.co.uk/news/national/26769204.putin-aggressor-killer-cannot-trumps-friend-says-zelensky/",
-   "kilde": "GDELT",
-   "domene": "malverngazette.co.uk",
-   "publisert": "2026-11-27T15:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "putin"
    ]
   },
   {
@@ -516,36 +722,6 @@
    ]
   },
   {
-   "tittel": "AfD Leader Weidel Urges Ukraine to Cede Territory to Russia - Novinite.com",
-   "url": "https://www.novinite.com/articles/241825/AfD+Leader+Weidel+Urges+Ukraine+to+Cede+Territory+to+Russia",
-   "kilde": "GDELT",
-   "domene": "novinite.com",
-   "publisert": "2026-11-27T14:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange | World",
-   "url": "https://www.the-messenger.com/news/world/article_79155d26-2f29-577f-9d7c-a69cd73fae86.html",
-   "kilde": "GDELT",
-   "domene": "the-messenger.com",
-   "publisert": "2026-11-27T14:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "putin"
-   ]
-  },
-  {
    "tittel": "UK-EU trade deal promises boost for food and farming",
    "url": "https://www.thescottishfarmer.co.uk/news/26757153.uk-eu-trade-deal-promises-boost-food-farming/",
    "kilde": "GDELT",
@@ -615,52 +791,6 @@
    "matchede_ord": [
     "israeli",
     "gaza"
-   ]
-  },
-  {
-   "tittel": "Putin and Nikol Pashinyan to discuss security issues and the operations of the Russian military base in Armenia – Peskov",
-   "url": "https://www.aysor.am/en/news/2026/11/27/Peskov/2436149",
-   "kilde": "GDELT",
-   "domene": "aysor.am",
-   "publisert": "2026-11-27T14:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russian",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Russia sports ban: Ukraine's Heraskevych hails EU pushback",
-   "url": "https://www.dw.com/en/ukraines-heraskevych-hails-eu-pushback-against-russian-athletes/a-80074375",
-   "kilde": "GDELT",
-   "domene": "dw.com",
-   "publisert": "2026-11-27T14:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Russian Drones Hit Ukraine's Infrastructure as Estonia Scrambles NATO Jets",
-   "url": "https://www.kyivpost.com/post/91387",
-   "kilde": "GDELT",
-   "domene": "kyivpost.com",
-   "publisert": "2026-11-27T14:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian",
-    "nato"
    ]
   },
   {
@@ -734,36 +864,6 @@
    ]
   },
   {
-   "tittel": "Russia and Ukraine Exchange Over 40 Elderly Civilians in Belarus",
-   "url": "https://www.themoscowtimes.com/2026/11/27/russia-and-ukraine-exchange-over-40-elderly-civilians-in-belarus-a812393",
-   "kilde": "GDELT",
-   "domene": "themoscowtimes.com",
-   "publisert": "2026-11-27T14:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
-   "tittel": "Ukraine's Zelenskiy compares Putin to Hitler \"He's an aggressor and a killer ,  No, he's not a friend.\" – Ya Libnan",
-   "url": "https://yalibnan.com/2026/11/27/ukraines-zelenskiy-compares-putin-to-hitler-hes-an-aggressor-and-a-killer-no-hes-not-a-friend/",
-   "kilde": "GDELT",
-   "domene": "yalibnan.com",
-   "publisert": "2026-11-27T14:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Arab News | EU wheat extends gains on Black Sea disruption",
    "url": "https://www.arabnews.com/world/eu-wheat-extends-gains-on-black-sea-disruption-3014261",
    "kilde": "GDELT",
@@ -779,21 +879,6 @@
    ]
   },
   {
-   "tittel": "Ukraine president urges US to pressure Vladimir Putin",
-   "url": "https://www.chicagotribune.com/2026/11/27/ukraine-russia-us-vladimir-putin/",
-   "kilde": "GDELT",
-   "domene": "chicagotribune.com",
-   "publisert": "2026-11-27T14:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Iranian Activist and Screenwriter Mehdi Mahmoudian Arrested in Tehran",
    "url": "https://www.hollywoodreporter.com/news/general-news/mehdi-mahmoudian-arrested-iran-it-was-just-an-accident-1236764121/",
    "kilde": "GDELT",
@@ -806,38 +891,6 @@
    "matchede_ord": [
     "iranian",
     "tehran"
-   ]
-  },
-  {
-   "tittel": "Israel kills Gaza deputy education minister and wife in fresh attack on Gaza",
-   "url": "https://www.middleeasteye.net/news/israel-kills-palestinian-education-minister-killed-alongside-wife-third-israeli-attack-hamas",
-   "kilde": "GDELT",
-   "domene": "middleeasteye.net",
-   "publisert": "2026-11-27T14:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Iran says oil tanker explodes after hitting naval mine in Strait of Hormuz; oil price continues to rise",
-   "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/11/27/iran-says-oil-tanker-explodes-after-hitting-naval-mine-in-strait-of-hormuz-oil-price-continues-to-rise",
-   "kilde": "GDELT",
-   "domene": "thestar.com.my",
-   "publisert": "2026-11-27T14:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy",
-    "shipping_chokepoints"
-   ],
-   "matchede_ord": [
-    "oil price",
-    "hormuz",
-    "iran"
    ]
   },
   {
@@ -1101,20 +1154,6 @@
    ],
    "matchede_ord": [
     "customs duty"
-   ]
-  },
-  {
-   "tittel": "Russia extends jet fuel export ban until March 2027",
-   "url": "https://aa.com.tr/en/world/russia-extends-jet-fuel-export-ban-until-march-2027/4139951",
-   "kilde": "GDELT",
-   "domene": "aa.com.tr",
-   "publisert": "2026-11-27T10:45:00Z",
-   "tema": "food_agri",
-   "temaer": [
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "export ban"
    ]
   },
   {
@@ -1525,20 +1564,6 @@
    ]
   },
   {
-   "tittel": "7 risks investors need to watch now: Nvidia, US interest rates, liquidity, trade wars, hot wars, AI, Australian 'recession'",
-   "url": "https://www.afr.com/chanticleer/we-may-be-on-the-edge-of-something-nasty-watch-these-seven-risks-20261127-p61hsl",
-   "kilde": "GDELT",
-   "domene": "afr.com",
-   "publisert": "2026-11-27T00:30:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade war"
-   ]
-  },
-  {
    "tittel": "Putin showed 'restraint' by not using nuclear weapons, Kushner says",
    "url": "https://www.wdsu.com/article/putin-showed-restraint-by-not-using-nuclear-weapons-kushner-says/74540220",
    "kilde": "GDELT",
@@ -1564,20 +1589,6 @@
    ],
    "matchede_ord": [
     "south china sea"
-   ]
-  },
-  {
-   "tittel": "New Jersey under state of emergency as storm slams coast",
-   "url": "https://www.standardspeaker.com/2026/11/26/new-jersey-under-state-of-emergency-as-storm-slams-shore-bringing-coastal-flooding/",
-   "kilde": "GDELT",
-   "domene": "standardspeaker.com",
-   "publisert": "2026-11-26T23:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
    ]
   },
   {

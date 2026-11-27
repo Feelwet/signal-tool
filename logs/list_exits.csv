@@ -97,7 +97,14 @@ date,ticker,code,old_score,new_score
 2026-11-26,NOHAL.OL,out_of_top60,2.85,1.0
 2026-11-26,TXN,out_of_top60,2.71,1.0
 2026-11-27,ADI,,3.97,
+2026-11-27,AVGO,out_of_top60,2.19,1.0
 2026-11-27,CYTK,,2.5,
-2026-11-27,ENVIP.OL,out_of_top60,3.36,1.5
-2026-11-27,MOWI.OL,out_of_top60,1.7,1.58
+2026-11-27,FXI,out_of_top60,,1.19
+2026-11-27,KO,out_of_top60,1.81,0.5
+2026-11-27,MU,out_of_top60,2.65,1.0
+2026-11-27,NKT.CO,out_of_top60,,0.44
+2026-11-27,NOD.OL,moved_to_theme,2.36,1.13
+2026-11-27,SMH,out_of_top60,,0.63
+2026-11-27,SPY,out_of_top60,,0.47
+2026-11-27,STRC,out_of_top60,1.74,0.5
 2026-11-27,WSM,,4.1,
