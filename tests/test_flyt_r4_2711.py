@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import re
 import hashlib
 import http.server
 import json
@@ -277,7 +278,7 @@ def test_r4_playwright_official_u_and_a(official_preview):
         assert any(t.startswith("+") and "andre" in t for t in ov["texts"])
         landish = [t for t in ov["texts"] if t and not t.startswith("Varer") and not t.startswith("+") and "tickere" in t.lower() or True]
         # høyre kolonne: maks 6 land-etiketter + 1 andre
-        labs_n = [t for t in ov["texts"] if "tickere" in t.lower() or (t.startswith("+") and "andre" in t)]
+        labs_n = [t for t in ov["texts"] if re.search(r"\d+\s+ticker", t.lower()) or (t.startswith("+") and "andre" in t)]
         # vare nodes don't say tickere? they might. Varer have ticker counts too.
         scroll = page.evaluate("() => ({sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, sh: document.documentElement.scrollHeight, ch: document.documentElement.clientHeight})")
         assert scroll["sw"] <= scroll["cw"] + 1, scroll

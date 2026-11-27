@@ -648,6 +648,10 @@ function roundTonnHalfUp(v) {
   if (!Number.isFinite(n)) return n;
   return Math.floor(n + 0.5);
 }
+function tickerCountLabel(n) {
+  const k = Number(n) || 0;
+  return k === 1 ? '1 ticker' : `${k} tickere`;
+}
 function fmtSceneVal(row) {
   if (row.status === 'mangler' || row.verdi == null || row.verdi === '') return null;
   const v = row.verdi;
@@ -1186,7 +1190,7 @@ function placeLabels(visu, pos, hitN) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = `${counts.get(n.id)} tickere`;
+    if (visu.overview && counts.has(n.id)) vv.textContent = tickerCountLabel(counts.get(n.id));
     else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
@@ -1339,7 +1343,7 @@ function placeLabelsProjected(visu, pos, hitN, t) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = `${counts.get(n.id)} tickere`;
+    if (visu.overview && counts.has(n.id)) vv.textContent = tickerCountLabel(counts.get(n.id));
     else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
