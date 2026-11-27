@@ -540,3 +540,136 @@ def test_headless_scrollWidth_390_and_1280_with_card_and_sheet_open(tmp_path):
         b.close()
     for w, m in measured.items():
         assert m["sw"] <= m["iw"] and m["sw"] <= m["cw"], (w, m)
+
+
+
+def test_sheet_hides_content_note_and_inline_keeps_one():
+    h, css = P.html(), P.PAGE_CSS
+    assert 'id="ny-fk-note-sheet"' in h
+    assert 'class="ny-fk-note" id="ny-fk-note-sheet">Forklaring fra kildene, ikke en prognose' in h
+    assert "#ny-fk-sheet-body > .ny-fk-note:first-child{display:none}" in css
+    assert "function kortInner(c, inSheet)" in h
+    assert "kortInner(kort, !isWide())" in h
+    assert "const note=inSheet?'':(" in h
+    assert "<p class=\"ny-fk-note\">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')" in h
+
+
+def test_source_orig_is_own_muted_line_not_a_link():
+    h, css = P.html(), P.PAGE_CSS
+    assert 'class="ny-fk-orig">Kilde: ' in h
+    assert "esc(r.source_orig)" in h
+    assert 'r.source_orig?\'<span class="ny-fk-src">' not in h
+    assert "r.source_orig?'<span class=\"ny-fk-src\">" not in h
+    assert "r.source_orig?'<a " not in h
+    block = css[css.index(".ny-fk-orig{"): css.index(".ny-fk-orig{") + 280]
+    assert "font:400 12px/16px" in block
+    assert "var(--muted" in block
+    assert "text-decoration:none" in block
+    assert "<a" not in block
+    br = css[css.index(".ny-fk-br{"): css.index(".ny-fk-br-main{")]
+    assert "min-height:44px" in br
+    assert "max-height:44px" not in br
+    assert "flex-direction:column" in br and "height:auto" in br
+
+
+@pytest.mark.skipif(
+    not (__import__("shutil").which("google-chrome") or __import__("shutil").which("chromium")),
+    reason="ingen headless Chrome",
+)
+def test_headless_note_once_and_source_orig_style(tmp_path):
+    """Ved 390 vises notelinja bare i arkhodet; ved 1280 én gang inline. Kildetekst 12/16 muted uten understrek."""
+    import shutil
+    pw = pytest.importorskip("playwright.sync_api")
+    _, _, card = _cn_card()
+    items = [
+        {**CNBC, "source": "CNBC", "source_id": "cnbc", "published_utc": "2026-11-27T02:04:09Z", "section": "Marked", "paywall": False, "issuer": None, "pool": "editorial"},
+    ]
+    html, news, card = _fixture_nyheter_page(card, items)
+    f = tmp_path / "nyheter.html"
+    f.write_text(html)
+    note_js = """() => {
+      const needle = 'Forklaring fra kildene, ikke en prognose';
+      const vis = (el) => {
+        let n = el;
+        while (n) {
+          if (n.hidden) return false;
+          const s = getComputedStyle(n);
+          if (s.display === 'none' || s.visibility === 'hidden') return false;
+          n = n.parentElement;
+        }
+        return true;
+      };
+      return [...document.querySelectorAll('.ny-fk-note')].filter(el => vis(el) && (el.textContent||'').includes(needle)).map(el => ({
+        id: el.id || '',
+        inHead: !!el.closest('.ny-fk-head'),
+        inSheetBody: !!el.closest('#ny-fk-sheet-body'),
+        inInline: !!el.closest('.ny-fkort.open'),
+      }));
+    }"""
+    orig_js = """() => {
+      const els = [...document.querySelectorAll('.ny-fk-orig')].filter(el => {
+        let n = el;
+        while (n) {
+          if (n.hidden) return false;
+          const s = getComputedStyle(n);
+          if (s.display === 'none' || s.visibility === 'hidden') return false;
+          n = n.parentElement;
+        }
+        return true;
+      });
+      return els.map(el => {
+        const s = getComputedStyle(el);
+        const row = el.closest('.ny-fk-br');
+        const main = row && row.querySelector('.ny-fk-br-main');
+        const rb = row && row.getBoundingClientRect();
+        const mb = main && main.getBoundingClientRect();
+        const eb = el.getBoundingClientRect();
+        return {
+          text: (el.textContent||'').trim(),
+          tag: el.tagName,
+          inA: !!el.closest('a'),
+          fontSize: s.fontSize,
+          lineHeight: s.lineHeight,
+          color: s.color,
+          deco: s.textDecorationLine || s.textDecoration,
+          display: s.display,
+          rowH: rb ? rb.height : null,
+          below: (mb && eb) ? (eb.top >= mb.bottom - 1) : null,
+        };
+      });
+    }"""
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome" if shutil.which("google-chrome") else None)
+        for w, mode in ((390, "sheet"), (1280, "panel")):
+            pg = b.new_page(viewport={"width": w, "height": 900})
+            _route_json(pg, news, card)
+            pg.goto(f.as_uri())
+            pg.wait_for_selector(".ny-fk-inngang")
+            pg.locator(".ny-fk-inngang").click()
+            if mode == "sheet":
+                pg.wait_for_selector("#ny-fk-sheet:not([hidden])")
+            else:
+                pg.wait_for_selector(".ny-fkort.open")
+            notes = pg.evaluate(note_js)
+            assert len(notes) == 1, (w, notes)
+            if mode == "sheet":
+                assert notes[0]["inHead"] and notes[0]["id"] == "ny-fk-note-sheet"
+                assert not notes[0]["inSheetBody"]
+            else:
+                assert notes[0]["inInline"] and not notes[0]["inHead"]
+            origs = pg.evaluate(orig_js)
+            assert origs, (w, "ingen synlig ny-fk-orig")
+            assert any(o["text"] == "Kilde: 增长1.0倍" for o in origs), origs
+            for o in origs:
+                assert o["text"].startswith("Kilde: ")
+                assert o["tag"] != "A" and not o["inA"], o
+                assert o["fontSize"] == "12px" and o["lineHeight"] == "16px", o
+                assert "underline" not in (o["deco"] or "").lower(), o
+                assert o["rowH"] is not None and o["rowH"] > 44, o
+                assert o["below"] is True, o
+            # rader uten kildetekst skal fortsatt kunne være 44 px
+            plain = pg.evaluate("""() => [...document.querySelectorAll('.ny-fk-br')].filter(r => !r.querySelector('.ny-fk-orig')).map(r => r.getBoundingClientRect().height)""")
+            if plain:
+                assert all(abs(h - 44) <= 1 for h in plain), (w, plain)
+            pg.close()
+        b.close()

@@ -89,6 +89,7 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fkort{display:none;box-sizing:border-box;max-width:720px;padding:12px 0 16px}
 .ny-fkort.open{display:block}
 .ny-fk-note{margin:0 0 12px;font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8}
+#ny-fk-sheet-body > .ny-fk-note:first-child{display:none}
 .ny-fk-h{margin:16px 0 8px;font:600 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
 .ny-fk-h:first-child{margin-top:0}
 .ny-fk-body,.ny-fk-kort p,.ny-fk-txt{font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
@@ -102,8 +103,10 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fk-tall{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 6px}
 .ny-fk-tall span{font:600 24px/28px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
 .ny-fk-tag{display:inline-block;margin:0 0 8px;padding:2px 8px;border-radius:4px;background:var(--pill,#262d38);color:#94a3b8;font:500 13px/18px system-ui,-apple-system,sans-serif}
-.ny-fk-br{display:flex;align-items:center;justify-content:space-between;gap:8px;height:44px;min-height:44px;max-height:44px;box-sizing:border-box;font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-br{display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:0;min-height:44px;height:auto;box-sizing:border-box;font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3)}
+.ny-fk-br-main{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;width:100%;box-sizing:border-box}
 .ny-fk-br .ny-fk-ch{margin-left:auto;text-align:right;white-space:nowrap}
+.ny-fk-orig{display:block;font:400 12px/16px system-ui,-apple-system,sans-serif;color:var(--muted,var(--mut,#94a3b8));text-decoration:none}
 .ny-fk-nv{display:flex;align-items:center;justify-content:space-between;gap:8px;height:56px;min-height:56px;max-height:56px;box-sizing:border-box;font:400 15px/22px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3);border-bottom:1px solid var(--line,#2d333b)}
 .ny-fk-nv .ny-fk-ch{margin-left:auto;text-align:right}
 .ny-fk-attr{font:400 13px/18px system-ui,-apple-system,sans-serif;color:#94a3b8;margin-left:6px}
@@ -222,7 +225,7 @@ def html(snap=None) -> str:
     const geo=(rules.geo||[]).some(g=>blob.indexOf(String(g).toLowerCase())>=0);
     return phrase&&fig&&geo;
   }}
-  function kortInner(c){{
+  function kortInner(c, inSheet){{
     if(!kortOk(c)) return '';
     const b=c.blocks||{{}};
     const tal=(b.tallet&&b.tallet.values)||[];
@@ -233,8 +236,8 @@ def html(snap=None) -> str:
     function rows(list, cls){{
       return (list||[]).map(r=>{{
         const ch=esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change);
-        const orig=r.source_orig?'<span class="ny-fk-src">'+esc(r.source_orig)+'</span>':'';
-        return '<div class="'+cls+'"><span>'+esc(r.industry)+'</span><span class="ny-fk-ch">'+ch+orig+'</span></div>';
+        const orig=r.source_orig?'<span class="ny-fk-orig">Kilde: '+esc(r.source_orig)+'</span>':'';
+        return '<div class="'+cls+'"><div class="ny-fk-br-main"><span>'+esc(r.industry)+'</span><span class="ny-fk-ch">'+ch+'</span></div>'+orig+'</div>';
       }}).join('');
     }}
     const chg=b.endring||{{}};
@@ -262,7 +265,8 @@ def html(snap=None) -> str:
     const testLine='{E(TEST_LINE)}';
     const testHref='{E(TEST_HREF)}';
     const test='<a class="ny-fk-test" href="'+testHref+'">'+testLine+'</a>';
-    return '<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>'
+    const note=inSheet?'':('<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>');
+    return note
       +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+src
       +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største økning</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
       +'<h3 class="ny-fk-h">Kildens forklaring</h3>'+expl
@@ -278,7 +282,7 @@ def html(snap=None) -> str:
     document.querySelectorAll('.ny-fkort.open').forEach(el=>el.classList.remove('open'));
   }}
   function openForklaring(btn){{
-    const inner=kortInner(kort);
+    const inner=kortInner(kort, !isWide());
     if(!inner) return;
     if(isWide()){{
       closeForklaring();
