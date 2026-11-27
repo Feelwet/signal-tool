@@ -14,8 +14,10 @@ FALLBACK_JSON = "data/nyheter.json"
 RAW_KORT = "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nbs_industriprofitt.json"
 FALLBACK_KORT = "data/nbs_industriprofitt.json"
 # AnalBot 27.11, ordrett. Statisk, ikke autogenerert.
+# Pages deployer site/ med .nojekyll, så .md vises ikke som artikkel der.
+# Lenken går derfor til GitHub-blob og åpnes i samme fane (uten target=_blank).
 TEST_LINE = "Testet 27.11.2026: Å kjøpe bransjene med høyest profittvekst etter NBS-tallet ga ingen påviselig meravkastning 1–20 dager etter (106 publiseringer, 2017–2026). Kursene hadde i snitt steget før tallet kom."
-TEST_HREF = "tester/nbs_test_2711.html"
+TEST_HREF = "https://github.com/Feelwet/signal-tool/blob/master/tester/nbs_test_2711.md"
 TABS = ("Alt", "Norge", "Marked", "Verden", "Børsmeldinger")
 FT_CREDIT = "© The Financial Times Limited 2026. Overskrifter og lenker; ingen artikkeltekst lagres."
 

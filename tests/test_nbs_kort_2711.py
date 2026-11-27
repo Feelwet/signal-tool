@@ -288,6 +288,10 @@ def test_analbot_test_line_is_verbatim_and_above_source():
     assert expected in h
     assert expected in Path(P.__file__).read_text()
     assert "ny-fk-test" in h and P.TEST_HREF in h
+    assert P.TEST_HREF == "https://github.com/Feelwet/signal-tool/blob/master/tester/nbs_test_2711.md"
+    start = h.find("const test=")
+    chunk = h[start:start+180]
+    assert "ny-fk-test" in chunk and "target=_blank" not in chunk
     block = css[css.index(".ny-fk-test{"): css.index(".ny-fk-test{") + 280]
     assert "min-height:44px" in block and "height:auto" in block
     assert "padding:12px 16px" in block
