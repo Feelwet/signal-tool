@@ -1,11 +1,11 @@
-"""Kandidatlista over tid (UxBot/AnalBot 11.11, etikett UxBot 27.11): endringsstripe på Oversikt, «På lista siden DD.MM»
-i kandidattabellen, ut-grunner (logs/list_exits.csv), inn/ut-perioder (data/list_periods.json) og periodelinjene under kursgrafen.
+"""Kandidatlista over tid (UxBot/AnalBot 11.11, etikett UxBot 27.11): endringsstripe på Oversikt, kolonnen «På lista siden»
+med cellen «DD.MM», ut-grunner (logs/list_exits.csv), inn/ut-perioder (data/list_periods.json) og periodelinjene under kursgrafen.
 
 Kilde: logs/categories.csv. «Lista» = kandidatlista = loggens rader uten kategori «tema» (temakart-tickere står utenfor
 kandidatlista, jf. tickersiden) + innkurs-sideloggen for ikke-loggbare kandidater (ETF-er o.l.), som i since.py. «Kjøring» = en dato i loggen (helger med); stripen sammenligner siste mot forrige kjøring.
 - Stripe: inn = siste − forrige, ut = forrige − siste, står fortsatt = siste ∩ forrige (inn + står fortsatt = dagens antall).
-- Dager: sammenhengende kjøringer bakover t.o.m. siste kjøring. Cellen viser «På lista siden DD.MM», der DD.MM er første
-  dato i den rekka (samme rekke som N teller). Ikke på lista i siste kjøring: «–».
+- Dager: sammenhengende kjøringer bakover t.o.m. siste kjøring. Overskrift og mobil-etikett er «På lista siden»;
+  cellen viser bare «DD.MM» (første dato i den rekka som N teller). Ikke på lista i siste kjøring: «–».
 - Perioder: [inn, ut|None]; ut = første kjøring tickeren manglet (hver manglende kjøring bryter perioden).
 - Ut-grunner logges fra 11.11 (record_exits) med kode below_threshold / out_of_top60 / no_price / delisted / moved_to_theme. Historiske
   utfall har ingen kode og vises som «grunn ikke logget». Ingen kode -> aldri en grunn; «rødt flagg» er aldri en grunn.
@@ -28,7 +28,7 @@ CODES = ("below_threshold", "out_of_top60", "no_price", "delisted", "moved_to_th
 NO_REASON = "grunn ikke logget"
 # Kan slås på som " (før {dm})"; {dm} = første dato i logs/list_exits.csv (aldri hardkodet). Tom = av.
 NO_REASON_SUFFIX = ""
-DAYS_HEAD = "Dager på lista"
+DAYS_HEAD = "På lista siden"
 NO_PRICE_HEAD = "Ute pga. manglende kurs"
 CHART_NOTE = "Grått felt = perioder på kandidatlista. Ikke kjøps- eller salgssignal."
 
@@ -432,9 +432,9 @@ def strip_check(html: str) -> dict:
 
 
 def days_cell(t: str, dmap: dict[str, int], since: dict | None = None) -> str:
-    """«På lista siden DD.MM» fra første dato i den sammenhengende rekka som slutter i siste kjøring; «–» ellers.
+    """Cellen viser «DD.MM» (første dato i rekka som slutter i siste kjøring) eller «–».
 
-    Ny-merket vises fortsatt når N=1. Grå, ingen sortering. Ingen ny typografi.
+    Mobil-etiketten «På lista siden» ligger i .dgl (skjult på PC). Ny-merket vises når N=1.
     """
     n = dmap.get(t)
     if n is None:
@@ -443,7 +443,8 @@ def days_cell(t: str, dmap: dict[str, int], since: dict | None = None) -> str:
     if not d:   # since skal følge dmap; mangler dato vises «–», aldri oppdiktet
         return '<td class="dg"><span class="dgv">–</span></td>'
     ny = '<span class="dg-ny">Ny</span>' if n == 1 else ""
-    return f'<td class="dg"><span class="dgv">På lista siden {_dm(d)}</span>{ny}</td>'
+    return (f'<td class="dg"><span class="dgl">{E(DAYS_HEAD)} </span>'
+            f'<span class="dgv">{E(_dm(d))}</span>{ny}</td>')
 
 
 def days_ctx(path: Path | None = None, entry_path=_DEF, members_path=_DEF) -> tuple[dict, dict]:
@@ -501,8 +502,9 @@ CSS = """
 .ov-chg a.chg-c:hover,.ov-chg a.chg-c:focus-visible{border-color:#94a3b8}
 .ov-chg .chg-g{color:#94a3b8;font-weight:600}.ov-chg .chg-why{flex-basis:100%;text-align:center;font-size:13px;line-height:18px;color:#94a3b8}
 .ov-ct th.dg-h,.ov-ct td.dg{text-align:right;white-space:nowrap}.ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8;font-variant-numeric:tabular-nums}
+.ov-ct .dgl{display:none}
 .ov-ct .dg-ny{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid #3b4757;border-radius:999px;font-size:12px;line-height:16px;color:#94a3b8;vertical-align:1px}
-@media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end;align-self:start;font-size:13px;line-height:18px;color:#94a3b8;padding-top:1px}.ov-ct td.dg .dg-ny{margin-left:4px}
+@media(max-width:699px){.ov-ct td.dg{grid-area:dg;justify-self:end;align-self:start;font-size:13px;line-height:18px;color:#94a3b8;padding-top:1px}.ov-ct td.dg .dgl{display:inline;font-size:13px;line-height:18px;color:#94a3b8}.ov-ct td.dg .dg-ny{margin-left:4px}
 .ov-ct td.sgt .sgc{white-space:normal;overflow:visible;text-overflow:clip;max-width:100%}.ov-ct td.nmc{min-width:0}}
 .lp-note,.lp-list{font-size:13px;line-height:18px;color:#94a3b8}.lp-note{margin:6px 0 2px}.lp-list{list-style:none;margin:0;padding:0}.lp-list li{margin:0;padding:0;white-space:normal;overflow:visible;text-overflow:clip}
 @media(max-width:599px){.lp-list li{max-height:58px}.lp-list .lp-r{display:block}.lp-list .lp-r+.lp-g{display:inline}}

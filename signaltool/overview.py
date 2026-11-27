@@ -373,7 +373,7 @@ def candidates_table_html(snap: dict) -> str:
     from . import site_risk as RK
     tk = candidates(snap)
     checked, fm = _flag_state(snap)
-    dmap, since = CHG.days_ctx()   # UxBot 27.11: «På lista siden DD.MM» fra samme rekke som N
+    dmap, since = CHG.days_ctx()   # UxBot 27.11: overskrift «På lista siden», celle «DD.MM»
     rows = []
     for i, e in enumerate(tk):
         t = e["ticker"]

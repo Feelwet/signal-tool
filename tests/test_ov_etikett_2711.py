@@ -1,4 +1,4 @@
-"""UxBot 27.11: «På lista siden DD.MM» avledes fra loggens sammenhengende rekke, uten hardkodet dato."""
+"""UxBot 27.11: cellen «DD.MM» avledes fra loggens sammenhengende rekke, uten hardkodet dato."""
 from signaltool import ov_changes as C
 from signaltool import overview as OV
 
@@ -15,8 +15,10 @@ def test_since_date_comes_from_the_log_streak():
         if n < len(ds):
             assert t not in by[ds[-n - 1]]
         html = C.days_cell(t, dmap, since)
-        assert f"På lista siden {C._dm(start)}" in html
-        assert "dager på rad" not in html and "fra " not in html
+        assert f'<span class="dgv">{C._dm(start)}</span>' in html
+        assert f'<span class="dgl">{C.DAYS_HEAD} </span>' in html
+        assert "På lista siden" not in html.split('class="dgv">', 1)[1]
+        assert "dager på rad" not in html
         if n == 1:
             assert 'class="dg-ny">Ny</span>' in html
         else:
@@ -29,6 +31,7 @@ def test_overview_header_is_kurs_5d_20d_tickere_unchanged():
     t = OV.candidates_table_html({"tickers": [{"ticker": "A.OL", "score": 1.0, "stats": {"ret_5d": 0.01, "ret_20d": 0.02}}],
                                   "oslo_universe_flags": []})
     assert ">Kurs 5d / 20d<" in t
+    assert '<th scope="col" class="dg-h">På lista siden</th>' in t
     # Tickere/sektor-raden beholder den gamle etiketten
     src = open("signaltool/stockrow.py", encoding="utf-8").read()
     assert "Kurs 5d / 20d" not in src

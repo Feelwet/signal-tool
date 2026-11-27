@@ -1,4 +1,4 @@
-"""UxBot/AnalBot 11.11: endringsstripe, «På lista siden DD.MM» (UxBot 27.11), ut-grunner, perioder og graflinjer."""
+"""UxBot/AnalBot 11.11: endringsstripe, kolonnen «På lista siden» med cellen «DD.MM» (UxBot 27.11), ut-grunner, perioder og graflinjer."""
 import copy
 import csv
 import json
@@ -131,9 +131,9 @@ def test_days_counter_known_example(tmp_path):
     dmap, since = C.days_ctx(_write(tmp_path, rows))
     assert dmap == {"A": 6, "B": 2, "N": 1}
     assert since == {"A": "2026-11-05", "B": "2026-11-09", "N": "2026-11-10"}
-    assert C.days_cell("A", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 05.11</span></td>'
-    assert C.days_cell("B", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 09.11</span></td>'   # rekken startet 09.11, ikke 06.11
-    assert C.days_cell("N", dmap, since) == '<td class="dg"><span class="dgv">På lista siden 10.11</span><span class="dg-ny">Ny</span></td>'
+    assert C.days_cell("A", dmap, since) == '<td class="dg"><span class="dgl">På lista siden </span><span class="dgv">05.11</span></td>'
+    assert C.days_cell("B", dmap, since) == '<td class="dg"><span class="dgl">På lista siden </span><span class="dgv">09.11</span></td>'   # rekken startet 09.11, ikke 06.11
+    assert C.days_cell("N", dmap, since) == '<td class="dg"><span class="dgl">På lista siden </span><span class="dgv">10.11</span><span class="dg-ny">Ny</span></td>'
     assert C.days_cell("OUT", dmap, since) == '<td class="dg"><span class="dgv">–</span></td>'
 
 
@@ -156,12 +156,14 @@ def test_candidate_table_has_days_column(tmp_path, monkeypatch):
     monkeypatch.setattr(SN, "ENTRY_LOG", tmp_path / "ingen_entry.csv")    # og fra ekte sidelogg (nyere datoer enn testens 10.11)
     s = {"tickers": [{"ticker": "A.OL", "score": 5.0}, {"ticker": "B.OL", "score": 4.0}], "oslo_universe_flags": []}
     t = OV.candidates_table_html(s)
-    assert '<th scope="col" class="dg-h">Dager på lista</th></tr></thead>' in t
+    assert '<th scope="col" class="dg-h">På lista siden</th></tr></thead>' in t
     rows = re.findall(r"<tr data-nf=.*?</tr>", t)
-    assert '<span class="dgv">På lista siden 09.11</span></td></tr>' in rows[0] and "dg-ny" not in rows[0]
-    assert '<span class="dgv">På lista siden 10.11</span><span class="dg-ny">Ny</span></td></tr>' in rows[1]
+    assert '<span class="dgl">På lista siden </span><span class="dgv">09.11</span></td></tr>' in rows[0] and "dg-ny" not in rows[0]
+    assert '<span class="dgl">På lista siden </span><span class="dgv">10.11</span><span class="dg-ny">Ny</span></td></tr>' in rows[1]
     assert "sortable" not in t and "aria-sort" not in t
     assert ".ov-ct td.dg{font-size:14px;line-height:20px;color:#94a3b8" in C.CSS and ".ov-ct th.dg-h,.ov-ct td.dg{text-align:right" in C.CSS
+    assert ".ov-ct .dgl{display:none}" in C.CSS
+    assert ".ov-ct td.dg .dgl{display:inline;font-size:13px;line-height:18px;color:#94a3b8" in C.CSS.split("@media(max-width:699px)", 1)[1]
     assert '"nm nm nm dg" "rk fl sg sg"' in OV.CSS and ".ov-ct td.dg{grid-area:dg;justify-self:end;" in C.CSS   # < 600: navnelinja
 
 
@@ -401,7 +403,7 @@ def _mobile_rule(css, sel):
 def test_mobile_days_on_name_line_not_signal_row():
     areas = re.search(r'\.ov-ct tr\{display:grid;grid-template-columns:([^;]+);grid-template-areas:((?:"[^"]+" ?)+);', OV.CSS)
     rows = re.findall(r'"([^"]+)"', areas.group(2))
-    assert rows[0].split() == ["nm", "nm", "nm", "dg"]            # «På lista siden DD.MM»/«Ny» på navnelinja, høyre
+    assert rows[0].split() == ["nm", "nm", "nm", "dg"]            # «På lista siden» + «DD.MM»/«Ny» på navnelinja, høyre
     assert "dg" not in rows[1].split() and rows[1].split()[-2:] == ["sg", "sg"]   # linje 2: risiko · flagg · signal, full bredde
     assert "minmax(0,1fr)" in areas.group(1)                       # navnet tar resten og brytes
     m = C.CSS.split("@media(max-width:699px){", 1)[1]
