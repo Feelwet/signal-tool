@@ -1,10 +1,10 @@
 {
- "hentet": "2026-11-27T19:01:45+0100",
+ "hentet": "2026-11-27T19:31:42+0100",
  "dato": "2026-11-27",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (2353) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (1807) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
   "Oslo Børs Newsweb": "fra forrige henting"
@@ -12,11 +12,11 @@
  "temaer": [
   {
    "tema": "conflict_defense",
-   "antall": 137
+   "antall": 142
   },
   {
    "tema": "mideast_energy",
-   "antall": 102
+   "antall": 106
   },
   {
    "tema": "risk_off_haven",
@@ -28,7 +28,7 @@
   },
   {
    "tema": "food_agri",
-   "antall": 18
+   "antall": 19
   },
   {
    "tema": "shipping_chokepoints",
@@ -56,6 +56,168 @@
   }
  ],
  "saker": [
+  {
+   "tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
+   "url": "http://www.shanghaisun.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
+   "kilde": "GDELT",
+   "domene": "shanghaisun.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal",
+    "tariff"
+   ]
+  },
+  {
+   "tittel": "BTA :: Bulgaria and Romania Key to Black Sea Security and Lower Danube Connectivity, Study Says",
+   "url": "https://www.bta.bg/en/news/balkans/1254439-bulgaria-and-romania-key-to-black-sea-security-and-lower-danube-connectivity-st",
+   "kilde": "GDELT",
+   "domene": "bta.bg",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "black sea"
+   ]
+  },
+  {
+   "tittel": "Russian stuff blowing up: Ukraine strikes rocket fuel production plant",
+   "url": "https://www.dailykos.com/stories/2026/11/27/800133564/community/russian-stuff-blowing-up-friday/",
+   "kilde": "GDELT",
+   "domene": "dailykos.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia's flagship mining forum at risk as regional conflict rages",
+   "url": "https://www.mining.com/saudi-arabias-flagship-mining-forum-at-risk-as-regional-conflict-rages/",
+   "kilde": "GDELT",
+   "domene": "mining.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "'Serves US interests better': Iraq's oil smuggling clampdown threatens ties with Kurds, Iran",
+   "url": "https://www.newindianexpress.com/world/2026/Nov/27/serves-us-interests-better-iraqs-oil-smuggling-clampdown-threatens-ties-with-kurds-iran",
+   "kilde": "GDELT",
+   "domene": "newindianexpress.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iran",
+    "iraq"
+   ]
+  },
+  {
+   "tittel": "Pakistan and Turkey pledge to support Saudi Arabia against Houthi attacks under defense pact",
+   "url": "https://www.union-bulletin.com/news/world/pakistan-and-turkey-pledge-to-support-saudi-arabia-against-houthi-attacks-under-defense-pact/article_fa1ff20f-6331-57b4-bdc0-37d62d12c935.html",
+   "kilde": "GDELT",
+   "domene": "union-bulletin.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Ukraine urges countries to follow Canada's lead in barring Russian athletes – Winnipeg Free Press",
+   "url": "https://www.winnipegfreepress.com/canada/2026/11/27/ukraine-urges-countries-to-follow-canadas-lead-in-barring-russian-athletes",
+   "kilde": "GDELT",
+   "domene": "winnipegfreepress.com",
+   "publisert": "2026-11-27T18:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Swedish Gripen jets with Meteor missiles will arrive in Ukraine in January, posing the first serious threat to Russian aviation (Ukraine Battlefield update, Day 1,737)",
+   "url": "https://euobserver.com/252231/swedish-gripen-jets-with-meteor-missiles-will-arrive-in-ukraine-in-january-posing-the-first-serious-threat-to-russian-aviation-ukraine-battlefield-update-day-1737/",
+   "kilde": "GDELT",
+   "domene": "euobserver.com",
+   "publisert": "2026-11-27T18:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian",
+    "missile"
+   ]
+  },
+  {
+   "tittel": "Arab News |  Saudi Arabia, Pakistan and Turkiye to accelerate support for Kingdom's security in face of Houthi attacks",
+   "url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-pakistan-and-turkiye-to-accelerate-support-for-kingdoms-security-in-face-of-houthi-attacks-3014302",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-27T18:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Zelensky urges the U.S. to pressure Putin - Los Angeles Times",
+   "url": "https://www.latimes.com/world-nation/story/2026-11-27/zelensky-urges-u-s-to-pressure-putin",
+   "kilde": "GDELT",
+   "domene": "latimes.com",
+   "publisert": "2026-11-27T18:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelensky",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy compares Trump calling Putin a friend to praising Hitler",
+   "url": "https://www.staradvertiser.com/2026/11/27/breaking-news/zelenskyy-compares-trump-calling-putin-a-friend-to-praising-hitler/",
+   "kilde": "GDELT",
+   "domene": "staradvertiser.com",
+   "publisert": "2026-11-27T18:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
   {
    "tittel": "Why, after losing 700,000 men in Ukraine, Russians aren't revolting",
    "url": "http://www.washingtonexaminer.com/op-eds/4815434/why-russians-are-not-revolting/",
@@ -277,21 +439,6 @@
    "matchede_ord": [
     "zelenskyy",
     "russia"
-   ]
-  },
-  {
-   "tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
-   "url": "http://www.indiagazette.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
-   "kilde": "GDELT",
-   "domene": "indiagazette.com",
-   "publisert": "2026-11-27T17:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal",
-    "tariff"
    ]
   },
   {
@@ -546,82 +693,6 @@
    ]
   },
   {
-   "tittel": "Lights Out In Putin's Crimea... And Zelensky Says Russia's Next Massive Strike Is Coming",
-   "url": "https://www.zerohedge.com/geopolitical/lights-out-putins-crimea-and-zelensky-says-russias-next-massive-strike-coming",
-   "kilde": "GDELT",
-   "domene": "zerohedge.com",
-   "publisert": "2026-11-27T17:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "russia",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Zelensky compares Trump's friendship with Putin to being friends with Hitler during World War Two",
-   "url": "https://article.wn.com/view/2026/11/27/Zelensky_compares_Trump_s_friendship_with_Putin_to_being_fri/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Putin Takes Part in Flag-Raising Ceremony on Russia's Newest Nuclear Submarine",
-   "url": "https://sputnikglobe.com/20261127/russia-one-of-few-countries-capable-of-building-powerful-nuclear-submarines-putin-1125153024.html",
-   "kilde": "GDELT",
-   "domene": "sputnikglobe.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russia",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Zelensky urges the US to pressure Putin, calling Trump's 'my friend' remark strange – The Frontier Post",
-   "url": "https://thefrontierpost.com/zelensky-urges-the-us-to-pressure-putin-calling-trumps-my-friend-remark-strange/",
-   "kilde": "GDELT",
-   "domene": "thefrontierpost.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "putin"
-   ]
-  },
-  {
-   "tittel": "Arab News | Zelensky urges the US to pressure Putin, calling Trump's 'my friend' remark strange",
-   "url": "https://www.arabnews.com/world/zelensky-urges-the-us-to-pressure-putin-calling-trumps-my-friend-remark-strange-3014271",
-   "kilde": "GDELT",
-   "domene": "arabnews.com",
-   "publisert": "2026-11-27T17:00:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelensky",
-    "putin"
-   ]
-  },
-  {
    "tittel": "Mecca Defence Pact Explained: Pakistan, Saudi Arabia And Türkiye",
    "url": "https://www.outlookindia.com/international/mecca-defence-pact-pakistan-saudi-arabia-turkiye-mutual-defence-houthi-attacks",
    "kilde": "GDELT",
@@ -810,34 +881,6 @@
    ]
   },
   {
-   "tittel": "Qatar strongly condemns Houthi group's attack on Jazan Refinery in Saudi Arabia",
-   "url": "http://thepeninsulaqatar.com/article/27/11/2026/qatar-strongly-condemns-houthi-groups-attack-on-jazan-refinery-in-saudi-arabia",
-   "kilde": "GDELT",
-   "domene": "thepeninsulaqatar.com",
-   "publisert": "2026-11-27T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Pakistan hosts defense talks with Saudi Arabia and Turkey under Mecca pact",
-   "url": "http://www.reflector.com/news/national/pakistan-hosts-defense-talks-with-saudi-arabia-and-turkey-under-mecca-pact/article_2cf2fe0e-2453-5733-8f5b-51ef1c3925d0.html",
-   "kilde": "GDELT",
-   "domene": "reflector.com",
-   "publisert": "2026-11-27T15:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
    "tittel": "Gold prices surge by Rs11,500 per tola, silver also gets costlier",
    "url": "https://dunyanews.tv/en/Business/985216-gold-prices-surge-by-rs11500-per-tola-silver-also-gets-costlier",
    "kilde": "GDELT",
@@ -933,35 +976,6 @@
    ],
    "matchede_ord": [
     "export control"
-   ]
-  },
-  {
-   "tittel": "Pakistan, Saudi Arabia, Turkiye begin Key Talks on Collective Defence, Joint Military Response",
-   "url": "https://en.dailypakistan.com.pk/27-Nov-2026/pakistan-saudi-arabia-turkiye-begin-key-talks-on-collective-defence-joint-military-response",
-   "kilde": "GDELT",
-   "domene": "dailypakistan.com.pk",
-   "publisert": "2026-11-27T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Israeli attacks on women and girls meant 'to destroy life' in Gaza: Amnesty  - Grenada Chronicle – Daily Grenada And Caribbean News",
-   "url": "https://grenadachronicle.com/israeli-attacks-on-women-and-girls-meant-to-destroy-life-in-gaza-amnesty/",
-   "kilde": "GDELT",
-   "domene": "grenadachronicle.com",
-   "publisert": "2026-11-27T15:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israeli",
-    "gaza"
    ]
   },
   {
