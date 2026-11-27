@@ -1,0 +1,228 @@
+[
+  {
+    "id": "scenario:energi-NO-opp:mekanisme-inntekt",
+    "navn": "Energipris i Norge opp",
+    "berorte_noder": [
+      "energi:kraft-NO",
+      "ticker:NHY.OL",
+      "anlegg:karmoy",
+      "anlegg:ardal",
+      "anlegg:sunndal",
+      "anlegg:hoyanger",
+      "anlegg:husnes"
+    ],
+    "berorte_kanter": [
+      "selskap:kraft-NO-til-nhy-2025"
+    ],
+    "setning": "Hydro Energy skriver at volatilitet i både produksjon og spotpriser på elektrisitet kan føre til betydelige variasjoner i kvartalsvise inntekter.",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "15",
+    "status": "kilde",
+    "sitat": "«Volatilitet i både produksjon og spotpriser på elektrisitet kan imidlertid føre til betydelige variasjoner i kvartalsvise inntekter.»",
+    "merknad": "Etikett i visningen: Mekanisme ifølge kilden. Ingen kursretning og ingen egne anslag.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:energi-NO-opp:mekanisme-kostnad",
+    "navn": "Energipris i Norge opp",
+    "berorte_noder": [
+      "energi:kraft-NO",
+      "ticker:NHY.OL",
+      "vare:raaaluminium"
+    ],
+    "berorte_kanter": [
+      "selskap:kraft-NO-til-nhy-2025",
+      "selskap:nhy-primaer-2025"
+    ],
+    "setning": "Hydro skriver at tilgang til konkurransedyktig fornybar kraft er grunnlaget for å levere lavkarbonaluminium til konkurransedyktige kostnader på lang sikt, og at kraft er en kritisk innsatsfaktor. Oppstrømsvirksomheten beskrives som kortsiktig i energi (kraft, gass og kull).",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "16",
+    "status": "kilde",
+    "sitat": "«Tilgang til konkurransedyktig fornybar kraft er grunnlaget for å levere lavkarbonaluminium til konkurransedyktige kostnader på lang sikt» (s. 16). «Kraft er en kritisk innsatsfaktor i aluminiumsproduksjon» (s. 81). «Hydros oppstrømsvirksomhet er i hovedsak langsiktig alumina, aluminium og produktpremier, og kortsiktig energi (kraft, gass og kull)» (s. 38).",
+    "merknad": "Flere sider i samme norske utgave. S. 16 gjelder tilgang til kraft, s. 81 innsatsfaktoren og s. 38 eksponeringen. Kostnadsandelen 15–20 % og tilføyelsen «i 2025» er tatt ut, fordi bare tall fra Hydros sensitivitetstabell på s. 38 er tillatt i scenarioene.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:energi-NO-opp:netto-posisjon",
+    "navn": "Energipris i Norge opp",
+    "berorte_noder": [
+      "energi:kraft-NO",
+      "ticker:NHY.OL"
+    ],
+    "berorte_kanter": [
+      "selskap:kraft-NO-til-nhy-2025"
+    ],
+    "setning": "Hydro skriver at netto kraftposisjon i Norge blir balansert gjennom kjøp og salg i det nordiske kraftmarkedet ved kjøp og salg i spotmarkedet, og at behovet for kraft primært dekkes gjennom langsiktige kjøpskontrakter med kraftleverandører og egen produksjon.",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "187",
+    "status": "kilde",
+    "sitat": "«Netto kraftposisjon i Norge blir balansert gjennom kjøp og salg i det nordiske kraftmarkedet ved kjøp og salg i spotmarkedet.» «Hydros behov for kraft dekkes primært gjennom langsiktige kjøpskontrakter med kraftleverandører, herunder prosjektselskaper med en begrenset produksjonsportefølje, og gjennom Hydros egen produksjon.» (norsk utgave s. 187, note 8.1).",
+    "merknad": "Note 8.1 i den norske utgaven, s. 187. Sidetall, utgave og URL hører til samme utgave. Ingen tall utover det som står i kilden.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:energi-NO-opp:sensitivitet",
+    "navn": "Energipris i Norge opp",
+    "berorte_noder": [
+      "energi:kraft-NO",
+      "ticker:NHY.OL"
+    ],
+    "berorte_kanter": [
+      "selskap:kraft-NO-til-nhy-2025"
+    ],
+    "setning": "Kilden beskriver ikke dette",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "38",
+    "status": "mangler",
+    "sitat": "",
+    "merknad": "Sensitivitetstabellen på s. 38 gjelder aluminiumpris og valuta, ikke norsk kraftpris. Ingen av de tre scenarioene handler om aluminiumspris, så sitatet derfra er ikke tatt inn. Setningen er «Kilden beskriver ikke dette».",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:import-EU-ned:nettoimportor",
+    "navn": "Import til EU ned",
+    "berorte_noder": [
+      "land:EU",
+      "land:NO",
+      "vare:raaaluminium",
+      "vare:alumina"
+    ],
+    "berorte_kanter": [
+      "handelsdata:ekstraEU-EU:7601:import:Eurostat",
+      "handelsdata:NO-EU:7601:import:Eurostat",
+      "handelsdata:ekstraEU-EU:2818.20:import:Eurostat"
+    ],
+    "setning": "Mangler data",
+    "kilde": "European Aluminium, one-pager «The strategic role of European aluminium»",
+    "kilde_url": "https://european-aluminium.eu/wp-content/uploads/2024/09/EA_onepager_Digital.pdf",
+    "side": "",
+    "status": "mangler",
+    "sitat": "",
+    "merknad": "Raden er satt til mangler med visningen «Mangler data». One-pageren har ikke trykte sidetall, så et ordrett sitat med side og URL kan ikke kontrolleres. En omskrivning er ikke tillatt.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:import-EU-ned:hydro-europa",
+    "navn": "Import til EU ned",
+    "berorte_noder": [
+      "ticker:NHY.OL",
+      "land:EU",
+      "land:NO"
+    ],
+    "berorte_kanter": [
+      "selskap:nhy-europaandel-primaer",
+      "handelsdata:NO-EU:7601:import:Eurostat"
+    ],
+    "setning": "Hydro skriver at aluminium er definert som et strategisk materiale av EU og NATO.",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "16",
+    "status": "kilde",
+    "sitat": "«Aluminium er definert som et strategisk materiale av EU og NATO» (s. 16).",
+    "merknad": "Andelen 30 prosent av europeisk primæraluminium står på kanten selskap:nhy-europaandel-primaer, ikke i scenarioteksten, fordi bare tall fra Hydros sensitivitetstabell på s. 38 er tillatt i scenarioene.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:import-EU-ned:sensitivitet",
+    "navn": "Import til EU ned",
+    "berorte_noder": [
+      "land:EU",
+      "ticker:NHY.OL",
+      "land:NO"
+    ],
+    "berorte_kanter": [
+      "handelsdata:NO-EU:7601:import:Eurostat"
+    ],
+    "setning": "Kilden beskriver ikke dette",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "38",
+    "status": "mangler",
+    "sitat": "",
+    "merknad": "Årsrapporten 2025 oppgir ikke en sensitivitet for lavere import av aluminium til EU. Tabellen på s. 38 gjelder et annet spørsmål (aluminiumpris og valuta) og er derfor ikke sitert her. Setningen er «Kilden beskriver ikke dette».",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:bil-opp:andel",
+    "navn": "Etterspørsel fra bil opp",
+    "berorte_noder": [
+      "sluttbruk:bil",
+      "vare:raaaluminium",
+      "ticker:NHY.OL"
+    ],
+    "berorte_kanter": [
+      "estimat:raaaluminium-bil:andel",
+      "selskap:nhy-ekstrudering-2025"
+    ],
+    "setning": "Kilden beskriver ikke dette",
+    "kilde": "European Aluminium, one-pager «The strategic role of European aluminium»",
+    "kilde_url": "https://european-aluminium.eu/wp-content/uploads/2024/09/EA_onepager_Digital.pdf",
+    "side": "",
+    "status": "mangler",
+    "sitat": "",
+    "merknad": "European Aluminium har en figur for sluttbruk i Europa, men oppgir ikke referanseår i dokumentet eller på siden aluminium-in-use. Etter FLAG 4 vises ikke tallet.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:bil-opp:hydro-kunder",
+    "navn": "Etterspørsel fra bil opp",
+    "berorte_noder": [
+      "sluttbruk:bil",
+      "ticker:NHY.OL"
+    ],
+    "berorte_kanter": [
+      "selskap:nhy-ekstrudering-2025"
+    ],
+    "setning": "Hydro nevner bil, bygg og elektrisitet som kundeområder for Aluminium Metal, men oppgir ikke hvor stor andel av omsetningen som kommer fra bil.",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "16",
+    "status": "kilde",
+    "sitat": "«Ved å inngå strategiske partnerskap med ledende kunder innen bil-, bygg- og anleggsbransjen, samt elektrisitetsektor og forbruksvarer, jobber Hydro Aluminium Metal for å dekarbonisere industriene der aluminium brukes.»",
+    "merknad": "Ordrett sitat fra den norske utgaven s. 16. kilde_url peker på samme utgave.",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  },
+  {
+    "id": "scenario:bil-opp:sensitivitet",
+    "navn": "Etterspørsel fra bil opp",
+    "berorte_noder": [
+      "sluttbruk:bil",
+      "ticker:NHY.OL"
+    ],
+    "berorte_kanter": [
+      "selskap:nhy-ekstrudering-2025"
+    ],
+    "setning": "Kilden beskriver ikke dette",
+    "kilde": "Hydro integrert årsrapport 2025",
+    "kilde_url": "https://www.hydro.com/globalassets/06-investors/reports-and-presentations/annual-report/ar-2025/integrert-arsrapport-2025.pdf",
+    "side": "38",
+    "status": "mangler",
+    "sitat": "",
+    "merknad": "Årsrapporten 2025 oppgir ikke en sensitivitet for økt etterspørsel fra bil. Tabellen på s. 38 gjelder et annet spørsmål (aluminiumpris og valuta) og er derfor ikke sitert her. Setningen er «Kilden beskriver ikke dette».",
+    "publisert": false,
+    "nivaa": null,
+    "verdi": null
+  }
+]

@@ -1,7 +1,7 @@
 import * as THREE from './vendor/three.module.min.js';
 
 const LAG_SRC = { 'råvare': 'Handelsdata', 'selskap': 'Selskapsrapport' };
-const TYPE_LAB = { selskap: 'Selskaper', råvare: 'Råvarer', land: 'Land', sluttbruk: 'Sluttbruk', verk: 'Verk og anlegg' };
+const TYPE_LAB = { selskap: 'Selskaper', ticker: 'Selskaper', råvare: 'Råvarer', vare: 'Råvarer', land: 'Land', sluttbruk: 'Sluttbruk', verk: 'Verk og anlegg', anlegg: 'Verk og anlegg', energi: 'Råvarer' };
 const MAX_LAND_PER_LAG = 6;
 const TONN = new Set(['tonn', 't', 'tonnes', 'metric tonnes', 'metriske tonn', 'mt']);
 const MAX_NODES = 25;
@@ -52,9 +52,18 @@ function slug(t) {
 }
 function tickerOf(n) {
   if (n?.ticker) return n.ticker;
-  if (n?.type === 'selskap' && n?.id) return n.id;
+  const nid = String(n?.id || '');
+  if (nid.startsWith('ticker:') && nid.slice(7)) return nid.slice(7);
+  if ((n?.type === 'selskap' || n?.type === 'ticker') && nid) return nid;
   return null;
 }
+function yearOf(row) {
+  const v = (row?.år != null && row.år !== '') ? row.år : row?.ar;
+  if (v == null || v === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : v;
+}
+function isVerk(n) { return n && (n.type === 'verk' || n.type === 'anlegg'); }
 function isTonn(u) { return TONN.has(String(u || '').trim().toLowerCase()); }
 function isPub(e) { return e && e.publisert === true; }
 function pubKanter(list) { return (list || kanter).filter(isPub); }
@@ -88,17 +97,36 @@ function nodeTall(node) {
   if (node && ((node.verdi != null && node.verdi !== '') || node.tekst)) return [node];
   return [];
 }
-function landTonn(node) {
-  if (node?.verdi == null || node.verdi === '' || !isTonn(node.enhet) || node.år == null || node.år === '') return null;
-  const y = Number(node.år), v = Number(node.verdi);
-  if (!Number.isFinite(y) || !Number.isFinite(v)) return null;
-  return { year: y, val: v };
+function landTonn(node, edges) {
+  const y0 = yearOf(node);
+  if (node?.verdi != null && node.verdi !== '' && isTonn(node.enhet) && y0 != null) {
+    const y = Number(y0), v = Number(node.verdi);
+    if (Number.isFinite(y) && Number.isFinite(v)) return { year: y, val: v };
+  }
+  const list = (edges || pubKanter()).filter(isPub);
+  const nid = node?.id;
+  const byYear = new Map();
+  for (const e of list) {
+    if (e.status !== 'kilde' || e.verdi == null || e.verdi === '' || !isTonn(e.enhet)) continue;
+    if (e.fra !== nid && e.til !== nid) continue;
+    const y = yearOf(e);
+    if (y == null) continue;
+    const v = Number(e.verdi);
+    if (!Number.isFinite(v)) continue;
+    byYear.set(y, (byYear.get(y) || 0) + v);
+  }
+  if (!byYear.size) return null;
+  let year = 0, val = -1;
+  for (const [y, v] of byYear) {
+    if (v > val || (v === val && y > year)) { val = v; year = y; }
+  }
+  return { year, val };
 }
-function landForLag(nodes) {
+function landForLag(nodes, edges) {
   const lands = nodes.filter((n) => n.type === 'land');
   const measured = [], unmeasured = [];
   for (const n of lands) {
-    const t = landTonn(n);
+    const t = landTonn(n, edges);
     if (t) measured.push({ n, ...t });
     else unmeasured.push(n);
   }
@@ -122,15 +150,41 @@ function verkFor(companyId) {
     if (e.fra === companyId) linked.add(e.til);
     else if (e.til === companyId) linked.add(e.fra);
   }
-  return noder.filter((n) => n.type === 'verk' && linked.has(n.id));
+  let out = noder.filter((n) => isVerk(n) && linked.has(n.id));
+  const focus = byId.get(companyId);
+  const mat = focus?.materiale;
+  if (mat) {
+    const seen = new Set(out.map((n) => n.id));
+    for (const n of noder) {
+      if (isVerk(n) && n.materiale === mat && !seen.has(n.id)) { out.push(n); seen.add(n.id); }
+    }
+  }
+  return out;
+}
+function plantLand(n) {
+  if (n.land) return n.land;
+  for (const e of pubKanter()) {
+    const other = e.fra === n.id ? e.til : (e.til === n.id ? e.fra : null);
+    const o = other && byId.get(other);
+    if (o && o.type === 'land') return o.navn;
+  }
+  const t = n.hva_det_er || n.merknad || '';
+  const m = t.match(/\bi\s+([^.,]+)/i);
+  if (m) {
+    const bit = m[1];
+    const parts = bit.split(',').map((s) => s.trim());
+    return parts[parts.length - 1];
+  }
+  return '';
 }
 function verkLabel(verks) {
   return 'Verk (' + verks.length + ')';
 }
 function packVisible(rawNodes, edges, focus) {
-  const verks = rawNodes.filter((n) => n.type === 'verk');
-  let nodes = rawNodes.filter((n) => n.type !== 'verk');
   const focusId = focus?.id;
+  const fromNb = rawNodes.filter((n) => isVerk(n));
+  const verks = focusId ? verkFor(focusId) : fromNb;
+  let nodes = rawNodes.filter((n) => !isVerk(n));
   if (verks.length && focusId) {
     nodes.push({
       id: 'verk:' + focusId,
@@ -154,7 +208,7 @@ function packVisible(rawNodes, edges, focus) {
   nodes = rest;
   byHop.forEach((lands, hop) => {
     if (!lands.length) return;
-    const { visible, andre } = landForLag(lands);
+    const { visible, andre } = landForLag(lands, edges);
     nodes.push(...visible);
     if (andre.length) {
       nodes.push({
@@ -174,7 +228,7 @@ function packVisible(rawNodes, edges, focus) {
   for (const e of edges) {
     const mapEnd = (id) => {
       const n = byId.get(id);
-      if (n?.type === 'verk' && clusterId) {
+      if (isVerk(n) && clusterId) {
         if (verkOpen && keep.has(id)) return id;
         return clusterId;
       }
@@ -186,24 +240,41 @@ function packVisible(rawNodes, edges, focus) {
   }
   return { nodes, edges: packedEdges };
 }
+function isMekanisme(setning, url) {
+  const s = String(setning || '').trim();
+  const u = String(url || '').trim();
+  const low = s.toLowerCase();
+  return !!(s && u && low !== 'kilden beskriver ikke dette' && low !== 'mangler data');
+}
 function scenarioHasChip(s) {
-  return (s?.tekst || []).some((t) => String(t.setning || '').trim() && String(t.kilde_url || '').trim());
+  if ((s?.tekst || []).some((t) => isMekanisme(t.setning, t.kilde_url))) return true;
+  return isMekanisme(s?.setning, s?.kilde_url);
+}
+function scenarioGroup(idOrName) {
+  const seed = scenarioer.find((x) => x.id === idOrName) || scenarioer.find((x) => x.navn === idOrName);
+  if (!seed) return [];
+  return scenarioer.filter((x) => x.navn === seed.navn);
 }
 function fillChips() {
   const box = document.getElementById('flyt-hvis-chips') || document.querySelector('.flyt-hvis-chips');
   if (!box) return;
   box.innerHTML = '';
+  const seen = new Set();
   for (const s of scenarioer) {
-    if (!scenarioHasChip(s)) continue;
+    if (!s.navn || seen.has(s.navn)) continue;
+    const group = scenarioer.filter((x) => x.navn === s.navn);
+    if (!group.some(scenarioHasChip)) continue;
+    seen.add(s.navn);
+    const sid = (group.find(scenarioHasChip) || s).id;
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'flyt-chip';
-    b.dataset.scenario = s.id;
+    b.dataset.scenario = sid;
     b.setAttribute('aria-pressed', 'false');
     b.textContent = s.navn;
     b.addEventListener('click', () => {
-      if (scenario?.id === s.id) applyScenario(null);
-      else applyScenario(s.id);
+      if (scenario?.navn === s.navn) applyScenario(null);
+      else applyScenario(sid);
     });
     box.appendChild(b);
   }
@@ -221,9 +292,15 @@ function setFokusUrl(id, push = true) {
   else history.replaceState({ fokus: id }, '', u);
 }
 async function loadJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) return null;
-  return r.json();
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    const txt = await r.text();
+    if (!txt) return null;
+    return JSON.parse(txt);
+  } catch {
+    return null;
+  }
 }
 function arr(obj, key, alt) {
   if (!obj) return [];
@@ -351,7 +428,15 @@ function visibleSet(focusId) {
     return { nodes: [focusNode], edges: [], overview: false, hidden: 0, missingChain: true };
   }
   const nb = neighbors(focusNode.id, 2);
-  const nodes = noder.filter((n) => nb.ids.has(n.id));
+  const extra = [];
+  for (const e of kanter) {
+    if (e.status !== 'mangler') continue;
+    let other = null;
+    if (e.fra === focusNode.id) other = e.til;
+    else if (e.til === focusNode.id) other = e.fra;
+    if (other && !nb.ids.has(other) && byId.has(other)) extra.push(byId.get(other));
+  }
+  const nodes = noder.filter((n) => nb.ids.has(n.id)).concat(extra);
   const packed = packVisible(nodes, nb.edges, focusNode);
   const hidden = Math.max(0, packed.nodes.length - MAX_NODES);
   let pnodes = packed.nodes;
@@ -392,7 +477,7 @@ function layout(visu) {
   const focusId = visu.focus?.id || fokus;
   const groups = [[], [], []];
   for (const n of visu.nodes) {
-    if (n.type === 'verkgruppe' || n.type === 'verk') continue;
+    if (n.type === 'verkgruppe' || isVerk(n)) continue;
     groups[hopOf(n.id, focusId)].push(n);
   }
   groups.forEach((g, hop) => {
@@ -403,7 +488,7 @@ function layout(visu) {
     });
   });
   const cluster = visu.nodes.find((n) => n.type === 'verkgruppe');
-  const plants = visu.nodes.filter((n) => n.type === 'verk');
+  const plants = visu.nodes.filter((n) => isVerk(n));
   if (cluster) {
     const nhy = pos.get(focusId) || { x: W * 0.18, y: H * 0.5 };
     const cx = nhy.x + W * 0.14;
@@ -442,7 +527,9 @@ function srcLine(row) {
   const head = LAG_SRC[row.lag] || 'Kilde';
   const bits = [head];
   if (row.kilde) bits.push(row.kilde);
-  if (row.år) bits.push(String(row.år));
+  const y = yearOf(row);
+  if (y != null && y !== '') bits.push(String(y));
+  if (row.side) bits.push('s. ' + row.side);
   if (row.hs_kode) bits.push('HS ' + row.hs_kode);
   const text = bits.join(' · ');
   if (row.kilde_url) {
@@ -471,7 +558,8 @@ function fmtVal(row) {
   if (row.status === 'mangler' || row.verdi == null || row.verdi === '') return null;
   const v = row.verdi;
   const num = typeof v === 'number' ? v.toLocaleString('nb-NO') : String(v);
-  return [num, row.enhet, row.år].filter((x) => x != null && x !== '').join(' ');
+  const y = yearOf(row);
+  return [num, row.enhet, y].filter((x) => x != null && x !== '').join(' ');
 }
 
 function updateStatus() {
@@ -486,7 +574,7 @@ function fillSearch() {
   for (const e of pubKanter()) { visible.add(e.fra); visible.add(e.til); }
   for (const n of noder) {
     const t = tickerOf(n);
-    if (!visible.has(n.id) && !universe.includes(t)) continue;
+    if (!visible.has(n.id) && n.status !== 'mangler' && !universe.includes(t)) continue;
     opts.push({ v: n.id, lab: n.navn + (t && t !== n.navn ? ` (${t})` : '') });
     if (t && t !== n.id) opts.push({ v: t, lab: t });
   }
@@ -635,7 +723,7 @@ function appendTallRows(container, node) {
       p.appendChild(b);
     }
     wrap.appendChild(p);
-    wrap.appendChild(srcLine(r));
+    wrap.appendChild(srcLine({ ...r, lag: r.lag || node.lag }));
     container.appendChild(wrap);
   }
 }
@@ -666,7 +754,7 @@ function renderPanel(node) {
       const row = document.createElement('div');
       row.className = 'flyt-verk-rad';
       const a = document.createElement('span'); a.textContent = v.navn;
-      const b = document.createElement('span'); b.textContent = v.land || '';
+      const b = document.createElement('span'); b.textContent = plantLand(v) || v.land || '';
       const c = document.createElement('span'); c.textContent = fmtVal(v) || 'Mangler data';
       row.append(a, b, c);
       row.tabIndex = 0;
@@ -1044,8 +1132,9 @@ function showList(force) {
   el.wrap.style.display = 'none';
   closePanel();
   const groups = { selskap: [], råvare: [], land: [], sluttbruk: [] };
+  const typMap = { ticker: 'selskap', anlegg: 'selskap', verk: 'selskap', vare: 'råvare', energi: 'råvare', verkgruppe: 'selskap', andre: 'land' };
   const visN = vis.nodes.length ? vis.nodes : noder;
-  for (const n of visN) (groups[n.type] || (groups.råvare)).push(n);
+  for (const n of visN) (groups[typMap[n.type] || n.type] || (groups.råvare)).push(n);
   el.listView.innerHTML = '';
   for (const [typ, rows] of Object.entries(groups)) {
     if (!rows.length) continue;
@@ -1145,42 +1234,65 @@ function resetView() {
 }
 
 function applyScenario(id) {
-  let s = scenarioer.find((x) => x.id === id) || null;
-  if (s && !scenarioHasChip(s)) s = null;
-  scenario = s;
-  document.querySelectorAll('.flyt-chip').forEach((b) => b.setAttribute('aria-pressed', s && b.dataset.scenario === s.id ? 'true' : 'false'));
+  const group = id ? scenarioGroup(id) : [];
+  const sourced = group.filter(scenarioHasChip);
+  const s = sourced[0] || null;
+  scenario = s ? { ...s, navn: s.navn, id: s.id, noder: group.flatMap((x) => x.berorte_noder || x.noder || []), kanter: group.flatMap((x) => x.berorte_kanter || x.kanter || []) } : null;
+  document.querySelectorAll('.flyt-chip').forEach((b) => {
+    const g = scenarioGroup(b.dataset.scenario);
+    const on = !!(s && g.some((x) => x.navn === s.navn));
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   const box = el.hvisTekst;
   box.innerHTML = '';
   const tallBox = document.getElementById('flyt-hvis-tall');
   if (tallBox) tallBox.innerHTML = '';
   if (s) {
-    for (const t of s.tekst || []) {
-      if (!String(t.setning || '').trim()) continue;
+    const sentences = [];
+    for (const row of group) {
+      if (Array.isArray(row.tekst)) {
+        for (const trow of row.tekst) {
+          if (isMekanisme(trow.setning, trow.kilde_url)) sentences.push({ ...trow });
+        }
+      } else if (isMekanisme(row.setning, row.kilde_url)) {
+        sentences.push({ setning: row.setning, kilde_url: row.kilde_url, side: row.side });
+      }
+    }
+    for (const trow of sentences) {
       const p = document.createElement('p');
       p.className = 'flyt-hvis-s';
-      p.textContent = t.setning + ' ';
-      if (t.kilde_url) {
+      p.textContent = trow.setning + ' ';
+      if (trow.kilde_url) {
         const a = document.createElement('a');
-        a.href = t.kilde_url;
+        a.href = trow.kilde_url;
         a.target = '_blank';
         a.rel = 'noopener';
-        a.textContent = t.side ? `Kilde, s. ${t.side}` : 'Kilde';
+        a.textContent = trow.side ? `Kilde, s. ${trow.side}` : 'Kilde';
         p.appendChild(a);
       }
       box.appendChild(p);
     }
     if (tallBox) {
-      const rows = Array.isArray(s.tall) ? s.tall : [];
-      if (!rows.length) {
+      const tallRows = [];
+      for (const row of group) {
+        if (Array.isArray(row.tall) && row.tall.length) {
+          for (const r of row.tall) tallRows.push(r);
+        }
+        const st = String(row.setning || '').trim();
+        if (st.toLowerCase() === 'kilden beskriver ikke dette') {
+          tallRows.push({ tekst: st });
+        }
+      }
+      if (!tallRows.length) {
         const p = document.createElement('p');
         p.className = 'flyt-hvis-tall-rad flyt-miss';
         p.textContent = EMPTY;
         tallBox.appendChild(p);
       } else {
-        for (const r of rows) {
+        for (const r of tallRows) {
           const p = document.createElement('p');
           p.className = 'flyt-hvis-tall-rad';
-          p.textContent = r.tekst || '';
+          p.textContent = r.tekst || r.setning || '';
           if (r.kilde_url) {
             const a = document.createElement('a');
             a.href = r.kilde_url;
@@ -1197,7 +1309,6 @@ function applyScenario(id) {
   redraw();
 }
 
-/* ---------- events ---------- */
 function bind() {
   el.kart.addEventListener('click', () => { if (!webgl && !hasWebGL()) { mode = 'liste'; } else mode = 'kart'; syncToggle(); });
   el.liste.addEventListener('click', () => { mode = 'liste'; syncToggle(); });
@@ -1268,15 +1379,17 @@ async function init() {
   webgl = hasWebGL();
   is3d = webgl && matchMedia('(min-width:901px)').matches;
   if (!webgl) { mode = 'liste'; }
-  const [N, K, S, D] = await Promise.all([
+  const [N, K, S1, S2, D] = await Promise.all([
     loadJson(`${DATA_BASE}/noder.json`),
     loadJson(`${DATA_BASE}/kanter.json`),
+    loadJson(`${DATA_BASE}/scenarios.json`),
     loadJson(`${DATA_BASE}/scenarioer.json`),
     loadJson(KURS_URL),
   ]);
   noder = arr(N, 'noder', 'nodes');
   kanter = arr(K, 'kanter', 'edges');
-  scenarioer = arr(S, 'scenarioer', 'scenarios');
+  scenarioer = arr(S1, 'scenarioer', 'scenarios');
+  if (!scenarioer.length) scenarioer = arr(S2, 'scenarioer', 'scenarios');
   byId = new Map(noder.map((n) => [n.id, n]));
   if (D && Array.isArray(D.tickers)) {
     for (const e of D.tickers) kurs[e.ticker] = e;

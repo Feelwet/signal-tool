@@ -13,7 +13,13 @@ from pathlib import Path
 
 LAG = frozenset({"råvare", "selskap"})
 STATUS = frozenset({"kilde", "estimat", "mangler", "kontekst"})
-TYPER = frozenset({"selskap", "råvare", "land", "sluttbruk", "verk"})
+TYPER = frozenset({"selskap", "råvare", "land", "sluttbruk", "verk", "anlegg", "ticker", "vare", "energi"})
+TYPE_ALIAS = {"anlegg": "verk", "ticker": "selskap", "vare": "råvare"}
+VERK_TYPER = frozenset({"verk", "anlegg"})
+OFFISIELL_MD5 = {
+    "noder.json": "02ab5d48a26842392130afcecb7c72ba",
+    "kanter.json": "9f6280057d24f7b869aee39eadd528a2",
+}
 MAX_LAND_PER_LAG = 6
 TONN = frozenset({"tonn", "t", "tonnes", "metric tonnes", "metriske tonn", "mt"})
 
@@ -245,8 +251,11 @@ def ticker_of(node: dict) -> str | None:
         return str(t).strip()
     nid = str(node.get("id") or "")
     # selskapsnode med ticker-form som id
-    if node.get("type") == "selskap" and nid:
-        return nid
+    if node.get("type") in ("selskap", "ticker") and nid:
+        return nid if "." in nid or node.get("type") == "ticker" else nid
+    # ticker:NHY.OL
+    if nid.startswith("ticker:") and nid.split(":", 1)[1]:
+        return nid.split(":", 1)[1]
     return None
 
 
@@ -357,6 +366,33 @@ def is_tonn(enhet: str | None) -> bool:
     return str(enhet or "").strip().lower() in TONN
 
 
+def canon_type(typ: str | None) -> str | None:
+    if typ is None:
+        return None
+    return TYPE_ALIAS.get(typ, typ)
+
+
+def year_of(row: dict):
+    if not isinstance(row, dict):
+        return None
+    v = row.get("år")
+    if v in (None, ""):
+        v = row.get("ar")
+    if v in (None, ""):
+        return None
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        try:
+            return int(float(v))
+        except (TypeError, ValueError):
+            return v
+
+
+def is_verk(node: dict) -> bool:
+    return isinstance(node, dict) and node.get("type") in VERK_TYPER
+
+
 def node_tall(node: dict) -> list[dict]:
     """Tallrader på en node. Flere rader slås aldri sammen."""
     if not isinstance(node, dict):
@@ -369,46 +405,90 @@ def node_tall(node: dict) -> list[dict]:
     return []
 
 
+_IKKE_MEKANISME = frozenset({"kilden beskriver ikke dette", "mangler data"})
+
+
+def _mekanisme_setning(setning: str, kilde_url: str) -> bool:
+    s = str(setning or "").strip()
+    u = str(kilde_url or "").strip()
+    return bool(s and u and s.lower() not in _IKKE_MEKANISME)
+
+
 def scenario_has_chip(s: dict) -> bool:
-    """Chip vises bare når scenarioet har minst én setning med kilde_url."""
+    """Chip vises bare når scenarioet har minst én kildebelagt mekanismesetning."""
     if not isinstance(s, dict):
         return False
     for t in s.get("tekst") or []:
-        if isinstance(t, dict) and str(t.get("setning") or "").strip() and str(t.get("kilde_url") or "").strip():
+        if isinstance(t, dict) and _mekanisme_setning(t.get("setning"), t.get("kilde_url")):
             return True
+    if _mekanisme_setning(s.get("setning"), s.get("kilde_url")):
+        return True
     return False
 
 
 def scenario_chips(scenarioer) -> list[tuple[str, str]]:
+    """Én chip per visningsnavn, hvis minst én rad har kildebelagt mekanismesetning."""
     if isinstance(scenarioer, dict):
         scenarioer = scenarioer.get("scenarioer") or scenarioer.get("scenarios") or []
     out = []
+    seen = set()
     for s in scenarioer or []:
-        if scenario_has_chip(s) and s.get("id") and s.get("navn"):
-            out.append((s["id"], s["navn"]))
+        navn = s.get("navn")
+        if not navn or navn in seen:
+            continue
+        group = [x for x in scenarioer if x.get("navn") == navn]
+        if any(scenario_has_chip(x) for x in group):
+            sid = next((x.get("id") for x in group if scenario_has_chip(x) and x.get("id")), s.get("id"))
+            if sid:
+                out.append((sid, navn))
+                seen.add(navn)
     return out
 
 
-def land_tonn(node: dict) -> tuple[int, float] | None:
+def land_tonn(node: dict, kanter=None) -> tuple[int, float] | None:
     if not isinstance(node, dict):
         return None
-    if node.get("verdi") in (None, "") or not is_tonn(node.get("enhet")) or node.get("år") in (None, ""):
+    y = year_of(node)
+    if node.get("verdi") not in (None, "") and is_tonn(node.get("enhet")) and y is not None:
+        try:
+            return int(y), float(node["verdi"])
+        except (TypeError, ValueError):
+            pass
+    if kanter is None:
         return None
-    try:
-        return int(node["år"]), float(node["verdi"])
-    except (TypeError, ValueError):
+    kanter = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
+    nid = node.get("id")
+    by_year: dict[int, float] = {}
+    for e in kanter:
+        if e.get("status") != "kilde":
+            continue
+        if not is_tonn(e.get("enhet")) or e.get("verdi") in (None, ""):
+            continue
+        if e.get("fra") != nid and e.get("til") != nid:
+            continue
+        ey = year_of(e)
+        if ey is None:
+            continue
+        try:
+            by_year[int(ey)] = by_year.get(int(ey), 0.0) + float(e["verdi"])
+        except (TypeError, ValueError):
+            continue
+    if not by_year:
         return None
+    year = max(by_year, key=lambda y: (by_year[y], y))
+    return year, by_year[year]
 
 
-def land_for_lag(nodes: list) -> tuple[list, list]:
+def land_for_lag(nodes: list, kanter=None) -> tuple[list, list]:
     """Maks 6 land per lag, sortert etter tonn innenfor samme år.
 
     Land uten tonn (og land i andre år enn det valgte) går i «+n andre» og rangeres ikke.
+    Tonn kan stå på noden eller summeres fra publiserte kanter.
     """
     lands = [n for n in nodes if isinstance(n, dict) and n.get("type") == "land"]
     measured, unmeasured = [], []
     for n in lands:
-        t = land_tonn(n)
+        t = land_tonn(n, kanter)
         if t:
             measured.append((n, t[0], t[1]))
         else:
@@ -439,7 +519,16 @@ def verk_for(noder, kanter, company_id: str, *, only_published: bool = True) -> 
             linked.add(e.get("til"))
         elif e.get("til") == company_id:
             linked.add(e.get("fra"))
-    return [n for n in noder if n.get("type") == "verk" and n.get("id") in linked]
+    out = [n for n in noder if is_verk(n) and n.get("id") in linked]
+    focus = next((n for n in noder if n.get("id") == company_id), None)
+    mat = focus.get("materiale") if isinstance(focus, dict) else None
+    if mat:
+        seen = {n["id"] for n in out}
+        for n in noder:
+            if is_verk(n) and n.get("materiale") == mat and n.get("id") not in seen:
+                out.append(n)
+                seen.add(n["id"])
+    return out
 
 
 def verk_label(verks: list) -> str:

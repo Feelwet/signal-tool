@@ -200,11 +200,41 @@ def apply_godkjent_file(dest: Path, godkjent: Path) -> int:
     return sum(1 for e in out if e.get("publisert") is True)
 
 
+
+OFFICIAL_FILES = ("noder.json", "kanter.json", "scenarios.json")
+
+
+def repo_flyt() -> Path:
+    return Path(__file__).resolve().parents[1] / "flyt"
+
+
+def publish_repo_flyt(dest: Path, src: Path | None = None) -> bool:
+    """Kopier flyt/*.json byte-like til dest (site/flyt/). Overskriver ikke med CSV-konvertering."""
+    import hashlib
+    src = Path(src or repo_flyt())
+    dest = Path(dest)
+    if not (src / "noder.json").exists() or not (src / "kanter.json").exists():
+        return False
+    dest.mkdir(parents=True, exist_ok=True)
+    for fn in OFFICIAL_FILES:
+        s = src / fn
+        if not s.exists():
+            continue
+        data = s.read_bytes()
+        (dest / fn).write_bytes(data)
+    return True
+
+
 def maybe_convert(src: Path = DEFAULT_SRC, dest: Path = DEFAULT_DEST) -> bool:
+    dest = Path(dest)
+    # Godkjente JSON-filer i repoets flyt/ skal kopieres uendret til nettstedet.
+    # Ikke til vilkårlige testdestinasjoner, og ikke via CSV-konvertering (den
+    # setter publisert=false og skal ikke overskrive AnalBot-godkjente data).
+    if dest.resolve() == Path(DEFAULT_DEST).resolve() and publish_repo_flyt(dest):
+        return True
     src = Path(src)
     if not (src / "nodes.csv").exists() or not (src / "edges.csv").exists():
         return False
-    dest = Path(dest)
     convert(src, dest)
     godkjent = dest / "godkjent.csv"
     if not godkjent.exists():

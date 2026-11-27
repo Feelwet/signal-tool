@@ -1,9 +1,8 @@
-Flyt-data. noder.json, kanter.json og scenarioer.json skrives av
-`python3 -m signaltool.flyt_build` fra CSV (standard: /workspace/flyt-nhy-2711/).
+Flyt-data. De offentlige filene noder.json, kanter.json og scenarios.json
+kopieres uendret fra repoets flyt/-mappe ved nettstedbygging.
 
 Ikke legg inn oppdiktede tall her. Syntetiske fixtures ligger bare i tests/fixtures/flyt/
-og skal aldri publiseres.
+og skal aldri publiseres på siden.
 
-publisert på hver kant er false som standard. Byggesteget fra CSV setter aldri true.
-True settes bare fra flyt/godkjent.csv (kant-id, lag, dato, kontroll),
-via signaltool.flyt_build.apply_godkjent_file.
+Bare kanter med publisert: true vises. CSV-konvertering brukes ikke når godkjente
+JSON-filer allerede ligger i flyt/.

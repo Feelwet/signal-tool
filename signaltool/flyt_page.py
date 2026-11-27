@@ -150,6 +150,22 @@ def write(site: Path | None = None, snap=None, **kw) -> Path:
     site = Path(site or SITE)
     copy_static(site)
     out = site / "flyt.html"
+    if kw.get("noder") is None:
+        from .flyt_build import publish_repo_flyt
+        publish_repo_flyt(site / "flyt")
+        if (site / "flyt" / "noder.json").exists():
+            import json
+            from .flyt_schema import universe_tickers
+            noder = json.loads((site / "flyt" / "noder.json").read_text(encoding="utf-8"))
+            kanter = json.loads((site / "flyt" / "kanter.json").read_text(encoding="utf-8")) if (site / "flyt" / "kanter.json").exists() else None
+            sc_path = site / "flyt" / "scenarios.json"
+            if not sc_path.exists():
+                sc_path = site / "flyt" / "scenarioer.json"
+            scenarioer = json.loads(sc_path.read_text(encoding="utf-8")) if sc_path.exists() else None
+            kw.setdefault("noder", noder)
+            kw.setdefault("kanter", kanter)
+            kw.setdefault("scenarioer", scenarioer)
+            kw.setdefault("universe", universe_tickers())
     out.write_text(html(snap, **kw), encoding="utf-8")
     return out
 
