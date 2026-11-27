@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-27",
+  "generated": "2026-11-27 13:00",
+  "tickers": [
+    {
+      "ticker": "NHY.OL",
+      "name": "Norsk Hydro ASA (fiktiv kurs)",
+      "stats": {
+        "close": 70.0,
+        "ret_5d": 0.021,
+        "ret_20d": -0.015,
+        "last_date": "2026-11-26"
+      },
+      "_risk": {
+        "level": "Middels",
+        "in_universe": 1,
+        "date": "2026-11-26"
+      },
+      "flags": []
+    }
+  ]
+}

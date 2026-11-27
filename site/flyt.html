@@ -1,0 +1,122 @@
+<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Flyt – Geo-signal</title><link rel="stylesheet" href="style.css?v=0"><meta name="color-scheme" content="dark"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><meta name="theme-color" content="#1c2430"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Signal"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="robots" content="noindex"><link rel="stylesheet" href="flyt.css"></head><body class="pg-flyt" data-generated="2026-11-27T13:00:00+01:00">
+<div class="app">
+<aside class="side" id="side">
+<nav><a class="" href="nyheter.html">Nyheter</a><a class="" href="index.html">Oversikt</a><a class="" href="trender.html">Trender</a><div class="navgrp"><span class=on>Aksjer</span><a class="" href="tickere.html">Tickere</a><a class="" href="sektorer.html">Sektorer</a><a class="" href="oslo.html">Oslo</a><a class="on" href="flyt.html">Flyt</a></div><a class="" href="portefolje.html">Signal-boka</a><div class="navgrp"><span>Marked</span><a class="" href="makro.html">Makro</a><a class="" href="kalender.html">Kalender</a></div><a class="" href="temaer.html">Temaer</a><a class="" href="metode.html">Metode</a></nav>
+
+<div class="tools">
+<button type="button" id="folds-open">Åpne alle områder</button>
+<button type="button" id="folds-close">Lukk alle områder</button>
+</div>
+</aside>
+<div class="content">
+<header class="top"><button type="button" class="side-toggle" id="nav-toggle" aria-label="Meny">☰</button>
+<a class="brand" href="index.html">🛰️ Geo-signal</a></header><p id="stale-line" class="stale-line" hidden>Dataene er ikke oppdatert siden 27.11 kl. 13:00.</p><p class="gen gen-line" data-hent="27.11 kl. 13:00">Oppdatert 27.11 kl. 13:00</p>
+<main>
+<div class="flyt" id="flyt-app">
+  <div class="flyt-top" id="flyt-top">
+    <label class="flyt-search"><span class="flyt-vh">Søk ticker, materiale eller land</span>
+      <input id="flyt-q" type="search" placeholder="Søk ticker, materiale eller land" aria-label="Søk ticker, materiale eller land" autocomplete="off" list="flyt-q-list">
+    </label>
+    <datalist id="flyt-q-list"></datalist>
+    <div class="flyt-toggle" role="group" aria-label="Visning">
+      <button type="button" id="flyt-kart" class="on" aria-pressed="true">Kart</button>
+      <button type="button" id="flyt-liste" aria-pressed="false">Liste</button>
+    </div>
+    <button type="button" id="flyt-hvis" aria-pressed="false">Hva hvis</button>
+  </div>
+  <p class="flyt-disc">Undersøkelse og kontekst, ikke kjøpsanbefaling. Stiplet = estimat.</p>
+  <p class="flyt-status" id="flyt-status"></p>
+  <div class="flyt-crumb" id="flyt-crumb" hidden></div>
+  <div class="flyt-desk" id="flyt-desk">
+    <div class="flyt-stage-wrap" id="flyt-stage-wrap">
+      <div id="flyt-scene" class="flyt-scene" role="img" aria-label="Flyt-kart"></div>
+      <div class="flyt-labels" id="flyt-labels"></div>
+      <div class="flyt-zoom">
+        <button type="button" id="flyt-zoom-in" aria-label="Zoom inn">+</button>
+        <button type="button" id="flyt-zoom-out" aria-label="Zoom ut">−</button>
+        <button type="button" id="flyt-reset" aria-label="Tilbakestill">Tilbakestill</button>
+      </div>
+    </div>
+    <aside id="flyt-panel" class="flyt-panel" hidden>
+      <div class="flyt-panel-bar">
+        <button type="button" id="flyt-panel-close" aria-label="Lukk">Lukk</button>
+      </div>
+      <div id="flyt-panel-body"></div>
+    </aside>
+  </div>
+  <div id="flyt-list" class="flyt-list" hidden></div>
+  <div id="flyt-hvis-box" class="flyt-hvis" hidden>
+    <div class="flyt-hvis-chips" role="group" aria-label="Hva hvis"><button type="button" class="flyt-chip" data-scenario="energi_opp" aria-pressed="false">Energipris i Norge opp</button><button type="button" class="flyt-chip" data-scenario="import_eu_ned" aria-pressed="false">Import til EU ned</button><button type="button" class="flyt-chip" data-scenario="bil_opp" aria-pressed="false">Etterspørsel fra bil opp</button></div>
+    <div class="flyt-hvis-panel">
+      <p class="flyt-hvis-lead">Forklaring fra kildene, ikke en prognose</p>
+      <h2>Hva kildene sier</h2>
+      <p class="flyt-etikett">Mekanisme ifølge kilden</p>
+      <div id="flyt-hvis-tekst"></div>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="flyt-meta">{"universe": ["AFL", "AKRBP.OL", "AKSO.OL", "AVGO", "BBIO", "BEN", "BORR.OL", "CAVEN.OL", "CEG", "CLX", "CYVIZ.OL", "DASH", "DFENS.OL", "DLTR", "DOFG.OL", "ELABS.OL", "ENDUR.OL", "EQNR.OL", "EQVA.OL", "FXI", "GILD", "GSF.OL", "HAS", "HII", "HUM", "HUNT.OL", "JACK.OL", "KIM", "KO", "KOG.OL", "LLY", "MPCC.OL", "MRK", "MRNA", "MU", "NCLH", "NKT.CO", "NOD.OL", "NOHAL.OL", "NRG", "NVDA", "PLT.OL", "PODD", "PWR", "REGN", "SCANA.OL", "SMH", "SPOL.OL", "SPY", "STRC", "SUBC.OL", "SWK", "TGT", "TPR", "TSM", "TTWO", "TXT", "VAR.OL", "VRT", "WEC", "WY"], "n": 61, "coverage": null, "data_base": "flyt", "kurs_url": "data.json", "default_fokus": "NHY.OL"}</script>
+</main>
+<footer><b>Ikke finansiell rådgivning.</b> Automatisk informasjonsverktøy basert på offentlige data og enkle, transparente regler. Signaler kan være feil, forsinket eller allerede priset inn. Gjør alltid egne vurderinger.<br>Data: GDELT, SEC EDGAR, Polymarket, Oslo Børs Newsweb, Finanstilsynet, SSB, Eurostat, FRED, ONS, SCB, DST, OECD, IMF m.fl. Se «Kilder og metode». · <a href="metode.html#treffrate">Treffrate</a></footer>
+</div></div>
+<script>
+(function(){
+  function folds(){return Array.from(document.querySelectorAll('details.fold'));}
+  function setAll(open){folds().forEach(function(d){d.open=open;});}
+  var openBtn=document.getElementById('folds-open');
+  var closeBtn=document.getElementById('folds-close');
+  if(openBtn) openBtn.addEventListener('click',function(){setAll(true);});
+  if(closeBtn) closeBtn.addEventListener('click',function(){setAll(false);});
+  var sl=document.getElementById('stale-line');
+  var iso=document.body.getAttribute('data-generated');
+  if(sl && iso){
+    var ts=Date.parse(iso);
+    if(!isNaN(ts) && Date.now()-ts>36*60*60*1000) sl.hidden=false;
+  }
+  var tog=document.getElementById('nav-toggle');
+  if(tog) tog.addEventListener('click',function(){document.body.classList.toggle('nav-open');});
+  document.querySelectorAll('.side nav a').forEach(function(a){
+    a.addEventListener('click',function(){document.body.classList.remove('nav-open');});
+  });
+  // Auto-wrap legacy cards that start with h2/h3 into folds (once).
+  document.querySelectorAll('main .card').forEach(function(card){
+    if(card.closest('details.fold')||card.classList.contains('nofold')) return;
+    var h=null;
+    for(var i=0;i<card.children.length;i++){
+      var c=card.children[i];
+      if(c.tagName==='H2'||c.tagName==='H3'){h=c;break;}
+      if(c.tagName==='P' && c.classList.contains('mut')) continue;
+      break;
+    }
+    if(!h) return;
+    var d=document.createElement('details');
+    d.className='fold';
+    d.open=true;
+    if(card.id){d.id=card.id;card.removeAttribute('id');}
+    var sum=document.createElement('summary');
+    var hx=document.createElement('h2');
+    hx.innerHTML=h.innerHTML;
+    sum.appendChild(hx);
+    var body=document.createElement('div');
+    body.className='fold-body';
+    while(card.firstChild){
+      var ch=card.firstChild;
+      if(ch===h){card.removeChild(ch);continue;}
+      body.appendChild(ch);
+    }
+    d.appendChild(sum);d.appendChild(body);
+    card.replaceWith(d);
+  });
+})();
+</script><script>(()=>{let cur=null,pinned=false;const d=document,tip=b=>d.getElementById(b.getAttribute('aria-describedby')),btn=e=>e.target&&e.target.closest?e.target.closest('button.info[aria-describedby]'):null;
+function show(b){if(cur&&cur!==b)hide(cur);const t=tip(b);if(!t)return;t.hidden=false;const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;let top=r.bottom+6;if(top+h>innerHeight-8&&r.top-h-6>8)top=r.top-h-6;
+t.style.top=top+'px';t.style.left=Math.max(8,Math.min(r.left-8,innerWidth-w-8))+'px';b.setAttribute('aria-expanded','true');cur=b}
+function hide(b){const t=tip(b);if(t)t.hidden=true;b.setAttribute('aria-expanded','false');if(cur===b){cur=null;pinned=false}}
+d.addEventListener('pointerover',e=>{const b=btn(e);if(b&&e.pointerType!=='touch'&&cur!==b)show(b)});
+d.addEventListener('pointerout',e=>{const b=btn(e);if(b&&!b.contains(e.relatedTarget)&&!(pinned&&cur===b)&&d.activeElement!==b)hide(b)});
+d.addEventListener('focusin',e=>{const b=btn(e);if(b)show(b)});
+d.addEventListener('focusout',e=>{const b=btn(e);if(b&&!(pinned&&cur===b))hide(b)});
+d.addEventListener('click',e=>{const b=btn(e);if(b){e.preventDefault();e.stopPropagation();if(cur===b&&pinned)hide(b);else{show(b);pinned=true}return}if(cur&&!e.target.closest('.tip'))hide(cur)},true);
+d.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)hide(cur)});
+const re=()=>{if(cur){const c=cur,k=pinned;show(c);pinned=k}};addEventListener('scroll',re,true);addEventListener('resize',re)})()</script><script>(()=>{if(window.__scI)return;window.__scI=1;const d=document,Q='.sc-i,.ri.ri-c',QO='.sc-i[aria-expanded=true],.ri.ri-c[aria-expanded=true]',x=k=>d.querySelectorAll(QO).forEach(b=>b!==k&&b.setAttribute('aria-expanded','false'));d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest(Q);if(!b){x(null);return}if(e.target.closest('.tip a'))return;e.preventDefault();x(b);b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');if(b.getAttribute('aria-expanded')==='true')P(b)});const P=b=>{const t=b.querySelector('.tip');if(!t)return;t.classList.add('pop');const W=innerWidth,w=Math.min(280,W-16);t.style.maxWidth=w+'px';t.style.left='8px';t.style.top='0px';const r=b.getBoundingClientRect(),tw=Math.min(t.offsetWidth||w,w),th=t.offsetHeight;t.style.left=Math.max(8,Math.min(r.left+r.width/2-tw/2,W-tw-8))+'px';let y=r.bottom+6;if(y+th>innerHeight-8&&r.top-th-6>8)y=r.top-th-6;t.style.top=y+'px'};addEventListener('scroll',()=>d.querySelectorAll(QO).forEach(P),{passive:true});addEventListener('resize',()=>d.querySelectorAll(QO).forEach(P));d.addEventListener('keydown',e=>{if(e.key==='Escape')x(null)})})()</script><script>(()=>{const d=document,H=d.documentElement;if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>0));if(H.dataset.offline){const g=d.querySelector('header.top ~ p.gen');if(g){const h=g.dataset.hent||g.textContent.replace(/^Oppdatert\s*/,'')||'ukjent tid';g.textContent=g.dataset.kd?"Frakoblet, viser kurser per {kurs} (hentet {hentet})".replace('{kurs}',g.dataset.kd).replace('{hentet}',h):"Frakoblet, viser data hentet {hentet}".replace('{hentet}',h)}}const day=86400000,iso=x=>new Date(x+'T00:00:00Z').getTime(),n=new Date(),u=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());d.querySelectorAll('.ms-f[data-d]').forEach(f=>{if(f.querySelector('.ms-w'))return;let e;if(f.dataset.sym==='BTC-USD')e=u-day;else{e=n.getUTCHours()>=23?u:u-day;while([0,6].includes(new Date(e).getUTCDay()))e-=day}if(iso(f.dataset.d)<e){const s=f.querySelector('.ms-s');if(s){const w=d.createElement('div');w.className='ms-w';w.textContent='⚠ eldre kurs';w.setAttribute('aria-label','Kursen er eldre enn '+(f.dataset.sym==='BTC-USD'?'i går':'siste handelsdag'));s.after(w)}}});const box=d.getElementById('pwa-inst');if(!box)return;const sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(sa)return;const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);let ev=null;if(ios){box.hidden=false;const g=d.getElementById('pwa-go'),hp=d.getElementById('pwa-help'),oth=/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|DuckDuckGo|YaBrowser|Brave/.test(navigator.userAgent);hp.textContent=oth?"\u00c5pne siden i Safari for \u00e5 installere.":"Trykk \u22ef eller Del i Safari, velg Del og s\u00e5 Legg til p\u00e5 Hjem-skjerm.";g.addEventListener('click',e=>{e.stopPropagation();const o=hp.hidden;hp.hidden=!o;g.setAttribute('aria-expanded',o?'true':'false')})}addEventListener('beforeinstallprompt',e=>{e.preventDefault();ev=e;box.hidden=false});d.getElementById('pwa-go').addEventListener('click',async()=>{if(!ev)return;ev.prompt();try{await ev.userChoice}catch(x){}ev=null;box.hidden=true});addEventListener('appinstalled',()=>{box.hidden=true})})()</script><nav class="tabbar" aria-label="Hovedmeny"><a class="tb-t" href="nyheter.html"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 5h12v14H6a2 2 0 0 1-2-2V5z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M16 7h3a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H6"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M8 9h6M8 13h6M8 17h4"/></svg><span>Nyheter</span></a><a class="tb-t" href="index.html"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Oversikt</span></a><a class="tb-t" href="tickere.html"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span>Tickere</span></a><a class="tb-t" href="oslo.html"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="9.5" r="2.5"/></svg><span>Oslo</span></a><a class="tb-t" href="portefolje.html"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 5v16M8 7h7"/></svg><span>Signal-boka</span></a><button type="button" class="tb-t tb-more on" id="tb-more" aria-expanded="false" aria-controls="more-sheet"><svg class="tb-i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" cx="5" cy="12" r="1.3"/><circle fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="1.3"/><circle fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" cx="19" cy="12" r="1.3"/></svg><span>Mer</span></button></nav><div class="ms-bg" id="ms-bg" hidden></div><div class="more-sheet" id="more-sheet" role="dialog" aria-label="Flere sider" hidden><div class="ms-h">Flere sider</div><a class="ms-r" href="trender.html">Trender</a><a class="ms-r" href="om.html">Om siden</a><a class="ms-r" href="temaer.html">Temaer</a><a class="ms-r" href="sektorer.html">Sektorer</a><a class="ms-r on" href="flyt.html">Flyt</a><a class="ms-r" href="makro.html">Makro</a><a class="ms-r" href="kalender.html">Kalender</a><a class="ms-r" href="metode.html">Metode</a><a class="ms-r" href="tickere.html?filter=flagg">Røde flagg Oslo</a><a class="ms-r" href="metode.html#treffrate">Treffrate</a><a class="ms-r" href="kilder.html">Kilder og metode</a><button type="button" class="ms-r ms-b" data-folds="1">Åpne alle områder</button><button type="button" class="ms-r ms-b" data-folds="0">Lukk alle områder</button></div><script>(()=>{const d=document,b=d.getElementById('tb-more'),s=d.getElementById('more-sheet'),g=d.getElementById('ms-bg');if(!b||!s)return;const set=o=>{s.hidden=!o;g.hidden=!o;b.setAttribute('aria-expanded',o?'true':'false')};b.addEventListener('click',e=>{e.stopPropagation();set(s.hidden)});g.addEventListener('click',()=>set(false));d.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});s.querySelectorAll('[data-folds]').forEach(x=>x.addEventListener('click',()=>{const o=x.dataset.folds==='1';d.querySelectorAll('details.fold').forEach(f=>f.open=o);set(false)}));s.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));if(d.body.classList.contains('pg-temaer')){const rows=[...d.querySelectorAll('main table tr')].filter(r=>r.querySelector('a[href^="tema/"]'));if(rows.length){const c=d.createElement('nav');c.className='tm-chips';c.setAttribute('aria-label','Hopp til tema');rows.forEach(r=>{const a=r.querySelector('a[href^="tema/"]'),k=a.getAttribute('href').replace(/^tema\/|\.html$/g,'');r.id=r.id||'tm-'+k;const ch=d.createElement('a');ch.href='#'+r.id;ch.textContent=a.textContent.split(/ [–/]| og /)[0];ch.title=a.textContent;ch.addEventListener('click',e=>{e.preventDefault();rows.forEach(x=>x.classList.remove('tm-hit'));r.classList.add('tm-hit');r.scrollIntoView({block:'start',behavior:'smooth'})});c.appendChild(ch)});const h=d.querySelector('main h1');const m=h&&h.nextElementSibling&&h.nextElementSibling.classList.contains('pmeta')?h.nextElementSibling:h;(m||d.querySelector('main').firstChild).after(c)}}})()</script><script type="module" src="flyt.js"></script></body></html>

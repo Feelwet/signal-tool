@@ -15,7 +15,7 @@ NAV = [
     ("Nyheter", "nyheter.html", []),
     ("Oversikt", "index.html", []),
     ("Trender", "trender.html", []),
-    ("Aksjer", None, [("tickere.html", "Tickere"), ("sektorer.html", "Sektorer"), ("oslo.html", "Oslo")]),
+    ("Aksjer", None, [("tickere.html", "Tickere"), ("sektorer.html", "Sektorer"), ("oslo.html", "Oslo"), ("flyt.html", "Flyt")]),
     ("Signal-boka", "portefolje.html", []),
     ("Marked", None, [("makro.html", "Makro"), ("kalender.html", "Kalender")]),
     ("Temaer", "temaer.html", []),

@@ -1,0 +1,8 @@
+kant-id,lag,dato,kontroll
+brasil>bauxitt,råvare,2026-11-27,fiktiv-testkontroll
+bauxitt>alumina,råvare,2026-11-27,fiktiv-testkontroll
+alumina>NHY.OL,selskap,2026-11-27,fiktiv-testkontroll
+NHY.OL>norge,selskap,2026-11-27,fiktiv-testkontroll
+NHY.OL>eu,råvare,2026-11-27,fiktiv-testkontroll
+NHY.OL>tyskland,råvare,2026-11-27,fiktiv-testkontroll
+NHY.OL>usa,råvare,2026-11-27,fiktiv-testkontroll

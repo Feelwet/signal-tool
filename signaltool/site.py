@@ -43,6 +43,8 @@ from . import pricechart as PC
 from . import evidens_status as ES
 from . import rowfresh as RF
 from . import kjede as KJ
+from . import flyt_page as FY
+from . import flyt_build as FB
 
 SITE = ROOT / "site"
 CSS_V = ["0"]  # innholds-hash av style.css, settes i build(); ?v= tvinger ny CSS etter hver endring
@@ -501,7 +503,7 @@ def page(title: str, body: str, depth=0, snap=None) -> str:
         "Trender": "trender.html", "Oversikt": "index.html", "Temaer": "temaer.html", "Tickere": "tickere.html",
         "Makro": "makro.html", "Kalender": "kalender.html", "Oslo Børs": "oslo.html", "Røde flagg Oslo": "tickere.html?filter=flagg", "Sektorer": "sektorer.html",
         "Kilder og metode": "kilder.html", "Metode": "metode.html", "Signal-boka": "portefolje.html", "Om siden": "om.html",
-        "Nyheter": "nyheter.html",
+        "Nyheter": "nyheter.html", "Flyt": "flyt.html",
     }
     cur = active.get(title)
     if cur is None:
@@ -653,7 +655,7 @@ def ticker_row(e, pre=""):
     lab = E(e.get("name") or e["ticker"])
     _rk = e.get("_risk") if isinstance(e.get("_risk"), dict) else None
     _lv = RK.shown_level(_rk, e["ticker"])
-    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E(_lv or "")}" data-t="{E(e["ticker"])}" data-sektor="{E(TL.sektor_slug(e))}" data-bors="{E(TL.bors_slug(e.get("ticker") or ""))}" data-risk="{"1" if _lv else "0"}" data-flag="{"1" if e.get("_flag") else "0"}" data-ny="{"1" if (e.get("_ret") or {}).get("new") else "0"}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
+    return (f'<tr class="rowlink" data-href="{E(href)}" data-cat="{E(_lv or "")}" data-t="{E(e["ticker"])}" data-sektor="{E(TL.sektor_slug(e))}" data-bors="{E(TL.bors_slug(e.get("ticker") or ""))}" data-risk="{"1" if _lv else "0"}" data-flag="{"1" if e.get("_flag") else "0"}" data-ny="{"1" if (e.get("_ret") or {}).get("new") else "0"}"{' data-unr="1"' if e.get("unranked") else ""}><td><a class="row-a" href="{E(href)}">{lab}</a>{NM.cell(e["ticker"], None, e.get("name"), TL.chip(e.get("_flag")) + DC.chip(e) + SS.fb_dot(e) + TL.nokurs(e) + RF.chips(e))}{FY.link(e["ticker"], pre)}{SN.mobile(e.get("_since"), e.get("_ret"), _cur(e))}{row_details(e)}</td>'
             f'{RK.cell(e.get("_risk"), ptc, ticker=e["ticker"])}<td class="pt-c">{ptc}</td><td class="sg-c"{_dm(pts)}>{pts}</td>{"<td>–</td><td>–</td>" if unr else tint(st.get("ret_5d")) + tint(st.get("ret_20d"))}{SN.cell(e.get("_since"), _cur(e))}{"<td class=\"ret-c\">–</td>" if unr else SN.ret_cell(e.get("_ret"), e.get("_since"))}<td class="mcol">{MINE.star(e["ticker"])}</td></tr>')
 
 
@@ -891,7 +893,7 @@ def build(snap: dict) -> Path:
                                    ".fold-sum{font-weight:400;font-size:.8em;color:var(--mut)}\n"
                                    ".xscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.vis-alle{margin:6px 0 10px}.vis-alle summary{cursor:pointer;color:var(--acc);min-height:32px}\n"
                                    "@media(max-width:699px){main,.card{min-width:0;max-width:100%}.card{overflow-wrap:anywhere}pre{white-space:pre-wrap}svg{max-width:100%}}\n")
-    _css += PWA.CSS + UX2.CSS + TB.CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS + NP.PAGE_CSS + TL.CSS   # U390 sist av mobilradene (≤ 599 px); TT etter; Nyheter; Tickere-filter sist så spesifikasjonen vinner over ux2
+    _css += PWA.CSS + UX2.CSS + TB.CSS + FY.LINK_CSS + TR.CSS + US.CSS + CHG.CSS + U390.CSS + TT.CSS + NP.PAGE_CSS + TL.CSS   # U390 sist av mobilradene (≤ 599 px); TT etter; Nyheter; Tickere-filter sist så spesifikasjonen vinner over ux2
     CSS_V[0] = hashlib.sha1(_css.encode()).hexdigest()[:10]
     (SITE / "style.css").write_text(_css)
     PWA.write(SITE, hashlib.sha1(f'{snap.get("generated")}|{CSS_V[0]}|{hashlib.sha1(TR.DATA.read_bytes()).hexdigest()}'.encode()).hexdigest()[:12])   # ny build -> ny SW-cache
@@ -979,6 +981,8 @@ def build(snap: dict) -> Path:
 
     (SITE / "makro.html").write_text(page("Makro", MOD_CSS + fold_tables(sec("Makro", makro_page, snap)), 0, snap))
     (SITE / "kalender.html").write_text(page("Kalender", sec("Kalender", kalender_page, snap), 0, snap))
+    FB.maybe_convert()
+    FY.write(SITE, snap)
     (SITE / "rode-flagg.html").write_text(L.redirect("tickere.html?filter=flagg", "Røde flagg Oslo"))
     (SITE / "oslo.html").write_text(page("Oslo Børs", MOD_CSS + fold_tables(sec("Oslo Børs", oslo_page, snap), 20, "Vis flere"), 0, snap))
     _f = SEC.load()  # sektorsidene viser når nøkkeltallene faktisk ble hentet, ikke snapshot-tid
@@ -1049,6 +1053,7 @@ def tema_ticker_page(e):
     s = e.get("_since")
     line = SN.line(s, '<span class="cat">Tema</span>') if s else ""
     return (f"""{TKP_CSS}{NM.header(e['ticker'], None, star=MINE.star(e['ticker']))}
+{FY.jump(e['ticker'], pre='../')}
 {KJ.jump_html(e['ticker'])}
 {line}
 {PC.html(e["ticker"], e.get("_px"), SN.dot_date(s), e.get("_px_date"), CHG.ticker_periods(e["ticker"]))}
@@ -1065,6 +1070,7 @@ def ticker_page(e, tmap):
     flags = "".join(f'<li>⚠️ {E(f)}</li>' for f in e.get("flags", []))
     th = "".join(f'<a class="pill" href="../tema/{k}.html">{E(tmap[k]["name"])}</a>' for k in e["themes"] if k in tmap)
     return f"""{TKP_CSS}{NM.header(e['ticker'], e.get('name'), star=MINE.star(e['ticker']), after=DC.low_chip(e) if e.get("unranked") else score_badge(e['score'], 4, 2, muted=True) + score_info())}
+{FY.jump(e['ticker'], pre='../')}
 {KJ.jump_html(e['ticker'])}
 {SN.line_rk(e.get("_since"), SC.chip(e) + RK.chip(e.get("_risk")) + RK.info_btn() + ES.for_key("risk", short=True), e.get("_ret")).replace('class="since mut rk-line"', 'class="since mut rk-line has-sec"', 1)}{RK.tip()}{SN.tip_html(e.get("_since"), e.get("_ret")) if e.get("_ret") and e["_ret"].get("r") is not None and not e["_ret"].get("new") else ""}{RK.src(e.get("_risk"))}{SC.SRC}{e.get("_srcline") or ""}{SS.fb_line(e)}{RF.line(e)}{RK.status()}
 {X.pead_exp_html(e)}

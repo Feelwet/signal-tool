@@ -1,0 +1,13 @@
+fra,til,lag,verdi,enhet,år,hs_kode,kilde,kilde_url,status,metode,avvik,grunn
+brasil,bauxitt,råvare,2500000,tonn,2024,2606,Fiktiv handelsdata,https://example.test/fiktiv/hs2606,kilde,,,
+bauxitt,alumina,råvare,1800000,tonn,2024,2818.20,Fiktiv handelsdata,https://example.test/fiktiv/hs2818,kilde,,,
+alumina,NHY.OL,selskap,1800000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s42,kilde,,,
+kraft_norge,NHY.OL,selskap,,TWh,2024,,Fiktiv testdata,https://example.test/fiktiv/kraft,estimat,"Fiktiv testfordeling, ikke et målt tall.",,
+NHY.OL,norge,selskap,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s41,kilde,,,
+NHY.OL,eu,råvare,800000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-eu,kilde,,,
+NHY.OL,tyskland,råvare,300000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-de,kilde,,,
+NHY.OL,usa,råvare,150000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-us,kilde,,,
+NHY.OL,bil,selskap,35,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+NHY.OL,bygg,selskap,25,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+NHY.OL,emballasje,selskap,15,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",,
+NHY.OL,forsvar,selskap,,,,,,,mangler,,,Kilden beskriver ikke andel til forsvar

@@ -1,0 +1,15 @@
+id,lag,navn,hva_det_er,type,ticker,verdi,enhet,år,hs_kode,kilde,kilde_url,status,metode,grunn
+NHY.OL,selskap,Norsk Hydro,Selskap (fiktiv testdata): primæraluminium.,selskap,NHY.OL,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s40,kilde,,
+EQNR.OL,selskap,Equinor (fiktiv),Selskap uten kildebelagte verdikjedetall i testdata.,selskap,EQNR.OL,,,,,,,mangler,,Mangler data for verdikjeden
+bauxitt,råvare,Bauksitt,Råvare til alumina (fiktiv).,råvare,,2500000,tonn,2024,2606,Fiktiv handelsdata,https://example.test/fiktiv/hs2606,kilde,,
+alumina,råvare,Alumina,Innsatsvare til primæraluminium (fiktiv).,råvare,,1800000,tonn,2024,2818.20,Fiktiv handelsdata,https://example.test/fiktiv/hs2818,kilde,,
+kraft_norge,råvare,Kraft Norge,Elektrisk kraft brukt i produksjon i Norge (fiktiv).,råvare,,,TWh,2024,,Fiktiv testdata,https://example.test/fiktiv/kraft,estimat,"Fiktiv testfordeling, ikke et målt tall.",
+brasil,råvare,Brasil,Produksjonsland for bauksitt og alumina (fiktiv).,land,,,,2024,,Fiktiv handelsdata,https://example.test/fiktiv/brasil,kilde,,
+norge,selskap,Norge,Produksjonsland for primæraluminium (fiktiv).,land,,1200000,tonn,2024,,Fiktiv selskapsrapport,https://example.test/fiktiv/hydro-2024#s41,kilde,,
+eu,råvare,EU,Importregion for aluminium (fiktiv).,land,,800000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-eu,kilde,,
+tyskland,råvare,Tyskland,Importland (fiktiv).,land,,300000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-de,kilde,,
+usa,råvare,USA,Importland (fiktiv).,land,,150000,tonn,2024,7601,Fiktiv handelsdata,https://example.test/fiktiv/hs7601-us,kilde,,
+bil,selskap,Bil,Sluttbruk i bilindustrien (fiktiv bransjeandel).,sluttbruk,,35,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
+bygg,selskap,Bygg,Sluttbruk i bygg og anlegg (fiktiv bransjeandel).,sluttbruk,,25,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
+emballasje,selskap,Emballasje,Sluttbruk i emballasje (fiktiv bransjeandel).,sluttbruk,,15,%,2024,,Fiktiv bransjeestimat,https://example.test/fiktiv/sluttbruk,estimat,"Fiktiv bransjeandel, ikke et målt tall.",
+forsvar,selskap,Forsvar,Sluttbruk i forsvar.,sluttbruk,,,,,,,,mangler,,Kilden beskriver ikke andel til forsvar

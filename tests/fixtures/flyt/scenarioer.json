@@ -1,0 +1,58 @@
+{
+  "_fiktiv": true,
+  "merknad": "Syntetisk test-fixture, fiktive tall og kilder. Skal aldri ligge i site/flyt/ eller publiseres.",
+  "scenarioer": [
+    {
+      "id": "energi_opp",
+      "navn": "Energipris i Norge opp",
+      "noder": [
+        "kraft_norge",
+        "NHY.OL"
+      ],
+      "kanter": [
+        "kraft_norge>NHY.OL"
+      ],
+      "tekst": [
+        {
+          "setning": "Fiktiv testdata, sitert ordrett: «En økning i kraftprisen på 10 NOK/MWh reduserer EBITDA med 1,2 milliarder NOK.»",
+          "kilde_url": "https://example.test/fiktiv/hydro-2024#s99",
+          "side": "99"
+        }
+      ]
+    },
+    {
+      "id": "import_eu_ned",
+      "navn": "Import til EU ned",
+      "noder": [
+        "eu",
+        "NHY.OL"
+      ],
+      "kanter": [
+        "NHY.OL>eu"
+      ],
+      "tekst": [
+        {
+          "setning": "Fiktiv testdata: kilden beskriver at lavere etterspørsel i EU reduserer leveransevolum, uten å angi kursutfall.",
+          "kilde_url": "https://example.test/fiktiv/hs7601-eu"
+        }
+      ]
+    },
+    {
+      "id": "bil_opp",
+      "navn": "Etterspørsel fra bil opp",
+      "noder": [
+        "bil",
+        "NHY.OL"
+      ],
+      "kanter": [
+        "NHY.OL>bil"
+      ],
+      "tekst": [
+        {
+          "setning": "Fiktiv testdata: kilden beskriver at høyere etterspørsel fra bilindustrien øker behovet for aluminium, uten å angi kursutfall.",
+          "kilde_url": "https://example.test/fiktiv/sluttbruk"
+        }
+      ]
+    }
+  ]
+}
