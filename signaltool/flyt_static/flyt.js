@@ -1553,6 +1553,7 @@ function bind() {
     el.hvisBox.hidden = !on;
     el.hvis.setAttribute('aria-pressed', on ? 'true' : 'false');
     if (el.chips) el.chips.hidden = !on;
+    if (on && isMobile()) closePanel();
     sizeScene();
     if (mode === 'kart') redraw();
   });
