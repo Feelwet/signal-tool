@@ -1003,6 +1003,8 @@ def build(snap: dict) -> Path:
         shutil.copy(C.LOG_PATH, SITE / "historikk" / "kategorier.csv")
     (SITE / "nyheter.html").write_text(page("Nyheter", NP.html(snap), 0, snap))
     NP.copy_json(SITE)
+    from . import nbs_test_page as NTP
+    NTP.write(SITE, page, snap)
     return SITE / "index.html"
 
 

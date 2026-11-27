@@ -13,6 +13,9 @@ RAW_JSON = "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/ny
 FALLBACK_JSON = "data/nyheter.json"
 RAW_KORT = "https://raw.githubusercontent.com/Feelwet/signal-tool/master/logs/nbs_industriprofitt.json"
 FALLBACK_KORT = "data/nbs_industriprofitt.json"
+# AnalBot 27.11, ordrett. Statisk, ikke autogenerert.
+TEST_LINE = "Testet 27.11.2026: Å kjøpe bransjene med høyest profittvekst etter NBS-tallet ga ingen påviselig meravkastning 1–20 dager etter (106 publiseringer, 2017–2026). Kursene hadde i snitt steget før tallet kom."
+TEST_HREF = "tester/nbs_test_2711.html"
 TABS = ("Alt", "Norge", "Marked", "Verden", "Børsmeldinger")
 FT_CREDIT = "© The Financial Times Limited 2026. Overskrifter og lenker; ingen artikkeltekst lagres."
 
@@ -101,6 +104,9 @@ body.pg-nyheter .ny-title{-webkit-line-clamp:1;max-height:20px;white-space:nowra
 .ny-fk-sheet[hidden]{display:none}
 .ny-fk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;position:sticky;top:0;background:#1c2430;z-index:1;padding:0 0 8px}
 .ny-fk-slukk{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--ink,#e6edf3);font:500 13px/16px system-ui,-apple-system,sans-serif;cursor:pointer}
+
+.ny-fk-test{display:block;min-height:44px;height:auto;padding:12px 16px;box-sizing:border-box;margin:16px 0 8px;border-left:3px solid var(--line,#2d333b);font:400 13px/18px system-ui,-apple-system,sans-serif;color:var(--ink,#e6edf3);text-decoration:none}
+.ny-fk-test:hover{text-decoration:underline}
 @media(min-width:1280px){
 .ny-fk-bg,.ny-fk-sheet{display:none!important}
 .ny-fkort{max-width:720px}
@@ -216,11 +222,15 @@ def html(snap=None) -> str:
     const srcLine=(b.tallet&&b.tallet.source_line)||(c.source&&c.source.line)||'NBS';
     const src='<p class="ny-fk-src">'+(srcUrl?('<a href="'+esc(srcUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(srcLine)+'</a>'):esc(srcLine))+'</p>';
     function rows(list, cls){{
-      return (list||[]).map(r=>'<div class="'+cls+'"><span>'+esc(r.industry)+'</span><span class="ny-fk-ch">'+esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change)+'</span></div>').join('');
+      return (list||[]).map(r=>{{
+        const ch=esc((r.arrow?r.arrow+' ':'')+(r.dir_text?r.dir_text+' ':'')+r.change);
+        const orig=r.source_orig?'<span class="ny-fk-src">'+esc(r.source_orig)+'</span>':'';
+        return '<div class="'+cls+'"><span>'+esc(r.industry)+'</span><span class="ny-fk-ch">'+ch+orig+'</span></div>';
+      }}).join('');
     }}
-    const contrib=b.bidrag||{{}};
-    const up=rows(contrib.up,'ny-fk-br');
-    const down=rows(contrib.down,'ny-fk-br');
+    const chg=b.endring||{{}};
+    const up=rows(chg.up,'ny-fk-br');
+    const down=rows(chg.down,'ny-fk-br');
     const fk=b.forklaring||{{}};
     const expl='<div class="ny-fk-tag">'+esc(fk.label||'Kildens egen forklaring')+'</div><p class="ny-fk-txt">'+esc(fk.text||'')+(fk.attribution?'<span class="ny-fk-attr">'+esc(fk.attribution)+'</span>':'')+'</p>';
     const nv=b.nevnt||{{}};
@@ -234,11 +244,15 @@ def html(snap=None) -> str:
       }}).join('');
       nevnt='<h3 class="ny-fk-h">Nevnt i kilden</h3>'+sec+exp;
     }}
+    const testLine='{E(TEST_LINE)}';
+    const testHref='{E(TEST_HREF)}';
+    const test='<a class="ny-fk-test" href="'+testHref+'">'+testLine+'</a>';
     return '<p class="ny-fk-note">'+esc(c.note||'Forklaring fra kildene, ikke en prognose')+'</p>'
       +'<h3 class="ny-fk-h">Tallet</h3><div class="ny-fk-tall">'+tall+'</div>'+src
-      +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største bidrag</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
+      +'<h3 class="ny-fk-h">Hva drar opp og ned</h3><p class="ny-fk-h">Største økning</p>'+up+'<p class="ny-fk-h">Største fall</p>'+down
       +'<h3 class="ny-fk-h">Kildens forklaring</h3>'+expl
-      +nevnt;
+      +nevnt
+      +test+src;
   }}
   function isWide(){{ return window.matchMedia && window.matchMedia('(min-width:1280px)').matches; }}
   function closeForklaring(){{

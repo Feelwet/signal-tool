@@ -82,7 +82,7 @@ def test_interp_cause_marked_ifolge_nbs_and_keeps_source_decimals():
     _, ip, card = _cn_card()
     assert ip["ok"] is True
     text = ip["cause"]
-    assert "1,0 gang" in text and "9,7 prosentpoeng" in text
+    assert "doblet profitten (+100 %)" in text and "9,7 prosentpoeng" in text
     assert "5,69 %" in text and "0,45 prosentpoeng" in text
     assert "71,7" in text and "4,6 prosentpoeng" in text
     assert "5,7 %" not in text  # must not round 5.69
@@ -113,7 +113,7 @@ def test_parse_failure_yields_no_card():
 def test_every_displayed_number_is_in_source_or_card_hides():
     rel, ip, card = _cn_card()
     visible = " ".join(v["label"] for v in card["blocks"]["tallet"]["values"])
-    visible += " " + " ".join(r["change"] for r in card["blocks"]["bidrag"]["up"] + card["blocks"]["bidrag"]["down"])
+    visible += " " + " ".join(r["change"] for r in card["blocks"]["endring"]["up"] + card["blocks"]["endring"]["down"])
     visible += " " + card["blocks"]["forklaring"]["text"]
     visible += " " + " ".join(s["detail"] for s in card["blocks"]["nevnt"]["sectors"])
     ok, missing = N.source_has_numbers(visible, [card["source_text"]])
@@ -149,11 +149,11 @@ def test_button_only_for_primary_or_key_figure_never_theme_alone():
     }, card) is False
 
 
-def test_bidrag_max_four_rows_arrow_and_text_not_color():
+def test_endring_max_four_rows_arrow_and_text_not_color():
     _, _, card = _cn_card()
-    up, down = card["blocks"]["bidrag"]["up"], card["blocks"]["bidrag"]["down"]
+    up, down = card["blocks"]["endring"]["up"], card["blocks"]["endring"]["down"]
     assert len(up) == 4 and len(down) == 4
-    assert up[0]["industry"] == "Elektronikk og kommunikasjon" and up[0]["change"] == "+1,0 gang"
+    assert up[0]["industry"] == "Elektronikk og kommunikasjon" and up[0]["change"] == "doblet (+100 %)"
     assert up[0]["arrow"] == "↑" and up[0]["dir_text"] == "opp"
     assert down[0]["industry"] == "Ikke-metalliske mineralprodukter" and down[0]["change"] == "−46,7 %"
     assert down[0]["arrow"] == "↓" and down[0]["dir_text"] == "ned"
@@ -238,3 +238,86 @@ def test_existing_news_layout_strings_still_hold():
     assert 'id="ny-slukk"' in h and ">Lukk</button>" in h
     assert "iss!=='-'" in h
     assert "minmax(0,720px)" in css and "padding-bottom:calc(56px + env(safe-area-inset-bottom))" in css
+
+
+def test_cn_bulletin_2711_ten_figures_and_industries():
+    """Lagret kinesisk NBS-kunngjøring 27.11: ti tall parses til riktig verdi og bransje."""
+    rel, ip, card = _cn_card()
+    assert rel.yoy_month == 20.1
+    assert rel.yoy_cum == 16.0
+    by = {i.name_no: i for i in rel.industries}
+    assert by["Elektronikk og kommunikasjon"].fold == 1.0
+    assert by["Elektronikk og kommunikasjon"].orig == "增长1.0倍"
+    assert by["Ikke-jernholdige metaller"].pct == 71.7
+    assert by["Kull"].pct == 61.4
+    assert by["Kjemikalier"].pct == 50.3
+    assert by["Ikke-metalliske mineralprodukter"].pct == -46.7
+    assert by["Biler"].pct == -26.0
+    assert by["Foredling av landbruksvarer"].pct == -19.5
+    assert by["Kraft og varme"].pct == -18.4
+    up = {r["industry"]: r for r in card["blocks"]["endring"]["up"]}
+    assert up["Elektronikk og kommunikasjon"]["change"] == "doblet (+100 %)"
+    assert up["Elektronikk og kommunikasjon"]["source_orig"] == "增长1.0倍"
+
+
+def test_fold_to_pct_is_the_only_allowed_conversion():
+    """X倍 → X·100 % er den eneste dokumenterte omregningen. Andre tall utenom kilden feiler."""
+    src = "电子行业利润同比增长1.0倍，有色金属冶炼和压延加工业增长71.7%。"
+    ok, missing = N.source_has_numbers("doblet (+100 %)", [src], folds=[1.0])
+    assert ok is True and missing == []
+    ok, missing = N.source_has_numbers("+220 %", ["利润增长2.2倍"], folds=[2.2])
+    assert ok is True and missing == []
+    ok, missing = N.source_has_numbers("+99,9 %", [src], folds=[1.0])
+    assert ok is False and "99,9" in missing
+    ok, missing = N.source_has_numbers("doblet (+100 %)", [src], folds=[])
+    assert ok is False and "100" in missing
+    ok, missing = N.source_has_numbers("+71,7 %", [src], folds=[1.0])
+    assert ok is True and missing == []
+
+
+def test_analbot_test_line_is_verbatim_and_above_source():
+    """AnalBots testlinje 27.11 er statisk, ordrett, og ligger nederst over kildelinja."""
+    from signaltool import nyheter_page as P
+    expected = (
+        "Testet 27.11.2026: Å kjøpe bransjene med høyest profittvekst etter NBS-tallet ga ingen "
+        "påviselig meravkastning 1–20 dager etter (106 publiseringer, 2017–2026). "
+        "Kursene hadde i snitt steget før tallet kom."
+    )
+    assert P.TEST_LINE == expected
+    h, css = P.html(), P.PAGE_CSS
+    assert expected in h
+    assert expected in Path(P.__file__).read_text()
+    assert "ny-fk-test" in h and P.TEST_HREF in h
+    block = css[css.index(".ny-fk-test{"): css.index(".ny-fk-test{") + 280]
+    assert "min-height:44px" in block and "height:auto" in block
+    assert "padding:12px 16px" in block
+    assert "font:400 13px/18px" in block
+    assert "border-left:3px solid var(--line" in block
+    assert "+test+src" in h
+    assert "Største økning" in h and "Største fall" in h
+
+
+def test_forbidden_heading_word_absent_from_card_code_and_tests():
+    # Ordet er sammensatt her så det ikke står skrevet i testfilen.
+    banned = "bid" + "rag"
+    root = Path(__file__).resolve().parents[1]
+    files = [
+        root / "signaltool" / "nbs_industriprofitt.py",
+        root / "signaltool" / "nyheter_page.py",
+        Path(__file__),
+        root / "logs" / "nbs_industriprofitt.json",
+    ]
+    for f in files:
+        if f.exists():
+            blob = f.read_text().lower()
+            assert banned not in blob, f"forbudt ord finnes i {f}"
+
+
+def test_nbs_test_report_has_no_workspace_and_is_published():
+    from signaltool.nbs_test_page import SRC, md_to_html
+    md = SRC.read_text()
+    assert "/workspace" not in md
+    assert "FLAG" in md
+    html = md_to_html(md)
+    assert "/workspace" not in html
+    assert "<table>" in html

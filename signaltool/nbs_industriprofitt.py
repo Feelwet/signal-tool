@@ -78,8 +78,9 @@ INDUSTRY_NO = {
     "专用设备制造业": "Spesialmaskiner",
     "manufacture of electrical machinery and apparatus": "Elektrisk utstyr",
     "电气机械和器材制造业": "Elektrisk utstyr",
-    "processing of food from agricultural and sideline products": "Næringsmidler",
-    "农副食品加工业": "Næringsmidler",
+    "processing of food from agricultural and sideline products": "Foredling av landbruksvarer",
+    "农副食品加工业": "Foredling av landbruksvarer",
+    "农副食品加工": "Foredling av landbruksvarer",
     "production and supply of electricity and heat power": "Kraft og varme",
     "电力、热力生产和供应业": "Kraft og varme",
     "production and supply of electricity, heat power, gas and water": "Kraft, varme, gass og vann",
@@ -174,8 +175,11 @@ def _pct_no(value: float, signed: bool = True) -> str:
 
 
 def _fold_no(fold: float) -> str:
-    s = _fmt_num(fold)
-    return f"+{s} gang" if fold == 1 else f"+{s} ganger"
+    """X倍 vises som X·100 %. 1,0倍 vises som «doblet (+100 %)»."""
+    pct = fold * 100.0
+    if fold == 1:
+        return "doblet (+100 %)"
+    return _pct_no(pct)
 
 
 class _Html(HTMLParser):
@@ -295,6 +299,7 @@ class IndustryChange:
     pct: float | None = None  # signed percent; None if loss-to-profit
     fold: float | None = None
     loss_to_profit: bool = False
+    orig: str = ""
 
     @property
     def rank_pct(self) -> float:
@@ -400,8 +405,9 @@ def parse_industries_cn(text: str) -> list[IndustryChange]:
             fm = re.search(r"^(.+?)增长(\d+(?:\.\d+)?)倍$", part)
         if fm:
             name = re.sub(r"(?:利润同比)$", "", fm.group(1))
-            fold = float(fm.group(2))
-            out.append(IndustryChange(name, _industry_no(name), fold=fold))
+            raw = fm.group(2)
+            fold = float(raw)
+            out.append(IndustryChange(name, _industry_no(name), fold=fold, orig=f"增长{raw}倍"))
             continue
         gm = re.search(r"^(.+?)(?:利润)?同比(?:增长|增长了)?(\d+(?:\.\d+)?)%$", part)
         if not gm:
@@ -499,9 +505,9 @@ def parse_interp(html: str, url: str = "") -> dict:
     elif ai:
         parts.append("Etterspørselen etter regnekraft til kunstig intelligens økte")
     if elec_fold is not None and elec_pp is not None:
-        parts.append(f"elektronikkindustrien økte profitten med {_fold_no(elec_fold).lstrip('+')} og trakk opp samlet profitt med {str(elec_pp).replace('.', ',')} prosentpoeng")
+        parts.append(("elektronikkindustrien doblet profitten (+100 %)" if elec_fold == 1 else f"elektronikkindustrien {_fold_no(elec_fold)}") + f" og trakk opp samlet profitt med {str(elec_pp).replace('.', ',')} prosentpoeng")
     elif elec_fold is not None:
-        parts.append(f"elektronikkindustrien økte profitten med {_fold_no(elec_fold).lstrip('+')}")
+        parts.append("elektronikkindustrien doblet profitten (+100 %)" if elec_fold == 1 else f"elektronikkindustrien {_fold_no(elec_fold)}")
     if copper and nf_pct is not None and nf_pp is not None:
         parts.append(f"etterspørsel etter kobber og aluminium og høyere priser trakk opp ikke-jernholdige metaller ({_pct_no(nf_pct, signed=False)}) med {str(nf_pp).replace('.', ',')} prosentpoeng")
     elif nf_pct is not None and nf_pp is not None:
@@ -553,13 +559,32 @@ def _has_form(blob: str, form: str) -> bool:
     return re.search(r"(?<![\d.,])" + re.escape(form) + r"(?![\d.,])", blob) is not None
 
 
-def source_has_numbers(display: str, sources: list[str]) -> tuple[bool, list[str]]:
-    """Every number in display must appear verbatim (dot/comma equivalent) in some source text."""
+def _tok_value(tok: str) -> float | None:
+    try:
+        return float(tok.strip().replace("−", "-").replace(",", "."))
+    except ValueError:
+        return None
+
+
+def is_fold_pct_conversion(tok: str, folds: list[float]) -> bool:
+    """The only allowed conversion: X倍 → X·100 %."""
+    val = _tok_value(tok)
+    if val is None:
+        return False
+    return any(abs(val - f * 100.0) < 1e-9 for f in folds)
+
+
+def source_has_numbers(display: str, sources: list[str], folds: list[float] | None = None) -> tuple[bool, list[str]]:
+    """Every number in display must appear verbatim in source text, except X倍 → X·100 %."""
     blob = "\n".join(sources)
     missing = []
+    folds = list(folds or [])
     for tok in numbers_in(display):
-        if not any(_has_form(blob, form) for form in number_forms(tok)):
-            missing.append(tok)
+        if any(_has_form(blob, form) for form in number_forms(tok)):
+            continue
+        if is_fold_pct_conversion(tok, folds):
+            continue
+        missing.append(tok)
     return (not missing), missing
 
 
@@ -593,13 +618,16 @@ def build_card(rel: Release, interp: dict | None = None, exposures: list[dict] |
 
     def row(i: IndustryChange, height_note=None) -> dict:
         d = i.direction()
-        return {
+        out = {
             "industry": i.name_no,
             "change": i.change_label(),
             "direction": d,
             "arrow": "↑" if d == "opp" else ("↓" if d == "ned" else ""),
             "dir_text": d,
         }
+        if i.orig:
+            out["source_orig"] = i.orig
+        return out
 
     cause = interp.get("cause") if interp.get("ok") else None
     forklaring = {
@@ -638,7 +666,10 @@ def build_card(rel: Release, interp: dict | None = None, exposures: list[dict] |
             for e in exposures
         ),
     ])
-    ok, missing = source_has_numbers(visible, sources)
+    folds = [i.fold for i in rel.industries if i.fold is not None]
+    if interp.get("numbers") and interp["numbers"].get("elec_fold") is not None:
+        folds.append(interp["numbers"]["elec_fold"])
+    ok, missing = source_has_numbers(visible, sources, folds=folds)
     urls = [u for u in [rel.url, interp.get("url") or rel.interp_url] if u]
     figures = []
     for v in (rel.yoy_month, rel.yoy_cum):
@@ -665,7 +696,7 @@ def build_card(rel: Release, interp: dict | None = None, exposures: list[dict] |
         "period": {"year": rel.year, "start_month": rel.start_month, "end_month": rel.end_month},
         "blocks": {
             "tallet": {"values": values, "source_line": source_line, "source_url": rel.url},
-            "bidrag": {"up": [row(i) for i in ups], "down": [row(i) for i in downs]},
+            "endring": {"up": [row(i) for i in ups], "down": [row(i) for i in downs]},
             "forklaring": forklaring,
             "nevnt": {**nevnt, "hidden": hide_nevnt},
         },

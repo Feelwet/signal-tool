@@ -37,14 +37,15 @@
       "source_line": "NBS · 27.11.2026",
       "source_url": "https://www.stats.gov.cn/sj/zxfb/202611/t20261127_1965949.html"
     },
-    "bidrag": {
+    "endring": {
       "up": [
         {
           "industry": "Elektronikk og kommunikasjon",
-          "change": "+1,0 gang",
+          "change": "doblet (+100 %)",
           "direction": "opp",
           "arrow": "↑",
-          "dir_text": "opp"
+          "dir_text": "opp",
+          "source_orig": "增长1.0倍"
         },
         {
           "industry": "Ikke-jernholdige metaller",
@@ -84,7 +85,7 @@
           "dir_text": "ned"
         },
         {
-          "industry": "Næringsmidler",
+          "industry": "Foredling av landbruksvarer",
           "change": "−19,5 %",
           "direction": "ned",
           "arrow": "↓",
@@ -101,7 +102,7 @@
     },
     "forklaring": {
       "label": "Kildens egen forklaring",
-      "text": "Etterspørselen etter regnekraft til kunstig intelligens økte og trakk opp profitten i minnebrikker og tilhørende produksjon, elektronikkindustrien økte profitten med 1,0 gang og trakk opp samlet profitt med 9,7 prosentpoeng, etterspørsel etter kobber og aluminium og høyere priser trakk opp ikke-jernholdige metaller (71,7 %) med 4,6 prosentpoeng, inntektsmarginen var 5,69 %, opp 0,45 prosentpoeng.",
+      "text": "Etterspørselen etter regnekraft til kunstig intelligens økte og trakk opp profitten i minnebrikker og tilhørende produksjon, elektronikkindustrien doblet profitten (+100 %) og trakk opp samlet profitt med 9,7 prosentpoeng, etterspørsel etter kobber og aluminium og høyere priser trakk opp ikke-jernholdige metaller (71,7 %) med 4,6 prosentpoeng, inntektsmarginen var 5,69 %, opp 0,45 prosentpoeng.",
       "attribution": "ifølge NBS",
       "missing": false
     },
@@ -109,7 +110,7 @@
       "sectors": [
         {
           "name": "Elektronikk og kommunikasjon",
-          "detail": "Elektronikk og kommunikasjon +1,0 gang profitt jan.–okt.",
+          "detail": "Elektronikk og kommunikasjon doblet (+100 %) profitt jan.–okt.",
           "source": "NBS"
         },
         {
@@ -168,8 +169,8 @@
           "source": "NBS"
         },
         {
-          "name": "Næringsmidler",
-          "detail": "Næringsmidler −19,5 % profitt jan.–okt.",
+          "name": "Foredling av landbruksvarer",
+          "detail": "Foredling av landbruksvarer −19,5 % profitt jan.–okt.",
           "source": "NBS"
         },
         {
