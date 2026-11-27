@@ -49,7 +49,8 @@ body.pg-flyt footer{max-width:none}
 .flyt-sec p{margin:0 0 6px;font-size:14px;line-height:20px}
 .flyt-src,.flyt-sec p.flyt-src,.flyt-strom-rad .flyt-src{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--mut,#9ea9b5)}
 .flyt-src a{color:var(--acc,#6cb6ff)}
-.flyt-row,.flyt-list a,a.flyt-rel,a.flyt-tk,.flyt-tk-plain{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;height:auto;padding:0 8px;border-top:1px solid var(--line,#3a4350);box-sizing:border-box;color:var(--ink,#e6edf3);text-decoration:none;text-align:left;background:transparent}
+.flyt-tk-plain{display:inline;border:0;padding:0;margin:0;min-height:0;background:transparent;color:inherit;font:inherit;box-shadow:none}
+.flyt-row,.flyt-list a,a.flyt-rel,a.flyt-tk{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;height:auto;padding:0 8px;border-top:1px solid var(--line,#3a4350);box-sizing:border-box;color:var(--ink,#e6edf3);text-decoration:none;text-align:left;background:transparent}
 .flyt-hvis{margin-top:8px;border:1px solid var(--line,#3a4350);border-radius:10px;padding:10px;background:var(--card,#161b22)}
 .flyt-hvis-chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0;min-height:44px;align-items:center}
 .flyt-chip{border:1px solid var(--line,#3a4350);border-radius:8px}

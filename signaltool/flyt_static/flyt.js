@@ -756,10 +756,21 @@ function kursBlock(ticker) {
   const e = kurs[ticker];
   const wrap = document.createElement('div');
   wrap.className = 'flyt-kurs';
+  const href = tickerPageHref(ticker);
+  const tickerPlain = () => {
+    const s = document.createElement('span');
+    s.className = 'flyt-tk-plain';
+    s.textContent = ticker;
+    return s;
+  };
   if (!e) {
     const p = document.createElement('p');
     p.className = 'flyt-miss';
     p.textContent = 'Mangler kursdata';
+    if (!href) {
+      p.append(' ');
+      p.appendChild(tickerPlain());
+    }
     wrap.appendChild(p);
   } else {
     const st = e.stats || {};
@@ -788,18 +799,14 @@ function kursBlock(ticker) {
     k.appendChild(pctSpan('20d', st.ret_20d));
     wrap.appendChild(k);
   }
-  const href = tickerPageHref(ticker);
   if (href) {
     const a = document.createElement('a');
     a.href = href;
     a.textContent = ticker;
     a.className = 'flyt-rel';
     wrap.appendChild(a);
-  } else {
-    const s = document.createElement('span');
-    s.className = 'flyt-tk-plain';
-    s.textContent = ticker;
-    wrap.appendChild(s);
+  } else if (e) {
+    wrap.appendChild(tickerPlain());
   }
   return wrap;
 }
