@@ -1,6 +1,167 @@
 {
 "saker": [
 {
+"tittel": "Why, after losing 700,000 men in Ukraine, Russians aren't revolting",
+"url": "http://www.washingtonexaminer.com/op-eds/4815434/why-russians-are-not-revolting/",
+"kilde": "GDELT",
+"domene": "washingtonexaminer.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Zelenskyy urges US to pressure Putin and questions Trump's reference to Putin as a 'friend'",
+"url": "https://economictimes.indiatimes.com/news/international/world-news/zelenskyy-urges-us-to-pressure-putin-and-questions-trumps-reference-to-putin-as-a-friend/articleshow/136229191.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Nvidia stock Blackwell chips Shanghai data center: Why are NVDA shares under pressure? Nvidia stock falls as Blackwell AI chips surface at Shanghai data center linked to Alice Huang, reviving US-China export control concerns",
+"url": "https://economictimes.indiatimes.com/world/us/why-are-nvda-shares-under-pressure-nvidia-stock-falls-as-blackwell-ai-chips-surface-at-shanghai-data-center-linked-to-alice-huang-reviving-us-china-export-control-concerns/articleshow/136228067.cms",
+"kilde": "GDELT",
+"domene": "indiatimes.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Putin's biggest ally questions a key claim Russia uses to justify invasion of Ukraine",
+"url": "https://keyt.com/news/national-world/cnn-world/2026/11/27/putins-biggest-ally-questions-a-key-claim-russia-uses-to-justify-invasion-of-ukraine/",
+"kilde": "GDELT",
+"domene": "keyt.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Northumberland County declares state of emergency after severe weather",
+"url": "https://www.12onyourside.com/2026/11/27/northumberland-county-declares-state-emergency-after-severe-weather-2/",
+"kilde": "GDELT",
+"domene": "12onyourside.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "'Bear trap': Ukraine hails new operation as Russian casualties mount | News",
+"url": "https://www.aljazeera.com/news/2026/11/27/ukraine-rejects-unfavourable-compromises-as-it-frees-more-territory",
+"kilde": "GDELT",
+"domene": "aljazeera.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Arab News | Dutch PM to discuss MATCH Act chipmaking export controls with Trump at G20",
+"url": "https://www.arabnews.com/world/dutch-pm-to-discuss-match-act-chipmaking-export-controls-with-trump-at-g20-3014295",
+"kilde": "GDELT",
+"domene": "arabnews.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "BTA :: Bulgarian MEPs Urge EU to Protect Black Sea Shipping and Compensate Industries Hit by War",
+"url": "https://www.bta.bg/en/news/world/1253670-bulgarian-meps-urge-eu-to-protect-black-sea-shipping-and-compensate-industries-h",
+"kilde": "GDELT",
+"domene": "bta.bg",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "By Putin's logic, Russia should be returned to Mongolia, Belarus' Lukashenka says",
+"url": "https://www.euronews.com/2026/11/27/by-putins-logic-russia-should-go-back-to-mongolia-belarus-lukashenka-says",
+"kilde": "GDELT",
+"domene": "euronews.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Russian drone strikes hit Ukraine's energy, rail and civilian infrastructure, causing deaths",
+"url": "https://www.euronews.com/2026/11/27/russian-drone-strikes-hit-ukraines-energy-rail-and-civilian-infrastructure-causing-deaths",
+"kilde": "GDELT",
+"domene": "euronews.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Israeli military says six militants killed in Gaza over past week",
+"url": "https://www.prokerala.com/news/articles/a1841995.html",
+"kilde": "GDELT",
+"domene": "prokerala.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Neculaescu: Romania wants NATO to take joint measures against hybrid attacks in response to Russia's threats",
+"url": "https://www.stiripesurse.ro/neculaescu-romania-wants-nato-to-take-joint-measures-against-hybrid-attacks-in-response-to-russias-threats_3940494",
+"kilde": "GDELT",
+"domene": "stiripesurse.ro",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Russia Accuses Latvia of Obstructing Grain Transit, Aiding Ukrainian Drone Attacks",
+"url": "https://www.themoscowtimes.com/2026/11/27/russia-accuses-latvia-of-obstructing-grain-transit-aiding-ukrainian-drone-a812399",
+"kilde": "GDELT",
+"domene": "themoscowtimes.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange",
+"url": "https://www.wjcl.com/article/zelenskyy-urges-us-pressure-putin-trump-my-friend-remark/74548685",
+"kilde": "GDELT",
+"domene": "wjcl.com",
+"publisert": "2026-11-27T18:00:00Z"
+},
+{
+"tittel": "\"From Algeria to India, Sudan to Indonesia\": Zelenskyy warns of threats to food exports through Black Sea amid Russia war",
+"url": "http://www.indiagazette.com/news/279466435/from-algeria-to-india-sudan-to-indonesia-zelenskyy-warns-of-threats-to-food-exports-through-black-sea-amid-russia-war",
+"kilde": "GDELT",
+"domene": "indiagazette.com",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
+"url": "http://www.indiagazette.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
+"kilde": "GDELT",
+"domene": "indiagazette.com",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Europe preparing for war with Russia, demanding truce in Ukraine: Russian FM Lavrov says US displaying more",
+"url": "http://www.middleeaststar.com/news/279467013/europe-preparing-for-war-with-russia-demanding-truce-in-ukraine-russian-fm-lavrov-says-us-displaying-more-political-maturity",
+"kilde": "GDELT",
+"domene": "middleeaststar.com",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Spain to vote in snap election on Nov 29 amid housing crisis, immigration debate; far-right Vox eyes power",
+"url": "https://aninews.in/news/world/europe/spain-to-vote-in-snap-election-on-nov-29-amid-housing-crisis-immigration-debate-far-right-vox-eyes-power20261127225356/",
+"kilde": "GDELT",
+"domene": "aninews.in",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Palestinians in Gaza and the West Bank Want Israel to Disappear",
+"url": "https://www.algemeiner.com/2026/11/27/palestinians-gaza-west-bank-want-israel-disappear/",
+"kilde": "GDELT",
+"domene": "algemeiner.com",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Japan pushes for substantial increase in defense spending; expert warns of shift toward offensive military capability",
+"url": "https://www.globaltimes.cn/page/202611/1375188.shtml",
+"kilde": "GDELT",
+"domene": "globaltimes.cn",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Israeli drone strike on vehicle kills Palestinian man in northern Gaza",
+"url": "https://www.middleeasteye.net/live-blog/live-blog-update/israeli-drone-strike-vehicle-kills-palestinian-man-northern-gaza",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "Mecca pact members meet in Islamabad, condemn Houthi attacks on Saudi Arabia",
+"url": "https://www.middleeasteye.net/live-blog/live-blog-update/mecca-pact-members-meet-islamabad-condemn-houthi-attacks-saudi-arabia",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
+"tittel": "US lobbied Iraq and Venezuela to exit Opec, sparking Saudi intervention",
+"url": "https://www.middleeasteye.net/news/us-lobbied-iraq-and-venezuela-exit-opec-sparking-saudi-intervention",
+"kilde": "GDELT",
+"domene": "middleeasteye.net",
+"publisert": "2026-11-27T17:45:00Z"
+},
+{
 "tittel": "IRGC: Oil tanker hits naval mine while attempting to transit Strait of Hormuz",
 "url": "http://www.jpost.com/middle-east/iran-news/article-916328",
 "kilde": "GDELT",
@@ -8,22 +169,8 @@
 "publisert": "2026-11-27T17:15:00Z"
 },
 {
-"tittel": "\"From Algeria to India, Sudan to Indonesia\": Zelenskyy warns of threats to food exports through Black Sea amid Russia war",
-"url": "http://www.russiaherald.com/news/279466435/from-algeria-to-india-sudan-to-indonesia-zelenskyy-warns-of-threats-to-food-exports-through-black-sea-amid-russia-war",
-"kilde": "GDELT",
-"domene": "russiaherald.com",
-"publisert": "2026-11-27T17:15:00Z"
-},
-{
 "tittel": "NATO gave Kiev naval strike capability. Then the Ukrainians attacked Libya",
 "url": "http://www.russiaherald.com/news/279466477/nato-gave-kiev-naval-strike-capability-then-the-ukrainians-attacked-libya",
-"kilde": "GDELT",
-"domene": "russiaherald.com",
-"publisert": "2026-11-27T17:15:00Z"
-},
-{
-"tittel": "Europe preparing for war with Russia, demanding truce in Ukraine: Russian FM Lavrov says US displaying more",
-"url": "http://www.russiaherald.com/news/279467013/europe-preparing-for-war-with-russia-demanding-truce-in-ukraine-russian-fm-lavrov-says-us-displaying-more-political-maturity",
 "kilde": "GDELT",
 "domene": "russiaherald.com",
 "publisert": "2026-11-27T17:15:00Z"
@@ -47,13 +194,6 @@
 "url": "https://english.aawsat.com/world/5346304-mossad-and-israeli-military-chiefs-odds-over-striking-iran",
 "kilde": "GDELT",
 "domene": "aawsat.com",
-"publisert": "2026-11-27T17:15:00Z"
-},
-{
-"tittel": "Zelenskyy urges the US to pressure Putin, calling Trump's 'my friend' remark strange",
-"url": "https://www.4029tv.com/article/zelenskyy-urges-us-pressure-putin-trump-my-friend-remark/74548685",
-"kilde": "GDELT",
-"domene": "4029tv.com",
 "publisert": "2026-11-27T17:15:00Z"
 },
 {
@@ -99,24 +239,10 @@
 "publisert": "2026-11-27T17:15:00Z"
 },
 {
-"tittel": "US tariff proposal will not pressure India into trade deal, Make in India no threat to American industry: ITPO Chairman",
-"url": "http://www.beijingbulletin.com/news/279466980/us-tariff-proposal-will-not-pressure-india-into-trade-deal-make-in-india-no-threat-to-american-industry-itpo-chairman",
-"kilde": "GDELT",
-"domene": "beijingbulletin.com",
-"publisert": "2026-11-27T17:00:00Z"
-},
-{
 "tittel": "Zelensky compares Trump's friendship with Putin to being friends with Hitler during World War Two",
 "url": "https://article.wn.com/view/2026/11/27/Zelensky_compares_Trump_s_friendship_with_Putin_to_being_fri/",
 "kilde": "GDELT",
 "domene": "wn.com",
-"publisert": "2026-11-27T17:00:00Z"
-},
-{
-"tittel": "Putin's biggest ally questions a key claim Russia uses to justify invasion of Ukraine",
-"url": "https://cyprusnews.eu/cnn-kosmos/putins-biggest-ally-questions-a-key-claim-russia-uses-to-justify-invasion-of-ukraine/",
-"kilde": "GDELT",
-"domene": "cyprusnews.eu",
 "publisert": "2026-11-27T17:00:00Z"
 },
 {
@@ -215,13 +341,6 @@
 "url": "https://kenya-today.com/report-ethiopias-prime-minister-rejects-invasion-claims-calls-for-dialogue-on-red-sea-access-34427/",
 "kilde": "GDELT",
 "domene": "kenya-today.com",
-"publisert": "2026-11-27T16:45:00Z"
-},
-{
-"tittel": "Zelenskyy urges US to pressure Putin and questions Trump's reference to Putin as a 'friend'",
-"url": "https://www.2news.com/news/world/zelenskyy-urges-us-to-pressure-putin-and-questions-trumps-reference-to-putin-as-a-friend/article_a6f22918-e820-5977-ac86-8da2ffda0872.html",
-"kilde": "GDELT",
-"domene": "2news.com",
 "publisert": "2026-11-27T16:45:00Z"
 },
 {
@@ -2226,6 +2345,6 @@
 "publisert": "2026-11-24T19:00:00Z"
 }
 ],
-"gkg_siste_fil": "2026-11-27T17:15:00Z",
-"hentet": "2026-11-27T17:17:20Z"
+"gkg_siste_fil": "2026-11-27T18:00:00Z",
+"hentet": "2026-11-27T18:01:45Z"
 }
