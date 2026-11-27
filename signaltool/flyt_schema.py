@@ -558,6 +558,54 @@ def verk_label(verks: list) -> str:
     return f"Verk ({len(verks)})"
 
 
+def is_selskap(node: dict) -> bool:
+    return isinstance(node, dict) and canon_type(node.get("type")) == "selskap"
+
+
+def selskap_count_label(n: int) -> str:
+    """Samme entall/flertall-logikk som «1 ticker» / «n tickere»."""
+    k = int(n or 0)
+    return "1 selskap" if k == 1 else f"{k} selskaper"
+
+
+def selskaper_paa_land(noder: list, kanter: list, land_id: str) -> list[str]:
+    """Distinkte selskapsnoder med publisert kant lag=selskap til landet.
+
+    Telles direkte, eller via selskapets eget verk/anlegg i landet
+    (f.eks. NHY → Qatalum → Qatar). Teller ikke via råvarelaget.
+    Returnerer selskapsnodenes id-er, sortert.
+    """
+    noder = _load(noder, "noder") if not isinstance(noder, list) else noder
+    kanter = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
+    by_id = {n["id"]: n for n in noder if isinstance(n, dict) and n.get("id")}
+    sel = [e for e in kanter if e.get("lag") == "selskap"]
+
+    def other(e, nid):
+        if e.get("fra") == nid:
+            return e.get("til")
+        if e.get("til") == nid:
+            return e.get("fra")
+        return None
+
+    found: set[str] = set()
+    plants_in_land: set[str] = set()
+    for e in sel:
+        o = other(e, land_id)
+        if not o or o not in by_id:
+            continue
+        n = by_id[o]
+        if is_selskap(n):
+            found.add(n["id"])
+        elif is_verk(n):
+            plants_in_land.add(n["id"])
+    for pid in plants_in_land:
+        for e in sel:
+            o = other(e, pid)
+            if o and o in by_id and is_selskap(by_id[o]):
+                found.add(o)
+    return sorted(found)
+
+
 def tickers_on_node(noder: list, kanter: list, node_id: str) -> list[str]:
     """Tickere koblet til en node via publiserte kanter (inntil to hopp)."""
     noder = _load(noder, "noder") if not isinstance(noder, list) else noder
@@ -607,9 +655,10 @@ def tickers_on_node(noder: list, kanter: list, node_id: str) -> list[str]:
 
 
 def oversikt_varer_og_land(noder: list, kanter: list) -> dict:
-    """Oversikten: venstre Varer (n), høyre topp 6 land etter tickerantall + «+n andre».
+    """Oversikten: venstre Varer (n), høyre topp 6 land etter selskapsantall + «+n andre».
 
-    Land med 0 tickere går alltid i +n andre og fyller ikke de 6 plassene.
+    Land med 0 selskaper går alltid i +n andre og fyller ikke de 6 plassene.
+    Varer telles fortsatt med tickers_on_node.
     """
     noder = _load(noder, "noder") if not isinstance(noder, list) else noder
     pub = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
@@ -618,9 +667,13 @@ def oversikt_varer_og_land(noder: list, kanter: list) -> dict:
     lands = [n for n in noder if isinstance(n, dict) and n.get("type") == "land" and n.get("id") in connected]
     counts: dict[str, int] = {}
     deg: dict[str, int] = {}
-    for n in lands + varer:
+    for n in varer:
         nid = n["id"]
         counts[nid] = len(set(tickers_on_node(noder, pub, nid)))
+        deg[nid] = sum(1 for e in pub if e.get("fra") == nid or e.get("til") == nid)
+    for n in lands:
+        nid = n["id"]
+        counts[nid] = len(selskaper_paa_land(noder, pub, nid))
         deg[nid] = sum(1 for e in pub if e.get("fra") == nid or e.get("til") == nid)
     with_t = [n for n in lands if counts.get(n["id"], 0) > 0]
     with_t.sort(key=lambda n: (-counts.get(n["id"], 0), -deg.get(n["id"], 0), str(n.get("navn") or n["id"])))

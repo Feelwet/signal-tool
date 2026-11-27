@@ -441,6 +441,38 @@ function tickersOn(nodeId) {
   return out;
 }
 
+function isSelskap(n) { return n && canonType(n.type) === 'selskap'; }
+function isVerkNode(n) { return n && (n.type === 'verk' || n.type === 'anlegg'); }
+function selskaperOn(landId) {
+  const out = [];
+  const seen = new Set();
+  const sel = pubKanter().filter((e) => e.lag === 'selskap');
+  const other = (e, id) => e.fra === id ? e.til : (e.til === id ? e.fra : null);
+  const plants = [];
+  for (const e of sel) {
+    const o = other(e, landId);
+    if (!o) continue;
+    const n = byId.get(o);
+    if (!n) continue;
+    if (isSelskap(n) && !seen.has(n.id)) {
+      seen.add(n.id);
+      out.push({ id: n.id, ticker: tickerOf(n), node: n, edge: e });
+    } else if (isVerkNode(n)) plants.push(n.id);
+  }
+  for (const pid of plants) {
+    for (const e of sel) {
+      const o = other(e, pid);
+      if (!o) continue;
+      const n = byId.get(o);
+      if (n && isSelskap(n) && !seen.has(n.id)) {
+        seen.add(n.id);
+        out.push({ id: n.id, ticker: tickerOf(n), node: n, edge: e });
+      }
+    }
+  }
+  return out;
+}
+
 function overviewGraph() {
   const connected = new Set();
   for (const e of pubKanter()) { connected.add(e.fra); connected.add(e.til); }
@@ -448,8 +480,12 @@ function overviewGraph() {
   const lands = noder.filter((n) => n.type === 'land' && connected.has(n.id));
   const counts = new Map();
   const deg = new Map();
-  for (const n of [...mats, ...lands]) {
+  for (const n of mats) {
     counts.set(n.id, new Set(tickersOn(n.id).map((x) => x.ticker)).size);
+    deg.set(n.id, pubKanter().filter((e) => e.fra === n.id || e.til === n.id).length);
+  }
+  for (const n of lands) {
+    counts.set(n.id, selskaperOn(n.id).length);
     deg.set(n.id, pubKanter().filter((e) => e.fra === n.id || e.til === n.id).length);
   }
   const withT = lands.filter((n) => (counts.get(n.id) || 0) > 0)
@@ -651,6 +687,10 @@ function roundTonnHalfUp(v) {
 function tickerCountLabel(n) {
   const k = Number(n) || 0;
   return k === 1 ? '1 ticker' : `${k} tickere`;
+}
+function selskapCountLabel(n) {
+  const k = Number(n) || 0;
+  return k === 1 ? '1 selskap' : `${k} selskaper`;
 }
 function fmtSceneVal(row) {
   if (row.status === 'mangler' || row.verdi == null || row.verdi === '') return null;
@@ -933,8 +973,14 @@ function renderPanel(node, opts) {
   if (rel.childNodes.length) el.pbody.appendChild(sec('Relaterte noder', rel, 'relaterte'));
   if (node.type && node.type !== 'selskap') {
     const box = document.createElement('div');
-    const list = tickersOn(node.id);
-    if (!list.length) {
+    const isLand = node.type === 'land';
+    const list = isLand ? selskaperOn(node.id) : tickersOn(node.id);
+    if (isLand) {
+      const cap = document.createElement('p');
+      cap.textContent = selskapCountLabel(list.length);
+      box.appendChild(cap);
+    }
+    if (!list.length && !isLand) {
       const p = document.createElement('p');
       p.className = 'flyt-miss';
       p.textContent = 'Ingen tickere koblet hit';
@@ -1197,7 +1243,7 @@ function placeLabels(visu, pos, hitN) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = tickerCountLabel(counts.get(n.id));
+    if (visu.overview && counts.has(n.id)) vv.textContent = (n.type === 'land' ? selskapCountLabel : tickerCountLabel)(counts.get(n.id));
     else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
@@ -1350,7 +1396,7 @@ function placeLabelsProjected(visu, pos, hitN, t) {
     d.appendChild(nm);
     const vv = document.createElement('span');
     vv.className = 'v';
-    if (visu.overview && counts.has(n.id)) vv.textContent = tickerCountLabel(counts.get(n.id));
+    if (visu.overview && counts.has(n.id)) vv.textContent = (n.type === 'land' ? selskapCountLabel : tickerCountLabel)(counts.get(n.id));
     else {
       const fv = fmtSceneVal(n);
       vv.textContent = fv || (n.år ? String(n.år) : '');
@@ -1717,7 +1763,7 @@ async function init() {
   else redraw();
 }
 
-window.__flyt = { onNode, applyScenario, resetView, fillChips,
+window.__flyt = { onNode, applyScenario, resetView, fillChips, selskaperOn, tickersOn, selskapCountLabel, tickerCountLabel,
   get vis() { return vis; }, get verkOpen() { return verkOpen; } };
 init().catch((err) => {
   el.status.textContent = 'Kunne ikke laste flyt-data.';
