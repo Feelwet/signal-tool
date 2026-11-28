@@ -98,6 +98,8 @@ function srcText(row) {
   let text = bits.join(' · ');
   if (row?.side) text += (text ? ', ' : '') + 's. ' + row.side;
   if (row?.hs_kode) text += ' · HS ' + row.hs_kode;
+  // FLAG 5: SSB-tall er Norges egen rapportering; partnertall er ikke hentet.
+  if (/SSB/.test(kilde) && !/kun norsk rapportering/.test(text)) text += ' · kun norsk rapportering';
   return text;
 }
 
@@ -914,7 +916,10 @@ function fmtSceneVal(row) {
   if (row.status === 'mangler' || row.verdi == null || row.verdi === '') return null;
   const v = row.verdi;
   let num;
-  if (typeof v === 'number' && isTonn(row.enhet)) {
+  if (typeof v === 'number' && isTonn(row.enhet) && v > 0 && v < 1) {
+    // FLAG 2: verdi lagres med desimaler; scenen viser «under 1 tonn» under 1 tonn.
+    num = 'under 1';
+  } else if (typeof v === 'number' && isTonn(row.enhet)) {
     num = roundTonnHalfUp(v).toLocaleString('nb-NO');
   } else if (typeof v === 'number') {
     num = v.toLocaleString('nb-NO');
@@ -1080,6 +1085,40 @@ function esc(s) {
 }
 
 
+// SPEC-tillegg: avvik >20 % mot partner gir to rader (44 px) + metodelinje 13/18.
+// Scenetykkelse kommer alltid fra rapportørens tall.
+function avvikInfo(r) {
+  const p = r?.partner;
+  if (!p || p.verdi == null || p.verdi === '' || r.verdi == null || r.verdi === '') return null;
+  const a = Number(r.verdi), b = Number(p.verdi);
+  if (!Number.isFinite(a) || !Number.isFinite(b) || a === 0) return null;
+  const pct = Math.abs(b - a) / Math.abs(a) * 100;
+  if (pct <= 20) return null;
+  return { pct, partner: p };
+}
+function appendAvvik(container, r, node, info) {
+  const wrap = document.createElement('div');
+  wrap.className = 'flyt-tall-rad flyt-avvik';
+  const rows = [
+    [`Rapportør (${r.reporter_land || r.reporter || ''}):`, r],
+    [`Partner (${info.partner.reporter_land || info.partner.land || ''}):`, { ...info.partner, enhet: info.partner.enhet || r.enhet, ar: info.partner.ar || r.ar }],
+  ];
+  for (const [lab, row] of rows) {
+    const d = document.createElement('div');
+    d.className = 'flyt-avvik-rad';
+    const a = document.createElement('span'); a.textContent = lab;
+    const b = document.createElement('span'); b.textContent = fmtVal(row) || 'Mangler data';
+    d.append(a, b);
+    wrap.appendChild(d);
+  }
+  const m = document.createElement('p');
+  m.className = 'flyt-metode';
+  m.textContent = 'Metode: ' + (r.metode || info.partner.metode || 'Mangler data');
+  wrap.appendChild(m);
+  wrap.appendChild(srcLine({ ...r, lag: r.lag || node.lag }));
+  container.appendChild(wrap);
+}
+
 function appendTallRows(container, node) {
   if (node.status === 'kontekst') {
     const p = document.createElement('p');
@@ -1106,6 +1145,8 @@ function appendTallRows(container, node) {
     return;
   }
   for (const r of rows) {
+    const av = avvikInfo(r);
+    if (av) { appendAvvik(container, r, node, av); continue; }
     const wrap = document.createElement('div');
     wrap.className = 'flyt-tall-rad';
     const p = document.createElement('p');
@@ -1201,7 +1242,7 @@ function renderPanel(node, opts) {
     if (!list.length && !isLand) {
       const p = document.createElement('p');
       p.className = 'flyt-miss';
-      p.textContent = 'Ingen tickere koblet hit';
+      p.textContent = 'Mangler data';
       box.appendChild(p);
     }
     for (const row of list) {

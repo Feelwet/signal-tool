@@ -173,3 +173,4 @@ a.flyt-l{position:relative;z-index:2;color:var(--acc,#6cb6ff);background:transpa
 .flyt-lab.selskap-rad{min-height:44px;height:44px;max-height:44px;padding:2px 6px;max-width:180px}
 .flyt-lab.selskap-rad .n,.flyt-lab.selskap-rad .v{font-size:12px;line-height:16px}
 .flyt-metode{font-size:13px;line-height:18px;color:var(--muted,#9ea9b5);margin:0 0 8px}
+.flyt-avvik-rad{display:flex;justify-content:space-between;align-items:center;min-height:44px;height:44px;box-sizing:border-box;gap:12px;font-size:13px;line-height:18px}
