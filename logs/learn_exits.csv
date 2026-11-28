@@ -660,3 +660,10 @@ date,ticker,prev_run,reason,rank,score,tie_step,n_types,tied_with,run_id,is_cano
 2026-11-27,NOD.OL,2026-11-26,cut60,76,1.13,,,,46022294838,true
 2026-11-27,STRC,2026-11-26,cut60,112,0.5,,,,46022294838,true
 2026-11-27,WSM,2026-11-26,score0,,,,,,46022294838,true
+2026-11-28,BOR.OL,2026-11-27,cut60,127,0.5,,,,46088450505,true
+2026-11-28,CAVEN.OL,2026-11-27,"lik score, kutt 60",61,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true
+2026-11-28,CYVIZ.OL,2026-11-27,"lik score, kutt 60",62,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true
+2026-11-28,ENDUR.OL,2026-11-27,"lik score, kutt 60",63,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true
+2026-11-28,HUDL.OL,2026-11-27,"lik score, kutt 60",64,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true
+2026-11-28,IDEX.OL,2026-11-27,"lik score, kutt 60",65,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true
+2026-11-28,INDCT.OL,2026-11-27,"lik score, kutt 60",66,1.5,3,1,MOWI.OL:på:2|AFG.OL:på:1|BOHUS.OL:på:1,46088450505,true

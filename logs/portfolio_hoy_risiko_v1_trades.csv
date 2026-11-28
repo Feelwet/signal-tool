@@ -53,3 +53,11 @@ hoy_risiko_v1,fill,2026-11-04-0048,2026-11-05,2026-11-04,ENDUR.OL,buy,topp10 20d
 hoy_risiko_v1,cancel,2026-11-03-0040,2026-11-08,2026-11-03,BRG.OL,buy,ingen kurs,2026-11-03,,NOK,,,,,,,3.9,,Middels,2026-10-30,Basic Materials,watch,0.0255,OSEBX (OSEBX.OL),2096.510009765625,
 hoy_risiko_v1,order,2026-11-08-0053,2026-11-08,2026-11-08,APP,buy,topp10 20d>0,2026-11-06,,USD,,,,,,,3.92,,Høy,2026-11-06,Communication Services,watch,0.4121,S&P 500 (^GSPC),7376.85986328125,
 hoy_risiko_v1,fill,2026-11-08-0053,2026-11-10,2026-11-08,APP,buy,topp10 20d>0,2026-11-09,410.0,USD,9.50255012512207,11.467001,44675.96,89.35,,,3.92,,Høy,2026-11-06,Communication Services,watch,0.4121,S&P 500 (^GSPC),7376.85986328125,7549.93994140625
+hoy_risiko_v1,order,2026-11-28-0055,2026-11-28,2026-11-28,KOG.OL,sell,20 handelsdager,2026-11-27,,NOK,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0056,2026-11-28,2026-11-28,EQNR.OL,sell,20 handelsdager,2026-11-27,,NOK,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0057,2026-11-28,2026-11-28,LMT,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0058,2026-11-28,2026-11-28,EPAC,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0059,2026-11-28,2026-11-28,LHX,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0060,2026-11-28,2026-11-28,TXT,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0061,2026-11-28,2026-11-28,NCLH,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,
+hoy_risiko_v1,order,2026-11-28-0062,2026-11-28,2026-11-28,HII,sell,20 handelsdager,2026-11-27,,USD,,,,,,,,,,,,,,,,

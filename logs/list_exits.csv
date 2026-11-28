@@ -108,3 +108,10 @@ date,ticker,code,old_score,new_score
 2026-11-27,SPY,out_of_top60,,0.47
 2026-11-27,STRC,out_of_top60,1.74,0.5
 2026-11-27,WSM,,4.1,
+2026-11-28,BOR.OL,out_of_top60,1.54,0.5
+2026-11-28,CAVEN.OL,out_of_top60,2.67,1.5
+2026-11-28,CYVIZ.OL,out_of_top60,1.5,1.5
+2026-11-28,ENDUR.OL,out_of_top60,1.5,1.5
+2026-11-28,HUDL.OL,out_of_top60,1.5,1.5
+2026-11-28,IDEX.OL,out_of_top60,1.5,1.5
+2026-11-28,INDCT.OL,out_of_top60,1.5,1.5
