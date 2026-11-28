@@ -664,6 +664,7 @@ def oversikt_varer_og_land(noder: list, kanter: list) -> dict:
     pub = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
     connected = {e.get("fra") for e in pub} | {e.get("til") for e in pub}
     varer = [n for n in noder if isinstance(n, dict) and canon_type(n.get("type")) == "råvare" and n.get("id") in connected]
+    varer = sorter_varer_etter_selskap(noder, pub, varer)
     lands = [n for n in noder if isinstance(n, dict) and n.get("type") == "land" and n.get("id") in connected]
     counts: dict[str, int] = {}
     deg: dict[str, int] = {}
@@ -697,3 +698,136 @@ def round_tonn_scene(verdi) -> int:
     import math
     return math.floor(float(verdi) + 0.5)
 
+
+
+def selskaper_paa_vare(noder: list, kanter: list, vare_id: str) -> list[str]:
+    """Distinkte selskapsnoder med publisert kant lag=selskap til varen fra egen rapport.
+
+    Telles direkte (ticker/selskap → vare) eller via selskapets eget verk/anlegg
+    (f.eks. NHY → Paragominas → Bauksitt, også når eierskapet vises gjennom
+    verk_for / samme materiale, som i offisiell Hydro-graf).
+    Teller ikke via handels-/råvarekanter.
+    """
+    noder = _load(noder, "noder") if not isinstance(noder, list) else noder
+    raw_k = _load(kanter, "kanter") if not isinstance(kanter, list) else kanter
+    kanter = published_only(raw_k)
+    by_id = {n["id"]: n for n in noder if isinstance(n, dict) and n.get("id")}
+    sel = [e for e in kanter if e.get("lag") == "selskap"]
+
+    def other(e, nid):
+        if e.get("fra") == nid:
+            return e.get("til")
+        if e.get("til") == nid:
+            return e.get("fra")
+        return None
+
+    found: set[str] = set()
+    plants: set[str] = set()
+    for e in sel:
+        o = other(e, vare_id)
+        if not o or o not in by_id:
+            continue
+        n = by_id[o]
+        if is_selskap(n):
+            found.add(n["id"])
+        elif is_verk(n):
+            plants.add(n["id"])
+    # eierkant plant ↔ selskap
+    for pid in plants:
+        for e in sel:
+            o = other(e, pid)
+            if o and o in by_id and is_selskap(by_id[o]):
+                found.add(o)
+    # offisiell Hydro: Paragominas/Alunorte har publisert produksjonskant til
+    # varen, men ingen publisert eierkant til ticker:NHY.OL. Ta med selskap
+    # der verket inngår i verk_for (koblet eller samme materiale).
+    if plants:
+        for n in noder:
+            if not is_selskap(n):
+                continue
+            vset = {v["id"] for v in verk_for(noder, raw_k, n["id"], only_published=True)}
+            if plants & vset:
+                found.add(n["id"])
+    return sorted(found)
+def sorter_varer_etter_selskap(noder: list, kanter: list, varer: list) -> list:
+    """Sorter varer etter antall distinkte selskapsnoder med publisert rapportkant.
+
+    Lik telling beholder opprinnelig rekkefølge (stabilt), så offisiell NHY-rekkefølge
+    ikke endres når alle fire varer har samme antall.
+    """
+    keyed = []
+    for i, n in enumerate(varer):
+        c = len(selskaper_paa_vare(noder, kanter, n["id"]))
+        keyed.append(( -c, i, n))
+    keyed.sort()
+    return [n for _, _, n in keyed]
+
+
+def ticker_har_publisert_flyt(ticker: str, noder: list, kanter: list) -> bool:
+    """True hvis tickeren har minst én publisert kant (direkte på selskapsnoden)."""
+    noder = _load(noder, "noder") if not isinstance(noder, list) else noder
+    kanter = published_only(_load(kanter, "kanter") if not isinstance(kanter, list) else kanter)
+    ids = {n["id"] for n in noder if isinstance(n, dict) and ticker_of(n) == ticker}
+    if not ids:
+        return False
+    for e in kanter:
+        if e.get("fra") in ids or e.get("til") in ids:
+            return True
+    return False
+
+
+GICS11 = (
+    "Energi",
+    "Materialer",
+    "Industri",
+    "Forbruksvarer",
+    "Konsumvarer",
+    "Helse",
+    "Finans",
+    "IT",
+    "Kommunikasjonstjenester",
+    "Forsyning",
+    "Eiendom",
+)
+UKJENT_SEKTOR = "Ukjent sektor"
+
+
+def liste_grupper(noder: list, sektor_av: dict[str, str] | None = None) -> list[tuple[str, list[dict]]]:
+    """Liste gruppert etter de 11 GICS-navnene + «Ukjent sektor». Ukjent mapping → ukjent sektor."""
+    sektor_av = sektor_av or {}
+    noder = [n for n in noder if isinstance(n, dict) and is_selskap(n)]
+    buckets = {n: [] for n in GICS11}
+    buckets[UKJENT_SEKTOR] = []
+    for n in noder:
+        t = ticker_of(n) or n.get("id")
+        s = sektor_av.get(t) or sektor_av.get(n.get("id")) or UKJENT_SEKTOR
+        if s not in buckets:
+            s = UKJENT_SEKTOR
+        buckets[s].append(n)
+    out = []
+    for name in list(GICS11) + [UKJENT_SEKTOR]:
+        if buckets[name]:
+            out.append((name, buckets[name]))
+    return out
+
+
+def avvik_panel(rapportor: dict, partner: dict | None, *, grense: float = 20.0) -> dict | None:
+    """Hvis avvik >20 % mot partner: to rader + metodelinje. Scenetykkelse fra rapportør."""
+    if not partner or rapportor.get("verdi") in (None, "") or partner.get("verdi") in (None, ""):
+        return None
+    a, b = float(rapportor["verdi"]), float(partner["verdi"])
+    if a == 0:
+        return None
+    pct = abs(b - a) / abs(a) * 100
+    if pct <= grense:
+        return None
+    return {
+        "avvik_pct": pct,
+        "scenetykkelse_fra": "rapportor",
+        "rader": [
+            {"etikett": f"Rapportør ({rapportor.get('reporter_land') or rapportor.get('land') or ''}):", "verdi": rapportor["verdi"]},
+            {"etikett": f"Partner ({partner.get('reporter_land') or partner.get('land') or ''}):", "verdi": partner["verdi"]},
+        ],
+        "metode": (rapportor.get("metode") or partner.get("metode") or "").strip(),
+        "hoyde_px": (44, 44, "13/18"),
+    }

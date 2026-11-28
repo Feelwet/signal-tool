@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from .config import ROOT
-from .flyt_schema import coverage, universe_tickers, scenario_chips
+from .flyt_schema import coverage, universe_tickers, scenario_chips, ticker_har_publisert_flyt
 
 STATIC = Path(__file__).resolve().parent / "flyt_static"
 LINK_CSS = (
@@ -19,12 +19,31 @@ LINK_CSS = (
 E = lambda x: _html.escape("" if x is None else str(x))
 SITE = ROOT / "site"
 FLYT = SITE / "flyt"
+_PUB_CACHE = None
+
+def _official_graph():
+    global _PUB_CACHE
+    if _PUB_CACHE is None:
+        from .config import ROOT as _R
+        n = __import__("json").loads((_R / "flyt" / "noder.json").read_text(encoding="utf-8"))
+        k = __import__("json").loads((_R / "flyt" / "kanter.json").read_text(encoding="utf-8"))
+        if isinstance(n, dict):
+            n = n.get("noder") or n
+        if isinstance(k, dict):
+            k = k.get("kanter") or k
+        _PUB_CACHE = (n, k)
+    return _PUB_CACHE
+
 def fokus_href(ticker: str, pre: str = "") -> str:
     return f"{pre}flyt.html?fokus={quote(str(ticker), safe='')}"
 
 
-def link(ticker: str, pre: str = "") -> str:
-    """Synlig «Flyt»-lenke (min 44×44) til flyt.html?fokus=<ticker>."""
+def link(ticker: str, pre: str = "", *, noder=None, kanter=None) -> str:
+    """Synlig «Flyt»-lenke (min 44×44) bare ved minst én publisert kant. Ellers ingenting."""
+    if noder is None or kanter is None:
+        noder, kanter = _official_graph()
+    if not ticker_har_publisert_flyt(ticker, noder, kanter):
+        return ""
     return (f'<a class="flyt-l" href="{E(fokus_href(ticker, pre))}">Flyt</a>')
 
 
