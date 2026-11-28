@@ -183,8 +183,10 @@ def test_u12_scene_rounds_tonn_half_up_panel_keeps_exact():
     assert round_tonn_scene(n["verdi"]) == 1381342
     src = JS.read_text(encoding="utf-8")
     assert "function fmtSceneVal" in src and "function roundTonnHalfUp" in src
-    # panelet bruker fortsatt fmtVal (ordrett), scenen fmtSceneVal
-    assert src.count("const fv = fmtSceneVal(n);") >= 2
+    # panelet bruker fortsatt fmtVal (ordrett), scenen fmtSceneVal (via fillLabel i 2D og projisert)
+    assert "function fillLabel" in src
+    assert src.count("fmtSceneVal(n)") >= 1
+    assert "fmtVal" in src
     assert "Ingen tall for denne noden." not in src
     assert "Noden har ingen egne tall." in src
 

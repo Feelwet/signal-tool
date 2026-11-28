@@ -776,16 +776,17 @@ def ticker_har_publisert_flyt(ticker: str, noder: list, kanter: list) -> bool:
     return False
 
 
+# Samme 11 navn som tickerlist.SEKTOR_NAV (offisiell norsk GICS på siden). Ikke finn på egne.
 GICS11 = (
     "Energi",
-    "Materialer",
+    "Råvarer",
     "Industri",
-    "Forbruksvarer",
-    "Konsumvarer",
+    "Syklisk forbruk",
+    "Defensivt forbruk",
     "Helse",
     "Finans",
-    "IT",
-    "Kommunikasjonstjenester",
+    "Teknologi",
+    "Kommunikasjon",
     "Forsyning",
     "Eiendom",
 )

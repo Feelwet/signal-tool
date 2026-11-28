@@ -221,11 +221,12 @@ def test_ux_playwright_verk_land_kraft_hvis(preview):
                 "spania", "polen", "storbritannia", "belgia", "sveits", "osterrrike",
             }
         ])
-        # hop-1 land rundt NHY (brasil kan ligge på et annet hop)
-        for n in visible:
-            assert n["navn"] in names
-        andre_lab = f"+{len(andre)} andre"
-        assert any(n == andre_lab or n.startswith("+") and n.endswith("andre") for n in names)
+        # Runde 1: maks 6 + «+n andre» per side (ikke per hopp).
+        land_names = [n["navn"] for n in land_nodes]
+        scene_lands = [nm for nm in names if nm in land_names]
+        assert len(scene_lands) <= MAX_LAND_PER_LAG * 2
+        assert any(n.startswith("+") and "andre" in n for n in names)
+        # land som land_for_lag la i +n andre skal fortsatt ikke ligge som egen etikett
         for n in andre:
             assert n["navn"] not in names
 

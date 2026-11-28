@@ -304,3 +304,62 @@ def test_manifest_eurostat_mangler_ingen_avvikstilfeller():
     assert "mangler" in str(m.get("comtrade")).lower() or "nøkkel" in str(m.get("comtrade")).lower()
     assert "ingen tilfeller" in str(m.get("avvik_mot_partner")).lower()
     assert m.get("n_publisert_true") == 0
+
+
+def test_c1_oversikt_selskaper_og_maks():
+    from signaltool.flyt_aggregat import build_oversikt, MAX_SELSKAP, MAX_LAND
+    n, k = _off()
+    ov = build_oversikt(n, k, universe=["EQNR.OL"])
+    assert ov["selskaper_n"] == 1
+    assert ov["selskaper"][0]["ticker"] == "NHY.OL"
+    assert ov["land_n"] == 25
+    assert ov["varer_n"] == 4
+    land_ids = [x["id"] for x in ov["noder"] if str(x.get("id","")).startswith("land:")]
+    assert len(land_ids) == MAX_LAND
+    assert any(x.get("id") == "andre:oversikt" and x["navn"] == "+19 andre" for x in ov["noder"])
+    # ingen selskaper-andre når bare 1
+    assert not any(x.get("id") == "andre:selskaper" for x in ov["noder"])
+
+
+def test_c5_aggregat_og_fokus_skrives_utenom_offisielle(tmp_path):
+    from signaltool.flyt_aggregat import write_aggregates
+    n, k = _off()
+    info = write_aggregates(tmp_path, n, k, universe=["EQNR.OL", "MOWI.OL"])
+    assert (tmp_path / "oversikt.json").exists()
+    assert (tmp_path / "fokus" / "ticker-NHY.OL.json").exists()
+    # offisielle filer skal ikke ligge her med mindre vi kopierte dem
+    pack = json.loads((tmp_path / "fokus" / "ticker-NHY.OL.json").read_text(encoding="utf-8"))
+    assert pack["fokus"] == "ticker:NHY.OL"
+    assert len(pack["noder"]) <= 40 * 3
+    assert "testdata:" not in (tmp_path / "oversikt.json").read_text(encoding="utf-8")
+
+
+def test_c5_ingen_utkast_eller_testdata_i_site_flyt_etter_write(tmp_path):
+    from signaltool.flyt_page import write
+    write(tmp_path, {"generated": "2026-11-28 13:00"})
+    flyt = tmp_path / "flyt"
+    assert not (flyt / "utkast_2811").exists()
+    for pth in list(flyt.glob("*.json")) + list((flyt / "fokus").glob("*.json") if (flyt / "fokus").exists() else []):
+        text = pth.read_text(encoding="utf-8")
+        assert "testdata:" not in text
+        assert '"testdata": true' not in text.lower()
+    # offisiell md5
+    for name, expected in OFF_MD5.items():
+        assert _md5(flyt / name) == expected
+
+
+def test_c6_flyt_lenker_som_forsvinner():
+    n, k = _off()
+    from signaltool.flyt_schema import universe_tickers
+    from signaltool.flyt_page import link as flyt_link
+    uni = universe_tickers()
+    etter = [t for t in uni if flyt_link(t, noder=n, kanter=k)]
+    # Før porten hadde alle univers-tickere lenke i listen og på ticker-siden (2 flater).
+    forsvinner_liste = len(uni) - len(etter)
+    assert forsvinner_liste == len(uni)  # k=0
+    # lagre til rapport: 60 på tickere.html + 60 på ticker-sider = 120
+    Path("/tmp/flyt-lenker-forsvinner.txt").write_text(
+        f"univers={len(uni)} med_publisert={len(etter)} liste={forsvinner_liste} ticker_sider={forsvinner_liste} totalt_hovedflater={forsvinner_liste*2}\n",
+        encoding="utf-8",
+    )
+    assert etter == []

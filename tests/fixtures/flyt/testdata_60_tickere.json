@@ -1,7 +1,7 @@
 {
   "_fiktiv": true,
   "testdata": true,
-  "merknad": "Fiktive testdata for Flyt runde 1 (60 tickere). Skal aldri inn i flyt/ offisielle filer eller site/flyt/ Pages-bygget.",
+  "merknad": "Fiktive testdata for Flyt runde 1 (60 tickere, 12 med publisert selskapskant). Skal aldri inn i flyt/ offisielle filer eller site/flyt/ Pages-bygget.",
   "noder": [
     {
       "id": "testdata:ticker:TST00.OL",
@@ -15,7 +15,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Energi"
     },
     {
       "id": "testdata:ticker:TST01.OL",
@@ -29,7 +30,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Råvarer"
     },
     {
       "id": "testdata:ticker:TST02.OL",
@@ -43,7 +45,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Industri"
     },
     {
       "id": "testdata:ticker:TST03.OL",
@@ -57,7 +60,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Syklisk forbruk"
     },
     {
       "id": "testdata:ticker:TST04.OL",
@@ -71,7 +75,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Defensivt forbruk"
     },
     {
       "id": "testdata:ticker:TST05.OL",
@@ -85,7 +90,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Helse"
     },
     {
       "id": "testdata:ticker:TST06.OL",
@@ -99,7 +105,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Finans"
     },
     {
       "id": "testdata:ticker:TST07.OL",
@@ -113,7 +120,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Teknologi"
     },
     {
       "id": "testdata:ticker:TST08.OL",
@@ -127,7 +135,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Kommunikasjon"
     },
     {
       "id": "testdata:ticker:TST09.OL",
@@ -141,7 +150,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Forsyning"
     },
     {
       "id": "testdata:ticker:TST10.OL",
@@ -155,7 +165,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Eiendom"
     },
     {
       "id": "testdata:ticker:TST11.OL",
@@ -169,7 +180,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Energi"
     },
     {
       "id": "testdata:ticker:TST12.OL",
@@ -183,7 +195,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Råvarer"
     },
     {
       "id": "testdata:ticker:TST13.OL",
@@ -197,7 +210,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Industri"
     },
     {
       "id": "testdata:ticker:TST14.OL",
@@ -211,7 +225,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Syklisk forbruk"
     },
     {
       "id": "testdata:ticker:TST15.OL",
@@ -225,7 +240,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Defensivt forbruk"
     },
     {
       "id": "testdata:ticker:TST16.OL",
@@ -239,7 +255,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Helse"
     },
     {
       "id": "testdata:ticker:TST17.OL",
@@ -253,7 +270,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Finans"
     },
     {
       "id": "testdata:ticker:TST18.OL",
@@ -267,7 +285,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Teknologi"
     },
     {
       "id": "testdata:ticker:TST19.OL",
@@ -281,7 +300,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Kommunikasjon"
     },
     {
       "id": "testdata:ticker:TST20.OL",
@@ -295,7 +315,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Forsyning"
     },
     {
       "id": "testdata:ticker:TST21.OL",
@@ -309,7 +330,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Eiendom"
     },
     {
       "id": "testdata:ticker:TST22.OL",
@@ -323,7 +345,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Energi"
     },
     {
       "id": "testdata:ticker:TST23.OL",
@@ -337,7 +360,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Råvarer"
     },
     {
       "id": "testdata:ticker:TST24.OL",
@@ -351,7 +375,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Industri"
     },
     {
       "id": "testdata:ticker:TST25.OL",
@@ -365,7 +390,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Syklisk forbruk"
     },
     {
       "id": "testdata:ticker:TST26.OL",
@@ -379,7 +405,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Defensivt forbruk"
     },
     {
       "id": "testdata:ticker:TST27.OL",
@@ -393,7 +420,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Helse"
     },
     {
       "id": "testdata:ticker:TST28.OL",
@@ -407,7 +435,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Finans"
     },
     {
       "id": "testdata:ticker:TST29.OL",
@@ -421,7 +450,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Teknologi"
     },
     {
       "id": "testdata:ticker:TST30.OL",
@@ -435,7 +465,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Kommunikasjon"
     },
     {
       "id": "testdata:ticker:TST31.OL",
@@ -449,7 +480,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Forsyning"
     },
     {
       "id": "testdata:ticker:TST32.OL",
@@ -463,7 +495,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Eiendom"
     },
     {
       "id": "testdata:ticker:TST33.OL",
@@ -477,7 +510,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Energi"
     },
     {
       "id": "testdata:ticker:TST34.OL",
@@ -491,7 +525,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Råvarer"
     },
     {
       "id": "testdata:ticker:TST35.OL",
@@ -505,7 +540,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Industri"
     },
     {
       "id": "testdata:ticker:TST36.OL",
@@ -519,7 +555,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Syklisk forbruk"
     },
     {
       "id": "testdata:ticker:TST37.OL",
@@ -533,7 +570,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Defensivt forbruk"
     },
     {
       "id": "testdata:ticker:TST38.OL",
@@ -547,7 +585,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Helse"
     },
     {
       "id": "testdata:ticker:TST39.OL",
@@ -561,7 +600,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Finans"
     },
     {
       "id": "testdata:ticker:TST40.OL",
@@ -575,7 +615,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Teknologi"
     },
     {
       "id": "testdata:ticker:TST41.OL",
@@ -589,7 +630,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Kommunikasjon"
     },
     {
       "id": "testdata:ticker:TST42.OL",
@@ -603,7 +645,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Forsyning"
     },
     {
       "id": "testdata:ticker:TST43.OL",
@@ -617,7 +660,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Eiendom"
     },
     {
       "id": "testdata:ticker:TST44.OL",
@@ -631,7 +675,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Energi"
     },
     {
       "id": "testdata:ticker:TST45.OL",
@@ -645,7 +690,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Råvarer"
     },
     {
       "id": "testdata:ticker:TST46.OL",
@@ -659,7 +705,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Industri"
     },
     {
       "id": "testdata:ticker:TST47.OL",
@@ -673,7 +720,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Syklisk forbruk"
     },
     {
       "id": "testdata:ticker:TST48.OL",
@@ -687,7 +735,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST49.OL",
@@ -701,7 +750,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST50.OL",
@@ -715,7 +765,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST51.OL",
@@ -729,7 +780,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST52.OL",
@@ -743,7 +795,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST53.OL",
@@ -757,7 +810,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST54.OL",
@@ -771,7 +825,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST55.OL",
@@ -785,7 +840,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST56.OL",
@@ -799,7 +855,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST57.OL",
@@ -813,7 +870,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST58.OL",
@@ -827,7 +885,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:ticker:TST59.OL",
@@ -841,7 +900,8 @@
       "kilde_url": "",
       "år": "",
       "enhet": "",
-      "testdata": true
+      "testdata": true,
+      "sektor": "Ukjent sektor"
     },
     {
       "id": "testdata:vare:demo",
@@ -986,6 +1046,132 @@
       "testdata": true,
       "reporter": "testdata",
       "reporter_land": "NO"
+    },
+    {
+      "id": "testdata:kant:TST03.OL-demo",
+      "fra": "testdata:ticker:TST03.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST04.OL-demo",
+      "fra": "testdata:ticker:TST04.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST05.OL-demo",
+      "fra": "testdata:ticker:TST05.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST06.OL-demo",
+      "fra": "testdata:ticker:TST06.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST07.OL-demo",
+      "fra": "testdata:ticker:TST07.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST08.OL-demo",
+      "fra": "testdata:ticker:TST08.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST09.OL-demo",
+      "fra": "testdata:ticker:TST09.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST10.OL-demo",
+      "fra": "testdata:ticker:TST10.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
+    },
+    {
+      "id": "testdata:kant:TST11.OL-demo",
+      "fra": "testdata:ticker:TST11.OL",
+      "til": "testdata:vare:demo",
+      "lag": "selskap",
+      "status": "kilde",
+      "kilde": "testdata",
+      "kilde_url": "https://example.test/testdata",
+      "år": 2025,
+      "enhet": "",
+      "verdi": null,
+      "publisert": true,
+      "testdata": true
     }
   ]
 }

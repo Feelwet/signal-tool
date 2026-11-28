@@ -204,10 +204,23 @@ def write(site: Path | None = None, snap=None, **kw) -> Path:
             if not sc_path.exists():
                 sc_path = site / "flyt" / "scenarioer.json"
             scenarioer = json.loads(sc_path.read_text(encoding="utf-8")) if sc_path.exists() else None
-            kw.setdefault("noder", noder)
-            kw.setdefault("kanter", kanter)
-            kw.setdefault("scenarioer", scenarioer)
-            kw.setdefault("universe", universe_tickers())
+            kw["noder"] = noder
+            kw["kanter"] = kanter
+            if scenarioer is not None:
+                kw["scenarioer"] = scenarioer
+            if not kw.get("universe"):
+                kw["universe"] = universe_tickers()
+    if kw.get("noder") is not None:
+        from .flyt_schema import universe_tickers
+        if not kw.get("universe"):
+            kw["universe"] = universe_tickers()
+        from .flyt_aggregat import write_aggregates
+        write_aggregates(
+            site / "flyt",
+            kw.get("noder"),
+            kw.get("kanter") or [],
+            universe=kw.get("universe") or [],
+        )
     out.write_text(html(snap, **kw), encoding="utf-8")
     return out
 
@@ -240,6 +253,36 @@ def prepare_preview(dest: Path, *, fixture: bool = False, snap=None) -> Path:
         scenarioer = json.loads((dest / "flyt" / "scenarioer.json").read_text(encoding="utf-8"))
     else:
         scenarioer = None
+        if not (dest / "data.json").exists():
+            (dest / "data.json").write_text(json.dumps({"tickers": []}), encoding="utf-8")
     write(dest, snap or {"generated": "2026-11-27 13:00"}, universe=uni, noder=noder, kanter=kanter,
           scenarioer=scenarioer, data_base=data_base, kurs_url=kurs_url)
+    return dest / "flyt.html"
+
+
+def prepare_testdata_preview(dest: Path, *, n_tickers: int = 60, snap=None) -> Path:
+    """Lokal visning med merket testdata (aldri til site/). n_tickers er 3 eller 60."""
+    import copy
+    dest = Path(dest)
+    dest.mkdir(parents=True, exist_ok=True)
+    from . import site as S
+    from . import tabbar as TB
+    fx = ROOT / "tests" / "fixtures" / "flyt" / "testdata_60_tickere.json"
+    pack = json.loads(fx.read_text(encoding="utf-8"))
+    noder = list(pack["noder"])
+    kanter = list(pack["kanter"])
+    tickers = [n for n in noder if str(n.get("id", "")).startswith("testdata:ticker:")]
+    if n_tickers < len(tickers):
+        keep_ids = {n["id"] for n in tickers[:n_tickers]}
+        keep_ids |= {n["id"] for n in noder if not str(n.get("id","")).startswith("testdata:ticker:")}
+        noder = [n for n in noder if n["id"] in keep_ids]
+        kanter = [e for e in kanter if e.get("fra") in keep_ids and e.get("til") in keep_ids]
+        tickers = [n for n in noder if str(n.get("id","")).startswith("testdata:ticker:")]
+    uni = [n.get("ticker") for n in tickers]
+    (dest / "style.css").write_text(S.CSS + TB.CSS + LINK_CSS, encoding="utf-8")
+    (dest / "data.json").write_text(json.dumps({"tickers": []}), encoding="utf-8")
+    (dest / "flyt").mkdir(exist_ok=True)
+    (dest / "flyt" / "scenarios.json").write_text(json.dumps({"scenarioer": []}), encoding="utf-8")
+    write(dest, snap or {"generated": "2026-11-28 13:00"}, universe=uni, noder=noder, kanter=kanter,
+          scenarioer=[], data_base="flyt", kurs_url="data.json")
     return dest / "flyt.html"

@@ -3,8 +3,9 @@ import * as THREE from './vendor/three.module.min.js';
 const LAG_SRC = { 'råvare': 'Handelsdata', 'selskap': 'Selskapsrapport' };
 const TYPE_LAB = { selskap: 'Selskaper', ticker: 'Selskaper', råvare: 'Råvarer', vare: 'Råvarer', land: 'Land', sluttbruk: 'Sluttbruk', verk: 'Verk og anlegg', anlegg: 'Verk og anlegg', energi: 'Råvarer' };
 const MAX_LAND_PER_LAG = 6;
+const MAX_SELSKAP_OVERSIKT = 8;
 const TONN = new Set(['tonn', 't', 'tonnes', 'metric tonnes', 'metriske tonn', 'mt']);
-const MAX_NODES = 25;
+const MAX_NODES = 40;
 const YAW_MAX = Math.PI / 6;      // ±30°
 const PITCH_MIN = 0;
 const PITCH_MAX = Math.PI / 9;    // 20°
@@ -46,6 +47,12 @@ let verkOpen = false;
 let three = null; // {renderer, scene, camera, frames}
 let dragging = null;
 let webgl = true;
+let listFilter = null;
+let aggregatOnly = false;
+let listIndex = [];
+let oversiktPack = null;
+let fokusFiler = {};
+let gicsNames = [];
 
 function slug(t) {
   return String(t || '').replace(/[^A-Za-z0-9_-]/g, '_');
@@ -59,6 +66,7 @@ function canonType(typ) {
 function isVare(n) { return n && canonType(n.type) === 'råvare'; }
 let overviewPackGap = 44;
 function isMobile() { return matchMedia('(max-width:900px)').matches; }
+function isWide() { return matchMedia('(min-width:901px)').matches; }
 function inUniverse(ticker) { return !!(ticker && universe.includes(ticker)); }
 function tickerPageHref(ticker) {
   return inUniverse(ticker) ? `ticker/${slug(ticker)}.html` : null;
@@ -473,51 +481,131 @@ function selskaperOn(landId) {
   return out;
 }
 
+function selskaperPaaVare(vareId) {
+  const sel = pubKanter().filter((e) => e.lag === 'selskap');
+  const other = (e, id) => e.fra === id ? e.til : (e.til === id ? e.fra : null);
+  const found = new Set();
+  const plants = [];
+  for (const e of sel) {
+    const o = other(e, vareId);
+    if (!o) continue;
+    const n = byId.get(o);
+    if (!n) continue;
+    if (isSelskap(n)) found.add(n.id);
+    else if (isVerkNode(n)) plants.push(n.id);
+  }
+  for (const pid of plants) {
+    for (const e of sel) {
+      const o = other(e, pid);
+      const n = o && byId.get(o);
+      if (n && isSelskap(n)) found.add(n.id);
+    }
+    // eier via verkFor / samme materiale
+    for (const n of noder) {
+      if (!isSelskap(n)) continue;
+      const vset = new Set(verkFor(n.id).map((v) => v.id));
+      if (vset.has(pid)) found.add(n.id);
+    }
+  }
+  return [...found];
+}
+function pubEdgeCount(nid) {
+  return pubKanter().filter((e) => e.fra === nid || e.til === nid).length;
+}
+function overviewSelskaper() {
+  const connected = new Set();
+  for (const e of pubKanter()) { connected.add(e.fra); connected.add(e.til); }
+  const sels = noder.filter((n) => isSelskap(n) && connected.has(n.id));
+  sels.sort((a, b) => (pubEdgeCount(b.id) - pubEdgeCount(a.id))
+    || String(tickerOf(a) || a.navn || '').localeCompare(String(tickerOf(b) || b.navn || ''), 'nb'));
+  return sels;
+}
+function capCol(items, max, id, filter, hva) {
+  const vis = items.slice(0, max);
+  const rest = items.slice(max);
+  if (rest.length) {
+    vis.push({
+      id, type: 'andre', navn: '+' + rest.length + ' andre',
+      hva_det_er: hva || 'Øvrige i kolonnen.',
+      medlemmer: rest, filter, lag: filter === 'selskaper' ? 'selskap' : 'land', status: 'kontekst',
+    });
+  }
+  return vis;
+}
 function overviewGraph() {
   const connected = new Set();
   for (const e of pubKanter()) { connected.add(e.fra); connected.add(e.til); }
-  const mats = noder.filter((n) => isVare(n) && connected.has(n.id));
+  let mats = noder.filter((n) => isVare(n) && connected.has(n.id));
   const lands = noder.filter((n) => n.type === 'land' && connected.has(n.id));
   const counts = new Map();
   const deg = new Map();
+  mats = mats.map((n, i) => ({ n, i, c: selskaperPaaVare(n.id).length }))
+    .sort((a, b) => (b.c - a.c) || (a.i - b.i))
+    .map((x) => x.n);
   for (const n of mats) {
-    counts.set(n.id, new Set(tickersOn(n.id).map((x) => x.ticker)).size);
-    deg.set(n.id, pubKanter().filter((e) => e.fra === n.id || e.til === n.id).length);
+    counts.set(n.id, selskaperPaaVare(n.id).length);
+    deg.set(n.id, pubEdgeCount(n.id));
   }
   for (const n of lands) {
     counts.set(n.id, selskaperOn(n.id).length);
-    deg.set(n.id, pubKanter().filter((e) => e.fra === n.id || e.til === n.id).length);
+    deg.set(n.id, pubEdgeCount(n.id));
   }
   const withT = lands.filter((n) => (counts.get(n.id) || 0) > 0)
     .sort((a, b) => (counts.get(b.id) - counts.get(a.id))
       || (deg.get(b.id) - deg.get(a.id))
       || String(a.navn || '').localeCompare(String(b.navn || ''), 'nb'));
-  const visible = withT.slice(0, MAX_LAND_PER_LAG);
-  const visIds = new Set(visible.map((n) => n.id));
-  const andre = lands.filter((n) => !visIds.has(n.id));
-  const nodes = [...mats, ...visible];
-  if (andre.length) {
-    nodes.push({
-      id: 'andre:oversikt',
-      type: 'andre',
-      navn: '+' + andre.length + ' andre',
-      hva_det_er: 'Øvrige land, inkludert land uten tickere.',
-      medlemmer: andre,
-      lag: 'land',
-      status: 'kontekst',
+  const landVis = capCol(withT, MAX_LAND_PER_LAG, 'andre:oversikt', 'land',
+    'Øvrige land, inkludert land uten selskaper.');
+  // 0-selskaps-land i +n andre (de som ikke er i withT)
+  const visLandIds = new Set(withT.slice(0, MAX_LAND_PER_LAG).map((n) => n.id));
+  const zeroLands = lands.filter((n) => !visLandIds.has(n.id) && !withT.includes(n));
+  // capCol already only took withT; add zero-count lands into andre:oversikt
+  const andreNode = landVis.find((n) => n.type === 'andre');
+  const leftover = lands.filter((n) => !visLandIds.has(n.id));
+  if (andreNode) andreNode.medlemmer = leftover;
+  else if (leftover.length) {
+    landVis.push({
+      id: 'andre:oversikt', type: 'andre', navn: '+' + leftover.length + ' andre',
+      hva_det_er: 'Øvrige land, inkludert land uten selskaper.',
+      medlemmer: leftover, filter: 'land', lag: 'land', status: 'kontekst',
     });
   }
+  const sels = overviewSelskaper();
+  const showSels = isWide();
+  const selVis = showSels ? capCol(sels, MAX_SELSKAP_OVERSIKT, 'andre:selskaper', 'selskaper',
+    'Øvrige selskaper med publisert kant.') : [];
+  const vareVis = capCol(mats, MAX_LAND_PER_LAG, 'andre:varer', 'varer', 'Øvrige varer.');
+  const nodes = [...vareVis, ...(showSels ? selVis : []), ...landVis.filter((n) => n.type !== 'andre' || leftover.length || (n.medlemmer || []).length)];
+  // drop empty andre
+  const clean = nodes.filter((n) => n.type !== 'andre' || (n.medlemmer && n.medlemmer.length));
   return {
-    nodes, counts,
+    nodes: clean, counts,
     varerN: mats.length, heading: 'Varer (' + mats.length + ')',
     landN: lands.length, landHeading: 'Land (' + lands.length + ')',
+    selskaperN: sels.length, selskaperHeading: showSels ? ('Selskaper (' + sels.length + ')') : '',
+    showSelskaper: showSels,
   };
 }
 
 function visibleSet(focusId) {
   if (!focusId) {
+    if (oversiktPack && oversiktPack.aggregat) {
+      const counts = new Map(Object.entries(oversiktPack.counts || {}).map(([k, v]) => [k, Number(v)]));
+      let nodes = (oversiktPack.noder || []).slice();
+      const showS = isWide();
+      if (!showS) {
+        nodes = nodes.filter((n) => !isSelskap(n) && n.id !== 'andre:selskaper' && n.filter !== 'selskaper');
+      }
+      return {
+        nodes, edges: [], overview: true, counts, hidden: 0,
+        heading: oversiktPack.varer_label, varerN: oversiktPack.varer_n,
+        landN: oversiktPack.land_n, landHeading: oversiktPack.land_label,
+        selskaperN: oversiktPack.selskaper_n, selskaperHeading: showS ? oversiktPack.selskaper_label : '',
+        showSelskaper: showS,
+      };
+    }
     const ov = overviewGraph();
-    return { nodes: ov.nodes.slice(), edges: [], overview: true, counts: ov.counts, hidden: 0, heading: ov.heading, varerN: ov.varerN, landN: ov.landN, landHeading: ov.landHeading };
+    return { nodes: ov.nodes.slice(), edges: [], overview: true, counts: ov.counts, hidden: 0, heading: ov.heading, varerN: ov.varerN, landN: ov.landN, landHeading: ov.landHeading, selskaperN: ov.selskaperN, selskaperHeading: ov.selskaperHeading, showSelskaper: ov.showSelskaper };
   }
   const t = tickerOf(byId.get(focusId)) || (byId.has(focusId) ? null : focusId);
   const focusNode = byId.get(focusId) || noder.find((n) => tickerOf(n) === focusId);
@@ -537,6 +625,7 @@ function visibleSet(focusId) {
   }
   const nodes = noder.filter((n) => nb.ids.has(n.id)).concat(extra);
   const packed = packVisible(nodes, nb.edges, focusNode);
+  packed.nodes = capFocusSides(packed.nodes, packed.edges, focusNode);
   const hidden = Math.max(0, packed.nodes.length - MAX_NODES);
   let pnodes = packed.nodes;
   if (pnodes.length > MAX_NODES) {
@@ -547,6 +636,65 @@ function visibleSet(focusId) {
   const keep = new Set(pnodes.map((n) => n.id));
   const edges = packed.edges.filter((e) => keep.has(e.fra) && keep.has(e.til));
   return { nodes: pnodes, edges, overview: false, hidden, focus: focusNode };
+}
+
+
+function sideOf(n, focus, edges) {
+  if (!n || !focus) return 'mid';
+  if (n.id === focus.id || n.type === 'verkgruppe' || isVerk(n)) return 'mid';
+  const toF = edges.some((e) => e.til === focus.id && e.fra === n.id);
+  const fromF = edges.some((e) => e.fra === focus.id && e.til === n.id);
+  if (toF && !fromF) return 'up';
+  if (fromF && !toF) return 'down';
+  if (n.type === 'land' || n.type === 'andre' || n.id === 'andre:0' || (n.id || '').startsWith('andre:')) return 'down';
+  if (isSelskap(n) && isVare(focus)) return 'up';
+  if (isVare(n) && isSelskap(focus)) return fromF || !toF ? 'down' : 'up';
+  return toF ? 'up' : 'down';
+}
+function capFocusSides(nodes, edges, focus) {
+  if (!focus) return nodes;
+  const flat = [];
+  for (const n of nodes) {
+    if (n.type === 'andre' && Array.isArray(n.medlemmer) && n.medlemmer.length) {
+      for (const m of n.medlemmer) flat.push(m);
+    } else flat.push(n);
+  }
+  nodes = flat;
+  const mid = [], up = [], down = [];
+  for (const n of nodes) {
+    const s = sideOf(n, focus, edges);
+    if (s === 'up') up.push(n);
+    else if (s === 'down') down.push(n);
+    else mid.push(n);
+  }
+  function cap(side, key) {
+    const vis = side.slice(0, MAX_LAND_PER_LAG);
+    const rest = side.slice(MAX_LAND_PER_LAG);
+    if (rest.length) {
+      vis.push({
+        id: 'andre:' + key,
+        type: 'andre',
+        navn: '+' + rest.length + ' andre',
+        hva_det_er: 'Øvrige noder på denne siden.',
+        medlemmer: rest,
+        filter: isSelskap(rest[0]) ? 'selskaper' : (isVare(rest[0]) ? 'varer' : 'land'),
+        lag: 'råvare',
+        status: 'kontekst',
+      });
+    }
+    return vis;
+  }
+  let out = cap(up, 'opp').concat(mid).concat(cap(down, 'ned'));
+  if (isMobile() && out.length > 14) {
+    // maks 14 etiketter ved 390: slipp verkgruppe først
+    out = out.filter((n) => n.type !== 'verkgruppe' && !isVerk(n));
+    if (out.length > 14) {
+      const focusN = out.filter((n) => n.id === focus.id);
+      const rest = out.filter((n) => n.id !== focus.id);
+      out = focusN.concat(rest.slice(0, 13));
+    }
+  }
+  return out;
 }
 
 function hopOf(id, focusId) {
@@ -561,17 +709,17 @@ function layout(visu) {
   const H = el.scene.clientHeight || 600;
   const pos = new Map();
   if (visu.overview) {
-    const mats = visu.nodes.filter((n) => isVare(n));
-    const lands = visu.nodes.filter((n) => n.type === 'land' || n.type === 'andre');
-    // Venstre kolonne under «Varer (n)»; høyre: topp 6 + «+n andre».
-    // Zoom ligger 16/16 øverst til venstre; hold venstre kolonne unna zoom-stacken.
-    const zoomW = 120, zoomH = 16 + 44 * 3 + 8 + 16;
-    const minBox = 52, gap = 44; // faktisk etikett-høyde (navn+verdi+padding) + minstegap 44
+    const isAndre = (n, f) => n.type === 'andre' && (n.filter || (n.id || '').split(':')[1]) === f;
+    const mats = visu.nodes.filter((n) => isVare(n) || isAndre(n, 'varer'));
+    const sels = visu.nodes.filter((n) => visu.showSelskaper && (isSelskap(n) || isAndre(n, 'selskaper')));
+    const lands = visu.nodes.filter((n) => n.type === 'land' || isAndre(n, 'land') || (n.type === 'andre' && n.id === 'andre:oversikt'));
+    // Zoom 16/16 øverst til venstre; hold venstre kolonne unna zoom-stacken.
+    const zoomW = 120;
+    const gap = 44;
     overviewPackGap = 44;
-    const packFit = (col, x, startY) => {
+    const packFit = (col, x, startY, labH) => {
       const n = col.length;
       if (!n) return;
-      const labH = W < 500 ? 68 : 50;
       const avail = Math.max(labH, H - startY - 8);
       let usedGap = gap;
       if (n > 1 && n * labH + (n - 1) * gap > avail) {
@@ -580,7 +728,7 @@ function layout(visu) {
       overviewPackGap = Math.min(overviewPackGap, usedGap);
       col.forEach((node, i) => {
         const y = startY + labH / 2 + i * (labH + usedGap);
-        pos.set(node.id, { x, y, z: 0, hop: x > W / 2 ? 1 : 0 });
+        pos.set(node.id, { x, y, z: 0, hop: x > W / 2 ? 1 : 0, labH });
       });
     };
     const zoomEl = document.querySelector('.flyt-zoom');
@@ -588,29 +736,99 @@ function layout(visu) {
     const zoomRight = zoomEl && sceneBox.width
       ? Math.max(0, zoomEl.getBoundingClientRect().right - sceneBox.left)
       : 16 + zoomW;
-    const narrow = W < 500;
-    const xL = narrow ? zoomRight + (W - zoomRight) * 0.28 : Math.max(W * 0.32, zoomRight + 70);
-    const xR = narrow ? zoomRight + (W - zoomRight) * 0.78 : W * 0.72;
+    const three = !!(visu.showSelskaper && isWide());
     const headY = 16 + 9;
     const colStart = 16 + 18 + 8;
-    pos.set('__varer_h', { x: xL, y: headY, z: 0, hop: 0, heading: visu.heading || ('Varer (' + mats.length + ')') });
+    const vareH = W < 500 ? 68 : 50;
+    const landH = W < 500 ? 68 : 50;
+    const selH = 44;
+    let xL, xM, xR;
+    if (three) {
+      const span = Math.max(80, W - zoomRight - 24);
+      xL = zoomRight + 24 + span * 0.12;
+      xM = zoomRight + 24 + span * 0.50;
+      xR = zoomRight + 24 + span * 0.82;
+    } else {
+      const narrow = W < 500;
+      xL = narrow ? zoomRight + (W - zoomRight) * 0.28 : Math.max(W * 0.32, zoomRight + 70);
+      xR = narrow ? zoomRight + (W - zoomRight) * 0.78 : W * 0.72;
+    }
+    pos.set('__varer_h', { x: xL, y: headY, z: 0, hop: 0, heading: visu.heading || ('Varer (' + visu.varerN + ')') });
+    if (three) pos.set('__selskaper_h', { x: xM, y: headY, z: 0, hop: 0, heading: visu.selskaperHeading || ('Selskaper (' + (visu.selskaperN || sels.filter(isSelskap).length) + ')') });
     pos.set('__land_h', { x: xR, y: headY, z: 0, hop: 1, heading: visu.landHeading || ('Land (' + (visu.landN != null ? visu.landN : lands.filter((n) => n.type === 'land').length) + ')') });
-    packFit(mats, xL, colStart);
-    packFit(lands, xR, colStart);
+    packFit(mats, xL, colStart, vareH);
+    if (three) packFit(sels, xM, colStart, selH);
+    packFit(lands, xR, colStart, landH);
     return pos;
   }
   const focusId = visu.focus?.id || fokus;
+  const focusN = visu.focus || byId.get(focusId);
   const groups = [[], [], []];
   for (const n of visu.nodes) {
     if (n.type === 'verkgruppe' || isVerk(n)) continue;
-    groups[hopOf(n.id, focusId)].push(n);
+    const s = sideOf(n, focusN, visu.edges || []);
+    const hop = s === 'up' ? 0 : (s === 'down' ? 2 : 1);
+    groups[hop].push(n);
   }
+  // Sørg for at fokus ligger i midten også om sideOf ga noe annet
+  groups[0] = groups[0].filter((n) => n.id !== focusId);
+  groups[2] = groups[2].filter((n) => n.id !== focusId);
+  if (focusN && visu.nodes.some((n) => n.id === focusId)) {
+    groups[1] = [focusN, ...groups[1].filter((n) => n.id !== focusId)];
+  }
+  const packFocusCol = (g, x, hop) => {
+    if (!g.length) return;
+    const estH = (n) => {
+      const name = String(n.navn || '');
+      const hasVal = !!fmtSceneVal(n);
+      const lines = Math.max(1, Math.ceil(name.length / (W < 500 ? 12 : 16)));
+      return Math.max(44, 8 + lines * 16 + (hasVal ? 16 : 0));
+    };
+    let items = g.slice();
+    const startY = 8;
+    const avail = Math.max(44, H - startY - 8);
+    const gap0 = 8;
+    const fits = (arr) => {
+      const hs = arr.map(estH);
+      return hs.reduce((a, b) => a + b, 0) + gap0 * Math.max(0, arr.length - 1) <= avail;
+    };
+    while (items.length > 1 && !fits(items)) {
+      const keep = items.filter((n) => n.type !== 'andre');
+      const drop = keep.pop();
+      let andre = items.find((n) => n.type === 'andre') || visu.nodes.find((n) => n.type === 'andre' && (n.id === 'andre:ned' || n.id === 'andre:opp' || n.id === 'andre:' + hop));
+      const rest = (andre && andre.medlemmer ? andre.medlemmer.slice() : []);
+      if (drop) rest.unshift(drop);
+      items = keep;
+      if (rest.length) {
+        if (!andre) {
+          andre = {
+            id: 'andre:' + (hop === 0 ? 'opp' : 'ned'),
+            type: 'andre', lag: 'råvare', status: 'kontekst', filter: 'land',
+            hva_det_er: 'Øvrige noder på denne siden.',
+          };
+          visu.nodes.push(andre);
+        }
+        andre.medlemmer = rest;
+        andre.navn = '+' + rest.length + ' andre';
+        items.push(andre);
+      }
+    }
+    const hs = items.map(estH);
+    let usedGap = gap0;
+    const sumH = hs.reduce((a, b) => a + b, 0);
+    if (items.length > 1 && sumH + usedGap * (items.length - 1) > avail) {
+      usedGap = Math.max(4, (avail - sumH) / (items.length - 1));
+    }
+    let y = startY;
+    items.forEach((n, i) => {
+      const h = hs[i];
+      pos.set(n.id, { x, y: y + h / 2, z: (hop - 1) * 20, hop });
+      y += h + usedGap;
+    });
+  };
   groups.forEach((g, hop) => {
     const x = W * (0.18 + hop * 0.32);
-    g.forEach((n, i) => {
-      const y = H * ((i + 1) / (g.length + 1));
-      pos.set(n.id, { x, y, z: (hop - 1) * 20, hop });
-    });
+    packFocusCol(g, x, hop);
   });
   const cluster = visu.nodes.find((n) => n.type === 'verkgruppe');
   const plants = visu.nodes.filter((n) => isVerk(n));
@@ -971,7 +1189,7 @@ function renderPanel(node, opts) {
     rel.appendChild(a);
   }
   if (rel.childNodes.length) el.pbody.appendChild(sec('Relaterte noder', rel, 'relaterte'));
-  if (node.type && node.type !== 'selskap') {
+  if (node.type && node.type !== 'selskap' && !isVare(node)) {
     const box = document.createElement('div');
     const isLand = node.type === 'land';
     const list = isLand ? selskaperOn(node.id) : tickersOn(node.id);
@@ -1124,7 +1342,19 @@ function resolveOverlaps(visu) {
   const isHead = (d) => d.classList.contains('flyt-col-h');
   const gapAB = (a, b) => (isHead(a) || isHead(b) ? 8 : minGap);
   const mid = parent.left + parent.width / 2;
-  const cols = [
+  function colsByX(list) {
+    const rows = list.map((d) => ({ d, x: toBox(d).left + toBox(d).width / 2 }));
+    rows.sort((a, b) => a.x - b.x);
+    const out = [];
+    const thresh = 80;
+    for (const r of rows) {
+      const col = out.find((c) => Math.abs((c.reduce((s, i) => s + i.x, 0) / c.length) - r.x) < thresh);
+      if (col) col.push(r);
+      else out.push([r]);
+    }
+    return out.map((c) => c.map((i) => i.d));
+  }
+  const cols = visu.overview ? colsByX(items) : [
     items.filter((d) => toBox(d).left + toBox(d).width / 2 < mid),
     items.filter((d) => toBox(d).left + toBox(d).width / 2 >= mid),
   ];
@@ -1207,8 +1437,62 @@ function resolveOverlaps(visu) {
     if (!moved) break;
   }
 }
+
+function andreFilter(n) {
+  if (!n || n.type !== 'andre') return null;
+  if (n.filter) return n.filter;
+  if (n.id === 'andre:oversikt') return 'land';
+  if (n.id === 'andre:selskaper') return 'selskaper';
+  if (n.id === 'andre:varer') return 'varer';
+  return 'land';
+}
+function onAndreOrNode(n) {
+  if (n && n.type === 'andre') {
+    listFilter = andreFilter(n);
+    showList(true);
+    return;
+  }
+  onNode(n.id);
+}
+function fillLabel(d, n, visu, counts) {
+  if (visu.overview && isSelskap(n)) {
+    d.classList.add('selskap-rad');
+    const tk = document.createElement('span');
+    tk.className = 'n';
+    tk.textContent = tickerOf(n) || n.navn || '';
+    d.appendChild(tk);
+    const nm = tickerOf(n) && n.navn && n.navn !== tickerOf(n) ? n.navn : '';
+    if (nm) {
+      const vv = document.createElement('span');
+      vv.className = 'v';
+      vv.textContent = nm;
+      d.appendChild(vv);
+    }
+    return;
+  }
+  const nm = document.createElement('span');
+  nm.className = 'n';
+  nm.textContent = n.navn;
+  d.appendChild(nm);
+  const vv = document.createElement('span');
+  vv.className = 'v';
+  if (visu.overview) {
+    if (n.type === 'land' && counts.has(n.id)) vv.textContent = selskapCountLabel(counts.get(n.id));
+  } else {
+    const fv = fmtSceneVal(n);
+    vv.textContent = fv || (n.år ? String(n.år) : '');
+  }
+  if (vv.textContent) d.appendChild(vv);
+  if (n.status === 'estimat') {
+    const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Estimat'; d.appendChild(b);
+  }
+  if (n.status === 'mangler') {
+    const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Mangler data'; d.appendChild(b);
+  }
+}
+
 function placeOverviewHeading(pos) {
-  for (const key of ['__varer_h', '__land_h']) {
+  for (const key of ['__varer_h', '__selskaper_h', '__land_h']) {
     const head = pos.get(key);
     if (!head || !head.heading) continue;
     const h = document.createElement('div');
@@ -1237,26 +1521,8 @@ function placeLabels(visu, pos, hitN) {
     if (hitN?.has(n.id)) d.classList.add('hit');
     d.style.left = (p.x / (el.scene.clientWidth) * 100) + '%';
     d.style.top = (p.y / (el.scene.clientHeight) * 100) + '%';
-    const nm = document.createElement('span');
-    nm.className = 'n';
-    nm.textContent = n.navn;
-    d.appendChild(nm);
-    const vv = document.createElement('span');
-    vv.className = 'v';
-    if (visu.overview) {
-      if (n.type === 'land' && counts.has(n.id)) vv.textContent = selskapCountLabel(counts.get(n.id));
-    } else {
-      const fv = fmtSceneVal(n);
-      vv.textContent = fv || (n.år ? String(n.år) : '');
-    }
-    if (vv.textContent) d.appendChild(vv);
-    if (n.status === 'estimat') {
-      const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Estimat'; d.appendChild(b);
-    }
-    if (n.status === 'mangler') {
-      const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Mangler data'; d.appendChild(b);
-    }
-    d.addEventListener('click', (ev) => { ev.stopPropagation(); onNode(n.id); });
+    fillLabel(d, n, visu, counts);
+    d.addEventListener('click', (ev) => { ev.stopPropagation(); onAndreOrNode(n); });
     el.labels.appendChild(d);
   }
   if (visu.hidden) {
@@ -1391,22 +1657,8 @@ function placeLabelsProjected(visu, pos, hitN, t) {
     if (hitN?.has(n.id)) d.classList.add('hit');
     d.style.left = x + 'px';
     d.style.top = y + 'px';
-    const nm = document.createElement('span');
-    nm.className = 'n';
-    nm.textContent = n.navn;
-    d.appendChild(nm);
-    const vv = document.createElement('span');
-    vv.className = 'v';
-    if (visu.overview) {
-      if (n.type === 'land' && counts.has(n.id)) vv.textContent = selskapCountLabel(counts.get(n.id));
-    } else {
-      const fv = fmtSceneVal(n);
-      vv.textContent = fv || (n.år ? String(n.år) : '');
-    }
-    if (vv.textContent) d.appendChild(vv);
-    if (n.status === 'estimat') { const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Estimat'; d.appendChild(b); }
-    if (n.status === 'mangler') { const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'Mangler data'; d.appendChild(b); }
-    d.addEventListener('click', (ev) => { ev.stopPropagation(); onNode(n.id); });
+    fillLabel(d, n, visu, counts);
+    d.addEventListener('click', (ev) => { ev.stopPropagation(); onAndreOrNode(n); });
     el.labels.appendChild(d);
   }
   if (visu.hidden) {
@@ -1446,28 +1698,99 @@ function redraw() {
 }
 
 function showList(force) {
-  if (force) { mode = 'liste'; syncToggle(); }
+  if (force) { mode = 'liste'; syncToggle(); return; }
+  if (three) { try { three.renderer.dispose(); } catch (e) {} three = null; el.scene.innerHTML = ''; }
   el.listView.hidden = false;
   el.wrap.style.display = 'none';
   closePanel();
-  const groups = { selskap: [], råvare: [], land: [], sluttbruk: [] };
-  const typMap = { ticker: 'selskap', anlegg: 'selskap', verk: 'selskap', vare: 'råvare', energi: 'råvare', verkgruppe: 'selskap', andre: 'land' };
-  const visN = vis.nodes.length ? vis.nodes : noder;
-  for (const n of visN) (groups[typMap[n.type] || n.type] || (groups.råvare)).push(n);
+  const names = (gicsNames && gicsNames.length) ? gicsNames : ['Energi','Råvarer','Industri','Syklisk forbruk','Defensivt forbruk','Helse','Finans','Teknologi','Kommunikasjon','Forsyning','Eiendom','Ukjent sektor'];
   el.listView.innerHTML = '';
-  for (const [typ, rows] of Object.entries(groups)) {
-    if (!rows.length) continue;
+  const filt = listFilter;
+  function addRow(parent, opts) {
+    const clickable = !!opts.clickable;
+    const a = document.createElement(clickable ? 'a' : 'div');
+    a.className = 'flyt-list-rad' + (opts.miss ? ' miss' : '');
+    if (clickable) a.href = `flyt.html?fokus=${encodeURIComponent(opts.fokus)}`;
+    const tk = document.createElement('span'); tk.className = 'tk'; tk.textContent = opts.ticker || '';
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = opts.navn || '';
+    a.appendChild(tk); a.appendChild(nm);
+    if (opts.miss) {
+      const m = document.createElement('span'); m.className = 'miss-lab'; m.textContent = 'Mangler data'; a.appendChild(m);
+    }
+    if (clickable) {
+      a.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        listFilter = null;
+        mode = 'kart';
+        syncToggle();
+        go(opts.fokus, true);
+      });
+    }
+    parent.appendChild(a);
+  }
+  if (filt === 'land' || filt === 'varer' || filt === 'selskaper') {
+    const h = document.createElement('h2');
+    h.textContent = filt === 'land' ? 'Land' : (filt === 'varer' ? 'Varer' : 'Selskaper');
+    el.listView.appendChild(h);
+    let rows = [];
+    if (filt === 'selskaper') {
+      const fromOv = (oversiktPack && oversiktPack.selskaper) || overviewSelskaper().map((n) => ({ id: n.id, navn: n.navn, ticker: tickerOf(n) }));
+      rows = fromOv;
+    } else if (filt === 'varer') {
+      rows = (vis.nodes || []).filter((n) => isVare(n)).map((n) => ({ id: n.id, navn: n.navn }));
+      const andre = (vis.nodes || []).find((n) => n.id === 'andre:varer');
+      if (andre) rows = rows.concat(andre.medlemmer || []);
+      if (oversiktPack && oversiktPack.noder) {
+        const seen = new Set(rows.map((r) => r.id));
+        for (const n of oversiktPack.noder) {
+          if (isVare(n) && !seen.has(n.id)) { rows.push(n); seen.add(n.id); }
+        }
+      }
+    } else {
+      const andre = (vis.nodes || []).find((n) => n.id === 'andre:oversikt');
+      const visL = (vis.nodes || []).filter((n) => n.type === 'land');
+      rows = visL.map((n) => ({ id: n.id, navn: n.navn })).concat(andre && andre.medlemmer ? andre.medlemmer : []);
+    }
     const det = document.createElement('details');
     det.open = true;
     const sum = document.createElement('summary');
-    sum.textContent = TYPE_LAB[typ] || typ;
+    sum.textContent = h.textContent + ' (' + rows.length + ')';
     det.appendChild(sum);
-    for (const n of rows) {
-      const a = document.createElement('a');
-      a.href = `flyt.html?fokus=${encodeURIComponent(tickerOf(n) || n.id)}`;
-      a.textContent = n.navn + (fmtVal(n) ? ' · ' + fmtVal(n) : '');
-      a.addEventListener('click', (ev) => { ev.preventDefault(); mode = 'kart'; syncToggle(); go(n.id, true); });
-      det.appendChild(a);
+    for (const r of rows) {
+      addRow(det, { ticker: r.ticker || '', navn: r.navn || r.id, fokus: r.ticker || r.id, clickable: true, miss: false });
+    }
+    el.listView.appendChild(det);
+    return;
+  }
+  // Standard Liste: univers-tickere gruppert etter GICS. Uten publisert kant: grå, nederst, Mangler data.
+  const items = (listIndex && listIndex.length) ? listIndex.slice() : (
+    (meta.universe || []).map((t) => ({ ticker: t, navn: t, id: t, sektor: 'Ukjent sektor', publisert: hasPublished(t) }))
+  );
+  const buckets = {};
+  for (const name of names) buckets[name] = [];
+  if (!buckets['Ukjent sektor']) buckets['Ukjent sektor'] = [];
+  for (const it of items) {
+    let s = it.sektor || 'Ukjent sektor';
+    if (!buckets[s]) s = 'Ukjent sektor';
+    buckets[s].push(it);
+  }
+  for (const name of names) {
+    const rows = buckets[name] || [];
+    if (!rows.length) continue;
+    const ok = rows.filter((r) => r.publisert);
+    const miss = rows.filter((r) => !r.publisert);
+    ok.sort((a, b) => String(a.ticker).localeCompare(String(b.ticker), 'nb'));
+    miss.sort((a, b) => String(a.ticker).localeCompare(String(b.ticker), 'nb'));
+    const det = document.createElement('details');
+    det.open = true;
+    const sum = document.createElement('summary');
+    sum.textContent = name;
+    det.appendChild(sum);
+    for (const r of ok.concat(miss)) {
+      addRow(det, {
+        ticker: r.ticker, navn: r.navn && r.navn !== r.ticker ? r.navn : '',
+        fokus: r.id || r.ticker, clickable: !!r.publisert, miss: !r.publisert,
+      });
     }
     el.listView.appendChild(det);
   }
@@ -1494,7 +1817,8 @@ function onNode(id) {
     return;
   }
   if (syn && syn.type === 'andre') {
-    renderPanel(syn);
+    listFilter = andreFilter(syn);
+    showList(true);
     return;
   }
   const n = byId.get(id);
@@ -1509,6 +1833,11 @@ function onNode(id) {
 }
 
 function go(id, push, fromUrl) {
+  const run = () => goAfterLoad(id, push, fromUrl);
+  if (aggregatOnly) { loadFokusPack(id).then(run); return; }
+  run();
+}
+function goAfterLoad(id, push, fromUrl) {
   const resolved = resolveFokus(id);
   const node = byId.get(resolved) || noder.find((n) => tickerOf(n) === resolved);
   fokus = node ? node.id : resolved;
@@ -1647,7 +1976,7 @@ function applyScenario(id) {
 
 function bind() {
   el.kart.addEventListener('click', () => { if (!webgl && !hasWebGL()) { mode = 'liste'; } else mode = 'kart'; syncToggle(); });
-  el.liste.addEventListener('click', () => { mode = 'liste'; syncToggle(); });
+  el.liste.addEventListener('click', () => { listFilter = null; mode = 'liste'; syncToggle(); });
   el.hvis.addEventListener('click', () => {
     const on = el.hvisBox.hidden;
     el.hvisBox.hidden = !on;
@@ -1732,20 +2061,54 @@ function bind() {
   });
 }
 
+function fokusSlug(id) {
+  return String(id || '').replace(/[:/\\]/g, '-') + '.json';
+}
+async function loadFokusPack(id) {
+  if (!id) return;
+  const resolved = id;
+  const rel = (fokusFiler && (fokusFiler[resolved] || fokusFiler[resolveFokus(resolved)])) || ('fokus/' + fokusSlug(resolveFokus(resolved) || resolved));
+  const pack = await loadJson(`${DATA_BASE}/${rel}`);
+  if (!pack) return;
+  const nn = arr(pack, 'noder', 'nodes');
+  const kk = arr(pack, 'kanter', 'edges');
+  for (const n of nn) {
+    if (!n || !n.id) continue;
+    const prev = byId.get(n.id);
+    if (!prev) noder.push(n);
+    byId.set(n.id, n);
+  }
+  const have = new Set(kanter.map((e) => e.id || (e.fra + '>' + e.til)));
+  for (const e of kk) {
+    const k = e.id || (e.fra + '>' + e.til);
+    if (!have.has(k)) { kanter.push(e); have.add(k); }
+  }
+}
 async function init() {
   webgl = hasWebGL();
   is3d = webgl && matchMedia('(min-width:901px)').matches;
-  if (!webgl) { mode = 'liste'; }
-  const [N, K, D] = await Promise.all([
-    loadJson(`${DATA_BASE}/noder.json`),
-    loadJson(`${DATA_BASE}/kanter.json`),
-    loadJson(KURS_URL),
-  ]);
-  // Bare scenarios.json først; scenarioer.json bare som fallback om den første mangler (unngå 404).
+  const ov = await loadJson(`${DATA_BASE}/oversikt.json`);
+  const D = await loadJson(KURS_URL);
   let S = await loadJson(`${DATA_BASE}/scenarios.json`);
   if (!S) S = await loadJson(`${DATA_BASE}/scenarioer.json`);
-  noder = arr(N, 'noder', 'nodes');
-  kanter = arr(K, 'kanter', 'edges');
+  if (ov && ov.aggregat) {
+    aggregatOnly = true;
+    oversiktPack = ov;
+    const graf = ov.graf || ov;
+    noder = arr(graf, 'noder', 'nodes');
+    kanter = arr(graf, 'kanter', 'edges');
+    // scene uses packed oversiktPack.noder; noder/kanter er publisert graf for tellinger
+    listIndex = ov.liste || [];
+    fokusFiler = ov.fokus_filer || {};
+    gicsNames = ov.gics || [];
+  } else {
+    const [N, K] = await Promise.all([
+      loadJson(`${DATA_BASE}/noder.json`),
+      loadJson(`${DATA_BASE}/kanter.json`),
+    ]);
+    noder = arr(N, 'noder', 'nodes');
+    kanter = arr(K, 'kanter', 'edges');
+  }
   scenarioer = arr(S, 'scenarioer', 'scenarios');
   byId = new Map(noder.map((n) => [n.id, n]));
   if (D && Array.isArray(D.tickers)) {
