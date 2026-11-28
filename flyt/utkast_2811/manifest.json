@@ -1,0 +1,33 @@
+{
+  "hentet_tid": "2026-11-28T13:00:16+01:00",
+  "ssb_oppdatert": "2026-05-15T06:00:00Z",
+  "kilde_url": "https://www.ssb.no/statbank/table/08801",
+  "aar": 2025,
+  "n_noder": 81,
+  "n_kanter": 363,
+  "n_publisert_true": 0,
+  "eurostat": "mangler: Comext-API er tilgjengelig uten nøkkel, men ufiltrert spørring ga 413 (for stor) og korrekt filtrert uttrekk ble ikke fullført i denne runden.",
+  "comtrade": "mangler: klassisk API er pensjonert; comtradeapi.un.org krever nøkkel.",
+  "avvik_mot_partner": "ingen tilfeller (partnerkilde ikke hentet). Støtte for to rader + metode er forberedt i skjema/tester.",
+  "sum_sjekk": "land summerer til offisiell SSB-total for alle 8 HS-grupper i 2025, avvik 0 kg. Ingen negative verdier.",
+  "kanter_per_vare_hs": {
+    "total|0302.14": 1,
+    "total|0303.13": 1,
+    "total|0304.41": 1,
+    "total|0304.81": 1,
+    "total|27090001": 1,
+    "total|27090009": 1,
+    "total|2711.11": 1,
+    "total|2711.21": 1,
+    "vare:kondensat|27090001": 6,
+    "vare:laks_fersk_filet|0304.41": 73,
+    "vare:laks_fersk_hel|0302.14": 88,
+    "vare:laks_fryst_filet|0304.81": 74,
+    "vare:laks_fryst_hel|0303.13": 62,
+    "vare:naturgass|2711.11": 14,
+    "vare:naturgass|2711.21": 6,
+    "vare:raaolje|27090009": 22
+  },
+  "jack_ol": "ekskludert fra selskapsdata",
+  "kondensat_selskapskant": "ingen (ikke nevnt i godkjente sitater)"
+}
