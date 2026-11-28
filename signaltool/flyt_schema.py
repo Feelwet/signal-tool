@@ -699,6 +699,16 @@ def round_tonn_scene(verdi) -> int:
     return math.floor(float(verdi) + 0.5)
 
 
+def scene_tonn_tekst(verdi) -> str:
+    """FLAG 2: lagret verdi har desimaler; scenen viser hele tonn (0,5 opp)
+    og «under 1 tonn» for 0 < verdi < 1. Speiler fmtSceneVal i flyt.js."""
+    v = float(verdi)
+    if 0 < v < 1:
+        return "under 1 tonn"
+    n = round_tonn_scene(v)
+    return f"{n:,}".replace(",", "\u00a0") + " tonn"
+
+
 
 def selskaper_paa_vare(noder: list, kanter: list, vare_id: str) -> list[str]:
     """Distinkte selskapsnoder med publisert kant lag=selskap til varen fra egen rapport.

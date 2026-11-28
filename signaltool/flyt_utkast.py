@@ -50,6 +50,8 @@ HS_TO_VARE = {
 }
 
 # Selskap -> vare, kun fra godkjent rapport med side. Ingen volum (ikke estimer).
+# Runde 1 FLAG 3/4 (AnalBot 13:10): hver kant har egen hel setning med side som nevner varen.
+# Kanter uten slik setning er tatt ut (se /workspace/flyt-alle-2811/endringer_flag1-4_2811.md).
 SELSKAP_VARER = {
     "EQNR.OL": {
         "navn": "Equinor ASA",
@@ -57,7 +59,10 @@ SELSKAP_VARER = {
         "kilde": "Equinor årsrapport 2025 (norsk utgave)",
         "side": "12",
         "sitat": "Vi produserer om lag to millioner fat oljeekvivalenter daglig, hvorav to tredjedeler av vår egenproduksjon kommer fra norsk sokkel.",
-        "varer": ["vare:raaolje", "vare:naturgass"],
+        "varer": {
+            "vare:raaolje": ("12", "Vi produserer om lag to millioner fat oljeekvivalenter daglig, hvorav to tredjedeler av vår egenproduksjon kommer fra norsk sokkel."),
+            "vare:naturgass": ("12", "Vi raffinerer og selger råolje og naturgass, inkludert den norske stats andel på norsk sokkel, for eksport av produkter som bensin, diesel, gass og fyringsolje til kontinentale Europa, Storbritannia, Nord-Amerika, Asia og Afrika."),
+        },
     },
     "AKRBP.OL": {
         "navn": "Aker BP ASA",
@@ -65,7 +70,10 @@ SELSKAP_VARER = {
         "kilde": "Aker BP Annual report 2025",
         "side": "3",
         "sitat": "Aker BP ASA is a company engaged in exploration, field development and production of oil and gas on the Norwegian continental shelf (NCS).",
-        "varer": ["vare:raaolje", "vare:naturgass"],
+        "varer": {
+            "vare:raaolje": ("3", "Aker BP ASA is a company engaged in exploration, field development and production of oil and gas on the Norwegian continental shelf (NCS)."),
+            "vare:naturgass": ("3", "Aker BP ASA is a company engaged in exploration, field development and production of oil and gas on the Norwegian continental shelf (NCS)."),
+        },
     },
     "VAR.OL": {
         "navn": "Vår Energi ASA",
@@ -73,7 +81,10 @@ SELSKAP_VARER = {
         "kilde": "Vår Energi Annual Report 2025",
         "side": "6",
         "sitat": "Vår Energi ASA is a leading independent upstream oil and gas company on the highly attractive NCS.",
-        "varer": ["vare:raaolje", "vare:naturgass"],
+        "varer": {
+            "vare:raaolje": ("6", "Vår Energi ASA is a leading independent upstream oil and gas company on the highly attractive NCS."),
+            "vare:naturgass": ("6", "Vår Energi ASA is a leading independent upstream oil and gas company on the highly attractive NCS."),
+        },
     },
     "MOWI.OL": {
         "navn": "Mowi ASA",
@@ -81,14 +92,18 @@ SELSKAP_VARER = {
         "kilde": "Mowi Integrated Annual Report 2025",
         "side": "6",
         "sitat": "Mowi is the world's largest producer of farm-raised salmon measured by both volume and turnover.",
-        "varer": [
-            "vare:laks_fersk_hel",
-            "vare:laks_fryst_hel",
-            "vare:laks_fersk_filet",
-            "vare:laks_fryst_filet",
-        ],
+        # vare:laks_fryst_hel er tatt ut: ingen hel setning nevner fryst hel laks.
+        "varer": {
+            "vare:laks_fersk_hel": ("21", "Fresh whole salmon (i.e. primary processed salmon) represented 52.4% of our total revenues in 2025, a slight increase from 50.7% in 2024."),
+            "vare:laks_fersk_filet": ("242", "Our secondary processing operations turn the gutted fish into products such as fillets, steaks and other portions of fish - smoked, fresh and frozen."),
+            "vare:laks_fryst_filet": ("242", "Our secondary processing operations turn the gutted fish into products such as fillets, steaks and other portions of fish - smoked, fresh and frozen."),
+        },
     },
 }
+
+KUN_NORSK = "kun norsk rapportering"
+SSB_KILDE = f"SSB tabell 08801 ({KUN_NORSK})"
+YOY_GRENSE_PCT = 40.0
 
 VARE_META = {
     "vare:raaolje": ("Råolje", "Jordolje og oljer utvunnet av bituminøse mineraler, unnt naturlige gasskondensater, rå (SSB 27090009).", "petroleum"),
@@ -180,9 +195,8 @@ def land_id(code: str) -> str:
 
 
 def kg_to_tonn(kg: float) -> float:
-    t = kg / 1000.0
-    # behold presisjon som i offisielle data (kg/1000, uten ekstra avrunding)
-    return int(t) if t.is_integer() else t
+    # FLAG 2: lagres alltid med desimaler (kg/1000, ingen avrunding). Scenen runder.
+    return float(kg) / 1000.0
 
 
 def ssb_by_hs_land_year(rows: list[dict]) -> dict:
@@ -300,6 +314,41 @@ def _node(nid, lag, typ, navn, hva, status, kilde, url, side="", merknad="", mat
     return n
 
 
+def yoy_merke(kg_2025: float, kg_2024: float | None, grense: float = YOY_GRENSE_PCT) -> dict:
+    """FLAG 1: merk ny i 2025 eller år-over-år >= 40 %. Endrer aldri publisert."""
+    before = None if kg_2024 is None else float(kg_2024)
+    after = float(kg_2025)
+    out = {"verdi_2024": None if before is None else before / 1000.0, "yoy_pct": None, "yoy_merke": ""}
+    if before is None or before == 0:
+        out["yoy_merke"] = "ny_i_2025"
+        return out
+    pct = (after - before) / before * 100.0
+    out["yoy_pct"] = round(pct, 1)
+    if abs(pct) >= grense:
+        out["yoy_merke"] = "yoy_ge_40"
+    return out
+
+
+def yoy_logg(kanter: list) -> list[dict]:
+    rows = []
+    for e in kanter:
+        m = e.get("yoy_merke")
+        if not m:
+            continue
+        rows.append({
+            "kant_id": e["id"],
+            "hs_kode": e.get("hs_kode", ""),
+            "merke": m,
+            "for_2024_tonn": "" if e.get("verdi_2024") is None else e["verdi_2024"],
+            "etter_2025_tonn": e.get("verdi"),
+            "yoy_pct": "" if e.get("yoy_pct") is None else e["yoy_pct"],
+            "publisert_for": False,
+            "publisert_etter": e.get("publisert"),
+            "handling": "merket, forblir upublisert",
+        })
+    return rows
+
+
 def build(hentet_tid: str | None = None) -> dict:
     hentet_tid = hentet_tid or datetime.now(OSLO).isoformat(timespec="seconds")
     land_js = json.loads(SSB_LAND.read_text(encoding="utf-8"))
@@ -340,7 +389,7 @@ def build(hentet_tid: str | None = None) -> dict:
             "kilde", meta["kilde"], meta["url"], side=meta["side"],
             merknad=f"Sitat s. {meta['side']}: «{meta['sitat']}»",
         ))
-        for vare in meta["varer"]:
+        for vare, (vside, vsitat) in meta["varer"].items():
             kanter.append({
                 "id": f"selskap:{ticker}-{vare.split(':',1)[1]}-rapport",
                 "fra": nid,
@@ -353,13 +402,14 @@ def build(hentet_tid: str | None = None) -> dict:
                 "hs_kode": "",
                 "kilde": meta["kilde"],
                 "kilde_url": meta["url"],
-                "side": meta["side"],
+                "side": vside,
                 "status": "kilde",
                 "metode": "Kobling kun fra selskapets egen rapport med sidetall. Ingen volum er lagt inn (rapporten gir ikke et tall som kan brukes uten estimat).",
                 "avvik": "",
                 "reporter": meta["navn"],
                 "reporter_land": ticker,
-                "merknad": f"«{meta['sitat']}» (s. {meta['side']}).",
+                "merknad": f"«{vsitat}» (s. {vside}).",
+                "sitat": vsitat,
                 "materiale": VARE_META[vare][2],
                 "publisert": False,
                 "hentet_tid": hentet_tid,
@@ -398,11 +448,11 @@ def build(hentet_tid: str | None = None) -> dict:
             "ar": "2025",
             "år": "2025",
             "hs_kode": hs,
-            "kilde": "SSB tabell 08801",
+            "kilde": SSB_KILDE,
             "kilde_url": SSB_URL,
             "side": "",
             "status": "kilde",
-            "metode": f"SSB 08801, eksport 2025, mengde 1 (kg) for {', '.join(HS_SSB_CODES[hs])}, summert og omregnet til tonn. Offisiell totaltall uten landfordeling stemmer med sum av land (avvik 0).",
+            "metode": f"SSB 08801, eksport 2025, mengde 1 (kg) for {', '.join(HS_SSB_CODES[hs])}, summert og omregnet til tonn, kun norsk rapportering. Offisiell totaltall uten landfordeling stemmer med sum av land (avvik 0).",
             "avvik": "",
             "reporter": "Norge",
             "reporter_land": "NO",
@@ -429,15 +479,16 @@ def build(hentet_tid: str | None = None) -> dict:
                 "ar": "2025",
                 "år": "2025",
                 "hs_kode": hs,
-                "kilde": "SSB tabell 08801",
+                "kilde": SSB_KILDE,
                 "kilde_url": SSB_URL,
                 "side": "",
                 "status": "kilde",
-                "metode": f"SSB 08801, eksport 2025, mengde 1 (kg) for {', '.join(HS_SSB_CODES[hs])}, omregnet til tonn. Rapportør: Norge. Partnerstall fra Eurostat/Comtrade er ikke hentet (gratis nøkkel-fri spørring ikke fullført / Comtrade krever nøkkel).",
+                "metode": f"SSB 08801, eksport 2025, mengde 1 (kg) for {', '.join(HS_SSB_CODES[hs])}, omregnet til tonn. Rapportør: Norge, kun norsk rapportering. Partnerstall fra Eurostat/Comtrade er ikke hentet (gratis nøkkel-fri spørring ikke fullført / Comtrade krever nøkkel).",
                 "avvik": "",
                 "reporter": "Norge",
                 "reporter_land": "NO",
                 "merknad": f"SSB oppdatert {SSB_UPDATED}. råverdi={kg} kg. 2024={yoy if yoy is not None else 'ingen'} kg.",
+                **yoy_merke(kg, yoy),
                 "materiale": VARE_META[vare][2],
                 "publisert": False,
                 "hentet_tid": hentet_tid,
@@ -467,6 +518,12 @@ def build(hentet_tid: str | None = None) -> dict:
         "kanter_per_vare_hs": {f"{k[0]}|{k[1]}": v for k, v in sorted(counts.items())},
         "jack_ol": "ekskludert fra selskapsdata",
         "kondensat_selskapskant": "ingen (ikke nevnt i godkjente sitater)",
+        "yoy_regel": f"ny_i_2025 eller |endring| >= {YOY_GRENSE_PCT:.0f} % mot 2024; merket i yoy_merke og logget i yoy_logg.csv; publisert forblir false",
+        "n_yoy_merket": sum(1 for e in kanter if e.get("yoy_merke")),
+        "n_ny_i_2025": sum(1 for e in kanter if e.get("yoy_merke") == "ny_i_2025"),
+        "n_yoy_ge_40": sum(1 for e in kanter if e.get("yoy_merke") == "yoy_ge_40"),
+        "kildelinje": KUN_NORSK,
+        "selskapskanter_tatt_ut": ["MOWI.OL -> vare:laks_fryst_hel (ingen hel setning om fryst hel laks)"],
     }
     return {"noder": noder, "kanter": kanter, "manifest": manifest, "sum_err": sum_err}
 
@@ -477,6 +534,12 @@ def write(dest: Path | None = None, hentet_tid: str | None = None) -> dict:
     pack = build(hentet_tid=hentet_tid)
     (dest / "noder.json").write_text(json.dumps(pack["noder"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (dest / "kanter.json").write_text(json.dumps(pack["kanter"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    import csv as _csv
+    rows = yoy_logg(pack["kanter"])
+    with (dest / "yoy_logg.csv").open("w", encoding="utf-8", newline="") as fh:
+        w = _csv.DictWriter(fh, fieldnames=["kant_id", "hs_kode", "merke", "for_2024_tonn", "etter_2025_tonn", "yoy_pct", "publisert_for", "publisert_etter", "handling"])
+        w.writeheader()
+        w.writerows(rows)
     (dest / "manifest.json").write_text(json.dumps(pack["manifest"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (dest / "README.md").write_text(
         "Utkast til råvarelag, runde 1 (2026-11-28, Europe/Oslo).\n\n"

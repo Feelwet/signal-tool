@@ -1,10 +1,10 @@
 {
-  "hentet_tid": "2026-11-28T13:00:16+01:00",
+  "hentet_tid": "2026-11-28T14:05:00+01:00",
   "ssb_oppdatert": "2026-05-15T06:00:00Z",
   "kilde_url": "https://www.ssb.no/statbank/table/08801",
   "aar": 2025,
   "n_noder": 81,
-  "n_kanter": 363,
+  "n_kanter": 362,
   "n_publisert_true": 0,
   "eurostat": "mangler: Comext-API er tilgjengelig uten nøkkel, men ufiltrert spørring ga 413 (for stor) og korrekt filtrert uttrekk ble ikke fullført i denne runden.",
   "comtrade": "mangler: klassisk API er pensjonert; comtradeapi.un.org krever nøkkel.",
@@ -29,5 +29,13 @@
     "vare:raaolje|27090009": 22
   },
   "jack_ol": "ekskludert fra selskapsdata",
-  "kondensat_selskapskant": "ingen (ikke nevnt i godkjente sitater)"
+  "kondensat_selskapskant": "ingen (ikke nevnt i godkjente sitater)",
+  "yoy_regel": "ny_i_2025 eller |endring| >= 40 % mot 2024; merket i yoy_merke og logget i yoy_logg.csv; publisert forblir false",
+  "n_yoy_merket": 174,
+  "n_ny_i_2025": 48,
+  "n_yoy_ge_40": 126,
+  "kildelinje": "kun norsk rapportering",
+  "selskapskanter_tatt_ut": [
+    "MOWI.OL -> vare:laks_fryst_hel (ingen hel setning om fryst hel laks)"
+  ]
 }
