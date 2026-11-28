@@ -1,14 +1,13 @@
 {
- "hentet": "2026-11-28T01:55:28+0100",
+ "hentet": "2026-11-28T03:08:59+0100",
  "dato": "2026-11-28",
  "vindu_timer": 24,
  "vindu_timer_sentralbanker": 72,
  "kilder_status": {
-  "GDELT": "ok (3776) via GKG-filer (nye siden forrige henting)",
+  "GDELT": "ok (2882) via GKG-filer (nye siden forrige henting)",
   "ECB": "ok (15)",
   "Federal Reserve": "ok (20)",
-  "Oslo Børs Newsweb": "ok (7065 i 95d-uttrekket)",
-  "Norges Bank": "ok (5)"
+  "Oslo Børs Newsweb": "fra forrige henting"
  },
  "temaer": [
   {
@@ -21,15 +20,15 @@
   },
   {
    "tema": "risk_off_haven",
-   "antall": 37
+   "antall": 40
   },
   {
    "tema": "food_agri",
-   "antall": 29
+   "antall": 31
   },
   {
    "tema": "tariffs_trade",
-   "antall": 29
+   "antall": 28
   },
   {
    "tema": "shipping_chokepoints",
@@ -49,16 +48,47 @@
   },
   {
    "tema": "rare_earths_semis",
-   "antall": 3
+   "antall": 2
   }
  ],
  "saker": [
   {
-   "tittel": "Saudi Arabia participates in 25th IORA Council of Ministers meeting in New Delhi",
-   "url": "http://www.chinanationalnews.com/news/279468797/saudi-arabia-participates-in-25th-iora-council-of-ministers-meeting-in-new-delhi",
+   "tittel": "Putin's biggest ally questions a key claim Russia uses to justify invasion of Ukraine",
+   "url": "https://ktvz.com/news/national-world/cnn-world/2026/11/27/putins-biggest-ally-questions-a-key-claim-russia-uses-to-justify-invasion-of-ukraine/",
    "kilde": "GDELT",
-   "domene": "chinanationalnews.com",
-   "publisert": "2026-11-28T00:15:00Z",
+   "domene": "ktvz.com",
+   "publisert": "2026-11-28T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Putin unveils nuclear-powered sub armed with missiles",
+   "url": "https://www.edenmagnet.com.au/story/9399819/putin-unveils-nuclear-powered-sub-armed-with-missiles/",
+   "kilde": "GDELT",
+   "domene": "edenmagnet.com.au",
+   "publisert": "2026-11-28T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "missile",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Pakistan and Turkey pledge to support Saudi Arabia against Houthi attacks under defense pact",
+   "url": "https://www.nbcnews.com/world/pakistan/pakistan-turkey-pledge-support-saudi-arabia-houthi-attacks-defense-pac-rcna611628",
+   "kilde": "GDELT",
+   "domene": "nbcnews.com",
+   "publisert": "2026-11-28T02:15:00Z",
    "tema": "mideast_energy",
    "temaer": [
     "mideast_energy"
@@ -68,11 +98,321 @@
    ]
   },
   {
+   "tittel": "Zelenskyy urges U.S. to pressure Russia and questions Trump referring Putin as 'friend'",
+   "url": "https://www.thehindu.com/news/international/zelenskyy-urges-us-to-pressure-russia-and-questions-trump-referring-putin-as-friend/article71753434.ece",
+   "kilde": "GDELT",
+   "domene": "thehindu.com",
+   "publisert": "2026-11-28T02:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "russia",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Saudi Arabia participates in 25th IORA Council of Ministers meeting in New Delhi",
+   "url": "https://www.2lt.com.au/saudi-arabia-participates-in-25th-iora-council-of-ministers-meeting-in-new-delhi/",
+   "kilde": "GDELT",
+   "domene": "2lt.com.au",
+   "publisert": "2026-11-28T02:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Hamas Leader's Last Surviving Son Escapes Israeli Strike in Gaza",
+   "url": "https://www.khaama.com/hamas-leader-last-surviving-son-escapes-israeli-strike-gaza/",
+   "kilde": "GDELT",
+   "domene": "khaama.com",
+   "publisert": "2026-11-28T02:00:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israeli",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Ukraine Offers Black Sea Cease-Fire, Awaits Kremlin Response",
+   "url": "http://www.europesun.com/news/279468839/ukraine-offers-black-sea-cease-fire-awaits-kremlin-response",
+   "kilde": "GDELT",
+   "domene": "europesun.com",
+   "publisert": "2026-11-28T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "kremlin"
+   ]
+  },
+  {
    "tittel": "Zelenskyy Criticizes Trump Over Putin \"Friend\" Comment",
-   "url": "https://790waeb.iheart.com/content/2026-11-27-zelenskyy-criticizes-trump-over-putin-friend-comment/",
+   "url": "https://wiba.iheart.com/content/2026-11-27-zelenskyy-criticizes-trump-over-putin-friend-comment/",
    "kilde": "GDELT",
    "domene": "iheart.com",
-   "publisert": "2026-11-28T00:15:00Z",
+   "publisert": "2026-11-28T01:45:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Manitoba First Nation Declares State of Emergency Over Water",
+   "url": "https://www.chrisd.ca/2026/11/27/marcel-colomb-first-nation-water-state-of-emergency-manitoba/",
+   "kilde": "GDELT",
+   "domene": "chrisd.ca",
+   "publisert": "2026-11-28T01:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "International Business: US 'pushed Venezuela and Iraq to consider leaving Opec'",
+   "url": "https://www.gdnonline.com:443/Details/1414180",
+   "kilde": "GDELT",
+   "domene": "gdnonline.com",
+   "publisert": "2026-11-28T01:45:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iraq",
+    "opec"
+   ]
+  },
+  {
+   "tittel": "Marcel Colomb First Nation in Manitoba declares state of emergency over water – Winnipeg Free Press",
+   "url": "https://www.winnipegfreepress.com/breakingnews/2026/11/27/marcel-colomb-first-nation-in-manitoba-declares-state-of-emergency-over-water",
+   "kilde": "GDELT",
+   "domene": "winnipegfreepress.com",
+   "publisert": "2026-11-28T01:45:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Ukraine submits Black Sea ceasefire proposals, awaits Russian response",
+   "url": "https://sana.sy/en/politics/2362387/",
+   "kilde": "GDELT",
+   "domene": "sana.sy",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense",
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "russian"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy Criticizes Trump Over Putin \"Friend\" Comment | NewsRadio 1370 AM & 92.9 FM WSPD",
+   "url": "https://wspd.iheart.com/content/2026-11-27-zelenskyy-criticizes-trump-over-putin-friend-comment/",
+   "kilde": "GDELT",
+   "domene": "iheart.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "zelenskyy",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Arab News | Saudi Arabia, Pakistan and Turkiye vow to bolster Kingdom's security against Houthi attacks",
+   "url": "https://www.arabnews.com/saudi-arabia/saudi-arabia-pakistan-and-turkiye-vow-to-bolster-kingdoms-security-against-houthi-attacks-3014302",
+   "kilde": "GDELT",
+   "domene": "arabnews.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "saudi arabia"
+   ]
+  },
+  {
+   "tittel": "Kremlin Issues Stark Warning Over Ukraine's Dangerous Push to Widen Geography of Conflict   – NaturalNews.com",
+   "url": "https://www.naturalnews.com/2026-11-27-kremlin-warning-over-ukraine-push-widen-geography-conflict.html",
+   "kilde": "GDELT",
+   "domene": "naturalnews.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "ukraine",
+    "kremlin"
+   ]
+  },
+  {
+   "tittel": "Putin's 'successor' 'took own life at waterfall', secret Kremlin files reveal after claims he died trying to save man",
+   "url": "https://www.the-sun.com/news/17368055/",
+   "kilde": "GDELT",
+   "domene": "the-sun.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "kremlin",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "Virginia under state of emergency after Thanksgiving coastal storm",
+   "url": "https://www.wboc.com/news/virginia-under-state-of-emergency-after-thanksgiving-coastal-storm/article_5638898f-2dfb-442a-8239-664abdb76662.html",
+   "kilde": "GDELT",
+   "domene": "wboc.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "North Topsail Beach lifts state of emergency after nor'easter damage",
+   "url": "https://www.wect.com/2026/11/27/north-topsail-beach-lifts-state-emergency-after-noreaster-damage/",
+   "kilde": "GDELT",
+   "domene": "wect.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "US pushed Venezuela and  Iraq to leave OPEC and prevented Venezuela from paying its membership dues – Ya Libnan",
+   "url": "https://yalibnan.com/2026/11/28/us-pushed-venezuela-and-iraq-to-leave-opec-and-prevented-venezuela-from-paying-its-membership-dues/",
+   "kilde": "GDELT",
+   "domene": "yalibnan.com",
+   "publisert": "2026-11-28T01:30:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "iraq",
+    "opec"
+   ]
+  },
+  {
+   "tittel": "US trade deal nearing finish line, says Piyush Goyal as Washington proposes fresh tariffs of up to 25%",
+   "url": "https://economictimes.indiatimes.com/news/economy/foreign-trade/us-trade-deal-nearing-finish-line-says-piyush-goyal-as-washington-proposes-fresh-tariffs-of-up-to-25/articleshow/136232649.cms",
+   "kilde": "GDELT",
+   "domene": "indiatimes.com",
+   "publisert": "2026-11-28T01:15:00Z",
+   "tema": "tariffs_trade",
+   "temaer": [
+    "tariffs_trade"
+   ],
+   "matchede_ord": [
+    "trade deal",
+    "tariff"
+   ]
+  },
+  {
+   "tittel": "Israel kills four in Gaza as Hamas chief al-Hayya's son survives strike  - Grenada Chronicle – Daily Grenada And Caribbean News",
+   "url": "https://grenadachronicle.com/israel-kills-four-in-gaza-as-hamas-chief-al-hayyas-son-survives-strike/",
+   "kilde": "GDELT",
+   "domene": "grenadachronicle.com",
+   "publisert": "2026-11-28T01:15:00Z",
+   "tema": "mideast_energy",
+   "temaer": [
+    "mideast_energy"
+   ],
+   "matchede_ord": [
+    "israel",
+    "gaza"
+   ]
+  },
+  {
+   "tittel": "Putin unveils new Russian nuclear-powered submarine with hypersonic weapons  - Grenada Chronicle – Daily Grenada And Caribbean News",
+   "url": "https://grenadachronicle.com/putin-unveils-new-russian-nuclear-powered-submarine-with-hypersonic-weapons/",
+   "kilde": "GDELT",
+   "domene": "grenadachronicle.com",
+   "publisert": "2026-11-28T01:15:00Z",
+   "tema": "conflict_defense",
+   "temaer": [
+    "conflict_defense"
+   ],
+   "matchede_ord": [
+    "russian",
+    "putin"
+   ]
+  },
+  {
+   "tittel": "'We need a blessing': Houston family's Thanksgiving saved, Christmas remains uncertain amid Harris County food crisis",
+   "url": "https://www.click2houston.com/news/local/2026/11/27/we-need-a-blessing-houston-familys-thanksgiving-saved-christmas-remains-uncertain-amid-harris-county-food-crisis/",
+   "kilde": "GDELT",
+   "domene": "click2houston.com",
+   "publisert": "2026-11-28T01:15:00Z",
+   "tema": "food_agri",
+   "temaer": [
+    "food_agri"
+   ],
+   "matchede_ord": [
+    "food crisis"
+   ]
+  },
+  {
+   "tittel": "Virginia Gov. Abigail Spanberger declares state of emergency after storm",
+   "url": "https://www.fox5dc.com/news/virginia-gov-abigail-spanberger-declares-state-emergency-after-coastal-storm",
+   "kilde": "GDELT",
+   "domene": "fox5dc.com",
+   "publisert": "2026-11-28T01:15:00Z",
+   "tema": "risk_off_haven",
+   "temaer": [
+    "risk_off_haven"
+   ],
+   "matchede_ord": [
+    "state of emergency"
+   ]
+  },
+  {
+   "tittel": "Zelenskyy urges US to pressure Putin and questions Trump's reference to Putin as a 'friend'",
+   "url": "https://www.texarkanagazette.com/news/2026/nov/27/zelenskyy-urges-us-to-pressure-putin-and/",
+   "kilde": "GDELT",
+   "domene": "texarkanagazette.com",
+   "publisert": "2026-11-28T01:15:00Z",
    "tema": "conflict_defense",
    "temaer": [
     "conflict_defense"
@@ -375,38 +715,6 @@
    ]
   },
   {
-   "tittel": "Ukraine Offers Black Sea Cease-Fire, Awaits Kremlin Response",
-   "url": "http://www.kenyastar.com/news/279468839/ukraine-offers-black-sea-cease-fire-awaits-kremlin-response",
-   "kilde": "GDELT",
-   "domene": "kenyastar.com",
-   "publisert": "2026-11-27T23:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "kremlin"
-   ]
-  },
-  {
-   "tittel": "Putin's biggest ally questions a key claim Russia uses to justify invasion of Ukraine",
-   "url": "https://abc17news.com/news/national-world/cnn-world/2026/11/27/putins-biggest-ally-questions-a-key-claim-russia-uses-to-justify-invasion-of-ukraine/",
-   "kilde": "GDELT",
-   "domene": "abc17news.com",
-   "publisert": "2026-11-27T23:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia",
-    "putin"
-   ]
-  },
-  {
    "tittel": "\"Breaking through enemy blockade is underway\": Iran Navy chief dismisses US blockade in Strait of Hormuz",
    "url": "https://news.webindia123.com/news/Articles/World/20261128/4525488.html",
    "kilde": "GDELT",
@@ -509,21 +817,6 @@
    ]
   },
   {
-   "tittel": "Putin flags off Russia's new nuclear-powered submarine; says five more to join fleet by 2030",
-   "url": "https://www.hindustantimes.com/world-news/putin-flags-off-russias-new-nuclear-powered-submarine-says-five-more-to-join-fleet-by-2030-101795819444639.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-27T23:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "russia",
-    "putin"
-   ]
-  },
-  {
    "tittel": "US Said to Urge Venezuela, Iraq to Quit OPEC",
    "url": "https://www.riotimesonline.com/us-pushed-venezuela-iraq-consider-leaving-opec-2026/",
    "kilde": "GDELT",
@@ -567,36 +860,6 @@
    ]
   },
   {
-   "tittel": "US TARGETS RUSSIAN OIL GIANTS WITH NEW SANCTIONS TO PUSH FOR UKRAINE PEACE TALKS",
-   "url": "http://silverbirdtv.com/us-targets-russian-oil-giants-with-new-sanctions-to-push-for-ukraine-peace-talks/",
-   "kilde": "GDELT",
-   "domene": "silverbirdtv.com",
-   "publisert": "2026-11-27T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
-   "tittel": "Safeguarding children – and their innocence – in both Russia and Ukraine",
-   "url": "https://www.csmonitor.com/Editorials/the-monitors-view/2026/1127/Safeguarding-children-and-their-innocence-in-both-Russia-and-Ukraine",
-   "kilde": "GDELT",
-   "domene": "csmonitor.com",
-   "publisert": "2026-11-27T23:15:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Gov. Spanberger declares state of emergency following Thanksgiving storm",
    "url": "https://www.wsls.com/news/local/2026/11/27/gov-spanberger-declares-state-of-emergency-following-thanksgiving-storm/",
    "kilde": "GDELT",
@@ -611,22 +874,6 @@
    ]
   },
   {
-   "tittel": "Ukraine proposes Black Sea ceasefire, awaits Russia's response",
-   "url": "http://www.bignewsnetwork.com/news/279468125/ukraine-proposes-black-sea-ceasefire-awaits-russia-response",
-   "kilde": "GDELT",
-   "domene": "bignewsnetwork.com",
-   "publisert": "2026-11-27T19:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Qatar LNG exports reach highest level since war began despite Strait of Hormuz risks",
    "url": "https://arynews.tv/qatar-lng-exports-reach-highest-level-since-war-began-despite-strait-of-hormuz-risks",
    "kilde": "GDELT",
@@ -638,22 +885,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Kyiv offers Black Sea ceasefire, as Putin expands Russia's navy  - Dominican Republic Post – Caribbean News, Business, Travel & Culture",
-   "url": "https://dominicanrepublicpost.com/kyiv-offers-black-sea-ceasefire-as-putin-expands-russias-navy/",
-   "kilde": "GDELT",
-   "domene": "dominicanrepublicpost.com",
-   "publisert": "2026-11-27T19:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense",
-    "food_agri"
-   ],
-   "matchede_ord": [
-    "russia",
-    "putin"
    ]
   },
   {
@@ -710,35 +941,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "Pakistan and Turkey pledge to support Saudi Arabia against Houthi attacks under defense pact",
-   "url": "https://www.newsday.com/news/nation/pakistan-saudi-turkey-meeting-trilateral-alliance-m30316",
-   "kilde": "GDELT",
-   "domene": "newsday.com",
-   "publisert": "2026-11-27T19:45:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Zelenskyy urges US to pressure Putin and questions Trump's reference to Putin as a 'friend'",
-   "url": "https://www.newsday.com/news/nation/russia-ukraine-war-zelenskyy-trump-putin-m05413",
-   "kilde": "GDELT",
-   "domene": "newsday.com",
-   "publisert": "2026-11-27T19:45:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "zelenskyy",
-    "putin"
    ]
   },
   {
@@ -799,21 +1001,6 @@
    ]
   },
   {
-   "tittel": "Fedorov: Ukraine needs to develop countermeasures against Russia's 'Rassvet' right now",
-   "url": "https://en.interfax.com.ua/news/general/1243786.html",
-   "kilde": "GDELT",
-   "domene": "interfax.com.ua",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russia"
-   ]
-  },
-  {
    "tittel": "Oil prices retreat as traders await key OPEC+ meeting",
    "url": "https://news.az/news/oil-prices-retreat-as-traders-await-key-opec-meeting",
    "kilde": "GDELT",
@@ -829,21 +1016,6 @@
    ]
   },
   {
-   "tittel": "Ukraine drone strike forces Russian flotilla to change course",
-   "url": "https://news.az/news/ukraine-drone-strike-forces-russian-flotilla-to-change-course",
-   "kilde": "GDELT",
-   "domene": "news.az",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "conflict_defense",
-   "temaer": [
-    "conflict_defense"
-   ],
-   "matchede_ord": [
-    "ukraine",
-    "russian"
-   ]
-  },
-  {
    "tittel": "Mendocino County declares state of emergency amid latest storms",
    "url": "https://www.advocate-news.com/2026/11/27/mendocino-county-declares-state-of-emergency-amid-latest-storms/",
    "kilde": "GDELT",
@@ -855,94 +1027,6 @@
    ],
    "matchede_ord": [
     "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Iraq's October Oil Revenues Hit Record $8.8 Billion As Baghdad Challenges OPEC+ Capacity Limits",
-   "url": "https://www.foreignpolicyjournal.com/2026/11/27/iraqs-october-oil-revenues-hit-record-8-8-billion-as-baghdad-challenges-opec-capacity-limits/",
-   "kilde": "GDELT",
-   "domene": "foreignpolicyjournal.com",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iraq",
-    "opec"
-   ]
-  },
-  {
-   "tittel": "Israel Kills Gaza Deputy Education Minister, Wife In Targeted Strike",
-   "url": "https://www.latintimes.com/israeli-airstrikes-gaza-kill-hamas-official-wife-601913",
-   "kilde": "GDELT",
-   "domene": "latintimes.com",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "israel",
-    "gaza"
-   ]
-  },
-  {
-   "tittel": "Saudi Arabia mining forum faces delay amid attacks",
-   "url": "https://www.northernminer.com/news/saudi-arabia-mining-forum-faces-delay-amid-attacks/1003898370/",
-   "kilde": "GDELT",
-   "domene": "northernminer.com",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "saudi arabia"
-   ]
-  },
-  {
-   "tittel": "Marcel Colomb First Nation in Manitoba declares state of emergency over water – Winnipeg Free Press",
-   "url": "https://www.winnipegfreepress.com/business/2026/11/27/marcel-colomb-first-nation-in-manitoba-declares-state-of-emergency-over-water",
-   "kilde": "GDELT",
-   "domene": "winnipegfreepress.com",
-   "publisert": "2026-11-27T19:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
-   ]
-  },
-  {
-   "tittel": "Iraq carries out reconnaissance, inspection operation on Iran border",
-   "url": "https://article.wn.com/view/2026/11/27/Iraq_carries_out_reconnaissance_inspection_operation_on_Iran/",
-   "kilde": "GDELT",
-   "domene": "wn.com",
-   "publisert": "2026-11-27T19:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iran",
-    "iraq"
-   ]
-  },
-  {
-   "tittel": "Washington pushed Venezuela, Iraq to consider leaving OPEC",
-   "url": "https://economictimes.indiatimes.com/news/international/world-news/washington-pushed-venezuela-iraq-to-consider-leaving-opec/articleshow/136231459.cms",
-   "kilde": "GDELT",
-   "domene": "indiatimes.com",
-   "publisert": "2026-11-27T19:15:00Z",
-   "tema": "mideast_energy",
-   "temaer": [
-    "mideast_energy"
-   ],
-   "matchede_ord": [
-    "iraq",
-    "opec"
    ]
   },
   {
@@ -1258,20 +1342,6 @@
    ]
   },
   {
-   "tittel": "Gold prices surge by Rs11,500 per tola, silver also gets costlier",
-   "url": "https://dunyanews.tv/en/Business/985216-gold-prices-surge-by-rs11500-per-tola-silver-also-gets-costlier",
-   "kilde": "GDELT",
-   "domene": "dunyanews.tv",
-   "publisert": "2026-11-27T15:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
-   ]
-  },
-  {
    "tittel": "India, US push for trade deal as negotiations continue; no timeline set, says Commerce Secretary",
    "url": "https://economictimes.indiatimes.com/news/economy/foreign-trade/india-us-push-for-trade-deal-as-negotiations-continue-no-timeline-set-says-commerce-secretary/articleshow/136226565.cms",
    "kilde": "GDELT",
@@ -1283,20 +1353,6 @@
    ],
    "matchede_ord": [
     "trade deal"
-   ]
-  },
-  {
-   "tittel": "MCX gold prices rebound over  ₹8,300 in two sessions, set to snap 2-week losing streak; what lifted sentiment?",
-   "url": "https://www.livemint.com/market/commodities/mcx-gold-prices-in-india-rebound-rs-8-345-in-two-sessions-set-to-snap-2-week-losing-streak-what-lifted-sentiment-11795791891588.html",
-   "kilde": "GDELT",
-   "domene": "livemint.com",
-   "publisert": "2026-11-27T15:45:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
@@ -1325,20 +1381,6 @@
    ],
    "matchede_ord": [
     "export control"
-   ]
-  },
-  {
-   "tittel": "Gold Prices in Pakistan Surge by Rs11,500 Per Tola",
-   "url": "https://arynews.tv/gold-prices-skyrocket-in-pakistan",
-   "kilde": "GDELT",
-   "domene": "arynews.tv",
-   "publisert": "2026-11-27T15:30:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "gold price"
    ]
   },
   {
@@ -1395,20 +1437,6 @@
    ],
    "matchede_ord": [
     "black sea"
-   ]
-  },
-  {
-   "tittel": "State of emergency declared in US after storm batters country",
-   "url": "https://www.irishmirror.ie/news/world-news/state-emergency-declared-after-storm-37922449",
-   "kilde": "GDELT",
-   "domene": "irishmirror.ie",
-   "publisert": "2026-11-27T15:15:00Z",
-   "tema": "risk_off_haven",
-   "temaer": [
-    "risk_off_haven"
-   ],
-   "matchede_ord": [
-    "state of emergency"
    ]
   },
   {
@@ -1708,20 +1736,6 @@
    ]
   },
   {
-   "tittel": "India-US trade deal is close to culmination: Piyush Goyal",
-   "url": "https://www.hindustantimes.com/business/indiaus-trade-deal-is-close-to-culmination-piyush-goyal-101795773715461.html",
-   "kilde": "GDELT",
-   "domene": "hindustantimes.com",
-   "publisert": "2026-11-27T10:45:00Z",
-   "tema": "tariffs_trade",
-   "temaer": [
-    "tariffs_trade"
-   ],
-   "matchede_ord": [
-    "trade deal"
-   ]
-  },
-  {
    "tittel": "CREDAI moots tweaking affordable housing definition in Budget, doubling price cap to ₹90 lakh",
    "url": "https://www.thehindubusinessline.com/news/real-estate/credai-moots-tweaking-affordable-housing-definition-in-budget-doubling-price-cap-to-90-lakh/article71749918.ece",
    "kilde": "GDELT",
@@ -1815,20 +1829,6 @@
    ],
    "matchede_ord": [
     "strait of hormuz"
-   ]
-  },
-  {
-   "tittel": "Rare earth beneath our palms: Opportunity or opportunism?",
-   "url": "https://www.thestar.com.my/business/insight/2026/11/27/rare-earth-beneath-our-palms-opportunity-or-opportunism",
-   "kilde": "GDELT",
-   "domene": "thestar.com.my",
-   "publisert": "2026-11-27T01:15:00Z",
-   "tema": "rare_earths_semis",
-   "temaer": [
-    "rare_earths_semis"
-   ],
-   "matchede_ord": [
-    "rare earth"
    ]
   },
   {
