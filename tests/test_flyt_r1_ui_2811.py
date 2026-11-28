@@ -11,8 +11,13 @@ import pytest
 from signaltool.config import ROOT
 from signaltool.flyt_page import LINK_CSS, prepare_preview, prepare_testdata_preview, write
 
+# Foretrukket katalog som i briefen; i CI finnes ikke /workspace med skrivetilgang.
 SHOTS = Path("/workspace/flyt-shots-2811")
-SHOTS.mkdir(parents=True, exist_ok=True)
+try:
+    SHOTS.mkdir(parents=True, exist_ok=True)
+except OSError:
+    SHOTS = Path("/tmp/flyt-shots-2811")
+    SHOTS.mkdir(parents=True, exist_ok=True)
 
 
 def _launch(p):
